@@ -3,17 +3,8 @@
 Public Class FormSheetSelector
 	Public Property SelectedSheets As New List(Of String)
 	Public Property Task As TaskPrint
-
 	Dim SheetSizeList As New List(Of String)
 
-	Public Sub New()
-
-		' This call is required by the designer.
-		InitializeComponent()
-
-		' Add any initialization after the InitializeComponent() call.
-
-	End Sub
 
 	Public Sub New(Task As TaskPrint)
 
@@ -30,18 +21,6 @@ Public Class FormSheetSelector
 		Me.ShowDialog()
 	End Sub
 
-	Public Sub ShowForm2(Filter As String)
-		'Dim PD As New PrinterDoctor
-		SheetSizeList = Task.GetSheetSizes(Filter)
-
-		CheckedListBox1.Items.Clear()
-		For Each SheetSize As String In SheetSizeList
-			CheckedListBox1.Items.Add(Task.ConstantNameToDisplayName(SheetSize))
-		Next
-
-		Me.ShowDialog()
-
-	End Sub
 
 	Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
 		Me.SelectedSheets.Clear()
@@ -57,7 +36,6 @@ Public Class FormSheetSelector
 	End Sub
 
 	Private Sub RadioButtonAnsi_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonAnsi.CheckedChanged
-		'Dim UP As New UtilsPrinters
 		SheetSizeList = Task.GetSheetSizes("Ansi")
 
 		CheckedListBox1.Items.Clear()
@@ -71,7 +49,6 @@ Public Class FormSheetSelector
 	End Sub
 
 	Private Sub RadioButtonIso_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonIso.CheckedChanged
-		'Dim UP As New UtilsPrinters
 		SheetSizeList = Task.GetSheetSizes("Iso")
 
 		CheckedListBox1.Items.Clear()
@@ -86,7 +63,6 @@ Public Class FormSheetSelector
 	End Sub
 
 	Private Sub RadioButtonAll_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonAll.CheckedChanged
-		'Dim UP As New UtilsPrinters
 		SheetSizeList = Task.GetSheetSizes("All")
 
 		CheckedListBox1.Items.Clear()
@@ -108,4 +84,5 @@ Public Class FormSheetSelector
 
 
 	End Sub
+
 End Class

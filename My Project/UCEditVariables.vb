@@ -10,6 +10,7 @@ Public Class UCEditVariables
     Public Property ExposeName As String
     Public Property NotifyVariableEditor As Boolean
 
+
     Public Sub New()
 
         ' This call is required by the designer.
@@ -48,6 +49,28 @@ Public Class UCEditVariables
 
     End Sub
 
+
+    Public Sub ReconcileFormWithProps()
+        Me.NotifyVariableEditor = False
+
+        CheckBoxSelect.Checked = Me.Selected
+        TextBoxVariableName.Text = Me.VariableName
+        TextBoxFormula.Text = Me.Formula
+        ComboBoxUnitType.Text = Me.UnitType
+        CheckBoxExpose.Checked = Me.Expose
+        TextBoxExposeName.Text = Me.ExposeName
+
+        Me.NotifyVariableEditor = True
+    End Sub
+
+    Public Sub Notify()
+        If NotifyVariableEditor Then
+            VariableEditor.UCChanged(Me)
+        End If
+
+    End Sub
+
+
     Private Sub CheckBoxSelect_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelect.CheckedChanged
         Me.Selected = CheckBoxSelect.Checked
         Notify()
@@ -81,26 +104,6 @@ Public Class UCEditVariables
         Notify()
     End Sub
 
-    Public Sub ReconcileFormWithProps()
-        Me.NotifyVariableEditor = False
-
-        CheckBoxSelect.Checked = Me.Selected
-        TextBoxVariableName.Text = Me.VariableName
-        TextBoxFormula.Text = Me.Formula
-        ComboBoxUnitType.Text = Me.UnitType
-        CheckBoxExpose.Checked = Me.Expose
-        TextBoxExposeName.Text = Me.ExposeName
-
-        Me.NotifyVariableEditor = True
-    End Sub
-
-    Public Sub Notify()
-        If NotifyVariableEditor Then
-            VariableEditor.UCChanged(Me)
-        End If
-
-    End Sub
-
     Private Sub InsertPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
         Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
         Dim CaretPosition = TextBox.SelectionStart
@@ -115,4 +118,5 @@ Public Class UCEditVariables
         End If
 
     End Sub
+
 End Class

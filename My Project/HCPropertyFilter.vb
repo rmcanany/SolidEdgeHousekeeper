@@ -5,6 +5,7 @@ Imports Newtonsoft.Json
 Public Class PropertyFilters
     Public Property Items As List(Of HCPropertyFilter)
 
+
     Public Sub New()
         Dim UP As New UtilsPreferences
         Dim Infile As String = UP.GetPropertyFiltersFilename(CheckExisting:=True)
@@ -28,6 +29,7 @@ Public Class PropertyFilters
         End If
 
     End Sub
+
 
     Public Sub Save()
         Dim UP As New UtilsPreferences
@@ -116,9 +118,11 @@ Public Class HCPropertyFilter
     Public Property Conditions As List(Of PropertyFilterCondition)
     Public Property IsActiveFilter As Boolean
 
+
     Public Sub New()
         Me.Conditions = New List(Of PropertyFilterCondition)
     End Sub
+
 
     Public Sub New(JSONString As String)
         Me.Conditions = New List(Of PropertyFilterCondition)
@@ -199,17 +203,6 @@ Public Class HCPropertyFilter
             End If
         Next
 
-        ' Surplus info can safely be ignored
-        ' Check for surplus info
-        'If Proceed Then
-        '    For Each PropertyName As String In JSONDict.Keys
-        '        If Not PropertyNamesList.Contains(PropertyName) Then
-        '            Proceed = False
-        '            Exit For
-        '        End If
-        '    Next
-        'End If
-
         Return Proceed
     End Function
 
@@ -242,9 +235,11 @@ Public Class PropertyFilterCondition
         LessThan
     End Enum
 
+
     Public Sub New()
 
     End Sub
+
 
     Public Sub New(JSONString As String)
         FromJSON(JSONString)
@@ -303,17 +298,6 @@ Public Class PropertyFilterCondition
                 Exit For
             End If
         Next
-
-        ' Surplus info can safely be ignored
-        ' Check for surplus info
-        'If Proceed Then
-        '    For Each PropertyName As String In JSONDict.Keys
-        '        If Not PropertyNamesList.Contains(PropertyName) Then
-        '            Proceed = False
-        '            Exit For
-        '        End If
-        '    Next
-        'End If
 
         Return Proceed
     End Function

@@ -259,31 +259,6 @@ Public Class TaskCheckRelationships
     End Sub
 
 
-    Private Function GetSuppressedComponents(
-        tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
-        ) As List(Of SolidEdgeAssembly.Occurrence)
-
-        Dim SuppressedOccurrences As New List(Of SolidEdgeAssembly.Occurrence)
-
-        Dim ComponentType As SolidEdgeAssembly.AssemblyComponentTypeConstants
-        ComponentType = SolidEdgeAssembly.AssemblyComponentTypeConstants.seAssemblyComponentTypeAll
-        Dim ComponentCount As Integer
-        'Dim SuppressedComponents() As Object = Nothing
-        Dim SuppressedComponents As Array = Nothing
-        tmpSEDoc.GetSuppressedComponents(ComponentType, ComponentCount, SuppressedComponents)
-
-        For Each Component As Object In SuppressedComponents
-            Try
-                Dim tmpComponent As SolidEdgeAssembly.Occurrence = CType(Component, SolidEdgeAssembly.Occurrence)
-                SuppressedOccurrences.Add(tmpComponent)
-            Catch ex As Exception
-
-            End Try
-        Next
-
-        Return SuppressedOccurrences
-    End Function
-
     Private Sub CheckFeatures(
         CheckItem As String,
         Models As SolidEdgePart.Models,
@@ -340,8 +315,6 @@ Public Class TaskCheckRelationships
                             End If
 
                             If CheckItem = "Underconstrained relationships" Then
-                                'RefPlane = Nothing
-                                ' UserDefinedPatterns (eg Hole Pattern) are different
                                 If FeatureTypeConstant = SolidEdgePart.FeatureTypeConstants.igUserDefinedPatternFeatureObject Then
                                     RefPlane = UF.GetPatternPlane(_Feature)
                                 Else
@@ -351,7 +324,6 @@ Public Class TaskCheckRelationships
                                         If Profile Is Nothing Then
                                             Continue For
                                         End If
-                                        'RefPlane = GetProfilePlane(Profile)
                                         RefPlane = CType(Profile.Plane, SolidEdgePart.RefPlane)
 
                                     Catch ex As Exception
@@ -448,8 +420,6 @@ Public Class TaskCheckRelationships
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
@@ -479,7 +449,6 @@ Public Class TaskCheckRelationships
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

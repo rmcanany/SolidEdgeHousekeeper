@@ -87,8 +87,6 @@ Public Class FormPropertyFilter
             ' Ignore any with no PropertyName
             If Not UC.PropertyName = "" Then
 
-                ' UC.Value = "" is not an error.
-
                 If UC.PropertySet = "" Then
                     s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
                 End If
@@ -114,31 +112,6 @@ Public Class FormPropertyFilter
         End If
 
         Return InputsOK
-    End Function
-
-    Private Function UpdatePropertyFilterDictFromForm() As Dictionary(Of String, Dictionary(Of String, String))
-
-        Dim tmpPropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
-
-        Dim i = 0
-
-        For Each UC As UCPropertyFilter In UCList
-            If Not UC.PropertyName = "" Then
-                Dim d = New Dictionary(Of String, String)
-                d("Variable") = UC.Variable
-                d("PropertySet") = UC.PropertySet
-                d("PropertyName") = UC.PropertyName
-                d("Comparison") = UC.Comparison
-                d("Value") = UC.Value
-                d("Formula") = UC.Formula
-
-                tmpPropertyFilterDict(CStr(i)) = d
-
-                i += 1
-            End If
-        Next
-
-        Return tmpPropertyFilterDict
     End Function
 
     Private Function UpdatePropertyFilterFromForm() As HCPropertyFilter
@@ -204,31 +177,6 @@ Public Class FormPropertyFilter
 
         Return tmpPropertyFilter
     End Function
-
-    Public Sub PopulateUCList(tmpPropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)))
-
-        Dim NewUC As UCPropertyFilter
-
-        Me.UCList.Clear()
-
-        For Each Key As String In tmpPropertyFilterDict.Keys
-            NewUC = New UCPropertyFilter(Me)
-            NewUC.NotifyPropertyFilter = False
-
-            NewUC.Variable = tmpPropertyFilterDict(Key)("Variable")
-            NewUC.PropertySet = tmpPropertyFilterDict(Key)("PropertySet")
-            NewUC.PropertyName = tmpPropertyFilterDict(Key)("PropertyName")
-            NewUC.Comparison = tmpPropertyFilterDict(Key)("Comparison")
-            NewUC.Value = tmpPropertyFilterDict(Key)("Value")
-            NewUC.Formula = tmpPropertyFilterDict(Key)("Formula")
-
-            NewUC.Dock = DockStyle.Fill
-
-            UCList.Add(NewUC)
-            NewUC.NotifyPropertyFilter = True
-        Next
-
-    End Sub
 
     Public Sub PopulateUCList(tmpPropertyFilter As HCPropertyFilter)
 
@@ -331,7 +279,6 @@ Public Class FormPropertyFilter
         For Each UC As UCPropertyFilter In UCList
             If Not UC.PropertyName = "" Then
                 UC.Formula = Me.Formula
-                'UC.ReconcileFormWithProps()
             End If
         Next
 
@@ -494,7 +441,6 @@ Public Class FormPropertyFilter
 
         Dim ActiveFilterName As String = Nothing
 
-        'ComboBoxSavedSettings.Items.Add("")
         For Each Item As HCPropertyFilter In Me.PropertyFilters.Items
             ComboBoxSavedSettings.Items.Add(Item.Name)
             If Item.IsActiveFilter Then
@@ -541,16 +487,13 @@ Public Class FormPropertyFilter
 
     End Sub
 
-
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         Me.DialogResult = DialogResult.Cancel
     End Sub
 
-
     Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click
         System.Diagnostics.Process.Start(Me.HelpURL)
     End Sub
-
 
     Private Sub ButtonRowDelete_Click(sender As Object, e As EventArgs) Handles ButtonRowDelete.Click
         Dim SelectedRow = GetSelectedRow()
@@ -677,7 +620,6 @@ Public Class FormPropertyFilter
         End If
 
     End Sub
-
 
     Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAllProps.Click
 

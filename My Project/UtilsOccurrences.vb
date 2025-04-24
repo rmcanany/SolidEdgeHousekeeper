@@ -10,6 +10,7 @@ Public Class UtilsOccurrences
     Public AllOccurrences As New List(Of SolidEdgeAssembly.Occurrence)
     Public AllSubOccurrences As New List(Of SolidEdgeAssembly.SubOccurrence)
 
+
     Public Sub New(SEDoc As SolidEdgeAssembly.AssemblyDocument,
                    IgnoreIncludeInReportsFlag As Boolean,
                    Optional IncludeSubOccurrences As Boolean = True)

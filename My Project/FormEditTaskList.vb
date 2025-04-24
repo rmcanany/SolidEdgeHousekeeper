@@ -19,92 +19,6 @@ Public Class FormEditTaskList
     End Sub
 
 
-    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-
-        Dim DescriptionList As New List(Of String)
-        Dim RepeatsList As New List(Of String)
-
-        For Each Task As Task In Me.TaskList
-            DescriptionList.Add(Task.Description)
-        Next
-
-        DescriptionList.Sort()
-
-        Dim s As String
-        Dim s2 As String
-
-        For i = 1 To DescriptionList.Count - 1
-            s = DescriptionList(i)
-            s2 = DescriptionList(i - 1)
-            If s = s2 Then
-                If Not RepeatsList.Contains(s) Then
-                    RepeatsList.Add(s)
-                End If
-            End If
-        Next
-
-        If RepeatsList.Count = 0 Then
-            Me.DialogResult = DialogResult.OK
-        Else
-            s = String.Format("Task names must be unique{0}", vbCrLf)
-            s = String.Format("{0}Please rename the following:{1}", s, vbCrLf)
-            For Each s2 In RepeatsList
-                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
-            Next
-            MsgBox(s, vbOKOnly)
-        End If
-    End Sub
-
-    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
-        Me.DialogResult = DialogResult.Cancel
-    End Sub
-
-
-    Private Sub FormEditTaskList_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Me.TaskList = New List(Of Task)
-        For Each Task As Task In OldTaskList
-            If Task.ColorHue = "" Then Task.ColorHue = "Green"
-            If Task.ColorSaturation = 0 Then Task.ColorSaturation = 0.2
-            If Task.ColorBrightness = 0 Then Task.ColorBrightness = 1
-            If Task.ColorR = 0 Then Task.ColorR = 240
-            If Task.ColorG = 0 Then Task.ColorG = 255
-            If Task.ColorB = 0 Then Task.ColorB = 240
-
-            Me.TaskList.Add(Task)
-        Next
-
-        Dim UP As New UtilsPreferences()
-        UP.RememberTaskSelections = Me.RememberTaskSelections
-
-        Me.AvailableTasks = New List(Of Task)
-        Me.AvailableTasks = UP.BuildTaskListFromScratch(Nothing)
-
-
-
-        BuildColumns()
-
-        Dim i As Integer = 0
-
-        For Each SourceTask As Task In Me.AvailableTasks
-            DataGridViewSource.Rows.Add({SourceTask.Description})
-            DataGridViewSource.Rows(i).DefaultCellStyle.BackColor = Color.FromArgb(SourceTask.ColorR, SourceTask.ColorG, SourceTask.ColorB)
-            i += 1
-        Next
-
-        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
-        'DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
-
-        UpdateDataGridView()
-
-    End Sub
-
-    Private Sub FormEditTaskList_Resize(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
-        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
-        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
-
-    End Sub
-
     Private Sub BuildColumns()
 
         Dim ColumnNames As List(Of String) = "Task".Split(CChar(" ")).ToList
@@ -167,38 +81,6 @@ Public Class FormEditTaskList
 
     End Sub
 
-    'Private Sub DataGridViewTarget_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewTarget.CellContentClick
-
-    'End Sub
-
-    Private Sub DataGridViewTarget_CurrentCellDirtyStateChanged(
-        ByVal sender As Object,
-        ByVal e As EventArgs
-        ) Handles DataGridViewTarget.CurrentCellDirtyStateChanged
-
-        If DataGridViewTarget.IsCurrentCellDirty Then
-            DataGridViewTarget.CommitEdit(DataGridViewDataErrorContexts.Commit)
-        End If
-    End Sub
-
-    Private Sub DataGridViewTarget_CellValueChanged(
-        ByVal sender As Object,
-        ByVal e As DataGridViewCellEventArgs
-        ) Handles DataGridViewTarget.CellValueChanged
-
-        Select Case e.ColumnIndex
-            Case 0 ' Description
-                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridViewTarget.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
-                Me.TaskList(e.RowIndex).Description = CStr(TextBox.Value)
-
-                DataGridViewTarget.Invalidate()
-
-            Case Else
-                MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
-
-        End Select
-    End Sub
-
     Private Sub MoveRow(Direction As String)
         Dim SelectedRowIndex As Integer
         Dim tmpTaskList As New List(Of Task)
@@ -217,8 +99,6 @@ Public Class FormEditTaskList
             tf = tf Or ((SelectedRowIndex = DataGridViewTarget.Rows.Count - 1) And (Direction = "down"))
 
             If Not tf Then
-
-                'SelectedRowIndex = DataGridViewTarget.SelectedRows(0).Index
 
                 For i As Integer = 0 To Me.TaskList.Count - 1
 
@@ -261,6 +141,141 @@ Public Class FormEditTaskList
 
     End Sub
 
+    Private Function GetUniqueTaskDescription(
+        tmpTaskList As List(Of Task),
+        ProposedDescription As String
+        ) As String
+
+        Dim DescriptionList As New List(Of String)
+        Dim Description As String = ProposedDescription
+        Dim i As Integer
+
+        For Each Task As Task In tmpTaskList
+            DescriptionList.Add(Task.Description)
+        Next
+
+        i = 2
+        While DescriptionList.Contains(Description)
+            Description = String.Format("{0} [{1}]", ProposedDescription, CStr(i))
+            i += 1
+        End While
+
+        Return Description
+    End Function
+
+
+    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+
+        Dim DescriptionList As New List(Of String)
+        Dim RepeatsList As New List(Of String)
+
+        For Each Task As Task In Me.TaskList
+            DescriptionList.Add(Task.Description)
+        Next
+
+        DescriptionList.Sort()
+
+        Dim s As String
+        Dim s2 As String
+
+        For i = 1 To DescriptionList.Count - 1
+            s = DescriptionList(i)
+            s2 = DescriptionList(i - 1)
+            If s = s2 Then
+                If Not RepeatsList.Contains(s) Then
+                    RepeatsList.Add(s)
+                End If
+            End If
+        Next
+
+        If RepeatsList.Count = 0 Then
+            Me.DialogResult = DialogResult.OK
+        Else
+            s = String.Format("Task names must be unique{0}", vbCrLf)
+            s = String.Format("{0}Please rename the following:{1}", s, vbCrLf)
+            For Each s2 In RepeatsList
+                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
+            Next
+            MsgBox(s, vbOKOnly)
+        End If
+    End Sub
+
+    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+        Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub FormEditTaskList_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Me.TaskList = New List(Of Task)
+        For Each Task As Task In OldTaskList
+            If Task.ColorHue = "" Then Task.ColorHue = "Green"
+            If Task.ColorSaturation = 0 Then Task.ColorSaturation = 0.2
+            If Task.ColorBrightness = 0 Then Task.ColorBrightness = 1
+            If Task.ColorR = 0 Then Task.ColorR = 240
+            If Task.ColorG = 0 Then Task.ColorG = 255
+            If Task.ColorB = 0 Then Task.ColorB = 240
+
+            Me.TaskList.Add(Task)
+        Next
+
+        Dim UP As New UtilsPreferences()
+        UP.RememberTaskSelections = Me.RememberTaskSelections
+
+        Me.AvailableTasks = New List(Of Task)
+        Me.AvailableTasks = UP.BuildTaskListFromScratch(Nothing)
+
+
+
+        BuildColumns()
+
+        Dim i As Integer = 0
+
+        For Each SourceTask As Task In Me.AvailableTasks
+            DataGridViewSource.Rows.Add({SourceTask.Description})
+            DataGridViewSource.Rows(i).DefaultCellStyle.BackColor = Color.FromArgb(SourceTask.ColorR, SourceTask.ColorG, SourceTask.ColorB)
+            i += 1
+        Next
+
+        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+
+        UpdateDataGridView()
+
+    End Sub
+
+    Private Sub FormEditTaskList_Resize(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
+        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
+
+    End Sub
+
+    Private Sub DataGridViewTarget_CurrentCellDirtyStateChanged(
+        ByVal sender As Object,
+        ByVal e As EventArgs
+        ) Handles DataGridViewTarget.CurrentCellDirtyStateChanged
+
+        If DataGridViewTarget.IsCurrentCellDirty Then
+            DataGridViewTarget.CommitEdit(DataGridViewDataErrorContexts.Commit)
+        End If
+    End Sub
+
+    Private Sub DataGridViewTarget_CellValueChanged(
+        ByVal sender As Object,
+        ByVal e As DataGridViewCellEventArgs
+        ) Handles DataGridViewTarget.CellValueChanged
+
+        Select Case e.ColumnIndex
+            Case 0 ' Description
+                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridViewTarget.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
+                Me.TaskList(e.RowIndex).Description = CStr(TextBox.Value)
+
+                DataGridViewTarget.Invalidate()
+
+            Case Else
+                MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
+
+        End Select
+    End Sub
+
     Private Sub ButtonMoveUp_Click(sender As Object, e As EventArgs) Handles ButtonMoveUp.Click
         MoveRow("up")
     End Sub
@@ -300,7 +315,6 @@ Public Class FormEditTaskList
                 Me.TaskList(i).ResetTaskColor()
             Next
             UpdateDataGridView()
-            'MsgBox("OK")
         End If
     End Sub
 
@@ -376,25 +390,4 @@ Public Class FormEditTaskList
 
     End Sub
 
-    Private Function GetUniqueTaskDescription(
-        tmpTaskList As List(Of Task),
-        ProposedDescription As String
-        ) As String
-
-        Dim DescriptionList As New List(Of String)
-        Dim Description As String = ProposedDescription
-        Dim i As Integer
-
-        For Each Task As Task In tmpTaskList
-            DescriptionList.Add(Task.Description)
-        Next
-
-        i = 2
-        While DescriptionList.Contains(Description)
-            Description = String.Format("{0} [{1}]", ProposedDescription, CStr(i))
-            i += 1
-        End While
-
-        Return Description
-    End Function
 End Class

@@ -37,7 +37,6 @@ Public Class UtilsCommon
                 Filename = LinkedDoc.FullName
                 If Not tmpList.Contains(Filename) Then
 
-                    'tmpList.Add(LinkedDocs(i).FullName, LinkedDocs(i).FullName.ToString)
                     tmpList.Add(Filename, Filename)
 
                     If IO.Path.GetExtension(Filename).ToLower = ".asm" Then
@@ -255,8 +254,6 @@ Public Class UtilsCommon
             Next
 
         Catch ex As Exception
-            'ExitStatus = 1
-            'ErrorMessageList.Add("Unable to access variables")
         End Try
 
         Return DocDimensionDict
@@ -291,8 +288,6 @@ Public Class UtilsCommon
             Next
 
         Catch ex As Exception
-            'ExitStatus = 1
-            'ErrorMessageList.Add("Unable to access variables")
         End Try
 
         Return DocVariableDict
@@ -532,23 +527,28 @@ Public Class UtilsCommon
 
     End Sub
 
-    Public Function SplitFOAName(SEDocFullName As String) As Dictionary(Of String, String)
-        Dim SplitDict As New Dictionary(Of String, String)
+    Public Function GetFOAFilename(SEDocFullName As String) As String
         Dim Filename As String
-        Dim MemberName As String
 
         If SEDocFullName.Contains("!") Then
             Filename = SEDocFullName.Split("!"c)(0)
-            MemberName = SEDocFullName.Split("!"c)(1)
         Else
             Filename = SEDocFullName
+        End If
+
+        Return Filename
+    End Function
+
+    Public Function GetFOAMembername(SEDocFullName As String) As String
+        Dim MemberName As String
+
+        If SEDocFullName.Contains("!") Then
+            MemberName = SEDocFullName.Split("!"c)(1)
+        Else
             MemberName = ""
         End If
 
-        SplitDict("Filename") = Filename
-        SplitDict("MemberName") = MemberName
-
-        Return SplitDict
+        Return MemberName
     End Function
 
     Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean
@@ -811,7 +811,7 @@ Public Class UtilsCommon
         Dim SpecialProperty As String = Nothing
 
         If ModelLinkIdx = 0 Then  ' Model file
-            Fullname = SplitFOAName(SEDoc.FullName)("Filename")
+            Fullname = GetFOAFilename(SEDoc.FullName)
 
         Else  ' Must be a draft file
             Dim ModelLink As SolidEdgeDraft.ModelLink
@@ -821,7 +821,7 @@ Public Class UtilsCommon
                 tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
                 ModelLink = tmpSEDoc.ModelLinks.Item(ModelLinkIdx)
-                Fullname = SplitFOAName(ModelLink.FileName)("Filename")
+                Fullname = GetFOAFilename(ModelLink.FileName)
 
             Catch ex As Exception
                 Proceed = False
@@ -884,7 +884,7 @@ Public Class UtilsCommon
         Dim UFC As New UtilsFilenameCharmap
 
 
-        FullName = SplitFOAName(FullName)("Filename")
+        FullName = GetFOAFilename(FullName)
 
         Pattern = "%{[^}]*}"  ' Any number of substrings that start with "%{" and end with the first encountered "}".
         Matches = Regex.Matches(Instring, Pattern)
@@ -958,7 +958,6 @@ Public Class UtilsCommon
                     Dim A = nCalcExpression.Evaluate()
                     Outstring = A.ToString
                 Catch ex As Exception
-                    'Outstring = ex.Message.Replace(vbCrLf, "-")
                     Outstring = Nothing
                 End Try
             End If
@@ -996,8 +995,6 @@ Public Class UtilsCommon
 
     Public Sub CopyProperties(Source As Object, Destination As Object)
 
-        'Dim sourceType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Source)
-        'Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
         Dim sourceType As Type = HCComObject.GetCOMObjectType(Source)
         Dim destType As Type = HCComObject.GetCOMObjectType(Destination)
 
@@ -1014,7 +1011,6 @@ Public Class UtilsCommon
                                     Dim tmpValue = sourceProp.GetValue(Source, Nothing)
                                     If Not tmpValue Is Nothing Then destProp.SetValue(Destination, tmpValue, Nothing)
                                 Catch ex As Exception
-                                    'Console.WriteLine(destType.FullName & " - " & destProp.Name)
                                 End Try
                             End If
                         End If
@@ -1091,12 +1087,5 @@ Public Class UtilsCommon
         Return ModelIdx
     End Function
 
-    Public Function GetPropertyValue(Of T)(ByVal comObject As Object, ByVal name As String) As T
-        'https://github.com/SolidEdgeCommunity/SolidEdge.Community/blob/master/src/SolidEdge.Community/Runtime/InteropServices/ComObject.cs
-        'If Marshal.IsComObject(comObject) = False Then Throw New InvalidComObjectException()
-        Dim type As Type = comObject.[GetType]()
-        Dim value As Object = type.InvokeMember(name, System.Reflection.BindingFlags.GetProperty, Nothing, comObject, Nothing)
-        Return CType(value, T)
-    End Function
 
 End Class

@@ -19,17 +19,6 @@ Imports System.Runtime.InteropServices.ComTypes
 Public Class HCComObject
     Const LOCALE_SYSTEM_DEFAULT As Integer = 2048
 
-    'Public Shared Function GetITypeInfo(ByVal comObject As Object) As ITypeInfo
-    '    If Marshal.IsComObject(comObject) = False Then Throw New InvalidComObjectException()
-    '    Dim dispatch = TryCast(comObject, IDispatch)
-
-    '    If dispatch IsNot Nothing Then
-    '        Return dispatch.GetTypeInfo(0, LOCALE_SYSTEM_DEFAULT)
-    '    End If
-
-    '    Return Nothing
-    'End Function
-
     Public Shared Function GetPropertyValue(Of T)(ByVal comObject As Object, ByVal name As String) As T
         If Marshal.IsComObject(comObject) = False Then Throw New InvalidComObjectException()
         Dim type = comObject.[GetType]()

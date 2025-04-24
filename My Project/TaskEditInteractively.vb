@@ -383,7 +383,6 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.UseCountdownTimer.ToString, "Use countdown timer")
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -407,7 +406,6 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.SaveAfterTimeout.ToString, "Save file after timeout")
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -417,7 +415,6 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.RunCommands.ToString, "Start command")
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -500,7 +497,6 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

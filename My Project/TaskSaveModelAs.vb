@@ -388,8 +388,6 @@ Public Class TaskSaveModelAs
 
 
             Case = "par"
-                'Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
-
                 NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
                 If Not TaskLogger.HasErrors Then
@@ -410,8 +408,6 @@ Public Class TaskSaveModelAs
 
             Case = "psm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-
-                'Dim DraftTasks As New DraftTasks
 
                 Dim DraftFilename As String
                 Dim SEDraftDoc As SolidEdgeDraft.DraftDocument = Nothing
@@ -487,7 +483,7 @@ Public Class TaskSaveModelAs
 
         Dim Success As Boolean = True
 
-        Dim OldFullFilename As String = UC.SplitFOAName(SEDoc.FullName)("Filename")   ' "C:\Projects\part.par", "C:\Projects\assembly.asm!Master"
+        Dim OldFullFilename As String = UC.GetFOAFilename(SEDoc.FullName)   ' "C:\Projects\part.par", "C:\Projects\assembly.asm!Master"
 
         Dim OldDirectoryName As String = System.IO.Path.GetDirectoryName(OldFullFilename)             ' "C:\Projects"
         Dim OldFilenameWOExt As String = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)  ' "part"
@@ -634,8 +630,6 @@ Public Class TaskSaveModelAs
         SEApp As SolidEdgeFramework.Application,
         NewExtension As String
         )
-
-        'Dim ExitMessage As String
 
         Dim Window As SolidEdgeFramework.Window
         Dim View As SolidEdgeFramework.View
@@ -1001,7 +995,6 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)

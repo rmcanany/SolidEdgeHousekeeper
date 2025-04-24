@@ -81,7 +81,6 @@ Public Class TaskBreakLinks
         End Set
     End Property
 
-
     Enum ControlNames
         BreakDesignCopies
         BreakConstructionCopies
@@ -90,6 +89,7 @@ Public Class TaskBreakLinks
         BreakDraftModels
         AutoHideOptions
     End Enum
+
 
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
@@ -308,8 +308,6 @@ Public Class TaskBreakLinks
         Dim Model As SolidEdgePart.Model
         Dim CopiedParts As SolidEdgePart.CopiedParts
         Dim CopiedPart As SolidEdgePart.CopiedPart
-        'Dim CopyConstructions As SolidEdgePart.CopyConstructions = Nothing
-        'Dim CopyConstruction As SolidEdgePart.CopyConstruction
         Dim FileChanged As Boolean = False
 
         Dim UC As New UtilsCommon
@@ -319,12 +317,10 @@ Public Class TaskBreakLinks
             Case = "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
                 Models = tmpSEDoc.Models
-                'CopyConstructions = tmpSEDoc.Constructions.CopyConstructions
 
             Case = "psm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                 Models = tmpSEDoc.Models
-                'CopyConstructions = tmpSEDoc.Constructions.CopyConstructions
 
         End Select
 
@@ -370,12 +366,10 @@ Public Class TaskBreakLinks
         Select Case DocType
             Case = "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
-                'Models = tmpSEDoc.Models
                 CopyConstructions = tmpSEDoc.Constructions.CopyConstructions
 
             Case = "psm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                'Models = tmpSEDoc.Models
                 CopyConstructions = tmpSEDoc.Constructions.CopyConstructions
 
         End Select
@@ -408,8 +402,6 @@ Public Class TaskBreakLinks
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
-
-        'Dim IU As New InterfaceUtilities
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
@@ -456,7 +448,6 @@ Public Class TaskBreakLinks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

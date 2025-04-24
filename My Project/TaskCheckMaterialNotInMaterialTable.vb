@@ -82,7 +82,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.RequiresMaterialTable = True
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
-        'Me.SolidEdgeRequired = False
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
         GenerateTaskControl()
@@ -189,8 +188,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Dim TextBox As TextBox
         Dim Button As Button
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
 
         RowIndex = 0
@@ -225,7 +222,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -298,7 +294,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
             Case ControlNames.StructuredStorageEdit.ToString
                 Me.StructuredStorageEdit = Checkbox.Checked
-                'Me.RequiresSave = Not Checkbox.Checked
                 Me.SolidEdgeRequired = Not Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
@@ -342,6 +337,5 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         Return HelpString
     End Function
-
 
 End Class

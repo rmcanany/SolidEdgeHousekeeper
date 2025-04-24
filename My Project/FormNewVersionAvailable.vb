@@ -12,6 +12,8 @@ Public Class FormNewVersionAvailable
         LabelNewVersionAvailable.Text = s
 
     End Sub
+
+
     Private Sub FormNewVersionAvailable_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim LLList As List(Of LinkLabel)
         LLList = {LinkLabelReleaseNotes, LinkLabelInstallationInstructions, LinkLabelDownloadPage}.ToList

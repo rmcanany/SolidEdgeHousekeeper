@@ -3,23 +3,8 @@
 Imports Newtonsoft.Json
 
 Public Class FormPropertyInputEditor
-    'Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))
-    'Private InputEditorDoctor As New InputEditorDoctor
-    'Private ProcessCheckBoxEvents As Boolean
-    'Private FileType As String
 
     Public Property JSONString As String
-    '{"0":
-    '    {"PropertySet":"Custom",
-    '     "PropertyName":"hmk_Part_Number",
-    '     "FindSearch":"PT",
-    '     "FindString":"a",
-    '     "ReplaceSearch":"PT",
-    '     "ReplaceString":"b"},
-    ' "1":
-    '...
-    '}
-
     Public Property UCList As List(Of UCEditProperties)
     Public Property HelpURL As String
     Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
@@ -40,8 +25,6 @@ Public Class FormPropertyInputEditor
         End Set
     End Property
 
-
-
     Dim t As Timer = New Timer()
 
     Public Sub New()
@@ -53,7 +36,6 @@ Public Class FormPropertyInputEditor
 
         Dim UC As New UtilsCommon
 
-        'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
         Me.PropertiesData = Form_Main.PropertiesData
         Me.TemplatePropertyList = Me.PropertiesData.GetFavoritesList
 
@@ -206,7 +188,7 @@ Public Class FormPropertyInputEditor
 
     End Sub
 
-    Public Sub AddRow()
+    Private Sub AddRow()
         Dim NewUC As New UCEditProperties(Me)
         NewUC.Dock = DockStyle.Fill
         Me.UCList.Add(NewUC)
@@ -300,14 +282,48 @@ Public Class FormPropertyInputEditor
             End If
             If UC.PropertyName = "" Then
                 NeedANewRow = False
-                'Else
-                '    UC.ReconcileFormWithProps()
             End If
         Next
 
         If NeedANewRow Then
             AddRow()
         End If
+
+    End Sub
+
+    Private Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
+
+        Dim tmpForm As New Form
+        Dim tmpSize = New Size(200, 75)
+        tmpForm.Text = String.Empty
+        tmpForm.ControlBox = False
+        tmpForm.BackColor = Color.White
+
+        tmpForm.Size = tmpSize
+        tmpForm.StartPosition = FormStartPosition.Manual
+        tmpForm.Location = New Point(CInt(Me.Left + Me.Width / 2 - tmpForm.Width / 2), CInt(Me.Top + Me.Height / 2 - tmpForm.Height / 2))
+
+        Dim tmpLabel As New Label
+        tmpLabel.Font = New Font(Me.Font.Name, 8, FontStyle.Bold)
+        tmpLabel.Width = 180
+        tmpLabel.Dock = DockStyle.Fill
+        tmpLabel.TextAlign = ContentAlignment.MiddleCenter
+        tmpLabel.Text = "Expression copied to clipboard"
+        tmpForm.Controls.Add(tmpLabel)
+
+        tmpForm.Show(Me)
+
+        t.Start()
+
+    End Sub
+
+    Private Sub HandleTimerTick(sender As Object, e As EventArgs)
+
+        For Each item In Me.OwnedForms
+            item.Close()
+        Next
+
+        t.Stop()
 
     End Sub
 
@@ -330,17 +346,13 @@ Public Class FormPropertyInputEditor
         ' Check for imported template properties
         Dim tf As Boolean
 
-        'tf = Form_Main.TemplatePropertyDict Is Nothing
         tf = Form_Main.PropertiesData Is Nothing
         tf = tf Or Me.TemplatePropertyList Is Nothing
 
         If Not tf Then
-            'tf = Form_Main.TemplatePropertyDict.Count = 0
             tf = Form_Main.PropertiesData.Items.Count = 0
             tf = tf Or Me.TemplatePropertyList.Count = 0
         End If
-
-        'tf = tf And Form_Main.WarnNoImportedProperties
 
         If tf Then
             Dim s = "Template properties required for this command not found. "
@@ -356,7 +368,6 @@ Public Class FormPropertyInputEditor
 
         If CheckInputs() Then
 
-            'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
             Me.PropertiesData = Form_Main.PropertiesData
 
             Dim UP As New UtilsPreferences
@@ -372,47 +383,8 @@ Public Class FormPropertyInputEditor
 
     End Sub
 
-
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         Me.DialogResult = DialogResult.Cancel
-    End Sub
-
-
-    Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
-
-        Dim tmpForm As New Form
-        Dim tmpSize = New Size(200, 75)
-        tmpForm.Text = String.Empty
-        tmpForm.ControlBox = False
-        tmpForm.BackColor = Color.White
-
-        'tmpForm.FormBorderStyle = FormBorderStyle.None
-        tmpForm.Size = tmpSize
-        tmpForm.StartPosition = FormStartPosition.Manual
-        tmpForm.Location = New Point(CInt(Me.Left + Me.Width / 2 - tmpForm.Width / 2), CInt(Me.Top + Me.Height / 2 - tmpForm.Height / 2))
-
-        Dim tmpLabel As New Label
-        tmpLabel.Font = New Font(Me.Font.Name, 8, FontStyle.Bold)
-        tmpLabel.Width = 180
-        tmpLabel.Dock = DockStyle.Fill
-        tmpLabel.TextAlign = ContentAlignment.MiddleCenter
-        tmpLabel.Text = "Expression copied to clipboard"
-        tmpForm.Controls.Add(tmpLabel)
-
-        tmpForm.Show(Me)
-
-        t.Start()
-
-    End Sub
-
-    Sub HandleTimerTick(sender As Object, e As EventArgs)
-
-        For Each item In Me.OwnedForms
-            item.Close()
-        Next
-
-        t.Stop()
-
     End Sub
 
     Private Sub ToolStripButtonHelp_Click(sender As Object, e As EventArgs) Handles ToolStripButtonHelp.Click
@@ -423,7 +395,6 @@ Public Class FormPropertyInputEditor
 
         Dim tmp As New FormNCalc
         tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
-        'tmp.TextEditorNCalc.Text = "'%{System.Title}' + '-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
         tmp.ShowDialog()
         Dim A = tmp.Formula.Replace(vbCrLf, "")
         A = A.Split(CType("\\", Char)).First
@@ -527,9 +498,6 @@ Public Class FormPropertyInputEditor
                 PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
                 UCList(i).ComboBoxPropertyName.Items.Clear()
                 UCList(i).ComboBoxPropertyName.Items.Add("")
-                'For Each Key As String In Form_Main.TemplatePropertyDict.Keys
-                '    UCList(i).ComboBoxPropertyName.Items.Add(Key)
-                'Next
                 For Each Key As String In Form_Main.PropertiesData.GetAvailableList
                     UCList(i).ComboBoxPropertyName.Items.Add(Key)
                 Next

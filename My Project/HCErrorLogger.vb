@@ -7,6 +7,7 @@ Public Class HCErrorLogger
     Public Property FileLoggers As List(Of Logger)
     Public Property Abort As Boolean
 
+
     Public Sub New()
         Me.Timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
         Me.LogfileName = String.Format("{0}\Housekeeper_{1}.log", IO.Path.GetTempPath, Timestamp)
@@ -14,6 +15,7 @@ Public Class HCErrorLogger
         Me.Abort = False
 
     End Sub
+
 
     Public Function FileLoggerHasErrors(Filename As String) As Boolean
         Dim tmpHasErrors As Boolean = False
@@ -69,11 +71,11 @@ Public Class HCErrorLogger
     Private Sub BuildOutput(_Logger As Logger, Outlist As List(Of String), Level As Integer)
         Dim Indent As String = StrDup(4 * Level, " ")
 
-        If Level = 0 Then  ' It's the filename
+        If Level = 0 Then  ' It's the filename when executing tasks.  In that case a logger file will exist.
             If Outlist.Count > 0 Then Outlist.Add("")
             If FileIO.FileSystem.FileExists(_Logger.Name) Then
                 Outlist.Add(String.Format("{0} in {1}", IO.Path.GetFileName(_Logger.Name), IO.Path.GetDirectoryName(_Logger.Name)))
-            Else
+            Else  ' It is being used for another purpose than executing tasks.
                 Outlist.Add(_Logger.Name)
             End If
         Else

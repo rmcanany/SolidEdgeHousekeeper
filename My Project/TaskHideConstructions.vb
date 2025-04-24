@@ -176,12 +176,10 @@ Public Class TaskHideConstructions
 
             If (Models IsNot Nothing) And (RefPlanes IsNot Nothing) Then
                 If Models.Count > 0 Then
-                    'RefPlanes = tmpSEDoc.RefPlanes
                     For Each RefPlane In RefPlanes
                         RefPlane.Visible = False
                     Next
                 Else
-                    'RefPlanes = tmpSEDoc.RefPlanes
                     For Each RefPlane In RefPlanes
                         RefPlane.Visible = True
                     Next

@@ -12,20 +12,6 @@ Public Class TaskCheckFilename
             _PropertyFormula = value
             If Me.TaskOptionsTLP IsNot Nothing Then
                 CType(ControlsDict(ControlNames.PropertyFormula.ToString), TextBox).Text = value
-
-                'Dim UC As New UtilsCommon
-                'Me.PropertySet = UC.PropSetFromFormula(value)
-                'Me.PropertyName = UC.PropNameFromFormula(value)
-
-                'If Me.PropertiesData IsNot Nothing Then
-                '    Dim PropertyData = Me.PropertiesData.GetPropertyData(Me.PropertyName)
-                '    If PropertyData IsNot Nothing Then
-                '        Me.PropertyNameEnglish = PropertyData.EnglishName
-                '    Else
-                '        Me.PropertyNameEnglish = ""
-                '    End If
-
-                'End If
             End If
         End Set
     End Property
@@ -109,7 +95,6 @@ Public Class TaskCheckFilename
         End Set
     End Property
 
-
     Enum ControlNames
         PropertyFormula
         PropertyFormulaLabel
@@ -120,6 +105,7 @@ Public Class TaskCheckFilename
         StructuredStorageEdit
         AutoHideOptions
     End Enum
+
 
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
@@ -136,7 +122,6 @@ Public Class TaskCheckFilename
         Me.Category = "Check"
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
-        'Me.SolidEdgeRequired = False
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
         Me.RequiresLinkManagementOrder = True
 
@@ -186,7 +171,7 @@ Public Class TaskCheckFilename
 
         Dim UC As New UtilsCommon
 
-        Filename = UC.SplitFOAName(SEDoc.FullName)("Filename")
+        Filename = UC.GetFOAFilename(SEDoc.FullName)
 
         Filename = System.IO.Path.GetFileNameWithoutExtension(Filename)  'c:\project\part.par' -> 'part'
 
@@ -269,7 +254,7 @@ Public Class TaskCheckFilename
                     FormulaFound = False
 
                     For Each ModelLink In ModelLinks
-                        ModelLinkFilename = UC.SplitFOAName(ModelLink.FileName)("Filename")
+                        ModelLinkFilename = UC.GetFOAFilename(ModelLink.FileName)
                         Extension = IO.Path.GetExtension(ModelLinkFilename)
 
                         If (IO.File.Exists(ModelLinkFilename)) And (ValidExtensionsList.Contains(Extension)) Then
@@ -441,7 +426,6 @@ Public Class TaskCheckFilename
                                     SSChildDoc = New HCStructuredStorageDoc(ChildName)
                                     SSChildDoc.ReadProperties(Me.PropertiesData)
 
-                                    'Formula = CStr(SSChildDoc.GetPropValue(Me.PropertySet, Me.PropertyNameEnglish))
                                     Formula = SSChildDoc.SubstitutePropertyFormulas(Me.PropertyFormula, ValidFilenameRequired:=False)
 
                                     If Formula IsNot Nothing Then  ' Nothing is not an error, but no match possible.
@@ -513,8 +497,6 @@ Public Class TaskCheckFilename
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
-        'Dim ComboBox As ComboBox
-        'Dim ComboBoxItems As List(Of String) = Split("System Custom", " ").ToList
         Dim TextBox As TextBox
         Dim Label As Label
         Dim ControlWidth As Integer = 225
@@ -531,7 +513,6 @@ Public Class TaskCheckFilename
 
         TextBox = FormatOptionsTextBox(ControlNames.PropertyFormula.ToString, "")
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        'TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)

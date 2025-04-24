@@ -113,7 +113,6 @@ Public Class FormEditInteractively
     End Sub
 
     Private Sub AlwaysOnTopTimer_Tick(sender As System.Object, e As System.EventArgs) Handles AlwaysOnTopTimer.Tick
-        'Me.Activate()
         Me.TopMost = False
         Me.TopMost = True
     End Sub

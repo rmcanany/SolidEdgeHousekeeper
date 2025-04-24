@@ -3,10 +3,12 @@
 Public Class UtilsFilenameCharmap
     Private Charmap As New Dictionary(Of String, String)
 
+
     Public Sub New()
         LoadCharmap()
 
     End Sub
+
 
     Public Function SubstituteIllegalCharacters(Instring As String) As String
         Dim Outstring As String = Instring

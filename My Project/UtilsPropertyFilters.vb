@@ -13,6 +13,7 @@ Public Class UtilsPropertyFilters
         Me.PropertyFilter = FMain.PropertyFilters.GetActivePropertyFilter
     End Sub
 
+
     Public Function FilterProperties(
         FoundFiles As IReadOnlyCollection(Of String)
         ) As IReadOnlyCollection(Of String)
@@ -180,7 +181,6 @@ Public Class UtilsPropertyFilters
             DocValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyName))
 
             If DocValue Is Nothing Then
-                'DocValue = Me.PropNotFoundString
 
                 ''DocValue Is Nothing' occurs when the property doesn't exist in the file.
                 'Comparing Me.PropNotFoundString to any real value will become FALSE.
@@ -228,15 +228,10 @@ Public Class UtilsPropertyFilters
 
         Dim tf As Boolean = False
 
-        'If Not DocValue = Me.PropNotFoundString Then  ' Can't match a prop that doesn't exist
-        'End If
-
         If Comparison = "contains" Then
             tf = DocValue.ToLower.Contains(Value.ToLower)
         ElseIf Comparison = "is_exactly" Then
             tf = DocValue.ToLower = Value.ToLower
-            'ElseIf Comparison = "is_not" Then
-            '    tf = DocValue.ToLower <> Value.ToLower
         ElseIf Comparison = "wildcard_match" Then
             tf = DocValue.ToLower Like Value.ToLower
         ElseIf Comparison = "regex_match" Then

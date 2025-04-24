@@ -62,9 +62,11 @@ Public Class Preset
     Public Property FormSettingsJSON As String
     Public Property PropertyFiltersJSON As String
 
+
     Public Sub New()
 
     End Sub
+
 
     Public Function ToJSON() As String
 
@@ -120,17 +122,6 @@ Public Class Preset
                 Exit For
             End If
         Next
-
-        ' Surplus info can safely be ignored
-        ' Check for surplus info
-        'If Proceed Then
-        '    For Each PropertyName As String In JSONDict.Keys
-        '        If Not PropertyNamesList.Contains(PropertyName) Then
-        '            Proceed = False
-        '            Exit For
-        '        End If
-        '    Next
-        'End If
 
         Return Proceed
     End Function

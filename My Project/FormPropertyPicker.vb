@@ -6,6 +6,7 @@ Public Class FormPropertyPicker
     Public Property PropertyString As String
     Public Property PropertyOnly As Boolean
 
+
     Public Sub New()
 
         ' This call is required by the designer.
@@ -16,10 +17,10 @@ Public Class FormPropertyPicker
         Dim UC As New UtilsCommon
 
         Me.PropertyOnly = True
-        'Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
         Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
     End Sub
+
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
         Dim s As String = ""
@@ -94,7 +95,6 @@ Public Class FormPropertyPicker
                 ComboBoxPropertyName.Items.Add(PropName)
             Next
 
-            'ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString
         Else
             ButtonShowAll.Image = My.Resources.Unchecked
 
@@ -125,7 +125,6 @@ Public Class FormPropertyPicker
             Dim UC As New UtilsCommon
             Me.FavoritesList = FPLC.FavoritesList
 
-            'Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, Me.FavoritesList)
             Form_Main.PropertiesData.UpdateFavorites(Me.FavoritesList)
 
             ComboBoxPropertyName.Items.Clear()
@@ -138,4 +137,5 @@ Public Class FormPropertyPicker
 
 
     End Sub
+
 End Class

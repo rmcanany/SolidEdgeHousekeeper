@@ -327,7 +327,6 @@ Public Class TaskPrint
         Dim ControlWidth As Integer = 200
         Dim NewFileTypeLabelText = ""
 
-        'Dim PD As New PrinterDoctor
         Dim ComboBoxItems As List(Of String) = GetInstalledPrinterNames()
 
         Dim CtrlName As String
@@ -413,11 +412,7 @@ Public Class TaskPrint
             RowIndex += 1
         Next
 
-
-        'RowIndex += 1
-
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -477,13 +472,6 @@ Public Class TaskPrint
 
                     TextBox = CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox)
                     TextBox.Text = s
-                    'For Each SheetSize As String In Me.SelectedSheetsList
-                    '    If TextBox.Text = "" Then
-                    '        TextBox.Text = SheetSize
-                    '    Else
-                    '        TextBox.Text = String.Format("{0} {1}", TextBox.Text, SheetSize)
-                    '    End If
-                    'Next
 
                 End If
 

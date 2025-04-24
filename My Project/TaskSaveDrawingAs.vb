@@ -227,7 +227,6 @@ Public Class TaskSaveDrawingAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
-        'Me.RequiresTemplatePropertyDict = True
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
 
@@ -243,7 +242,6 @@ Public Class TaskSaveDrawingAs
         Me.NewDir = ""
         Me.UseSubdirectoryFormula = False
         Me.Formula = ""
-        'Me.CropImage = False
         Me.AddWatermark = False
         Me.WatermarkFilename = ""
         Me.WatermarkPositionX = 0
@@ -347,7 +345,7 @@ Public Class TaskSaveDrawingAs
 
         Dim Success As Boolean = True
 
-        Dim OldFullFilename As String = UC.SplitFOAName(SEDoc.FullName)("Filename")   ' "C:\Projects\part.par", "C:\Projects\assembly.asm!Master"
+        Dim OldFullFilename As String = UC.GetFOAFilename(SEDoc.FullName)   ' "C:\Projects\part.par", "C:\Projects\assembly.asm!Master"
 
         Dim OldDirectoryName As String = System.IO.Path.GetDirectoryName(OldFullFilename)             ' "C:\Projects"
         Dim OldFilenameWOExt As String = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)  ' "part"
@@ -460,7 +458,6 @@ Public Class TaskSaveDrawingAs
                 Watermark.ShowBorder = False
                 ImageX = Me.WatermarkPositionX * SheetW - Watermark.Width / 2
                 ImageY = Me.WatermarkPositionY * SheetH - Watermark.Height / 2
-                ' Watermark.GetOrigin(ImageX, ImageY)
                 Watermark.SetOrigin(ImageX, ImageY)
 
                 SEApp.DoIdle()
@@ -750,7 +747,6 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -829,7 +825,6 @@ Public Class TaskSaveDrawingAs
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
-        'Dim Ctrl As Control
         Dim TextBox As TextBox
 
         Select Case Name
@@ -852,12 +847,6 @@ Public Class TaskSaveDrawingAs
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.WatermarkFilename = tmpFileDialog.FileName
-
-                    'Ctrl = FindTLPControl(Me.TLPOptions, "TextBox", "WatermarkFilename")
-                    'If Ctrl IsNot Nothing Then
-                    '    TextBox = CType(Ctrl, TextBox)
-                    '    TextBox.Text = Me.WatermarkFilename
-                    'End If
 
                     TextBox = CType(ControlsDict(ControlNames.WatermarkFilename.ToString), TextBox)
                     TextBox.Text = Me.WatermarkFilename
@@ -928,11 +917,9 @@ Public Class TaskSaveDrawingAs
                 Me.NewFileTypeName = ComboBox.Text
 
                 If Me.NewFileTypeName = PDFPerSheetFileTypeName Then
-                    'SetControlVisibility(Me.TLPOptions, "CheckBox", "PDFPerSheetSuppressSheetname", True)
                     CType(ControlsDict(ControlNames.PDFPerSheetSuppressSheetname.ToString), CheckBox).Visible = True
 
                 Else
-                    'SetControlVisibility(Me.TLPOptions, "CheckBox", "PDFPerSheetSuppressSheetname", False)
                     CType(ControlsDict(ControlNames.PDFPerSheetSuppressSheetname.ToString), CheckBox).Visible = False
                 End If
 

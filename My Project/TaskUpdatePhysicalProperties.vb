@@ -145,8 +145,6 @@ Public Class TaskUpdatePhysicalProperties
 
                     If Occurrences.Count = 0 Then
                         Proceed = False
-                        'ExitStatus = 1
-                        'ErrorMessageList.Add("No models found")
                     End If
 
                     If Proceed Then
@@ -287,8 +285,6 @@ Public Class TaskUpdatePhysicalProperties
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
@@ -308,7 +304,6 @@ Public Class TaskUpdatePhysicalProperties
 
         RowIndex += 1
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -336,8 +331,6 @@ Public Class TaskUpdatePhysicalProperties
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
-        'Dim Ctrl As Control
-        'Dim Button As Button
 
         Select Case Name
             Case ControlNames.ShowSymbols.ToString

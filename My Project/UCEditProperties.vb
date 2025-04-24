@@ -108,7 +108,6 @@ Public Class UCEditProperties
     Public Property ProcessEvents As Boolean = True
 
 
-
     Public Sub New(_PropertyEditor As FormPropertyInputEditor)
 
         ' This call is required by the designer.
@@ -142,52 +141,6 @@ Public Class UCEditProperties
 
     End Sub
 
-    Private Sub CheckBoxSelect_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelected.CheckedChanged
-        Me.Selected = CheckBoxSelected.Checked
-        Notify()
-    End Sub
-
-    Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
-
-        If Me.ProcessEvents Then
-            Me.ProcessEvents = False
-
-            Me.PropertySet = ComboBoxPropertySet.Text
-
-            Dim PreviousPropertyName = Me.PropertyName
-            Dim IsInList As Boolean = False
-            ComboBoxPropertyName.Items.Clear()
-            For Each PropName As String In FilterPropertyNames()
-                ComboBoxPropertyName.Items.Add(PropName)
-                If PropName = PreviousPropertyName Then IsInList = True
-            Next
-            If IsInList Then
-                ComboBoxPropertyName.Text = PreviousPropertyName
-            Else
-                ComboBoxPropertyName.Text = ""
-            End If
-
-            Notify()
-
-            Me.ProcessEvents = True
-        End If
-
-
-    End Sub
-
-    Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
-
-        If Me.ProcessEvents Then
-            Me.ProcessEvents = False
-
-            Me.PropertyName = ComboBoxPropertyName.Text
-            UpdatePropertySet()
-            Notify()
-
-            Me.ProcessEvents = True
-        End If
-
-    End Sub
 
     Private Function FilterPropertyNames() As List(Of String)
         ' When the user changes the PropertySet ComboBox, this function creates a list of properties
@@ -260,6 +213,61 @@ Public Class UCEditProperties
 
     End Sub
 
+    Public Sub Notify()
+        If NotifyPropertyEditor Then
+            PropertyEditor.UCChanged(Me)
+        End If
+
+    End Sub
+
+
+    Private Sub CheckBoxSelect_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelected.CheckedChanged
+        Me.Selected = CheckBoxSelected.Checked
+        Notify()
+    End Sub
+
+    Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
+
+        If Me.ProcessEvents Then
+            Me.ProcessEvents = False
+
+            Me.PropertySet = ComboBoxPropertySet.Text
+
+            Dim PreviousPropertyName = Me.PropertyName
+            Dim IsInList As Boolean = False
+            ComboBoxPropertyName.Items.Clear()
+            For Each PropName As String In FilterPropertyNames()
+                ComboBoxPropertyName.Items.Add(PropName)
+                If PropName = PreviousPropertyName Then IsInList = True
+            Next
+            If IsInList Then
+                ComboBoxPropertyName.Text = PreviousPropertyName
+            Else
+                ComboBoxPropertyName.Text = ""
+            End If
+
+            Notify()
+
+            Me.ProcessEvents = True
+        End If
+
+
+    End Sub
+
+    Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
+
+        If Me.ProcessEvents Then
+            Me.ProcessEvents = False
+
+            Me.PropertyName = ComboBoxPropertyName.Text
+            UpdatePropertySet()
+            Notify()
+
+            Me.ProcessEvents = True
+        End If
+
+    End Sub
+
     Private Sub ComboBoxFindType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFindSearch.SelectedIndexChanged
         Me.FindSearch = ComboBoxFindSearch.Text
 
@@ -284,13 +292,6 @@ Public Class UCEditProperties
     Private Sub TextBoxReplaceString_TextChanged(sender As Object, e As EventArgs) Handles TextBoxReplaceString.TextChanged
         Me.ReplaceString = TextBoxReplaceString.Text
         Notify()
-    End Sub
-
-    Public Sub Notify()
-        If NotifyPropertyEditor Then
-            PropertyEditor.UCChanged(Me)
-        End If
-
     End Sub
 
     Private Sub SelectPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click

@@ -6,6 +6,7 @@ Public Class UCTaskControl
 
     Public Property AutoHideOptions As Boolean
 
+
     Public Sub New(Task As Task)
         ' This call is required by the designer.
         InitializeComponent()
@@ -35,19 +36,14 @@ Public Class UCTaskControl
 
         Me.Dock = DockStyle.Top
 
-        'Me.BackColor = Color.FromArgb(Task.ColorR, Task.ColorG, Task.ColorB)
-        ' tableLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        'Me.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-
     End Sub
+
 
     Public Sub AddTaskOptionsTLP(TaskOptionsTLP As ExTableLayoutPanel)
         Dim col_idx As Integer = Me.TLP.ColumnCount - 2
         Dim row_idx As Integer = 1
         Me.TLP.Controls.Add(TaskOptionsTLP, col_idx, row_idx)
     End Sub
-
-
 
     Private Sub UpdateAppliesToCBs(Enabled As Boolean)
 
@@ -65,6 +61,7 @@ Public Class UCTaskControl
             If Task.AppliesToDraft Then CBDraft.Checked = False
         End If
     End Sub
+
 
     Private Sub CBEnabled_CheckedChanged(sender As Object, e As EventArgs) Handles CBEnabled.CheckedChanged
 
@@ -177,6 +174,7 @@ Public Class UCTaskControl
         End If
 
     End Sub
+
 End Class
 
 

@@ -6,12 +6,13 @@ Public Class UtilsSEApp
 
 
     Public Property SEApp As SolidEdgeFramework.Application
-    'Public Property TextBoxStatus As TextBox
     Private Property FMain As Form_Main
+
 
     Public Sub New(_FMain As Form_Main)
         Me.FMain = _FMain
     End Sub
+
 
     Public Sub SEStart(RunInBackground As Boolean,
                         UseCurrentSession As Boolean,
@@ -30,17 +31,6 @@ Public Class UtilsSEApp
             Else
                 SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
             End If
-
-            'If UseCurrentSession Then
-            '    Try
-            '        SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
-            '    Catch ex As Exception
-            '        SEApp = CType(Microsoft.VisualBasic.CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            '    End Try
-            'Else
-            '    SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            'End If
-
 
             ' Turn off popups.
             SEApp.DisplayAlerts = False
@@ -67,12 +57,9 @@ Public Class UtilsSEApp
             End If
             'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
         Catch ex As Exception
-            'Activate()
             MsgBox("Could not start Solid Edge.  Exiting...")
             End
         End Try
-
-        'Activate()
 
     End Sub
 

@@ -141,11 +141,8 @@ Public Class TaskCheckInterference
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
-        '        Dim Button As Button
         Dim TextBox As TextBox
         Dim Label As Label
-
-        'Dim IU As New InterfaceUtilities
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
@@ -167,7 +164,6 @@ Public Class TaskCheckInterference
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

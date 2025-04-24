@@ -170,16 +170,6 @@ Public Class Form_Main
     Public Property LinkManagementOrder As List(Of String)
 
 
-
-    ' ###### DOCUMENT STATUS ######
-
-    '0 Available
-    '1 InWork
-    '2 InReview
-    '3 Released
-    '4 Baselined
-    '5 Obsolete
-
     Private _ProcessAsAvailable As Boolean
     Public Property ProcessAsAvailable As Boolean
         Get
@@ -195,7 +185,6 @@ Public Class Form_Main
 
                 StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-                'CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
                 RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
                 RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
                 If RadioButtonProcessAsAvailableChange.Checked Then
@@ -206,19 +195,6 @@ Public Class Form_Main
             End If
         End Set
     End Property
-
-    'Private _UseDMForStatusChanges As Boolean
-    'Public Property UseDMForStatusChanges As Boolean
-    '    Get
-    '        Return _UseDMForStatusChanges
-    '    End Get
-    '    Set(value As Boolean)
-    '        _UseDMForStatusChanges = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            CheckBoxUseDMForStatusChanges.Checked = value
-    '        End If
-    '    End Set
-    'End Property
 
     Private _ProcessAsAvailableRevert As Boolean
     Public Property ProcessAsAvailableRevert As Boolean
@@ -401,162 +377,6 @@ Public Class Form_Main
             End If
         End Set
     End Property
-
-    'Private _StatusAtoX As Integer
-    'Public Property StatusAtoX As Integer
-    '    Get
-    '        Return _StatusAtoX
-    '    End Get
-    '    Set(value As Integer)
-    '        _StatusAtoX = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Select Case value
-    '                Case 0
-    '                    RadioButtonStatusAtoA.Checked = True
-    '                Case 1
-    '                    RadioButtonStatusAtoIW.Checked = True
-    '                Case 2
-    '                    RadioButtonStatusAtoIR.Checked = True
-    '                Case 3
-    '                    RadioButtonStatusAtoR.Checked = True
-    '                Case 4
-    '                    RadioButtonStatusAtoB.Checked = True
-    '                Case 5
-    '                    RadioButtonStatusAtoO.Checked = True
-    '            End Select
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _StatusBtoX As Integer
-    'Public Property StatusBtoX As Integer
-    '    Get
-    '        Return _StatusBtoX
-    '    End Get
-    '    Set(value As Integer)
-    '        _StatusBtoX = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Select Case value
-    '                Case 0
-    '                    RadioButtonStatusBtoA.Checked = True
-    '                Case 1
-    '                    RadioButtonStatusBtoIW.Checked = True
-    '                Case 2
-    '                    RadioButtonStatusBtoIR.Checked = True
-    '                Case 3
-    '                    RadioButtonStatusBtoR.Checked = True
-    '                Case 4
-    '                    RadioButtonStatusBtoB.Checked = True
-    '                Case 5
-    '                    RadioButtonStatusBtoO.Checked = True
-    '            End Select
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _StatusIRtoX As Integer
-    'Public Property StatusIRtoX As Integer
-    '    Get
-    '        Return _StatusIRtoX
-    '    End Get
-    '    Set(value As Integer)
-    '        _StatusIRtoX = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Select Case value
-    '                Case 0
-    '                    RadioButtonStatusIRtoA.Checked = True
-    '                Case 1
-    '                    RadioButtonStatusIRtoIW.Checked = True
-    '                Case 2
-    '                    RadioButtonStatusIRtoIR.Checked = True
-    '                Case 3
-    '                    RadioButtonStatusIRtoR.Checked = True
-    '                Case 4
-    '                    RadioButtonStatusIRtoB.Checked = True
-    '                Case 5
-    '                    RadioButtonStatusIRtoO.Checked = True
-    '            End Select
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _StatusIWtoX As Integer
-    'Public Property StatusIWtoX As Integer
-    '    Get
-    '        Return _StatusIWtoX
-    '    End Get
-    '    Set(value As Integer)
-    '        _StatusIWtoX = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Select Case value
-    '                Case 0
-    '                    RadioButtonStatusIWtoA.Checked = True
-    '                Case 1
-    '                    RadioButtonStatusIWtoIW.Checked = True
-    '                Case 2
-    '                    RadioButtonStatusIWtoIR.Checked = True
-    '                Case 3
-    '                    RadioButtonStatusIWtoR.Checked = True
-    '                Case 4
-    '                    RadioButtonStatusIWtoB.Checked = True
-    '                Case 5
-    '                    RadioButtonStatusIWtoO.Checked = True
-    '            End Select
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _StatusOtoX As Integer
-    'Public Property StatusOtoX As Integer
-    '    Get
-    '        Return _StatusOtoX
-    '    End Get
-    '    Set(value As Integer)
-    '        _StatusOtoX = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Select Case value
-    '                Case 0
-    '                    RadioButtonStatusOtoA.Checked = True
-    '                Case 1
-    '                    RadioButtonStatusOtoIW.Checked = True
-    '                Case 2
-    '                    RadioButtonStatusOtoIR.Checked = True
-    '                Case 3
-    '                    RadioButtonStatusOtoR.Checked = True
-    '                Case 4
-    '                    RadioButtonStatusOtoB.Checked = True
-    '                Case 5
-    '                    RadioButtonStatusOtoO.Checked = True
-    '            End Select
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _StatusRtoX As Integer
-    'Public Property StatusRtoX As Integer
-    '    Get
-    '        Return _StatusRtoX
-    '    End Get
-    '    Set(value As Integer)
-    '        _StatusRtoX = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Select Case value
-    '                Case 0
-    '                    RadioButtonStatusRtoA.Checked = True
-    '                Case 1
-    '                    RadioButtonStatusRtoIW.Checked = True
-    '                Case 2
-    '                    RadioButtonStatusRtoIR.Checked = True
-    '                Case 3
-    '                    RadioButtonStatusRtoR.Checked = True
-    '                Case 4
-    '                    RadioButtonStatusRtoB.Checked = True
-    '                Case 5
-    '                    RadioButtonStatusRtoO.Checked = True
-    '            End Select
-    '        End If
-    '    End Set
-    'End Property
 
 
     ' ###### LIST SORT ######
@@ -749,7 +569,6 @@ Public Class Form_Main
         Set(value As String)
             _ServerQuery = value
             If Me.TabControl1 IsNot Nothing Then
-                'TextBoxServerQuery.Text = value
                 If FastColoredServerQuery.Text <> value Then FastColoredServerQuery.Text = value  '<---- This may throw an exception due to a weird initialization of the component in Form_Main.Designer.vb
             End If
         End Set
@@ -1256,8 +1075,6 @@ Public Class Form_Main
 
         ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
 
-        'ListViewFilesOutOfDate = False
-
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
@@ -1537,14 +1354,10 @@ Public Class Form_Main
         If Not tf Then
             Dim FPF As New FormPropertyFilter
 
-            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            'FPF.PropertyFilterDict = Me.PropertyFilterDict
             FPF.PropertyFilters = Me.PropertyFilters
             FPF.ShowDialog()
 
             If FPF.DialogResult = DialogResult.OK Then
-                '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-                'Me.PropertyFilterDict = FPF.PropertyFilterDict
                 Me.PropertyFilters = FPF.PropertyFilters
                 ListViewFilesOutOfDate = True
             End If
@@ -1636,17 +1449,9 @@ Public Class Form_Main
     End Sub
 
 
-    ' COMBOBOXES
-
-
-    ' LINK LABELS
-
-    Private Sub LinkLabelGitHubReadme_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs)
-        System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
-    End Sub
-
 
     ' RADIO BUTTONS
+
     Private Sub RadioButtonTLABottomUp_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLABottomUp.CheckedChanged
         Dim tf As Boolean = RadioButtonTLABottomUp.Checked
         Me.TLABottomUp = tf
@@ -1655,7 +1460,6 @@ Public Class Form_Main
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
             CheckBoxDraftAndModelSameName.Enabled = True
-            'CheckBoxTLAIgnoreIncludeInReports.Enabled = True
         End If
 
         ListViewFilesOutOfDate = True
@@ -1669,7 +1473,6 @@ Public Class Form_Main
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
             CheckBoxDraftAndModelSameName.Enabled = False
-            'CheckBoxTLAIgnoreIncludeInReports.Enabled = False
         End If
 
         ListViewFilesOutOfDate = True
@@ -1735,125 +1538,75 @@ Public Class Form_Main
 
     Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
 
-        Dim NewWay As Boolean = True
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+        tmpFolderDialog.Multiselect = True
 
-        If NewWay Then
-            Dim tmpFolderDialog As New CommonOpenFileDialog
-            tmpFolderDialog.IsFolderPicker = True
-            tmpFolderDialog.Multiselect = True
-
-            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
-                For Each tmpFolder As String In tmpFolderDialog.FileNames
-                    Dim tmpItem As New ListViewItem
-
-                    tmpItem.Text = "Folder"
-                    tmpItem.ImageKey = "Folder"
-                    tmpItem.Tag = "Folder"
-
-                    tmpItem.SubItems.Add(tmpFolder)
-                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
-                    tmpItem.Name = tmpFolder
-
-                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
-                        ListViewSources.Items.Add(tmpItem)
-                        ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-                    End If
-                Next
-
-                ListViewFilesOutOfDate = True
-
-                If Me.RemindFilelistUpdate Then
-                    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-                    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-                    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-                    MsgBox(s, vbOKOnly)
-                End If
-
-            End If
-        Else
-            Dim tmpFolderDialog As New CommonOpenFileDialog
-            tmpFolderDialog.IsFolderPicker = True
-
-            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            For Each tmpFolder As String In tmpFolderDialog.FileNames
                 Dim tmpItem As New ListViewItem
+
                 tmpItem.Text = "Folder"
-                tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
-                tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem.ImageKey = "Folder"
                 tmpItem.Tag = "Folder"
-                tmpItem.Name = tmpFolderDialog.FileName
+
+                tmpItem.SubItems.Add(tmpFolder)
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem.Name = tmpFolder
+
                 If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
                     ListViewSources.Items.Add(tmpItem)
                     ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
                 End If
+            Next
 
-                ListViewFilesOutOfDate = True
+            ListViewFilesOutOfDate = True
+
+            If Me.RemindFilelistUpdate Then
+                Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                MsgBox(s, vbOKOnly)
             End If
+
         End If
 
     End Sub
 
     Private Sub BT_AddFolderSubfolders_Click(sender As Object, e As EventArgs) Handles BT_AddFolderSubfolders.Click
 
-        Dim NewWay As Boolean = True
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+        tmpFolderDialog.Multiselect = True
 
-        If NewWay Then
-            Dim tmpFolderDialog As New CommonOpenFileDialog
-            tmpFolderDialog.IsFolderPicker = True
-            tmpFolderDialog.Multiselect = True
-
-            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
-                For Each tmpFolder As String In tmpFolderDialog.FileNames
-                    Dim tmpItem As New ListViewItem
-
-                    tmpItem.Text = "Folder with subfolders"
-                    tmpItem.ImageKey = "Folders"
-                    tmpItem.Tag = "Folders"
-
-                    tmpItem.SubItems.Add(tmpFolder)
-                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
-                    tmpItem.Name = tmpFolder
-
-                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
-                        ListViewSources.Items.Add(tmpItem)
-                        ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-                    End If
-                Next
-
-                ListViewFilesOutOfDate = True
-
-                If Me.RemindFilelistUpdate Then
-                    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-                    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-                    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-                    MsgBox(s, vbOKOnly)
-                End If
-
-
-            End If
-
-        Else
-            Dim tmpFolderDialog As New CommonOpenFileDialog
-            tmpFolderDialog.IsFolderPicker = True
-
-            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            For Each tmpFolder As String In tmpFolderDialog.FileNames
                 Dim tmpItem As New ListViewItem
+
                 tmpItem.Text = "Folder with subfolders"
-                tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
-                tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem.ImageKey = "Folders"
                 tmpItem.Tag = "Folders"
-                tmpItem.Name = tmpFolderDialog.FileName
-                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
-                ListViewFilesOutOfDate = True
+                tmpItem.SubItems.Add(tmpFolder)
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem.Name = tmpFolder
 
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                    ListViewSources.Items.Add(tmpItem)
+                    ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+            Next
+
+            ListViewFilesOutOfDate = True
+
+            If Me.RemindFilelistUpdate Then
+                Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                MsgBox(s, vbOKOnly)
             End If
 
         End If
-
     End Sub
 
     Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
@@ -1990,63 +1743,38 @@ Public Class Form_Main
 
     Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
 
-        Dim NewWay As Boolean = True
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+        tmpFolderDialog.Multiselect = True
 
-        If NewWay Then
-            Dim tmpFolderDialog As New CommonOpenFileDialog
-            tmpFolderDialog.IsFolderPicker = True
-            tmpFolderDialog.Multiselect = True
-
-            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
-                For Each tmpFolder As String In tmpFolderDialog.FileNames
-                    Dim tmpItem As New ListViewItem
-
-                    tmpItem.Text = "Top level asm folder"
-                    tmpItem.ImageKey = "ASM_Folder"
-                    tmpItem.Tag = "ASM_Folder"
-
-                    tmpItem.SubItems.Add(tmpFolder)
-                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
-                    tmpItem.Name = tmpFolder
-
-                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
-                        ListViewSources.Items.Add(tmpItem)
-                        ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-                    End If
-                Next
-
-                ListViewFilesOutOfDate = True
-
-                If Me.RemindFilelistUpdate Then
-                    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-                    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-                    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-                    MsgBox(s, vbOKOnly)
-                End If
-
-
-            End If
-
-        Else
-
-            Dim tmpFolderDialog As New CommonOpenFileDialog
-            tmpFolderDialog.IsFolderPicker = True
-
-            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            For Each tmpFolder As String In tmpFolderDialog.FileNames
                 Dim tmpItem As New ListViewItem
+
                 tmpItem.Text = "Top level asm folder"
-                tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-                tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem.ImageKey = "ASM_Folder"
                 tmpItem.Tag = "ASM_Folder"
-                tmpItem.Name = tmpFolderDialog.FileName
-                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
-                ListViewFilesOutOfDate = True
+                tmpItem.SubItems.Add(tmpFolder)
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem.Name = tmpFolder
+
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                    ListViewSources.Items.Add(tmpItem)
+                    ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+            Next
+
+            ListViewFilesOutOfDate = True
+
+            If Me.RemindFilelistUpdate Then
+                Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                MsgBox(s, vbOKOnly)
             End If
 
         End If
-
     End Sub
 
     Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
@@ -2064,7 +1792,7 @@ Public Class Form_Main
             Dim DragDropGroupPresent As Boolean
 
             DragDropGroupPresent = False
-            For Each g As ListViewGroup In ListViewSources.Groups 'ListViewFiles.Groups
+            For Each g As ListViewGroup In ListViewSources.Groups
                 If g.Name = "DragDrop" Then
                     DragDropGroupPresent = True
                     Exit For
@@ -2074,7 +1802,6 @@ Public Class Form_Main
             If Not DragDropGroupPresent Then
                 Dim tmpItem As New ListViewItem
                 tmpItem.Text = "DragDrop"
-                'tmpItem.SubItems.Add(tmpFolderDialog.FileName)
                 tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem.ImageKey = "ASM_Folder"
                 tmpItem.Tag = "DragDrop"
@@ -2281,7 +2008,7 @@ Public Class Form_Main
             For Each tmpItem As ListViewItem In ListViewFiles.Items
 
                 If tmpItem.Group.Name <> "Sources" And tmpItem.Group.Name <> "Excluded" Then
-                    content += tmpItem.Name ' & vbCrLf
+                    content += tmpItem.Name
 
                     For Each subItem As ListViewItem.ListViewSubItem In tmpItem.SubItems
                         If subItem.Bounds.Width <> 0 Then content += "," & subItem.Text
@@ -2413,7 +2140,6 @@ Public Class Form_Main
 
     Private Sub BT_ProcessSelected_Click(sender As Object, e As EventArgs) Handles BT_ProcessSelected.Click
         Dim UE As New UtilsExecute(Me)
-        'UE.TextBoxStatus = Me.TextBoxStatus
 
         If Not ListViewFiles.SelectedItems.Count = 0 Then UE.ProcessAll()
 
@@ -2850,7 +2576,6 @@ Public Class Form_Main
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.AssemblyTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
-            'TextBoxAssemblyTemplate.Text = Me.AssemblyTemplate
         End If
 
     End Sub
@@ -2864,7 +2589,6 @@ Public Class Form_Main
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.PartTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
-            'TextBoxPartTemplate.Text = Me.PartTemplate
         End If
 
     End Sub
@@ -2878,7 +2602,6 @@ Public Class Form_Main
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.SheetmetalTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
-            'TextBoxSheetmetalTemplate.Text = Me.SheetmetalTemplate
         End If
 
     End Sub
@@ -2892,7 +2615,6 @@ Public Class Form_Main
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.DraftTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
-            'TextBoxDraftTemplate.Text = Me.DraftTemplate
         End If
 
     End Sub
@@ -2906,7 +2628,6 @@ Public Class Form_Main
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.MaterialTable = tmpFileDialog.FileName
             CopyTemplatesToTasks()
-            'TextBoxMaterialTable.Text = Me.MaterialTable
         End If
 
     End Sub
@@ -3431,13 +3152,11 @@ Public Class Form_Main
 
         End If
 
-        'Me.ListOfColumns = Me.ListOfColumns
-
     End Sub
 
     Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
 
-        For Each item In Me.ListOfColumns ' tmpListOfColumns
+        For Each item In Me.ListOfColumns
 
             If item.Name = CLB_Properties.Items(e.Index).ToString Then
                 item.Visible = CType(e.NewValue, Boolean)
@@ -3446,7 +3165,7 @@ Public Class Form_Main
                     If Not item.Visible Then
                         ListViewFiles.Columns.Item(e.Index).Width = 0
                     Else
-                        ListViewFiles.Columns.Item(e.Index).Width = item.Width  'AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                        ListViewFiles.Columns.Item(e.Index).Width = item.Width
                     End If
                 End If
 
@@ -3536,26 +3255,6 @@ Public Class Form_Main
         End If
 
         Dim FullName As String = hitinfo.Item.Name 'File to edit
-
-        ''###############    Test, pass the cf to SetOLEPropValue if available?
-        'Dim fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
-        'Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-        'Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-        'Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, editbox.Text, False, PropertiesData)
-
-        'cf.Close()
-        'cf = Nothing
-        'fs.Close()
-        'fs = Nothing
-        ''###############
-
-        'If UC.SetOLEPropValue(FullName, PropertySet, PropertyNameEnglish, Q) Then
-        '    hitinfo.SubItem.Text = Q
-        '    hitinfo.SubItem.BackColor = Color.Empty
-        'End If
-
-        'editbox.Hide()
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
@@ -3683,7 +3382,6 @@ Public Class Form_Main
                 Application.DoEvents()
                 Startup(Presets:=True)
 
-                'Me.ListViewFilesOutOfDate = True
             End If
 
         Else
@@ -3769,27 +3467,9 @@ Public Class Form_Main
     End Sub
 
 
-    'Public Shared Function ExecuteQuery(cf As CompoundFile, FullName As String, Query As String, ResultIndex As Integer) As String
     Public Shared Function ExecuteQuery(FullName As String, Query As String, ResultIndex As Integer) As String
 
         ExecuteQuery = ""
-
-        ' #### This function calls SubstitutePropertyFormula, which in turn calls this function.  ####
-        ' #### UtilsFileList.UpdateLVItem calls SubstitutePropertyFormula directly, so I don't think it needs to be done here. ####
-        ''Dim UC As New UtilsCommon
-        ''Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, Query, False, Form_Main.PropertiesData).Replace(vbCrLf, " ")
-
-        'Dim SSDoc As HCStructuredStorageDoc = Nothing
-        'Try
-        '    SSDoc = New HCStructuredStorageDoc(FullName)
-        '    SSDoc.ReadProperties(Form_Main.PropertiesData)
-        'Catch ex As Exception
-        '    Return ""
-        'End Try
-
-        'Dim Q = SSDoc.SubstitutePropertyFormulas(Query, ValidFilenameRequired:=False).Replace(vbCrLf, " ")
-
-        'If SSDoc IsNot Nothing Then SSDoc.Close()
 
         Try
 
@@ -4050,7 +3730,8 @@ End Class
 
 ' Commands I can never remember
 
-' System.Windows.Forms.Application.DoEvents()
+
+' ###### FILE/DIRECTORY EXISTS, CREATE, DELETE, COPY ######
 
 ' tf = FileIO.FileSystem.FileExists(Filename)
 
@@ -4059,6 +3740,16 @@ End Class
 ' If Not FileIO.FileSystem.DirectoryExists(Dirname) Then
 '     FileIO.FileSystem.CreateDirectory(Dirname)
 ' End If
+
+' Dim DI As New DirectoryInfo(Dirname)
+' For Each File As FileInfo In DI.GetFiles
+'     File.Delete()
+' Next
+
+'System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
+
+
+' ###### FILE FILENAME, EXTENSION, DIRECTORY, STARTUP PATH ######
 
 ' Extension = IO.Path.GetExtension(WhereUsedFile)
 ' C:\project\part.par -> .par
@@ -4074,17 +3765,10 @@ End Class
 
 ' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
 
-' Dim DI As New DirectoryInfo(Dirname)
-' For Each File As FileInfo In DI.GetFiles
-'     File.Delete()
-' Next
-
-' System.Threading.Thread.Sleep(100)
-
-' PropTypeName = Prop.Value.GetType().Name
-' The preceeding syntax is probably better.  TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
-
 ' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+
+
+' ###### TEXT FILE IO ######
 
 ' Dim Defaults As String() = Nothing
 ' Defaults = IO.File.ReadAllLines(DefaultsFilename)
@@ -4094,6 +3778,19 @@ End Class
 
 ' Iterate through an Enum
 ' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+
+
+' ###### DOEVENTS, SLEEP ######
+
+' System.Windows.Forms.Application.DoEvents()
+
+' System.Threading.Thread.Sleep(100)
+
+
+' ###### CHECKING TYPES ######
+
+' PropTypeName = Prop.Value.GetType().Name
+' The preceeding syntax is probably better than:  TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
 
 ' Check COM types
 ' Select Case HCComObject.GetCOMObjectType(objVar)
@@ -4107,16 +3804,23 @@ End Class
 '        MsgBox(String.Format("Unrecognized variable type '{0}'", objVar.GetType.ToString))
 ' End Select
 
+
+' ###### CURSOR AND WINDOW ######
+
 'Me.Cursor = Cursors.WaitCursor
 'Me.Cursor = Cursors.Default
 
 'ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
 
-'System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
+
+' ###### JSON ######
 
 '_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
 
 'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+
+
+' ###### ENVIRONMENT VARIABLES: USER NAME, DATETIME  ######
 
 'Dim userName As String
 ''userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name

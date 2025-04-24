@@ -16,9 +16,11 @@ Public Class FormNCalc
     Dim CommandsStyle As FastColoredTextBoxNS.TextStyle = New FastColoredTextBoxNS.TextStyle(Brushes.SaddleBrown, Nothing, FontStyle.Regular)
     Dim CommentsStyle As FastColoredTextBoxNS.TextStyle = New FastColoredTextBoxNS.TextStyle(Brushes.Green, Nothing, FontStyle.Italic)
 
-    Dim CommandsList As String = "\b(" '"(?:^|(?<= ))("
+    Dim CommandsList As String = "\b("
 
     Dim CurrentExpression As String
+
+
     Public Sub New()
 
         ' FastColoredTextBox
@@ -48,14 +50,13 @@ Public Class FormNCalc
         For Each item In NCalcExtensionsWords
             CommandsList = CommandsList & item.Replace("()", "") & "|"
         Next
-        CommandsList = CommandsList.Remove(CommandsList.LastIndexOf("|")) & ")\b" ' ")(?:(?= )|$)"
+        CommandsList = CommandsList.Remove(CommandsList.LastIndexOf("|")) & ")\b"
 
         Dim SolidEdgeProperties As List(Of String) = New List(Of String) From {"System", "System.Title", "System.Subject", "System.Author", "System.Keywords", "System.Comments",
             "System.Template", "System.LastAuthor", "System.RevNumber", "System.EditTime", "System.LastPrinted", "System.Create_DTM", "System.LastSave_DTM", "System.PageCount",
             "System.WordCount", "System.CharCount", "System.AppName", "System.Doc_Security", "System.Document Number", "System.Revision", "System.Name", "Custom"}
 
         popupMenu.SearchPattern = "[\w\.]"
-        'popupMenu.Items.SetAutocompleteItems(NCalcExtensionsWords)
 
         Dim items = New List(Of AutocompleteItem)()
 
@@ -73,9 +74,75 @@ Public Class FormNCalc
 
     End Sub
 
+
+    Private Sub SaveExpressionItem(ExpressionName As String, Overwrite As Boolean)
+
+        Dim tmpExpressionsText As String = ""
+
+        If Overwrite Then
+
+            SavedExpressionsItems.Item(ExpressionName) = TextEditorFormula.Text
+
+        Else
+
+            DD_SavedExpressions.DropDownItems.Add(ExpressionName.Replace(vbCrLf, ""))
+            SavedExpressionsItems.Add(ExpressionName.Replace(vbCrLf, ""), TextEditorFormula.Text)
+
+        End If
+
+        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
+
+            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
+
+        Next
+
+        Dim UP As New UtilsPreferences
+        Dim PreferencesDirectory = UP.GetPreferencesDirectory()
+
+        Dim SavedExpressionsFilename = UP.GetSavedExpressionsFilename()
+
+        IO.File.WriteAllText(SavedExpressionsFilename, tmpExpressionsText)
+
+    End Sub
+
+    Private Sub DeleteExpressionItem(ExpressionName As String)
+
+        Dim tmpExpressionsText As String = ""
+
+        DD_SavedExpressions.DropDownItems.RemoveByKey(ExpressionName)
+        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
+            If item.Text = ExpressionName Then
+                DD_SavedExpressions.DropDownItems.Remove(item)
+                Exit For
+            End If
+        Next
+
+
+        SavedExpressionsItems.Remove(ExpressionName)
+
+        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
+
+            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
+
+        Next
+
+        Dim UP As New UtilsPreferences
+
+        IO.File.WriteAllText(UP.GetSavedExpressionsFilename, tmpExpressionsText)
+
+        TextEditorFormula.Clear()
+        CurrentExpression = ""
+        Me.Text = "Expression editor"
+
+        DD_SavedExpressions.DropDownItems.Item(0).PerformClick()
+
+    End Sub
+
+
+
     Private Sub FormNCalc_Closed(sender As Object, e As EventArgs) Handles Me.Closed
 
-        Formula = TextEditorFormula.Text '.Replace(vbCrLf, "")
+        Formula = TextEditorFormula.Text
 
     End Sub
 
@@ -169,7 +236,6 @@ Public Class FormNCalc
 
     Private Sub DD_SavedExpressions_DropDownItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles DD_SavedExpressions.DropDownItemClicked
 
-        'Dim tmpItem As ToolStripDropDownItem = e.ClickedItem
         Dim tmpItem As ToolStripItem = e.ClickedItem
 
         TextEditorFormula.Clear()
@@ -241,69 +307,6 @@ Public Class FormNCalc
             BT_SaveAs_Click(sender, e)
 
         End If
-
-    End Sub
-
-    Private Sub SaveExpressionItem(ExpressionName As String, Overwrite As Boolean)
-
-        Dim tmpExpressionsText As String = ""
-
-        If Overwrite Then
-
-            SavedExpressionsItems.Item(ExpressionName) = TextEditorFormula.Text
-
-        Else
-
-            DD_SavedExpressions.DropDownItems.Add(ExpressionName.Replace(vbCrLf, ""))
-            SavedExpressionsItems.Add(ExpressionName.Replace(vbCrLf, ""), TextEditorFormula.Text)
-
-        End If
-
-        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
-
-            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
-
-        Next
-
-        Dim UP As New UtilsPreferences
-        Dim PreferencesDirectory = UP.GetPreferencesDirectory()
-
-        Dim SavedExpressionsFilename = UP.GetSavedExpressionsFilename()
-
-        IO.File.WriteAllText(SavedExpressionsFilename, tmpExpressionsText)
-
-    End Sub
-
-    Private Sub DeleteExpressionItem(ExpressionName As String)
-
-        Dim tmpExpressionsText As String = ""
-
-        DD_SavedExpressions.DropDownItems.RemoveByKey(ExpressionName)
-        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
-            If item.Text = ExpressionName Then
-                DD_SavedExpressions.DropDownItems.Remove(item)
-                Exit For
-            End If
-        Next
-
-
-        SavedExpressionsItems.Remove(ExpressionName)
-
-        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
-
-            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
-
-        Next
-
-        Dim UP As New UtilsPreferences
-
-        IO.File.WriteAllText(UP.GetSavedExpressionsFilename, tmpExpressionsText)
-
-        TextEditorFormula.Clear()
-        CurrentExpression = ""
-        Me.Text = "Expression editor"
-
-        DD_SavedExpressions.DropDownItems.Item(0).PerformClick()
 
     End Sub
 

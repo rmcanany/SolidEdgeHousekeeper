@@ -71,32 +71,6 @@ Public Class TaskEditProperties
         End Set
     End Property
 
-    'Private _UpdateFaceStyles As Boolean
-    'Public Property UpdateFaceStyles As Boolean
-    '    Get
-    '        Return _UpdateFaceStyles
-    '    End Get
-    '    Set(value As Boolean)
-    '        _UpdateFaceStyles = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _RemoveFaceStyleOverrides As Boolean
-    'Public Property RemoveFaceStyleOverrides As Boolean
-    '    Get
-    '        Return _RemoveFaceStyleOverrides
-    '    End Get
-    '    Set(value As Boolean)
-    '        _RemoveFaceStyleOverrides = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
-    '        End If
-    '    End Set
-    'End Property
-
     Private _StructuredStorageEdit As Boolean
     Public Property StructuredStorageEdit As Boolean
         Get
@@ -132,8 +106,6 @@ Public Class TaskEditProperties
         UseConfigurationPageTemplates
         Browse
         MaterialTable
-        'UpdateFaceStyles
-        'RemoveFaceStyleOverrides
         StructuredStorageEdit
         AutoHideOptions
     End Enum
@@ -154,7 +126,6 @@ Public Class TaskEditProperties
         Me.RequiresMaterialTable = True
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
-        'Me.SolidEdgeRequired = False
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
         GenerateTaskControl()
@@ -168,8 +139,6 @@ Public Class TaskEditProperties
         Me.StructuredStorageEdit = False
         Me.AutoUpdateMaterial = False
         Me.UseConfigurationPageTemplates = False
-        'Me.UpdateFaceStyles = False
-        'Me.RemoveFaceStyleOverrides = False
 
     End Sub
 
@@ -429,10 +398,8 @@ Public Class TaskEditProperties
         Dim Proceed As Boolean = True
         Dim s As String
         Dim AddProp As Boolean
-        'Dim UpdateMatl As Boolean
 
         AddProp = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
-        'UpdateMatl = (Me.AutoUpdateMaterial) And (PropertySetName.ToLower = "system") And (PropertyName.ToLower = "material")
 
         If FindSearchType = "X" Then
             tf = SSDoc.DeleteProp(PropertySetName, PropertyNameEnglish)
@@ -500,27 +467,6 @@ Public Class TaskEditProperties
 
             End If
 
-            'If Proceed Then
-            '    If UpdateMatl Then
-            '        Dim SSMatTable As New HCStructuredStorageDoc(Me.MaterialTable)
-            '        SSMatTable.ReadMaterialTable()
-            '        tf = SSMatTable.UpdateMaterial(SSDoc)
-
-            '        SSMatTable.Close()
-
-            '        If Not tf Then
-            '            Proceed = False
-            '            ExitStatus = 1
-            '            If PropertyName = PropertyNameEnglish Then
-            '                s = String.Format("Unable to update '{0}'.", PropertyName)
-            '            Else
-            '                s = String.Format("Unable to update '{0}({1})'.", PropertyName, PropertyNameEnglish)
-            '            End If
-            '            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-            '        End If
-
-            '    End If
-            'End If
         End If
 
     End Sub
@@ -597,7 +543,7 @@ Public Class TaskEditProperties
             ' ####################### Do formula substitution #######################
 
             If Proceed Then
-                Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
+                Dim FullName As String = UC.GetFOAFilename(SEDoc.FullName)
 
                 FindString = UC.SubstitutePropertyFormula(SEDoc, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
                 If FindString Is Nothing Then
@@ -802,8 +748,6 @@ Public Class TaskEditProperties
         Dim Button As Button
         Dim TextBox As TextBox
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
@@ -842,7 +786,6 @@ Public Class TaskEditProperties
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
-        'CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -868,28 +811,9 @@ Public Class TaskEditProperties
         ControlsDict(TextBox.Name) = TextBox
         TextBox.Visible = False
 
-        'RowIndex += 1
-
-        'CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
-        'AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        'tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        'tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        'ControlsDict(CheckBox.Name) = CheckBox
-        'CheckBox.Visible = False
-
-        'RowIndex += 1
-
-        'CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
-        'AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        'tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        'tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        'ControlsDict(CheckBox.Name) = CheckBox
-        'CheckBox.Visible = False
-
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         ControlsDict(CheckBox.Name) = CheckBox
 
@@ -944,7 +868,6 @@ Public Class TaskEditProperties
                     TextBox = CType(ControlsDict(ControlNames.JSONString.ToString), TextBox)
                     TextBox.Text = FPIE.JSONString
 
-                    'Me.TemplatePropertyDict = FPIE.TemplatePropertyDict
                     Me.PropertiesData = FPIE.PropertiesData
 
                 End If
@@ -970,10 +893,6 @@ Public Class TaskEditProperties
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
-        ''Dim Ctrl As Control
-        'Dim Button As Button
-        'Dim TextBox As TextBox
-        'Dim CheckBox2 As CheckBox
         Dim tf As Boolean
 
         Select Case Name
@@ -997,10 +916,6 @@ Public Class TaskEditProperties
                 CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = tf
                 CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = tf
 
-                'tf = (Not Me.StructuredStorageEdit) And (Me.AutoUpdateMaterial)
-
-                'CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
-                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
 
             Case ControlNames.AutoUpdateMaterial.ToString '"AutoUpdateMaterial"
                 Me.AutoUpdateMaterial = Checkbox.Checked
@@ -1009,8 +924,6 @@ Public Class TaskEditProperties
                 tf = Me.AutoUpdateMaterial
 
                 CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Visible = tf
-                'CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
-                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
 
                 tf = Me.AutoUpdateMaterial And Not Me.UseConfigurationPageTemplates
 
@@ -1031,16 +944,6 @@ Public Class TaskEditProperties
                     CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = True
 
                 End If
-
-            'Case ControlNames.UpdateFaceStyles.ToString
-            '    Me.UpdateFaceStyles = Checkbox.Checked
-            '    Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
-
-            '    'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Me.UpdateFaceStyles
-
-            'Case ControlNames.RemoveFaceStyleOverrides.ToString
-            '    Me.RemoveFaceStyleOverrides = Checkbox.Checked
-            '    Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
 
             Case ControlNames.AutoHideOptions.ToString '"HideOptions"
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked

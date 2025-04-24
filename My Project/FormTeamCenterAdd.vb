@@ -2,8 +2,8 @@
 Public Class FormTeamCenterAdd
 
     Public Property Filelist As List(Of String)
-
     Private FMain As Form_Main
+
 
     Public Sub New(_FMain As Form_Main)
         InitializeComponent()
@@ -11,80 +11,6 @@ Public Class FormTeamCenterAdd
         Me.Filelist = New List(Of String)
     End Sub
 
-    Private Sub FormTeamCenterAdd_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        CloseSolidEdge()
-    End Sub
-
-    Private Sub ButtonSearch_Click(sender As Object, e As EventArgs) Handles ButtonSearch.Click
-        SearchTeamCenter()
-    End Sub
-
-    Private Sub ButtonDownloadAll_Click(sender As Object, e As EventArgs) Handles ButtonDownloadAll.Click
-        DownloadAll()
-    End Sub
-
-    Private Sub ButtonSearchAndAdd_Click(sender As Object, e As EventArgs) Handles ButtonSearchAndAdd.Click
-        SearchTeamCenter()
-        DownloadAll()
-    End Sub
-
-    Private Sub ButtonDownload_Click(sender As Object, e As EventArgs) Handles ButtonDownload.Click
-        If ListViewTeamCenterItems.SelectedItems.Count = 0 Then
-            MessageBox.Show("Please select a file to add to cache.", "No File Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        Dim selectedItem As ListViewItem = ListViewTeamCenterItems.SelectedItems(0)
-        Dim fileName As String = selectedItem.Text
-        Dim fileItemID As String = selectedItem.SubItems(1).Text
-        Dim fileItemRevID As String = selectedItem.SubItems(2).Text
-
-        ' Check if the item is already in ListViewDownloadedFiles
-        For Each item As ListViewItem In ListViewDownloadedFiles.Items
-            If item.Text = fileName Then
-                LabelStatus.Text = "Item already in cache!"
-                MessageBox.Show(fileName + " is already in the cache folder", "File Already In Cache", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-        Next
-
-        Dim objApp As SolidEdgeFramework.Application = Nothing
-        Dim TCE As SolidEdgeFramework.SolidEdgeTCE = Nothing
-
-        Try
-            Cursor.Current = Cursors.WaitCursor
-            LabelStatus.Text = "Connecting to Solid Edge..."
-
-            'Try
-            '    objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            'Catch ex As COMException When ex.ErrorCode = &H800401E3
-            '    objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            '    objApp.Visible = True
-            'End Try
-
-            objApp = OpenSolidEdge(Visible:=True)
-
-            TCE = objApp.SolidEdgeTCE
-
-            LabelStatus.Text = "Adding to cache..."
-
-            ' Download the selected item
-            Dim temp(,) As Object = New Object(1, 1) {}
-            TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
-
-            ' Get cache path and add the filename and file path to listview
-            Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
-
-            ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
-
-            LabelStatus.Text = "Added to cache!"
-        Catch ex As Exception
-            LabelStatus.Text = "Item already in cache!"
-            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            Cursor.Current = Cursors.Default
-        End Try
-    End Sub
 
     Private Sub SearchTeamCenter()
         Dim objApp As SolidEdgeFramework.Application = Nothing
@@ -93,16 +19,6 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            ' Connect to Solid Edge, if not open then Open Solid Edge
-
-            'Try
-            '    LabelStatus.Text = "Connecting to Solid Edge..."
-            '    objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            'Catch ex As COMException When ex.ErrorCode = &H800401E3
-            '    LabelStatus.Text = "Opening Solid Edge..."
-            '    objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            '    objApp.Visible = False
-            'End Try
 
             LabelStatus.Text = "Connecting to Solid Edge..."
             objApp = OpenSolidEdge(Visible:=False)
@@ -116,7 +32,6 @@ Public Class FormTeamCenterAdd
                 Throw New ApplicationException($"TeamCenter not set as PDM mode. Please open Solid Edge and enable TeamCenter by going to File > Manage > TeamCenter.")
             End If
 
-            'LabelStatus.Text = "Connecting to TeamCenter..." + Environment.NewLine + "(You may need to sign in)"
             LabelStatus.Text = "Connecting to TeamCenter.  (You may need to sign in)"
             objDocuments = objApp.Documents
 
@@ -146,16 +61,8 @@ Public Class FormTeamCenterAdd
 
                     ' Validate item ID
 
-                    ' ###### Does this apply to all TeamCenter sites? ######
-
-                    'If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, "^\d{8}$") Then
-                    '    ErrorList.Add($"Invalid Item ID: {itemID}. It should be 8 digits.")
-                    '    'MessageBox.Show($"Invalid Item ID: {itemID}. It should be 8 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    '    Continue For
-                    'End If
                     If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, FMain.TCItemIDRx) Then
                         ErrorList.Add($"Invalid Item ID: '{itemID}'. Not a Regex match to '{FMain.TCItemIDRx}'.")
-                        'MessageBox.Show($"Invalid Item ID: {itemID}. It should be 8 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         Continue For
                     End If
 
@@ -171,8 +78,6 @@ Public Class FormTeamCenterAdd
                         itemAttributes(0, 0) = "item_id"
                         itemAttributes(0, 1) = itemID
 
-                        ' ###### Does this apply to all TeamCenter sites? ######
-
                         ' Retrieve all revisions for the item
                         TCE.GetAllRevisions(itemAttributes, "MFK9Item1", revisions)
 
@@ -183,11 +88,6 @@ Public Class FormTeamCenterAdd
                             For i As Integer = 0 To revisions.GetLength(0) - 1
                                 Dim rev As String = revisions(i, 0).ToString()
 
-                                ' ###### Does this apply to all TeamCenter sites? ######
-
-                                'If System.Text.RegularExpressions.Regex.IsMatch(rev, "^[A-Z]$") Then
-                                '    filteredRevisions.Add(rev)
-                                'End If
                                 If System.Text.RegularExpressions.Regex.IsMatch(rev, FMain.TCRevisionRx) Then
                                     filteredRevisions.Add(rev)
                                 End If
@@ -198,14 +98,10 @@ Public Class FormTeamCenterAdd
                                 ' Set the revision to the latest one
                                 revision = filteredRevisions.Last()
                             Else
-                                ' Throw an exception if no valid revisions are found
-                                'MessageBox.Show($"No valid revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                                 ErrorList.Add($"No valid revisions found for Item ID: '{itemID}'.")
                                 Continue For
                             End If
                         Else
-                            ' Throw an exception if no revisions are found
-                            'MessageBox.Show($"No revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                             ErrorList.Add($"No valid revisions found for Item ID: '{itemID}'.")
                             Continue For
                         End If
@@ -234,7 +130,6 @@ Public Class FormTeamCenterAdd
                     End If
 
                     If Not revisionExists Then
-                        'MessageBox.Show($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         ErrorList.Add($"Invalid Revision: '{revision}' for Item ID: '{itemID}'. Revision does not exist.")
                         Continue For
                     End If
@@ -262,7 +157,6 @@ Public Class FormTeamCenterAdd
                 Dim Result = MsgBox(s, vbOKCancel, "Validation Error")
                 If Result = MsgBoxResult.Cancel Then Return
 
-                ''MessageBox.Show(s, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
 
             ListViewTeamCenterItems.Items.Clear()
@@ -332,13 +226,6 @@ Public Class FormTeamCenterAdd
         Try
             Cursor.Current = Cursors.WaitCursor
 
-            'Try
-            '    objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            'Catch ex As COMException When ex.ErrorCode = &H800401E3
-            '    objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            '    objApp.Visible = True
-            'End Try
-
             LabelStatus.Text = "Connecting to Solid Edge..."
             objApp = OpenSolidEdge(Visible:=True)
 
@@ -364,7 +251,6 @@ Public Class FormTeamCenterAdd
                 Next
 
                 If alreadyDownloaded Then
-                    'MessageBox.Show("File Already In Cache", fileName + " is already in the cache folder", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     Continue For
                 End If
 
@@ -417,79 +303,6 @@ Public Class FormTeamCenterAdd
         End If
     End Sub
 
-    Private Sub ButtonAddAndClose_Click(sender As Object, e As EventArgs) Handles ButtonAddAndClose.Click
-
-        Dim Proceed As Boolean = True
-
-        Dim NewWay As Boolean = True
-        If NewWay Then
-
-            Dim Testing As Boolean = False
-            If Testing Then
-                Filelist.AddRange({"C:\data\junk\80000500.asm", "C:\data\junk\80000500.dft", "C:\data\junk\80000501.par", "C:\data\junk\80000502.par"})
-            Else
-                If ListViewTeamCenterItems.Items.Count = 0 Then
-                    MessageBox.Show("No files to add.", "No Files", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    Proceed = False
-                Else
-                    For Each item As ListViewItem In ListViewDownloadedFiles.Items
-                        Dim fileName As String = item.Text
-                        Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
-
-                        If Not Me.Filelist.Contains(filePath) Then Filelist.Add(filePath)
-                    Next
-                End If
-            End If
-
-        Else
-            If ListViewTeamCenterItems.Items.Count = 0 Then
-                MessageBox.Show("No files to add.", "No Files", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Proceed = False
-            Else
-                For Each item As ListViewItem In ListViewDownloadedFiles.Items
-                    Dim fileName As String = item.Text
-                    Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
-
-                    ' Check if the file already exists in the ListView
-                    Dim exists As Boolean = False
-                    For Each existingItem As ListViewItem In FMain.ListViewFiles.Items
-                        If existingItem.Name = filePath Then
-                            exists = True
-                            Exit For
-                        End If
-                    Next
-
-                    ' Add the file to the ListView in the main form if it doesn't already exist
-                    If Not exists Then
-                        Dim tmpItem As New ListViewItem
-                        tmpItem.Text = fileName
-                        tmpItem.SubItems.Add(filePath)
-                        tmpItem.ImageKey = "Unchecked"
-                        tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
-                        tmpItem.Name = filePath
-                        tmpItem.Group = FMain.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
-                        FMain.ListViewFiles.Items.Add(tmpItem)
-                    End If
-                Next
-            End If
-        End If
-
-        If Proceed Then
-            Me.DialogResult = DialogResult.OK
-        Else
-            Me.DialogResult = DialogResult.Cancel
-        End If
-
-    End Sub
-
-    Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridViewItems.KeyDown
-        If e.Control AndAlso e.KeyCode = Keys.V Then
-            PasteClipboardData()
-        ElseIf e.KeyCode = Keys.Delete Then
-            DeleteSelectedCells()
-        End If
-    End Sub
-
     Private Sub DeleteSelectedCells()
         For Each cell As DataGridViewCell In DataGridViewItems.SelectedCells
             If Not cell.ReadOnly Then
@@ -536,6 +349,107 @@ Public Class FormTeamCenterAdd
         Catch ex As Exception
             MessageBox.Show($"Error pasting data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+
+    Private Sub FormTeamCenterAdd_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        CloseSolidEdge()
+    End Sub
+
+    Private Sub ButtonSearch_Click(sender As Object, e As EventArgs) Handles ButtonSearch.Click
+        SearchTeamCenter()
+    End Sub
+
+    Private Sub ButtonDownloadAll_Click(sender As Object, e As EventArgs) Handles ButtonDownloadAll.Click
+        DownloadAll()
+    End Sub
+
+    Private Sub ButtonSearchAndAdd_Click(sender As Object, e As EventArgs) Handles ButtonSearchAndAdd.Click
+        SearchTeamCenter()
+        DownloadAll()
+    End Sub
+
+    Private Sub ButtonDownload_Click(sender As Object, e As EventArgs) Handles ButtonDownload.Click
+        If ListViewTeamCenterItems.SelectedItems.Count = 0 Then
+            MessageBox.Show("Please select a file to add to cache.", "No File Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim selectedItem As ListViewItem = ListViewTeamCenterItems.SelectedItems(0)
+        Dim fileName As String = selectedItem.Text
+        Dim fileItemID As String = selectedItem.SubItems(1).Text
+        Dim fileItemRevID As String = selectedItem.SubItems(2).Text
+
+        ' Check if the item is already in ListViewDownloadedFiles
+        For Each item As ListViewItem In ListViewDownloadedFiles.Items
+            If item.Text = fileName Then
+                LabelStatus.Text = "Item already in cache!"
+                MessageBox.Show(fileName + " is already in the cache folder", "File Already In Cache", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+        Next
+
+        Dim objApp As SolidEdgeFramework.Application = Nothing
+        Dim TCE As SolidEdgeFramework.SolidEdgeTCE = Nothing
+
+        Try
+            Cursor.Current = Cursors.WaitCursor
+            LabelStatus.Text = "Connecting to Solid Edge..."
+
+            objApp = OpenSolidEdge(Visible:=True)
+
+            TCE = objApp.SolidEdgeTCE
+
+            LabelStatus.Text = "Adding to cache..."
+
+            ' Download the selected item
+            Dim temp(,) As Object = New Object(1, 1) {}
+            TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
+
+            ' Get cache path and add the filename and file path to listview
+            Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
+
+            ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
+
+            LabelStatus.Text = "Added to cache!"
+        Catch ex As Exception
+            LabelStatus.Text = "Item already in cache!"
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            Cursor.Current = Cursors.Default
+        End Try
+    End Sub
+
+    Private Sub ButtonAddAndClose_Click(sender As Object, e As EventArgs) Handles ButtonAddAndClose.Click
+
+        Dim Proceed As Boolean = True
+
+        If ListViewTeamCenterItems.Items.Count = 0 Then
+            MessageBox.Show("No files to add.", "No Files", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Proceed = False
+        Else
+            For Each item As ListViewItem In ListViewDownloadedFiles.Items
+                Dim fileName As String = item.Text
+                Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
+
+                If Not Me.Filelist.Contains(filePath) Then Filelist.Add(filePath)
+            Next
+        End If
+
+        If Proceed Then
+            Me.DialogResult = DialogResult.OK
+        Else
+            Me.DialogResult = DialogResult.Cancel
+        End If
+
+    End Sub
+
+    Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridViewItems.KeyDown
+        If e.Control AndAlso e.KeyCode = Keys.V Then
+            PasteClipboardData()
+        ElseIf e.KeyCode = Keys.Delete Then
+            DeleteSelectedCells()
+        End If
     End Sub
 
     Private Sub Cancel_Click(sender As Object, e As EventArgs) Handles Cancel.Click

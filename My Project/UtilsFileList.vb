@@ -1,6 +1,5 @@
 ﻿Option Strict On
 
-'Imports System.IO
 Imports ListViewExtended
 
 Public Class UtilsFileList
@@ -14,6 +13,7 @@ Public Class UtilsFileList
         Me.ListViewFiles = ListViewFiles
         Me.ListViewSources = ListViewSources
     End Sub
+
 
     Private Function CheckStartConditions(ByRef BareTopLevelAssembly As Boolean) As Boolean
         Dim Proceed As Boolean = True
@@ -101,7 +101,6 @@ Public Class UtilsFileList
 
         Dim GroupTags As New List(Of String)
         Dim BareTopLevelAssembly As Boolean = False
-        'Dim msg As String
 
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
@@ -151,11 +150,6 @@ Public Class UtilsFileList
 
         Dim FoundFiles As IReadOnlyCollection(Of String)
         FoundFiles = tmpFoundFiles
-
-        'DragDropCache.Clear()
-        'For Each item As ListViewItem In ListViewFiles.Items
-        '    DragDropCache.Add(item)
-        'Next
 
         ' Remove problem files
         If Not FoundFiles Is Nothing Then
@@ -269,7 +263,6 @@ Public Class UtilsFileList
                             s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
                             MsgBox(s, vbOKOnly)
                             FoundFiles = Nothing
-                            'Exit Sub
                         End Try
                     End If
 
@@ -281,7 +274,7 @@ Public Class UtilsFileList
 
                         Dim tmplist = GetAllDirectories(Source.Name)
 
-                        Dim tmpFolders As String() ' = Directory.GetDirectories(Source.Name, "*", SearchOption.AllDirectories)
+                        Dim tmpFolders As String()
 
                         tmpFolders = tmplist.ToArray
 
@@ -378,7 +371,6 @@ Public Class UtilsFileList
 
         Dim tmpList As New List(Of String)
 
-        ' 20241129 adding top level folder to directory search list.  RM
         tmpList.Add(Path)
 
         GetMyDirectories(Path, tmpList)
@@ -411,17 +403,6 @@ Public Class UtilsFileList
         End Try
 
     End Sub
-
-
-
-
-
-
-
-
-
-
-
 
     Public Sub PopulateListView(FoundFiles As IReadOnlyCollection(Of String))
 
@@ -458,7 +439,6 @@ Public Class UtilsFileList
             tf = True
             tf = tf And UC.FilenameIsOK(FoundFile)
             tf = tf And IO.File.Exists(FoundFile)
-            'tf = tf And (Not ListViewFiles.Items.ContainsKey(FoundFile))  '###### Duplicates are removed from FoundFiles before calling this method.
 
             If tf Then
 
@@ -493,7 +473,6 @@ Public Class UtilsFileList
         FMain.TextBoxStatus.Text = ""
     End Sub
 
-
     Public Function RemoveProblemFiles(
         FoundFiles As IReadOnlyCollection(Of String),
         ActiveFileExtensionsList As List(Of String)
@@ -506,7 +485,6 @@ Public Class UtilsFileList
         For Each item In FoundFiles
             tf = UC.FilenameIsOK(item)
             tf = tf And IO.File.Exists(item)
-            'tf = tf And Not tmpFoundFiles.Contains(item)  ' Duplicate are already removed if needed
 
             ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
             ' Causes a problem comparing extensions
@@ -526,7 +504,6 @@ Public Class UtilsFileList
 
     End Function
 
-
     Public Function ProcessTLA(
         BareTopLevelAssembly As Boolean,
         Source As ListViewItem,
@@ -538,7 +515,6 @@ Public Class UtilsFileList
         If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
             Dim tmpFolders As New List(Of String)
 
-            'For Each item As ListViewItem In ListViewFiles.Items
             For Each item As ListViewItem In ListViewSources.Items
                 If item.Tag.ToString = "ASM_Folder" Then
                     If Not tmpFolders.Contains(item.Name) Then tmpFolders.Add(item.Name)
@@ -599,8 +575,6 @@ Public Class UtilsFileList
 
     End Function
 
-
-
     Public Function FileWildcardSearch(
         ByVal FoundFiles As IReadOnlyCollection(Of String),
         ByVal WildcardString As String) As IReadOnlyCollection(Of String)
@@ -620,10 +594,8 @@ Public Class UtilsFileList
         Return tmpFoundFiles
     End Function
 
-
     Public Function GetFileNames(ByVal FileWildcard As String) As List(Of String)
         ' Build up list of files to process depending on which option was selected.
-        ' Dim FoundFiles As ObjectModel.ReadOnlyCollection(Of String)
         Dim FoundFilesArray As String() = {}
         Dim FoundFilesList As New List(Of String)
         Dim FileExtension As String = FileWildcard.Replace("*", "")
@@ -663,7 +635,6 @@ Public Class UtilsFileList
         Return FoundFilesList
     End Function
 
-
     Public Function GetTotalFilesToProcess() As Integer
         Dim Count As Integer = 0
 
@@ -692,21 +663,13 @@ Public Class UtilsFileList
         Dim MissingFilesList As New List(Of String)
         Dim DependencyDict As New Dictionary(Of String, List(Of String))
         Dim Filename As String
-        'Dim DMDoc As RevisionManager.Document
 
-        'Dim DMApp As New RevisionManager.Application
-        'DMApp.Visible = 1
         Dim SSDoc As HCStructuredStorageDoc = Nothing
-
-
-        'FMain.Activate()
 
         For Each Filename In Foundfiles
 
             FMain.TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
             System.Windows.Forms.Application.DoEvents()
-
-            'DMDoc = CType(DMApp.Open(Filename), RevisionManager.Document)
 
             Try
                 SSDoc = New HCStructuredStorageDoc(Filename)
@@ -733,24 +696,18 @@ Public Class UtilsFileList
 
         OutList = SortByDependency(DependencyDict)
 
-        'DMApp.Quit()
-
         If MissingFilesList.Count > 0 Then
             Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
             Dim MissingFilesFileName As String
-            'Dim msg As String
             MissingFilesFileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Missing_Files.log"
 
             Try
                 Using writer As New IO.StreamWriter(MissingFilesFileName, True)
                     writer.WriteLine("FILES NOT FOUND")
                     For Each Filename In MissingFilesList
-                        ' Filename = Filename.Replace(TopLevelFolder, "")
                         writer.WriteLine(String.Format(Filename))
                     Next
                 End Using
-
-                'Process.Start("Notepad.exe", MissingFilesFileName)
 
                 Try
                     ' Try to use the default application to open the file.
@@ -770,80 +727,14 @@ Public Class UtilsFileList
 
     End Function
 
-    'Private Function GetLinks(
-    '    DMDoc As RevisionManager.Document,
-    '    LinkDict As Dictionary(Of String, List(Of String)),
-    '    MissingFilesList As List(Of String)
-    '    ) As Dictionary(Of String, List(Of String))
-
-    '    'Dim LinkDict As New Dictionary(Of String, List(Of String))
-    '    Dim LinkDoc As RevisionManager.Document
-    '    Dim LinkDocs As RevisionManager.LinkedDocuments
-    '    Dim DMDocName As String
-    '    Dim LinkDocName As String
-    '    'Dim Filename As String
-    '    Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
-    '    'Dim tf As Boolean
-
-    '    Dim UC As New UtilsCommon
-
-    '    DMDocName = UC.SplitFOAName(DMDoc.FullName)("Filename")
-
-    '    If Not LinkDict.Keys.Contains(DMDocName) Then
-
-    '        LinkDict.Add(DMDocName, New List(Of String))
-
-    '        ' Master FOP reports Child documents as LinkedDocuments.
-    '        ' Not correct in this dependency context.
-    '        'FOPStatus
-    '        '1 Not FOP 
-    '        '2 FOP Master
-    '        '4 FOP not Master
-    '        Dim FOPStatus As Integer
-    '        DMDoc.IsDocumentFOP(FOPStatus)
-
-    '        If Not FOPStatus = 2 Then
-    '            LinkDocs = CType(DMDoc.LinkedDocuments, RevisionManager.LinkedDocuments)
-    '            If Not LinkDocs Is Nothing Then
-    '                If LinkDocs.Count > 0 Then
-    '                    For Each LinkDoc In LinkDocs
-
-    '                        LinkDocName = UC.SplitFOAName(LinkDoc.FullName)("Filename")
-
-    '                        If ValidExtensions.Contains(IO.Path.GetExtension(LinkDocName)) Then
-    '                            If IO.File.Exists(LinkDocName) Then
-    '                                LinkDict(DMDocName).Add(LinkDocName)
-    '                                LinkDict = GetLinks(LinkDoc, LinkDict, MissingFilesList)
-    '                            Else
-    '                                If Not MissingFilesList.Contains(LinkDocName) Then
-    '                                    MissingFilesList.Add(LinkDocName)
-    '                                End If
-    '                            End If
-    '                        End If
-    '                    Next
-    '                End If
-
-    '            End If
-    '        End If
-    '    End If
-
-    '    Return LinkDict
-    'End Function
-
     Private Function GetLinks(
         SSDoc As HCStructuredStorageDoc,
         LinkDict As Dictionary(Of String, List(Of String)),
         MissingFilesList As List(Of String)
         ) As Dictionary(Of String, List(Of String))
 
-        ''Dim LinkDict As New Dictionary(Of String, List(Of String))
-        'Dim LinkDoc As RevisionManager.Document
-        'Dim LinkDocs As RevisionManager.LinkedDocuments
         Dim SSDocName As String
-        'Dim LinkDocName As String
-        'Dim Filename As String
         Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
-        'Dim tf As Boolean
 
         Dim SSLinkNames As List(Of String)
         Dim SSLinkName As String
@@ -1098,8 +989,6 @@ Public Class UtilsFileList
 
     End Function
 
-
-
     Public Function GetSourceDirectories() As List(Of String)
         Dim SourceDirectories As New List(Of String)
         Dim TagName As String
@@ -1123,30 +1012,10 @@ Public Class UtilsFileList
 
         Next
 
-        'For Each Item As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
-
-        '    If Item.Group.Name = "Sources" Then
-
-        '        TagName = CType(Item.Tag, String)
-
-        '        If TagName.ToLower.Contains("folder") Then
-        '            s = Item.Name
-        '            If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
-        '        ElseIf TagName.ToLower = "asm" Then
-        '            s = System.IO.Path.GetDirectoryName(Item.Name)
-        '            If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
-        '        End If
-
-        '    End If
-
-        'Next
-
         Return SourceDirectories
     End Function
 
     Public Sub UpdatePropertiesColumns()
-
-        'FMain.Cursor.Current = Cursors.WaitCursor  ' ########## Moved to where this method is being called in Form_Main
 
         Dim UC As New UtilsCommon
 
@@ -1196,8 +1065,6 @@ Public Class UtilsFileList
 
         ListViewFiles.EndUpdate()
 
-        'FMain.Cursor = Cursors.Default
-
     End Sub
 
     Private Sub CreateColumns()
@@ -1206,18 +1073,18 @@ Public Class UtilsFileList
 
             If PropName.Name <> "Name" And PropName.Name <> "Path" Then
                 ListViewFiles.Columns.Add(PropName.Name, 0)
-                If PropName.Visible Then ListViewFiles.Columns.Item(ListViewFiles.Columns.Count - 1).Width = PropName.Width 'AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                If PropName.Visible Then ListViewFiles.Columns.Item(ListViewFiles.Columns.Count - 1).Width = PropName.Width
             ElseIf PropName.Name = "Name" Then
                 If Not PropName.Visible Then
                     ListViewFiles.Columns.Item(0).Width = 0
                 Else
-                    ListViewFiles.Columns.Item(0).Width = PropName.Width '.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    ListViewFiles.Columns.Item(0).Width = PropName.Width
                 End If
             ElseIf PropName.Name = "Path" Then
                 If Not PropName.Visible Then
                     ListViewFiles.Columns.Item(1).Width = 0
                 Else
-                    ListViewFiles.Columns.Item(1).Width = PropName.Width '.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    ListViewFiles.Columns.Item(1).Width = PropName.Width
                 End If
             End If
 
@@ -1235,7 +1102,7 @@ Public Class UtilsFileList
         'Dim z = FMain.ListViewFiles.ClientRectangle
 
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
-                Dim UC As New UtilsCommon
+            Dim UC As New UtilsCommon
             Try
                 'Adding extra properties data if needed
                 For Each PropColumn In FMain.ListOfColumns
@@ -1243,18 +1110,6 @@ Public Class UtilsFileList
                         Dim PropValue As String
                         Dim tmpColor As Color = Color.White
                         Try
-                            'Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                            'Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
-                            'Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-                            'PropValue = UC.SubstitutePropertyFormula(
-                            '    Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula, ValidFilenameRequired:=False, FMain.PropertiesData)
-
-                            'cf.Close()
-                            'fs.Close()
-                            'cf = Nothing
-                            'fs = Nothing
-
                             Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name)
                             SSDoc.ReadProperties(FMain.PropertiesData)
 
@@ -1286,8 +1141,6 @@ Public Class UtilsFileList
             'Eventually insert code to personalize Sources group
 
         End If
-
-        'End If
 
     End Sub
 

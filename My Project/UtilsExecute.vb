@@ -5,17 +5,17 @@ Public Class UtilsExecute
     Public Property FMain As Form_Main
     Public Property FilesToProcessTotal As Integer
     Public Property FilesToProcessCompleted As Integer
-    'Public Property UtilsLogFile As UtilsLogFile
     Public Property TotalAborts As Double
     Public Property TotalAbortsMaximum As Integer = 4
     Public Property SEApp As SolidEdgeFramework.Application
     Public Property StartTime As DateTime
-    'Public Property TextBoxStatus As TextBox
     Public Property ErrorLogger As HCErrorLogger
+
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
     End Sub
+
 
     Public Sub ProcessAll()
 
@@ -46,7 +46,6 @@ Public Class UtilsExecute
         TotalAborts = 0
 
         Dim USEA = New UtilsSEApp(FMain)
-        'USEA.TextBoxStatus = Me.TextBoxStatus
 
         If FMain.SolidEdgeRequired > 0 Then
             USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU)
@@ -129,7 +128,6 @@ Public Class UtilsExecute
         Dim StartLogger As Logger = HeaderLogger.AddLogger("")
 
         Dim USEA = New UtilsSEApp(FMain)
-        'USEA.TextBoxStatus = Me.TextBoxStatus
 
         If Not FMain.UseCurrentSession Then
             If USEA.SEIsRunning() Then
@@ -379,11 +377,7 @@ Public Class UtilsExecute
     Public Sub ProcessFile(
         ByVal Path As String,
         ByVal Filetype As String
-        ) 'As Dictionary(Of String, List(Of String))
-
-        'Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        'Dim ExitStatus As Integer
-        'Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
+        )
 
         Dim FileLogger As Logger = Me.ErrorLogger.AddFile(Path)
 
@@ -415,7 +409,6 @@ Public Class UtilsExecute
 
             Dim s As String = SetStartingStatus(OldStatus, Path) 'SetStartingStatus populates OldStatus
             If Not s = "" Then
-                'ErrorMessagesCombined(s) = New List(Of String) From {""}
                 FileLogger.AddMessage(s)
             End If
 
@@ -431,7 +424,6 @@ Public Class UtilsExecute
 
                 Proceed = CheckVersion(SEApp, Path)
                 If Not Proceed Then
-                    'ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
                     FileLogger.AddMessage("Error opening file")
                 End If
 
@@ -481,22 +473,11 @@ Public Class UtilsExecute
                         If tf Then
 
                             If FMain.SolidEdgeRequired > 0 Then
-                                'ErrorMessage = Task.Process(SEDoc, FMain.Configuration, SEApp)
                                 Task.Process(SEDoc, SEApp)
                             Else
-                                'ErrorMessage = Task.Process(Path)
                                 Task.Process(Path)
                             End If
 
-                            'ExitStatus = ErrorMessage.Keys(0)
-
-                            'If ExitStatus <> 0 Then
-                            '    ErrorMessagesCombined(Task.Description) = ErrorMessage(ErrorMessage.Keys(0))
-                            'End If
-
-                            'If ExitStatus = 99 Or Me.ErrorLogger.Abort Then
-                            '    FMain.StopProcess = True
-                            'End If
                             If Me.ErrorLogger.Abort Then
                                 FMain.StopProcess = True
                             End If
@@ -522,7 +503,6 @@ Public Class UtilsExecute
                 If FMain.ProcessAsAvailable Then
                     Dim s As String = SetEndingStatus(OldStatus, Path)
                     If Not s = "" Then
-                        'ErrorMessagesCombined(s) = New List(Of String) From {""}
                         FileLogger.AddMessage(s)
                     End If
                 End If
@@ -545,7 +525,6 @@ Public Class UtilsExecute
             Else
                 If FMain.SolidEdgeRequired > 0 Then
                     Dim USEA = New UtilsSEApp(FMain)
-                    'USEA.TextBoxStatus = Me.TextBoxStatus
 
                     USEA.SEStop(FMain.UseCurrentSession)
                     SEApp = Nothing
@@ -556,10 +535,8 @@ Public Class UtilsExecute
             End If
 
             If ex.ToString.Contains("SolidEdgeFramework.Documents.Open") Then
-                'ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
                 FileLogger.AddMessage("Error opening file")
             Else
-                'ErrorMessagesCombined("Error processing file") = AbortList
                 FileLogger.AddMessage(String.Format("Error processing file"))
                 For Each s In AbortList
                     FileLogger.AddMessage(s)
@@ -569,7 +546,6 @@ Public Class UtilsExecute
 
         UpdateTimeRemaining()
 
-        'Return ErrorMessagesCombined
     End Sub
 
     Private Function CheckVersion(SEApp As SolidEdgeFramework.Application, Filename As String) As Boolean

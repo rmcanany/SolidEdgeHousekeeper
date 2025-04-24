@@ -5,8 +5,8 @@ Public Class FormPropertyListCustomizeManualEntry
     Public Property PropertySet As String
     Public Property PropertyName As String
     Public Property EnglishName As String
-
     Private Property LocalizedEnglishNames As List(Of String)
+
 
     Public Sub New(_PropertiesData As HCPropertiesData)
 
@@ -44,6 +44,7 @@ Public Class FormPropertyListCustomizeManualEntry
 
         Return InputsOK
     End Function
+
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Me.PropertySet = ComboBoxPropertySet.Text

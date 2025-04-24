@@ -618,7 +618,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
-        'tmpTLPOptions.SetColumnSpan(TextBox, 2)
         ControlsDict(TextBox.Name) = TextBox
         TextBox.Visible = False
 
@@ -650,14 +649,12 @@ Public Class TaskCreateDrawingOfFlatPattern
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
-        'tmpTLPOptions.SetColumnSpan(TextBox, 2)
         ControlsDict(TextBox.Name) = TextBox
         TextBox.Visible = False
 
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -850,22 +847,13 @@ Public Class TaskCreateDrawingOfFlatPattern
                 Me.DraftTemplate = TextBox.Text
 
             Case ControlNames.ScaleFactor.ToString
-                'Try
-                '    Me.ScaleFactor = CDbl(TextBox.Text)
-                'Catch ex As Exception
-                'End Try
+                ' Conversion to int handled in CheckStartConditions
 
             Case ControlNames.XOffset.ToString
-                'Try
-                '    Me.XOffset = CDbl(TextBox.Text)
-                'Catch ex As Exception
-                'End Try
+                ' Conversion to int handled in CheckStartConditions
 
             Case ControlNames.YOffset.ToString
-                'Try
-                '    Me.YOffset = CDbl(TextBox.Text)
-                'Catch ex As Exception
-                'End Try
+                ' Conversion to int handled in CheckStartConditions
 
             Case ControlNames.NewDirDraft.ToString
                 Me.NewDirDraft = TextBox.Text

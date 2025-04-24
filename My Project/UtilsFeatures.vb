@@ -4,7 +4,6 @@ Public Class UtilsFeatures
 
     Public Function GetName(Feature As Object) As String
 
-        'Dim Name = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
         Dim Name = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
 
         Return Name
@@ -15,8 +14,6 @@ Public Class UtilsFeatures
 
         ' Some features do not have a ModelingModeType
         Try
-            '    Dim ModelingModeType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-            'Of SolidEdgePart.ModelingModeConstants)(Feature, "ModelingModeType")
             Dim ModelingModeType = HCComObject.GetPropertyValue(Of SolidEdgePart.ModelingModeConstants)(Feature, "ModelingModeType")
 
             If ModelingModeType = SolidEdgePart.ModelingModeConstants.seModelingModeOrdered Then
@@ -36,8 +33,6 @@ Public Class UtilsFeatures
         Dim FeatureType As SolidEdgePart.FeatureTypeConstants = Nothing
 
         Try
-            '    FeatureType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-            'Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type")
             FeatureType = HCComObject.GetPropertyValue(Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type")
         Catch ex As Exception
         End Try
@@ -49,8 +44,6 @@ Public Class UtilsFeatures
 
     Public Function GetStatus(Feature As Object) As SolidEdgePart.FeatureStatusConstants
 
-        'Dim Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-        '             Of SolidEdgePart.FeatureStatusConstants)(Feature, "Status")
         Dim Status = HCComObject.GetPropertyValue(Of SolidEdgePart.FeatureStatusConstants)(Feature, "Status")
 
         Return Status
@@ -63,8 +56,6 @@ Public Class UtilsFeatures
 
         'Some features do not have a profile
         Try
-            'Profile = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-            '         Of SolidEdgePart.Profile)(Feature, "Profile")
             Profile = HCComObject.GetPropertyValue(Of SolidEdgePart.Profile)(Feature, "Profile")
         Catch ex As Exception
         End Try
@@ -75,8 +66,6 @@ Public Class UtilsFeatures
 
     Public Function GetPatternPlane(Feature As Object) As SolidEdgePart.RefPlane
 
-        'Dim PatternPlane = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-        '             Of SolidEdgePart.RefPlane)(Feature, "PatternPlane")
         Dim PatternPlane = HCComObject.GetPropertyValue(Of SolidEdgePart.RefPlane)(Feature, "PatternPlane")
 
         Return PatternPlane

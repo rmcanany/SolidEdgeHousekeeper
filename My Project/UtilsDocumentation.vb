@@ -77,10 +77,6 @@ Public Class UtilsDocumentation
         HelpfileBaseURLFilename = UP.GetHelpfileBaseURLFilename
         IO.File.WriteAllLines(HelpfileBaseURLFilename, Outlist)
 
-        'Dim HelpfileBaseURLFilenameForDevs = UP.GetHelpfileBaseURLFilenameForDevs
-        'IO.File.WriteAllLines(HelpfileBaseURLFilenameForDevs, Outlist)
-
-
         If HelpfileBaseURLFilename.Contains(UP.GetHardCodedPath) Then
             MsgBox(String.Format("Updated BaseURL '{0}'", BaseURL))
         End If
@@ -131,10 +127,6 @@ Public Class UtilsDocumentation
             Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
 
             ' html for collapsible sections
-            '<details><summary><h2 style="display:inline-block">Task Details</h2></summary>
-            'msg = String.Format(
-            '    "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}My%20Project/media/spacer.png{0}><img src={0}Resources/SE_asm.png{0}><img src={0}My%20Project/media/spacer.png{0}>TASK DETAILS</h2></summary>",
-            '    Chr(34))
             msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
             msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
             msg = String.Format("{1}<img src={0}Resources/SE_asm.png{0}>", Chr(34), msg)
@@ -146,9 +138,6 @@ Public Class UtilsDocumentation
 
             For Each Task As Task In tmpTaskList
                 Dim ImageName As String = Task.Name
-                'msg = String.Format(
-                '    "<details><summary><h3 style={0}margin:0px; display:inline-block{0}><img src={0}My%20Project/media/spacer.png{0}><img src={0}Resources/{2}.png{0}><img src={0}My%20Project/media/spacer.png{0}>{1}</h3></summary>",
-                '    Chr(34), Task.Description, ImageName)
                 msg = String.Format("<details><summary><h3 style={0}margin:0px; display:inline-block{0}>", Chr(34))
                 msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
                 msg = String.Format("{1}<img src={0}Resources/{2}.png{0}>", Chr(34), msg, ImageName)
@@ -169,8 +158,6 @@ Public Class UtilsDocumentation
             ReadmeOut.Add("")
 
             ReadmeOut.Add("")
-            'msg = "# KNOWN ISSUES"
-            'msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/icons8_help_16.png{0} style={0}padding-right:10px{0}>KNOWN ISSUES</h2></summary>", Chr(34))
             msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
             msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
             msg = String.Format("{1}<img src={0}Resources/icons8_help_16.png{0}>", Chr(34), msg)
@@ -230,8 +217,6 @@ Public Class UtilsDocumentation
             ReadmeOut.Add("")
 
             ReadmeOut.Add("")
-            'msg = "# OPEN SOURCE PACKAGES"
-            'msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/TaskRunExternalProgram.png{0} style={0}padding-right:10px{0}>OPEN SOURCE PACKAGES</h2></summary>", Chr(34))
             msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
             msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
             msg = String.Format("{1}<img src={0}Resources/TaskRunExternalProgram.png{0}>", Chr(34), msg)
@@ -243,8 +228,6 @@ Public Class UtilsDocumentation
 
             msg = "This project uses these awesome open source packages."
             ReadmeOut.Add(msg)
-            'msg = "- Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)"
-            'ReadmeOut.Add(msg)
             msg = "- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)"
             ReadmeOut.Add(msg)
             msg = "- Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)"
@@ -263,8 +246,6 @@ Public Class UtilsDocumentation
 
             msg = ""
             ReadmeOut.Add("")
-            'msg = "# CODE ORGANIZATION"
-            'msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/Info-16.png{0} style={0}padding-right:10px{0}>CODE ORGANIZATION</h2></summary>", Chr(34))
             msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
             msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
             msg = String.Format("{1}<img src={0}Resources/Info-16.png{0}>", Chr(34), msg)

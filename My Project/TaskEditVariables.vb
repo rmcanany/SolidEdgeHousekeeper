@@ -65,7 +65,6 @@ Public Class TaskEditVariables
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditVariables
         Me.Category = "Edit"
-        'Me.RequiresTemplatePropertyDict = True
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
 
@@ -77,7 +76,6 @@ Public Class TaskEditVariables
         Me.JSONString = ""
         Me.AutoAddMissingVariable = False
 
-        'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
         Me.PropertiesData = New HCPropertiesData
 
     End Sub
@@ -186,7 +184,7 @@ Public Class TaskEditVariables
                 Dim VariableName As String = VariablesToEditDict(RowIndex)("VariableName").Trim
 
                 Dim Formula As String = VariablesToEditDict(RowIndex)("Formula").Trim
-                Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
+                Dim FullName As String = UC.GetFOAFilename(SEDoc.FullName)
 
                 Dim tmpFormula As String = Formula
 
@@ -283,8 +281,6 @@ Public Class TaskEditVariables
         Dim Button As Button
         Dim TextBox As TextBox
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
@@ -311,7 +307,6 @@ Public Class TaskEditVariables
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         ControlsDict(CheckBox.Name) = CheckBox
 
@@ -348,9 +343,6 @@ Public Class TaskEditVariables
                 VariableInputEditor.JSONString = Me.JSONString
                 VariableInputEditor.HelpURL = Me.HelpURL
 
-                '' Workaround
-                'Dim FileType = "asm"
-
                 VariableInputEditor.ShowDialog()
 
                 If VariableInputEditor.DialogResult = DialogResult.OK Then
@@ -369,8 +361,6 @@ Public Class TaskEditVariables
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
-        'Dim Ctrl As Control
-        'Dim Button As Button
 
         Select Case Name
             Case ControlNames.AutoAddMissingVariable.ToString

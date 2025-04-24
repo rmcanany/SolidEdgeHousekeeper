@@ -7,6 +7,7 @@ Public Class HCPropertiesData
 
     Public Property Items As List(Of PropertyData)
 
+
     Public Sub New()
 
         Items = New List(Of PropertyData)
@@ -42,6 +43,7 @@ Public Class HCPropertiesData
 
         End If
     End Sub
+
 
     Public Sub Save()
 
@@ -519,6 +521,9 @@ Public Class HCPropertiesData
     End Function
 
     Private Function ScanFilesForProps(Directory As String, Method As String) As List(Of String)
+        ' This a utility that can be used to open (many) files to see what properties are defined.
+        ' It is not normally used in production.
+
         ' Searches a directory and subdirectories for property names
         ' Directory: The top-level directory to search
         ' Method: What program to use to process the files.  'SE' or 'SS'
@@ -625,18 +630,8 @@ Public Class PropertyData
     Public Enum PropertySetNameConstants
         System
         Custom
-        'Duplicate
         Server
     End Enum
-
-    'Public Enum PropertySetActualNameConstants
-    '    SummaryInformation
-    '    ExtendedSummaryInformation
-    '    DocumentSummaryInformation
-    '    ProjectInformation
-    '    MechanicalModeling
-    '    Custom
-    'End Enum
 
     Public Enum TypeNameConstants
         ' Preceeding names with '_' to avoid VB reserved keywords
@@ -653,9 +648,11 @@ Public Class PropertyData
         Manual
     End Enum
 
+
     Public Sub New()
 
     End Sub
+
 
     Public Sub New(_PropertySetActualName As String, _PropID As Integer)
 
@@ -1088,17 +1085,6 @@ Public Class PropertyData
                 Exit For
             End If
         Next
-
-        ' Surplus info can safely be ignored
-        ' Check for surplus info
-        'If Proceed Then
-        '    For Each PropertyName As String In JSONDict.Keys
-        '        If Not PropertyNamesList.Contains(PropertyName) Then
-        '            Proceed = False
-        '            Exit For
-        '        End If
-        '    Next
-        'End If
 
         Return Proceed
     End Function

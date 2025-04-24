@@ -7,7 +7,6 @@ Public MustInherit Class Task
     Inherits HCIsolatedTaskProxy
 
     Public Property Name As String
-
     Private _Description As String
     Public Property Description() As String
         Get
@@ -20,7 +19,6 @@ Public MustInherit Class Task
             End If
         End Set
     End Property
-
     Public Property HelpText As String
     Public Property RequiresSave As Boolean
     Public Property AppliesToAssembly As Boolean
@@ -99,10 +97,10 @@ Public MustInherit Class Task
         End Set
     End Property
 
-    Public Property IsOptionsHidden As Boolean
+    'Public Property IsOptionsHidden As Boolean
     Public Property RequiresSourceDirectories As Boolean
     Public Property SourceDirectories As List(Of String)
-    Public Property TLPHeader As ExTableLayoutPanel
+    'Public Property TLPHeader As ExTableLayoutPanel
     Public Property ControlsDict As Dictionary(Of String, Control)
     Public Property ColorHue As String
     Public Property ColorSaturation As Double
@@ -114,7 +112,6 @@ Public MustInherit Class Task
     Public Property RequiresPartTemplate As Boolean = False
     Public Property RequiresSheetmetalTemplate As Boolean = False
     Public Property RequiresDraftTemplate As Boolean = False
-    'Public Property DraftTemplate As String = ""
     Public Property RequiresMaterialTable As Boolean = False
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
@@ -258,44 +255,6 @@ Public MustInherit Class Task
 
     End Sub
 
-    'Public Sub AddSupplementalErrorMessage(
-    '    ByRef ExitStatus As Integer,
-    '    ErrorMessageList As List(Of String),
-    '    SupplementalErrorMessage As Dictionary(Of Integer, List(Of String))
-    '    )
-
-    '    Dim SupplementalExitStatus As Integer = SupplementalErrorMessage.Keys(0)
-
-    '    If Not SupplementalExitStatus = 0 Then
-    '        If SupplementalExitStatus > ExitStatus Then
-    '            ExitStatus = SupplementalExitStatus
-    '        End If
-    '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
-    '            ErrorMessageList.Add(s)
-    '        Next
-    '    End If
-    'End Sub
-
-    'Public Sub UpdateErrorMessageList(
-    '    ErrorMessageList As List(Of String),
-    '    ErrorMessage As String,
-    '    TreatAsSubtask As Boolean,
-    '    LabelText As String)
-
-    '    Dim Indent As String = "    "
-
-    '    If TreatAsSubtask Then
-    '        If Not ErrorMessageList.Contains(LabelText) Then
-    '            ErrorMessageList.Add(LabelText)
-    '        End If
-    '        ErrorMessageList.Add(String.Format("{0}{1}", Indent, ErrorMessage))
-    '    Else
-    '        ErrorMessageList.Add(ErrorMessage)
-    '    End If
-
-
-    'End Sub
-
     Public Function GenerateLabelText() As String
         ' Scratch.TaskOpenSave -> Open save
         ' Housekeeper.TaskOpenSave -> Open save
@@ -375,8 +334,6 @@ Public MustInherit Class Task
         )
 
         Dim ParticipatingCheckBox As CheckBox
-        'Dim OtherCheckBox As CheckBox
-        'Dim Ctrl As Control
 
         For Each ParticipatingCheckBox In ParticipatingCheckBoxes
             If Not ParticipatingCheckBox Is NewlyCheckedCheckBox Then
@@ -391,8 +348,6 @@ Public MustInherit Class Task
         Dim JSONString As String
 
         Dim tmpJSONDict As New Dictionary(Of String, String)
-        'Dim Ctrl As Control
-        'Dim CtrlName As String
 
         Dim TaskType As Type = Me.GetType()
         Dim PropInfos = New List(Of PropertyInfo)(TaskType.GetProperties())
@@ -430,8 +385,6 @@ Public MustInherit Class Task
                 Case "Boolean".ToLower
                     tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
                 Case "List`1".ToLower
-                    '_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
-                    'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
                     Dim Something = PropInfo.GetValue(Me, Nothing)
                     tmpJSONDict(PropInfoName) = JsonConvert.SerializeObject(Something)
                     Dim i = 0
@@ -605,7 +558,6 @@ Public MustInherit Class Task
         TextBox.Name = ControlName
         TextBox.Text = TextBoxText
         TextBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
-        'TextBox.AutoSize = True
 
         Return TextBox
     End Function

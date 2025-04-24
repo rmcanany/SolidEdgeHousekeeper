@@ -94,7 +94,6 @@ Public Class TaskCheckDrawings
         End Set
     End Property
 
-
     Enum ControlNames
         CheckAll
         DrawingViewsOutOfDate
@@ -104,6 +103,7 @@ Public Class TaskCheckDrawings
         DimensionsOverridden
         AutoHideOptions
     End Enum
+
 
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
@@ -156,9 +156,6 @@ Public Class TaskCheckDrawings
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal SEApp As SolidEdgeFramework.Application
         )
-
-        Dim s As String
-        Dim tf As Boolean
 
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
 
@@ -409,8 +406,6 @@ Public Class TaskCheckDrawings
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
@@ -464,7 +459,6 @@ Public Class TaskCheckDrawings
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -562,7 +556,7 @@ Public Class TaskCheckDrawings
         HelpString += vbCrLf + vbCrLf + "![CheckDrawings](My%20Project/media/task_check_drawings.png)"
 
         HelpString += vbCrLf + vbCrLf + "The options are: "
-        HelpString += vbCrLf + "- `Drawing views out of date`: Checks if any drawing views are not up to date. "
+        HelpString += vbCrLf + "- `Drawing views out of date`: Checks if any drawing views, and associated models, are not up to date. "
         HelpString += vbCrLf + "- `Detached dimensions or annotations`: Checks that dimensions, "
         HelpString += "balloons, callouts, etc. are attached to geometry in the drawing. "
         HelpString += vbCrLf + "- `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. "

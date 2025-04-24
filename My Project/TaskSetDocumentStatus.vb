@@ -66,7 +66,6 @@ Public Class TaskSetDocumentStatus
         SetColorFromCategory(Me)
         Me.RequiresPropertiesData = True
         Me.SolidEdgeRequired = False
-        'Me.CompatibleWithOtherTasks = False
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -132,10 +131,8 @@ Public Class TaskSetDocumentStatus
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
         Dim ComboBox As ComboBox
-        'Dim ComboBoxItems As List(Of String) = Split("Available Baselined InReview InWork Obsolete Released", " ").ToList
         Dim ComboBoxItems As New List(Of String)
         ComboBoxItems.AddRange({"", "Available", "Baselined", "InReview", "InWork", "Obsolete", "Released"})
-        'Dim TextBox As TextBox
         Dim Label As Label
         Dim ControlWidth As Integer = 225
 
@@ -166,7 +163,6 @@ Public Class TaskSetDocumentStatus
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -214,30 +210,7 @@ Public Class TaskSetDocumentStatus
 
         Select Case Name
             Case ControlNames.StructuredStorageEdit.ToString
-                'Me.StructuredStorageEdit = Checkbox.Checked
-                'Me.RequiresSave = Not Checkbox.Checked
-                'Me.SolidEdgeRequired = Not Checkbox.Checked
-
-            'Case ControlNames.UpdateAdditionalProperties.ToString
-            '    Me.UpdateAdditionalProperties = Checkbox.Checked
-
-            '    CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox).Visible = Me.UpdateAdditionalProperties
-
-            '    CType(ControlsDict(ControlNames.PropertyLabel.ToString), Label).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.ValueLabel.ToString), Label).Visible = Me.UpdateAdditionalProperties
-
-            '    CType(ControlsDict(ControlNames.AuxProperty1.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.AuxValue1.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.AuxProperty2.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.AuxValue2.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.AuxProperty3.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.AuxValue3.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.AuxProperty4.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-            '    CType(ControlsDict(ControlNames.AuxValue4.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-
-
-            'Case ControlNames.AutoAddMissingProperty.ToString
-            '    Me.AutoAddMissingProperty = Checkbox.Checked
+                ' Not enabled.  Always checked.
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
@@ -248,44 +221,6 @@ Public Class TaskSetDocumentStatus
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
-
-    End Sub
-
-    Public Sub TextBoxOptions_Text_Changed(sender As System.Object, e As System.EventArgs)
-        Dim TextBox = CType(sender, TextBox)
-        Dim Name = TextBox.Name
-
-        Dim UC As New UtilsCommon
-
-        'Select Case Name
-        '    Case ControlNames.AuxProperty1.ToString
-        '        Me.AuxProperty1 = TextBox.Text
-
-        '    Case ControlNames.AuxValue1.ToString
-        '        Me.AuxValue1 = TextBox.Text
-
-        '    Case ControlNames.AuxProperty2.ToString
-        '        Me.AuxProperty2 = TextBox.Text
-
-        '    Case ControlNames.AuxValue2.ToString
-        '        Me.AuxValue2 = TextBox.Text
-
-        '    Case ControlNames.AuxProperty3.ToString
-        '        Me.AuxProperty3 = TextBox.Text
-
-        '    Case ControlNames.AuxValue3.ToString
-        '        Me.AuxValue3 = TextBox.Text
-
-        '    Case ControlNames.AuxProperty4.ToString
-        '        Me.AuxProperty4 = TextBox.Text
-
-        '    Case ControlNames.AuxValue4.ToString
-        '        Me.AuxValue4 = TextBox.Text
-
-        '    Case Else
-        '        MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-        'End Select
-
 
     End Sub
 

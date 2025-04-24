@@ -352,7 +352,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim CheckBox As CheckBox
         Dim Button As Button
         Dim TextBox As TextBox
-        'Dim Combobox As ComboBox
         Dim Label As Label
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
@@ -675,34 +674,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
 
-
-    End Sub
-
-    Public Sub ComboBoxOptions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)
-        Dim ComboBox = CType(sender, ComboBox)
-        Dim Name = ComboBox.Name
-        Dim CheckBox As CheckBox = Nothing
-        Dim TextBox As TextBox = Nothing
-        Dim Label As Label = Nothing
-
-        Select Case Name
-            Case ControlNames.ExcludedFinishes.ToString
-
-                If Not ComboBox.Items.Contains(ComboBox.Text) Then
-                    ComboBox.Items.Add(ComboBox.Text)
-                End If
-
-                Me.ExcludedFinishesList.Clear()
-
-                For Each Item As String In ComboBox.Items
-                    ExcludedFinishesList.Add(Item)
-                Next
-
-
-            Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
-        End Select
 
     End Sub
 

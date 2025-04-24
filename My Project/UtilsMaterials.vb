@@ -57,7 +57,6 @@ Public Class UtilsMaterials
             Case "asm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
                 IsWeldment = tmpSEDoc.WeldmentAssembly
-                'If IsWeldment = Nothing Then IsWeldment = False
         End Select
 
         If ((DocType = "asm") And (IsWeldment)) Or (Models IsNot Nothing AndAlso Models.Count > 0) Then
@@ -182,130 +181,117 @@ Public Class UtilsMaterials
 
         If Mismatches.Count > 0 Then
 
-            Dim NewWay As Boolean = True
-            If NewWay Then
-                If Me.UpdateFaceStyles Then
-                    ' Face styles are not always updated, especially on imported files.
-                    Try
-                        MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                    Catch ex As Exception
-                        ErrorLogger.AddMessage("Some face styles may not have been updated.  Please verify results.")
-                    End Try
-                Else
-                    For Each MismatchProp As SolidEdgeFramework.MatTablePropIndex In Mismatches
-
-                        tf = MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
-                        tf = tf Or MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFillStyle
-                        If tf Then
-                            Continue For
-                        End If
-
-                        Dim LibPropValue As Object = Nothing
-                        MatTable.GetMaterialPropValueFromLibrary(
-                            MatTableMaterial.ToString, ActiveMaterialLibrary, MismatchProp, LibPropValue)
-                        SEApp.DoIdle()
-
-                        Dim ModelIdx As Integer = 0
-                        Dim AutoAdd As Boolean = False
-
-                        Select Case MismatchProp
-                            Case SolidEdgeFramework.MatTablePropIndex.seDensity
-                                ' Density is a variable, not a property
-
-                                Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
-                                DocVariableDict = UC.GetDocVariables(SEDoc)
-                                If DocVariableDict.Keys.Contains("PhysicalProperties_Density") Then
-                                    ' Density from the material table is in kg/m^3
-                                    ' Density in the document needs to be in its own units
-
-                                    Dim UnitsOfMeasure = SEDoc.UnitsOfMeasure
-                                    Dim Factor As Double = 1.0
-                                    Dim LibPropDouble As Double = CDbl(LibPropValue)
-                                    For Each UnitOfMeasure As SolidEdgeFramework.UnitOfMeasure In UnitsOfMeasure
-                                        If UnitOfMeasure.Type = SolidEdgeConstants.UnitTypeConstants.igUnitDistance Then
-                                            If UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthInch Then
-                                                ' Weight conversion: 0.45359237 kg = 1 lb.  lb/in^3 = kg/m^3 * lb/kg * (m/in)^3
-                                                Factor = (1 / 0.45359237) * ((25.4 / 1000) ^ 3)
-                                                LibPropDouble = Factor * LibPropDouble
-                                                DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
-                                            ElseIf UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter Then
-                                                Factor = 1 / (1000 * 1000 * 1000)
-                                                LibPropDouble = Factor * LibPropDouble
-                                                DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
-                                            Else
-                                                ErrorLogger.AddMessage(String.Format("Could not update density with '{0}' units", UnitOfMeasure.Units))
-                                            End If
-                                        End If
-                                    Next
-                                End If
-
-                            Case SolidEdgeFramework.MatTablePropIndex.seCoefOfThermalExpansion
-                                UC.SetPropValue(SEDoc, "System", "Coef. of Thermal Exp", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                            Case SolidEdgeFramework.MatTablePropIndex.seThermalConductivity
-                                UC.SetPropValue(SEDoc, "System", "Thermal Conductivity", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                            Case SolidEdgeFramework.MatTablePropIndex.seSpecificHeat
-                                UC.SetPropValue(SEDoc, "System", "Specific Heat", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                            Case SolidEdgeFramework.MatTablePropIndex.seModulusElasticity
-                                UC.SetPropValue(SEDoc, "System", "Modulus of Elasticity", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                            Case SolidEdgeFramework.MatTablePropIndex.sePoissonRatio
-                                UC.SetPropValue(SEDoc, "System", "Poisson's Ratio", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                            Case SolidEdgeFramework.MatTablePropIndex.seYieldStress
-                                UC.SetPropValue(SEDoc, "System", "Yield Stress", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                            Case SolidEdgeFramework.MatTablePropIndex.seUltimateStress
-                                UC.SetPropValue(SEDoc, "System", "Ultimate Stress", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                            Case SolidEdgeFramework.MatTablePropIndex.seElongation
-                                UC.SetPropValue(SEDoc, "System", "Elongation", ModelIdx, AutoAdd, CDbl(LibPropValue))
-                        End Select
-
-                    Next
-
-                    'Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
-
-                    'Dim OldDocFaceStyleName As Object = Nothing
-                    'MatTable.GetMaterialPropValueFromDoc(
-                    '                SEDoc, seFaceStyle, OldDocFaceStyleName)
-                    'SEApp.DoIdle()
-
-                    'Dim OldLibFaceStyleName As Object = Nothing
-                    'MatTable.GetMaterialPropValueFromLibrary(
-                    '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
-                    'SEApp.DoIdle()
-
-                    'MatTable.SetMaterialPropValueToLibrary(
-                    '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
-                    'SEApp.DoIdle()
-
-                    'SEDoc.Save()
-                    'SEApp.DoIdle()
-
-                    'Dim MatOOD As Boolean
-                    'Dim GageOOD As Boolean
-                    'MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
-
-                    'If MatOOD Then
-                    '    MatTable.ApplyMaterialToDoc(
-                    '                SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                    '    SEApp.DoIdle()
-
-                    '    SEDoc.Save()
-                    '    SEApp.DoIdle()
-                    'End If
-
-                    'MatTable.SetMaterialPropValueToLibrary(
-                    '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
-                    'SEApp.DoIdle()
-                End If
-
-            Else  ' Not NewWay
+            If Me.UpdateFaceStyles Then
                 ' Face styles are not always updated, especially on imported files.
                 Try
                     MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                    'UpdateFaces()
                 Catch ex As Exception
                     ErrorLogger.AddMessage("Some face styles may not have been updated.  Please verify results.")
                 End Try
-            End If
+            Else
+                For Each MismatchProp As SolidEdgeFramework.MatTablePropIndex In Mismatches
 
+                    tf = MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
+                    tf = tf Or MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFillStyle
+                    If tf Then
+                        Continue For
+                    End If
+
+                    Dim LibPropValue As Object = Nothing
+                    MatTable.GetMaterialPropValueFromLibrary(
+                            MatTableMaterial.ToString, ActiveMaterialLibrary, MismatchProp, LibPropValue)
+                    SEApp.DoIdle()
+
+                    Dim ModelIdx As Integer = 0
+                    Dim AutoAdd As Boolean = False
+
+                    Select Case MismatchProp
+                        Case SolidEdgeFramework.MatTablePropIndex.seDensity
+                            ' Density is a variable, not a property
+
+                            Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+                            DocVariableDict = UC.GetDocVariables(SEDoc)
+                            If DocVariableDict.Keys.Contains("PhysicalProperties_Density") Then
+                                ' Density from the material table is in kg/m^3
+                                ' Density in the document needs to be in its own units
+
+                                Dim UnitsOfMeasure = SEDoc.UnitsOfMeasure
+                                Dim Factor As Double = 1.0
+                                Dim LibPropDouble As Double = CDbl(LibPropValue)
+                                For Each UnitOfMeasure As SolidEdgeFramework.UnitOfMeasure In UnitsOfMeasure
+                                    If UnitOfMeasure.Type = SolidEdgeConstants.UnitTypeConstants.igUnitDistance Then
+                                        If UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthInch Then
+                                            ' Weight conversion: 0.45359237 kg = 1 lb.  lb/in^3 = kg/m^3 * lb/kg * (m/in)^3
+                                            Factor = (1 / 0.45359237) * ((25.4 / 1000) ^ 3)
+                                            LibPropDouble = Factor * LibPropDouble
+                                            DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                                        ElseIf UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter Then
+                                            Factor = 1 / (1000 * 1000 * 1000)
+                                            LibPropDouble = Factor * LibPropDouble
+                                            DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                                        Else
+                                            ErrorLogger.AddMessage(String.Format("Could not update density with '{0}' units", UnitOfMeasure.Units))
+                                        End If
+                                    End If
+                                Next
+                            End If
+
+                        Case SolidEdgeFramework.MatTablePropIndex.seCoefOfThermalExpansion
+                            UC.SetPropValue(SEDoc, "System", "Coef. of Thermal Exp", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                        Case SolidEdgeFramework.MatTablePropIndex.seThermalConductivity
+                            UC.SetPropValue(SEDoc, "System", "Thermal Conductivity", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                        Case SolidEdgeFramework.MatTablePropIndex.seSpecificHeat
+                            UC.SetPropValue(SEDoc, "System", "Specific Heat", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                        Case SolidEdgeFramework.MatTablePropIndex.seModulusElasticity
+                            UC.SetPropValue(SEDoc, "System", "Modulus of Elasticity", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                        Case SolidEdgeFramework.MatTablePropIndex.sePoissonRatio
+                            UC.SetPropValue(SEDoc, "System", "Poisson's Ratio", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                        Case SolidEdgeFramework.MatTablePropIndex.seYieldStress
+                            UC.SetPropValue(SEDoc, "System", "Yield Stress", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                        Case SolidEdgeFramework.MatTablePropIndex.seUltimateStress
+                            UC.SetPropValue(SEDoc, "System", "Ultimate Stress", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                        Case SolidEdgeFramework.MatTablePropIndex.seElongation
+                            UC.SetPropValue(SEDoc, "System", "Elongation", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                    End Select
+
+                Next
+
+                'Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
+
+                'Dim OldDocFaceStyleName As Object = Nothing
+                'MatTable.GetMaterialPropValueFromDoc(
+                '                SEDoc, seFaceStyle, OldDocFaceStyleName)
+                'SEApp.DoIdle()
+
+                'Dim OldLibFaceStyleName As Object = Nothing
+                'MatTable.GetMaterialPropValueFromLibrary(
+                '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+                'SEApp.DoIdle()
+
+                'MatTable.SetMaterialPropValueToLibrary(
+                '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
+                'SEApp.DoIdle()
+
+                'SEDoc.Save()
+                'SEApp.DoIdle()
+
+                'Dim MatOOD As Boolean
+                'Dim GageOOD As Boolean
+                'MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
+
+                'If MatOOD Then
+                '    MatTable.ApplyMaterialToDoc(
+                '                SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                '    SEApp.DoIdle()
+
+                '    SEDoc.Save()
+                '    SEApp.DoIdle()
+                'End If
+
+                'MatTable.SetMaterialPropValueToLibrary(
+                '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+                'SEApp.DoIdle()
+            End If
         End If
 
         If Me.UpdateFaceStyles Then
@@ -438,7 +424,6 @@ Public Class UtilsMaterials
 
                     Features = Model.Features
                     For Each Feature In Features
-                        'FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
                         FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
                         If Not FeatureNames.Contains(FeatureName) Then
                             FeatureNames.Add(FeatureName)
@@ -577,8 +562,6 @@ Public Class UtilsMaterials
         Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
         Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
 
-        'Dim FeatureType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-        'Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
         Dim FeatureType = HCComObject.GetPropertyValue(
             Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
 
@@ -689,7 +672,7 @@ Public Class UtilsMaterials
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDeleteBlendFeatureObject 'GetType(SolidEdgePart.DeleteBlend)
+            Case SolidEdgePart.FeatureTypeConstants.igDeleteBlendFeatureObject
                 Dim Feature_ = CType(Feature, SolidEdgePart.DeleteBlend)
                 FeatureFaceStyle = Feature_.GetStyle()
                 If FeatureFaceStyle IsNot Nothing Then
@@ -719,7 +702,7 @@ Public Class UtilsMaterials
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDimpleFeatureObject 'GetType(SolidEdgePart.Dimple)
+            Case SolidEdgePart.FeatureTypeConstants.igDimpleFeatureObject
                 Dim Feature_ = CType(Feature, SolidEdgePart.Dimple)
                 FeatureFaceStyle = Feature_.GetStyle()
                 If FeatureFaceStyle IsNot Nothing Then
@@ -1194,10 +1177,7 @@ Public Class UtilsMaterials
                         'End If
 
                     Case Else
-                        'Dim FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
                         Dim FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
-                        'ExitStatus = 1
-                        'ErrorMessageList.Add(String.Format("{0} (FeatureType={1}) not processed.  Please verify results.", FeatureName, FeatureType.ToString))
                 End Select
 
         End Select

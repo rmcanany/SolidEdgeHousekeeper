@@ -56,13 +56,10 @@ Public Class HCStructuredStorageDoc
             Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
         End Try
 
-        'If IsFOA() Then
-        '    Throw New Exception("FOA files currently not supported")
-        'End If
-
         Me.DocType = IO.Path.GetExtension(FullName).ToLower.Replace(".", "")
 
     End Sub
+
 
     Public Sub ReadProperties(_PropertiesData As HCPropertiesData)
         Me.PropertiesData = _PropertiesData
@@ -83,7 +80,6 @@ Public Class HCStructuredStorageDoc
 
         Me.MatTable = New MaterialTable(Me.cf)
     End Sub
-
 
     Public Function IsFOA() As Boolean
         If IO.Path.GetExtension(Me.FullName) = ".asm" Then
@@ -158,8 +154,6 @@ Public Class HCStructuredStorageDoc
         End If
 
         PropNameEnglish = PropNameEnglish.ToLower
-
-        'TypeName = ProcessSpecialProperty(PropSetName, PropNameEnglish)
 
         Dim Prop As Prop = GetProp(PropSetName, PropNameEnglish)
 
@@ -336,7 +330,6 @@ Public Class HCStructuredStorageDoc
         Return Success
     End Function
 
-
     Public Function GetPropNames() As List(Of String)
         Dim PropNames As New List(Of String)
 
@@ -350,8 +343,6 @@ Public Class HCStructuredStorageDoc
 
         Return PropNames
     End Function
-
-
 
     Public Function SubstitutePropertyFormulas(
          InString As String,
@@ -375,7 +366,6 @@ Public Class HCStructuredStorageDoc
         Dim OutString As String = Nothing
 
         Dim UC As New UtilsCommon
-        'Dim UFC As New UtilsFilenameCharmap
 
         Dim Proceed As Boolean = True
 
@@ -434,7 +424,6 @@ Public Class HCStructuredStorageDoc
 
                 Catch ex As Exception
 
-                    'OutString = ex.Message.Replace(vbCrLf, "-")
                     OutString = Nothing
 
                 End Try
@@ -589,9 +578,8 @@ Public Class HCStructuredStorageDoc
     End Function
 
     Private Sub OutputPropList()
+        ' Utility if needed for testing.  Not used in production.
         Dim Outfile As String = ".\ole_props.csv"
-        'Dim s As String
-        'Dim InList As New List(Of String)
         Dim OutList As New List(Of String)
 
         If IO.File.Exists(Outfile) Then
@@ -612,6 +600,7 @@ Public Class HCStructuredStorageDoc
 
 
     End Sub
+
 
     Public Function IsFileEmpty() As Boolean
         Dim IsEmpty As Boolean
@@ -634,6 +623,7 @@ Public Class HCStructuredStorageDoc
 
         Return IsEmpty
     End Function
+
 
     Public Function GetLinkNames() As List(Of String)
         If Me.LinkNames Is Nothing Then
@@ -684,6 +674,7 @@ Public Class HCStructuredStorageDoc
         Private Property FullName As String
         Private Property PropertySetNames As List(Of String)
 
+
         Public Sub New(_cf As CompoundFile, _FullName As String)
             Me.cf = _cf
             Me.FullName = _FullName
@@ -726,6 +717,7 @@ Public Class HCStructuredStorageDoc
             Next
 
         End Sub
+
 
         Public Function PrepOutput(InList As List(Of String), FullName As String) As List(Of String)
             Dim OutList As New List(Of String)
@@ -771,6 +763,7 @@ Public Class HCStructuredStorageDoc
         Public Property co As OLEPropertiesContainer
         Private Property PropNames As New List(Of String)
         Private Property PropertySetNameToStreamName As New Dictionary(Of String, String)
+
 
         Public Sub New(_cf As CompoundFile,
                        PropertySetName As String,
@@ -822,6 +815,7 @@ Public Class HCStructuredStorageDoc
             End If
 
         End Sub
+
 
         Private Function CorrectedOLEPropName(PropertySetName As String, OLEProp As OLEProperty) As String
             Dim CorrectedName As String = ""
@@ -1033,9 +1027,6 @@ Public Class HCStructuredStorageDoc
             Get
                 Return Me.OLEProp.Value
             End Get
-            'Set(value As Object)
-            '    SetValue(value)
-            'End Set
         End Property
 
         Public Property VTType As VTPropertyType
@@ -1043,6 +1034,7 @@ Public Class HCStructuredStorageDoc
 
         Private co As OLEPropertiesContainer
         Private Property OLEProp As OLEProperty
+
 
         Public Sub New(_co As OLEPropertiesContainer, _OLEProp As OLEProperty, CorrectedName As String)
             Me.co = _co
@@ -1052,6 +1044,7 @@ Public Class HCStructuredStorageDoc
             Me.VTType = Me.OLEProp.VTType
             Me.SetValue(Me.OLEProp.Value)
         End Sub
+
 
         Public Function PrepOutput(InList As List(Of String)) As List(Of String)
             Dim tmpList As New List(Of String)
@@ -1065,7 +1058,6 @@ Public Class HCStructuredStorageDoc
                 v = "Value exception"
             End Try
 
-            'tmpList.AddRange({CStr(Me.PropertyIdentifier), Me.OLEProp.PropertyName, Me.Name, v})
             tmpList.AddRange({CStr(Me.PropertyIdentifier), Me.OLEProp.PropertyName, Me.Name})
 
             For Each s As String In tmpList
@@ -1083,10 +1075,6 @@ Public Class HCStructuredStorageDoc
             Dim tmpName As String
             Dim tmpPropertyIdentifier As UInteger
             Dim UDP As OLEPropertiesContainer
-
-            'If Not Me.co.HasUserDefinedProperties Then
-            '    Success = False
-            'End If
 
             If Success Then
                 If CStr(PropertyValue) = CInt(PropertyValue).ToString Then
@@ -1203,6 +1191,7 @@ Public Class HCStructuredStorageDoc
         Private Property LinkManagementOrder As List(Of String)
         Private Property ContainingFileFullName As String
 
+
         Public Sub New(_cf As CompoundFile, _IsFOA As Boolean, _LinkManagementOrder As List(Of String), _ContainingFileFullName As String)
             Me.cf = _cf
             Me.IsFOA = _IsFOA
@@ -1211,6 +1200,7 @@ Public Class HCStructuredStorageDoc
 
             GetFullNames()
         End Sub
+
 
         Private Sub GetFullNames()
             Dim RootStorages As New List(Of CFStorage)
@@ -1538,7 +1528,6 @@ Public Class HCStructuredStorageDoc
                             ByteList.Add(ByteArray(j))
                         Next
 
-                        'Filename = System.Text.Encoding.ASCII.GetString(ByteList.ToArray)
                         Filename = Encoding.Default.GetString(ByteList.ToArray)
 
                         ' Check for RELATIVE filename
@@ -1653,9 +1642,6 @@ Public Class HCStructuredStorageDoc
                 If RelativeMotion = 1 Then
                     Prefix = ".\"
                 Else
-                    'For i = 0 To RelativeMotion - 1
-                    '    Prefix = String.Format("{0}..\", Prefix)
-                    'Next
                     For j = 0 To RelativeMotion - 2
                         Prefix = String.Format("{0}..\", Prefix)
                     Next
@@ -1743,14 +1729,7 @@ Public Class HCStructuredStorageDoc
         End Function
 
         Private Function FormatByteString(ByteArray As Byte(), AsChr As Boolean) As String
-
-            'Public Static string ByteArrayToString(Byte[] ba)
-            '{
-            '  StringBuilder Hex() = New StringBuilder(ba.Length * 2);
-            '  foreach(Byte b In ba)
-            '            Hex.AppendFormat("{0:x2}", b);
-            '  Return Hex.ToString();
-            '}
+            ' Utility for investigating format of ByteArray.  Not used in production.
 
             Dim s As String = ""
             Dim _s As String = ""
@@ -1785,6 +1764,7 @@ Public Class HCStructuredStorageDoc
 
         ' This is for material table files *.mat only
 
+
         Public Sub New(cf As CompoundFile)
             Dim ByteArray As Byte()
             Dim AllStreams As New List(Of CFStream)
@@ -1813,6 +1793,7 @@ Public Class HCStructuredStorageDoc
             TraverseNodes(XmlDoc)  'Populates Me.Materials and Me.Gages
 
         End Sub
+
 
         Public Function UpdateMaterial(SSDoc As HCStructuredStorageDoc) As Boolean
             Dim IsUpToDate As Boolean

@@ -139,7 +139,6 @@ Public Class UtilsPreferences
 
         Dim FormType As Type = FMain.GetType()
         Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
-        'Dim Value As String
 
         If Not Infile = "" Then
             JSONString = IO.File.ReadAllText(Infile)
@@ -229,13 +228,6 @@ Public Class UtilsPreferences
         Return String.Format("{0}\HelpfileBaseURL.txt", GetStartupDirectory)
     End Function
 
-    'Public Function GetHelpfileBaseURLFilenameForDevs() As String
-    '    Dim s As String = String.Format("{0}\HelpfileBaseURL.txt", GetStartupDirectory)
-
-    '    s = s.Replace("\bin\Release", "")
-
-    '    Return s
-    'End Function
 
 
     '###### FILENAME CHARMAP ######
@@ -677,8 +669,6 @@ Public Class UtilsPreferences
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskEditInteractively)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
-        'TaskList.Add(New TaskRecognizeHoles)
-        'If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         ' Restyle
         TaskList.Add(New TaskUpdateModelStylesFromTemplate)
@@ -727,8 +717,6 @@ Public Class UtilsPreferences
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         For Each Task As Task In TaskList
-            'Task.RememberTaskSelections = Form1.RememberTaskSelections
-            'Task.RememberTaskSelections = Me.RememberTaskSelections
             KnownTasks.Add(Task.Name.ToLower)
         Next
 
@@ -739,7 +727,6 @@ Public Class UtilsPreferences
     End Function
 
     Private Sub CheckForUnknownTasks(KnownTasks As List(Of String))
-        'Dim HardcodedPath = "C:\data\CAD\scripts\SolidEdgeHousekeeper\My Project"
         Dim HardcodedPath = String.Format("{0}\My Project", GetHardCodedPath)
         Dim Filenames As List(Of String)
         Dim Filename As String
@@ -818,7 +805,6 @@ Public Class UtilsPreferences
     '###### LINK MANAGEMENT ORDER ######
     Public Function GetLinkManagementOrder() As List(Of String)
 
-        'Dim LinkManagementFilename As String = Form_Main.TextBoxLinkManagementFilename.Text
         Dim LinkManagementFilename As String = Form_Main.LinkManagementFilename
 
         Dim Contents As String() = Nothing
@@ -835,7 +821,6 @@ Public Class UtilsPreferences
         Catch ex As Exception
             msg = String.Format("LinkMgmt.txt file '{0}' (on Configuration Tab) not found.{1}", LinkManagementFilename, vbCrLf)
             MsgBox(msg)
-            'Exit Function
         End Try
 
         If Contents IsNot Nothing Then

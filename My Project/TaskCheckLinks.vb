@@ -81,7 +81,6 @@ Public Class TaskCheckLinks
         Me.RequiresPropertiesData = True
         Me.Category = "Check"
         SetColorFromCategory(Me)
-        'Me.SolidEdgeRequired = False
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
         Me.RequiresLinkManagementOrder = True
 
@@ -192,8 +191,6 @@ Public Class TaskCheckLinks
                     Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
                     Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
-                    'Dim Filename As String
-
                     ModelLinks = tmpSEDoc.ModelLinks
 
                     For Each ModelLink In ModelLinks
@@ -241,7 +238,7 @@ Public Class TaskCheckLinks
             ' Perform the checks
             For Each s In LinkFilenames
 
-                s = UC.SplitFOAName(s)("Filename")
+                s = UC.GetFOAFilename(s)
 
                 If CheckItem = "Missing links" Then
                     If Not FileIO.FileSystem.FileExists(s) Then
@@ -379,8 +376,6 @@ Public Class TaskCheckLinks
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
@@ -410,7 +405,6 @@ Public Class TaskCheckLinks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -453,7 +447,6 @@ Public Class TaskCheckLinks
 
             Case ControlNames.StructuredStorageEdit.ToString
                 Me.StructuredStorageEdit = Checkbox.Checked
-                'Me.RequiresSave = Not Checkbox.Checked
                 Me.SolidEdgeRequired = Not Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
@@ -482,7 +475,5 @@ Public Class TaskCheckLinks
 
         Return HelpString
     End Function
-
-
 
 End Class

@@ -4,6 +4,7 @@ Public Class TaskCheckDrawingPartsList
 
     Inherits Task
 
+
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
         Me.Description = GenerateLabelText()

@@ -16,90 +16,6 @@ Public Class FormPropertyListCustomize
     End Sub
 
 
-    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-
-        Dim DescriptionList As New List(Of String)
-        Dim RepeatsList As New List(Of String)
-
-        For Each Propname As String In Me.FavoritesList
-            DescriptionList.Add(Propname)
-        Next
-
-        DescriptionList.Sort()
-
-        Dim s As String
-        Dim s2 As String
-
-        For i = 1 To DescriptionList.Count - 1
-            s = DescriptionList(i)
-            s2 = DescriptionList(i - 1)
-            If s.ToLower = s2.ToLower Then
-                If Not RepeatsList.Contains(s) Then
-                    RepeatsList.Add(s)
-                End If
-            End If
-        Next
-
-        If RepeatsList.Count = 0 Then
-            Me.DialogResult = DialogResult.OK
-
-        Else
-            s = String.Format("Property names must be unique{0}", vbCrLf)
-            s = String.Format("{0}Please remove duplicates of the following:{1}", s, vbCrLf)
-            For Each s2 In RepeatsList
-                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
-            Next
-            MsgBox(s, vbOKOnly)
-        End If
-    End Sub
-
-    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
-        Me.DialogResult = DialogResult.Cancel
-    End Sub
-
-
-    Private Sub FormPropertyListCustomize_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Dim Proceed As Boolean = True
-
-        If Not Form_Main.PropertiesData Is Nothing Then
-            If Form_Main.PropertiesData.Items.Count > 0 Then
-                Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
-                Me.AvailableList = Form_Main.PropertiesData.GetAvailableList
-            Else
-                Proceed = False
-            End If
-        Else
-            Proceed = False
-        End If
-
-        If Not Proceed Then
-            Dim s = "Template properties required for this command not found. "
-            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
-            MsgBox(s, vbOKOnly)
-            Me.DialogResult = DialogResult.Cancel
-        Else
-            BuildColumns()
-
-            For Each Propname As String In Me.AvailableList
-                DataGridViewSource.Rows.Add({Propname})
-            Next
-
-            DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
-
-            UpdateDataGridViewTarget()
-
-        End If
-
-
-    End Sub
-
-    Private Sub FormPropertyListCustomize_Resize(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
-        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
-        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
-
-    End Sub
-
     Private Sub BuildColumns()
 
         Dim ColumnNames As List(Of String) = "Task".Split(CChar(" ")).ToList
@@ -167,35 +83,6 @@ Public Class FormPropertyListCustomize
 
     End Sub
 
-    Private Sub DataGridViewTarget_CurrentCellDirtyStateChanged(
-        ByVal sender As Object,
-        ByVal e As EventArgs
-        ) Handles DataGridViewTarget.CurrentCellDirtyStateChanged
-
-        If DataGridViewTarget.IsCurrentCellDirty Then
-            DataGridViewTarget.CommitEdit(DataGridViewDataErrorContexts.Commit)
-        End If
-    End Sub
-
-    Private Sub DataGridViewTarget_CellValueChanged(
-        ByVal sender As Object,
-        ByVal e As DataGridViewCellEventArgs
-        ) Handles DataGridViewTarget.CellValueChanged
-
-        Select Case e.ColumnIndex
-            Case 0 ' Description
-                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridViewTarget.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
-
-                Me.FavoritesList(e.RowIndex) = CStr(TextBox.Value)
-
-                DataGridViewTarget.Invalidate()
-
-            Case Else
-                MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
-
-        End Select
-    End Sub
-
     Private Sub MoveRow(Direction As String)
         Dim SelectedRowIndex As Integer
 
@@ -258,6 +145,127 @@ Public Class FormPropertyListCustomize
 
     End Sub
 
+    'Private Function GetUniqueTaskDescription(
+    '    tmpTaskList As List(Of Task),
+    '    ProposedDescription As String
+    '    ) As String
+
+    '    Return ProposedDescription
+    'End Function
+
+
+    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+
+        Dim DescriptionList As New List(Of String)
+        Dim RepeatsList As New List(Of String)
+
+        For Each Propname As String In Me.FavoritesList
+            DescriptionList.Add(Propname)
+        Next
+
+        DescriptionList.Sort()
+
+        Dim s As String
+        Dim s2 As String
+
+        For i = 1 To DescriptionList.Count - 1
+            s = DescriptionList(i)
+            s2 = DescriptionList(i - 1)
+            If s.ToLower = s2.ToLower Then
+                If Not RepeatsList.Contains(s) Then
+                    RepeatsList.Add(s)
+                End If
+            End If
+        Next
+
+        If RepeatsList.Count = 0 Then
+            Me.DialogResult = DialogResult.OK
+
+        Else
+            s = String.Format("Property names must be unique{0}", vbCrLf)
+            s = String.Format("{0}Please remove duplicates of the following:{1}", s, vbCrLf)
+            For Each s2 In RepeatsList
+                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
+            Next
+            MsgBox(s, vbOKOnly)
+        End If
+    End Sub
+
+    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+        Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub FormPropertyListCustomize_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Dim Proceed As Boolean = True
+
+        If Not Form_Main.PropertiesData Is Nothing Then
+            If Form_Main.PropertiesData.Items.Count > 0 Then
+                Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
+                Me.AvailableList = Form_Main.PropertiesData.GetAvailableList
+            Else
+                Proceed = False
+            End If
+        Else
+            Proceed = False
+        End If
+
+        If Not Proceed Then
+            Dim s = "Template properties required for this command not found. "
+            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            MsgBox(s, vbOKOnly)
+            Me.DialogResult = DialogResult.Cancel
+        Else
+            BuildColumns()
+
+            For Each Propname As String In Me.AvailableList
+                DataGridViewSource.Rows.Add({Propname})
+            Next
+
+            DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+
+            UpdateDataGridViewTarget()
+
+        End If
+
+
+    End Sub
+
+    Private Sub FormPropertyListCustomize_Resize(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
+        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
+
+    End Sub
+
+    Private Sub DataGridViewTarget_CurrentCellDirtyStateChanged(
+        ByVal sender As Object,
+        ByVal e As EventArgs
+        ) Handles DataGridViewTarget.CurrentCellDirtyStateChanged
+
+        If DataGridViewTarget.IsCurrentCellDirty Then
+            DataGridViewTarget.CommitEdit(DataGridViewDataErrorContexts.Commit)
+        End If
+    End Sub
+
+    Private Sub DataGridViewTarget_CellValueChanged(
+        ByVal sender As Object,
+        ByVal e As DataGridViewCellEventArgs
+        ) Handles DataGridViewTarget.CellValueChanged
+
+        Select Case e.ColumnIndex
+            Case 0 ' Description
+                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridViewTarget.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
+
+                Me.FavoritesList(e.RowIndex) = CStr(TextBox.Value)
+
+                DataGridViewTarget.Invalidate()
+
+            Case Else
+                MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
+
+        End Select
+    End Sub
+
     Private Sub ButtonMoveUp_Click(sender As Object, e As EventArgs) Handles ButtonMoveUp.Click
         MoveRow("up")
     End Sub
@@ -268,7 +276,6 @@ Public Class FormPropertyListCustomize
 
     Private Sub CustomizeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomizeToolStripMenuItem.Click
         Dim FPLCM As New FormPropertyListCustomizeManualEntry(Form_Main.PropertiesData)
-        'Dim UC As New UtilsCommon
 
         Dim Result = FPLCM.ShowDialog()
 
@@ -299,7 +306,6 @@ Public Class FormPropertyListCustomize
         Dim s As String = ""
 
         Dim tmpTemplatePropertyList As New List(Of String)
-        'Dim tmpTaskList As New List(Of Task)
 
         Dim i As Integer
 
@@ -333,10 +339,8 @@ Public Class FormPropertyListCustomize
         Dim s As String = ""
 
         Dim tmpTemplatePropertyList As New List(Of String)
-        'Dim tmpTaskList As New List(Of Task)
 
         Dim i As Integer
-        'Dim TaskDescription As String
 
         Dim PU As New UtilsPreferences
 
@@ -360,7 +364,6 @@ Public Class FormPropertyListCustomize
         i = 0
         For Each Propname As String In Me.AvailableList
             If SelectedRowIndices.Contains(i) Then
-                'TaskDescription = GetUniqueTaskDescription(tmpTaskList, Task.Description)
                 tmpTemplatePropertyList.Add(Propname)
             End If
             i += 1
@@ -372,29 +375,6 @@ Public Class FormPropertyListCustomize
 
     End Sub
 
-    Private Function GetUniqueTaskDescription(
-        tmpTaskList As List(Of Task),
-        ProposedDescription As String
-        ) As String
-
-        Return ProposedDescription
-        'Dim DescriptionList As New List(Of String)
-        'Dim Description As String = ProposedDescription
-        'Dim i As Integer
-
-        'For Each Task As Task In tmpTaskList
-        '    DescriptionList.Add(Task.Description)
-        'Next
-
-        'i = 2
-        'While DescriptionList.Contains(Description)
-        '    Description = String.Format("{0} [{1}]", ProposedDescription, CStr(i))
-        '    i += 1
-        'End While
-
-        'Return Description
-    End Function
-
     Private Sub CheckBoxSortSourceList_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSortSourceList.CheckedChanged
 
         Dim UC As New UtilsCommon
@@ -402,11 +382,11 @@ Public Class FormPropertyListCustomize
         If CheckBoxSortSourceList.Checked Then
             Me.AvailableList.Sort()
         Else
-            'Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
             Me.AvailableList = Form_Main.PropertiesData.GetAvailableList
         End If
 
         UpdateDataGridViewSource()
 
     End Sub
+
 End Class

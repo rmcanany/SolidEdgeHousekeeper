@@ -1102,8 +1102,6 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim Button As Button
         Dim CheckBox As CheckBox
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
@@ -1405,7 +1403,6 @@ Public Class TaskUpdateModelStylesFromTemplate
                 If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
                     Me.AutoHideOptions = Checkbox.Checked
                 End If
-                'HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

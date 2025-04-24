@@ -8,61 +8,6 @@ Public Class FormEditTaskListChangeColor
     Public Property ColorG As Integer
     Public Property ColorB As Integer
 
-    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-        Dim Proceed As Boolean = True
-        Dim s As String = ""
-
-        Me.ColorHue = ComboBoxColor.Text
-
-        Try
-            Me.ColorSaturation = CDbl(NumericUpDownSaturation.Value)
-            If (Me.ColorSaturation < 0) Or (Me.ColorSaturation > 1) Then
-                Proceed = False
-                s = String.Format("{0}{1}{2}", s, "Saturation must be a number between 0 and 1", vbCrLf)
-            End If
-        Catch ex As Exception
-            Proceed = False
-            s = String.Format("{0}{1}{2}", s, "Saturation must be a number between 0 and 1", vbCrLf)
-        End Try
-
-        Try
-            Me.ColorBrightness = CDbl(NumericUpDownBrightness.Value)
-            If (Me.ColorBrightness < 0) Or (Me.ColorBrightness > 1) Then
-                Proceed = False
-                s = String.Format("{0}{1}{2}", s, "Brightness must be a number between 0 and 1", vbCrLf)
-            End If
-        Catch ex As Exception
-            Proceed = False
-            s = String.Format("{0}{1}{2}", s, "Brightness must be a number between 0 and 1", vbCrLf)
-        End Try
-
-        If Proceed Then
-            Me.DialogResult = DialogResult.OK
-        Else
-            MsgBox(s)
-        End If
-
-    End Sub
-
-    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
-        Me.DialogResult = DialogResult.Cancel
-    End Sub
-
-    Private Sub FormEditTaskListChangeColor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim ColorHueList As List(Of String) = "Red Green Blue Cyan Magenta Yellow White Orange Purple".Split(" "c).ToList
-        For Each s As String In ColorHueList
-            ComboBoxColor.Items.Add(s)
-        Next
-        ComboBoxColor.Text = Me.ColorHue
-        NumericUpDownSaturation.Value = CDec(Me.ColorSaturation)
-        NumericUpDownBrightness.Value = CDec(Me.ColorBrightness)
-    End Sub
-
-    Private Sub ComboBoxColor_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxColor.SelectedIndexChanged
-        Me.ColorHue = ComboBoxColor.Text
-        UpdateColor()
-
-    End Sub
 
     Private Sub UpdateColor()
         Dim R As Integer = 0
@@ -119,6 +64,62 @@ Public Class FormEditTaskListChangeColor
         ButtonColor.BackColor = Color.FromArgb(R, G, B)
     End Sub
 
+
+    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+        Dim Proceed As Boolean = True
+        Dim s As String = ""
+
+        Me.ColorHue = ComboBoxColor.Text
+
+        Try
+            Me.ColorSaturation = CDbl(NumericUpDownSaturation.Value)
+            If (Me.ColorSaturation < 0) Or (Me.ColorSaturation > 1) Then
+                Proceed = False
+                s = String.Format("{0}{1}{2}", s, "Saturation must be a number between 0 and 1", vbCrLf)
+            End If
+        Catch ex As Exception
+            Proceed = False
+            s = String.Format("{0}{1}{2}", s, "Saturation must be a number between 0 and 1", vbCrLf)
+        End Try
+
+        Try
+            Me.ColorBrightness = CDbl(NumericUpDownBrightness.Value)
+            If (Me.ColorBrightness < 0) Or (Me.ColorBrightness > 1) Then
+                Proceed = False
+                s = String.Format("{0}{1}{2}", s, "Brightness must be a number between 0 and 1", vbCrLf)
+            End If
+        Catch ex As Exception
+            Proceed = False
+            s = String.Format("{0}{1}{2}", s, "Brightness must be a number between 0 and 1", vbCrLf)
+        End Try
+
+        If Proceed Then
+            Me.DialogResult = DialogResult.OK
+        Else
+            MsgBox(s)
+        End If
+
+    End Sub
+
+    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+        Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub FormEditTaskListChangeColor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim ColorHueList As List(Of String) = "Red Green Blue Cyan Magenta Yellow White Orange Purple".Split(" "c).ToList
+        For Each s As String In ColorHueList
+            ComboBoxColor.Items.Add(s)
+        Next
+        ComboBoxColor.Text = Me.ColorHue
+        NumericUpDownSaturation.Value = CDec(Me.ColorSaturation)
+        NumericUpDownBrightness.Value = CDec(Me.ColorBrightness)
+    End Sub
+
+    Private Sub ComboBoxColor_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxColor.SelectedIndexChanged
+        Me.ColorHue = ComboBoxColor.Text
+        UpdateColor()
+
+    End Sub
 
     Private Sub NumericUpDownSaturation_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDownSaturation.ValueChanged
         Try

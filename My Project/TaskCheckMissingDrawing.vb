@@ -51,7 +51,6 @@ Public Class TaskCheckMissingDrawing
         Me.Image = My.Resources.TaskCheckMissingDrawing
         Me.Category = "Check"
         SetColorFromCategory(Me)
-        'Me.SolidEdgeRequired = False
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
         GenerateTaskControl()
@@ -92,7 +91,7 @@ Public Class TaskCheckMissingDrawing
 
         Dim UC As New UtilsCommon
 
-        ModelFilename = UC.SplitFOAName(SEDoc.FullName)("Filename")
+        ModelFilename = UC.GetFOAFilename(SEDoc.FullName)
 
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
@@ -109,7 +108,7 @@ Public Class TaskCheckMissingDrawing
 
         Dim UC As New UtilsCommon
 
-        ModelFilename = UC.SplitFOAName(FullName)("Filename")
+        ModelFilename = UC.GetFOAFilename(FullName)
 
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
@@ -125,8 +124,6 @@ Public Class TaskCheckMissingDrawing
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
-        'Dim TextBox As TextBox
-        'Dim Button As Button
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
 
@@ -141,7 +138,6 @@ Public Class TaskCheckMissingDrawing
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -169,7 +165,6 @@ Public Class TaskCheckMissingDrawing
 
             Case ControlNames.StructuredStorageEdit.ToString
                 Me.StructuredStorageEdit = Checkbox.Checked
-                'Me.RequiresSave = Not Checkbox.Checked
                 Me.SolidEdgeRequired = Not Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
@@ -191,7 +186,5 @@ Public Class TaskCheckMissingDrawing
 
         Return HelpString
     End Function
-
-
 
 End Class
