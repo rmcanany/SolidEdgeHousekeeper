@@ -15,11 +15,13 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2025.2 Enhancements/Fixes
 
-We'll get to the highlights in just a second, but first some big news...  Housekeeper has its first **sponsor!**  
+We'll get to the highlights in just a second, but first some big news...  Housekeeper has its first **Sponsor!**  
 
-Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own **@aalian.khan8036** (our newest **contributor**) as a COOP student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
+Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own **@aalian.khan8036** (our newest **Contributor**) as a CoOp student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
 
-Now to those highlights...
+Oh, and if you like statistics, here are a few:  The program has over **2100 downloads** (almost 1000 in the last 12 months), **6 contributors** (5 really, but I count Francesco twice), **36 releases**, and over **1000 commits** on GitHub.  Thanks to everyone for spreading the word!
+
+Now on to those highlights...
 
 ### TeamCenter Integration
 
@@ -67,23 +69,32 @@ See the [<ins>**Check Relationships Help Topic**</ins>](https://github.com/rmcan
 
 ### Run External Program
 
-Added the ability to run a user-supplied `code snippet`.  The program inserts the snippet between two sections of pre-built code that take care of the task's set-up and wrap-up, respectively.  The code snippet is the (often very short) part that does the actual task at hand. 
+Added the ability to run a user-supplied `code snippet`.  The program inserts the snippet between two sections of pre-built code that take care of the task's set-up and wrap-up, respectively.  The code snippet is the (often very short) part that does the actual task at hand. It's just a text file in VB.Net syntax.  You can create it in Notepad.
 
-The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test and maintain a separate program to do it automatically. 
+The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test and maintain a separate program to do it automatically.  Here's an example.  (Note, the variables `DocType`, `SEDoc`, etc. are predefined and available for use.)
+
+```
+If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
+If DocType = ".par" Then SEDoc.UpdateOnFileSave = True
+If DocType = ".psm" Then SEDoc.UpdateOnFileSave = True
+If DocType = ".dft" Then ExitStatus = 1
+If ExitStatus = 0 Then
+    SEDoc.Save()
+    SEApp.DoIdle()
+Else
+    ErrorMessageList.Add("An error occurred")
+End If
+```
+
+Added some [<ins>Code Snippet</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) examples to [<ins>Housekeeper External Programs</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme).  Also added example programs [<ins>Thin Part to Sheetmetal</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ThinPartToSheetmetal) and [<ins>Create Flat Pattern</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/CreateFlatPattern).
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
-
-### Thin Part to Sheetmetal
-
-Added a new Housekeeper External Program to convert imported parts to sheetmetal.  
-
-See [<ins>**Thin Part to Sheetmetal**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ThinPartToSheetmetal) for details.
 
 ### Batch Importer
 
 Added a new bare-bones batch importer.  This is a separate program and not part of Housekeeper.
 
-The first time the program runs, it creates a file, `program_settings.txt`, in the same directory as the executable.  That file is where you specify the template to use for the conversion, the type of file to import, and the input and output directories.
+The first time the program runs, it creates a file, `program_settings.txt`, in the same directory as the executable.  That is where you specify the template to use for the conversion, the type of file to import, and the input and output directories.
 
 See [<ins>**Batch Importer**</ins>](https://github.com/rmcanany/BatchImporter#readme) for details.
 

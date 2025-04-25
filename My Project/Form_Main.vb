@@ -3724,6 +3724,8 @@ Public Class ListViewColumnSorter
             Return OrderOfSort
         End Get
     End Property
+
+
 End Class
 
 
@@ -3733,16 +3735,16 @@ End Class
 
 ' ###### FILE/DIRECTORY EXISTS, CREATE, DELETE, COPY ######
 
-' tf = FileIO.FileSystem.FileExists(Filename)
+' tf = System.IO.File.Exists(Filename)
 
-' tf = Not FileIO.FileSystem.DirectoryExists(Dirname)
+' tf = System.IO.Directory.Exists(Dirname)
 
-' If Not FileIO.FileSystem.DirectoryExists(Dirname) Then
-'     FileIO.FileSystem.CreateDirectory(Dirname)
+' If Not System.IO.Directory.Exists(Dirname) Then
+'     System.IO.Directory.CreateDirectory(Dirname)  ' Creates all parent directories if they do not exist.
 ' End If
 
-' Dim DI As New DirectoryInfo(Dirname)
-' For Each File As FileInfo In DI.GetFiles
+' Dim DI As New System.IO.DirectoryInfo(Dirname)
+' For Each File As System.IO.FileInfo In DI.GetFiles
 '     File.Delete()
 ' Next
 
@@ -3751,17 +3753,13 @@ End Class
 
 ' ###### FILE FILENAME, EXTENSION, DIRECTORY, STARTUP PATH ######
 
-' Extension = IO.Path.GetExtension(WhereUsedFile)
-' C:\project\part.par -> .par
+' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)  ' C:\project\part.par -> part.par
 
-' DirName = System.IO.Path.GetDirectoryName(SEDoc.FullName)
-' C:\project\part.par -> C:\project
+' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)  ' C:\project\part.par -> part
 
-' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)
-' C:\project\part.par -> part
+' Extension = System.IO.Path.GetExtension(WhereUsedFile)  ' C:\project\part.par -> .par
 
-' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
-' C:\project\part.par -> part.par
+' DirName = System.IO.Path.GetDirectoryName(SEDoc.FullName)  ' C:\project\part.par -> C:\project
 
 ' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
 
@@ -3770,14 +3768,10 @@ End Class
 
 ' ###### TEXT FILE IO ######
 
-' Dim Defaults As String() = Nothing
-' Defaults = IO.File.ReadAllLines(DefaultsFilename)
+' Dim Defaults As List(Of String) = System.IO.File.ReadAllLines(DefaultsFilename).ToList
 
 ' Dim Defaults As New List(Of String)
-' IO.File.WriteAllLines(DefaultsFilename, Defaults)
-
-' Iterate through an Enum
-' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+' System.IO.File.WriteAllLines(DefaultsFilename, Defaults)
 
 
 ' ###### DOEVENTS, SLEEP ######
@@ -3787,7 +3781,7 @@ End Class
 ' System.Threading.Thread.Sleep(100)
 
 
-' ###### CHECKING TYPES ######
+' ###### TYPES, ENUMS ######
 
 ' PropTypeName = Prop.Value.GetType().Name
 ' The preceeding syntax is probably better than:  TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
@@ -3804,6 +3798,9 @@ End Class
 '        MsgBox(String.Format("Unrecognized variable type '{0}'", objVar.GetType.ToString))
 ' End Select
 
+' Iterate through an Enum
+' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+
 
 ' ###### CURSOR AND WINDOW ######
 
@@ -3815,15 +3812,14 @@ End Class
 
 ' ###### JSON ######
 
-'_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
+' JSONString = JsonConvert.SerializeObject(Me.SomeDict) Then
 
-'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+' SomeDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
 
 
 ' ###### ENVIRONMENT VARIABLES: USER NAME, DATETIME  ######
 
-'Dim userName As String
-''userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name
-'userName = Environment.UserName
-'Dim StatusChangeDate = DateTime.Now
+' Dim UserName As String = Environment.UserName
+''Dim UserName As String = System.Security.Principal.WindowsIdentity.GetCurrent().Name
+' Dim StatusChangeDate = DateTime.Now
 
