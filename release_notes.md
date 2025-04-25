@@ -86,7 +86,7 @@ Else
 End If
 ```
 
-Added some [<ins>Code Snippet</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) examples to [<ins>Housekeeper External Programs</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme).  Also added example programs [<ins>Thin Part to Sheetmetal</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ThinPartToSheetmetal) and [<ins>Create Flat Pattern</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/CreateFlatPattern).
+You can see some examples in the [<ins>Code Snippet</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) section of the [<ins>Housekeeper External Programs</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) repository.  That repo also has two new programs you can try -- [<ins>Thin Part to Sheetmetal</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ThinPartToSheetmetal) and [<ins>Create Flat Pattern</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/CreateFlatPattern).
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 

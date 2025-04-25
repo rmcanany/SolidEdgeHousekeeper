@@ -1051,7 +1051,7 @@ Checks draft files for various problems.
 ![CheckDrawings](My%20Project/media/task_check_drawings.png)
 
 The options are: 
-- `Drawing views out of date`: Checks if any drawing views are not up to date. 
+- `Drawing views out of date`: Checks if any drawing views, and associated models, are not up to date. 
 - `Detached dimensions or annotations`: Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing. 
 - `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
 - `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. 
@@ -1061,13 +1061,17 @@ The options are:
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskRunExternalProgram.png"><img src="My%20Project/media/spacer.png">Run external program</h3></summary>
 
-Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` file. 
+Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` program. Housekeeper opens each Solid Edge file in turn, then launches the program.  Naturally, it must be written for that scenario. 
+
+This command enhances the original by combining it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. 
 
 ![RunExternalProgram](My%20Project/media/task_run_external_program.png)
 
 Select the program with the `Browse` button on the Options panel. 
 
-If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
+If you are writing your own program, 
+
+be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
 **Code Snippets**
 

@@ -399,13 +399,21 @@ Public Class TaskRunExternalProgram
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` file. "
+        HelpString = "Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` program. "
+        HelpString += "Housekeeper opens each Solid Edge file in turn, then launches the program.  "
+        HelpString += "Naturally, it must be written for that scenario. "
+
+        HelpString += vbCrLf + vbCrLf + "This command enhances the original by combining it with "
+        HelpString += "Housekeeper's extensive file selection, filtering, and error-reporting capabilities. "
 
         HelpString += vbCrLf + vbCrLf + "![RunExternalProgram](My%20Project/media/task_run_external_program.png)"
 
         HelpString += vbCrLf + vbCrLf + "Select the program with the `Browse` button on the Options panel. "
-        HelpString += vbCrLf + vbCrLf + "If you are writing your own program, be aware several interoperability rules apply. "
-        HelpString += "See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
+
+        HelpString += vbCrLf + vbCrLf + "If you are writing your own program, "
+        HelpString += vbCrLf + vbCrLf + "be aware several interoperability rules apply.  See "
+        HelpString += "[<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) "
+        HelpString += "for details and examples. "
 
         HelpString += vbCrLf + vbCrLf + "**Code Snippets**"
 
