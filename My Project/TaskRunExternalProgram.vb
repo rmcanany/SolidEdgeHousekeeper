@@ -411,7 +411,7 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "Select the program with the `Browse` button on the Options panel. "
 
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, "
-        HelpString += vbCrLf + vbCrLf + "be aware several interoperability rules apply.  See "
+        HelpString += "be aware several interoperability rules apply.  See "
         HelpString += "[<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) "
         HelpString += "for details and examples. "
 

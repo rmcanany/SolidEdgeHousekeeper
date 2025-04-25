@@ -1069,9 +1069,7 @@ This command enhances the original by combining it with Housekeeper's extensive 
 
 Select the program with the `Browse` button on the Options panel. 
 
-If you are writing your own program, 
-
-be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
+If you are writing your own program, be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
 **Code Snippets**
 
