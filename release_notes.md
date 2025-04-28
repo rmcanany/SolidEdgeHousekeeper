@@ -7,7 +7,7 @@
 
 # Release Notes
 
-Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it [<ins>**Here**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
+Solid Edge Housekeeper is a batch utility for finding annoying little errors in your project.  It is free and open source and you can find it [<ins>**Here**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
 Please note, the program has been tested on thousands of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
@@ -19,7 +19,7 @@ We'll get to the highlights in just a second, but first some big news...  Housek
 
 Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own **@aalian.khan8036** (our newest **Contributor**) as a CoOp student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
 
-Oh, and if you like statistics, here are a few:  The program has over **2100 downloads** (almost 1000 in the last 12 months), **6 contributors** (5 really, but I count Francesco twice), **36 releases**, and over **1000 commits** on GitHub.  Thanks to everyone for spreading the word!
+Oh, and if you like statistics here's a few:  The program has over **2100 downloads** (almost 1000 in the last 12 months), **6 contributors** (5 really, but I count Francesco twice), **36 releases**, and over **1000 commits** on GitHub.  Thanks to everyone for spreading the word!
 
 Now on to those highlights...
 
@@ -27,7 +27,7 @@ Now on to those highlights...
 
 Sponsored by **@john.matthews3452 (Hatch)**. Thank you!
 
-Contributed by **@aalian.khan8036** (with helpful input from **@SatyenB**). Thank you!
+Contributed by **@aalian.khan8036** (with helpful guidance from **@SatyenB**). Thank you!
 
 Added the ability to select files from TeamCenter.  
 
@@ -54,7 +54,7 @@ See the [<ins>**Check Drawing Views Help Topic**</ins>](https://github.com/rmcan
 Renamed the command `Check part number does not match filename` to `Check filename`.
 
 - Added the option to use a property formula.  Previously only a single property was allowed.  (Thank you **@tempod!**).
-- Added a choice in comparison operators: `contains` or `is_exactly`.
+- Added a choice of comparison operators: `contains` or `is_exactly`.
 - Clarified the description of the sometimes confusing option `Draft files -- Check the draft file itself`.
 - Updated the documentation to show examples for common use cases.
 
@@ -96,7 +96,7 @@ Added a new bare-bones batch importer.  This is a separate program and not part 
 
 The first time the program runs, it creates a file, `program_settings.txt`, in the same directory as the executable.  That is where you specify the template to use for the conversion, the type of file to import, and the input and output directories.
 
-See [<ins>**Batch Importer**</ins>](https://github.com/rmcanany/BatchImporter#readme) for details.
+See the [<ins>**Batch Importer Help Topic**</ins>](https://github.com/rmcanany/BatchImporter#readme) for details.
 
 ### Structured Storage
 
