@@ -19,7 +19,7 @@ We'll get to the highlights in just a second, but first some big news...  Housek
 
 Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own **@aalian.khan8036** (our newest **Contributor**) as a CoOp student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
 
-Oh, and if you like stats, here's a few:  The program has over **2100 downloads** (almost 1000 in the last 12 months), **6 contributors** (5 really, but I count **Francesco** twice), **36 releases**, and more than **100 closed Issues** and **1000 commits** on GitHub.  Thanks to everyone for spreading the word!
+Oh, and if you like stats...  The program has over **2100 downloads** (almost 1000 in the last year), **6 contributors** (5 really, but I count **Francesco** twice!), **36 releases**, and more than **1000 commits** and **100 closed Issues** on GitHub.  Thanks to everyone for spreading the word!
 
 Now on to those highlights...
 
