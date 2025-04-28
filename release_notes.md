@@ -19,7 +19,7 @@ We'll get to the highlights in just a second, but first some big news...  Housek
 
 Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own **@aalian.khan8036** (our newest **Contributor**) as a CoOp student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
 
-Oh, and if you like statistics here's a few:  The program has over **2100 downloads** (almost 1000 in the last 12 months), **6 contributors** (5 really, but I count Francesco twice), **36 releases**, and over **1000 commits** on GitHub.  Thanks to everyone for spreading the word!
+Oh, and if you like stats, here's a few:  The program has over **2100 downloads** (almost 1000 in the last 12 months), **6 contributors** (5 really, but I count **Francesco** twice), **36 releases**, and more than **100 closed Issues** and **1000 commits** on GitHub.  Thanks to everyone for spreading the word!
 
 Now on to those highlights...
 
@@ -71,7 +71,7 @@ See the [<ins>**Check Relationships Help Topic**</ins>](https://github.com/rmcan
 
 Added the ability to run a user-supplied `code snippet`.  The program inserts the snippet between two sections of pre-built code that take care of the task's set-up and wrap-up, respectively.  The code snippet is the (often very short) part that does the actual task at hand. It's just a text file in VB.Net syntax.  You can create it in Notepad.
 
-The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test and maintain a separate program to do it automatically.  Here's an example.  (Note, the variables `DocType`, `SEDoc`, etc. are predefined and available for use.)
+The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test and maintain a separate program to do it automatically.  Here's an example.  (Note, the variables `DocType`, `SEDoc`, etc. are predefined in the set-up code and available for use.)
 
 ```
 If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
