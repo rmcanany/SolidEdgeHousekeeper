@@ -403,12 +403,15 @@ Public Class TaskRunExternalProgram
         HelpString += "Housekeeper opens each Solid Edge file in turn, then launches the program.  "
         HelpString += "Naturally, it must be written for that scenario. "
 
-        HelpString += vbCrLf + vbCrLf + "This command enhances the original by combining it with "
-        HelpString += "Housekeeper's extensive file selection, filtering, and error-reporting capabilities. "
+        HelpString += vbCrLf + vbCrLf + "This command effectively turns the original into a batch program, "
+        HelpString += "enhancing it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. "
 
         HelpString += vbCrLf + vbCrLf + "![RunExternalProgram](My%20Project/media/task_run_external_program.png)"
 
         HelpString += vbCrLf + vbCrLf + "Select the program with the `Browse` button on the Options panel. "
+        HelpString += "Note, for downloaded programs, Windows sometimes sets a `Block` flag.  "
+        HelpString += "Before you run it the first time, you can right-click the executable and select `Properties`.  "
+        HelpString += "If it is blocked, there should be an option on the General Tab to `Unblock` it.  "
 
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, "
         HelpString += "be aware several interoperability rules apply.  See "
@@ -438,6 +441,7 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + String.Format("If DocType = {0}.asm{0} Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True", Chr(34))
         HelpString += vbCrLf + String.Format("If DocType = {0}.par{0} Then SEDoc.UpdateOnFileSave = True", Chr(34))
         HelpString += vbCrLf + String.Format("If DocType = {0}.psm{0} Then SEDoc.UpdateOnFileSave = True", Chr(34))
+        HelpString += vbCrLf + String.Format("If DocType = {0}.dft{0} ExitStatus = 1", Chr(34))
         HelpString += vbCrLf + "If ExitStatus = 0 Then"
         HelpString += vbCrLf + "    SEDoc.Save()"
         HelpString += vbCrLf + "    SEApp.DoIdle()"
@@ -454,7 +458,7 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + "- `DocType` The file extension of `SEDoc`."
 
         HelpString += vbCrLf + vbCrLf + "One present annoyance of using PowerShell is that I haven't found how "
-        HelpString += "to tell it about Solid Edge type libraries.  "
+        HelpString += "to tell it about Solid Edge `type libraries`.  "
         HelpString += "That means it doesn't understand things like: "
         HelpString += vbCrLf + vbCrLf + "`Dim TemplateDoc As SolidEdgePart.PartDocument` "
         HelpString += vbCrLf + vbCrLf + "You have to use `Dim TemplateDoc As Object` instead. "

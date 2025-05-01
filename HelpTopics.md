@@ -1063,11 +1063,11 @@ The options are:
 
 Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` program. Housekeeper opens each Solid Edge file in turn, then launches the program.  Naturally, it must be written for that scenario. 
 
-This command enhances the original by combining it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. 
+This command effectively turns the original into a batch program, enhancing it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. 
 
 ![RunExternalProgram](My%20Project/media/task_run_external_program.png)
 
-Select the program with the `Browse` button on the Options panel. 
+Select the program with the `Browse` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
 
 If you are writing your own program, be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
@@ -1085,6 +1085,7 @@ One example is enabling the Physical Properties `Update on Save` flag. The code 
 If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
 If DocType = ".par" Then SEDoc.UpdateOnFileSave = True
 If DocType = ".psm" Then SEDoc.UpdateOnFileSave = True
+If DocType = ".dft" ExitStatus = 1
 If ExitStatus = 0 Then
     SEDoc.Save()
     SEApp.DoIdle()
@@ -1100,7 +1101,7 @@ The program defines these variables, which you can use in your code.
 - `ErrorMessageList` A list of error messages that Housekeeper reports.
 - `DocType` The file extension of `SEDoc`.
 
-One present annoyance of using PowerShell is that I haven't found how to tell it about Solid Edge type libraries.  That means it doesn't understand things like: 
+One present annoyance of using PowerShell is that I haven't found how to tell it about Solid Edge `type libraries`.  That means it doesn't understand things like: 
 
 `Dim TemplateDoc As SolidEdgePart.PartDocument` 
 
