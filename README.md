@@ -1079,7 +1079,7 @@ The code snippet is just a text file written in VB.Net syntax.  It can be create
 
 The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test, and maintain a separate program to do it automatically. 
 
-If you ask a programmer how to do **X**, you'll often get an answer.  But only for **X** itself, not all the *other stuff*. Things that may seem obviously needed to a programmer but not to anyone else, like connecting to the application, activating the document, handling errors, etc., etc.  The code snippet functionality is meant for the *other stuff*. 
+If you ask a programmer how to do **X**, you'll often get an answer.  But only for **X** itself, not all the *other stuff*. Things that may seem obvious to them but not to anyone else, like needing to connect to the application, activate a document, trap errors, etc., etc.  The code snippet functionality is meant for the *other stuff*. 
 
 Here's an example snippet for enabling the Physical Properties `Update on Save` flag. 
 

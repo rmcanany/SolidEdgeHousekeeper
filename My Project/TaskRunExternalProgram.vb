@@ -435,9 +435,9 @@ Public Class TaskRunExternalProgram
 
         HelpString += vbCrLf + vbCrLf + "If you ask a programmer how to do **X**, you'll often get an answer.  "
         HelpString += "But only for **X** itself, not all the *other stuff*. "
-        HelpString += "Things that may seem obviously needed to a programmer but not to anyone else, "
-        HelpString += "like connecting to the application, "
-        HelpString += "activating the document, handling errors, etc., etc.  "
+        HelpString += "Things that may seem obvious to them but not to anyone else, "
+        HelpString += "like needing to connect to the application, "
+        HelpString += "activate a document, trap errors, etc., etc.  "
         HelpString += "The code snippet functionality is meant for the *other stuff*. "
 
         HelpString += vbCrLf + vbCrLf + "Here's an example snippet for enabling the Physical Properties `Update on Save` flag. "
