@@ -401,10 +401,9 @@ Public Class TaskRunExternalProgram
         Dim HelpString As String
         HelpString = "Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` program. "
         HelpString += "Housekeeper opens each Solid Edge file in turn, then launches the program.  "
-        HelpString += "Naturally, it must be written for that scenario. "
 
-        HelpString += vbCrLf + vbCrLf + "This command effectively turns the original into a batch program, "
-        HelpString += "enhancing it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. "
+        HelpString += vbCrLf + vbCrLf + "This command turns a typical single-file macro into a batch routine, "
+        HelpString += "also enhancing it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. "
 
         HelpString += vbCrLf + vbCrLf + "![RunExternalProgram](My%20Project/media/task_run_external_program.png)"
 
@@ -420,7 +419,7 @@ Public Class TaskRunExternalProgram
 
         HelpString += vbCrLf + vbCrLf + "**Code Snippets**"
 
-        HelpString += vbCrLf + vbCrLf + "Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. "
+        HelpString += vbCrLf + vbCrLf + "Unlike the other file types, a `*.snp` is a special file containing only a small section of code. "
         HelpString += "The code snippet is the (often very short) part that does the actual task at hand. "
         HelpString += "You can see a few examples "
         HelpString += "[<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets)."
@@ -434,8 +433,13 @@ Public Class TaskRunExternalProgram
         HelpString += "where the time to do the job manually can't justify the time needed to "
         HelpString += "write, test, and maintain a separate program to do it automatically. "
 
-        HelpString += vbCrLf + vbCrLf + "One example is enabling the Physical Properties `Update on Save` flag. "
-        HelpString += "The code snippet would look something like this."
+        HelpString += vbCrLf + vbCrLf + "If you ask how to do **X**, you'll often get an answer.  "
+        HelpString += "But only for **X** itself, not all the *other stuff*. "
+        HelpString += "Things like connecting to the application, "
+        HelpString += "activating the document, providing user feedback, etc., etc.  "
+        HelpString += "The code snippet functionality is meant for the *other stuff*. "
+
+        HelpString += vbCrLf + vbCrLf + "Here's an example snippet for enabling the Physical Properties `Update on Save` flag. "
 
         HelpString += vbCrLf + vbCrLf + "```"
         HelpString += vbCrLf + String.Format("If DocType = {0}.asm{0} Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True", Chr(34))

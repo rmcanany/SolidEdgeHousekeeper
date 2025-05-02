@@ -1061,9 +1061,9 @@ The options are:
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskRunExternalProgram.png"><img src="My%20Project/media/spacer.png">Run external program</h3></summary>
 
-Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` program. Housekeeper opens each Solid Edge file in turn, then launches the program.  Naturally, it must be written for that scenario. 
+Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` program. Housekeeper opens each Solid Edge file in turn, then launches the program.  
 
-This command effectively turns the original into a batch program, enhancing it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. 
+This command turns a typical single-file macro into a batch routine, also enhancing it with Housekeeper's extensive file selection, filtering, and error-reporting capabilities. 
 
 ![RunExternalProgram](My%20Project/media/task_run_external_program.png)
 
@@ -1073,13 +1073,15 @@ If you are writing your own program, be aware several interoperability rules app
 
 **Code Snippets**
 
-Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. The code snippet is the (often very short) part that does the actual task at hand. You can see a few examples [<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).
+Unlike the other file types, a `*.snp` is a special file containing only a small section of code. The code snippet is the (often very short) part that does the actual task at hand. You can see a few examples [<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).
 
 The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad.  The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  
 
 The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test, and maintain a separate program to do it automatically. 
 
-One example is enabling the Physical Properties `Update on Save` flag. The code snippet would look something like this.
+If you ask how to do **X**, you'll often get an answer.  But only for **X** itself, not all the *other stuff*. Things like connecting to the application, activating the document, providing user feedback, etc., etc.  The code snippet functionality is meant for the *other stuff*. 
+
+Here's an example snippet for enabling the Physical Properties `Update on Save` flag. 
 
 ```
 If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
