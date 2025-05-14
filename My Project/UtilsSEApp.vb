@@ -57,7 +57,11 @@ Public Class UtilsSEApp
             End If
             'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
         Catch ex As Exception
-            MsgBox("Could not start Solid Edge.  Exiting...")
+            Dim s As String = String.Format("Could not start Solid Edge.  Exiting...{0}", vbCrLf)
+            s = String.Format("{0}Exception: '{1}'{2}", s, ex.Message, vbCrLf)
+            s = String.Format("{0}Stack trace:{1}", s, vbCrLf)
+            s = String.Format("{0}{1}", s, ex.ToString)
+            MsgBox(s)
             End
         End Try
 
