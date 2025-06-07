@@ -486,7 +486,8 @@ Public Class UtilsMaterials
                         SEApp.DoIdle()
 
                         tf = Me.UseFinishFaceStyle
-                        tf = tf And Not Me.ExcludedFinishesList.Contains(Me.FinishName, StringComparer.OrdinalIgnoreCase)
+                        tf = tf And ExcludedFinishesList IsNot Nothing
+                        tf = tf AndAlso Not Me.ExcludedFinishesList.Contains(Me.FinishName, StringComparer.OrdinalIgnoreCase)
                         If tf Then
                             For Each tmpFaceStyle As SolidEdgeFramework.FaceStyle In DocFaceStyles
                                 If tmpFaceStyle.StyleName.ToLower = FinishName.ToLower Then

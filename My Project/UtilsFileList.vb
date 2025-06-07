@@ -1110,7 +1110,7 @@ Public Class UtilsFileList
                         Dim PropValue As String
                         Dim tmpColor As Color = Color.White
                         Try
-                            Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name)
+                            Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, OpenReadWrite:=False)
                             SSDoc.ReadProperties(FMain.PropertiesData)
 
                             PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, ValidFilenameRequired:=False)

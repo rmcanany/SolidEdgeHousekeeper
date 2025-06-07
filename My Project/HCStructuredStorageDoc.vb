@@ -35,12 +35,16 @@ Public Class HCStructuredStorageDoc
     End Enum
 
 
-    Public Sub New(_FullName As String)
+    Public Sub New(_FullName As String, Optional OpenReadWrite As Boolean = True)
 
         Me.FullName = _FullName
 
         Try
-            Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.ReadWrite)
+            If OpenReadWrite Then
+                Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.ReadWrite)
+            Else
+                Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.Read)
+            End If
         Catch ex As Exception
             Dim L As Integer = Me.FullName.Count
             Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
