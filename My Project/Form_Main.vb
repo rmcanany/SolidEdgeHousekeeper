@@ -3209,15 +3209,17 @@ Public Class Form_Main
 
                 Dim ListViewFile As ListViewItem = hitinfo.Item
 
-                editbox.Parent = ListViewFiles
+                If hitinfo.SubItem.BackColor.Name = "White" Or hitinfo.SubItem.BackColor.Name = "Gainsboro" Then    'Only non read-only file or non present properties can be changed
+                    editbox.Parent = ListViewFiles
 
-                editbox.Bounds = hitinfo.SubItem.Bounds
-                editbox.Text = hitinfo.SubItem.Text
-                editbox.Show()
-                editbox.SelectionStart = editbox.TextLength
-                editbox.SelectedText = ""
-                editbox.SelectionLength = 0
-                editbox.Focus()
+                    editbox.Bounds = hitinfo.SubItem.Bounds
+                    editbox.Text = hitinfo.SubItem.Text
+                    editbox.Show()
+                    editbox.SelectionStart = editbox.TextLength
+                    editbox.SelectedText = ""
+                    editbox.SelectionLength = 0
+                    editbox.Focus()
+                End If
 
             End If
 
@@ -3267,9 +3269,9 @@ Public Class Form_Main
 
         Dim Q = SSDoc.SubstitutePropertyFormulas(editbox.Text, ValidFilenameRequired:=False)
 
-        If SSDoc.SetPropValue(PropertySet, PropertyNameEnglish, Q, AddProperty:=False) Then
+        If SSDoc.SetPropValue(PropertySet, PropertyNameEnglish, Q, AddProperty:=True) Then
             hitinfo.SubItem.Text = Q
-            hitinfo.SubItem.BackColor = Color.Empty
+            hitinfo.SubItem.BackColor = Color.White
 
             SSDoc.Save()
         End If
