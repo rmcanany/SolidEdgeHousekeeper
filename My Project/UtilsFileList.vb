@@ -445,6 +445,9 @@ Public Class UtilsFileList
                 Dim tmpFinfo As IO.FileInfo = My.Computer.FileSystem.GetFileInfo(FoundFile)
 
                 Dim tmpLVItem As New ListViewItem
+
+                tmpLVItem.BackColor = Color.White
+
                 tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
                 tmpLVItem.UseItemStyleForSubItems = False
                 tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
@@ -458,6 +461,8 @@ Public Class UtilsFileList
                     "Size: " & (tmpFinfo.Length / 1024).ToString("0") & " KB" & vbCrLf &
                     "Date created: " & tmpFinfo.CreationTime.ToShortDateString() & vbCrLf &
                     "Date modified: " & tmpFinfo.LastWriteTime.ToShortDateString()
+
+                If tmpFinfo.IsReadOnly Then tmpLVItem.BackColor = Color.LightGray : tmpLVItem.SubItems.Item(1).BackColor = Color.LightGray '<----- setting the read-only backcolor
 
                 ListViewFiles.Items.Add(tmpLVItem)
 
@@ -1108,7 +1113,7 @@ Public Class UtilsFileList
                 For Each PropColumn In FMain.ListOfColumns
                     If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
                         Dim PropValue As String
-                        Dim tmpColor As Color = Color.White
+                        Dim tmpColor As Color = LVItem.BackColor 'Color.White ####### Changed to reflect the file read-only backcolor
                         Try
                             Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, OpenReadWrite:=False)
                             SSDoc.ReadProperties(FMain.PropertiesData)
@@ -1119,8 +1124,10 @@ Public Class UtilsFileList
 
                         Catch ex As Exception
                             PropValue = ""
-                            tmpColor = Color.Gainsboro
+                            tmpColor = Color.Gainsboro '<--- Properties not present ######## for some reason this doesn't work anymore
                         End Try
+
+                        If IsNothing(PropValue) Then tmpColor = Color.Gainsboro '<---------- Properties not present
 
                         LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
 

@@ -783,7 +783,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(55, 15)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks
@@ -959,7 +959,7 @@ Partial Class Form_Main
         Me.TaskHeaderNameLabel.Location = New System.Drawing.Point(213, 9)
         Me.TaskHeaderNameLabel.Name = "TaskHeaderNameLabel"
         Me.TaskHeaderNameLabel.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.TaskHeaderNameLabel.Size = New System.Drawing.Size(81, 15)
+        Me.TaskHeaderNameLabel.Size = New System.Drawing.Size(80, 15)
         Me.TaskHeaderNameLabel.TabIndex = 7
         Me.TaskHeaderNameLabel.Text = "TASK NAME"
         '
@@ -1049,7 +1049,7 @@ Partial Class Form_Main
         Me.LabelTLAListOptions.AutoSize = True
         Me.LabelTLAListOptions.Location = New System.Drawing.Point(3, 12)
         Me.LabelTLAListOptions.Name = "LabelTLAListOptions"
-        Me.LabelTLAListOptions.Size = New System.Drawing.Size(82, 15)
+        Me.LabelTLAListOptions.Size = New System.Drawing.Size(80, 15)
         Me.LabelTLAListOptions.TabIndex = 0
         Me.LabelTLAListOptions.Text = "LIST OPTIONS"
         '
@@ -1126,7 +1126,7 @@ Partial Class Form_Main
         Me.LabelTLASearchOptions.AutoSize = True
         Me.LabelTLASearchOptions.Location = New System.Drawing.Point(3, 172)
         Me.LabelTLASearchOptions.Name = "LabelTLASearchOptions"
-        Me.LabelTLASearchOptions.Size = New System.Drawing.Size(104, 15)
+        Me.LabelTLASearchOptions.Size = New System.Drawing.Size(103, 15)
         Me.LabelTLASearchOptions.TabIndex = 21
         Me.LabelTLASearchOptions.Text = "SEARCH OPTIONS"
         '
@@ -1150,7 +1150,7 @@ Partial Class Form_Main
         Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(3, 205)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(355, 19)
+        Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(354, 19)
         Me.RadioButtonTLATopDown.TabIndex = 12
         Me.RadioButtonTLATopDown.TabStop = True
         Me.RadioButtonTLATopDown.Text = "Top Down Search -- Best for self-contained project directories"
@@ -1318,7 +1318,7 @@ Partial Class Form_Main
         Me.LabelStatusAfter.Location = New System.Drawing.Point(161, 7)
         Me.LabelStatusAfter.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusAfter.Name = "LabelStatusAfter"
-        Me.LabelStatusAfter.Size = New System.Drawing.Size(84, 15)
+        Me.LabelStatusAfter.Size = New System.Drawing.Size(81, 15)
         Me.LabelStatusAfter.TabIndex = 95
         Me.LabelStatusAfter.Text = "STATUS AFTER"
         '
@@ -1338,7 +1338,7 @@ Partial Class Form_Main
         Me.LabelStatusBefore.Location = New System.Drawing.Point(9, 35)
         Me.LabelStatusBefore.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusBefore.Name = "LabelStatusBefore"
-        Me.LabelStatusBefore.Size = New System.Drawing.Size(91, 15)
+        Me.LabelStatusBefore.Size = New System.Drawing.Size(89, 15)
         Me.LabelStatusBefore.TabIndex = 94
         Me.LabelStatusBefore.Text = "STATUS BEFORE"
         '
@@ -2472,7 +2472,7 @@ Partial Class Form_Main
         Me.Label1.Location = New System.Drawing.Point(3, 200)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 10, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(386, 105)
+        Me.Label1.Size = New System.Drawing.Size(387, 105)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = resources.GetString("Label1.Text")
         '
@@ -2906,58 +2906,58 @@ Partial Class Form_Main
         '
         Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove, Me.BT_MoveToRecycleBin})
         Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
-        Me.Menu_ListViewFile.Size = New System.Drawing.Size(184, 148)
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(183, 148)
         '
         'BT_Open
         '
         Me.BT_Open.Image = CType(resources.GetObject("BT_Open.Image"), System.Drawing.Image)
         Me.BT_Open.Name = "BT_Open"
-        Me.BT_Open.Size = New System.Drawing.Size(183, 22)
+        Me.BT_Open.Size = New System.Drawing.Size(182, 22)
         Me.BT_Open.Text = "Open"
         '
         'BT_OpenFolder
         '
         Me.BT_OpenFolder.Image = CType(resources.GetObject("BT_OpenFolder.Image"), System.Drawing.Image)
         Me.BT_OpenFolder.Name = "BT_OpenFolder"
-        Me.BT_OpenFolder.Size = New System.Drawing.Size(183, 22)
+        Me.BT_OpenFolder.Size = New System.Drawing.Size(182, 22)
         Me.BT_OpenFolder.Text = "Open folder"
         '
         'ToolStripSeparator8
         '
         Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(180, 6)
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(179, 6)
         '
         'BT_FindLinks
         '
         Me.BT_FindLinks.Image = CType(resources.GetObject("BT_FindLinks.Image"), System.Drawing.Image)
         Me.BT_FindLinks.Name = "BT_FindLinks"
-        Me.BT_FindLinks.Size = New System.Drawing.Size(183, 22)
+        Me.BT_FindLinks.Size = New System.Drawing.Size(182, 22)
         Me.BT_FindLinks.Text = "Find linked files"
         '
         'BT_ProcessSelected
         '
         Me.BT_ProcessSelected.Image = CType(resources.GetObject("BT_ProcessSelected.Image"), System.Drawing.Image)
         Me.BT_ProcessSelected.Name = "BT_ProcessSelected"
-        Me.BT_ProcessSelected.Size = New System.Drawing.Size(183, 22)
+        Me.BT_ProcessSelected.Size = New System.Drawing.Size(182, 22)
         Me.BT_ProcessSelected.Text = "Process selected"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(180, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(179, 6)
         '
         'BT_Remove
         '
         Me.BT_Remove.Image = CType(resources.GetObject("BT_Remove.Image"), System.Drawing.Image)
         Me.BT_Remove.Name = "BT_Remove"
-        Me.BT_Remove.Size = New System.Drawing.Size(183, 22)
+        Me.BT_Remove.Size = New System.Drawing.Size(182, 22)
         Me.BT_Remove.Text = "Remove from list"
         '
         'BT_MoveToRecycleBin
         '
         Me.BT_MoveToRecycleBin.Image = CType(resources.GetObject("BT_MoveToRecycleBin.Image"), System.Drawing.Image)
         Me.BT_MoveToRecycleBin.Name = "BT_MoveToRecycleBin"
-        Me.BT_MoveToRecycleBin.Size = New System.Drawing.Size(183, 22)
+        Me.BT_MoveToRecycleBin.Size = New System.Drawing.Size(182, 22)
         Me.BT_MoveToRecycleBin.Text = "Move To Recycle Bin"
         '
         'NotifyIcon1
