@@ -466,52 +466,65 @@ Public Class HCStructuredStorageDoc
             Return Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
         End If
 
-        PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName
+        Try
+            PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName
+        Catch ex As Exception
+            MsgBox(PropertyName & " NOT FOUND", MsgBoxStyle.Exclamation) '<-------- ######### Properly handle this situation, MSGBOX not ideal causes it blocks the batch
+        End Try
 
-        If ModelIdx = 0 Then
-            DocValue = CStr(GetPropValue(PropertySetName, PropertyNameEnglish))
-            If DocValue Is Nothing Then
-                Return Nothing
-            Else
-                If ValidFilenameRequired Then
-                    DocValue = UFC.SubstituteIllegalCharacters(DocValue)
+        If Not IsNothing(PropertyNameEnglish) Then
+
+            If ModelIdx = 0 Then
+                DocValue = CStr(GetPropValue(PropertySetName, PropertyNameEnglish))
+                If DocValue Is Nothing Then
+                    Return Nothing
+                Else
+                    If ValidFilenameRequired Then
+                        DocValue = UFC.SubstituteIllegalCharacters(DocValue)
+                    End If
                 End If
+
+            Else
+                If Me.LinkNames Is Nothing Then
+                    Throw New Exception("LinkNames not initialized")
+                End If
+
+                If ModelIdx > Me.LinkNames.Items.Count - 1 Then
+                    Return Nothing
+                End If
+
+                LinkName = Me.LinkNames.Items(ModelIdx - 1)
+
+                Dim SSDoc As HCStructuredStorageDoc = Nothing
+                Try
+                    SSDoc = New HCStructuredStorageDoc(LinkName)
+                    SSDoc.ReadProperties(Me.PropertiesData)
+                Catch ex As Exception
+                    If SSDoc IsNot Nothing Then SSDoc.Close()
+                    Return Nothing
+                End Try
+
+                DocValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
+                If DocValue Is Nothing Then
+                    SSDoc.Close()
+                    Return Nothing
+                Else
+                    If ValidFilenameRequired Then
+                        DocValue = UFC.SubstituteIllegalCharacters(DocValue)
+                    End If
+                End If
+
+                SSDoc.Close()
             End If
 
         Else
-            If Me.LinkNames Is Nothing Then
-                Throw New Exception("LinkNames not initialized")
-            End If
 
-            If ModelIdx > Me.LinkNames.Items.Count - 1 Then
-                Return Nothing
-            End If
+            DocValue = "*** PROPERTY NOT FOUND ***" '<-------- IS THIS ACCETTABLE ?
 
-            LinkName = Me.LinkNames.Items(ModelIdx - 1)
-
-            Dim SSDoc As HCStructuredStorageDoc = Nothing
-            Try
-                SSDoc = New HCStructuredStorageDoc(LinkName)
-                SSDoc.ReadProperties(Me.PropertiesData)
-            Catch ex As Exception
-                If SSDoc IsNot Nothing Then SSDoc.Close()
-                Return Nothing
-            End Try
-
-            DocValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
-            If DocValue Is Nothing Then
-                SSDoc.Close()
-                Return Nothing
-            Else
-                If ValidFilenameRequired Then
-                    DocValue = UFC.SubstituteIllegalCharacters(DocValue)
-                End If
-            End If
-
-            SSDoc.Close()
         End If
 
         Return DocValue
+
     End Function
 
     Private Function GetProp(
