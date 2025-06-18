@@ -3264,7 +3264,9 @@ Public Class Form_Main
             SSDoc = New HCStructuredStorageDoc(FullName)
             SSDoc.ReadProperties(Me.PropertiesData)
         Catch ex As Exception
-
+            ' Couldn't open read-write.  Nothing to do here.
+            MsgBox("The property cannot be changed.  The file may be read-only or already open elsewhere.", vbOKOnly)
+            Exit Sub
         End Try
 
         Dim Q = SSDoc.SubstitutePropertyFormulas(editbox.Text, ValidFilenameRequired:=False)
