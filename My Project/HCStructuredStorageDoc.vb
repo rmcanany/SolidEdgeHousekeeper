@@ -46,7 +46,7 @@ Public Class HCStructuredStorageDoc
                 Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.Read)
             End If
         Catch ex As Exception
-            Dim L As Integer = Me.FullName.Count
+            'Dim L As Integer = Me.FullName.Count
             Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
         End Try
 
@@ -448,7 +448,7 @@ Public Class HCStructuredStorageDoc
 
         Dim PropertySetName As String
         Dim PropertyName As String
-        Dim PropertyNameEnglish As String
+        Dim PropertyNameEnglish As String = Nothing
         Dim ModelIdx As Integer
 
         Dim LinkName As String
@@ -466,11 +466,18 @@ Public Class HCStructuredStorageDoc
             Return Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
         End If
 
-        Try
-            PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName
-        Catch ex As Exception
-            MsgBox(PropertyName & " NOT FOUND", MsgBoxStyle.Exclamation) '<-------- ######### Properly handle this situation, MSGBOX not ideal causes it blocks the batch
-        End Try
+        Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
+        If tmpPropertyData IsNot Nothing Then
+            PropertyNameEnglish = tmpPropertyData.EnglishName
+        Else
+            Return Nothing
+        End If
+
+        'Try
+        '    PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName  ' Exception was on Nothing.Englishname, I think.
+        'Catch ex As Exception
+        '    MsgBox(PropertyName & " NOT FOUND", MsgBoxStyle.Exclamation) '<-------- ######### Properly handle this situation, MSGBOX not ideal causes it blocks the batch
+        'End Try
 
         If Not IsNothing(PropertyNameEnglish) Then
 
@@ -518,8 +525,10 @@ Public Class HCStructuredStorageDoc
             End If
 
         Else
-
-            DocValue = "*** PROPERTY NOT FOUND ***" '<-------- IS THIS ACCETTABLE ?
+            ' Changing back to returning Nothing.
+            ' This routine is called by SubstitutePropertyFormulas, which is used in many places.
+            ' They all already have ways of handling return values of Nothing.
+            'DocValue = "*** PROPERTY NOT FOUND ***" '<-------- IS THIS ACCETTABLE ?
 
         End If
 
@@ -725,7 +734,8 @@ Public Class HCStructuredStorageDoc
                     End If
                 Else
                     ' The Custom PropertySet needs the same cs and co as DocumentSummaryInformation, not copies.
-                    If (cs IsNot Nothing) And (cs IsNot Nothing) Then
+                    'If (cs IsNot Nothing) And (cs IsNot Nothing) Then
+                    If (cs IsNot Nothing) And (co IsNot Nothing) Then
                         Me.Items.Add(New PropertySet(Me.cf, PropertySetName, cs, co))
                         PropertySetNames.Add(PropertySetName)
                     End If
@@ -839,7 +849,18 @@ Public Class HCStructuredStorageDoc
 
             Select Case PropertySetName
                 Case "SummaryInformation"
-                    CorrectedName = OLEProp.PropertyName.Replace("PIDSI_", "")
+                    Select Case OLEProp.PropertyIdentifier
+                        Case 8
+                            CorrectedName = "Last Author"
+                        Case 12
+                            CorrectedName = "Origination Date"
+                        Case 13
+                            CorrectedName = "Last Save Date"
+                        Case 19
+                            CorrectedName = "Security"
+                        Case Else
+                            CorrectedName = OLEProp.PropertyName.Replace("PIDSI_", "")
+                    End Select
                 Case "DocumentSummaryInformation"
                     CorrectedName = OLEProp.PropertyName.Replace("PIDDSI_", "")
                 Case "ExtendedSummaryInformation"

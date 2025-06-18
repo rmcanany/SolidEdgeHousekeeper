@@ -1112,7 +1112,7 @@ Public Class UtilsFileList
                 'Adding extra properties data if needed
                 For Each PropColumn In FMain.ListOfColumns
                     If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
-                        Dim PropValue As String
+                        Dim PropValue As String = Nothing
                         Dim tmpColor As Color = LVItem.BackColor 'Color.White ####### Changed to reflect the file read-only backcolor
                         Try
                             Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, OpenReadWrite:=False)
@@ -1123,11 +1123,17 @@ Public Class UtilsFileList
                             SSDoc.Close()
 
                         Catch ex As Exception
-                            PropValue = ""
-                            tmpColor = Color.Gainsboro '<--- Properties not present ######## for some reason this doesn't work anymore
+                            'I think this quit working because:
+                            ' -- The SSDoc New() call no longer throws an exception on read-only files.
+                            ' -- If PropColumn.Formula is not found in SSDoc, there is no exception.  It returns Nothing.
+                            'PropValue = ""
+                            'tmpColor = Color.Gainsboro '<--- Properties not present ######## for some reason this doesn't work anymore
                         End Try
 
-                        If IsNothing(PropValue) Then tmpColor = Color.Gainsboro '<---------- Properties not present
+                        If IsNothing(PropValue) Then
+                            PropValue = ""
+                            tmpColor = Color.Gainsboro '<---------- Properties not present
+                        End If
 
                         LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
 
