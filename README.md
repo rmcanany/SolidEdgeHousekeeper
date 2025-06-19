@@ -740,6 +740,14 @@ Checks drawing views and parts lists, and updates them if needed.
 
 </details>
 
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingBlocks.png"><img src="My%20Project/media/spacer.png">Update drawing blocks</h3></summary>
+
+Adds, replaces and/or deletes blocks from a draft file. 
+
+![UpdateMaterialFromMaterialTable](My%20Project/media/task_update_material_from_material_table.png)
+
+</details>
+
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateFlatPattern.png"><img src="My%20Project/media/spacer.png">Update flat pattern</h3></summary>
 
 Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. 

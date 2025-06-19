@@ -657,6 +657,8 @@ Public Class UtilsPreferences
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateDrawingViews)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
+        TaskList.Add(New TaskUpdateDrawingBlocks)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateFlatPattern)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskBreakLinks)

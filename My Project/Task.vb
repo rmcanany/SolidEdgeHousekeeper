@@ -615,6 +615,23 @@ Public MustInherit Class Task
         Return Label
     End Function
 
+    Public Function FormatOptionsDataGridView(
+        ControlName As String,
+        ColumnHeaders As List(Of String)
+        ) As DataGridView
+
+        Dim DataGridView = New DataGridView
+        For Each ColumnName As String In ColumnHeaders
+            Dim ColIdx = DataGridView.Columns.Add(ColumnName, ColumnName)
+            'DataGridView.Columns(ColIdx).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+        Next
+        DataGridView.RowHeadersWidth = 30
+        DataGridView.Name = ControlName
+        DataGridView.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+        DataGridView.AutoSize = True
+
+        Return DataGridView
+    End Function
 
     'EVENT HANDLERS
     Public Sub TextBox_GotFocus(sender As System.Object, e As System.EventArgs)

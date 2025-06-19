@@ -3229,7 +3229,7 @@ Public Class Form_Main
 
     Private Sub editbox_LostFocus(sender As Object, e As EventArgs)
 
-        Dim UC As New UtilsCommon
+        'Dim UC As New UtilsCommon
 
         Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
         Dim PropertySet As String = ""
@@ -3271,12 +3271,21 @@ Public Class Form_Main
 
         Dim Q = SSDoc.SubstitutePropertyFormulas(editbox.Text, ValidFilenameRequired:=False)
 
-        If SSDoc.SetPropValue(PropertySet, PropertyNameEnglish, Q, AddProperty:=True) Then
-            hitinfo.SubItem.Text = Q
-            hitinfo.SubItem.BackColor = Color.White
+        Dim Success As Boolean = True
+        If Q IsNot Nothing Then
+            If SSDoc.SetPropValue(PropertySet, PropertyNameEnglish, Q, AddProperty:=True) Then
+                hitinfo.SubItem.Text = Q
+                hitinfo.SubItem.BackColor = Color.White
 
-            SSDoc.Save()
+                SSDoc.Save()
+            Else
+                Success = False
+            End If
+        Else
+            Success = False
         End If
+
+        If Not Success Then MsgBox($"Unable to resolve '{editbox.Text}'", vbOKOnly)
 
         If SSDoc IsNot Nothing Then SSDoc.Close()
 

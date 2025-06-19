@@ -219,6 +219,7 @@
     <Compile Include="My Project\OleMessageFilter.vb" />
     <Compile Include="My Project\TaskCheckFilename.vb" />
     <Compile Include="My Project\TaskSetDocumentStatus.vb" />
+    <Compile Include="My Project\TaskUpdateDrawingBlocks.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />
     <Compile Include="My Project\UtilsExecute.vb" />
     <Compile Include="My Project\UtilsFeatures.vb" />
