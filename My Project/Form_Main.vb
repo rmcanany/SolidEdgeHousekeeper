@@ -3272,6 +3272,7 @@ Public Class Form_Main
         Dim Q = SSDoc.SubstitutePropertyFormulas(editbox.Text, ValidFilenameRequired:=False)
 
         Dim Success As Boolean = True
+
         If Q IsNot Nothing Then
             If SSDoc.SetPropValue(PropertySet, PropertyNameEnglish, Q, AddProperty:=True) Then
                 hitinfo.SubItem.Text = Q

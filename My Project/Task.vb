@@ -629,6 +629,7 @@ Public MustInherit Class Task
         DataGridView.Name = ControlName
         DataGridView.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
         DataGridView.AutoSize = True
+        DataGridView.BackgroundColor = Color.White
 
         Return DataGridView
     End Function

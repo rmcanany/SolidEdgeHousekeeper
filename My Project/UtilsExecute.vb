@@ -135,6 +135,10 @@ Public Class UtilsExecute
             End If
         End If
 
+        If FMain.UseCurrentSession And FMain.RunInBackground Then
+            StartLogger.AddMessage("Cannot use current session AND run in background.  Disable one or the other on the Configuration Tab -- General Page.")
+        End If
+
         If USEA.DMIsRunning() Then
             StartLogger.AddMessage("Close Revision Manager")
         End If
