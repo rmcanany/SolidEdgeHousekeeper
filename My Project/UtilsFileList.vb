@@ -1060,8 +1060,9 @@ Public Class UtilsFileList
 
             End If
 
+            Dim IsReadOnly As Boolean = tmpLVItem.SubItems(0).BackColor = Color.LightGray
 
-            UpdateLVItem(tmpLVItem)
+            UpdateLVItem(tmpLVItem, IsReadOnly)
 
             NumProcessed += 1
         Next
@@ -1097,7 +1098,7 @@ Public Class UtilsFileList
 
     End Sub
 
-    Private Sub UpdateLVItem(LVItem As ListViewItem)
+    Private Sub UpdateLVItem(LVItem As ListViewItem, IsReadOnly As Boolean)
 
 
         '#### For some reason LVItem.Bounds.Bottom return a wrong value, ListViewCollapsible is the suspect
@@ -1134,6 +1135,8 @@ Public Class UtilsFileList
                             PropValue = ""
                             tmpColor = Color.Gainsboro '<---------- Properties not present
                         End If
+
+                        If IsReadOnly Then tmpColor = Color.LightGray
 
                         LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
 
