@@ -626,7 +626,9 @@ For details, see the [<ins>**Property Filter**</ins>](#property-filter) section
 - `Check for newer version at startup`
 Uses GitHub's API to get the most recent version and compare it to the running version.  Not everyone wants programs to access outside resources like that.  Feel free to disable it if desired; it won't hurt anything.
 - `Remind me if I need to update the file list`
-This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it very quickly.
+This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
+- `Process drawing files as inactive`
+This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once complete.  However, in case of a malfunction, it may not be able to do so.  You can manually reset the option on the SE File Open dialog.
 
 </details>
 
