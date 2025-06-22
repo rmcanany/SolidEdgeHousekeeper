@@ -223,17 +223,11 @@ Public Class TaskUpdateBlocks
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
-        '            If FinishName Is Nothing Then
-        '                TaskLogger.AddMessage(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
-        '            End If
-
         Dim BlockLibraryDoc As SolidEdgeDraft.DraftDocument = Nothing
         Dim DocBlockName As String
         Dim LibraryBlockName As String
         Dim DocBlocksDict As New Dictionary(Of String, SolidEdgeDraft.Block)
-        'Dim DocBlockNamesDict As New Dictionary(Of String, String)  ' {Name.ToLower: Name}
         Dim LibraryBlocksDict As New Dictionary(Of String, SolidEdgeDraft.Block)
-        'Dim LibraryBlockNamesDict As New Dictionary(Of String, String)
 
         Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -290,7 +284,7 @@ Public Class TaskUpdateBlocks
                             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                         End Try
                     Else
-                        TaskLogger.AddMessage($"Template does Not have a block named '{LibraryBlockName}'")
+                        TaskLogger.AddMessage($"Library does Not have a block named '{LibraryBlockName}'")
                     End If
                 Else
                     ' Not an error
@@ -300,8 +294,9 @@ Public Class TaskUpdateBlocks
 
         ' Delete
         If Not TaskLogger.HasErrors And Me.DeleteBlocks Then
+
             For Each DocBlockName In Me.DeleteBlocksList
-                DocBlockName = DocBlockName
+
                 If DocBlocksDict.Keys.Contains(DocBlockName) Then
                     Try
                         DocBlocksDict(DocBlockName).Delete()
@@ -318,7 +313,6 @@ Public Class TaskUpdateBlocks
         If Not TaskLogger.HasErrors And Me.AddBlocks Then
 
             For Each LibraryBlockName In Me.AddBlocksList
-                LibraryBlockName = LibraryBlockName
 
                 ' Check that SEDoc does not already have a block with this name
                 If Not DocBlocksDict.Keys.Contains(LibraryBlockName) Then
@@ -393,7 +387,7 @@ Public Class TaskUpdateBlocks
             For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheetDict(LibrarySheetName).BlockOccurrences
                 If LibraryBlockOccurrence.Block Is LibraryBlock Then
 
-                    ' Found a block occurrence in the library.  
+                    ' Found a block occurrence in the library on this sheet.  
 
                     ' Does SEDoc have a sheet with the same name?
                     If DocSheetDict.Keys.Contains(LibrarySheetName) Then
@@ -417,7 +411,6 @@ Public Class TaskUpdateBlocks
                         If Me.ReportMissingSheet Then
                             TaskLogger.AddMessage($"Library has '{LibraryBlock.Name}' on sheet '{LibrarySheetName}'.  Document does not have a sheet with that name.")
                         End If
-                        ' Not an error
                     End If
 
                 End If

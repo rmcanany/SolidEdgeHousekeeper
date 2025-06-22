@@ -167,6 +167,7 @@ Public Class TaskPrint
         Me.Image = My.Resources.TaskPrint
         Me.Category = "Output"
         SetColorFromCategory(Me)
+        Me.CompatibleWithInactiveDraft = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

@@ -739,6 +739,19 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _ProcessDraftsInactive As Boolean
+    Public Property ProcessDraftsInactive As Boolean
+        Get
+            Return _ProcessDraftsInactive
+        End Get
+        Set(value As Boolean)
+            _ProcessDraftsInactive = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxProcessDraftsInactive.Checked = value
+            End If
+        End Set
+    End Property
+
 
     '###### HOME TAB ######
 
@@ -3632,6 +3645,10 @@ Public Class Form_Main
 
     Private Sub CheckBoxRemindFilelistUpdate_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRemindFilelistUpdate.CheckedChanged
         Me.RemindFilelistUpdate = CheckBoxRemindFilelistUpdate.Checked
+    End Sub
+
+    Private Sub CheckBoxProcessDraftsInactive_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxProcessDraftsInactive.CheckedChanged
+        Me.ProcessDraftsInactive = CheckBoxProcessDraftsInactive.Checked
     End Sub
 
 End Class

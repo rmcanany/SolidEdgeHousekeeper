@@ -48,7 +48,7 @@ Public Class UtilsExecute
         Dim USEA = New UtilsSEApp(FMain)
 
         If FMain.SolidEdgeRequired > 0 Then
-            USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU)
+            USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
             SEApp = USEA.SEApp
         End If
 
@@ -225,6 +225,14 @@ Public Class UtilsExecute
                     Next
                 End If
 
+                Dim tf As Boolean = FMain.ProcessDraftsInactive
+                tf = tf And Not Task.CompatibleWithInactiveDraft
+                tf = tf And Task.IsSelectedDraft
+                If tf Then
+                    Dim s As String = $"{Task.Name} cannot process inactive drafts.  "
+                    s = $"{s}Disable the task, or the 'Process drawing files as inactive' option (Configuration Tab -- General Page)."
+                    StartLogger.AddMessage(s)
+                End If
                 Dim SubLogger As Logger = StartLogger.AddLogger(Task.Description)
                 Task.CheckStartConditions(SubLogger)
 
@@ -533,7 +541,7 @@ Public Class UtilsExecute
                     USEA.SEStop(FMain.UseCurrentSession)
                     SEApp = Nothing
 
-                    USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU)
+                    USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
                     SEApp = USEA.SEApp
                 End If
             End If

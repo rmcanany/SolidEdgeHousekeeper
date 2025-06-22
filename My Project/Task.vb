@@ -97,10 +97,9 @@ Public MustInherit Class Task
         End Set
     End Property
 
-    'Public Property IsOptionsHidden As Boolean
+
     Public Property RequiresSourceDirectories As Boolean
     Public Property SourceDirectories As List(Of String)
-    'Public Property TLPHeader As ExTableLayoutPanel
     Public Property ControlsDict As Dictionary(Of String, Control)
     Public Property ColorHue As String
     Public Property ColorSaturation As Double
@@ -123,6 +122,8 @@ Public MustInherit Class Task
     Public Property ErrorLogger As HCErrorLogger
     Public Property FileLogger As Logger
     Public Property TaskLogger As Logger
+    Public Property CompatibleWithInactiveDraft As Boolean = False
+
 
 
     Public Enum BaseControlNames

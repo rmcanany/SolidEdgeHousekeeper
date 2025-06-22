@@ -223,6 +223,7 @@ Partial Class Form_Main
         Me.TextBoxListViewUpdateFrequency = New System.Windows.Forms.TextBox()
         Me.LabelListViewUpdateFrequency = New System.Windows.Forms.Label()
         Me.CheckBoxRemindFilelistUpdate = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxProcessDraftsInactive = New System.Windows.Forms.CheckBox()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -2453,6 +2454,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2507,10 +2509,12 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 5)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 3)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 11)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxProcessDraftsInactive, 0, 12)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 13
+        Me.ExTableLayoutPanel2.RowCount = 14
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2733,6 +2737,18 @@ Partial Class Form_Main
         Me.CheckBoxRemindFilelistUpdate.TabIndex = 77
         Me.CheckBoxRemindFilelistUpdate.Text = "Remind me if I need to update the file list"
         Me.CheckBoxRemindFilelistUpdate.UseVisualStyleBackColor = True
+        '
+        'CheckBoxProcessDraftsInactive
+        '
+        Me.CheckBoxProcessDraftsInactive.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxProcessDraftsInactive.AutoSize = True
+        Me.CheckBoxProcessDraftsInactive.Location = New System.Drawing.Point(3, 365)
+        Me.CheckBoxProcessDraftsInactive.Name = "CheckBoxProcessDraftsInactive"
+        Me.CheckBoxProcessDraftsInactive.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxProcessDraftsInactive.Size = New System.Drawing.Size(181, 19)
+        Me.CheckBoxProcessDraftsInactive.TabIndex = 78
+        Me.CheckBoxProcessDraftsInactive.Text = "Process draft files as inactive"
+        Me.CheckBoxProcessDraftsInactive.UseVisualStyleBackColor = True
         '
         'ToolStripPresets
         '
@@ -3277,4 +3293,5 @@ Partial Class Form_Main
     Friend WithEvents BT_AddTeamCenter As ToolStripButton
     Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
     Friend WithEvents CheckBoxRemindFilelistUpdate As CheckBox
+    Friend WithEvents CheckBoxProcessDraftsInactive As CheckBox
 End Class

@@ -229,6 +229,7 @@ Public Class TaskSaveDrawingAs
         Me.Category = "Output"
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
+        Me.CompatibleWithInactiveDraft = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

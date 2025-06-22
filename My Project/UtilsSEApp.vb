@@ -7,6 +7,7 @@ Public Class UtilsSEApp
 
     Public Property SEApp As SolidEdgeFramework.Application
     Private Property FMain As Form_Main
+    Private Property PreviousProcessDraftsInactive As Object  ' In reality this is a boolean
 
 
     Public Sub New(_FMain As Form_Main)
@@ -14,9 +15,11 @@ Public Class UtilsSEApp
     End Sub
 
 
-    Public Sub SEStart(RunInBackground As Boolean,
-                        UseCurrentSession As Boolean,
-                        NoUpdateMRU As Boolean)
+    Public Sub SEStart(
+        RunInBackground As Boolean,
+        UseCurrentSession As Boolean,
+        NoUpdateMRU As Boolean,
+        ProcessDraftsInactive As Boolean)
 
         FMain.TextBoxStatus.Text = "Starting Solid Edge..."
 
@@ -55,7 +58,14 @@ Public Class UtilsSEApp
                 SEApp.WindowState = 2  'Maximizes Solid Edge
                 'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
             End If
+
+            ' For ProcessDraftsInactive, need to remember the previous setting
+            Dim Param = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalSessionDraftOpenInactive
+            SEApp.GetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
+            SEApp.SetGlobalParameter(Param, ProcessDraftsInactive)
+
             'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
+
         Catch ex As Exception
             Dim s As String
             s = String.Format("Could not start Solid Edge.  Exiting...{0}", vbCrLf)
@@ -72,7 +82,12 @@ Public Class UtilsSEApp
         If Not UseCurrentSession Then
 
             FMain.TextBoxStatus.Text = "Closing Solid Edge..."
-            If (Not (SEApp Is Nothing)) Then
+            If SEApp IsNot Nothing Then
+
+                Dim Param = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalSessionDraftOpenInactive
+                SEApp.SetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
+                SEApp.DoIdle()
+
                 Try
                     SEApp.Quit()
                 Catch ex As Exception
