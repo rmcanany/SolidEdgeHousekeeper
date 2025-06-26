@@ -512,13 +512,18 @@ Public Class TaskSaveModelAs
         If Not Me.UseSubdirectoryFormula Then
             NewSubDirectoryName = ""
         Else
-            NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
+            NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData)
+
             If NewSubDirectoryName Is Nothing Then
                 Success = False
 
                 Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
-
+            Else
+                Dim DoNotSubstituteChars As New List(Of String)
+                DoNotSubstituteChars.Add("\")
+                UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
             End If
+
             If Success Then
                 If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
                     NewSubDirectoryName = String.Format("{0}\", NewSubDirectoryName)
@@ -531,12 +536,16 @@ Public Class TaskSaveModelAs
         If Not Me.ChangeFilename Then
             NewFilenameWOExt = OldFilenameWOExt
         Else
-            NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, ValidFilenameRequired:=True, Me.PropertiesData)
+            NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData)
+
             If NewFilenameWOExt Is Nothing Then
                 Success = False
 
                 Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
-
+            Else
+                Dim DoNotSubstituteChars As New List(Of String)
+                DoNotSubstituteChars.Add("\")
+                UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
             End If
         End If
 

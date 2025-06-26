@@ -545,7 +545,7 @@ Public Class TaskEditProperties
             If Proceed Then
                 Dim FullName As String = UC.GetFOAFilename(SEDoc.FullName)
 
-                FindString = UC.SubstitutePropertyFormula(SEDoc, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
+                FindString = UC.SubstitutePropertyFormula(SEDoc, FullName, FindString, Me.PropertiesData)
                 If FindString Is Nothing Then
                     Proceed = False
                     s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
@@ -554,7 +554,7 @@ Public Class TaskEditProperties
 
                 Dim OriginalReplaceString As String = ""
                 If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString
-                ReplaceString = UC.SubstitutePropertyFormula(SEDoc, FullName, ReplaceString, ValidFilenameRequired:=False, Me.PropertiesData, ReplaceSearchType = "EX")
+                ReplaceString = UC.SubstitutePropertyFormula(SEDoc, FullName, ReplaceString, Me.PropertiesData, ReplaceSearchType = "EX")
                 If ReplaceString Is Nothing Then
                     Proceed = False
                     If Not ReplaceSearchType = "EX" Then

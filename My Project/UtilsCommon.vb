@@ -847,7 +847,6 @@ Public Class UtilsCommon
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal FullName As String,
         ByVal Instring As String,
-        ValidFilenameRequired As Boolean,
         PropertiesData As HCPropertiesData,
         Optional Expression As Boolean = False
         ) As String
@@ -928,9 +927,9 @@ Public Class UtilsCommon
                 End If
 
                 If tmpValue IsNot Nothing Then
-                    If ValidFilenameRequired Then
-                        tmpValue = UFC.SubstituteIllegalCharacters(tmpValue)
-                    End If
+                    'If ValidFilenameRequired Then
+                    '    tmpValue = UFC.SubstituteIllegalCharacters(tmpValue)
+                    'End If
 
                     DocValues.Add(tmpValue)
                 Else

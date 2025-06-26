@@ -180,7 +180,7 @@ Public Class TaskCheckFilename
         Select Case DocType
             Case = "asm", "par", "psm"
 
-                Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, ValidFilenameRequired:=False, Me.PropertiesData)
+                Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData)
 
                 If Formula Is Nothing Then
                     TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
@@ -210,7 +210,7 @@ Public Class TaskCheckFilename
             Case = "dft"
 
                 If Me.DraftsCheckDraftItself Then
-                    Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, ValidFilenameRequired:=False, Me.PropertiesData)
+                    Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData)
 
                     If Formula Is Nothing Then
                         TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
@@ -263,7 +263,7 @@ Public Class TaskCheckFilename
                             ModelLinkDoc = CType(ModelLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument)
 
                             Formula = UC.SubstitutePropertyFormula(
-                                    ModelLinkDoc, ModelLinkDoc.FullName, Me.PropertyFormula, ValidFilenameRequired:=False, Me.PropertiesData)
+                                    ModelLinkDoc, ModelLinkDoc.FullName, Me.PropertyFormula, Me.PropertiesData)
 
                             If Formula IsNot Nothing Then
                                 Formulas.Add(Formula)

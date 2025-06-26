@@ -10,12 +10,18 @@ Public Class UtilsFilenameCharmap
     End Sub
 
 
-    Public Function SubstituteIllegalCharacters(Instring As String) As String
+    Public Function SubstituteIllegalCharacters(
+        Instring As String,
+        DoNotSubstituteChars As List(Of String)
+        ) As String
+
         Dim Outstring As String = Instring
         Dim Key As String
         Dim Value As String
 
         For Each Key In Charmap.Keys
+            If DoNotSubstituteChars.Contains(Key) Then Continue For
+
             Value = Charmap(Key)
             Outstring = Outstring.Replace(Key, Value)
         Next

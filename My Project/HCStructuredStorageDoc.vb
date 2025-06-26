@@ -7,6 +7,7 @@ Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Xml
+Imports Microsoft.PowerShell.Commands.Internal.Format
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
@@ -487,7 +488,7 @@ Public Class HCStructuredStorageDoc
                     Return Nothing
                 Else
                     If ValidFilenameRequired Then
-                        DocValue = UFC.SubstituteIllegalCharacters(DocValue)
+                        DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
                     End If
                 End If
 
@@ -517,7 +518,7 @@ Public Class HCStructuredStorageDoc
                     Return Nothing
                 Else
                     If ValidFilenameRequired Then
-                        DocValue = UFC.SubstituteIllegalCharacters(DocValue)
+                        DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
                     End If
                 End If
 

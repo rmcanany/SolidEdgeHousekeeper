@@ -188,7 +188,7 @@ Public Class TaskEditVariables
 
                 Dim tmpFormula As String = Formula
 
-                Formula = UC.SubstitutePropertyFormula(SEDoc, FullName, Formula, ValidFilenameRequired:=False, Me.PropertiesData)
+                Formula = UC.SubstitutePropertyFormula(SEDoc, FullName, Formula, Me.PropertiesData)
                 If Formula Is Nothing Then
                     TaskLogger.AddMessage(String.Format("Could not process formula '{0}', property not found", tmpFormula))
                     Continue For
