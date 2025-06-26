@@ -175,6 +175,9 @@ Public Class UCTaskControl
 
     End Sub
 
+    Private Sub ExpressionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpressionEditorToolStripMenuItem.Click
+        MsgBox("In UCTaskControl.vb got a ExpressionEditorToolStripMenuItem.Click event")
+    End Sub
 End Class
 
 

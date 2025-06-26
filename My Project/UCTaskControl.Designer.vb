@@ -35,6 +35,7 @@ Partial Class UCTaskControl
         Me.HelpButton = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExpressionEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TLP.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -71,7 +72,7 @@ Partial Class UCTaskControl
         Me.TLP.RowCount = 2
         Me.TLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TLP.Size = New System.Drawing.Size(324, 37)
+        Me.TLP.Size = New System.Drawing.Size(325, 37)
         Me.TLP.TabIndex = 0
         Me.TLP.Task = Nothing
         '
@@ -197,7 +198,7 @@ Partial Class UCTaskControl
         Me.TaskName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.TaskName.Name = "TaskName"
         Me.TaskName.Padding = New System.Windows.Forms.Padding(12, 0, 0, 0)
-        Me.TaskName.Size = New System.Drawing.Size(76, 15)
+        Me.TaskName.Size = New System.Drawing.Size(77, 15)
         Me.TaskName.TabIndex = 12
         Me.TaskName.Text = "Task Name"
         '
@@ -206,7 +207,7 @@ Partial Class UCTaskControl
         Me.HelpButton.FlatAppearance.BorderSize = 0
         Me.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.HelpButton.Image = Global.Housekeeper.My.Resources.Resources.Help
-        Me.HelpButton.Location = New System.Drawing.Point(298, 4)
+        Me.HelpButton.Location = New System.Drawing.Point(299, 4)
         Me.HelpButton.Margin = New System.Windows.Forms.Padding(4)
         Me.HelpButton.Name = "HelpButton"
         Me.HelpButton.Size = New System.Drawing.Size(22, 28)
@@ -215,15 +216,21 @@ Partial Class UCTaskControl
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem, Me.ExpressionEditorToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 26)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 70)
         '
         'InsertPropertyToolStripMenuItem
         '
         Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
-        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
+        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.InsertPropertyToolStripMenuItem.Text = "Insert property"
+        '
+        'ExpressionEditorToolStripMenuItem
+        '
+        Me.ExpressionEditorToolStripMenuItem.Name = "ExpressionEditorToolStripMenuItem"
+        Me.ExpressionEditorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExpressionEditorToolStripMenuItem.Text = "Expression editor"
         '
         'UCTaskControl
         '
@@ -236,7 +243,7 @@ Partial Class UCTaskControl
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(0)
         Me.Name = "UCTaskControl"
-        Me.Size = New System.Drawing.Size(324, 37)
+        Me.Size = New System.Drawing.Size(325, 37)
         Me.TLP.ResumeLayout(False)
         Me.TLP.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)
@@ -257,4 +264,5 @@ Partial Class UCTaskControl
     Friend WithEvents TLP As ExTableLayoutPanel
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
     Friend WithEvents InsertPropertyToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ExpressionEditorToolStripMenuItem As ToolStripMenuItem
 End Class
