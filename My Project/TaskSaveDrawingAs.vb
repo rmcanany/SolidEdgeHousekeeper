@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class TaskSaveDrawingAs
@@ -375,7 +376,19 @@ Public Class TaskSaveDrawingAs
         If Not Me.UseSubdirectoryFormula Then
             NewSubDirectoryName = ""
         Else
-            NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
+
+
+            If Me.Formula.StartsWith("EX:") Then
+
+                NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula.Replace("EX:", ""), ValidFilenameRequired:=True, Me.PropertiesData, True)
+                NewSubDirectoryName = NewSubDirectoryName.Replace("/", "\")
+
+            Else
+
+                NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
+
+            End If
+
             If NewSubDirectoryName Is Nothing Then
                 Success = False
 
