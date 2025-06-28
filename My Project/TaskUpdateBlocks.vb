@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports System.IO
 
 Public Class TaskUpdateBlocks
     Inherits Task
@@ -75,7 +76,6 @@ Public Class TaskUpdateBlocks
         End Get
         Set(value As List(Of String))
             _ReplaceBlocksList = value
-            '_ReplaceBlocksList.Sort()
 
             If Me.TaskOptionsTLP IsNot Nothing And _ReplaceBlocksList IsNot Nothing Then
                 Dim tmpDataGridView As DataGridView = CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView)
@@ -100,7 +100,6 @@ Public Class TaskUpdateBlocks
         End Get
         Set(value As List(Of String))
             _DeleteBlocksList = value
-            '_DeleteBlocksList.Sort()
 
             If Me.TaskOptionsTLP IsNot Nothing And _DeleteBlocksList IsNot Nothing Then
                 Dim tmpDataGridView As DataGridView = CType(ControlsDict(ControlNames.DeleteBlocksDGV.ToString), DataGridView)
@@ -123,7 +122,6 @@ Public Class TaskUpdateBlocks
         End Get
         Set(value As List(Of String))
             _AddBlocksList = value
-            '_AddBlocksList.Sort()
 
             If Me.TaskOptionsTLP IsNot Nothing And _AddBlocksList IsNot Nothing Then
                 Dim tmpDataGridView As DataGridView = CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView)
@@ -417,6 +415,7 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
+
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -456,12 +455,13 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"File block name", "Library block name"}.ToList
         DataGridView = FormatOptionsDataGridView(ControlNames.ReplaceBlocksDGV.ToString, ColumnHeaders)
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
+        AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
-        'DataGridView.Height = 50
+        DataGridView.Height = 46
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -479,12 +479,13 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"File block name"}.ToList
         DataGridView = FormatOptionsDataGridView(ControlNames.DeleteBlocksDGV.ToString, ColumnHeaders)
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
+        AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
-        'DataGridView.Height = 50
+        DataGridView.Height = 46
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -511,12 +512,13 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"Library block name"}.ToList
         DataGridView = FormatOptionsDataGridView(ControlNames.AddBlocksDGV.ToString, ColumnHeaders)
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
+        AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
-        'DataGridView.Height = 50
+        DataGridView.Height = 46
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -548,44 +550,76 @@ Public Class TaskUpdateBlocks
                 End If
             End If
 
-            If Me.ReplaceBlocks And Me.ReplaceBlocksList IsNot Nothing Then
-                If Me.ReplaceBlocksList.Count = 0 Then
-                    ErrorLogger.AddMessage("Enter at least one block to replace")
-                End If
+            If Me.ReplaceBlocks Then
+                If Me.ReplaceBlocksList IsNot Nothing Then
+                    If Me.ReplaceBlocksList.Count = 0 Then
+                        ErrorLogger.AddMessage("Enter at least one block to replace")
+                    End If
 
-                If Me.ReplaceBlocksList.Count > 0 Then
-                    For Each ItemPair As String In Me.ReplaceBlocksList
-                        Dim SplitList As List(Of String) = ItemPair.Split(CChar(",")).ToList
-                        Dim ReplaceItem = SplitList(0).Trim
-                        Dim ReplacingItem = SplitList(1).Trim
-                        If ReplaceItem = "" Or ReplacingItem = "" Then
-                            ErrorLogger.AddMessage($"Cannot replace '{ReplaceItem}' with '{ReplacingItem}'")
-                        End If
-                    Next
+                    If Me.ReplaceBlocksList.Count > 0 Then
+                        For Each ItemPair As String In Me.ReplaceBlocksList
+                            Dim SplitList As List(Of String) = ItemPair.Split(CChar(",")).ToList
+                            Dim ReplaceItem = SplitList(0).Trim
+                            Dim ReplacingItem = SplitList(1).Trim
+                            If ReplaceItem = "" Or ReplacingItem = "" Then
+                                ErrorLogger.AddMessage($"Cannot replace '{ReplaceItem}' with '{ReplacingItem}'")
+                            End If
+                        Next
+                    End If
+                Else
+                    ErrorLogger.AddMessage("Enter at least one block to replace")
                 End If
             End If
 
-            If Me.DeleteBlocks And Me.DeleteBlocksList IsNot Nothing Then
-                If Me.DeleteBlocksList.Count = 0 Then
+            If Me.DeleteBlocks Then
+                If Me.DeleteBlocksList IsNot Nothing Then
+                    If Me.DeleteBlocksList.Count = 0 Then
+                        ErrorLogger.AddMessage("Enter at least one block to delete")
+                    End If
+                Else
                     ErrorLogger.AddMessage("Enter at least one block to delete")
                 End If
             End If
 
-            If Me.AddBlocks And Me.AddBlocksList IsNot Nothing Then
-                If Me.AddBlocksList.Count = 0 Then
+            If Me.AddBlocks Then
+                If Me.AddBlocksList IsNot Nothing Then
+                    If Me.AddBlocksList.Count = 0 Then
+                        ErrorLogger.AddMessage("Enter at least one block to add")
+                    End If
+                Else
                     ErrorLogger.AddMessage("Enter at least one block to add")
                 End If
             End If
-
-
         End If
 
     End Sub
 
+    Public Sub DataGridViewOptions_CellEnter(sender As System.Object, e As DataGridViewCellEventArgs)
+
+        Dim DataGridView = CType(sender, DataGridView)
+        Dim RowHeight As Integer = DataGridView.Rows(0).Height
+
+        Dim Name = DataGridView.Name
+
+        Select Case Name
+            Case ControlNames.ReplaceBlocksDGV.ToString
+                DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+            Case ControlNames.DeleteBlocksDGV.ToString
+                DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+            Case ControlNames.AddBlocksDGV.ToString
+                DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+            Case Else
+                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+        End Select
+    End Sub
 
     Public Sub DataGridViewOptions_Leave(sender As System.Object, e As System.EventArgs)
-        'MsgBox(sender.ToString)
+
         Dim DataGridView = CType(sender, DataGridView)
+
         DataGridView.CommitEdit(DataGridViewDataErrorContexts.LeaveControl)
         DataGridView.EndEdit()
 
