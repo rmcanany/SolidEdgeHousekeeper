@@ -78,7 +78,9 @@ Public Class UtilsDocumentation
         IO.File.WriteAllLines(HelpfileBaseURLFilename, Outlist)
 
         If HelpfileBaseURLFilename.Contains(UP.GetHardCodedPath) Then
-            MsgBox(String.Format("Updated BaseURL '{0}'", BaseURL))
+            s = $"Updated BaseURL, '{BaseURL}'{vbCrLf}{vbCrLf}"
+            s = $"{s}Note: Restart the program to update the task HelpURLs."
+            MsgBox(s)
         End If
 
     End Sub

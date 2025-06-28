@@ -505,7 +505,7 @@ Public Class TaskUpdateBlocks
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
-        'CheckBox.Visible = False
+        CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -593,6 +593,7 @@ Public Class TaskUpdateBlocks
         End If
 
     End Sub
+
 
     Public Sub DataGridViewOptions_CellEnter(sender As System.Object, e As DataGridViewCellEventArgs)
 
@@ -767,15 +768,17 @@ Public Class TaskUpdateBlocks
 
         HelpString += vbCrLf + vbCrLf + "![UpdateBlocks](My%20Project/media/task_update_blocks.png)"
 
-        HelpString += vbCrLf + vbCrLf + "For adding and replacing, a draft file containing the blocks is required.  "
+        HelpString += vbCrLf + vbCrLf + "For adding and replacing, a draft file containing the new blocks is required.  "
+        HelpString += "In most cases it will simply be your draft template.  "
         HelpString += "Click the `Block Library` button to select it."
 
-        HelpString += vbCrLf + vbCrLf + "The `Add Blocks` option adds the library block to the document.  "
-        HelpString += "It then checks for occcurrences of that block on each sheet of the library "
-        HelpString += "and adds it to the corresponding sheet in the document.  "
+        HelpString += vbCrLf + vbCrLf + "The `Add Blocks` option adds the block to the document block library.  "
+        HelpString += "A new block does not automatically appear on drawings. "
+        HelpString += "The program checks each sheet of the library "
+        HelpString += "and places an occurrence of it on the corresponding sheet of the document.  "
         HelpString += "It is placed at the same location, with the same scale and rotation, as the original.  "
         HelpString += "If the document does not have a corresponding sheet, enable `Report missing sheet` "
-        HelpString += "to have that condition reported in the log file.  "
+        HelpString += "to have it reported in the log file.  "
 
         Return HelpString
     End Function

@@ -748,9 +748,9 @@ Adds, replaces and/or deletes blocks in a draft file.
 
 ![UpdateBlocks](My%20Project/media/task_update_blocks.png)
 
-For adding and replacing, a draft file containing the blocks is required.  Click the `Block Library` button to select it.
+For adding and replacing, a draft file containing the new blocks is required.  In most cases it will simply be your draft template.  Click the `Block Library` button to select it.
 
-The `Add Blocks` option adds the library block to the document.  It then checks for occcurrences of that block on each sheet of the library and adds it to the corresponding sheet in the document.  It is placed at the same location, with the same scale and rotation, as the original.  If the document does not have a corresponding sheet, enable `Report missing sheet` to have that condition reported in the log file.  
+The `Add Blocks` option adds the block to the document block library.  A new block does not automatically appear on drawings. The program checks each sheet of the library and places an occurrence of it on the corresponding sheet of the document.  It is placed at the same location, with the same scale and rotation, as the original.  If the document does not have a corresponding sheet, enable `Report missing sheet` to have it reported in the log file.  
 
 </details>
 
