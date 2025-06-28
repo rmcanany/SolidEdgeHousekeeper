@@ -775,7 +775,7 @@ Public Class TaskUpdateBlocks
         HelpString += vbCrLf + vbCrLf + "The `Add Blocks` option adds the block to the document block library.  "
         HelpString += "A new block does not automatically appear on drawings. "
         HelpString += "The program checks each sheet of the library "
-        HelpString += "and places an occurrence of it on the corresponding sheet of the document.  "
+        HelpString += "and places an occurrence of the block on the corresponding sheet of the document.  "
         HelpString += "It is placed at the same location, with the same scale and rotation, as the original.  "
         HelpString += "If the document does not have a corresponding sheet, enable `Report missing sheet` "
         HelpString += "to have it reported in the log file.  "
