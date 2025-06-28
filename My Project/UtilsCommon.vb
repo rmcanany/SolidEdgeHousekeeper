@@ -919,7 +919,10 @@ Public Class UtilsCommon
                     tmpValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
 
                 ElseIf PropertyName = "Query" And PropertySet = "Server" Then
-                    tmpValue = Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
+                    'tmpValue = Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
+
+                    Dim tmpServerQuery = SubstitutePropertyFormula(SEDoc, FullName, Form_Main.ServerQuery, PropertiesData)
+                    tmpValue = Form_Main.ExecuteQuery(FullName, tmpServerQuery, ModelIdx).Replace(vbCrLf, " ")
 
                 Else
                     FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)

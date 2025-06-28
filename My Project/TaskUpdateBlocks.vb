@@ -1,8 +1,6 @@
 ﻿Option Strict On
-Imports System.Windows
 
 Public Class TaskUpdateBlocks
-
     Inherits Task
 
     Private _BlockLibrary As String
@@ -463,6 +461,7 @@ Public Class TaskUpdateBlocks
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
+        'DataGridView.Height = 50
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -485,6 +484,7 @@ Public Class TaskUpdateBlocks
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
+        'DataGridView.Height = 50
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -516,6 +516,7 @@ Public Class TaskUpdateBlocks
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
+        'DataGridView.Height = 50
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -541,23 +542,41 @@ Public Class TaskUpdateBlocks
                 ErrorLogger.AddMessage("Select at least one task to perform")
             End If
 
-            If Not FileIO.FileSystem.FileExists(Me.BlockLibrary) Then
+            If Not IO.File.Exists(Me.BlockLibrary) Then
                 If Me.ReplaceBlocks Or Me.AddBlocks Then
                     ErrorLogger.AddMessage("Select a valid block library")
                 End If
             End If
 
-            If Me.ReplaceBlocks And Me.ReplaceBlocksList.Count = 0 Then
-                ErrorLogger.AddMessage("Enter at least one block to replace")
+            If Me.ReplaceBlocks And Me.ReplaceBlocksList IsNot Nothing Then
+                If Me.ReplaceBlocksList.Count = 0 Then
+                    ErrorLogger.AddMessage("Enter at least one block to replace")
+                End If
+
+                If Me.ReplaceBlocksList.Count > 0 Then
+                    For Each ItemPair As String In Me.ReplaceBlocksList
+                        Dim SplitList As List(Of String) = ItemPair.Split(CChar(",")).ToList
+                        Dim ReplaceItem = SplitList(0).Trim
+                        Dim ReplacingItem = SplitList(1).Trim
+                        If ReplaceItem = "" Or ReplacingItem = "" Then
+                            ErrorLogger.AddMessage($"Cannot replace '{ReplaceItem}' with '{ReplacingItem}'")
+                        End If
+                    Next
+                End If
             End If
 
-            If Me.DeleteBlocks And Me.DeleteBlocksList.Count = 0 Then
-                ErrorLogger.AddMessage("Enter at least one block to delete")
+            If Me.DeleteBlocks And Me.DeleteBlocksList IsNot Nothing Then
+                If Me.DeleteBlocksList.Count = 0 Then
+                    ErrorLogger.AddMessage("Enter at least one block to delete")
+                End If
             End If
 
-            If Me.AddBlocks And Me.AddBlocksList.Count = 0 Then
-                ErrorLogger.AddMessage("Enter at least one block to add")
+            If Me.AddBlocks And Me.AddBlocksList IsNot Nothing Then
+                If Me.AddBlocksList.Count = 0 Then
+                    ErrorLogger.AddMessage("Enter at least one block to add")
+                End If
             End If
+
 
         End If
 
@@ -565,8 +584,11 @@ Public Class TaskUpdateBlocks
 
 
     Public Sub DataGridViewOptions_Leave(sender As System.Object, e As System.EventArgs)
-
+        'MsgBox(sender.ToString)
         Dim DataGridView = CType(sender, DataGridView)
+        DataGridView.CommitEdit(DataGridViewDataErrorContexts.LeaveControl)
+        DataGridView.EndEdit()
+
         Dim Name = DataGridView.Name
 
         Select Case Name
@@ -580,7 +602,12 @@ Public Class TaskUpdateBlocks
                     End If
                     Dim ListItem As String = ""
                     For ColIdx = 0 To DataGridView.Columns.Count - 1
-                        Dim Value As String = CStr(DataGridView.Rows(RowIdx).Cells(ColIdx).Value).Trim
+                        Dim Value As String
+                        Try
+                            Value = CStr(DataGridView.Rows(RowIdx).Cells(ColIdx).Value).Trim
+                        Catch ex As Exception
+                            Value = ""
+                        End Try
                         If ColIdx = 0 Then
                             ListItem = Value
                         Else
@@ -718,6 +745,7 @@ Public Class TaskUpdateBlocks
 
         Return HelpString
     End Function
+
 
 
 End Class

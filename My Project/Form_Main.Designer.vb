@@ -2445,7 +2445,7 @@ Partial Class Form_Main
         '
         Me.FastColoredServerQuery.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
         Me.FastColoredServerQuery.AutoIndentCharsPatterns = ""
-        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(2, 14)
+        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(27, 14)
         Me.FastColoredServerQuery.BackBrush = Nothing
         Me.FastColoredServerQuery.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.FastColoredServerQuery.CharHeight = 14
@@ -2454,7 +2454,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)

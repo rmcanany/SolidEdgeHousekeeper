@@ -1116,7 +1116,7 @@ Public Class UtilsFileList
                         Dim PropValue As String = Nothing
                         Dim tmpColor As Color = LVItem.BackColor 'Color.White ####### Changed to reflect the file read-only backcolor
                         Try
-                            Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, OpenReadWrite:=False)
+                            Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, _OpenReadWrite:=False)
                             SSDoc.ReadProperties(FMain.PropertiesData)
 
                             PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, ValidFilenameRequired:=False)

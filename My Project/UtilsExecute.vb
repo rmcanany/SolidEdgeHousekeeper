@@ -233,9 +233,9 @@ Public Class UtilsExecute
                     s = $"{s}Disable the task, or the 'Process drawing files as inactive' option (Configuration Tab -- General Page)."
                     StartLogger.AddMessage(s)
                 End If
+
                 Dim SubLogger As Logger = StartLogger.AddLogger(Task.Description)
                 Task.CheckStartConditions(SubLogger)
-
             End If
         Next
 

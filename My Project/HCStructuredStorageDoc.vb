@@ -16,6 +16,7 @@ Imports PanoramicData.NCalcExtensions
 Public Class HCStructuredStorageDoc
 
     Public Property FullName As String
+    Public Property OpenReadWrite As Boolean
 
     Private Property PropSets As PropertySets
     Private Property fs As FileStream
@@ -25,6 +26,7 @@ Public Class HCStructuredStorageDoc
     Private Property PropertiesData As HCPropertiesData
     Private Property MatTable As MaterialTable
     Private Property DocType As String 'asm, dft, par, psm, mtl
+
 
     Public Enum StatusSecurityMapping
         ssmAvailable = 0
@@ -36,12 +38,13 @@ Public Class HCStructuredStorageDoc
     End Enum
 
 
-    Public Sub New(_FullName As String, Optional OpenReadWrite As Boolean = True)
+    Public Sub New(_FullName As String, Optional _OpenReadWrite As Boolean = True)
 
         Me.FullName = _FullName
+        Me.OpenReadWrite = _OpenReadWrite
 
         Try
-            If OpenReadWrite Then
+            If _OpenReadWrite Then
                 Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.ReadWrite)
             Else
                 Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.Read)
@@ -68,7 +71,7 @@ Public Class HCStructuredStorageDoc
 
     Public Sub ReadProperties(_PropertiesData As HCPropertiesData)
         Me.PropertiesData = _PropertiesData
-        Me.PropSets = New PropertySets(Me.cf, Me.FullName)
+        Me.PropSets = New PropertySets(Me.cf, Me.FullName, Me.OpenReadWrite)
     End Sub
 
     Public Sub ReadLinks(_LinkManagementOrder As List(Of String))
@@ -464,7 +467,10 @@ Public Class HCStructuredStorageDoc
         End If
 
         If (PropertySetName = "Server") And (PropertyName = "Query") Then
-            Return Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
+            'Return Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
+
+            Dim tmpServerQuery = SubstitutePropertyFormulas(Form_Main.ServerQuery, ValidFilenameRequired:=False)
+            Return Form_Main.ExecuteQuery(FullName, tmpServerQuery, ModelIdx).Replace(vbCrLf, " ")
         End If
 
         Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
@@ -696,15 +702,21 @@ Public Class HCStructuredStorageDoc
 
     Private Class PropertySets
         Public Property Items As List(Of PropertySet)
+        Public Property OpenReadWrite As Boolean
 
         Private Property cf As CompoundFile
         Private Property FullName As String
         Private Property PropertySetNames As List(Of String)
 
 
-        Public Sub New(_cf As CompoundFile, _FullName As String)
+        Public Sub New(
+            _cf As CompoundFile,
+            _FullName As String,
+            _OpenReadWrite As Boolean)
+
             Me.cf = _cf
             Me.FullName = _FullName
+            Me.OpenReadWrite = _OpenReadWrite
 
             Me.Items = New List(Of PropertySet)
 
@@ -724,7 +736,7 @@ Public Class HCStructuredStorageDoc
                     'Not all files have every PropertySet
                     'Properties of some very old files appear to be organized differently
                     Try
-                        Me.Items.Add(New PropertySet(Me.cf, PropertySetName))
+                        Me.Items.Add(New PropertySet(Me.cf, PropertySetName, Me.OpenReadWrite))
                         Me.PropertySetNames.Add(PropertySetName)
                     Catch ex As Exception
                     End Try
@@ -737,7 +749,7 @@ Public Class HCStructuredStorageDoc
                     ' The Custom PropertySet needs the same cs and co as DocumentSummaryInformation, not copies.
                     'If (cs IsNot Nothing) And (cs IsNot Nothing) Then
                     If (cs IsNot Nothing) And (co IsNot Nothing) Then
-                        Me.Items.Add(New PropertySet(Me.cf, PropertySetName, cs, co))
+                        Me.Items.Add(New PropertySet(Me.cf, PropertySetName, Me.OpenReadWrite, cs, co))
                         PropertySetNames.Add(PropertySetName)
                     End If
                 End If
@@ -785,6 +797,7 @@ Public Class HCStructuredStorageDoc
     Private Class PropertySet
         Public Property Items As New List(Of Prop)
         Public Property Name As String
+        Public Property OpenReadWrite As Boolean
 
         Private Property cf As CompoundFile
         Public Property cs As CFStream
@@ -793,13 +806,16 @@ Public Class HCStructuredStorageDoc
         Private Property PropertySetNameToStreamName As New Dictionary(Of String, String)
 
 
-        Public Sub New(_cf As CompoundFile,
-                       PropertySetName As String,
-                       Optional _cs As CFStream = Nothing,
-                       Optional _co As OLEPropertiesContainer = Nothing)
+        Public Sub New(
+            _cf As CompoundFile,
+            PropertySetName As String,
+            _OpenReadWrite As Boolean,
+            Optional _cs As CFStream = Nothing,
+            Optional _co As OLEPropertiesContainer = Nothing)
 
             Me.cf = _cf
             Me.Name = PropertySetName
+            Me.OpenReadWrite = _OpenReadWrite
 
             Me.PropertySetNameToStreamName("SummaryInformation") = "SummaryInformation"
             Me.PropertySetNameToStreamName("DocumentSummaryInformation") = "DocumentSummaryInformation"
@@ -829,7 +845,7 @@ Public Class HCStructuredStorageDoc
                     For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
                         CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                         Me.PropNames.Add(CorrectedName)
-                        Me.Items.Add(New Prop(co, OLEProp, CorrectedName))
+                        Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
                     Next
                 End If
 
@@ -837,7 +853,7 @@ Public Class HCStructuredStorageDoc
                 For Each OLEProp As OLEProperty In co.Properties
                     CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                     Me.PropNames.Add(CorrectedName)
-                    Me.Items.Add(New Prop(co, OLEProp, CorrectedName))
+                    Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
                 Next
 
             End If
@@ -982,6 +998,8 @@ Public Class HCStructuredStorageDoc
         Public Function AddProp(PropertyNameEnglish As String, Value As Object) As Boolean
             Dim Success As Boolean = True
 
+            If Not Me.OpenReadWrite Then Return False
+
             Dim OLEProp As OLEProperty = Nothing
             Dim UserProperties As OLEPropertiesContainer
             Dim NewPropertyId As UInteger
@@ -1022,7 +1040,7 @@ Public Class HCStructuredStorageDoc
 
             If Success Then
                 PropNames.Add(PropertyNameEnglish)
-                Dim Prop = New Prop(co, OLEProp, PropertyNameEnglish)
+                Dim Prop = New Prop(co, OLEProp, PropertyNameEnglish, Me.OpenReadWrite)
                 Items.Add(Prop)
             End If
 
@@ -1070,18 +1088,27 @@ Public Class HCStructuredStorageDoc
 
         Public Property VTType As VTPropertyType
         Public Property PropertyIdentifier As UInteger
+        Public Property OpenReadWrite As Boolean
+
 
         Private co As OLEPropertiesContainer
         Private Property OLEProp As OLEProperty
 
 
-        Public Sub New(_co As OLEPropertiesContainer, _OLEProp As OLEProperty, CorrectedName As String)
+        Public Sub New(
+            _co As OLEPropertiesContainer,
+            _OLEProp As OLEProperty,
+            CorrectedName As String,
+            _OpenReadWrite As Boolean)
+
             Me.co = _co
             Me.OLEProp = _OLEProp
             Me.Name = CorrectedName
+            Me.OpenReadWrite = _OpenReadWrite
             Me.PropertyIdentifier = Me.OLEProp.PropertyIdentifier
             Me.VTType = Me.OLEProp.VTType
-            Me.SetValue(Me.OLEProp.Value)
+
+            If Me.OpenReadWrite Then Me.SetValue(Me.OLEProp.Value)
         End Sub
 
 

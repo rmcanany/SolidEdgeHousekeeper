@@ -460,7 +460,7 @@ Public Class TaskUpdateModelSizeInVariableTable
             End If
 
             If Not (Me.ReportXYZ Or Me.ReportMinMidMax) Then
-                ErrorLogger.AddMessage("")
+                ErrorLogger.AddMessage("Select at least one type of variable to report")
             End If
 
             Dim s = "Enter unique names for each variable"
