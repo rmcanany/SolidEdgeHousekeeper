@@ -17,6 +17,19 @@ Public Class TaskRunExternalProgram
         End Set
     End Property
 
+    Private _HideConsoleWindow As Boolean
+    Public Property HideConsoleWindow As Boolean
+        Get
+            Return _HideConsoleWindow
+        End Get
+        Set(value As Boolean)
+            _HideConsoleWindow = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.HideConsoleWindow.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _SaveAfterProcessing As Boolean
     Public Property SaveAfterProcessing As Boolean
         Get
@@ -47,6 +60,7 @@ Public Class TaskRunExternalProgram
     Enum ControlNames
         Browse
         ExternalProgram
+        HideConsoleWindow
         SaveAfterProcessing
         AutoHideOptions
     End Enum
@@ -123,20 +137,32 @@ Public Class TaskRunExternalProgram
 
         If Extension = ".ps1" Then
             P.StartInfo.FileName = "powershell.exe"
-            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", Me.ExternalProgram, Chr(34))
+            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", Me.ExternalProgram.Replace(" ", "` "), Chr(34))
             P.StartInfo.RedirectStandardError = True
             P.StartInfo.UseShellExecute = False
+            If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
             P.Start()
             PSError = P.StandardError.ReadToEnd
         ElseIf Extension = ".snp" Then
             P.StartInfo.FileName = "powershell.exe"
-            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", BuildSnippetFile(Me.ExternalProgram), Chr(34))
+            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", BuildSnippetFile(Me.ExternalProgram).Replace(" ", "` "), Chr(34))
             P.StartInfo.RedirectStandardError = True
             P.StartInfo.UseShellExecute = False
+            If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
             P.Start()
             PSError = P.StandardError.ReadToEnd
         Else
-            P = Diagnostics.Process.Start(Me.ExternalProgram)
+            'P = Diagnostics.Process.Start(Me.ExternalProgram)
+
+            P.StartInfo.FileName = Me.ExternalProgram
+            'P.StartInfo.Arguments = String.Format("{1}{0}{1}", Me.ExternalProgram, Chr(34))
+            If Me.HideConsoleWindow Then
+                P.StartInfo.RedirectStandardError = True
+                P.StartInfo.UseShellExecute = False
+                P.StartInfo.CreateNoWindow = True
+            End If
+            P.Start()
+
         End If
 
         If Not PSError = "" Then
@@ -308,6 +334,14 @@ Public Class TaskRunExternalProgram
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideConsoleWindow.ToString, "Hide the program console window while processing")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.SaveAfterProcessing.ToString, "Save file after processing")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -346,6 +380,10 @@ Public Class TaskRunExternalProgram
         Dim Name = Checkbox.Name
 
         Select Case Name
+
+            Case ControlNames.HideConsoleWindow.ToString
+                Me.HideConsoleWindow = Checkbox.Checked
+
             Case ControlNames.SaveAfterProcessing.ToString
                 Me.SaveAfterProcessing = Checkbox.Checked
 
@@ -418,6 +456,12 @@ Public Class TaskRunExternalProgram
         HelpString += "Note, for downloaded programs, Windows sometimes sets a `Block` flag.  "
         HelpString += "Before you run it the first time, you can right-click the executable and select `Properties`.  "
         HelpString += "If it is blocked, there should be an option on the General Tab to `Unblock` it.  "
+
+        HelpString += vbCrLf + vbCrLf + "For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  "
+        HelpString += "You can do so by opening a PowerShell command prompt as an Administrator.  "
+        HelpString += "Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`.  "
+        HelpString += "I was told this has 'security implications'.  Presumably *negative* implications.  "
+        HelpString += "You might want to work with your IT department to see if there is a safer way.  "
 
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, "
         HelpString += "be aware several interoperability rules apply.  See "

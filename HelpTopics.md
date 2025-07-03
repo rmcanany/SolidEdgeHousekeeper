@@ -1083,6 +1083,8 @@ This command turns a typical single-file macro into a batch routine, also enhanc
 
 Select the program with the `Browse` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
 
+For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt as an Administrator.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`.  I was told this has 'security implications'.  Presumably *negative* implications.  You might want to work with your IT department to see if there is a safer way.  
+
 If you are writing your own program, be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
 **Code Snippets**
