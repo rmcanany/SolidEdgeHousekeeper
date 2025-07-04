@@ -122,6 +122,7 @@ Public Class TaskRunExternalProgram
         Dim Extension As String
 
         Dim UP As New UtilsPreferences
+
         Dim SettingsFilename = UP.GetFormMainSettingsFilename(CheckExisting:=True)
         Dim NewSettingsFilename As String = ""
         If Not SettingsFilename = "" Then
@@ -205,6 +206,8 @@ Public Class TaskRunExternalProgram
 
 
     Private Function BuildSnippetFile(SnippetFilename As String) As String
+        ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/
+
         Dim Toplist As New List(Of String)
         Dim Midlist As New List(Of String)
         Dim Botlist As New List(Of String)
@@ -212,37 +215,45 @@ Public Class TaskRunExternalProgram
         Dim s As String
         Dim Indent As String = "                "
 
+        Dim UP As New UtilsPreferences
+
+        Dim DllPath As String = UP.GetStartupDirectory
+
         Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
 
         Toplist.Add("$StartupPath = Split-Path $script:MyInvocation.MyCommand.Path")
         Toplist.Add("")
-        'Toplist.Add("$DLLs = (")
-        'Toplist.Add("    $StartupPath + '\Interop.SolidEdgeConstants'")
-        'Toplist.Add("    $StartupPath + '\Interop.SolidEdgeFrameworkSupport',")
-        'Toplist.Add("    $StartupPath + '\Interop.SolidEdgeFramework'")
-        'Toplist.Add("    )")
-        'Toplist.Add("")
-        Toplist.Add(String.Format("$Source = @{0}", Chr(34)))
+        Toplist.Add("$DLLs = (")
+        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeFramework.dll"",")
+        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeFrameworkSupport.dll"",")
+        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeConstants.dll"",")
+        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgePart.dll"",")
+        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeAssembly.dll"",")
+        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeDraft.dll"",")
+        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeGeometry.dll""")
+        Toplist.Add("    )")
+        Toplist.Add("")
+        Toplist.Add("$Source = @""")
+        Toplist.Add("")
         Toplist.Add("Imports System")
         Toplist.Add("Imports System.Collections.Generic")
+        Toplist.Add("")
         Toplist.Add("Public Class Snippet")
         Toplist.Add("")
         Toplist.Add("    Public Shared Function RunSnippet(StartupPath As String) As Integer")
         Toplist.Add("        Dim ExitStatus As Integer = 0")
         Toplist.Add("        Dim ErrorMessageList As New List(Of String)")
         Toplist.Add("")
-        Toplist.Add("        Dim SEApp As Object = Nothing")
-        Toplist.Add("        Dim SEDoc As Object = Nothing")
+        Toplist.Add("        Dim SEApp As SolidEdgeFramework.Application = Nothing")
+        Toplist.Add("        Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing")
         Toplist.Add("")
         Toplist.Add("        Try")
-        Toplist.Add(String.Format("            SEApp = Runtime.InteropServices.Marshal.GetActiveObject({0}SolidEdge.Application{0})", Chr(34)))
-        Toplist.Add("            SEDoc = SEApp.ActiveDocument")
-        s = "            Console.WriteLine(String.Format(*Processing {0}*, SEDoc.Name))"
-        s = s.Replace(CChar("*"), Chr(34))
-        Toplist.Add(s)
+        Toplist.Add("            SEApp = CType(Runtime.InteropServices.Marshal.GetActiveObject(""SolidEdge.Application""), SolidEdgeFramework.Application)")
+        Toplist.Add("            SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)")
+        Toplist.Add("            Console.WriteLine(String.Format(""Processing {0}"", SEDoc.Name))")
         Toplist.Add("        Catch ex As Exception")
         Toplist.Add("            ExitStatus = 1")
-        Toplist.Add(String.Format("            ErrorMessageList.Add({0}Unable to connect to Solid Edge, or no file is open{0})", Chr(34)))
+        Toplist.Add("            ErrorMessageList.Add(""Unable to connect to Solid Edge, or no file is open"")")
         Toplist.Add("        End Try")
         Toplist.Add("")
         Toplist.Add("        If ExitStatus = 0 Then")
@@ -258,9 +269,7 @@ Public Class TaskRunExternalProgram
 
         Botlist.Add("            Catch ex As Exception")
         Botlist.Add("                ExitStatus = 1")
-        s = "                ErrorMessageList.Add(String.Format(*{0}*, ex.Message))"
-        s = s.Replace(CChar("*"), Chr(34))
-        Botlist.Add(s)
+        Botlist.Add("                ErrorMessageList.Add(String.Format(""{0}"", ex.Message))")
         Botlist.Add("            End Try")
         Botlist.Add("        End If")
         Botlist.Add("")
@@ -271,22 +280,27 @@ Public Class TaskRunExternalProgram
         Botlist.Add("        Return ExitStatus")
         Botlist.Add("    End Function")
         Botlist.Add("")
+        Botlist.Add("    Public Shared Sub LoadLibrary(ParamArray libs As Object())")
+        Botlist.Add("        For Each [lib] As String In libs")
+        Botlist.Add("            'Console.WriteLine(String.Format(""Loading library:  {0}"", [lib]))")
+        Botlist.Add("            Dim assm As System.Reflection.Assembly = System.Reflection.Assembly.LoadFrom([lib])")
+        Botlist.Add("            'Console.WriteLine(assm.GetName().ToString())")
+        Botlist.Add("        Next")
+        Botlist.Add("    End Sub")
+        Botlist.Add("")
         Botlist.Add("    Private Shared Sub SaveErrorMessages(StartupPath As String, ErrorMessageList As List(Of String))")
         Botlist.Add("        Dim ErrorFilename As String")
-        Botlist.Add("")
-        s = "        ErrorFilename = String.Format(*{0}\error_messages.txt*, StartupPath)"
-        s = s.Replace(CChar("*"), Chr(34))
-        Botlist.Add(s)
-        Botlist.Add("")
+        Botlist.Add("        ErrorFilename = String.Format(""{0}\error_messages.txt"", StartupPath)")
         Botlist.Add("        IO.File.WriteAllLines(ErrorFilename, ErrorMessageList)")
-        Botlist.Add("")
         Botlist.Add("    End Sub")
         Botlist.Add("")
         Botlist.Add("End Class")
-        Botlist.Add(String.Format("{0}@", Chr(34)))
+        Botlist.Add("""@")
         Botlist.Add("")
-        Botlist.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
-        'Botlist.Add("Add-Type -TypeDefinition $Source -ReferencedAssemblies $DLLs -Language VisualBasic")
+        'Botlist.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
+        Botlist.Add("Add-Type -TypeDefinition $Source -ReferencedAssemblies $DLLs -Language VisualBasic")
+        Botlist.Add("")
+        Botlist.Add("[Snippet]::LoadLibrary($DLLs)")
         Botlist.Add("")
         Botlist.Add("$ExitStatus = [Snippet]::RunSnippet($StartupPath)")
         Botlist.Add("")
@@ -308,6 +322,89 @@ Public Class TaskRunExternalProgram
         Return PowerShellFilename
     End Function
 
+    Private Sub DevelopSnippetCode()
+
+        ' Develop the snippet code here, then copy to the snippet file.
+        ' Unindent for proper formatting in the *.ps1 file.
+
+        ' NOTES ON POWERSHELL VB SYNTAX
+        ' $"{VariableName}" format does not work.  Use String.Format("{0}", VariableName) instead.
+
+
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim SEApp As SolidEdgeFramework.Application
+        Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument
+        SEApp = CType(Runtime.InteropServices.Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+        SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+        Console.WriteLine("")
+
+        Dim DocType As String = IO.Path.GetExtension(SEDoc.FullName)
+
+        Try
+            ' ############## SNIPPET CODE START ##############
+
+            If DocType = ".dft" Then
+
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+
+                Dim PartsLists As New List(Of SolidEdgeDraft.PartsList)
+                Dim BackgroundNames As New List(Of String)
+
+                Try
+                    If ExitStatus = 0 Then
+                        For Each Sheet As SolidEdgeDraft.Sheet In tmpSEDoc.Sheets
+                            If Sheet.Section.Type = 0 Then
+                                For Each Item As Object In Sheet.DrawingObjects
+                                    Dim PartsList As SolidEdgeDraft.PartsList = TryCast(Item, SolidEdgeDraft.PartsList)
+                                    If PartsList IsNot Nothing Then
+                                        PartsLists.Add(PartsList)
+                                        BackgroundNames.Add(Sheet.Background.Name)
+                                    End If
+                                Next
+                            End If
+                        Next
+                    End If
+                Catch
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Could not process sheets")
+                End Try
+
+                If ExitStatus = 0 And PartsLists.Count > 0 And PartsLists.Count = BackgroundNames.Count Then
+                    For i As Integer = 0 To PartsLists.Count - 1
+                        Try
+                            PartsLists(i).SavedSettings = BackgroundNames(i) + " NEW"
+                            PartsLists(i).Update()
+                            SEApp.DoIdle()
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            'ErrorMessageList.Add($"Could not update parts list to '{BackgroundNames(i)} NEW'")
+                            Dim s As String
+                            s = String.Format("Could not update parts list to '{0} NEW'", BackgroundNames(i))
+                            ErrorMessageList.Add(s)
+                        End Try
+                    Next
+                End If
+
+                If ExitStatus = 0 Then
+                    Try
+                        SEDoc.Save()
+                        SEApp.DoIdle()
+                    Catch
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Could not save file")
+                    End Try
+                End If
+            End If
+
+            ' ############## SNIPPET CODE END ##############
+
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
