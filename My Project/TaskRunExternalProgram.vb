@@ -610,25 +610,25 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + "- `ErrorMessageList` A list of error messages that Housekeeper reports."
         HelpString += vbCrLf + "- `DocType` The file extension of `SEDoc`."
 
-        HelpString += vbCrLf + vbCrLf + "One present annoyance of using PowerShell is that I haven't found how "
-        HelpString += "to tell it about Solid Edge `type libraries`.  "
-        HelpString += "That means it doesn't understand things like: "
-        HelpString += vbCrLf + vbCrLf + "`Dim TemplateDoc As SolidEdgePart.PartDocument` "
-        HelpString += vbCrLf + vbCrLf + "You have to use `Dim TemplateDoc As Object` instead. "
-        HelpString += vbCrLf + vbCrLf + "It's not all bad news. "
-        HelpString += "For one thing, you can chain assignments like in the VB6 days. "
+        'HelpString += vbCrLf + vbCrLf + "One present annoyance of using PowerShell is that I haven't found how "
+        'HelpString += "to tell it about Solid Edge `type libraries`.  "
+        'HelpString += "That means it doesn't understand things like: "
+        'HelpString += vbCrLf + vbCrLf + "`Dim TemplateDoc As SolidEdgePart.PartDocument` "
+        'HelpString += vbCrLf + vbCrLf + "You have to use `Dim TemplateDoc As Object` instead. "
+        'HelpString += vbCrLf + vbCrLf + "It's not all bad news. "
+        'HelpString += "For one thing, you can chain assignments like in the VB6 days. "
 
-        HelpString += vbCrLf + vbCrLf + "```"
-        HelpString += vbCrLf + "Dim igQueryPlane = 6"
-        HelpString += vbCrLf + "Dim Faces = SEDoc.Models.Item(1).Body.Faces(FaceType:=igQueryPlane)"
-        HelpString += vbCrLf + "```"
+        'HelpString += vbCrLf + vbCrLf + "```"
+        'HelpString += vbCrLf + "Dim igQueryPlane = 6"
+        'HelpString += vbCrLf + "Dim Faces = SEDoc.Models.Item(1).Body.Faces(FaceType:=igQueryPlane)"
+        'HelpString += vbCrLf + "```"
 
-        HelpString += vbCrLf + vbCrLf + "Another annoyance is troubleshooting. "
-        HelpString += "The Console Window from `Run External Program` disappears too fast to see syntax errors. "
+        'HelpString += vbCrLf + vbCrLf + "Another annoyance is troubleshooting. "
+        'HelpString += "The Console Window from `Run External Program` disappears too fast to see syntax errors. "
 
-        HelpString += vbCrLf + vbCrLf + "To get around that, you can `Run External Program` once to create the PowerShell program.  "
-        HelpString += "Then run that code separately in a PowerShell terminal, where the error messages are persistent. "
-        HelpString += "Once it's working, copy the relevant part back into the `*.snp` file. "
+        'HelpString += vbCrLf + vbCrLf + "To get around that, you can `Run External Program` once to create the PowerShell program.  "
+        'HelpString += "Then run that code separately in a PowerShell terminal, where the error messages are persistent. "
+        'HelpString += "Once it's working, copy the relevant part back into the `*.snp` file. "
 
         Return HelpString
     End Function
