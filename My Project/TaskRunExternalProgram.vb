@@ -30,6 +30,19 @@ Public Class TaskRunExternalProgram
         End Set
     End Property
 
+    Private _DeleteTempFiles As Boolean
+    Public Property DeleteTempFiles As Boolean
+        Get
+            Return _DeleteTempFiles
+        End Get
+        Set(value As Boolean)
+            _DeleteTempFiles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DeleteTempFiles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _SaveAfterProcessing As Boolean
     Public Property SaveAfterProcessing As Boolean
         Get
@@ -61,6 +74,7 @@ Public Class TaskRunExternalProgram
         Browse
         ExternalProgram
         HideConsoleWindow
+        DeleteTempFiles
         SaveAfterProcessing
         AutoHideOptions
     End Enum
@@ -163,15 +177,23 @@ Public Class TaskRunExternalProgram
                 P.StartInfo.CreateNoWindow = True
             End If
             P.Start()
-
+            If Me.HideConsoleWindow Then PSError = P.StandardError.ReadToEnd
         End If
 
         If Not PSError = "" Then
+            TaskLogger.AddMessage("The external program reported the following error")
             TaskLogger.AddMessage(PSError)
         End If
 
         P.WaitForExit()
         ExitCode = P.ExitCode
+
+        If IO.File.Exists(NewSettingsFilename) Then IO.File.Delete(NewSettingsFilename)
+
+        If Me.DeleteTempFiles And Extension = ".snp" Then
+            Dim PowerShellFilename As String = IO.Path.ChangeExtension(ExternalProgram, ".ps1")
+            If IO.File.Exists(PowerShellFilename) Then IO.File.Delete(PowerShellFilename)
+        End If
 
         ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
 
@@ -181,7 +203,6 @@ Public Class TaskRunExternalProgram
                 If ErrorMessages.Length > 0 Then
                     For Each ErrorMessageFromProgram As String In ErrorMessages
                         TaskLogger.AddMessage(ErrorMessageFromProgram)
-
                     Next
                 Else
                     TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
@@ -406,6 +427,7 @@ Public Class TaskRunExternalProgram
 
     End Sub
 
+
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -432,6 +454,14 @@ Public Class TaskRunExternalProgram
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.HideConsoleWindow.ToString, "Hide the program console window")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.DeleteTempFiles.ToString, "Delete temp files after processing")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -480,6 +510,9 @@ Public Class TaskRunExternalProgram
 
             Case ControlNames.HideConsoleWindow.ToString
                 Me.HideConsoleWindow = Checkbox.Checked
+
+            Case ControlNames.DeleteTempFiles.ToString
+                Me.DeleteTempFiles = Checkbox.Checked
 
             Case ControlNames.SaveAfterProcessing.ToString
                 Me.SaveAfterProcessing = Checkbox.Checked
@@ -591,15 +624,15 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "Here's an example snippet for enabling the Physical Properties `Update on Save` flag. "
 
         HelpString += vbCrLf + vbCrLf + "```"
-        HelpString += vbCrLf + String.Format("If DocType = {0}.asm{0} Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True", Chr(34))
-        HelpString += vbCrLf + String.Format("If DocType = {0}.par{0} Then SEDoc.UpdateOnFileSave = True", Chr(34))
-        HelpString += vbCrLf + String.Format("If DocType = {0}.psm{0} Then SEDoc.UpdateOnFileSave = True", Chr(34))
-        HelpString += vbCrLf + String.Format("If DocType = {0}.dft{0} ExitStatus = 1", Chr(34))
+        HelpString += vbCrLf + $"If DocType = "".asm"" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True"
+        HelpString += vbCrLf + $"If DocType = "".par"" Then SEDoc.UpdateOnFileSave = True"
+        HelpString += vbCrLf + $"If DocType = "".psm"" Then SEDoc.UpdateOnFileSave = True"
+        HelpString += vbCrLf + $"If DocType = "".dft"" ExitStatus = 1"
         HelpString += vbCrLf + "If ExitStatus = 0 Then"
         HelpString += vbCrLf + "    SEDoc.Save()"
         HelpString += vbCrLf + "    SEApp.DoIdle()"
         HelpString += vbCrLf + "Else"
-        HelpString += vbCrLf + String.Format("    ErrorMessageList.Add({0}An error occurred{0})", Chr(34))
+        HelpString += vbCrLf + $"    ErrorMessageList.Add(""An error occurred"")"
         HelpString += vbCrLf + "End If"
         HelpString += vbCrLf + "```"
 

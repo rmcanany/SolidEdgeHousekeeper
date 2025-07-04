@@ -6,12 +6,15 @@ Public Class UCTaskControl
 
     Public Property AutoHideOptions As Boolean
 
+    Private Property OwnedForms As List(Of Form)
+
+    Dim t As Timer = New Timer()
 
     Public Sub New(Task As Task)
         ' This call is required by the designer.
         InitializeComponent()
 
-
+        Me.OwnedForms = New List(Of Form)
 
         Me.Task = Task
         Me.TaskName.Text = Task.Description
@@ -176,8 +179,69 @@ Public Class UCTaskControl
     End Sub
 
     Private Sub ExpressionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpressionEditorToolStripMenuItem.Click
-        MsgBox("In UCTaskControl.vb got a ExpressionEditorToolStripMenuItem.Click event")
+        'MsgBox("In UCTaskControl.vb got a ExpressionEditorToolStripMenuItem.Click event")
+
+        Dim TaskType As Type = Me.Task.GetType
+
+        If Not TaskType.Name = "TaskSaveDrawingAs" Then
+            MsgBox($"Expression editing not implemented for {Me.Task.Description}")
+            Exit Sub
+        End If
+
+        t.Interval = 1500
+        AddHandler t.Tick, AddressOf HandleTimerTick
+
+
+        Dim tmp As New FormNCalc
+        tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        tmp.ShowDialog()
+        Dim A = tmp.Formula.Replace(vbCrLf, "")
+        A = A.Split(CType("\\", Char)).First
+
+        If A <> "" Then
+            Clipboard.SetText(A)
+            MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)
+        End If
     End Sub
+
+    Private Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
+
+        Dim tmpForm As New Form
+        Dim tmpSize = New Size(200, 75)
+        tmpForm.Text = String.Empty
+        tmpForm.ControlBox = False
+        tmpForm.BackColor = Color.White
+
+        tmpForm.Size = tmpSize
+        tmpForm.StartPosition = FormStartPosition.Manual
+        tmpForm.Location = New Point(CInt(Me.Left + Me.Width / 2 - tmpForm.Width / 2), CInt(Me.Top + Me.Height / 2 - tmpForm.Height / 2))
+
+        Dim tmpLabel As New Label
+        tmpLabel.Font = New Font(Me.Font.Name, 8, FontStyle.Bold)
+        tmpLabel.Width = 180
+        tmpLabel.Dock = DockStyle.Fill
+        tmpLabel.TextAlign = ContentAlignment.MiddleCenter
+        tmpLabel.Text = "Expression copied to clipboard"
+        tmpForm.Controls.Add(tmpLabel)
+
+        Me.OwnedForms.Add(tmpForm)
+
+        tmpForm.Show(Me)
+
+        t.Start()
+
+    End Sub
+
+    Private Sub HandleTimerTick(sender As Object, e As EventArgs)
+
+        For Each item In Me.OwnedForms
+            item.Close()
+        Next
+
+        t.Stop()
+
+    End Sub
+
 End Class
 
 

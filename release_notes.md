@@ -13,6 +13,67 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
+## V2025.3 Enhancements/Fixes
+
+### Update Blocks
+
+Sponsored by **@john.matthews3452 (Hatch)**. Thank you!
+
+Added a new command to replace, add, and/or delete drawing sheet blocks.
+
+![Update Blocks](My%20Project/media/task_update_blocks.png)
+
+The block library, usually just your Draft template, is the source for new or replacement blocks.
+
+When adding a block, the program places it into the file's block collection.  It then checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the file.  It is placed at the same location, with the same scale and rotation, as the original.
+
+### Save Drawing As
+
+Contributed by **@Francesco Arfilli**.  Thank you!
+
+Added the ability to create filenames and subdirectory formulas using the Expression Editor.  This can be especially handy if you need to use an `If` statement to decide how something is named.
+
+![Expression Editor](My%20Project/media/release_notes_task_save_drawing_as.png)
+
+
+### Run External Program
+
+Added an option to hide the popup window of the external program (Thank you **@[Robin BIoomberg]!**)  This keeps you from being interrupted every few seconds while trying to get other work done.
+
+![Run External Program](My%20Project/media/task_run_external_program.png)
+
+Added the ability to refer to Solid Edge type libraries in code snippets.  Previously, only Visual Basic types were recognized.
+
+Added an option to delete temp files created by the snippet functionality.  Normally you want this enabled, but can disable it if you need to inspect the `*.ps1` file created by the command.
+
+### File List
+
+Contributed by **@Francesco Arfilli**.  Thank you!
+
+Fixed an issue where properties on the list were not being shown for read-only files.  (Thank you **@ih0nza!**)
+
+Fixed an issue where a server query was not returning results when the query contained a property formula.
+
+![Configuration Tab -- General Page](My%20Project/media/configuration_tab_general_page.png)
+
+Added a reminder to update the file list if any changes to the input list is made.  This is for new or infrequent users.  It's very annoying.  Turn it off on the **Configuration Tab -- General Page**
+
+### Update Parts Lists
+
+Added an example code snippet to update the properties of a parts list from another entry in `DraftList.txt`.  (Thank you **@[Robin BIoomberg]!**)  The snippet can be found in the [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) repo.
+
+### Open Draft Files Inactive
+
+Added an option to open draft files in inactive mode.  (Thank you **@ih0nza!**)  The option is on the **Configuration Tab -- General Page**.  It is meant to speed up processing of large assembly drawings.
+
+Not all commands that process drawings are compatible with this option.  If there is a conflict, it is reported to the user before processing begins.
+
+### Housekeeper Not Starting
+
+Solution contributed by **@Francesco Arfilli**.  Thank you!
+
+From a bug report on Github (Thank you **@DieCola85!**), Francesco figured out the user's COM objects had become unregistered.  He suggested re-running the most recent MP and that fixed it!
+
 ## V2025.2 Enhancements/Fixes
 
 We'll get to the highlights in just a second, but first some big news...  Housekeeper has its first **Sponsor!**  
