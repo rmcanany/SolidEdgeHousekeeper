@@ -23,7 +23,7 @@ Added a new command to replace, add, and/or delete drawing sheet blocks.
 
 ![Update Blocks](My%20Project/media/task_update_blocks.png)
 
-The block library, usually just your Draft template, is the source for new or replacement blocks.
+The block library, probably just your Draft template, is the source for new or replacement blocks.
 
 When adding a block, the program first places it into the file's block collection.  It then checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the file.  It is placed at the same location, with the same scale and rotation, as the original.
 
@@ -37,6 +37,8 @@ Added the ability to create filenames and subdirectory formulas using the Expres
 
 ![Expression Editor](My%20Project/media/release_notes_task_save_drawing_as.png)
 
+Added the same functionality to `Save Model As`.
+
 See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#save-model-as) for details.
 
 ### Run External Program
@@ -48,6 +50,8 @@ Added an option to hide the popup window of the external program (Thank you **@[
 Added the ability to refer to Solid Edge type libraries in code snippets.  Previously, only Visual Basic types were recognized.
 
 Added an option to delete temp files created by the snippet functionality.  Normally you want this enabled, but can disable it if you need to inspect the `*.ps1` file created by the command.
+
+See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 
 ### File List
 
@@ -61,9 +65,13 @@ Fixed an issue where a server query was not returning results when the query con
 
 Added a reminder to update the file list if any changes to the input list is made.  This is for new or infrequent users.  It's very annoying.  Turn it off on the **Configuration Tab -- General Page**
 
+See the [<ins>**File List Options Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#file-list-options) for details.
+
 ### Update Parts Lists
 
-Added an example code snippet to update the properties of a parts list from another entry in `DraftList.txt`.  (Thank you **@[Robin BIoomberg]!**)  The snippet can be found in the [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) repo.
+Added an example code snippet to update the properties of a parts list from another entry in `DraftList.txt`.  (Thank you **@[Robin BIoomberg]!**)  
+
+See the [<ins>**Housekeeper External Programs Snippets Section**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) for details.
 
 ### Open Draft Files Inactive
 
@@ -71,6 +79,7 @@ Added an option to open draft files in inactive mode.  (Thank you **@ih0nza!**) 
 
 Not all commands that process drawings are compatible with this option.  If there is a conflict, it is reported to the user before processing begins.
 
+See the [<ins>**Configuration Tab -- General Page**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#general-page) for details.
 ### Housekeeper Not Starting
 
 Solution contributed by **@Francesco Arfilli**.  Thank you!
