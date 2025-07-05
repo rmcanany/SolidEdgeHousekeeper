@@ -376,41 +376,30 @@ Public Class TaskSaveDrawingAs
         If Not Me.UseSubdirectoryFormula Then
             NewSubDirectoryName = ""
         Else
-
-
             If Me.Formula.StartsWith("EX:") Then
-
                 NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula.Replace("EX:", ""), Me.PropertiesData, True)
                 'NewSubDirectoryName = NewSubDirectoryName.Replace("/", "\")
 
                 If NewSubDirectoryName Is Nothing Then
                     Success = False
-
                     Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
                     UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
-
                 End If
 
             Else
-
                 NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData)
 
                 If NewSubDirectoryName Is Nothing Then
                     Success = False
-
                     Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
                     UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
-
                 End If
-
-
-
             End If
 
             If Success Then
@@ -425,16 +414,30 @@ Public Class TaskSaveDrawingAs
         If Not Me.ChangeFilename Then
             NewFilenameWOExt = OldFilenameWOExt
         Else
-            NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData)
+            If Me.FilenameFormula.StartsWith("EX:") Then
+                NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula.Replace("EX:", ""), Me.PropertiesData, True)
 
-            If NewFilenameWOExt Is Nothing Then
-                Success = False
+                If NewFilenameWOExt Is Nothing Then
+                    Success = False
+                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                Else
+                    Dim DoNotSubstituteChars As New List(Of String)
+                    DoNotSubstituteChars.Add("\")
+                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                End If
 
-                Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
             Else
-                Dim DoNotSubstituteChars As New List(Of String)
-                DoNotSubstituteChars.Add("\")
-                UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData)
+
+                If NewFilenameWOExt Is Nothing Then
+                    Success = False
+                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                Else
+                    Dim DoNotSubstituteChars As New List(Of String)
+                    DoNotSubstituteChars.Add("\")
+                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                End If
+
             End If
         End If
 

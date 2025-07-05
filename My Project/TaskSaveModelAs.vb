@@ -512,16 +512,30 @@ Public Class TaskSaveModelAs
         If Not Me.UseSubdirectoryFormula Then
             NewSubDirectoryName = ""
         Else
-            NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData)
+            If Me.Formula.StartsWith("EX:") Then
+                NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula.Replace("EX:", ""), Me.PropertiesData, True)
+                'NewSubDirectoryName = NewSubDirectoryName.Replace("/", "\")
 
-            If NewSubDirectoryName Is Nothing Then
-                Success = False
+                If NewSubDirectoryName Is Nothing Then
+                    Success = False
+                    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+                Else
+                    Dim DoNotSubstituteChars As New List(Of String)
+                    DoNotSubstituteChars.Add("\")
+                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                End If
 
-                Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
             Else
-                Dim DoNotSubstituteChars As New List(Of String)
-                DoNotSubstituteChars.Add("\")
-                UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData)
+
+                If NewSubDirectoryName Is Nothing Then
+                    Success = False
+                    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+                Else
+                    Dim DoNotSubstituteChars As New List(Of String)
+                    DoNotSubstituteChars.Add("\")
+                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                End If
             End If
 
             If Success Then
@@ -536,16 +550,30 @@ Public Class TaskSaveModelAs
         If Not Me.ChangeFilename Then
             NewFilenameWOExt = OldFilenameWOExt
         Else
-            NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData)
+            If Me.FilenameFormula.StartsWith("EX:") Then
+                NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula.Replace("EX:", ""), Me.PropertiesData, True)
 
-            If NewFilenameWOExt Is Nothing Then
-                Success = False
+                If NewFilenameWOExt Is Nothing Then
+                    Success = False
+                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                Else
+                    Dim DoNotSubstituteChars As New List(Of String)
+                    DoNotSubstituteChars.Add("\")
+                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                End If
 
-                Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
             Else
-                Dim DoNotSubstituteChars As New List(Of String)
-                DoNotSubstituteChars.Add("\")
-                UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData)
+
+                If NewFilenameWOExt Is Nothing Then
+                    Success = False
+                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                Else
+                    Dim DoNotSubstituteChars As New List(Of String)
+                    DoNotSubstituteChars.Add("\")
+                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                End If
+
             End If
         End If
 
@@ -1250,6 +1278,10 @@ Public Class TaskSaveModelAs
         HelpString += "To add a property, right-click the text box and select `Insert property`. "
         HelpString += "You can also just type it in if that's easier. "
         HelpString += "You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. "
+        HelpString += "You can also use the Expression Editor to create the new file or subdirectory name.  "
+        HelpString += "This can be especially handy if an `If` statement is needed for any reason.  "
+        HelpString += "For details on the Expression Editor, refer to the "
+        HelpString += "[<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties)."
 
         HelpString += vbCrLf + "- `Project %{System.Project Name}` "
         HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "

@@ -1132,7 +1132,7 @@ Exports the file to either a non-Solid Edge format, or the same format in a diff
 
 Select the file type using the combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
 
-You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
+You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. You can also use the Expression Editor to create the new file or subdirectory name.  This can be especially handy if an `If` statement is needed for any reason.  For details on the Expression Editor, refer to the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).
 - `Project %{System.Project Name}` 
 - `%{System.Material}\%{System.Sheet Metal Gage}` 
 

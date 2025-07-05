@@ -25,7 +25,9 @@ Added a new command to replace, add, and/or delete drawing sheet blocks.
 
 The block library, usually just your Draft template, is the source for new or replacement blocks.
 
-When adding a block, the program places it into the file's block collection.  It then checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the file.  It is placed at the same location, with the same scale and rotation, as the original.
+When adding a block, the program first places it into the file's block collection.  It then checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the file.  It is placed at the same location, with the same scale and rotation, as the original.
+
+See the [<ins>**Update Blocks Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-blocks) for details.
 
 ### Save Drawing As
 
@@ -35,6 +37,7 @@ Added the ability to create filenames and subdirectory formulas using the Expres
 
 ![Expression Editor](My%20Project/media/release_notes_task_save_drawing_as.png)
 
+See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#save-model-as) for details.
 
 ### Run External Program
 

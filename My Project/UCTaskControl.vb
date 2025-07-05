@@ -183,7 +183,7 @@ Public Class UCTaskControl
 
         Dim TaskType As Type = Me.Task.GetType
 
-        If Not TaskType.Name = "TaskSaveDrawingAs" Then
+        If Not (TaskType.Name = "TaskSaveDrawingAs" Or TaskType.Name = "TaskSaveModelAs") Then
             MsgBox($"Expression editing not implemented for {Me.Task.Description}")
             Exit Sub
         End If
