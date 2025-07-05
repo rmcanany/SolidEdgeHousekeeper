@@ -1278,13 +1278,15 @@ Public Class TaskSaveModelAs
         HelpString += "To add a property, right-click the text box and select `Insert property`. "
         HelpString += "You can also just type it in if that's easier. "
         HelpString += "You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. "
-        HelpString += "You can also use the Expression Editor to create the new file or subdirectory name.  "
-        HelpString += "This can be especially handy if an `If` statement is needed for any reason.  "
-        HelpString += "For details on the Expression Editor, refer to the "
-        HelpString += "[<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties)."
 
         HelpString += vbCrLf + "- `Project %{System.Project Name}` "
         HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "
+
+        HelpString += "Another option to create the new file or subdirectory name is to use the Expression Editor.  "
+        HelpString += "This can be especially handy if an `If` statement is needed for any reason.  "
+        HelpString += "For details on the Expression Editor, refer to the "
+        HelpString += "[<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  "
+        HelpString += "You'll have to scroll down a bit to see it."
 
         HelpString += vbCrLf + vbCrLf + "You can enter a subdirectory formula even if `Original directory` is enabled. "
         HelpString += "In that case, it is interpreted as a subdirectory under the original directory. "

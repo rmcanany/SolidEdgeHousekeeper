@@ -49,7 +49,7 @@ Added an option to hide the popup window of the external program (Thank you **@[
 
 Added the ability to refer to Solid Edge type libraries in code snippets.  Previously, only Visual Basic types were recognized.
 
-Added an option to delete temp files created by the snippet functionality.  Normally you want this enabled, but can disable it if you need to inspect the `*.ps1` file created by the command.
+Added an option to delete temp files created by the snippet functionality.  Normally you want this enabled, but can disable it if you need to inspect the `*.ps1` file created by the command for any reason.
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 
