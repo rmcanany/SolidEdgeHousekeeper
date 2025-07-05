@@ -10,11 +10,10 @@ Public Class UCTaskControl
 
     Dim t As Timer = New Timer()
 
+
     Public Sub New(Task As Task)
         ' This call is required by the designer.
         InitializeComponent()
-
-        Me.OwnedForms = New List(Of Form)
 
         Me.Task = Task
         Me.TaskName.Text = Task.Description
@@ -38,6 +37,8 @@ Public Class UCTaskControl
         If Task.AppliesToDraft Then CBDraft.Image = My.Resources.Unchecked
 
         Me.Dock = DockStyle.Top
+
+        Me.OwnedForms = New List(Of Form)
 
     End Sub
 
@@ -202,6 +203,7 @@ Public Class UCTaskControl
             Clipboard.SetText(A)
             MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)
         End If
+
     End Sub
 
     Private Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
