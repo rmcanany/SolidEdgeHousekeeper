@@ -63,7 +63,7 @@ Fixed an issue where a server query was not returning results when the query con
 
 ![Configuration Tab -- General Page](My%20Project/media/configuration_tab_general_page.png)
 
-Added a reminder to update the file list if any changes to the input list is made.  This is for new or infrequent users.  It's very annoying.  Turn it off on the **Configuration Tab -- General Page**
+Added a reminder to update the file list if any changes to the input list is made.  This is for new or infrequent users.  It's very annoying.  Turn it off on the **Configuration Tab -- General Page**.
 
 See the [<ins>**File List Options Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#file-list-options) for details.
 

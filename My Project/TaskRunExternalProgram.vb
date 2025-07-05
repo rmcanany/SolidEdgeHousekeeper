@@ -588,10 +588,11 @@ Public Class TaskRunExternalProgram
         HelpString += "If it is blocked, there should be an option on the General Tab to `Unblock` it.  "
 
         HelpString += vbCrLf + vbCrLf + "For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  "
-        HelpString += "You can do so by opening a PowerShell command prompt as an Administrator.  "
-        HelpString += "Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`.  "
-        HelpString += "I was told this has 'security implications'.  Presumably *negative* implications.  "
-        HelpString += "You might want to work with your IT department to see if there is a safer way.  "
+        HelpString += "You can do so by opening a PowerShell command prompt.  "
+        HelpString += "Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft "
+        HelpString += "[<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) "
+        HelpString += "with some details.  "
+        HelpString += "If you're not an expert on such matters, you might want to run it by your IT department first.  "
 
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, "
         HelpString += "be aware several interoperability rules apply.  See "
