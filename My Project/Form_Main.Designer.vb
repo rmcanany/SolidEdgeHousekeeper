@@ -25,14 +25,11 @@ Partial Class Form_Main
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
         Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
-        Me.BT_DeleteCLBItem = New System.Windows.Forms.Button()
-        Me.ButtonCloseListOfColumns = New System.Windows.Forms.Button()
-        Me.ButtonAddToListOfColumns = New System.Windows.Forms.Button()
         Me.CLB_Properties = New System.Windows.Forms.CheckedListBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.ListViewSources = New System.Windows.Forms.ListView()
@@ -43,38 +40,17 @@ Partial Class Form_Main
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ToolStrip_Filter = New System.Windows.Forms.ToolStrip()
-        Me.CheckBoxEnablePropertyFilter = New System.Windows.Forms.ToolStripButton()
-        Me.new_ButtonPropertyFilter = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
-        Me.CheckBoxEnableFileWildcard = New System.Windows.Forms.ToolStripButton()
         Me.ComboBoxFileWildcard = New System.Windows.Forms.ToolStripComboBox()
-        Me.new_ButtonFileSearchDelete = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip_List = New System.Windows.Forms.ToolStrip()
-        Me.BT_AddSingleFiles = New System.Windows.Forms.ToolStripButton()
-        Me.BT_AddFolder = New System.Windows.Forms.ToolStripButton()
-        Me.BT_AddFolderSubfolders = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_TopLevelAsm = New System.Windows.Forms.ToolStripButton()
-        Me.BT_ASM_Folder = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_AddFromlist = New System.Windows.Forms.ToolStripButton()
-        Me.BT_ExportList = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_ErrorList = New System.Windows.Forms.ToolStripButton()
-        Me.BT_DeleteAll = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_Update = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_Help = New System.Windows.Forms.ToolStripButton()
-        Me.BT_ColumnsSelect = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
-        Me.new_CheckBoxFilterDft = New System.Windows.Forms.ToolStripButton()
-        Me.new_CheckBoxFilterPsm = New System.Windows.Forms.ToolStripButton()
-        Me.new_CheckBoxFilterPar = New System.Windows.Forms.ToolStripButton()
-        Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.TabPageTasks = New System.Windows.Forms.TabPage()
         Me.TaskPanel = New System.Windows.Forms.Panel()
@@ -82,13 +58,6 @@ Partial Class Form_Main
         Me.EditTaskListButton = New System.Windows.Forms.Button()
         Me.TaskHeaderPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.TaskHeaderEnableButton = New System.Windows.Forms.Button()
-        Me.TaskHeaderCollapseButton = New System.Windows.Forms.Button()
-        Me.TaskHeaderToggleAssemblyButton = New System.Windows.Forms.Button()
-        Me.TaskHeaderTogglePartButton = New System.Windows.Forms.Button()
-        Me.TaskHeaderToggleSheetmetalButton = New System.Windows.Forms.Button()
-        Me.TaskHeaderToggleDraftButton = New System.Windows.Forms.Button()
-        Me.TaskHeaderHelpButton = New System.Windows.Forms.Button()
         Me.TaskHeaderNameLabel = New System.Windows.Forms.Label()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
@@ -126,49 +95,13 @@ Partial Class Form_Main
         Me.LabelStatusInReleased = New System.Windows.Forms.Label()
         Me.LabelStatusOutInReview = New System.Windows.Forms.Label()
         Me.GroupBoxStatusInA = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusAtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusAtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusAtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusAtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusAtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusAtoA = New System.Windows.Forms.RadioButton()
         Me.LabelStatusOutBaselined = New System.Windows.Forms.Label()
         Me.GroupBoxStatusInB = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusBtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoA = New System.Windows.Forms.RadioButton()
         Me.LabelStatusOutAvailable = New System.Windows.Forms.Label()
         Me.GroupBoxStatusInIR = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusIRtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoA = New System.Windows.Forms.RadioButton()
         Me.GroupBoxStatusInR = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusRtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoA = New System.Windows.Forms.RadioButton()
         Me.GroupBoxStatusInIW = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusIWtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoA = New System.Windows.Forms.RadioButton()
         Me.GroupBoxStatusInO = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusOtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
         Me.RadioButtonProcessAsAvailableRevert = New System.Windows.Forms.RadioButton()
         Me.RadioButtonProcessAsAvailableChange = New System.Windows.Forms.RadioButton()
         Me.TabPageSorting = New System.Windows.Forms.TabPage()
@@ -225,33 +158,102 @@ Partial Class Form_Main
         Me.CheckBoxRemindFilelistUpdate = New System.Windows.Forms.CheckBox()
         Me.CheckBoxProcessDraftsInactive = New System.Windows.Forms.CheckBox()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
-        Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
         Me.ComboBoxPresetName = New System.Windows.Forms.ToolStripComboBox()
-        Me.ButtonPresetLoad = New System.Windows.Forms.ToolStripButton()
-        Me.ButtonPresetSave = New System.Windows.Forms.ToolStripButton()
-        Me.ButtonPresetDelete = New System.Windows.Forms.ToolStripButton()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_ExcludeFromProcessing = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
+        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.BT_DeleteCLBItem = New System.Windows.Forms.Button()
+        Me.ButtonCloseListOfColumns = New System.Windows.Forms.Button()
+        Me.ButtonAddToListOfColumns = New System.Windows.Forms.Button()
+        Me.CheckBoxEnablePropertyFilter = New System.Windows.Forms.ToolStripButton()
+        Me.new_ButtonPropertyFilter = New System.Windows.Forms.ToolStripButton()
+        Me.CheckBoxEnableFileWildcard = New System.Windows.Forms.ToolStripButton()
+        Me.new_ButtonFileSearchDelete = New System.Windows.Forms.ToolStripButton()
+        Me.BT_AddSingleFiles = New System.Windows.Forms.ToolStripButton()
+        Me.BT_AddFolder = New System.Windows.Forms.ToolStripButton()
+        Me.BT_AddFolderSubfolders = New System.Windows.Forms.ToolStripButton()
+        Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
+        Me.BT_TopLevelAsm = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ASM_Folder = New System.Windows.Forms.ToolStripButton()
+        Me.BT_AddFromlist = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ExportList = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ErrorList = New System.Windows.Forms.ToolStripButton()
+        Me.BT_DeleteAll = New System.Windows.Forms.ToolStripButton()
+        Me.BT_Update = New System.Windows.Forms.ToolStripButton()
+        Me.BT_Help = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ColumnsSelect = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterDft = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterPsm = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterPar = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
+        Me.TaskHeaderEnableButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderCollapseButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderToggleAssemblyButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderTogglePartButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderToggleSheetmetalButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderToggleDraftButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderHelpButton = New System.Windows.Forms.Button()
+        Me.RadioButtonStatusAtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoA = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoA = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoA = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoA = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoA = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
+        Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
+        Me.ButtonPresetLoad = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonPresetSave = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonPresetDelete = New System.Windows.Forms.ToolStripButton()
         Me.ButtonProcess = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonHelp = New System.Windows.Forms.Button()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.BT_Open = New System.Windows.Forms.ToolStripMenuItem()
         Me.BT_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_FindLinks = New System.Windows.Forms.ToolStripMenuItem()
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_RemoveFromList = New System.Windows.Forms.ToolStripMenuItem()
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -340,40 +342,6 @@ Partial Class Form_Main
         Me.ColumnSelectionPanel.Size = New System.Drawing.Size(146, 192)
         Me.ColumnSelectionPanel.TabIndex = 36
         Me.ColumnSelectionPanel.Visible = False
-        '
-        'BT_DeleteCLBItem
-        '
-        Me.BT_DeleteCLBItem.Image = CType(resources.GetObject("BT_DeleteCLBItem.Image"), System.Drawing.Image)
-        Me.BT_DeleteCLBItem.Location = New System.Drawing.Point(121, 43)
-        Me.BT_DeleteCLBItem.Name = "BT_DeleteCLBItem"
-        Me.BT_DeleteCLBItem.Size = New System.Drawing.Size(20, 20)
-        Me.BT_DeleteCLBItem.TabIndex = 38
-        Me.BT_DeleteCLBItem.UseVisualStyleBackColor = True
-        Me.BT_DeleteCLBItem.Visible = False
-        '
-        'ButtonCloseListOfColumns
-        '
-        Me.ButtonCloseListOfColumns.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonCloseListOfColumns.Image = CType(resources.GetObject("ButtonCloseListOfColumns.Image"), System.Drawing.Image)
-        Me.ButtonCloseListOfColumns.Location = New System.Drawing.Point(73, 162)
-        Me.ButtonCloseListOfColumns.Name = "ButtonCloseListOfColumns"
-        Me.ButtonCloseListOfColumns.Size = New System.Drawing.Size(71, 28)
-        Me.ButtonCloseListOfColumns.TabIndex = 37
-        Me.ButtonCloseListOfColumns.Text = "Close"
-        Me.ButtonCloseListOfColumns.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.ButtonCloseListOfColumns.UseVisualStyleBackColor = True
-        '
-        'ButtonAddToListOfColumns
-        '
-        Me.ButtonAddToListOfColumns.Dock = System.Windows.Forms.DockStyle.Left
-        Me.ButtonAddToListOfColumns.Image = CType(resources.GetObject("ButtonAddToListOfColumns.Image"), System.Drawing.Image)
-        Me.ButtonAddToListOfColumns.Location = New System.Drawing.Point(0, 162)
-        Me.ButtonAddToListOfColumns.Name = "ButtonAddToListOfColumns"
-        Me.ButtonAddToListOfColumns.Size = New System.Drawing.Size(73, 28)
-        Me.ButtonAddToListOfColumns.TabIndex = 36
-        Me.ButtonAddToListOfColumns.Text = "Add"
-        Me.ButtonAddToListOfColumns.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.ButtonAddToListOfColumns.UseVisualStyleBackColor = True
         '
         'CLB_Properties
         '
@@ -508,52 +476,16 @@ Partial Class Form_Main
         Me.ToolStrip_Filter.TabIndex = 34
         Me.ToolStrip_Filter.Text = "ToolStrip1"
         '
-        'CheckBoxEnablePropertyFilter
-        '
-        Me.CheckBoxEnablePropertyFilter.CheckOnClick = True
-        Me.CheckBoxEnablePropertyFilter.Image = CType(resources.GetObject("CheckBoxEnablePropertyFilter.Image"), System.Drawing.Image)
-        Me.CheckBoxEnablePropertyFilter.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.CheckBoxEnablePropertyFilter.Name = "CheckBoxEnablePropertyFilter"
-        Me.CheckBoxEnablePropertyFilter.Size = New System.Drawing.Size(99, 22)
-        Me.CheckBoxEnablePropertyFilter.Text = "Property filter"
-        '
-        'new_ButtonPropertyFilter
-        '
-        Me.new_ButtonPropertyFilter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_ButtonPropertyFilter.Image = CType(resources.GetObject("new_ButtonPropertyFilter.Image"), System.Drawing.Image)
-        Me.new_ButtonPropertyFilter.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.new_ButtonPropertyFilter.Name = "new_ButtonPropertyFilter"
-        Me.new_ButtonPropertyFilter.Size = New System.Drawing.Size(23, 22)
-        Me.new_ButtonPropertyFilter.Text = "Configure"
-        '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
         Me.ToolStripSeparator6.Size = New System.Drawing.Size(6, 25)
-        '
-        'CheckBoxEnableFileWildcard
-        '
-        Me.CheckBoxEnableFileWildcard.CheckOnClick = True
-        Me.CheckBoxEnableFileWildcard.Image = CType(resources.GetObject("CheckBoxEnableFileWildcard.Image"), System.Drawing.Image)
-        Me.CheckBoxEnableFileWildcard.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.CheckBoxEnableFileWildcard.Name = "CheckBoxEnableFileWildcard"
-        Me.CheckBoxEnableFileWildcard.Size = New System.Drawing.Size(74, 22)
-        Me.CheckBoxEnableFileWildcard.Text = "Wildcard"
         '
         'ComboBoxFileWildcard
         '
         Me.ComboBoxFileWildcard.Name = "ComboBoxFileWildcard"
         Me.ComboBoxFileWildcard.Size = New System.Drawing.Size(140, 25)
         Me.ComboBoxFileWildcard.Sorted = True
-        '
-        'new_ButtonFileSearchDelete
-        '
-        Me.new_ButtonFileSearchDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_ButtonFileSearchDelete.Image = CType(resources.GetObject("new_ButtonFileSearchDelete.Image"), System.Drawing.Image)
-        Me.new_ButtonFileSearchDelete.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.new_ButtonFileSearchDelete.Name = "new_ButtonFileSearchDelete"
-        Me.new_ButtonFileSearchDelete.Size = New System.Drawing.Size(23, 22)
-        Me.new_ButtonFileSearchDelete.Text = "Clear"
         '
         'ToolStripSeparator7
         '
@@ -572,213 +504,41 @@ Partial Class Form_Main
         Me.ToolStrip_List.TabIndex = 33
         Me.ToolStrip_List.Text = "ToolStrip1"
         '
-        'BT_AddSingleFiles
-        '
-        Me.BT_AddSingleFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddSingleFiles.Image = CType(resources.GetObject("BT_AddSingleFiles.Image"), System.Drawing.Image)
-        Me.BT_AddSingleFiles.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_AddSingleFiles.Name = "BT_AddSingleFiles"
-        Me.BT_AddSingleFiles.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddSingleFiles.Text = "Add single files"
-        '
-        'BT_AddFolder
-        '
-        Me.BT_AddFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddFolder.Image = CType(resources.GetObject("BT_AddFolder.Image"), System.Drawing.Image)
-        Me.BT_AddFolder.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_AddFolder.Name = "BT_AddFolder"
-        Me.BT_AddFolder.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddFolder.Text = "Add single folder"
-        '
-        'BT_AddFolderSubfolders
-        '
-        Me.BT_AddFolderSubfolders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddFolderSubfolders.Image = CType(resources.GetObject("BT_AddFolderSubfolders.Image"), System.Drawing.Image)
-        Me.BT_AddFolderSubfolders.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_AddFolderSubfolders.Name = "BT_AddFolderSubfolders"
-        Me.BT_AddFolderSubfolders.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddFolderSubfolders.Text = "Add folder and subfolders"
-        '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
         Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
-        '
-        'BT_AddTeamCenter
-        '
-        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddTeamCenter.Image = Global.Housekeeper.My.Resources.Resources.teamcenter
-        Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
-        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddTeamCenter.Text = "Add TeamCenter"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
         Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
         '
-        'BT_TopLevelAsm
-        '
-        Me.BT_TopLevelAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_TopLevelAsm.Image = CType(resources.GetObject("BT_TopLevelAsm.Image"), System.Drawing.Image)
-        Me.BT_TopLevelAsm.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_TopLevelAsm.Name = "BT_TopLevelAsm"
-        Me.BT_TopLevelAsm.Size = New System.Drawing.Size(23, 22)
-        Me.BT_TopLevelAsm.Text = "Top level asm"
-        '
-        'BT_ASM_Folder
-        '
-        Me.BT_ASM_Folder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ASM_Folder.Image = CType(resources.GetObject("BT_ASM_Folder.Image"), System.Drawing.Image)
-        Me.BT_ASM_Folder.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_ASM_Folder.Name = "BT_ASM_Folder"
-        Me.BT_ASM_Folder.Size = New System.Drawing.Size(23, 22)
-        Me.BT_ASM_Folder.Text = "Top level assembly folder"
-        '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
-        '
-        'BT_AddFromlist
-        '
-        Me.BT_AddFromlist.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddFromlist.Image = CType(resources.GetObject("BT_AddFromlist.Image"), System.Drawing.Image)
-        Me.BT_AddFromlist.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_AddFromlist.Name = "BT_AddFromlist"
-        Me.BT_AddFromlist.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddFromlist.Text = "Add files from a list"
-        Me.BT_AddFromlist.ToolTipText = "Add files from a list"
-        '
-        'BT_ExportList
-        '
-        Me.BT_ExportList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ExportList.Image = CType(resources.GetObject("BT_ExportList.Image"), System.Drawing.Image)
-        Me.BT_ExportList.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_ExportList.Name = "BT_ExportList"
-        Me.BT_ExportList.Size = New System.Drawing.Size(23, 22)
-        Me.BT_ExportList.Text = "Export list"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
         '
-        'BT_ErrorList
-        '
-        Me.BT_ErrorList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ErrorList.Image = CType(resources.GetObject("BT_ErrorList.Image"), System.Drawing.Image)
-        Me.BT_ErrorList.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_ErrorList.Name = "BT_ErrorList"
-        Me.BT_ErrorList.Size = New System.Drawing.Size(23, 22)
-        Me.BT_ErrorList.Text = "Show only file with errors"
-        '
-        'BT_DeleteAll
-        '
-        Me.BT_DeleteAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_DeleteAll.Image = CType(resources.GetObject("BT_DeleteAll.Image"), System.Drawing.Image)
-        Me.BT_DeleteAll.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_DeleteAll.Name = "BT_DeleteAll"
-        Me.BT_DeleteAll.Size = New System.Drawing.Size(23, 22)
-        Me.BT_DeleteAll.Text = "Delete all"
-        '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
-        '
-        'BT_Update
-        '
-        Me.BT_Update.Image = CType(resources.GetObject("BT_Update.Image"), System.Drawing.Image)
-        Me.BT_Update.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_Update.Name = "BT_Update"
-        Me.BT_Update.Size = New System.Drawing.Size(65, 22)
-        Me.BT_Update.Text = "Update"
         '
         'ToolStripSeparator9
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 25)
         '
-        'BT_Help
-        '
-        Me.BT_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_Help.Image = CType(resources.GetObject("BT_Help.Image"), System.Drawing.Image)
-        Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_Help.Name = "BT_Help"
-        Me.BT_Help.Size = New System.Drawing.Size(23, 22)
-        Me.BT_Help.Text = "ToolStripButton2"
-        Me.BT_Help.ToolTipText = "Help"
-        '
-        'BT_ColumnsSelect
-        '
-        Me.BT_ColumnsSelect.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.BT_ColumnsSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ColumnsSelect.Image = CType(resources.GetObject("BT_ColumnsSelect.Image"), System.Drawing.Image)
-        Me.BT_ColumnsSelect.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_ColumnsSelect.Name = "BT_ColumnsSelect"
-        Me.BT_ColumnsSelect.Size = New System.Drawing.Size(23, 22)
-        Me.BT_ColumnsSelect.Text = "Columns configuration"
-        '
         'ToolStripSeparator10
         '
         Me.ToolStripSeparator10.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
         Me.ToolStripSeparator10.Size = New System.Drawing.Size(6, 25)
-        '
-        'new_CheckBoxFilterDft
-        '
-        Me.new_CheckBoxFilterDft.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.new_CheckBoxFilterDft.Checked = True
-        Me.new_CheckBoxFilterDft.CheckOnClick = True
-        Me.new_CheckBoxFilterDft.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.new_CheckBoxFilterDft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterDft.Image = CType(resources.GetObject("new_CheckBoxFilterDft.Image"), System.Drawing.Image)
-        Me.new_CheckBoxFilterDft.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.new_CheckBoxFilterDft.Name = "new_CheckBoxFilterDft"
-        Me.new_CheckBoxFilterDft.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterDft.Text = "Filter DFT"
-        '
-        'new_CheckBoxFilterPsm
-        '
-        Me.new_CheckBoxFilterPsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.new_CheckBoxFilterPsm.Checked = True
-        Me.new_CheckBoxFilterPsm.CheckOnClick = True
-        Me.new_CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.new_CheckBoxFilterPsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterPsm.Image = CType(resources.GetObject("new_CheckBoxFilterPsm.Image"), System.Drawing.Image)
-        Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
-        Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterPsm.Text = "Filter PSM"
-        '
-        'new_CheckBoxFilterPar
-        '
-        Me.new_CheckBoxFilterPar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.new_CheckBoxFilterPar.Checked = True
-        Me.new_CheckBoxFilterPar.CheckOnClick = True
-        Me.new_CheckBoxFilterPar.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.new_CheckBoxFilterPar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterPar.Image = CType(resources.GetObject("new_CheckBoxFilterPar.Image"), System.Drawing.Image)
-        Me.new_CheckBoxFilterPar.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.new_CheckBoxFilterPar.Name = "new_CheckBoxFilterPar"
-        Me.new_CheckBoxFilterPar.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.new_CheckBoxFilterPar.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterPar.Text = "Filter PAR"
-        '
-        'new_CheckBoxFilterAsm
-        '
-        Me.new_CheckBoxFilterAsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.new_CheckBoxFilterAsm.Checked = True
-        Me.new_CheckBoxFilterAsm.CheckOnClick = True
-        Me.new_CheckBoxFilterAsm.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.new_CheckBoxFilterAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterAsm.Image = CType(resources.GetObject("new_CheckBoxFilterAsm.Image"), System.Drawing.Image)
-        Me.new_CheckBoxFilterAsm.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.new_CheckBoxFilterAsm.Name = "new_CheckBoxFilterAsm"
-        Me.new_CheckBoxFilterAsm.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterAsm.Text = "Filter ASM"
         '
         'ToolStripLabel1
         '
@@ -808,7 +568,7 @@ Partial Class Form_Main
         Me.TaskPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskPanel.Location = New System.Drawing.Point(3, 37)
         Me.TaskPanel.Name = "TaskPanel"
-        Me.TaskPanel.Size = New System.Drawing.Size(545, 533)
+        Me.TaskPanel.Size = New System.Drawing.Size(545, 534)
         Me.TaskPanel.TabIndex = 2
         '
         'TaskFooterPanel
@@ -816,7 +576,7 @@ Partial Class Form_Main
         Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSteelBlue
         Me.TaskFooterPanel.Controls.Add(Me.EditTaskListButton)
         Me.TaskFooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 570)
+        Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 571)
         Me.TaskFooterPanel.Name = "TaskFooterPanel"
         Me.TaskFooterPanel.Size = New System.Drawing.Size(545, 46)
         Me.TaskFooterPanel.TabIndex = 1
@@ -868,91 +628,6 @@ Partial Class Form_Main
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(545, 34)
         Me.TableLayoutPanel2.TabIndex = 0
         '
-        'TaskHeaderEnableButton
-        '
-        Me.TaskHeaderEnableButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TaskHeaderEnableButton.FlatAppearance.BorderSize = 0
-        Me.TaskHeaderEnableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderEnableButton.Image = CType(resources.GetObject("TaskHeaderEnableButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderEnableButton.Location = New System.Drawing.Point(33, 3)
-        Me.TaskHeaderEnableButton.Name = "TaskHeaderEnableButton"
-        Me.TaskHeaderEnableButton.Size = New System.Drawing.Size(24, 28)
-        Me.TaskHeaderEnableButton.TabIndex = 0
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderEnableButton, "Unselect all")
-        Me.TaskHeaderEnableButton.UseVisualStyleBackColor = True
-        '
-        'TaskHeaderCollapseButton
-        '
-        Me.TaskHeaderCollapseButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TaskHeaderCollapseButton.Image = CType(resources.GetObject("TaskHeaderCollapseButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderCollapseButton.Location = New System.Drawing.Point(63, 3)
-        Me.TaskHeaderCollapseButton.Name = "TaskHeaderCollapseButton"
-        Me.TaskHeaderCollapseButton.Size = New System.Drawing.Size(24, 28)
-        Me.TaskHeaderCollapseButton.TabIndex = 1
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderCollapseButton, "Collapse all")
-        Me.TaskHeaderCollapseButton.UseVisualStyleBackColor = True
-        '
-        'TaskHeaderToggleAssemblyButton
-        '
-        Me.TaskHeaderToggleAssemblyButton.FlatAppearance.BorderSize = 0
-        Me.TaskHeaderToggleAssemblyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderToggleAssemblyButton.Image = CType(resources.GetObject("TaskHeaderToggleAssemblyButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderToggleAssemblyButton.Location = New System.Drawing.Point(93, 3)
-        Me.TaskHeaderToggleAssemblyButton.Name = "TaskHeaderToggleAssemblyButton"
-        Me.TaskHeaderToggleAssemblyButton.Size = New System.Drawing.Size(24, 27)
-        Me.TaskHeaderToggleAssemblyButton.TabIndex = 2
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleAssemblyButton, "Toggle assembly selection")
-        Me.TaskHeaderToggleAssemblyButton.UseVisualStyleBackColor = True
-        '
-        'TaskHeaderTogglePartButton
-        '
-        Me.TaskHeaderTogglePartButton.FlatAppearance.BorderSize = 0
-        Me.TaskHeaderTogglePartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderTogglePartButton.Image = CType(resources.GetObject("TaskHeaderTogglePartButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderTogglePartButton.Location = New System.Drawing.Point(123, 3)
-        Me.TaskHeaderTogglePartButton.Name = "TaskHeaderTogglePartButton"
-        Me.TaskHeaderTogglePartButton.Size = New System.Drawing.Size(24, 27)
-        Me.TaskHeaderTogglePartButton.TabIndex = 3
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderTogglePartButton, "Toggle part selection")
-        Me.TaskHeaderTogglePartButton.UseVisualStyleBackColor = True
-        '
-        'TaskHeaderToggleSheetmetalButton
-        '
-        Me.TaskHeaderToggleSheetmetalButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TaskHeaderToggleSheetmetalButton.FlatAppearance.BorderSize = 0
-        Me.TaskHeaderToggleSheetmetalButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderToggleSheetmetalButton.Image = CType(resources.GetObject("TaskHeaderToggleSheetmetalButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderToggleSheetmetalButton.Location = New System.Drawing.Point(153, 3)
-        Me.TaskHeaderToggleSheetmetalButton.Name = "TaskHeaderToggleSheetmetalButton"
-        Me.TaskHeaderToggleSheetmetalButton.Size = New System.Drawing.Size(24, 28)
-        Me.TaskHeaderToggleSheetmetalButton.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleSheetmetalButton, "Toggle sheetmetal selection")
-        Me.TaskHeaderToggleSheetmetalButton.UseVisualStyleBackColor = True
-        '
-        'TaskHeaderToggleDraftButton
-        '
-        Me.TaskHeaderToggleDraftButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TaskHeaderToggleDraftButton.FlatAppearance.BorderSize = 0
-        Me.TaskHeaderToggleDraftButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderToggleDraftButton.Image = CType(resources.GetObject("TaskHeaderToggleDraftButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderToggleDraftButton.Location = New System.Drawing.Point(183, 3)
-        Me.TaskHeaderToggleDraftButton.Name = "TaskHeaderToggleDraftButton"
-        Me.TaskHeaderToggleDraftButton.Size = New System.Drawing.Size(24, 28)
-        Me.TaskHeaderToggleDraftButton.TabIndex = 5
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleDraftButton, "Toggle Draft selection")
-        Me.TaskHeaderToggleDraftButton.UseVisualStyleBackColor = True
-        '
-        'TaskHeaderHelpButton
-        '
-        Me.TaskHeaderHelpButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TaskHeaderHelpButton.Image = CType(resources.GetObject("TaskHeaderHelpButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderHelpButton.Location = New System.Drawing.Point(518, 3)
-        Me.TaskHeaderHelpButton.Name = "TaskHeaderHelpButton"
-        Me.TaskHeaderHelpButton.Size = New System.Drawing.Size(24, 28)
-        Me.TaskHeaderHelpButton.TabIndex = 6
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderHelpButton, "Help")
-        Me.TaskHeaderHelpButton.UseVisualStyleBackColor = True
-        '
         'TaskHeaderNameLabel
         '
         Me.TaskHeaderNameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left
@@ -992,7 +667,7 @@ Partial Class Form_Main
         Me.TabControl2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(543, 613)
+        Me.TabControl2.Size = New System.Drawing.Size(543, 614)
         Me.TabControl2.TabIndex = 44
         '
         'TabPageTopLevelAssy
@@ -1003,7 +678,7 @@ Partial Class Form_Main
         Me.TabPageTopLevelAssy.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageTopLevelAssy.Name = "TabPageTopLevelAssy"
         Me.TabPageTopLevelAssy.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(535, 586)
         Me.TabPageTopLevelAssy.TabIndex = 2
         Me.TabPageTopLevelAssy.Text = "Top Level Assy"
         Me.TabPageTopLevelAssy.UseVisualStyleBackColor = True
@@ -1040,7 +715,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(527, 580)
         Me.ExTableLayoutPanel4.TabIndex = 22
         Me.ExTableLayoutPanel4.Task = Nothing
         '
@@ -1236,7 +911,7 @@ Partial Class Form_Main
         Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageStatus.Name = "TabPageStatus"
         Me.TabPageStatus.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageStatus.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageStatus.Size = New System.Drawing.Size(535, 586)
         Me.TabPageStatus.TabIndex = 3
         Me.TabPageStatus.Text = "Status"
         Me.TabPageStatus.UseVisualStyleBackColor = True
@@ -1260,7 +935,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(527, 581)
         Me.ExTableLayoutPanel6.TabIndex = 97
         Me.ExTableLayoutPanel6.Task = Nothing
         '
@@ -1439,85 +1114,6 @@ Partial Class Form_Main
         Me.GroupBoxStatusInA.TabIndex = 82
         Me.GroupBoxStatusInA.TabStop = False
         '
-        'RadioButtonStatusAtoR
-        '
-        Me.RadioButtonStatusAtoR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusAtoR.AutoSize = True
-        Me.RadioButtonStatusAtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusAtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusAtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusAtoR.Name = "RadioButtonStatusAtoR"
-        Me.RadioButtonStatusAtoR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusAtoR.TabIndex = 5
-        Me.RadioButtonStatusAtoR.TabStop = True
-        Me.RadioButtonStatusAtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusAtoO
-        '
-        Me.RadioButtonStatusAtoO.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusAtoO.AutoSize = True
-        Me.RadioButtonStatusAtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusAtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusAtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusAtoO.Name = "RadioButtonStatusAtoO"
-        Me.RadioButtonStatusAtoO.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusAtoO.TabIndex = 4
-        Me.RadioButtonStatusAtoO.TabStop = True
-        Me.RadioButtonStatusAtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusAtoIW
-        '
-        Me.RadioButtonStatusAtoIW.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusAtoIW.AutoSize = True
-        Me.RadioButtonStatusAtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusAtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusAtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusAtoIW.Name = "RadioButtonStatusAtoIW"
-        Me.RadioButtonStatusAtoIW.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusAtoIW.TabIndex = 3
-        Me.RadioButtonStatusAtoIW.TabStop = True
-        Me.RadioButtonStatusAtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusAtoIR
-        '
-        Me.RadioButtonStatusAtoIR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusAtoIR.AutoSize = True
-        Me.RadioButtonStatusAtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusAtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusAtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusAtoIR.Name = "RadioButtonStatusAtoIR"
-        Me.RadioButtonStatusAtoIR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusAtoIR.TabIndex = 2
-        Me.RadioButtonStatusAtoIR.TabStop = True
-        Me.RadioButtonStatusAtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusAtoB
-        '
-        Me.RadioButtonStatusAtoB.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusAtoB.AutoSize = True
-        Me.RadioButtonStatusAtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusAtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusAtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusAtoB.Name = "RadioButtonStatusAtoB"
-        Me.RadioButtonStatusAtoB.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusAtoB.TabIndex = 1
-        Me.RadioButtonStatusAtoB.TabStop = True
-        Me.RadioButtonStatusAtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusAtoA
-        '
-        Me.RadioButtonStatusAtoA.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusAtoA.AutoSize = True
-        Me.RadioButtonStatusAtoA.Checked = True
-        Me.RadioButtonStatusAtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
-        Me.RadioButtonStatusAtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusAtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusAtoA.Name = "RadioButtonStatusAtoA"
-        Me.RadioButtonStatusAtoA.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusAtoA.TabIndex = 0
-        Me.RadioButtonStatusAtoA.TabStop = True
-        Me.RadioButtonStatusAtoA.UseVisualStyleBackColor = True
-        '
         'LabelStatusOutBaselined
         '
         Me.LabelStatusOutBaselined.AutoSize = True
@@ -1543,85 +1139,6 @@ Partial Class Form_Main
         Me.GroupBoxStatusInB.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInB.TabIndex = 83
         Me.GroupBoxStatusInB.TabStop = False
-        '
-        'RadioButtonStatusBtoR
-        '
-        Me.RadioButtonStatusBtoR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusBtoR.AutoSize = True
-        Me.RadioButtonStatusBtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusBtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusBtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoR.Name = "RadioButtonStatusBtoR"
-        Me.RadioButtonStatusBtoR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusBtoR.TabIndex = 5
-        Me.RadioButtonStatusBtoR.TabStop = True
-        Me.RadioButtonStatusBtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoO
-        '
-        Me.RadioButtonStatusBtoO.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusBtoO.AutoSize = True
-        Me.RadioButtonStatusBtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusBtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusBtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoO.Name = "RadioButtonStatusBtoO"
-        Me.RadioButtonStatusBtoO.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusBtoO.TabIndex = 4
-        Me.RadioButtonStatusBtoO.TabStop = True
-        Me.RadioButtonStatusBtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoIW
-        '
-        Me.RadioButtonStatusBtoIW.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusBtoIW.AutoSize = True
-        Me.RadioButtonStatusBtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusBtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusBtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoIW.Name = "RadioButtonStatusBtoIW"
-        Me.RadioButtonStatusBtoIW.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusBtoIW.TabIndex = 3
-        Me.RadioButtonStatusBtoIW.TabStop = True
-        Me.RadioButtonStatusBtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoIR
-        '
-        Me.RadioButtonStatusBtoIR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusBtoIR.AutoSize = True
-        Me.RadioButtonStatusBtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusBtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusBtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoIR.Name = "RadioButtonStatusBtoIR"
-        Me.RadioButtonStatusBtoIR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusBtoIR.TabIndex = 2
-        Me.RadioButtonStatusBtoIR.TabStop = True
-        Me.RadioButtonStatusBtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoB
-        '
-        Me.RadioButtonStatusBtoB.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusBtoB.AutoSize = True
-        Me.RadioButtonStatusBtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusBtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusBtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoB.Name = "RadioButtonStatusBtoB"
-        Me.RadioButtonStatusBtoB.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusBtoB.TabIndex = 1
-        Me.RadioButtonStatusBtoB.TabStop = True
-        Me.RadioButtonStatusBtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoA
-        '
-        Me.RadioButtonStatusBtoA.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusBtoA.AutoSize = True
-        Me.RadioButtonStatusBtoA.Checked = True
-        Me.RadioButtonStatusBtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
-        Me.RadioButtonStatusBtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusBtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoA.Name = "RadioButtonStatusBtoA"
-        Me.RadioButtonStatusBtoA.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusBtoA.TabIndex = 0
-        Me.RadioButtonStatusBtoA.TabStop = True
-        Me.RadioButtonStatusBtoA.UseVisualStyleBackColor = True
         '
         'LabelStatusOutAvailable
         '
@@ -1649,85 +1166,6 @@ Partial Class Form_Main
         Me.GroupBoxStatusInIR.TabIndex = 84
         Me.GroupBoxStatusInIR.TabStop = False
         '
-        'RadioButtonStatusIRtoR
-        '
-        Me.RadioButtonStatusIRtoR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIRtoR.AutoSize = True
-        Me.RadioButtonStatusIRtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIRtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusIRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoR.Name = "RadioButtonStatusIRtoR"
-        Me.RadioButtonStatusIRtoR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIRtoR.TabIndex = 5
-        Me.RadioButtonStatusIRtoR.TabStop = True
-        Me.RadioButtonStatusIRtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoO
-        '
-        Me.RadioButtonStatusIRtoO.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIRtoO.AutoSize = True
-        Me.RadioButtonStatusIRtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIRtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusIRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoO.Name = "RadioButtonStatusIRtoO"
-        Me.RadioButtonStatusIRtoO.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIRtoO.TabIndex = 4
-        Me.RadioButtonStatusIRtoO.TabStop = True
-        Me.RadioButtonStatusIRtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoIW
-        '
-        Me.RadioButtonStatusIRtoIW.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIRtoIW.AutoSize = True
-        Me.RadioButtonStatusIRtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIRtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusIRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoIW.Name = "RadioButtonStatusIRtoIW"
-        Me.RadioButtonStatusIRtoIW.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIRtoIW.TabIndex = 3
-        Me.RadioButtonStatusIRtoIW.TabStop = True
-        Me.RadioButtonStatusIRtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoIR
-        '
-        Me.RadioButtonStatusIRtoIR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIRtoIR.AutoSize = True
-        Me.RadioButtonStatusIRtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIRtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusIRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoIR.Name = "RadioButtonStatusIRtoIR"
-        Me.RadioButtonStatusIRtoIR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIRtoIR.TabIndex = 2
-        Me.RadioButtonStatusIRtoIR.TabStop = True
-        Me.RadioButtonStatusIRtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoB
-        '
-        Me.RadioButtonStatusIRtoB.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIRtoB.AutoSize = True
-        Me.RadioButtonStatusIRtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIRtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusIRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoB.Name = "RadioButtonStatusIRtoB"
-        Me.RadioButtonStatusIRtoB.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIRtoB.TabIndex = 1
-        Me.RadioButtonStatusIRtoB.TabStop = True
-        Me.RadioButtonStatusIRtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoA
-        '
-        Me.RadioButtonStatusIRtoA.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIRtoA.AutoSize = True
-        Me.RadioButtonStatusIRtoA.Checked = True
-        Me.RadioButtonStatusIRtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
-        Me.RadioButtonStatusIRtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusIRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoA.Name = "RadioButtonStatusIRtoA"
-        Me.RadioButtonStatusIRtoA.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIRtoA.TabIndex = 0
-        Me.RadioButtonStatusIRtoA.TabStop = True
-        Me.RadioButtonStatusIRtoA.UseVisualStyleBackColor = True
-        '
         'GroupBoxStatusInR
         '
         Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoR)
@@ -1743,85 +1181,6 @@ Partial Class Form_Main
         Me.GroupBoxStatusInR.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInR.TabIndex = 87
         Me.GroupBoxStatusInR.TabStop = False
-        '
-        'RadioButtonStatusRtoR
-        '
-        Me.RadioButtonStatusRtoR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusRtoR.AutoSize = True
-        Me.RadioButtonStatusRtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusRtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoR.Name = "RadioButtonStatusRtoR"
-        Me.RadioButtonStatusRtoR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusRtoR.TabIndex = 5
-        Me.RadioButtonStatusRtoR.TabStop = True
-        Me.RadioButtonStatusRtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoO
-        '
-        Me.RadioButtonStatusRtoO.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusRtoO.AutoSize = True
-        Me.RadioButtonStatusRtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusRtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoO.Name = "RadioButtonStatusRtoO"
-        Me.RadioButtonStatusRtoO.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusRtoO.TabIndex = 4
-        Me.RadioButtonStatusRtoO.TabStop = True
-        Me.RadioButtonStatusRtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoIW
-        '
-        Me.RadioButtonStatusRtoIW.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusRtoIW.AutoSize = True
-        Me.RadioButtonStatusRtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusRtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoIW.Name = "RadioButtonStatusRtoIW"
-        Me.RadioButtonStatusRtoIW.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusRtoIW.TabIndex = 3
-        Me.RadioButtonStatusRtoIW.TabStop = True
-        Me.RadioButtonStatusRtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoIR
-        '
-        Me.RadioButtonStatusRtoIR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusRtoIR.AutoSize = True
-        Me.RadioButtonStatusRtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusRtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoIR.Name = "RadioButtonStatusRtoIR"
-        Me.RadioButtonStatusRtoIR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusRtoIR.TabIndex = 2
-        Me.RadioButtonStatusRtoIR.TabStop = True
-        Me.RadioButtonStatusRtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoB
-        '
-        Me.RadioButtonStatusRtoB.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusRtoB.AutoSize = True
-        Me.RadioButtonStatusRtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusRtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoB.Name = "RadioButtonStatusRtoB"
-        Me.RadioButtonStatusRtoB.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusRtoB.TabIndex = 1
-        Me.RadioButtonStatusRtoB.TabStop = True
-        Me.RadioButtonStatusRtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoA
-        '
-        Me.RadioButtonStatusRtoA.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusRtoA.AutoSize = True
-        Me.RadioButtonStatusRtoA.Checked = True
-        Me.RadioButtonStatusRtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
-        Me.RadioButtonStatusRtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoA.Name = "RadioButtonStatusRtoA"
-        Me.RadioButtonStatusRtoA.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusRtoA.TabIndex = 0
-        Me.RadioButtonStatusRtoA.TabStop = True
-        Me.RadioButtonStatusRtoA.UseVisualStyleBackColor = True
         '
         'GroupBoxStatusInIW
         '
@@ -1839,85 +1198,6 @@ Partial Class Form_Main
         Me.GroupBoxStatusInIW.TabIndex = 85
         Me.GroupBoxStatusInIW.TabStop = False
         '
-        'RadioButtonStatusIWtoR
-        '
-        Me.RadioButtonStatusIWtoR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIWtoR.AutoSize = True
-        Me.RadioButtonStatusIWtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIWtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusIWtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoR.Name = "RadioButtonStatusIWtoR"
-        Me.RadioButtonStatusIWtoR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIWtoR.TabIndex = 5
-        Me.RadioButtonStatusIWtoR.TabStop = True
-        Me.RadioButtonStatusIWtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoO
-        '
-        Me.RadioButtonStatusIWtoO.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIWtoO.AutoSize = True
-        Me.RadioButtonStatusIWtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIWtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusIWtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoO.Name = "RadioButtonStatusIWtoO"
-        Me.RadioButtonStatusIWtoO.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIWtoO.TabIndex = 4
-        Me.RadioButtonStatusIWtoO.TabStop = True
-        Me.RadioButtonStatusIWtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoIW
-        '
-        Me.RadioButtonStatusIWtoIW.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIWtoIW.AutoSize = True
-        Me.RadioButtonStatusIWtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIWtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusIWtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoIW.Name = "RadioButtonStatusIWtoIW"
-        Me.RadioButtonStatusIWtoIW.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIWtoIW.TabIndex = 3
-        Me.RadioButtonStatusIWtoIW.TabStop = True
-        Me.RadioButtonStatusIWtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoIR
-        '
-        Me.RadioButtonStatusIWtoIR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIWtoIR.AutoSize = True
-        Me.RadioButtonStatusIWtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIWtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusIWtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoIR.Name = "RadioButtonStatusIWtoIR"
-        Me.RadioButtonStatusIWtoIR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIWtoIR.TabIndex = 2
-        Me.RadioButtonStatusIWtoIR.TabStop = True
-        Me.RadioButtonStatusIWtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoB
-        '
-        Me.RadioButtonStatusIWtoB.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIWtoB.AutoSize = True
-        Me.RadioButtonStatusIWtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusIWtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusIWtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoB.Name = "RadioButtonStatusIWtoB"
-        Me.RadioButtonStatusIWtoB.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIWtoB.TabIndex = 1
-        Me.RadioButtonStatusIWtoB.TabStop = True
-        Me.RadioButtonStatusIWtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoA
-        '
-        Me.RadioButtonStatusIWtoA.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusIWtoA.AutoSize = True
-        Me.RadioButtonStatusIWtoA.Checked = True
-        Me.RadioButtonStatusIWtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
-        Me.RadioButtonStatusIWtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusIWtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoA.Name = "RadioButtonStatusIWtoA"
-        Me.RadioButtonStatusIWtoA.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusIWtoA.TabIndex = 0
-        Me.RadioButtonStatusIWtoA.TabStop = True
-        Me.RadioButtonStatusIWtoA.UseVisualStyleBackColor = True
-        '
         'GroupBoxStatusInO
         '
         Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoR)
@@ -1933,85 +1213,6 @@ Partial Class Form_Main
         Me.GroupBoxStatusInO.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInO.TabIndex = 86
         Me.GroupBoxStatusInO.TabStop = False
-        '
-        'RadioButtonStatusOtoR
-        '
-        Me.RadioButtonStatusOtoR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusOtoR.AutoSize = True
-        Me.RadioButtonStatusOtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusOtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusOtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoR.Name = "RadioButtonStatusOtoR"
-        Me.RadioButtonStatusOtoR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusOtoR.TabIndex = 5
-        Me.RadioButtonStatusOtoR.TabStop = True
-        Me.RadioButtonStatusOtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoO
-        '
-        Me.RadioButtonStatusOtoO.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusOtoO.AutoSize = True
-        Me.RadioButtonStatusOtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusOtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusOtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoO.Name = "RadioButtonStatusOtoO"
-        Me.RadioButtonStatusOtoO.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusOtoO.TabIndex = 4
-        Me.RadioButtonStatusOtoO.TabStop = True
-        Me.RadioButtonStatusOtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoIW
-        '
-        Me.RadioButtonStatusOtoIW.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusOtoIW.AutoSize = True
-        Me.RadioButtonStatusOtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusOtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusOtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoIW.Name = "RadioButtonStatusOtoIW"
-        Me.RadioButtonStatusOtoIW.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusOtoIW.TabIndex = 3
-        Me.RadioButtonStatusOtoIW.TabStop = True
-        Me.RadioButtonStatusOtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoIR
-        '
-        Me.RadioButtonStatusOtoIR.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusOtoIR.AutoSize = True
-        Me.RadioButtonStatusOtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusOtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusOtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoIR.Name = "RadioButtonStatusOtoIR"
-        Me.RadioButtonStatusOtoIR.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusOtoIR.TabIndex = 2
-        Me.RadioButtonStatusOtoIR.TabStop = True
-        Me.RadioButtonStatusOtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoB
-        '
-        Me.RadioButtonStatusOtoB.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusOtoB.AutoSize = True
-        Me.RadioButtonStatusOtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.RadioButtonStatusOtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusOtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoB.Name = "RadioButtonStatusOtoB"
-        Me.RadioButtonStatusOtoB.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusOtoB.TabIndex = 1
-        Me.RadioButtonStatusOtoB.TabStop = True
-        Me.RadioButtonStatusOtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoA
-        '
-        Me.RadioButtonStatusOtoA.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioButtonStatusOtoA.AutoSize = True
-        Me.RadioButtonStatusOtoA.Checked = True
-        Me.RadioButtonStatusOtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
-        Me.RadioButtonStatusOtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusOtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoA.Name = "RadioButtonStatusOtoA"
-        Me.RadioButtonStatusOtoA.Size = New System.Drawing.Size(22, 22)
-        Me.RadioButtonStatusOtoA.TabIndex = 0
-        Me.RadioButtonStatusOtoA.TabStop = True
-        Me.RadioButtonStatusOtoA.UseVisualStyleBackColor = True
         '
         'RadioButtonProcessAsAvailableRevert
         '
@@ -2048,7 +1249,7 @@ Partial Class Form_Main
         Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageSorting.Name = "TabPageSorting"
         Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageSorting.Size = New System.Drawing.Size(535, 586)
         Me.TabPageSorting.TabIndex = 4
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
@@ -2077,7 +1278,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(527, 581)
         Me.ExTableLayoutPanel7.TabIndex = 56
         Me.ExTableLayoutPanel7.Task = Nothing
         '
@@ -2205,7 +1406,7 @@ Partial Class Form_Main
         Me.TabPageTemplates.Location = New System.Drawing.Point(4, 24)
         Me.TabPageTemplates.Name = "TabPageTemplates"
         Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(535, 586)
         Me.TabPageTemplates.TabIndex = 7
         Me.TabPageTemplates.Text = "Templates"
         '
@@ -2384,7 +1585,7 @@ Partial Class Form_Main
         Me.TabPageServerQuery.Margin = New System.Windows.Forms.Padding(0)
         Me.TabPageServerQuery.Name = "TabPageServerQuery"
         Me.TabPageServerQuery.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageServerQuery.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageServerQuery.Size = New System.Drawing.Size(535, 586)
         Me.TabPageServerQuery.TabIndex = 8
         Me.TabPageServerQuery.Text = "Server Query"
         Me.TabPageServerQuery.UseVisualStyleBackColor = True
@@ -2409,7 +1610,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(529, 579)
+        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(529, 581)
         Me.ExTableLayoutPanel9.TabIndex = 0
         Me.ExTableLayoutPanel9.Task = Nothing
         '
@@ -2486,7 +1687,7 @@ Partial Class Form_Main
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(535, 586)
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
@@ -2527,7 +1728,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(527, 581)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
         '
@@ -2764,13 +1965,6 @@ Partial Class Form_Main
         Me.ToolStripPresets.TabIndex = 75
         Me.ToolStripPresets.Text = "ToolStrip1"
         '
-        'LabelPreset
-        '
-        Me.LabelPreset.Image = CType(resources.GetObject("LabelPreset.Image"), System.Drawing.Image)
-        Me.LabelPreset.Name = "LabelPreset"
-        Me.LabelPreset.Size = New System.Drawing.Size(60, 23)
-        Me.LabelPreset.Text = "Presets"
-        '
         'ToolStripSeparator11
         '
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
@@ -2782,36 +1976,6 @@ Partial Class Form_Main
         Me.ComboBoxPresetName.Size = New System.Drawing.Size(200, 26)
         Me.ComboBoxPresetName.Sorted = True
         Me.ComboBoxPresetName.ToolTipText = "Select preset"
-        '
-        'ButtonPresetLoad
-        '
-        Me.ButtonPresetLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonPresetLoad.Image = CType(resources.GetObject("ButtonPresetLoad.Image"), System.Drawing.Image)
-        Me.ButtonPresetLoad.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonPresetLoad.Name = "ButtonPresetLoad"
-        Me.ButtonPresetLoad.Size = New System.Drawing.Size(23, 23)
-        Me.ButtonPresetLoad.Text = "ToolStripButton2"
-        Me.ButtonPresetLoad.ToolTipText = "Load preset"
-        '
-        'ButtonPresetSave
-        '
-        Me.ButtonPresetSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonPresetSave.Image = CType(resources.GetObject("ButtonPresetSave.Image"), System.Drawing.Image)
-        Me.ButtonPresetSave.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonPresetSave.Name = "ButtonPresetSave"
-        Me.ButtonPresetSave.Size = New System.Drawing.Size(23, 23)
-        Me.ButtonPresetSave.Text = "ToolStripButton2"
-        Me.ButtonPresetSave.ToolTipText = "Save preset"
-        '
-        'ButtonPresetDelete
-        '
-        Me.ButtonPresetDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonPresetDelete.Image = CType(resources.GetObject("ButtonPresetDelete.Image"), System.Drawing.Image)
-        Me.ButtonPresetDelete.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonPresetDelete.Name = "ButtonPresetDelete"
-        Me.ButtonPresetDelete.Size = New System.Drawing.Size(23, 23)
-        Me.ButtonPresetDelete.Text = "ToolStripButton2"
-        Me.ButtonPresetDelete.ToolTipText = "Delete preset"
         '
         'TextBoxStatus
         '
@@ -2873,6 +2037,882 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(559, 105)
         Me.TableLayoutPanel1.TabIndex = 5
         '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 23)
+        '
+        'Menu_ListViewFile
+        '
+        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_ExcludeFromProcessing, Me.BT_RemoveFromList, Me.ToolStripSeparator13, Me.BT_MoveToRecycleBin})
+        Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(206, 198)
+        '
+        'ToolStripSeparator8
+        '
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(202, 6)
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(202, 6)
+        '
+        'BT_ExcludeFromProcessing
+        '
+        Me.BT_ExcludeFromProcessing.Image = Global.Housekeeper.My.Resources.Resources.Hide
+        Me.BT_ExcludeFromProcessing.Name = "BT_ExcludeFromProcessing"
+        Me.BT_ExcludeFromProcessing.Size = New System.Drawing.Size(205, 22)
+        Me.BT_ExcludeFromProcessing.Text = "Exclude from processing"
+        '
+        'ToolStripSeparator13
+        '
+        Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(202, 6)
+        '
+        'NotifyIcon1
+        '
+        Me.NotifyIcon1.Text = "NotifyIcon1"
+        Me.NotifyIcon1.Visible = True
+        '
+        'BT_DeleteCLBItem
+        '
+        Me.BT_DeleteCLBItem.Image = CType(resources.GetObject("BT_DeleteCLBItem.Image"), System.Drawing.Image)
+        Me.BT_DeleteCLBItem.Location = New System.Drawing.Point(121, 43)
+        Me.BT_DeleteCLBItem.Name = "BT_DeleteCLBItem"
+        Me.BT_DeleteCLBItem.Size = New System.Drawing.Size(20, 20)
+        Me.BT_DeleteCLBItem.TabIndex = 38
+        Me.BT_DeleteCLBItem.UseVisualStyleBackColor = True
+        Me.BT_DeleteCLBItem.Visible = False
+        '
+        'ButtonCloseListOfColumns
+        '
+        Me.ButtonCloseListOfColumns.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonCloseListOfColumns.Image = CType(resources.GetObject("ButtonCloseListOfColumns.Image"), System.Drawing.Image)
+        Me.ButtonCloseListOfColumns.Location = New System.Drawing.Point(73, 162)
+        Me.ButtonCloseListOfColumns.Name = "ButtonCloseListOfColumns"
+        Me.ButtonCloseListOfColumns.Size = New System.Drawing.Size(71, 28)
+        Me.ButtonCloseListOfColumns.TabIndex = 37
+        Me.ButtonCloseListOfColumns.Text = "Close"
+        Me.ButtonCloseListOfColumns.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.ButtonCloseListOfColumns.UseVisualStyleBackColor = True
+        '
+        'ButtonAddToListOfColumns
+        '
+        Me.ButtonAddToListOfColumns.Dock = System.Windows.Forms.DockStyle.Left
+        Me.ButtonAddToListOfColumns.Image = CType(resources.GetObject("ButtonAddToListOfColumns.Image"), System.Drawing.Image)
+        Me.ButtonAddToListOfColumns.Location = New System.Drawing.Point(0, 162)
+        Me.ButtonAddToListOfColumns.Name = "ButtonAddToListOfColumns"
+        Me.ButtonAddToListOfColumns.Size = New System.Drawing.Size(73, 28)
+        Me.ButtonAddToListOfColumns.TabIndex = 36
+        Me.ButtonAddToListOfColumns.Text = "Add"
+        Me.ButtonAddToListOfColumns.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.ButtonAddToListOfColumns.UseVisualStyleBackColor = True
+        '
+        'CheckBoxEnablePropertyFilter
+        '
+        Me.CheckBoxEnablePropertyFilter.CheckOnClick = True
+        Me.CheckBoxEnablePropertyFilter.Image = CType(resources.GetObject("CheckBoxEnablePropertyFilter.Image"), System.Drawing.Image)
+        Me.CheckBoxEnablePropertyFilter.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.CheckBoxEnablePropertyFilter.Name = "CheckBoxEnablePropertyFilter"
+        Me.CheckBoxEnablePropertyFilter.Size = New System.Drawing.Size(99, 22)
+        Me.CheckBoxEnablePropertyFilter.Text = "Property filter"
+        '
+        'new_ButtonPropertyFilter
+        '
+        Me.new_ButtonPropertyFilter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_ButtonPropertyFilter.Image = CType(resources.GetObject("new_ButtonPropertyFilter.Image"), System.Drawing.Image)
+        Me.new_ButtonPropertyFilter.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_ButtonPropertyFilter.Name = "new_ButtonPropertyFilter"
+        Me.new_ButtonPropertyFilter.Size = New System.Drawing.Size(23, 22)
+        Me.new_ButtonPropertyFilter.Text = "Configure"
+        '
+        'CheckBoxEnableFileWildcard
+        '
+        Me.CheckBoxEnableFileWildcard.CheckOnClick = True
+        Me.CheckBoxEnableFileWildcard.Image = CType(resources.GetObject("CheckBoxEnableFileWildcard.Image"), System.Drawing.Image)
+        Me.CheckBoxEnableFileWildcard.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.CheckBoxEnableFileWildcard.Name = "CheckBoxEnableFileWildcard"
+        Me.CheckBoxEnableFileWildcard.Size = New System.Drawing.Size(74, 22)
+        Me.CheckBoxEnableFileWildcard.Text = "Wildcard"
+        '
+        'new_ButtonFileSearchDelete
+        '
+        Me.new_ButtonFileSearchDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_ButtonFileSearchDelete.Image = CType(resources.GetObject("new_ButtonFileSearchDelete.Image"), System.Drawing.Image)
+        Me.new_ButtonFileSearchDelete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_ButtonFileSearchDelete.Name = "new_ButtonFileSearchDelete"
+        Me.new_ButtonFileSearchDelete.Size = New System.Drawing.Size(23, 22)
+        Me.new_ButtonFileSearchDelete.Text = "Clear"
+        '
+        'BT_AddSingleFiles
+        '
+        Me.BT_AddSingleFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddSingleFiles.Image = CType(resources.GetObject("BT_AddSingleFiles.Image"), System.Drawing.Image)
+        Me.BT_AddSingleFiles.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddSingleFiles.Name = "BT_AddSingleFiles"
+        Me.BT_AddSingleFiles.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddSingleFiles.Text = "Add single files"
+        '
+        'BT_AddFolder
+        '
+        Me.BT_AddFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddFolder.Image = CType(resources.GetObject("BT_AddFolder.Image"), System.Drawing.Image)
+        Me.BT_AddFolder.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddFolder.Name = "BT_AddFolder"
+        Me.BT_AddFolder.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddFolder.Text = "Add single folder"
+        '
+        'BT_AddFolderSubfolders
+        '
+        Me.BT_AddFolderSubfolders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddFolderSubfolders.Image = CType(resources.GetObject("BT_AddFolderSubfolders.Image"), System.Drawing.Image)
+        Me.BT_AddFolderSubfolders.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddFolderSubfolders.Name = "BT_AddFolderSubfolders"
+        Me.BT_AddFolderSubfolders.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddFolderSubfolders.Text = "Add folder and subfolders"
+        '
+        'BT_AddTeamCenter
+        '
+        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddTeamCenter.Image = Global.Housekeeper.My.Resources.Resources.teamcenter
+        Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
+        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddTeamCenter.Text = "Add TeamCenter"
+        '
+        'BT_TopLevelAsm
+        '
+        Me.BT_TopLevelAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_TopLevelAsm.Image = CType(resources.GetObject("BT_TopLevelAsm.Image"), System.Drawing.Image)
+        Me.BT_TopLevelAsm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_TopLevelAsm.Name = "BT_TopLevelAsm"
+        Me.BT_TopLevelAsm.Size = New System.Drawing.Size(23, 22)
+        Me.BT_TopLevelAsm.Text = "Top level asm"
+        '
+        'BT_ASM_Folder
+        '
+        Me.BT_ASM_Folder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ASM_Folder.Image = CType(resources.GetObject("BT_ASM_Folder.Image"), System.Drawing.Image)
+        Me.BT_ASM_Folder.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ASM_Folder.Name = "BT_ASM_Folder"
+        Me.BT_ASM_Folder.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ASM_Folder.Text = "Top level assembly folder"
+        '
+        'BT_AddFromlist
+        '
+        Me.BT_AddFromlist.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddFromlist.Image = CType(resources.GetObject("BT_AddFromlist.Image"), System.Drawing.Image)
+        Me.BT_AddFromlist.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddFromlist.Name = "BT_AddFromlist"
+        Me.BT_AddFromlist.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddFromlist.Text = "Add files from a list"
+        Me.BT_AddFromlist.ToolTipText = "Add files from a list"
+        '
+        'BT_ExportList
+        '
+        Me.BT_ExportList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ExportList.Image = CType(resources.GetObject("BT_ExportList.Image"), System.Drawing.Image)
+        Me.BT_ExportList.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ExportList.Name = "BT_ExportList"
+        Me.BT_ExportList.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ExportList.Text = "Export list"
+        '
+        'BT_ErrorList
+        '
+        Me.BT_ErrorList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ErrorList.Image = CType(resources.GetObject("BT_ErrorList.Image"), System.Drawing.Image)
+        Me.BT_ErrorList.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ErrorList.Name = "BT_ErrorList"
+        Me.BT_ErrorList.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ErrorList.Text = "Show only file with errors"
+        '
+        'BT_DeleteAll
+        '
+        Me.BT_DeleteAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_DeleteAll.Image = CType(resources.GetObject("BT_DeleteAll.Image"), System.Drawing.Image)
+        Me.BT_DeleteAll.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_DeleteAll.Name = "BT_DeleteAll"
+        Me.BT_DeleteAll.Size = New System.Drawing.Size(23, 22)
+        Me.BT_DeleteAll.Text = "Delete all"
+        '
+        'BT_Update
+        '
+        Me.BT_Update.Image = CType(resources.GetObject("BT_Update.Image"), System.Drawing.Image)
+        Me.BT_Update.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Update.Name = "BT_Update"
+        Me.BT_Update.Size = New System.Drawing.Size(65, 22)
+        Me.BT_Update.Text = "Update"
+        '
+        'BT_Help
+        '
+        Me.BT_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_Help.Image = CType(resources.GetObject("BT_Help.Image"), System.Drawing.Image)
+        Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Help.Name = "BT_Help"
+        Me.BT_Help.Size = New System.Drawing.Size(23, 22)
+        Me.BT_Help.Text = "ToolStripButton2"
+        Me.BT_Help.ToolTipText = "Help"
+        '
+        'BT_ColumnsSelect
+        '
+        Me.BT_ColumnsSelect.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.BT_ColumnsSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ColumnsSelect.Image = CType(resources.GetObject("BT_ColumnsSelect.Image"), System.Drawing.Image)
+        Me.BT_ColumnsSelect.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ColumnsSelect.Name = "BT_ColumnsSelect"
+        Me.BT_ColumnsSelect.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ColumnsSelect.Text = "Columns configuration"
+        '
+        'new_CheckBoxFilterDft
+        '
+        Me.new_CheckBoxFilterDft.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterDft.Checked = True
+        Me.new_CheckBoxFilterDft.CheckOnClick = True
+        Me.new_CheckBoxFilterDft.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterDft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterDft.Image = CType(resources.GetObject("new_CheckBoxFilterDft.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterDft.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterDft.Name = "new_CheckBoxFilterDft"
+        Me.new_CheckBoxFilterDft.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterDft.Text = "Filter DFT"
+        '
+        'new_CheckBoxFilterPsm
+        '
+        Me.new_CheckBoxFilterPsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterPsm.Checked = True
+        Me.new_CheckBoxFilterPsm.CheckOnClick = True
+        Me.new_CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterPsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterPsm.Image = CType(resources.GetObject("new_CheckBoxFilterPsm.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
+        Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterPsm.Text = "Filter PSM"
+        '
+        'new_CheckBoxFilterPar
+        '
+        Me.new_CheckBoxFilterPar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterPar.Checked = True
+        Me.new_CheckBoxFilterPar.CheckOnClick = True
+        Me.new_CheckBoxFilterPar.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterPar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterPar.Image = CType(resources.GetObject("new_CheckBoxFilterPar.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterPar.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterPar.Name = "new_CheckBoxFilterPar"
+        Me.new_CheckBoxFilterPar.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.new_CheckBoxFilterPar.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterPar.Text = "Filter PAR"
+        '
+        'new_CheckBoxFilterAsm
+        '
+        Me.new_CheckBoxFilterAsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterAsm.Checked = True
+        Me.new_CheckBoxFilterAsm.CheckOnClick = True
+        Me.new_CheckBoxFilterAsm.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterAsm.Image = CType(resources.GetObject("new_CheckBoxFilterAsm.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterAsm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterAsm.Name = "new_CheckBoxFilterAsm"
+        Me.new_CheckBoxFilterAsm.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterAsm.Text = "Filter ASM"
+        '
+        'TaskHeaderEnableButton
+        '
+        Me.TaskHeaderEnableButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderEnableButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderEnableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.TaskHeaderEnableButton.Image = CType(resources.GetObject("TaskHeaderEnableButton.Image"), System.Drawing.Image)
+        Me.TaskHeaderEnableButton.Location = New System.Drawing.Point(33, 3)
+        Me.TaskHeaderEnableButton.Name = "TaskHeaderEnableButton"
+        Me.TaskHeaderEnableButton.Size = New System.Drawing.Size(24, 28)
+        Me.TaskHeaderEnableButton.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderEnableButton, "Unselect all")
+        Me.TaskHeaderEnableButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderCollapseButton
+        '
+        Me.TaskHeaderCollapseButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderCollapseButton.Image = CType(resources.GetObject("TaskHeaderCollapseButton.Image"), System.Drawing.Image)
+        Me.TaskHeaderCollapseButton.Location = New System.Drawing.Point(63, 3)
+        Me.TaskHeaderCollapseButton.Name = "TaskHeaderCollapseButton"
+        Me.TaskHeaderCollapseButton.Size = New System.Drawing.Size(24, 28)
+        Me.TaskHeaderCollapseButton.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderCollapseButton, "Collapse all")
+        Me.TaskHeaderCollapseButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderToggleAssemblyButton
+        '
+        Me.TaskHeaderToggleAssemblyButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderToggleAssemblyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.TaskHeaderToggleAssemblyButton.Image = CType(resources.GetObject("TaskHeaderToggleAssemblyButton.Image"), System.Drawing.Image)
+        Me.TaskHeaderToggleAssemblyButton.Location = New System.Drawing.Point(93, 3)
+        Me.TaskHeaderToggleAssemblyButton.Name = "TaskHeaderToggleAssemblyButton"
+        Me.TaskHeaderToggleAssemblyButton.Size = New System.Drawing.Size(24, 27)
+        Me.TaskHeaderToggleAssemblyButton.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleAssemblyButton, "Toggle assembly selection")
+        Me.TaskHeaderToggleAssemblyButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderTogglePartButton
+        '
+        Me.TaskHeaderTogglePartButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderTogglePartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.TaskHeaderTogglePartButton.Image = CType(resources.GetObject("TaskHeaderTogglePartButton.Image"), System.Drawing.Image)
+        Me.TaskHeaderTogglePartButton.Location = New System.Drawing.Point(123, 3)
+        Me.TaskHeaderTogglePartButton.Name = "TaskHeaderTogglePartButton"
+        Me.TaskHeaderTogglePartButton.Size = New System.Drawing.Size(24, 27)
+        Me.TaskHeaderTogglePartButton.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderTogglePartButton, "Toggle part selection")
+        Me.TaskHeaderTogglePartButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderToggleSheetmetalButton
+        '
+        Me.TaskHeaderToggleSheetmetalButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderToggleSheetmetalButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderToggleSheetmetalButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.TaskHeaderToggleSheetmetalButton.Image = CType(resources.GetObject("TaskHeaderToggleSheetmetalButton.Image"), System.Drawing.Image)
+        Me.TaskHeaderToggleSheetmetalButton.Location = New System.Drawing.Point(153, 3)
+        Me.TaskHeaderToggleSheetmetalButton.Name = "TaskHeaderToggleSheetmetalButton"
+        Me.TaskHeaderToggleSheetmetalButton.Size = New System.Drawing.Size(24, 28)
+        Me.TaskHeaderToggleSheetmetalButton.TabIndex = 4
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleSheetmetalButton, "Toggle sheetmetal selection")
+        Me.TaskHeaderToggleSheetmetalButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderToggleDraftButton
+        '
+        Me.TaskHeaderToggleDraftButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderToggleDraftButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderToggleDraftButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.TaskHeaderToggleDraftButton.Image = CType(resources.GetObject("TaskHeaderToggleDraftButton.Image"), System.Drawing.Image)
+        Me.TaskHeaderToggleDraftButton.Location = New System.Drawing.Point(183, 3)
+        Me.TaskHeaderToggleDraftButton.Name = "TaskHeaderToggleDraftButton"
+        Me.TaskHeaderToggleDraftButton.Size = New System.Drawing.Size(24, 28)
+        Me.TaskHeaderToggleDraftButton.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleDraftButton, "Toggle Draft selection")
+        Me.TaskHeaderToggleDraftButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderHelpButton
+        '
+        Me.TaskHeaderHelpButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderHelpButton.Image = CType(resources.GetObject("TaskHeaderHelpButton.Image"), System.Drawing.Image)
+        Me.TaskHeaderHelpButton.Location = New System.Drawing.Point(518, 3)
+        Me.TaskHeaderHelpButton.Name = "TaskHeaderHelpButton"
+        Me.TaskHeaderHelpButton.Size = New System.Drawing.Size(24, 28)
+        Me.TaskHeaderHelpButton.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderHelpButton, "Help")
+        Me.TaskHeaderHelpButton.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoR
+        '
+        Me.RadioButtonStatusAtoR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusAtoR.AutoSize = True
+        Me.RadioButtonStatusAtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusAtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusAtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusAtoR.Name = "RadioButtonStatusAtoR"
+        Me.RadioButtonStatusAtoR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusAtoR.TabIndex = 5
+        Me.RadioButtonStatusAtoR.TabStop = True
+        Me.RadioButtonStatusAtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoO
+        '
+        Me.RadioButtonStatusAtoO.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusAtoO.AutoSize = True
+        Me.RadioButtonStatusAtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusAtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusAtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusAtoO.Name = "RadioButtonStatusAtoO"
+        Me.RadioButtonStatusAtoO.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusAtoO.TabIndex = 4
+        Me.RadioButtonStatusAtoO.TabStop = True
+        Me.RadioButtonStatusAtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoIW
+        '
+        Me.RadioButtonStatusAtoIW.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusAtoIW.AutoSize = True
+        Me.RadioButtonStatusAtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusAtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusAtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusAtoIW.Name = "RadioButtonStatusAtoIW"
+        Me.RadioButtonStatusAtoIW.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusAtoIW.TabIndex = 3
+        Me.RadioButtonStatusAtoIW.TabStop = True
+        Me.RadioButtonStatusAtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoIR
+        '
+        Me.RadioButtonStatusAtoIR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusAtoIR.AutoSize = True
+        Me.RadioButtonStatusAtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusAtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusAtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusAtoIR.Name = "RadioButtonStatusAtoIR"
+        Me.RadioButtonStatusAtoIR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusAtoIR.TabIndex = 2
+        Me.RadioButtonStatusAtoIR.TabStop = True
+        Me.RadioButtonStatusAtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoB
+        '
+        Me.RadioButtonStatusAtoB.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusAtoB.AutoSize = True
+        Me.RadioButtonStatusAtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusAtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusAtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusAtoB.Name = "RadioButtonStatusAtoB"
+        Me.RadioButtonStatusAtoB.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusAtoB.TabIndex = 1
+        Me.RadioButtonStatusAtoB.TabStop = True
+        Me.RadioButtonStatusAtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoA
+        '
+        Me.RadioButtonStatusAtoA.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusAtoA.AutoSize = True
+        Me.RadioButtonStatusAtoA.Checked = True
+        Me.RadioButtonStatusAtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.RadioButtonStatusAtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusAtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusAtoA.Name = "RadioButtonStatusAtoA"
+        Me.RadioButtonStatusAtoA.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusAtoA.TabIndex = 0
+        Me.RadioButtonStatusAtoA.TabStop = True
+        Me.RadioButtonStatusAtoA.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoR
+        '
+        Me.RadioButtonStatusBtoR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusBtoR.AutoSize = True
+        Me.RadioButtonStatusBtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusBtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusBtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoR.Name = "RadioButtonStatusBtoR"
+        Me.RadioButtonStatusBtoR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusBtoR.TabIndex = 5
+        Me.RadioButtonStatusBtoR.TabStop = True
+        Me.RadioButtonStatusBtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoO
+        '
+        Me.RadioButtonStatusBtoO.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusBtoO.AutoSize = True
+        Me.RadioButtonStatusBtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusBtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusBtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoO.Name = "RadioButtonStatusBtoO"
+        Me.RadioButtonStatusBtoO.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusBtoO.TabIndex = 4
+        Me.RadioButtonStatusBtoO.TabStop = True
+        Me.RadioButtonStatusBtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoIW
+        '
+        Me.RadioButtonStatusBtoIW.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusBtoIW.AutoSize = True
+        Me.RadioButtonStatusBtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusBtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusBtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoIW.Name = "RadioButtonStatusBtoIW"
+        Me.RadioButtonStatusBtoIW.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusBtoIW.TabIndex = 3
+        Me.RadioButtonStatusBtoIW.TabStop = True
+        Me.RadioButtonStatusBtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoIR
+        '
+        Me.RadioButtonStatusBtoIR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusBtoIR.AutoSize = True
+        Me.RadioButtonStatusBtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusBtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusBtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoIR.Name = "RadioButtonStatusBtoIR"
+        Me.RadioButtonStatusBtoIR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusBtoIR.TabIndex = 2
+        Me.RadioButtonStatusBtoIR.TabStop = True
+        Me.RadioButtonStatusBtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoB
+        '
+        Me.RadioButtonStatusBtoB.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusBtoB.AutoSize = True
+        Me.RadioButtonStatusBtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusBtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusBtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoB.Name = "RadioButtonStatusBtoB"
+        Me.RadioButtonStatusBtoB.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusBtoB.TabIndex = 1
+        Me.RadioButtonStatusBtoB.TabStop = True
+        Me.RadioButtonStatusBtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoA
+        '
+        Me.RadioButtonStatusBtoA.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusBtoA.AutoSize = True
+        Me.RadioButtonStatusBtoA.Checked = True
+        Me.RadioButtonStatusBtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.RadioButtonStatusBtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusBtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoA.Name = "RadioButtonStatusBtoA"
+        Me.RadioButtonStatusBtoA.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusBtoA.TabIndex = 0
+        Me.RadioButtonStatusBtoA.TabStop = True
+        Me.RadioButtonStatusBtoA.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoR
+        '
+        Me.RadioButtonStatusIRtoR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIRtoR.AutoSize = True
+        Me.RadioButtonStatusIRtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIRtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusIRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoR.Name = "RadioButtonStatusIRtoR"
+        Me.RadioButtonStatusIRtoR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIRtoR.TabIndex = 5
+        Me.RadioButtonStatusIRtoR.TabStop = True
+        Me.RadioButtonStatusIRtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoO
+        '
+        Me.RadioButtonStatusIRtoO.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIRtoO.AutoSize = True
+        Me.RadioButtonStatusIRtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIRtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusIRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoO.Name = "RadioButtonStatusIRtoO"
+        Me.RadioButtonStatusIRtoO.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIRtoO.TabIndex = 4
+        Me.RadioButtonStatusIRtoO.TabStop = True
+        Me.RadioButtonStatusIRtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoIW
+        '
+        Me.RadioButtonStatusIRtoIW.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIRtoIW.AutoSize = True
+        Me.RadioButtonStatusIRtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIRtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusIRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoIW.Name = "RadioButtonStatusIRtoIW"
+        Me.RadioButtonStatusIRtoIW.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIRtoIW.TabIndex = 3
+        Me.RadioButtonStatusIRtoIW.TabStop = True
+        Me.RadioButtonStatusIRtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoIR
+        '
+        Me.RadioButtonStatusIRtoIR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIRtoIR.AutoSize = True
+        Me.RadioButtonStatusIRtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIRtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusIRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoIR.Name = "RadioButtonStatusIRtoIR"
+        Me.RadioButtonStatusIRtoIR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIRtoIR.TabIndex = 2
+        Me.RadioButtonStatusIRtoIR.TabStop = True
+        Me.RadioButtonStatusIRtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoB
+        '
+        Me.RadioButtonStatusIRtoB.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIRtoB.AutoSize = True
+        Me.RadioButtonStatusIRtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIRtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusIRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoB.Name = "RadioButtonStatusIRtoB"
+        Me.RadioButtonStatusIRtoB.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIRtoB.TabIndex = 1
+        Me.RadioButtonStatusIRtoB.TabStop = True
+        Me.RadioButtonStatusIRtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoA
+        '
+        Me.RadioButtonStatusIRtoA.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIRtoA.AutoSize = True
+        Me.RadioButtonStatusIRtoA.Checked = True
+        Me.RadioButtonStatusIRtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.RadioButtonStatusIRtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusIRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoA.Name = "RadioButtonStatusIRtoA"
+        Me.RadioButtonStatusIRtoA.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIRtoA.TabIndex = 0
+        Me.RadioButtonStatusIRtoA.TabStop = True
+        Me.RadioButtonStatusIRtoA.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoR
+        '
+        Me.RadioButtonStatusRtoR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusRtoR.AutoSize = True
+        Me.RadioButtonStatusRtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusRtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoR.Name = "RadioButtonStatusRtoR"
+        Me.RadioButtonStatusRtoR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusRtoR.TabIndex = 5
+        Me.RadioButtonStatusRtoR.TabStop = True
+        Me.RadioButtonStatusRtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoO
+        '
+        Me.RadioButtonStatusRtoO.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusRtoO.AutoSize = True
+        Me.RadioButtonStatusRtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusRtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoO.Name = "RadioButtonStatusRtoO"
+        Me.RadioButtonStatusRtoO.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusRtoO.TabIndex = 4
+        Me.RadioButtonStatusRtoO.TabStop = True
+        Me.RadioButtonStatusRtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoIW
+        '
+        Me.RadioButtonStatusRtoIW.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusRtoIW.AutoSize = True
+        Me.RadioButtonStatusRtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusRtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoIW.Name = "RadioButtonStatusRtoIW"
+        Me.RadioButtonStatusRtoIW.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusRtoIW.TabIndex = 3
+        Me.RadioButtonStatusRtoIW.TabStop = True
+        Me.RadioButtonStatusRtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoIR
+        '
+        Me.RadioButtonStatusRtoIR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusRtoIR.AutoSize = True
+        Me.RadioButtonStatusRtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusRtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoIR.Name = "RadioButtonStatusRtoIR"
+        Me.RadioButtonStatusRtoIR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusRtoIR.TabIndex = 2
+        Me.RadioButtonStatusRtoIR.TabStop = True
+        Me.RadioButtonStatusRtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoB
+        '
+        Me.RadioButtonStatusRtoB.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusRtoB.AutoSize = True
+        Me.RadioButtonStatusRtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusRtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoB.Name = "RadioButtonStatusRtoB"
+        Me.RadioButtonStatusRtoB.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusRtoB.TabIndex = 1
+        Me.RadioButtonStatusRtoB.TabStop = True
+        Me.RadioButtonStatusRtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoA
+        '
+        Me.RadioButtonStatusRtoA.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusRtoA.AutoSize = True
+        Me.RadioButtonStatusRtoA.Checked = True
+        Me.RadioButtonStatusRtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.RadioButtonStatusRtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoA.Name = "RadioButtonStatusRtoA"
+        Me.RadioButtonStatusRtoA.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusRtoA.TabIndex = 0
+        Me.RadioButtonStatusRtoA.TabStop = True
+        Me.RadioButtonStatusRtoA.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoR
+        '
+        Me.RadioButtonStatusIWtoR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIWtoR.AutoSize = True
+        Me.RadioButtonStatusIWtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIWtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusIWtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoR.Name = "RadioButtonStatusIWtoR"
+        Me.RadioButtonStatusIWtoR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIWtoR.TabIndex = 5
+        Me.RadioButtonStatusIWtoR.TabStop = True
+        Me.RadioButtonStatusIWtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoO
+        '
+        Me.RadioButtonStatusIWtoO.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIWtoO.AutoSize = True
+        Me.RadioButtonStatusIWtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIWtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusIWtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoO.Name = "RadioButtonStatusIWtoO"
+        Me.RadioButtonStatusIWtoO.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIWtoO.TabIndex = 4
+        Me.RadioButtonStatusIWtoO.TabStop = True
+        Me.RadioButtonStatusIWtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoIW
+        '
+        Me.RadioButtonStatusIWtoIW.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIWtoIW.AutoSize = True
+        Me.RadioButtonStatusIWtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIWtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusIWtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoIW.Name = "RadioButtonStatusIWtoIW"
+        Me.RadioButtonStatusIWtoIW.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIWtoIW.TabIndex = 3
+        Me.RadioButtonStatusIWtoIW.TabStop = True
+        Me.RadioButtonStatusIWtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoIR
+        '
+        Me.RadioButtonStatusIWtoIR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIWtoIR.AutoSize = True
+        Me.RadioButtonStatusIWtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIWtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusIWtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoIR.Name = "RadioButtonStatusIWtoIR"
+        Me.RadioButtonStatusIWtoIR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIWtoIR.TabIndex = 2
+        Me.RadioButtonStatusIWtoIR.TabStop = True
+        Me.RadioButtonStatusIWtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoB
+        '
+        Me.RadioButtonStatusIWtoB.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIWtoB.AutoSize = True
+        Me.RadioButtonStatusIWtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusIWtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusIWtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoB.Name = "RadioButtonStatusIWtoB"
+        Me.RadioButtonStatusIWtoB.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIWtoB.TabIndex = 1
+        Me.RadioButtonStatusIWtoB.TabStop = True
+        Me.RadioButtonStatusIWtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoA
+        '
+        Me.RadioButtonStatusIWtoA.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusIWtoA.AutoSize = True
+        Me.RadioButtonStatusIWtoA.Checked = True
+        Me.RadioButtonStatusIWtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.RadioButtonStatusIWtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusIWtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoA.Name = "RadioButtonStatusIWtoA"
+        Me.RadioButtonStatusIWtoA.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusIWtoA.TabIndex = 0
+        Me.RadioButtonStatusIWtoA.TabStop = True
+        Me.RadioButtonStatusIWtoA.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoR
+        '
+        Me.RadioButtonStatusOtoR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusOtoR.AutoSize = True
+        Me.RadioButtonStatusOtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusOtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusOtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoR.Name = "RadioButtonStatusOtoR"
+        Me.RadioButtonStatusOtoR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusOtoR.TabIndex = 5
+        Me.RadioButtonStatusOtoR.TabStop = True
+        Me.RadioButtonStatusOtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoO
+        '
+        Me.RadioButtonStatusOtoO.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusOtoO.AutoSize = True
+        Me.RadioButtonStatusOtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusOtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusOtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoO.Name = "RadioButtonStatusOtoO"
+        Me.RadioButtonStatusOtoO.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusOtoO.TabIndex = 4
+        Me.RadioButtonStatusOtoO.TabStop = True
+        Me.RadioButtonStatusOtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoIW
+        '
+        Me.RadioButtonStatusOtoIW.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusOtoIW.AutoSize = True
+        Me.RadioButtonStatusOtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusOtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusOtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoIW.Name = "RadioButtonStatusOtoIW"
+        Me.RadioButtonStatusOtoIW.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusOtoIW.TabIndex = 3
+        Me.RadioButtonStatusOtoIW.TabStop = True
+        Me.RadioButtonStatusOtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoIR
+        '
+        Me.RadioButtonStatusOtoIR.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusOtoIR.AutoSize = True
+        Me.RadioButtonStatusOtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusOtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusOtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoIR.Name = "RadioButtonStatusOtoIR"
+        Me.RadioButtonStatusOtoIR.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusOtoIR.TabIndex = 2
+        Me.RadioButtonStatusOtoIR.TabStop = True
+        Me.RadioButtonStatusOtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoB
+        '
+        Me.RadioButtonStatusOtoB.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusOtoB.AutoSize = True
+        Me.RadioButtonStatusOtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.RadioButtonStatusOtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusOtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoB.Name = "RadioButtonStatusOtoB"
+        Me.RadioButtonStatusOtoB.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusOtoB.TabIndex = 1
+        Me.RadioButtonStatusOtoB.TabStop = True
+        Me.RadioButtonStatusOtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoA
+        '
+        Me.RadioButtonStatusOtoA.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioButtonStatusOtoA.AutoSize = True
+        Me.RadioButtonStatusOtoA.Checked = True
+        Me.RadioButtonStatusOtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.RadioButtonStatusOtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusOtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoA.Name = "RadioButtonStatusOtoA"
+        Me.RadioButtonStatusOtoA.Size = New System.Drawing.Size(22, 22)
+        Me.RadioButtonStatusOtoA.TabIndex = 0
+        Me.RadioButtonStatusOtoA.TabStop = True
+        Me.RadioButtonStatusOtoA.UseVisualStyleBackColor = True
+        '
+        'LabelPreset
+        '
+        Me.LabelPreset.Image = CType(resources.GetObject("LabelPreset.Image"), System.Drawing.Image)
+        Me.LabelPreset.Name = "LabelPreset"
+        Me.LabelPreset.Size = New System.Drawing.Size(60, 23)
+        Me.LabelPreset.Text = "Presets"
+        '
+        'ButtonPresetLoad
+        '
+        Me.ButtonPresetLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetLoad.Image = CType(resources.GetObject("ButtonPresetLoad.Image"), System.Drawing.Image)
+        Me.ButtonPresetLoad.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetLoad.Name = "ButtonPresetLoad"
+        Me.ButtonPresetLoad.Size = New System.Drawing.Size(23, 23)
+        Me.ButtonPresetLoad.Text = "ToolStripButton2"
+        Me.ButtonPresetLoad.ToolTipText = "Load preset"
+        '
+        'ButtonPresetSave
+        '
+        Me.ButtonPresetSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetSave.Image = CType(resources.GetObject("ButtonPresetSave.Image"), System.Drawing.Image)
+        Me.ButtonPresetSave.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetSave.Name = "ButtonPresetSave"
+        Me.ButtonPresetSave.Size = New System.Drawing.Size(23, 23)
+        Me.ButtonPresetSave.Text = "ToolStripButton2"
+        Me.ButtonPresetSave.ToolTipText = "Save preset"
+        '
+        'ButtonPresetDelete
+        '
+        Me.ButtonPresetDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetDelete.Image = CType(resources.GetObject("ButtonPresetDelete.Image"), System.Drawing.Image)
+        Me.ButtonPresetDelete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetDelete.Name = "ButtonPresetDelete"
+        Me.ButtonPresetDelete.Size = New System.Drawing.Size(23, 23)
+        Me.ButtonPresetDelete.Text = "ToolStripButton2"
+        Me.ButtonPresetDelete.ToolTipText = "Delete preset"
+        '
         'ButtonProcess
         '
         Me.ButtonProcess.Dock = System.Windows.Forms.DockStyle.Fill
@@ -2912,73 +2952,47 @@ Partial Class Form_Main
         Me.ButtonHelp.Text = "Help"
         Me.ButtonHelp.UseVisualStyleBackColor = True
         '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 23)
-        '
-        'Menu_ListViewFile
-        '
-        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove, Me.BT_MoveToRecycleBin})
-        Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
-        Me.Menu_ListViewFile.Size = New System.Drawing.Size(184, 148)
-        '
         'BT_Open
         '
         Me.BT_Open.Image = CType(resources.GetObject("BT_Open.Image"), System.Drawing.Image)
         Me.BT_Open.Name = "BT_Open"
-        Me.BT_Open.Size = New System.Drawing.Size(183, 22)
+        Me.BT_Open.Size = New System.Drawing.Size(205, 22)
         Me.BT_Open.Text = "Open"
         '
         'BT_OpenFolder
         '
         Me.BT_OpenFolder.Image = CType(resources.GetObject("BT_OpenFolder.Image"), System.Drawing.Image)
         Me.BT_OpenFolder.Name = "BT_OpenFolder"
-        Me.BT_OpenFolder.Size = New System.Drawing.Size(183, 22)
+        Me.BT_OpenFolder.Size = New System.Drawing.Size(205, 22)
         Me.BT_OpenFolder.Text = "Open folder"
-        '
-        'ToolStripSeparator8
-        '
-        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(180, 6)
         '
         'BT_FindLinks
         '
         Me.BT_FindLinks.Image = CType(resources.GetObject("BT_FindLinks.Image"), System.Drawing.Image)
         Me.BT_FindLinks.Name = "BT_FindLinks"
-        Me.BT_FindLinks.Size = New System.Drawing.Size(183, 22)
+        Me.BT_FindLinks.Size = New System.Drawing.Size(205, 22)
         Me.BT_FindLinks.Text = "Find linked files"
         '
         'BT_ProcessSelected
         '
         Me.BT_ProcessSelected.Image = CType(resources.GetObject("BT_ProcessSelected.Image"), System.Drawing.Image)
         Me.BT_ProcessSelected.Name = "BT_ProcessSelected"
-        Me.BT_ProcessSelected.Size = New System.Drawing.Size(183, 22)
+        Me.BT_ProcessSelected.Size = New System.Drawing.Size(205, 22)
         Me.BT_ProcessSelected.Text = "Process selected"
         '
-        'ToolStripSeparator5
+        'BT_RemoveFromList
         '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(180, 6)
-        '
-        'BT_Remove
-        '
-        Me.BT_Remove.Image = CType(resources.GetObject("BT_Remove.Image"), System.Drawing.Image)
-        Me.BT_Remove.Name = "BT_Remove"
-        Me.BT_Remove.Size = New System.Drawing.Size(183, 22)
-        Me.BT_Remove.Text = "Remove from list"
+        Me.BT_RemoveFromList.Image = CType(resources.GetObject("BT_RemoveFromList.Image"), System.Drawing.Image)
+        Me.BT_RemoveFromList.Name = "BT_RemoveFromList"
+        Me.BT_RemoveFromList.Size = New System.Drawing.Size(205, 22)
+        Me.BT_RemoveFromList.Text = "Remove from list"
         '
         'BT_MoveToRecycleBin
         '
         Me.BT_MoveToRecycleBin.Image = CType(resources.GetObject("BT_MoveToRecycleBin.Image"), System.Drawing.Image)
         Me.BT_MoveToRecycleBin.Name = "BT_MoveToRecycleBin"
-        Me.BT_MoveToRecycleBin.Size = New System.Drawing.Size(183, 22)
-        Me.BT_MoveToRecycleBin.Text = "Move To Recycle Bin"
-        '
-        'NotifyIcon1
-        '
-        Me.NotifyIcon1.Text = "NotifyIcon1"
-        Me.NotifyIcon1.Visible = True
+        Me.BT_MoveToRecycleBin.Size = New System.Drawing.Size(205, 22)
+        Me.BT_MoveToRecycleBin.Text = "Move files to Recycle Bin"
         '
         'Form_Main
         '
@@ -3107,7 +3121,7 @@ Partial Class Form_Main
     Friend WithEvents BT_Open As ToolStripMenuItem
     Friend WithEvents BT_OpenFolder As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
-    Friend WithEvents BT_Remove As ToolStripMenuItem
+    Friend WithEvents BT_RemoveFromList As ToolStripMenuItem
     Friend WithEvents ToolStrip_Filter As ToolStrip
     Friend WithEvents CheckBoxEnablePropertyFilter As ToolStripButton
     Friend WithEvents new_ButtonPropertyFilter As ToolStripButton
@@ -3293,4 +3307,6 @@ Partial Class Form_Main
     Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
     Friend WithEvents CheckBoxRemindFilelistUpdate As CheckBox
     Friend WithEvents CheckBoxProcessDraftsInactive As CheckBox
+    Friend WithEvents BT_ExcludeFromProcessing As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator13 As ToolStripSeparator
 End Class

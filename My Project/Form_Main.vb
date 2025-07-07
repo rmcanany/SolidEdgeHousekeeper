@@ -1912,6 +1912,7 @@ Public Class Form_Main
     Private Sub ListViewSources_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewSources.KeyUp
 
         If e.KeyCode = Keys.Escape Then ListViewSources.SelectedItems.Clear()
+
         If e.KeyCode = Keys.Back Or e.KeyCode = Keys.Delete Then
 
             For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
@@ -1931,6 +1932,7 @@ Public Class Form_Main
     Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
 
         If e.KeyCode = Keys.Escape Then ListViewFiles.SelectedItems.Clear()
+
         If e.KeyCode = Keys.Back Or e.KeyCode = Keys.Delete Then
 
             For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
@@ -1962,7 +1964,7 @@ Public Class Form_Main
 
             Next
 
-            ListViewFilesOutOfDate = True
+            'ListViewFilesOutOfDate = True
         End If
 
     End Sub
@@ -2072,7 +2074,8 @@ Public Class Form_Main
         Next
     End Sub
 
-    Private Sub BT_Remove_Click(sender As Object, e As EventArgs) Handles BT_Remove.Click
+    Private Sub BT_ExcludeFromProcessing_Click(sender As Object, e As EventArgs) Handles BT_ExcludeFromProcessing.Click
+
         For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
 
             Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
@@ -2086,16 +2089,70 @@ Public Class Form_Main
 
         Next
 
-        For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
+        If Not ListViewSources.SelectedItems.Count = 0 Then
+            For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
+                Dim tmpItem As ListViewItem = ListViewSources.SelectedItems.Item(i)
+                tmpItem.Remove()
+            Next
 
-            Dim tmpItem As ListViewItem = ListViewSources.SelectedItems.Item(i)
+            ListViewFilesOutOfDate = True
+        End If
+
+    End Sub
+
+    Private Sub BT_RemoveFromList_Click(sender As Object, e As EventArgs) Handles BT_RemoveFromList.Click
+
+        For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
+            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
             tmpItem.Remove()
-
         Next
+
+        If Not ListViewSources.SelectedItems.Count = 0 Then
+            For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
+                Dim tmpItem As ListViewItem = ListViewSources.SelectedItems.Item(i)
+                tmpItem.Remove()
+            Next
+
+            ListViewFilesOutOfDate = True
+        End If
+
 
     End Sub
 
     Private Sub BT_MoveToRecycleBin_Click(sender As Object, e As EventArgs) Handles BT_MoveToRecycleBin.Click
+
+        ' Check for non-local files.  They don't get moved to the Recycle Bin and are permanently deleted.
+        'https://stackoverflow.com/questions/4325712/how-can-i-determine-if-a-string-is-a-local-folder-string-or-a-network-string
+        Dim NonLocalFiles As New List(Of String)
+        For i = 0 To ListViewFiles.SelectedItems.Count - 1
+            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+            Dim Filename As String = tmpItem.Name
+            If Filename.StartsWith("/") Or Filename.StartsWith("\") Then
+                NonLocalFiles.Add(Filename)
+            Else
+                Dim DriveLetter As String = System.IO.Path.GetPathRoot(Filename)
+                Dim DriveInfo As New System.IO.DriveInfo(DriveLetter)
+                If DriveInfo.DriveType = IO.DriveType.Network Then
+                    NonLocalFiles.Add(Filename)
+                End If
+            End If
+        Next
+
+        If Not NonLocalFiles.Count = 0 Then
+            Dim s As String = $"Network files will be permanently deleted.  Do you wish to continue?{vbCrLf}"
+            Dim Indent As String = "    "
+            For i = 0 To NonLocalFiles.Count - 1
+                If i = 10 Then
+                    s = $"{s}{Indent} (And {NonLocalFiles.Count - 10} more){vbCrLf}"
+                    Exit For
+                End If
+                s = $"{s}{Indent}{NonLocalFiles(i)}{vbCrLf}"
+            Next
+            Dim Result = MsgBox(s, vbYesNo)
+            If Result = MsgBoxResult.No Then
+                Exit Sub
+            End If
+        End If
 
         For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
 

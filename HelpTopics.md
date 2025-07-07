@@ -266,8 +266,9 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Open folder:** Opens the files in Windows File Explorer.
 - **Find linked files:** Populates the list with files linked to a top-level assembly.  Similar to **Update** but no other File Sources are processed.
 - **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
-- **Remove from list:** Moves the files to the *Excluded files* section of the list.
-- **Move to Recycle Bin:** This is kinda asking for trouble, but can be handy with top-level assembly `Report unrelated files`.  If there are a lot of them, cleanup is a hassle.  Here's how I do it now.  
+- **Exclude from processing:** Moves the files to the *Excluded files* section of the list.  If the files are already in that section, they are moved back.
+- **Remove from list** Removes files from the list.
+- **Move files to Recycle Bin:** This is kinda asking for trouble, but can be handy with top-level assembly `Report unrelated files`.  If there are a lot of them, cleanup is a hassle.  Here's how I do it now.  
  
   - Save the Unrelated Files report as a `*.txt` file
   - Empty out the Recycle Bin
@@ -275,6 +276,7 @@ If you select one or more files on the list, you can click the right mouse butto
   - Import the `*.txt` file and update the list
   - Select files you no longer need and use this command.  Then open the top level assembly; if it complains about missing files, run `Restore items` from the Recycle Bin.  (I do a few files at a time, then repeat.)
 
+  Note moving to the Recycle Bin is not reliable for network files.  If any of those are detected, a warning is displayed with the option to cancel the action.
 </details>
 
 </details>
