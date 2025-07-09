@@ -28,8 +28,7 @@
 
 Solid Edge Housekeeper is a batch utility for finding annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
-If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  It's not nearly as detailed as this README, but it will get you up and running much more quickly.
-
+If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  Something else to check out is [<ins>**Solid Edge Storekeeper**</ins>](https://github.com/rmcanany/SolidEdgeStorekeeper#readme).  That is a separate utility to create, organize and share standard parts.
 
 <p align="center">
   <img src="My%20Project/media/home_tab_done.png">
@@ -1088,7 +1087,7 @@ This command turns a typical single-file macro into a batch routine, also enhanc
 
 Select the program with the `Browse` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
 
-For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft [<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) with some details.  If you're not an expert on such matters, you might want to run it by your IT department first.  
+For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt as an Administrator.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`.  I was told this has 'security implications'.  Presumably *negative* implications.  You might want to work with your IT department to see if there is a safer way.  
 
 If you are writing your own program, be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
@@ -1136,7 +1135,7 @@ Select the file type using the combobox. Select the directory using the `Browse`
 
 You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
 - `Project %{System.Project Name}` 
-- `%{System.Material}\%{System.Sheet Metal Gage}` Another option to create the new file or subdirectory name is to use the Expression Editor.  This can be especially handy if an `If` statement is needed for any reason.  For details on the Expression Editor, refer to the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  You'll have to scroll down a bit to see it.
+- `%{System.Material}\%{System.Sheet Metal Gage}` 
 
 You can enter a subdirectory formula even if `Original directory` is enabled. In that case, it is interpreted as a subdirectory under the original directory. 
 
