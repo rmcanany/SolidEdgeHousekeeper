@@ -30,6 +30,18 @@ Public Class TaskUpdateBlocks
         End Set
     End Property
 
+    Private _ReplaceBlocksReplaceExisting As Boolean
+    Public Property ReplaceBlocksReplaceExisting As Boolean
+        Get
+            Return _ReplaceBlocksReplaceExisting
+        End Get
+        Set(value As Boolean)
+            _ReplaceBlocksReplaceExisting = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ReplaceBlocksReplaceExisting.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
     Private _DeleteBlocks As Boolean
     Public Property DeleteBlocks As Boolean
         Get
@@ -56,6 +68,18 @@ Public Class TaskUpdateBlocks
         End Set
     End Property
 
+    Private _AddBlocksReplaceExisting As Boolean
+    Public Property AddBlocksReplaceExisting As Boolean
+        Get
+            Return _AddBlocksReplaceExisting
+        End Get
+        Set(value As Boolean)
+            _AddBlocksReplaceExisting = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AddBlocksReplaceExisting.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
     Private _ReportMissingSheet As Boolean
     Public Property ReportMissingSheet As Boolean
         Get
@@ -158,10 +182,12 @@ Public Class TaskUpdateBlocks
         BlockLibrary
         ReplaceBlocks
         ReplaceBlocksDGV
+        ReplaceBlocksReplaceExisting
         DeleteBlocks
         DeleteBlocksDGV
         AddBlocks
         AddBlocksDGV
+        AddBlocksReplaceExisting
         ReportMissingSheet
         AutoHideOptions
     End Enum
@@ -225,13 +251,19 @@ Public Class TaskUpdateBlocks
         Dim DocBlocksDict As New Dictionary(Of String, SolidEdgeDraft.Block)
         Dim LibraryBlocksDict As New Dictionary(Of String, SolidEdgeDraft.Block)
 
+        If SEDoc.FullName = Me.BlockLibrary Then
+            TaskLogger.AddMessage("Cannot process the block library itself")
+        End If
+
         Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
-        Try
-            BlockLibraryDoc = CType(SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
-        Catch ex As Exception
-            TaskLogger.AddMessage($"Unable to open '{Me.BlockLibrary}'")
-        End Try
+        If Not TaskLogger.HasErrors Then
+            Try
+                BlockLibraryDoc = CType(SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
+            Catch ex As Exception
+                TaskLogger.AddMessage($"Unable to open '{Me.BlockLibrary}'")
+            End Try
+        End If
 
         ' Read blocks from both files
         If Not TaskLogger.HasErrors Then
@@ -258,27 +290,73 @@ Public Class TaskUpdateBlocks
                 ReplacementsDict(DocBlockName) = LibraryBlockName
             Next
 
+            Dim ReplacedSameNameBlock As Boolean = False
+
             For Each DocBlockName In ReplacementsDict.Keys
                 LibraryBlockName = ReplacementsDict(DocBlockName)
                 If DocBlocksDict.Keys.Contains(DocBlockName) Then
                     If LibraryBlocksDict.Keys.Contains(LibraryBlockName) Then
+
+
                         If Not DocBlockName = LibraryBlockName Then
+                            ' Blocks have different names.  Check if the document already has
+                            ' a block with the same name as the library block.
                             If DocBlocksDict.Keys.Contains(LibraryBlockName) Then
-                                Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  "
-                                s = $"{s}A block with that name already exists in the file."
-                                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
-                                Continue For
+                                ' It does have a block with the same name.
+                                ' Replace it if the option is set.
+                                If Me.ReplaceBlocksReplaceExisting Then
+                                    Try
+                                        tmpSEDoc.Blocks.ReplaceBlock(LibraryBlocksDict(LibraryBlockName))
+                                        ReplacedSameNameBlock = True
+                                    Catch ex As Exception
+                                        Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  "
+                                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                                    End Try
+                                Else
+                                    Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  "
+                                    s = $"{s}A block with that name already exists in the file."
+                                    If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                                    Continue For
+                                End If
                             Else
                                 DocBlocksDict(DocBlockName).Name = LibraryBlockName
                             End If
                         End If
+
                         Try
-                            tmpSEDoc.Blocks.ReplaceBlock(LibraryBlocksDict(LibraryBlockName))
+                            If Not ReplacedSameNameBlock Then
+                                tmpSEDoc.Blocks.ReplaceBlock(LibraryBlocksDict(LibraryBlockName))
+                            Else
+                                ' Need to change the source block of each occurrence
+                                tmpSEDoc.Save()
+                                SEApp.DoIdle()
+
+                                Dim OldBlock As SolidEdgeDraft.Block = DocBlocksDict(DocBlockName)
+                                Dim NewBlock As SolidEdgeDraft.Block = Nothing
+                                For Each tmpDocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
+                                    If tmpDocBlock.Name = LibraryBlockName Then
+                                        NewBlock = tmpDocBlock
+                                    End If
+                                Next
+
+                                For Each DocSheet As SolidEdgeDraft.Sheet In tmpSEDoc.Sheets
+                                    For Each DocBlockOccurrence As SolidEdgeDraft.BlockOccurrence In DocSheet.BlockOccurrences
+                                        If DocBlockOccurrence.Block Is OldBlock Then
+                                            Dim x As Double
+                                            Dim y As Double
+                                            DocBlockOccurrence.GetOrigin(x, y)
+                                            DocBlockOccurrence.Block = NewBlock
+                                            DocBlockOccurrence.SetOrigin(x, y)
+                                            Dim i = 0
+                                        End If
+                                    Next
+                                Next
+                            End If
                         Catch ex As Exception
                             Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  "
-                            s = $"{s}A block with that name may already exist in the file."
                             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                         End Try
+
                     Else
                         TaskLogger.AddMessage($"Library does Not have a block named '{LibraryBlockName}'")
                     End If
@@ -329,12 +407,29 @@ Public Class TaskUpdateBlocks
                             TaskLogger.AddMessage($"Unable to add '{LibraryBlockName}'")
                         End Try
 
-
                     Else
                         TaskLogger.AddMessage($"Library does not have a block named '{LibraryBlockName}'")
                     End If
                 Else
-                    TaskLogger.AddMessage($"File already has a block named '{LibraryBlockName}'")
+                    If Me.AddBlocksReplaceExisting Then
+                        Dim tmpDocBlockName As String = LibraryBlockName
+                        Try
+                            Dim LibraryBlock As SolidEdgeDraft.Block = LibraryBlocksDict(LibraryBlockName)
+                            Dim DocBlock As SolidEdgeDraft.Block = tmpSEDoc.Blocks.ReplaceBlock(LibraryBlocksDict(LibraryBlockName))
+                            SEApp.DoIdle()
+
+                            ' Add occurrences on SEDoc sheets at locations to match those in the library
+                            AddBlockOccurrences(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
+
+                        Catch ex As Exception
+                            Dim s = $"Unable to replace '{tmpDocBlockName}' with '{LibraryBlockName}'.  "
+                            's = $"{s}A block with that name may already exist in the file."
+                            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                        End Try
+
+                    Else
+                        TaskLogger.AddMessage($"File already has a block named '{LibraryBlockName}'")
+                    End If
                 End If
             Next
 
@@ -452,6 +547,15 @@ Public Class TaskUpdateBlocks
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.ReplaceBlocksReplaceExisting.ToString, "Overwrite existing with replacement")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
         ColumnHeaders = {"File block name", "Library block name"}.ToList
         DataGridView = FormatOptionsDataGridView(ControlNames.ReplaceBlocksDGV.ToString, ColumnHeaders)
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
@@ -497,6 +601,15 @@ Public Class TaskUpdateBlocks
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
         'CheckBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.AddBlocksReplaceExisting.ToString, "Overwrite existing with added block")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -553,7 +666,7 @@ Public Class TaskUpdateBlocks
             If Me.ReplaceBlocks Then
                 If Me.ReplaceBlocksList IsNot Nothing Then
                     If Me.ReplaceBlocksList.Count = 0 Then
-                        ErrorLogger.AddMessage("Enter at least one block to replace")
+                        ErrorLogger.AddMessage("Enter at least one block to replace OR disable the option")
                     End If
 
                     If Me.ReplaceBlocksList.Count > 0 Then
@@ -567,27 +680,27 @@ Public Class TaskUpdateBlocks
                         Next
                     End If
                 Else
-                    ErrorLogger.AddMessage("Enter at least one block to replace")
+                    ErrorLogger.AddMessage("Enter at least one block to replace OR disable the option")
                 End If
             End If
 
             If Me.DeleteBlocks Then
                 If Me.DeleteBlocksList IsNot Nothing Then
                     If Me.DeleteBlocksList.Count = 0 Then
-                        ErrorLogger.AddMessage("Enter at least one block to delete")
+                        ErrorLogger.AddMessage("Enter at least one block to delete OR disable the option")
                     End If
                 Else
-                    ErrorLogger.AddMessage("Enter at least one block to delete")
+                    ErrorLogger.AddMessage("Enter at least one block to delete OR disable the option")
                 End If
             End If
 
             If Me.AddBlocks Then
                 If Me.AddBlocksList IsNot Nothing Then
                     If Me.AddBlocksList.Count = 0 Then
-                        ErrorLogger.AddMessage("Enter at least one block to add")
+                        ErrorLogger.AddMessage("Enter at least one block to add OR disable the option")
                     End If
                 Else
-                    ErrorLogger.AddMessage("Enter at least one block to add")
+                    ErrorLogger.AddMessage("Enter at least one block to add OR disable the option")
                 End If
             End If
         End If
@@ -631,10 +744,33 @@ Public Class TaskUpdateBlocks
 
                 Dim tmpReplaceBlocksList As New List(Of String)
 
-                For RowIdx = 0 To DataGridView.Rows.Count - 1
-                    If DataGridView.Rows(RowIdx).IsNewRow Then
-                        Continue For
+                ' Remove blank rows
+                For RowIdx = DataGridView.Rows.Count - 1 To 0 Step -1
+                    If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
+                    Dim BlockToReplace As String = ""
+                    Dim ReplacementBlock As String = ""
+
+                    Try
+                        BlockToReplace = CStr(DataGridView.Rows(RowIdx).Cells(0).Value).Trim
+                    Catch ex As Exception
+                        BlockToReplace = ""
+                    End Try
+                    Try
+                        ReplacementBlock = CStr(DataGridView.Rows(RowIdx).Cells(1).Value).Trim
+                    Catch ex As Exception
+                        ReplacementBlock = ""
+                    End Try
+
+                    If BlockToReplace = "" And ReplacementBlock = "" Then
+                        DataGridView.Rows.RemoveAt(RowIdx)
                     End If
+                Next
+
+                ' Update Me.ReplaceBlocksList
+                For RowIdx = 0 To DataGridView.Rows.Count - 1
+                    If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
                     Dim ListItem As String = ""
                     For ColIdx = 0 To DataGridView.Columns.Count - 1
                         Dim Value As String
@@ -657,10 +793,27 @@ Public Class TaskUpdateBlocks
             Case ControlNames.DeleteBlocksDGV.ToString
                 Dim tmpDeleteBlocksList As New List(Of String)
 
-                For RowIdx = 0 To DataGridView.Rows.Count - 1
-                    If DataGridView.Rows(RowIdx).IsNewRow Then
-                        Continue For
+                ' Remove blank rows
+                For RowIdx = DataGridView.Rows.Count - 1 To 0 Step -1
+                    If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
+                    Dim BlockToDelete As String = ""
+                    Try
+                        BlockToDelete = CStr(DataGridView.Rows(RowIdx).Cells(0).Value).Trim
+                    Catch ex As Exception
+                        BlockToDelete = ""
+                    End Try
+
+                    If BlockToDelete = "" Then
+                        DataGridView.Rows.RemoveAt(RowIdx)
                     End If
+
+                Next
+
+                ' Update Me.DeleteBlocksList
+                For RowIdx = 0 To DataGridView.Rows.Count - 1
+                    If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
                     tmpDeleteBlocksList.Add(CStr(DataGridView.Rows(RowIdx).Cells(0).Value).Trim)
                 Next
 
@@ -669,10 +822,27 @@ Public Class TaskUpdateBlocks
             Case ControlNames.AddBlocksDGV.ToString
                 Dim tmpAddBlocksList As New List(Of String)
 
-                For RowIdx = 0 To DataGridView.Rows.Count - 1
-                    If DataGridView.Rows(RowIdx).IsNewRow Then
-                        Continue For
+                ' Remove blank rows
+                For RowIdx = DataGridView.Rows.Count - 1 To 0 Step -1
+                    If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
+                    Dim BlockToAdd As String = ""
+                    Try
+                        BlockToAdd = CStr(DataGridView.Rows(RowIdx).Cells(0).Value).Trim
+                    Catch ex As Exception
+                        BlockToAdd = ""
+                    End Try
+
+                    If BlockToAdd = "" Then
+                        DataGridView.Rows.RemoveAt(RowIdx)
                     End If
+
+                Next
+
+                ' Update Me.AddBlocksList
+                For RowIdx = 0 To DataGridView.Rows.Count - 1
+                    If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
                     tmpAddBlocksList.Add(CStr(DataGridView.Rows(RowIdx).Cells(0).Value).Trim)
                 Next
 
@@ -693,7 +863,11 @@ Public Class TaskUpdateBlocks
             Case ControlNames.ReplaceBlocks.ToString
                 Me.ReplaceBlocks = Checkbox.Checked
                 CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView).Visible = Me.ReplaceBlocks
+                CType(ControlsDict(ControlNames.ReplaceBlocksReplaceExisting.ToString), CheckBox).Visible = Me.ReplaceBlocks
                 CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView).Width = TaskOptionsTLP.Width - 5
+
+            Case ControlNames.ReplaceBlocksReplaceExisting.ToString
+                Me.ReplaceBlocksReplaceExisting = Checkbox.Checked
 
             Case ControlNames.DeleteBlocks.ToString
                 Me.DeleteBlocks = Checkbox.Checked
@@ -703,8 +877,12 @@ Public Class TaskUpdateBlocks
             Case ControlNames.AddBlocks.ToString
                 Me.AddBlocks = Checkbox.Checked
                 CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView).Visible = Me.AddBlocks
+                CType(ControlsDict(ControlNames.AddBlocksReplaceExisting.ToString), CheckBox).Visible = Me.AddBlocks
                 CType(ControlsDict(ControlNames.ReportMissingSheet.ToString), CheckBox).Visible = Me.AddBlocks
                 CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView).Width = TaskOptionsTLP.Width - 5
+
+            Case ControlNames.AddBlocksReplaceExisting.ToString
+                Me.AddBlocksReplaceExisting = Checkbox.Checked
 
             Case ControlNames.ReportMissingSheet.ToString
                 Me.ReportMissingSheet = Checkbox.Checked
@@ -777,7 +955,18 @@ Public Class TaskUpdateBlocks
         HelpString += "The program checks each sheet of the library "
         HelpString += "and places an occurrence of the block on the corresponding sheet of the document.  "
         HelpString += "It is placed at the same location, with the same scale and rotation, as the original.  "
-        HelpString += "If the document does not have a corresponding sheet, enable `Report missing sheet` "
+
+        HelpString += vbCrLf + vbCrLf + "There are a few options.  They are described next.  "
+        HelpString += vbCrLf + "- `Replace Blocks` `Overwrite existing with replacement`: "
+        HelpString += "This is confusing.  The point of the command is to overwrite blocks. "
+        HelpString += "This option is for a scenario where you want to replace `Block1` in the file with `Block2` in the library. "
+        HelpString += "It tells the program how to proceed if `Block2` already exists in the file. "
+        HelpString += vbCrLf + "- `Add Blocks` `Overwrite existing with added block`: "
+        HelpString += "Similar to above, this is for a scenario where you're adding `Block1` to the file, but it already has a `Block1`.  "
+        HelpString += "If this scenario is encountered, this option tells the program what to do. "
+        HelpString += vbCrLf + "- `Add Blocks` `Report missing sheet in document`: "
+        HelpString += "As discussed above, `Add Blocks` checks every sheet in the Library. "
+        HelpString += "If the document does not have a corresponding sheet, enable this option "
         HelpString += "to have it reported in the log file.  "
 
         Return HelpString

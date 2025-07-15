@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormNCalc
+Partial Class FormExpressionEditor
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class FormNCalc
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormNCalc))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormExpressionEditor))
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.BT_Test = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -58,7 +58,7 @@ Partial Class FormNCalc
         Me.BT_Test.Image = Global.Housekeeper.My.Resources.Resources.Play
         Me.BT_Test.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_Test.Name = "BT_Test"
-        Me.BT_Test.Size = New System.Drawing.Size(47, 22)
+        Me.BT_Test.Size = New System.Drawing.Size(48, 22)
         Me.BT_Test.Text = "Test"
         '
         'ToolStripSeparator1
@@ -71,7 +71,7 @@ Partial Class FormNCalc
         Me.DD_SavedExpressions.Image = Global.Housekeeper.My.Resources.Resources.list
         Me.DD_SavedExpressions.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.DD_SavedExpressions.Name = "DD_SavedExpressions"
-        Me.DD_SavedExpressions.Size = New System.Drawing.Size(131, 22)
+        Me.DD_SavedExpressions.Size = New System.Drawing.Size(130, 22)
         Me.DD_SavedExpressions.Text = "Saved Expressions"
         '
         'BT_Save
@@ -130,6 +130,7 @@ Partial Class FormNCalc
         Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorFormula.IsReplaceMode = False
         Me.TextEditorFormula.Location = New System.Drawing.Point(0, 25)
         Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -152,6 +153,7 @@ Partial Class FormNCalc
         Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorResults.IsReplaceMode = False
         Me.TextEditorResults.Location = New System.Drawing.Point(0, 249)
         Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -163,7 +165,7 @@ Partial Class FormNCalc
         Me.TextEditorResults.TabIndex = 4
         Me.TextEditorResults.Zoom = 100
         '
-        'FormNCalc
+        'FormExpressionEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -176,7 +178,7 @@ Partial Class FormNCalc
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.MaximizeBox = False
-        Me.Name = "FormNCalc"
+        Me.Name = "FormExpressionEditor"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Expression editor"
         Me.ToolStrip1.ResumeLayout(False)

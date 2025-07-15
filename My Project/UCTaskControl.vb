@@ -193,8 +193,17 @@ Public Class UCTaskControl
         AddHandler t.Tick, AddressOf HandleTimerTick
 
 
-        Dim tmp As New FormNCalc
-        tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        Dim tmp As New FormExpressionEditor
+
+        Select Case Form_Main.ExpressionEditorLanguage.ToLower
+            Case "vb"
+                tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+            Case "sql"
+                tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+            Case Else
+                MsgBox($"Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
+        End Select
+
         tmp.ShowDialog()
         Dim A = tmp.Formula.Replace(vbCrLf, "")
         A = A.Split(CType("\\", Char)).First
@@ -217,6 +226,7 @@ Public Class UCTaskControl
         tmpForm.Size = tmpSize
         tmpForm.StartPosition = FormStartPosition.Manual
         tmpForm.Location = New Point(CInt(Me.Left + Me.Width / 2 - tmpForm.Width / 2), CInt(Me.Top + Me.Height / 2 - tmpForm.Height / 2))
+        'tmpForm.StartPosition = FormStartPosition.CenterParent
 
         Dim tmpLabel As New Label
         tmpLabel.Font = New Font(Me.Font.Name, 8, FontStyle.Bold)

@@ -393,8 +393,17 @@ Public Class FormPropertyInputEditor
 
     Private Sub ToolStripButtonExpressionEditor_Click(sender As Object, e As EventArgs) Handles ToolStripButtonExpressionEditor.Click
 
-        Dim tmp As New FormNCalc
-        tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        Dim tmp As New FormExpressionEditor
+
+        Select Case Form_Main.ExpressionEditorLanguage.ToLower
+            Case "vb"
+                tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+            Case "sql"
+                tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+            Case Else
+                MsgBox($"Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
+        End Select
+
         tmp.ShowDialog()
         Dim A = tmp.Formula.Replace(vbCrLf, "")
         A = A.Split(CType("\\", Char)).First

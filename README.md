@@ -754,7 +754,12 @@ Adds, replaces and/or deletes blocks in a draft file.
 
 For adding and replacing, a draft file containing the new blocks is required.  In most cases it will simply be your draft template.  Click the `Block Library` button to select it.
 
-The `Add Blocks` option adds the block to the document block library.  A new block does not automatically appear on drawings. The program checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the document.  It is placed at the same location, with the same scale and rotation, as the original.  If the document does not have a corresponding sheet, enable `Report missing sheet` to have it reported in the log file.  
+The `Add Blocks` option adds the block to the document block library.  A new block does not automatically appear on drawings. The program checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the document.  It is placed at the same location, with the same scale and rotation, as the original.  
+
+There are a few options.  They are described next.  
+- `Replace Blocks` `Overwrite existing with replacement`: This is confusing.  The point of the command is to overwrite blocks. This option is for a scenario where you want to replace `Block1` in the file with `Block2` in the library. It tells the program how to proceed if `Block2` already exists in the file. 
+- `Add Blocks` `Overwrite existing with added block`: Similar to above, this is for a scenario where you're adding `Block1` to the file, but it already has a `Block1`.  If this scenario is encountered, this option tells the program what to do. 
+- `Add Blocks` `Report missing sheet in document`: As discussed above, `Add Blocks` checks every sheet in the Library. If the document does not have a corresponding sheet, enable this option to have it reported in the log file.  
 
 </details>
 
@@ -1087,7 +1092,7 @@ This command turns a typical single-file macro into a batch routine, also enhanc
 
 Select the program with the `Browse` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
 
-For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt as an Administrator.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`.  I was told this has 'security implications'.  Presumably *negative* implications.  You might want to work with your IT department to see if there is a safer way.  
+For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft [<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) with some details.  If you're not an expert on such matters, you might want to run it by your IT department first.  
 
 If you are writing your own program, be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
@@ -1135,7 +1140,7 @@ Select the file type using the combobox. Select the directory using the `Browse`
 
 You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
 - `Project %{System.Project Name}` 
-- `%{System.Material}\%{System.Sheet Metal Gage}` 
+- `%{System.Material}\%{System.Sheet Metal Gage}` Another option to create the new file or subdirectory name is to use the Expression Editor.  This can be especially handy if an `If` statement is needed for any reason.  For details on the Expression Editor, refer to the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  You'll have to scroll down a bit to see it.
 
 You can enter a subdirectory formula even if `Original directory` is enabled. In that case, it is interpreted as a subdirectory under the original directory. 
 

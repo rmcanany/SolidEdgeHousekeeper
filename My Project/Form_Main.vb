@@ -752,6 +752,19 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _ExpressionEditorLanguage As String
+    Public Property ExpressionEditorLanguage As String
+        Get
+            Return _ExpressionEditorLanguage
+        End Get
+        Set(value As String)
+            _ExpressionEditorLanguage = value
+            If Me.TabControl1 IsNot Nothing Then
+                ComboBoxExpressionEditorLanguage.Text = value
+            End If
+        End Set
+    End Property
+
 
     '###### HOME TAB ######
 
@@ -1147,6 +1160,10 @@ Public Class Form_Main
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
         If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
+
+        If Not (Me.ExpressionEditorLanguage = "VB" Or Me.ExpressionEditorLanguage = "SQL") Then
+            Me.ExpressionEditorLanguage = "VB"
+        End If
 
         If Me.TCItemIDRx Is Nothing OrElse Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
         If Me.TCRevisionRx Is Nothing OrElse Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
@@ -3708,6 +3725,9 @@ Public Class Form_Main
         Me.ProcessDraftsInactive = CheckBoxProcessDraftsInactive.Checked
     End Sub
 
+    Private Sub ComboBoxExpressionEditorLanguage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxExpressionEditorLanguage.SelectedIndexChanged
+        Me.ExpressionEditorLanguage = ComboBoxExpressionEditorLanguage.Text
+    End Sub
 End Class
 
 

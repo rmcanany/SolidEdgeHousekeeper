@@ -67,7 +67,7 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
         KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
         KeepProps.AddRange({"TCCachePath", "TCItemIDRx", "TCRevisionRx"})
-        KeepProps.AddRange({"ProcessDraftsInactive"})
+        KeepProps.AddRange({"ProcessDraftsInactive", "ExpressionEditorLanguage"})
 
         If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
 

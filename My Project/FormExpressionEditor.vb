@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Imports FastColoredTextBoxNS
 Imports PanoramicData.NCalcExtensions
 
-Public Class FormNCalc
+Public Class FormExpressionEditor
 
     Public Formula As String
     Dim SavedExpressionsItems As New Dictionary(Of String, String)
@@ -70,7 +70,8 @@ Public Class FormNCalc
 
         popupMenu.Items.SetAutocompleteItems(items)
 
-        TextEditorFormula.Language = CType(5, Language)
+        'TextEditorFormula.Language = CType(5, Language)
+        TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL  ' Can change this as needed after instantiating the object.
 
     End Sub
 
