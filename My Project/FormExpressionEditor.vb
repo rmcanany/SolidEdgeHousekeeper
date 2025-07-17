@@ -180,12 +180,49 @@ Public Class FormExpressionEditor
 
         Next
 
-        Dim nCalcExpression As New ExtendedExpression(calculation)
+        Dim Success As Boolean = True
+        Dim nCalcExpression As ExtendedExpression = Nothing
+        Dim ExpressionResult As String = ""
 
-        TextEditorResults.Clear()
+        If TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL Then
+            Try
+                nCalcExpression = New ExtendedExpression(calculation)
+                ExpressionResult = CStr(nCalcExpression.Evaluate())
+            Catch ex As Exception
+                Success = False
+                TextEditorResults.Clear()
+                TextEditorResults.Text = ex.Message
+            End Try
 
-        Try
-            Dim A = nCalcExpression.Evaluate()
+        ElseIf TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then
+            Dim UPS As New UtilsPowerShell
+            Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(calculation.Split(CChar(vbCrLf)).ToList)
+            Dim PowerShellFilename As String = $"{IO.Path.GetTempPath}\HousekeeperExpression.ps1"
+            IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
+            Dim P As New Diagnostics.Process
+            Dim PSError As String = ""
+            P.StartInfo.FileName = "powershell.exe"
+            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowerShellFilename.Replace(" ", "` "), Chr(34))
+            P.StartInfo.RedirectStandardError = True
+            P.StartInfo.RedirectStandardOutput = True
+            P.StartInfo.UseShellExecute = False
+            P.StartInfo.CreateNoWindow = True
+            P.Start()
+            PSError = P.StandardError.ReadToEnd
+            Dim PSResult As String = P.StandardOutput.ReadToEnd
+
+            If Not PSError = "" Then
+                Success = False
+                TextEditorResults.Clear()
+                TextEditorResults.Text = PSError
+            End If
+
+            P.WaitForExit()
+            ExpressionResult = PSResult
+
+        End If
+
+        If Success Then
             Dim p As String = vbCrLf & vbCrLf & "Parameters list" & vbCrLf & "---------------"
 
             For Each tmpPar In Parameters
@@ -195,14 +232,9 @@ Public Class FormExpressionEditor
             Next
 
             TextEditorResults.Clear()
-            TextEditorResults.Text = "Expression result: " & CType(A, String) & p
+            TextEditorResults.Text = "Expression result: " & ExpressionResult & p
 
-        Catch ex As Exception
-
-            TextEditorResults.Clear()
-            TextEditorResults.Text = ex.Message
-
-        End Try
+        End If
 
     End Sub
 

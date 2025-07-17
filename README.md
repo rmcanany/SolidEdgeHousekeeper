@@ -11,7 +11,7 @@
 @john.matthews3452 (Hatch)
 
 **Contributors**
-@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github), @KGeetings (github)
+@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github)
 
 **Beta Testers**
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza, @mefrebo, @KGeetings, @tempod, @john.matthews3452
