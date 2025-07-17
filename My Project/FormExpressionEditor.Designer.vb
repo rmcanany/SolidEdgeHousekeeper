@@ -36,9 +36,14 @@ Partial Class FormExpressionEditor
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
         Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStrip1
@@ -49,7 +54,7 @@ Partial Class FormExpressionEditor
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(915, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(517, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -129,16 +134,15 @@ Partial Class FormExpressionEditor
         Me.TextEditorFormula.CharWidth = 8
         Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
-        Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Top
-        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
+        Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextEditorFormula.IsReplaceMode = False
-        Me.TextEditorFormula.Location = New System.Drawing.Point(0, 25)
+        Me.TextEditorFormula.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextEditorFormula.Name = "TextEditorFormula"
         Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorFormula.Size = New System.Drawing.Size(915, 224)
+        Me.TextEditorFormula.Size = New System.Drawing.Size(517, 210)
         Me.TextEditorFormula.TabIndex = 3
         Me.TextEditorFormula.Zoom = 100
         '
@@ -153,31 +157,45 @@ Partial Class FormExpressionEditor
         Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorResults.IsReplaceMode = False
-        Me.TextEditorResults.Location = New System.Drawing.Point(0, 249)
+        Me.TextEditorResults.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextEditorResults.Name = "TextEditorResults"
         Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorResults.Size = New System.Drawing.Size(915, 196)
+        Me.TextEditorResults.Size = New System.Drawing.Size(517, 206)
         Me.TextEditorResults.TabIndex = 4
         Me.TextEditorResults.Zoom = 100
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 25)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.TextEditorFormula)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.TextEditorResults)
+        Me.SplitContainer1.Size = New System.Drawing.Size(517, 420)
+        Me.SplitContainer1.SplitterDistance = 210
+        Me.SplitContainer1.TabIndex = 5
         '
         'FormExpressionEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(915, 445)
-        Me.Controls.Add(Me.TextEditorResults)
-        Me.Controls.Add(Me.TextEditorFormula)
+        Me.ClientSize = New System.Drawing.Size(517, 445)
+        Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.MaximizeBox = False
         Me.Name = "FormExpressionEditor"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Expression editor"
@@ -185,6 +203,10 @@ Partial Class FormExpressionEditor
         Me.ToolStrip1.PerformLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -201,4 +223,5 @@ Partial Class FormExpressionEditor
     Friend WithEvents TextEditorResults As FastColoredTextBoxNS.FastColoredTextBox
     Friend WithEvents BT_Clear As ToolStripButton
     Friend WithEvents BT_SaveAs As ToolStripButton
+    Friend WithEvents SplitContainer1 As SplitContainer
 End Class
