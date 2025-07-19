@@ -1062,13 +1062,18 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "**Expressions**"
 
-        HelpString += vbCrLf + vbCrLf + "An `expression` is similar to a formula in Excel. "
-        HelpString += "Expressions enable more complex manipulations of the `Replace` string. "
+        HelpString += vbCrLf + vbCrLf + "An `expression` is basically a program. "
+        HelpString += "It enables more complex manipulations of the `Replace` string. "
         HelpString += "To create one, click the `Expression Editor` button on the input editor form. "
+
+        HelpString += vbCrLf + vbCrLf + "There are two programming languages available, `NCalc` and `VB`. "
+        HelpString += "Choose which one to use on the **Configuration Tab -- General Page**. "
+        HelpString += "`VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  "
+        HelpString += "`NCalc` is more like a formula in Excel. Some of its features are detailed below. "
 
         HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
 
-        HelpString += vbCrLf + vbCrLf + "You can perform string processing, "
+        HelpString += vbCrLf + vbCrLf + "With `NCalc` you can perform string processing, "
         HelpString += "create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. "
         HelpString += "Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. "
         HelpString += "Unlike Excel, multi-line text is allowed, which can make the code more readable. "
@@ -1083,7 +1088,7 @@ Public Class TaskEditProperties
         HelpString += "That drop-down comes with a few examples. You can study those to get the hang of it. "
         HelpString += "To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. "
 
-        HelpString += vbCrLf + vbCrLf + "Available functions"
+        HelpString += vbCrLf + vbCrLf + "`NCalc` functions"
         HelpString += vbCrLf + vbCrLf + "`concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, "
         HelpString += "`dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,"
         HelpString += "`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, "

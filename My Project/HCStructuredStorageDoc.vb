@@ -395,8 +395,8 @@ Public Class HCStructuredStorageDoc
             Select Case TextToRemove
                 Case "EXPRESSION_VB"
                     ExpressionLanguage = "VB"
-                Case "EXPRESSION_SQL"
-                    ExpressionLanguage = "SQL"
+                Case "EXPRESSION_NCalc"
+                    ExpressionLanguage = "NCalc"
                 Case Else
                     ErrorLogger.AddMessage($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
                     'MsgBox($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
@@ -444,7 +444,7 @@ Public Class HCStructuredStorageDoc
         If Proceed Then
             If IsExpression Then
 
-                If ExpressionLanguage = "" Or ExpressionLanguage = "SQL" Then
+                If ExpressionLanguage = "" Or ExpressionLanguage = "NCalc" Then
                     Dim nCalcExpression As New ExtendedExpression(OutString)
                     Try
                         Dim A = nCalcExpression.Evaluate()

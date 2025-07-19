@@ -843,17 +843,19 @@ If you are changing `System.Material` specifically, you can also update the prop
 
 **Expressions**
 
-An `expression` is similar to a formula in Excel. Expressions enable more complex manipulations of the `Replace` string. To create one, click the `Expression Editor` button on the input editor form. 
+An `expression` is basically a program. It enables more complex manipulations of the `Replace` string. To create one, click the `Expression Editor` button on the input editor form. 
+
+There are two programming languages available, `NCalc` and `VB`. Choose which one to use on the **Configuration Tab -- General Page**. `VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  `NCalc` is more like a formula in Excel. Some of its features are detailed below. 
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
-You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
+With `NCalc` you can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
 You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. 
 
 You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to get the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
 
-Available functions
+`NCalc` functions
 
 `concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
 
@@ -1140,7 +1142,9 @@ Select the file type using the combobox. Select the directory using the `Browse`
 
 You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
 - `Project %{System.Project Name}` 
-- `%{System.Material}\%{System.Sheet Metal Gage}` Another option to create the new file or subdirectory name is to use the Expression Editor.  This can be especially handy if an `If` statement is needed for any reason.  For details on the Expression Editor, refer to the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  You'll have to scroll down a bit to see it.
+- `%{System.Material}\%{System.Sheet Metal Gage}` 
+
+Another option to create the new file or subdirectory name is to use the Expression Editor.  This can be especially handy if an `If` statement is needed for any reason.  For details on the Expression Editor, refer to the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  You'll have to scroll down a bit to see it.
 
 You can enter a subdirectory formula even if `Original directory` is enabled. In that case, it is interpreted as a subdirectory under the original directory. 
 

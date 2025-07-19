@@ -891,8 +891,8 @@ Public Class UtilsCommon
             Select Case TextToRemove
                 Case "EXPRESSION_VB"
                     ExpressionLanguage = "VB"
-                Case "EXPRESSION_SQL"
-                    ExpressionLanguage = "SQL"
+                Case "EXPRESSION_NCalc"
+                    ExpressionLanguage = "NCalc"
                 Case Else
                     MsgBox($"SubstitutePropertyFormula: Expression header not recognized '{TextToRemove}'")
                     Return Nothing
@@ -984,7 +984,7 @@ Public Class UtilsCommon
 
         If Proceed Then
             If IsExpression Then
-                If ExpressionLanguage = "" Or ExpressionLanguage = "SQL" Then
+                If ExpressionLanguage = "" Or ExpressionLanguage = "NCalc" Then
                     Dim nCalcExpression As New ExtendedExpression(Outstring)
                     Try
                         Dim A = nCalcExpression.Evaluate()

@@ -195,10 +195,10 @@ Public Class UCTaskControl
 
         Dim FEE As New FormExpressionEditor
 
-        Select Case Form_Main.ExpressionEditorLanguage.ToLower
-            Case "vb"
+        Select Case Form_Main.ExpressionEditorLanguage
+            Case "VB"
                 FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
-            Case "sql"
+            Case "NCalc"
                 FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
             Case Else
                 MsgBox($"UCTaskControl: Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)

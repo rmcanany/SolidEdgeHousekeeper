@@ -2460,6 +2460,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2778,7 +2779,7 @@ Partial Class Form_Main
         Me.ComboBoxExpressionEditorLanguage.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ComboBoxExpressionEditorLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxExpressionEditorLanguage.FormattingEnabled = True
-        Me.ComboBoxExpressionEditorLanguage.Items.AddRange(New Object() {"VB", "SQL"})
+        Me.ComboBoxExpressionEditorLanguage.Items.AddRange(New Object() {"NCalc", "VB"})
         Me.ComboBoxExpressionEditorLanguage.Location = New System.Drawing.Point(3, 3)
         Me.ComboBoxExpressionEditorLanguage.Name = "ComboBoxExpressionEditorLanguage"
         Me.ComboBoxExpressionEditorLanguage.Size = New System.Drawing.Size(69, 23)

@@ -1282,7 +1282,7 @@ Public Class TaskSaveModelAs
         HelpString += vbCrLf + "- `Project %{System.Project Name}` "
         HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "
 
-        HelpString += "Another option to create the new file or subdirectory name is to use the Expression Editor.  "
+        HelpString += vbCrLf + vbCrLf + "Another option to create the new file or subdirectory name is to use the Expression Editor.  "
         HelpString += "This can be especially handy if an `If` statement is needed for any reason.  "
         HelpString += "For details on the Expression Editor, refer to the "
         HelpString += "[<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  "

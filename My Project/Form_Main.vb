@@ -1161,8 +1161,8 @@ Public Class Form_Main
 
         If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
 
-        If Not (Me.ExpressionEditorLanguage = "VB" Or Me.ExpressionEditorLanguage = "SQL") Then
-            Me.ExpressionEditorLanguage = "SQL"
+        If Not (Me.ExpressionEditorLanguage = "VB" Or Me.ExpressionEditorLanguage = "NCalc") Then
+            Me.ExpressionEditorLanguage = "NCalc"
         End If
 
         If Me.TCItemIDRx Is Nothing OrElse Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
