@@ -57,13 +57,6 @@ Public Class UtilsPowerShell
         BotList.Add("")
         BotList.Add("$Result = [Expression]::RunExpression()")
         BotList.Add("Write-Output $Result")
-        'BotList.Add("")
-        'BotList.Add("Function ExitWithCode($exitcode) {")
-        'BotList.Add("  $host.SetShouldExit($exitcode)")
-        'BotList.Add("  Exit $exitcode")
-        'BotList.Add("}")
-        'BotList.Add("")
-        'BotList.Add("ExitWithCode($Result)")
 
         For Each L As List(Of String) In {TopList, MidList, BotList}
             For Each s In L
@@ -75,6 +68,32 @@ Public Class UtilsPowerShell
 
     End Function
 
+    Public Function RunExpressionScript(PowerShellFilename As String) As String
+        Dim Result As String = ""
+
+        Dim P As New Diagnostics.Process
+        Dim PSError As String = ""
+        P.StartInfo.FileName = "powershell.exe"
+        'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowerShellFilename.Replace(" ", "` "), Chr(34))
+        P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
+        P.StartInfo.RedirectStandardError = True
+        P.StartInfo.RedirectStandardOutput = True
+        P.StartInfo.UseShellExecute = False
+        P.StartInfo.CreateNoWindow = True
+        P.Start()
+        PSError = P.StandardError.ReadToEnd
+        Dim PSResult As String = P.StandardOutput.ReadToEnd
+
+        If Not PSError = "" Then
+            Throw New Exception(PSError)
+        End If
+
+        P.WaitForExit()
+        Result = PSResult.Replace(vbCrLf, "")
+
+        Return Result
+
+    End Function
 
     Private Function BuildSnippetFile(SnippetFilename As String) As String
         ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/

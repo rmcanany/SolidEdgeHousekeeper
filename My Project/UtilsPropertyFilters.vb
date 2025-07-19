@@ -171,7 +171,8 @@ Public Class UtilsPropertyFilters
 
             Value = Condition.Value
 
-            Value = SSDoc.SubstitutePropertyFormulas(Value, ValidFilenameRequired:=False)
+            Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
+            Value = SSDoc.SubstitutePropertyFormulas(Value, tmpErrorLogger)
 
             If Value Is Nothing Then
                 SSDoc.Close()

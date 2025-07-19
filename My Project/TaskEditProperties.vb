@@ -481,7 +481,7 @@ Public Class TaskEditProperties
 
         Dim s As String
 
-        FindString = SSDoc.SubstitutePropertyFormulas(FindString, ValidFilenameRequired:=False)
+        FindString = SSDoc.SubstitutePropertyFormulas(FindString, TaskLogger)
         If FindString Is Nothing Then
             s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
             If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
@@ -489,7 +489,7 @@ Public Class TaskEditProperties
 
         Dim OriginalReplaceString As String = ""
         If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString
-        ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
+        ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, ReplaceSearchType = "EX")
         If ReplaceString Is Nothing Then
             If Not ReplaceSearchType = "EX" Then
                 s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
@@ -545,7 +545,7 @@ Public Class TaskEditProperties
             If Proceed Then
                 Dim FullName As String = UC.GetFOAFilename(SEDoc.FullName)
 
-                FindString = UC.SubstitutePropertyFormula(SEDoc, FullName, FindString, Me.PropertiesData)
+                FindString = UC.SubstitutePropertyFormulas(SEDoc, FullName, FindString, Me.PropertiesData, TaskLogger)
                 If FindString Is Nothing Then
                     Proceed = False
                     s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
@@ -554,7 +554,7 @@ Public Class TaskEditProperties
 
                 Dim OriginalReplaceString As String = ""
                 If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString
-                ReplaceString = UC.SubstitutePropertyFormula(SEDoc, FullName, ReplaceString, Me.PropertiesData, ReplaceSearchType = "EX")
+                ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, ReplaceSearchType = "EX")
                 If ReplaceString Is Nothing Then
                     Proceed = False
                     If Not ReplaceSearchType = "EX" Then

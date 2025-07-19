@@ -199,26 +199,14 @@ Public Class FormExpressionEditor
             Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(calculation.Split(CChar(vbCrLf)).ToList)
             Dim PowerShellFilename As String = $"{IO.Path.GetTempPath}\HousekeeperExpression.ps1"
             IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
-            Dim P As New Diagnostics.Process
-            Dim PSError As String = ""
-            P.StartInfo.FileName = "powershell.exe"
-            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowerShellFilename.Replace(" ", "` "), Chr(34))
-            P.StartInfo.RedirectStandardError = True
-            P.StartInfo.RedirectStandardOutput = True
-            P.StartInfo.UseShellExecute = False
-            P.StartInfo.CreateNoWindow = True
-            P.Start()
-            PSError = P.StandardError.ReadToEnd
-            Dim PSResult As String = P.StandardOutput.ReadToEnd
 
-            If Not PSError = "" Then
+            Try
+                ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
+            Catch ex As Exception
                 Success = False
                 TextEditorResults.Clear()
-                TextEditorResults.Text = PSError
-            End If
-
-            P.WaitForExit()
-            ExpressionResult = PSResult
+                TextEditorResults.Text = ex.Message
+            End Try
 
         End If
 
@@ -379,6 +367,10 @@ Public Class FormExpressionEditor
 
     End Sub
 
+    Private Sub BT_InsertProp_Click(sender As Object, e As EventArgs) Handles BT_InsertProp.Click
+        TextEditorFormula.SelectedText = """%{}"""
+        TextEditorFormula.SelectionStart -= 2
+    End Sub
 End Class
 
 Public Class MethodAutocompleteItem2

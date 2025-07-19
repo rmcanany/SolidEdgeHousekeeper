@@ -39,9 +39,9 @@ Public Class TaskSaveDrawingAs
             Return _FilenameFormula
         End Get
         Set(value As String)
-            _FilenameFormula = value
+            _FilenameFormula = value.Replace(Chr(182), vbCrLf)
             If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.FilenameFormula.ToString), TextBox).Text = value
+                CType(ControlsDict(ControlNames.FilenameFormula.ToString), TextBox).Text = value.Replace(vbCrLf, Chr(182))
             End If
         End Set
     End Property
@@ -91,9 +91,9 @@ Public Class TaskSaveDrawingAs
             Return _Formula
         End Get
         Set(value As String)
-            _Formula = value
+            _Formula = value.Replace(Chr(182), vbCrLf)
             If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Text = value
+                CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Text = value.Replace(vbCrLf, Chr(182))
             End If
         End Set
     End Property
@@ -376,9 +376,8 @@ Public Class TaskSaveDrawingAs
         If Not Me.UseSubdirectoryFormula Then
             NewSubDirectoryName = ""
         Else
-            If Me.Formula.StartsWith("EX:") Then
-                NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula.Replace("EX:", ""), Me.PropertiesData, True)
-                'NewSubDirectoryName = NewSubDirectoryName.Replace("/", "\")
+            If Me.Formula.StartsWith("EXPRESSION_") Then
+                NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger, True)
 
                 If NewSubDirectoryName Is Nothing Then
                     Success = False
@@ -390,7 +389,7 @@ Public Class TaskSaveDrawingAs
                 End If
 
             Else
-                NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData)
+                NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger)
 
                 If NewSubDirectoryName Is Nothing Then
                     Success = False
@@ -414,8 +413,8 @@ Public Class TaskSaveDrawingAs
         If Not Me.ChangeFilename Then
             NewFilenameWOExt = OldFilenameWOExt
         Else
-            If Me.FilenameFormula.StartsWith("EX:") Then
-                NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula.Replace("EX:", ""), Me.PropertiesData, True)
+            If Me.FilenameFormula.StartsWith("EXPRESSION_") Then
+                NewFilenameWOExt = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData, TaskLogger, True)
 
                 If NewFilenameWOExt Is Nothing Then
                     Success = False
@@ -427,7 +426,7 @@ Public Class TaskSaveDrawingAs
                 End If
 
             Else
-                NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData)
+                NewFilenameWOExt = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData, TaskLogger)
 
                 If NewFilenameWOExt Is Nothing Then
                     Success = False

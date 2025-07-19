@@ -3356,7 +3356,8 @@ Public Class Form_Main
             Exit Sub
         End Try
 
-        Dim Q = SSDoc.SubstitutePropertyFormulas(editbox.Text, ValidFilenameRequired:=False)
+        Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
+        Dim Q = SSDoc.SubstitutePropertyFormulas(editbox.Text, tmpErrorLogger)
 
         Dim Success As Boolean = True
 

@@ -354,7 +354,7 @@ Public Class HCStructuredStorageDoc
 
     Public Function SubstitutePropertyFormulas(
          InString As String,
-         ValidFilenameRequired As Boolean,
+         ErrorLogger As Logger,
          Optional IsExpression As Boolean = False
          ) As String
 
@@ -387,6 +387,26 @@ Public Class HCStructuredStorageDoc
         Dim MatchString As Match
         Dim Pattern As String
 
+        Dim ExpressionLanguage As String = ""
+
+        If IsExpression And InString.StartsWith("EXPRESSION_") Then
+            Dim TextToRemove As String = InString.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
+
+            Select Case TextToRemove
+                Case "EXPRESSION_VB"
+                    ExpressionLanguage = "VB"
+                Case "EXPRESSION_SQL"
+                    ExpressionLanguage = "SQL"
+                Case Else
+                    ErrorLogger.AddMessage($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
+                    'MsgBox($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
+                    Return Nothing
+            End Select
+
+            InString = InString.Replace($"{TextToRemove}{vbCrLf}", "")
+
+        End If
+
 
         ' Any number of substrings that start with "%{" and end with the first encountered "}".
         Pattern = "%{[^}]*}"
@@ -402,8 +422,9 @@ Public Class HCStructuredStorageDoc
 
         If Proceed Then
             For Each Formula In Formulas
-                DocValue = ProcessFormula(Formula, ValidFilenameRequired)
+                DocValue = ProcessFormula(Formula, ErrorLogger)
                 If DocValue Is Nothing Then
+                    ErrorLogger.AddMessage($"Could not process formula '{Formula}'")
                     Return Nothing
                 Else
                     DocValues.Add(DocValue)
@@ -423,18 +444,30 @@ Public Class HCStructuredStorageDoc
         If Proceed Then
             If IsExpression Then
 
-                Dim nCalcExpression As New ExtendedExpression(OutString)
+                If ExpressionLanguage = "" Or ExpressionLanguage = "SQL" Then
+                    Dim nCalcExpression As New ExtendedExpression(OutString)
+                    Try
+                        Dim A = nCalcExpression.Evaluate()
+                        OutString = A.ToString
+                    Catch ex As Exception
+                        ErrorLogger.AddMessage($"Could not process expression '{OutString}'")
+                        OutString = Nothing
+                    End Try
 
-                Try
-                    Dim A = nCalcExpression.Evaluate()
+                Else  ' Must be VB
+                    Dim UPS As New UtilsPowerShell
+                    Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(OutString.Split(CChar(vbCrLf)).ToList)
+                    Dim PowerShellFilename As String = $"{IO.Path.GetTempPath}\HousekeeperExpression.ps1"
+                    IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
 
-                    OutString = A.ToString
+                    Try
+                        OutString = UPS.RunExpressionScript(PowerShellFilename)
+                    Catch ex As Exception
+                        ErrorLogger.AddMessage($"Could not process expression '{OutString}'")
+                        OutString = Nothing
+                    End Try
 
-                Catch ex As Exception
-
-                    OutString = Nothing
-
-                End Try
+                End If
 
             End If
         End If
@@ -444,7 +477,7 @@ Public Class HCStructuredStorageDoc
     End Function
 
 
-    Private Function ProcessFormula(Formula As String, ValidFilenameRequired As Boolean) As String
+    Private Function ProcessFormula(Formula As String, ErrorLogger As Logger) As String
         Dim DocValue As String = Nothing
 
         Dim UC As New UtilsCommon
@@ -463,13 +496,14 @@ Public Class HCStructuredStorageDoc
         ModelIdx = UC.ModelIdxFromFormula(Formula)
 
         If Not ((PropertySetName = "System") Or (PropertySetName = "Custom") Or (PropertySetName = "Server")) Then
+            ErrorLogger.AddMessage($"PropertySet not recognized '{PropertySetName}'")
             Return Nothing
         End If
 
         If (PropertySetName = "Server") And (PropertyName = "Query") Then
             'Return Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
 
-            Dim tmpServerQuery = SubstitutePropertyFormulas(Form_Main.ServerQuery, ValidFilenameRequired:=False)
+            Dim tmpServerQuery = SubstitutePropertyFormulas(Form_Main.ServerQuery, ErrorLogger)
             Return Form_Main.ExecuteQuery(FullName, tmpServerQuery, ModelIdx).Replace(vbCrLf, " ")
         End If
 
@@ -477,25 +511,21 @@ Public Class HCStructuredStorageDoc
         If tmpPropertyData IsNot Nothing Then
             PropertyNameEnglish = tmpPropertyData.EnglishName
         Else
+            ErrorLogger.AddMessage($"Property not recognized '{PropertyName}'")
             Return Nothing
         End If
-
-        'Try
-        '    PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName  ' Exception was on Nothing.Englishname, I think.
-        'Catch ex As Exception
-        '    MsgBox(PropertyName & " NOT FOUND", MsgBoxStyle.Exclamation) '<-------- ######### Properly handle this situation, MSGBOX not ideal causes it blocks the batch
-        'End Try
 
         If Not IsNothing(PropertyNameEnglish) Then
 
             If ModelIdx = 0 Then
                 DocValue = CStr(GetPropValue(PropertySetName, PropertyNameEnglish))
                 If DocValue Is Nothing Then
+                    ErrorLogger.AddMessage($"No value found for '{PropertySetName}.{PropertyNameEnglish}'")
                     Return Nothing
                 Else
-                    If ValidFilenameRequired Then
-                        DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
-                    End If
+                    'If ValidFilenameRequired Then
+                    '    DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
+                    'End If
                 End If
 
             Else
@@ -523,9 +553,9 @@ Public Class HCStructuredStorageDoc
                     SSDoc.Close()
                     Return Nothing
                 Else
-                    If ValidFilenameRequired Then
-                        DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
-                    End If
+                    'If ValidFilenameRequired Then
+                    '    DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
+                    'End If
                 End If
 
                 SSDoc.Close()

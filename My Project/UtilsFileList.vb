@@ -1119,7 +1119,8 @@ Public Class UtilsFileList
                             Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, _OpenReadWrite:=False)
                             SSDoc.ReadProperties(FMain.PropertiesData)
 
-                            PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, ValidFilenameRequired:=False)
+                            Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
+                            PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, tmpErrorLogger)
 
                             SSDoc.Close()
 

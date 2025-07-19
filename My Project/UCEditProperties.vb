@@ -95,9 +95,9 @@ Public Class UCEditProperties
             Return _ReplaceString
         End Get
         Set(value As String)
-            _ReplaceString = value
+            _ReplaceString = value.Replace(Chr(182), vbCrLf)
             If Me.ExTableLayoutPanel1 IsNot Nothing Then
-                TextBoxReplaceString.Text = value
+                TextBoxReplaceString.Text = value.Replace(vbCrLf, Chr(182))
             End If
         End Set
     End Property

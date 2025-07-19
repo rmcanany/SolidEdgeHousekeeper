@@ -180,7 +180,7 @@ Public Class TaskCheckFilename
         Select Case DocType
             Case = "asm", "par", "psm"
 
-                Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData)
+                Formula = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData, TaskLogger)
 
                 If Formula Is Nothing Then
                     TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
@@ -210,7 +210,7 @@ Public Class TaskCheckFilename
             Case = "dft"
 
                 If Me.DraftsCheckDraftItself Then
-                    Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData)
+                    Formula = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData, TaskLogger)
 
                     If Formula Is Nothing Then
                         TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
@@ -262,8 +262,8 @@ Public Class TaskCheckFilename
                             ModelLinkFilenames.Add(System.IO.Path.GetFileName(ModelLinkFilename))
                             ModelLinkDoc = CType(ModelLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument)
 
-                            Formula = UC.SubstitutePropertyFormula(
-                                    ModelLinkDoc, ModelLinkDoc.FullName, Me.PropertyFormula, Me.PropertiesData)
+                            Formula = UC.SubstitutePropertyFormulas(
+                                    ModelLinkDoc, ModelLinkDoc.FullName, Me.PropertyFormula, Me.PropertiesData, TaskLogger)
 
                             If Formula IsNot Nothing Then
                                 Formulas.Add(Formula)
@@ -349,7 +349,7 @@ Public Class TaskCheckFilename
             Select Case ExtensionParent
                 Case ".asm", ".par", ".psm"
 
-                    Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, ValidFilenameRequired:=False)
+                    Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, TaskLogger)
 
                     If Formula Is Nothing Then
                         TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
@@ -380,7 +380,7 @@ Public Class TaskCheckFilename
 
                     If Me.DraftsCheckDraftItself Then
 
-                        Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, ValidFilenameRequired:=False)
+                        Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, TaskLogger)
 
                         If Formula Is Nothing Then
                             TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
@@ -426,7 +426,7 @@ Public Class TaskCheckFilename
                                     SSChildDoc = New HCStructuredStorageDoc(ChildName)
                                     SSChildDoc.ReadProperties(Me.PropertiesData)
 
-                                    Formula = SSChildDoc.SubstitutePropertyFormulas(Me.PropertyFormula, ValidFilenameRequired:=False)
+                                    Formula = SSChildDoc.SubstitutePropertyFormulas(Me.PropertyFormula, TaskLogger)
 
                                     If Formula IsNot Nothing Then  ' Nothing is not an error, but no match possible.
                                         Formula = Formula.Trim

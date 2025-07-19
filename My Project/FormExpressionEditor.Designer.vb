@@ -25,13 +25,16 @@ Partial Class FormExpressionEditor
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormExpressionEditor))
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.EditorLabel = New System.Windows.Forms.ToolStripLabel()
         Me.BT_Test = New System.Windows.Forms.ToolStripButton()
+        Me.BT_Clear = New System.Windows.Forms.ToolStripButton()
+        Me.BT_InsertProp = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SavedExpressionsLabel = New System.Windows.Forms.ToolStripLabel()
         Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
         Me.BT_Save = New System.Windows.Forms.ToolStripButton()
         Me.BT_SaveAs = New System.Windows.Forms.ToolStripButton()
         Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
-        Me.BT_Clear = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
         Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
@@ -50,13 +53,20 @@ Partial Class FormExpressionEditor
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.White
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.BT_Clear, Me.ToolStripSeparator2, Me.BT_Help})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditorLabel, Me.BT_Test, Me.BT_Clear, Me.BT_InsertProp, Me.ToolStripSeparator1, Me.SavedExpressionsLabel, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(517, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(625, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'EditorLabel
+        '
+        Me.EditorLabel.BackColor = System.Drawing.Color.Linen
+        Me.EditorLabel.Name = "EditorLabel"
+        Me.EditorLabel.Size = New System.Drawing.Size(38, 22)
+        Me.EditorLabel.Text = "Editor"
         '
         'BT_Test
         '
@@ -66,18 +76,43 @@ Partial Class FormExpressionEditor
         Me.BT_Test.Size = New System.Drawing.Size(48, 22)
         Me.BT_Test.Text = "Test"
         '
+        'BT_Clear
+        '
+        Me.BT_Clear.Image = Global.Housekeeper.My.Resources.Resources.unchecked_disabled
+        Me.BT_Clear.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Clear.Name = "BT_Clear"
+        Me.BT_Clear.Size = New System.Drawing.Size(54, 22)
+        Me.BT_Clear.Text = "Clear"
+        '
+        'BT_InsertProp
+        '
+        Me.BT_InsertProp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.BT_InsertProp.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BT_InsertProp.Image = CType(resources.GetObject("BT_InsertProp.Image"), System.Drawing.Image)
+        Me.BT_InsertProp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_InsertProp.Name = "BT_InsertProp"
+        Me.BT_InsertProp.Size = New System.Drawing.Size(41, 22)
+        Me.BT_InsertProp.Text = """%{}"""
+        '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'SavedExpressionsLabel
+        '
+        Me.SavedExpressionsLabel.BackColor = System.Drawing.Color.Linen
+        Me.SavedExpressionsLabel.Name = "SavedExpressionsLabel"
+        Me.SavedExpressionsLabel.Size = New System.Drawing.Size(101, 22)
+        Me.SavedExpressionsLabel.Text = "Saved Expressions"
         '
         'DD_SavedExpressions
         '
         Me.DD_SavedExpressions.Image = Global.Housekeeper.My.Resources.Resources.list
         Me.DD_SavedExpressions.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.DD_SavedExpressions.Name = "DD_SavedExpressions"
-        Me.DD_SavedExpressions.Size = New System.Drawing.Size(130, 22)
-        Me.DD_SavedExpressions.Text = "Saved Expressions"
+        Me.DD_SavedExpressions.Size = New System.Drawing.Size(67, 22)
+        Me.DD_SavedExpressions.Text = "Select"
         '
         'BT_Save
         '
@@ -103,14 +138,6 @@ Partial Class FormExpressionEditor
         Me.BT_Delete.Size = New System.Drawing.Size(60, 22)
         Me.BT_Delete.Text = "Delete"
         '
-        'BT_Clear
-        '
-        Me.BT_Clear.Image = Global.Housekeeper.My.Resources.Resources.unchecked_disabled
-        Me.BT_Clear.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_Clear.Name = "BT_Clear"
-        Me.BT_Clear.Size = New System.Drawing.Size(54, 22)
-        Me.BT_Clear.Text = "Clear"
-        '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
@@ -118,10 +145,11 @@ Partial Class FormExpressionEditor
         '
         'BT_Help
         '
+        Me.BT_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_Help.Name = "BT_Help"
-        Me.BT_Help.Size = New System.Drawing.Size(52, 22)
+        Me.BT_Help.Size = New System.Drawing.Size(23, 22)
         Me.BT_Help.Text = "Help"
         '
         'TextEditorFormula
@@ -142,7 +170,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorFormula.Size = New System.Drawing.Size(517, 210)
+        Me.TextEditorFormula.Size = New System.Drawing.Size(625, 200)
         Me.TextEditorFormula.TabIndex = 3
         Me.TextEditorFormula.Zoom = 100
         '
@@ -164,7 +192,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorResults.Size = New System.Drawing.Size(517, 206)
+        Me.TextEditorResults.Size = New System.Drawing.Size(625, 132)
         Me.TextEditorResults.TabIndex = 4
         Me.TextEditorResults.Zoom = 100
         '
@@ -182,15 +210,15 @@ Partial Class FormExpressionEditor
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TextEditorResults)
-        Me.SplitContainer1.Size = New System.Drawing.Size(517, 420)
-        Me.SplitContainer1.SplitterDistance = 210
+        Me.SplitContainer1.Size = New System.Drawing.Size(625, 336)
+        Me.SplitContainer1.SplitterDistance = 200
         Me.SplitContainer1.TabIndex = 5
         '
         'FormExpressionEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(517, 445)
+        Me.ClientSize = New System.Drawing.Size(625, 361)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -224,4 +252,7 @@ Partial Class FormExpressionEditor
     Friend WithEvents BT_Clear As ToolStripButton
     Friend WithEvents BT_SaveAs As ToolStripButton
     Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents EditorLabel As ToolStripLabel
+    Friend WithEvents BT_InsertProp As ToolStripButton
+    Friend WithEvents SavedExpressionsLabel As ToolStripLabel
 End Class

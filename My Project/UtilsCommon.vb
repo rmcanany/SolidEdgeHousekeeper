@@ -843,12 +843,13 @@ Public Class UtilsCommon
         Return SpecialProperty
     End Function
 
-    Public Function SubstitutePropertyFormula(
+    Public Function SubstitutePropertyFormulas(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal FullName As String,
         ByVal Instring As String,
         PropertiesData As HCPropertiesData,
-        Optional Expression As Boolean = False
+        ErrorLogger As Logger,
+        Optional IsExpression As Boolean = False
         ) As String
 
         ' Replaces property formulas in a string
@@ -880,7 +881,26 @@ Public Class UtilsCommon
         Dim MatchString As Match
         Dim Pattern As String
 
+        Dim ExpressionLanguage As String = ""
+
         Dim UFC As New UtilsFilenameCharmap
+
+        If IsExpression And Instring.StartsWith("EXPRESSION_") Then
+            Dim TextToRemove As String = Instring.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
+
+            Select Case TextToRemove
+                Case "EXPRESSION_VB"
+                    ExpressionLanguage = "VB"
+                Case "EXPRESSION_SQL"
+                    ExpressionLanguage = "SQL"
+                Case Else
+                    MsgBox($"SubstitutePropertyFormula: Expression header not recognized '{TextToRemove}'")
+                    Return Nothing
+            End Select
+
+            Instring = Instring.Replace($"{TextToRemove}{vbCrLf}", "")
+
+        End If
 
 
         FullName = GetFOAFilename(FullName)
@@ -904,6 +924,7 @@ Public Class UtilsCommon
                 ModelIdx = ModelIdxFromFormula(Formula)
 
                 If Not ((PropertySet = "System") Or (PropertySet = "Custom") Or (PropertySet = "Server")) Then
+                    ErrorLogger.AddMessage($"PropertySet not recognized '{PropertySet}'")
                     Proceed = False
                 End If
 
@@ -921,12 +942,20 @@ Public Class UtilsCommon
                 ElseIf PropertyName = "Query" And PropertySet = "Server" Then
                     'tmpValue = Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
 
-                    Dim tmpServerQuery = SubstitutePropertyFormula(SEDoc, FullName, Form_Main.ServerQuery, PropertiesData)
-                    tmpValue = Form_Main.ExecuteQuery(FullName, tmpServerQuery, ModelIdx).Replace(vbCrLf, " ")
+                    Dim tmpServerQuery = SubstitutePropertyFormulas(SEDoc, FullName, Form_Main.ServerQuery, PropertiesData, ErrorLogger)
+                    If tmpServerQuery IsNot Nothing Then
+                        tmpValue = Form_Main.ExecuteQuery(FullName, tmpServerQuery, ModelIdx).Replace(vbCrLf, " ")
+                    Else
+                        ErrorLogger.AddMessage($"Unable to process query '{Form_Main.ServerQuery}'")
+                    End If
 
                 Else
                     FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
-                    If FoundProp IsNot Nothing Then tmpValue = FoundProp.Value.ToString
+                    If FoundProp IsNot Nothing Then
+                        tmpValue = FoundProp.Value.ToString
+                    Else
+                        ErrorLogger.AddMessage($"Unable to process property '{PropertySet}.{PropertyName}'")
+                    End If
                 End If
 
                 If tmpValue IsNot Nothing Then
@@ -954,14 +983,32 @@ Public Class UtilsCommon
         End If
 
         If Proceed Then
-            If Expression Then
-                Dim nCalcExpression As New ExtendedExpression(Outstring)
-                Try
-                    Dim A = nCalcExpression.Evaluate()
-                    Outstring = A.ToString
-                Catch ex As Exception
-                    Outstring = Nothing
-                End Try
+            If IsExpression Then
+                If ExpressionLanguage = "" Or ExpressionLanguage = "SQL" Then
+                    Dim nCalcExpression As New ExtendedExpression(Outstring)
+                    Try
+                        Dim A = nCalcExpression.Evaluate()
+                        Outstring = A.ToString
+                    Catch ex As Exception
+                        ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
+                        Outstring = Nothing
+                    End Try
+
+                Else  ' Must be VB
+                    Dim UPS As New UtilsPowerShell
+                    Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(Outstring.Split(CChar(vbCrLf)).ToList)
+                    Dim PowerShellFilename As String = $"{IO.Path.GetTempPath}\HousekeeperExpression.ps1"
+                    IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
+
+                    Try
+                        Outstring = UPS.RunExpressionScript(PowerShellFilename)
+                    Catch ex As Exception
+                        ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
+                        Outstring = Nothing
+                    End Try
+
+                End If
+
             End If
         End If
 

@@ -393,24 +393,33 @@ Public Class FormPropertyInputEditor
 
     Private Sub ToolStripButtonExpressionEditor_Click(sender As Object, e As EventArgs) Handles ToolStripButtonExpressionEditor.Click
 
-        Dim tmp As New FormExpressionEditor
+        Dim FEE As New FormExpressionEditor
 
         Select Case Form_Main.ExpressionEditorLanguage.ToLower
             Case "vb"
-                tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+                FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
             Case "sql"
-                tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+                FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
             Case Else
                 MsgBox($"Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
         End Select
 
-        tmp.ShowDialog()
-        Dim A = tmp.Formula.Replace(vbCrLf, "")
-        A = A.Split(CType("\\", Char)).First
+        FEE.ShowDialog()
 
-        If A <> "" Then
+        'Dim A = FEE.Formula.Replace(vbCrLf, "")
+        'A = A.Split(CType("\\", Char)).First
+
+        'If A <> "" Then
+        '    Clipboard.SetText(A)
+        '    MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)
+        'End If
+        If Not FEE.Formula = "" Then
+            Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
+            A = A.Split(CType("\\", Char)).First
+            A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+
             Clipboard.SetText(A)
-            MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)
+            MessageTimeOut("Expression copied to clipboard", "Expression editor", 1)
         End If
 
     End Sub

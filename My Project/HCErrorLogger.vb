@@ -118,7 +118,7 @@ Public Class Logger
 
     Public Sub AddMessage(Message As String)
         Me.HasErrors = True
-        Me.Messages.Add(Message)
+        Me.Messages.Add(Message.Replace(vbCrLf, Chr(182)))
 
         ' Propagate error flag up to parent loggers
         Dim tmpParent As Logger = Me.Parent
