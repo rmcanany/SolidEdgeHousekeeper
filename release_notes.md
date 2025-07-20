@@ -19,7 +19,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 Sponsored by **@john.matthews3452 (Hatch)**. Thank you!
 
-Added a new command to replace, add, and/or delete drawing sheet blocks.
+Added a new command to replace, add, and/or delete drawing sheet blocks.  This should be a welcome addition for any organization, like John's, needing to bring an entire archive of drawings into compliance with an updated standard.
 
 ![Update Blocks](My%20Project/media/task_update_blocks.png)
 
@@ -33,13 +33,23 @@ See the [<ins>**Update Blocks Help Topic**</ins>](https://github.com/rmcanany/So
 
 Contributed by **@Francesco Arfilli**.  Thank you!
 
-Added the ability to create filenames and subdirectory formulas using the Expression Editor.  This can be especially handy if you need to use an `If` statement to decide how something is named.
+Added the ability to create filenames and subdirectory formulas using the Expression Editor.  This can be especially handy if you need to use an `If` statement to decide where to save a file.
 
 ![Expression Editor](My%20Project/media/release_notes_task_save_drawing_as.png)
 
 Added the same functionality to `Save Model As`.
 
 See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#save-model-as) for details.
+
+### Expression Editor
+
+Added the ability to use `VB` as the programming language in the editor.  Previously, only `NCalc` was available.  
+
+![Expression Editor](My%20Project/media/expression_editor.png)
+
+`VB` is a full-featured programming language.  If a job can be done with a program, chances are it can be done with `VB`.  For many, it is also more readable, flexible, and familiar than other choices.
+
+See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties) for details.
 
 ### Run External Program
 
@@ -80,6 +90,7 @@ Added an option to open draft files in inactive mode.  (Thank you **@ih0nza!**) 
 Not all commands that process drawings are compatible with this option.  If there is a conflict, it is reported to the user before processing begins.
 
 See the [<ins>**Configuration Tab -- General Page**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#general-page) for details.
+
 ### Housekeeper Not Starting
 
 Solution contributed by **@Francesco Arfilli**.  Thank you!

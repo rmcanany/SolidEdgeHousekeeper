@@ -633,7 +633,9 @@ Uses GitHub's API to get the most recent version and compare it to the running v
 This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
 - `Process drawing files as inactive`
 This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once processing is complete.  However, in case of a program malfunction, it may not be able to do so.  You can manually reset the option by starting Solid Edge manually, then clicking the `Browse` button.  The checkbox is located toward the bottom of the form.  You have to select a draft file to make the checkbox active.
-
+- `Expression editor language`
+Sets the programming language for the expression editor.  The choices are `NCalc` or `VB`.  See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details.
+- 
 </details>
 
 </details>

@@ -1944,6 +1944,10 @@ Public Class Form_Main
 
         End If
 
+        If e.Control And e.KeyCode = Keys.C Then
+            Dim i = 0
+        End If
+
     End Sub
 
     Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
@@ -1980,8 +1984,12 @@ Public Class Form_Main
                 End If
 
             Next
+        End If
 
-            'ListViewFilesOutOfDate = True
+        If e.Control And e.KeyCode = Keys.C Then
+            ' https://dotnetref.blogspot.com/2007/06/copy-listview-to-clipboard.html
+            ' https://stackoverflow.com/questions/1873870/copying-data-from-a-winforms-listview
+
         End If
 
     End Sub
