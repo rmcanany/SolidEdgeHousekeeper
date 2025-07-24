@@ -254,6 +254,7 @@ Public Class TaskSaveModelAs
         Me.Category = "Output"
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
+        Me.RequiresForegroundProcessing = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

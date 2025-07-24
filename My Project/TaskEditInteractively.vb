@@ -189,6 +189,7 @@ Public Class TaskEditInteractively
         Me.Image = My.Resources.TaskEditInteractively
         Me.Category = "Edit"
         SetColorFromCategory(Me)
+        Me.RequiresForegroundProcessing = True
 
         CommandDict = GenerateCommandDict()
 

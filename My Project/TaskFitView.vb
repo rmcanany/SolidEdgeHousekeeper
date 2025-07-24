@@ -78,6 +78,7 @@ Public Class TaskFitView
         Me.Image = My.Resources.TaskFitView
         Me.Category = "Restyle"
         SetColorFromCategory(Me)
+        Me.RequiresForegroundProcessing = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

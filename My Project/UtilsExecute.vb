@@ -229,9 +229,11 @@ Public Class UtilsExecute
                 tf = tf And Not Task.CompatibleWithInactiveDraft
                 tf = tf And Task.IsSelectedDraft
                 If tf Then
-                    Dim s As String = $"{Task.Name} cannot process inactive drafts.  "
-                    s = $"{s}Disable the task, or the 'Process drawing files as inactive' option (Configuration Tab -- General Page)."
-                    StartLogger.AddMessage(s)
+                    StartLogger.AddMessage($"{Task.Description} cannot process inactive drafts")
+                End If
+
+                If Task.RequiresForegroundProcessing And FMain.RunInBackground Then
+                    StartLogger.AddMessage($"{Task.Description} cannot run in background")
                 End If
 
                 Dim SubLogger As Logger = StartLogger.AddLogger(Task.Description)

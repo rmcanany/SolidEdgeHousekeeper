@@ -123,7 +123,7 @@ Public MustInherit Class Task
     Public Property FileLogger As Logger
     Public Property TaskLogger As Logger
     Public Property CompatibleWithInactiveDraft As Boolean = False
-
+    Public Property RequiresForegroundProcessing As Boolean = False
 
 
     Public Enum BaseControlNames
