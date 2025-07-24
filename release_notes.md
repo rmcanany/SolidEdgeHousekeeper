@@ -91,11 +91,17 @@ Not all commands that process drawings are compatible with this option.  If ther
 
 See the [<ins>**Configuration Tab -- General Page**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#general-page) for details.
 
-### Housekeeper Not Starting
+### Other
+
+#### Housekeeper Not Starting
 
 Solution contributed by **@Francesco Arfilli**.  Thank you!
 
 From a bug report on Github (Thank you **@DieCola85!**), Francesco figured out the user's COM objects had become unregistered.  He suggested re-running the most recent MP and that fixed it!
+
+#### Run in Background
+
+Added a command compatability check for background processing.  (Thank you **@DieCola85!**)
 
 ## V2025.2 Enhancements/Fixes
 

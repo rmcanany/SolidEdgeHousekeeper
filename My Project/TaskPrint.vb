@@ -168,7 +168,6 @@ Public Class TaskPrint
         Me.Category = "Output"
         SetColorFromCategory(Me)
         Me.CompatibleWithInactiveDraft = True
-        Me.RequiresForegroundProcessing = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
