@@ -71,25 +71,50 @@ Public Class UtilsPreferences
 
         If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
 
+        Dim tmpMissingProperties As New List(Of String)
+        Dim tmpUnhandledPropTypes As New List(Of String)
+
+        Dim ValidPropTypes As New List(Of String)
+        ValidPropTypes.AddRange({"string", "double", "int32", "boolean", "list`1"})
+
+        Dim IgnoreNames As New List(Of String)
+        IgnoreNames.AddRange({"version", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
+        IgnoreNames.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
+
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
             PropType = PropInfo.PropertyType.Name.ToLower
 
-            If Not KeepProps.Contains(PropInfo.Name) Then
+            Dim NewWay As Boolean = True
+            If NewWay Then
 
-                If ReportIgnoredProperties Then
-                    s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
-                    If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
-                        s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
-                        MsgBox(s, vbOKOnly)
-                        s = ""
-                        IgnoredCount = -1
+                Dim PropModule As String = PropInfo.Module.ToString.ToLower
+
+                Dim tf As Boolean
+                tf = (Not SavingPresets) And ({"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
+                tf = tf Or PropModule.Contains("housekeeper")
+                tf = tf And Not IgnoreNames.Contains(PropInfo.Name.ToLower)
+                tf = tf And ValidPropTypes.Contains(PropType)
+
+                If Not tf Then Continue For
+            Else
+                If Not KeepProps.Contains(PropInfo.Name) Then
+
+                    If ReportIgnoredProperties Then
+                        s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
+                        If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
+                            s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
+                            MsgBox(s, vbOKOnly)
+                            s = ""
+                            IgnoredCount = -1
+                        End If
+                        IgnoredCount += 1
+
                     End If
-                    IgnoredCount += 1
 
+                    Continue For
                 End If
 
-                Continue For
             End If
 
             Value = Nothing
@@ -99,8 +124,10 @@ Public Class UtilsPreferences
                     Value = CStr(PropInfo.GetValue(FMain, Nothing))
                 Case "list`1"
                     Value = JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
+                    'MsgBox(String.Format("list`1 '{0}' detected", PropInfo.Name))
                 Case Else
                     MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropType))
+                    'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
             End Select
 
 
@@ -114,9 +141,10 @@ Public Class UtilsPreferences
                         Value = "False"
                     Case "list`1"
                         Value = JsonConvert.SerializeObject(New List(Of String))
-                        MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' detected", PropInfo.PropertyType.Name))
+                        'MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' detected", PropInfo.PropertyType.Name))
                     Case Else
                         MsgBox(String.Format("In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
+                        'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
                 End Select
             End If
 
