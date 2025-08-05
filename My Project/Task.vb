@@ -618,18 +618,37 @@ Public MustInherit Class Task
 
     Public Function FormatOptionsDataGridView(
         ControlName As String,
-        ColumnHeaders As List(Of String)
+        ColumnHeaders As List(Of String),
+        ColumnType As String,
+        ComboboxItems As List(Of String)
         ) As DataGridView
 
         Dim DataGridView = New DataGridView
+
+        'DataGridView.EditMode = DataGridViewEditMode.EditOnEnter
+
         For Each ColumnName As String In ColumnHeaders
-            Dim ColIdx = DataGridView.Columns.Add(ColumnName, ColumnName)
-            'DataGridView.Columns(ColIdx).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+
+            Select Case ColumnType.ToLower
+                Case "textbox"
+                    Dim ColIdx = DataGridView.Columns.Add(ColumnName, ColumnName)
+                Case "combobox"
+                    'https://stackoverflow.com/questions/21333320/converting-column-in-datagridview-into-a-combobox
+                    Dim Column As New DataGridViewComboBoxColumn
+
+                    Column.HeaderText = ColumnName
+                    Column.Name = ColumnName
+                    Column.Items.AddRange(ComboboxItems.ToArray)
+                    'Column.DataSource = ComboboxItems
+                    DataGridView.Columns.Add(Column)
+                Case Else
+                    MsgBox($"Task.FormatOptionsDataGridView: column type not recognized '{ColumnType}'")
+            End Select
+
         Next
         DataGridView.RowHeadersWidth = 30
         DataGridView.Name = ControlName
         DataGridView.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
-        'DataGridView.AutoSize = True
         DataGridView.BackgroundColor = Color.White
 
         Return DataGridView

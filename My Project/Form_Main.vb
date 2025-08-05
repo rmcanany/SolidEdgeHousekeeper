@@ -967,6 +967,11 @@ Public Class Form_Main
     Public Property TCItemIDRx As String
     Public Property TCRevisionRx As String
 
+    Public Property FBLBNTop As Integer  ' Remember FormBlockLibraryBlockNames size and position
+    Public Property FBLBNLeft As Integer
+    Public Property FBLBNHeight As Integer
+    Public Property FBLBNWidth As Integer
+
     'DESCRIPTION
     'Solid Edge Housekeeper
     'Robert McAnany 2020-2024

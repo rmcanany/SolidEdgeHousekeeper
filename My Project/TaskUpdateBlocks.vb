@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports System.Drawing.Text
 Imports System.IO
 
 Public Class TaskUpdateBlocks
@@ -42,6 +43,7 @@ Public Class TaskUpdateBlocks
             End If
         End Set
     End Property
+
     Private _DeleteBlocks As Boolean
     Public Property DeleteBlocks As Boolean
         Get
@@ -105,10 +107,13 @@ Public Class TaskUpdateBlocks
                 Dim tmpDataGridView As DataGridView = CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView)
                 tmpDataGridView.Rows.Clear()
 
-                For i = 0 To _ReplaceBlocksList.Count - 1
-                    Dim SplitList = _ReplaceBlocksList(i).Split(CChar(","))
-                    tmpDataGridView.Rows.Add(SplitList(0), SplitList(1))
-                Next
+                Try
+                    For i = 0 To _ReplaceBlocksList.Count - 1
+                        Dim SplitList = _ReplaceBlocksList(i).Split(CChar(","))
+                        tmpDataGridView.Rows.Add(SplitList(0), SplitList(1))
+                    Next
+                Catch ex As Exception
+                End Try
 
                 tmpDataGridView.CurrentCell = tmpDataGridView.Rows(tmpDataGridView.Rows.Count - 1).Cells(0)
                 tmpDataGridView.ClearSelection()
@@ -129,9 +134,12 @@ Public Class TaskUpdateBlocks
                 Dim tmpDataGridView As DataGridView = CType(ControlsDict(ControlNames.DeleteBlocksDGV.ToString), DataGridView)
                 tmpDataGridView.Rows.Clear()
 
-                For i = 0 To _DeleteBlocksList.Count - 1
-                    tmpDataGridView.Rows.Add(_DeleteBlocksList(i))
-                Next
+                Try
+                    For i = 0 To _DeleteBlocksList.Count - 1
+                        tmpDataGridView.Rows.Add(_DeleteBlocksList(i))
+                    Next
+                Catch ex As Exception
+                End Try
 
                 tmpDataGridView.CurrentCell = tmpDataGridView.Rows(tmpDataGridView.Rows.Count - 1).Cells(0)
                 tmpDataGridView.ClearSelection()
@@ -151,12 +159,97 @@ Public Class TaskUpdateBlocks
                 Dim tmpDataGridView As DataGridView = CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView)
                 tmpDataGridView.Rows.Clear()
 
-                For i = 0 To _AddBlocksList.Count - 1
-                    tmpDataGridView.Rows.Add(_AddBlocksList(i))
-                Next
+                Try
+                    For i = 0 To _AddBlocksList.Count - 1
+                        tmpDataGridView.Rows.Add(_AddBlocksList(i))
+                    Next
+                Catch ex As Exception
+                End Try
 
                 tmpDataGridView.CurrentCell = tmpDataGridView.Rows(tmpDataGridView.Rows.Count - 1).Cells(0)
                 tmpDataGridView.ClearSelection()
+            End If
+        End Set
+    End Property
+
+    Private _BlockLibraryBlockNames As List(Of String)
+    Public Property BlockLibraryBlockNames As List(Of String)
+        Get
+            Return _BlockLibraryBlockNames
+        End Get
+        Set(value As List(Of String))
+            value.Sort()
+
+            _BlockLibraryBlockNames = value
+
+            If Me.TaskOptionsTLP IsNot Nothing And _BlockLibraryBlockNames IsNot Nothing Then
+                Dim DVGs As New List(Of DataGridView)
+                DVGs.Add(CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView))
+                DVGs.Add(CType(ControlsDict(ControlNames.DeleteBlocksDGV.ToString), DataGridView))
+                DVGs.Add(CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView))
+
+                For Each DVG As DataGridView In DVGs
+                    For Each Column As DataGridViewComboBoxColumn In DVG.Columns
+                        Column.Items.Clear()
+
+                        Try
+                            If _BlockLibraryBlockNames IsNot Nothing Then
+                                For Each BlockName As String In _BlockLibraryBlockNames
+                                    Column.Items.Add(BlockName)
+                                Next
+                            End If
+                            If _ManuallyAddedBlockNames IsNot Nothing And Not Column.Name.ToLower.Contains("library") Then
+                                For Each BlockName As String In _ManuallyAddedBlockNames
+                                    Column.Items.Add(BlockName)
+                                Next
+                            End If
+                        Catch ex As Exception
+                        End Try
+
+                    Next
+                Next
+
+            End If
+        End Set
+    End Property
+
+    Private _ManuallyAddedBlockNames As List(Of String)
+    Public Property ManuallyAddedBlockNames As List(Of String)
+        Get
+            Return _ManuallyAddedBlockNames
+        End Get
+        Set(value As List(Of String))
+
+            If value IsNot Nothing Then value.Sort()
+
+            _ManuallyAddedBlockNames = value
+
+            If Me.TaskOptionsTLP IsNot Nothing And _ManuallyAddedBlockNames IsNot Nothing Then
+                Dim DVGs As New List(Of DataGridView)
+                DVGs.Add(CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView))
+                DVGs.Add(CType(ControlsDict(ControlNames.DeleteBlocksDGV.ToString), DataGridView))
+                DVGs.Add(CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView))
+
+                For Each DVG As DataGridView In DVGs
+                    For Each Column As DataGridViewComboBoxColumn In DVG.Columns
+                        Column.Items.Clear()
+
+                        Try
+                            If _BlockLibraryBlockNames IsNot Nothing Then
+                                For Each BlockName As String In _BlockLibraryBlockNames
+                                    Column.Items.Add(BlockName)
+                                Next
+                            End If
+                            If Not Column.Name.ToLower.Contains("library") Then
+                                For Each BlockName As String In _ManuallyAddedBlockNames
+                                    Column.Items.Add(BlockName)
+                                Next
+                            End If
+                        Catch ex As Exception
+                        End Try
+                    Next
+                Next
+
             End If
         End Set
     End Property
@@ -180,6 +273,7 @@ Public Class TaskUpdateBlocks
     Enum ControlNames
         Browse
         BlockLibrary
+        UpdateBlockList
         ReplaceBlocks
         ReplaceBlocksDGV
         ReplaceBlocksReplaceExisting
@@ -510,6 +604,40 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
+    Private Sub UpdateBlockList()
+        Dim USEA As New UtilsSEApp(Form_Main)
+
+        Form_Main.TextBoxStatus.Text = "Starting Solid Edge..."
+
+        USEA.SEStart(
+            RunInBackground:=False,
+            UseCurrentSession:=True,
+            NoUpdateMRU:=False,
+            ProcessDraftsInactive:=False)
+
+        Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
+
+        Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
+
+        Dim tmpBlockLibraryBlockNames As New List(Of String)
+        tmpBlockLibraryBlockNames.Add("")
+
+        If Blocks IsNot Nothing Then
+            For Each Block As SolidEdgeDraft.Block In Blocks
+                tmpBlockLibraryBlockNames.Add(Block.Name)
+            Next
+        End If
+
+        Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
+
+        SEDoc.Close(False)
+
+        USEA.SEStop(UseCurrentSession:=True)
+
+        Form_Main.TextBoxStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
+
+    End Sub
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -518,15 +646,16 @@ Public Class TaskUpdateBlocks
         Dim CheckBox As CheckBox
         Dim Button As Button
         Dim TextBox As TextBox
-        'Dim Label As Label
         Dim DataGridView As DataGridView
         Dim ColumnHeaders As List(Of String)
+        Dim ColumnType As String
+        If Me.BlockLibraryBlockNames Is Nothing Then Me.BlockLibraryBlockNames = New List(Of String)
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Block Library")
+        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Block library")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -536,6 +665,13 @@ Public Class TaskUpdateBlocks
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
+
+        RowIndex += 1
+
+        Button = FormatOptionsButton(ControlNames.UpdateBlockList.ToString, "Update list")
+        AddHandler Button.Click, AddressOf ButtonOptions_Click
+        tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
+        ControlsDict(Button.Name) = Button
 
         RowIndex += 1
 
@@ -556,16 +692,25 @@ Public Class TaskUpdateBlocks
 
         RowIndex += 1
 
+        'https://stackoverflow.com/questions/41281920/datagridview-combobox-column-that-will-accept-any-text
+        'https://www.vbforums.com/showthread.php?784101-Datagridview-Combobox-Column-DropDownStyle
+
         ColumnHeaders = {"File block name", "Library block name"}.ToList
-        DataGridView = FormatOptionsDataGridView(ControlNames.ReplaceBlocksDGV.ToString, ColumnHeaders)
+        ColumnType = "Combobox"
+        'ColumnItems = Me.BlockLibraryBlockNames
+        DataGridView = FormatOptionsDataGridView(ControlNames.ReplaceBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
-        AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
+        'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
+        AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
+        AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
+        AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
+        AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
-        DataGridView.Height = 46
+        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -581,15 +726,20 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         ColumnHeaders = {"File block name"}.ToList
-        DataGridView = FormatOptionsDataGridView(ControlNames.DeleteBlocksDGV.ToString, ColumnHeaders)
+        ColumnType = "Combobox"
+        'ColumnItems = Me.BlockLibraryBlockNames
+        DataGridView = FormatOptionsDataGridView(ControlNames.DeleteBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
-        AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
+        'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
+        AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
+        AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
+        AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
-        DataGridView.Height = 46
+        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -623,15 +773,20 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         ColumnHeaders = {"Library block name"}.ToList
-        DataGridView = FormatOptionsDataGridView(ControlNames.AddBlocksDGV.ToString, ColumnHeaders)
+        ColumnType = "Combobox"
+        'ColumnItems = Me.BlockLibraryBlockNames
+        DataGridView = FormatOptionsDataGridView(ControlNames.AddBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
-        AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
+        'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
+        AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
+        AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
+        AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
-        DataGridView.Height = 46
+        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
 
@@ -708,22 +863,57 @@ Public Class TaskUpdateBlocks
     End Sub
 
 
-    Public Sub DataGridViewOptions_CellEnter(sender As System.Object, e As DataGridViewCellEventArgs)
+    Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs)
 
         Dim DataGridView = CType(sender, DataGridView)
-        Dim RowHeight As Integer = DataGridView.Rows(0).Height
+        If DataGridView.SelectedCells IsNot Nothing AndAlso DataGridView.SelectedCells.Count > 0 Then
+            Dim SelectedCell = DataGridView.SelectedCells(0)
 
-        Dim Name = DataGridView.Name
+            If e.Control And e.KeyCode = Keys.V Then
+                SelectedCell.Value = Clipboard.GetText.Trim
+            ElseIf e.KeyCode = Keys.Delete Or e.KeyCode = Keys.Back Then
+                SelectedCell.Value = ""
+            End If
 
-        Select Case Name
+        End If
+
+    End Sub
+
+    'Public Sub DataGridViewOptions_CellEnter(sender As System.Object, e As DataGridViewCellEventArgs)
+
+    '    Dim DataGridView = CType(sender, DataGridView)
+    '    Dim RowHeight As Integer = DataGridView.Rows(0).Height
+
+    '    Dim Name = DataGridView.Name
+
+    '    Select Case Name
+    '        Case ControlNames.ReplaceBlocksDGV.ToString
+    '            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+    '        Case ControlNames.DeleteBlocksDGV.ToString
+    '            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+    '        Case ControlNames.AddBlocksDGV.ToString
+    '            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+    '        Case Else
+    '            MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+    '    End Select
+    'End Sub
+
+    Public Sub DataGridViewOptions_UpdateSize(sender As System.Object, e As DataGridViewCellEventArgs)
+
+        Dim DataGridView = CType(sender, DataGridView)
+
+        Select Case DataGridView.Name
             Case ControlNames.ReplaceBlocksDGV.ToString
-                DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
 
             Case ControlNames.DeleteBlocksDGV.ToString
-                DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
 
             Case ControlNames.AddBlocksDGV.ToString
-                DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -737,9 +927,8 @@ Public Class TaskUpdateBlocks
         DataGridView.CommitEdit(DataGridViewDataErrorContexts.LeaveControl)
         DataGridView.EndEdit()
 
-        Dim Name = DataGridView.Name
+        Select Case DataGridView.Name
 
-        Select Case Name
             Case ControlNames.ReplaceBlocksDGV.ToString
 
                 Dim tmpReplaceBlocksList As New List(Of String)
@@ -790,6 +979,8 @@ Public Class TaskUpdateBlocks
 
                 Me.ReplaceBlocksList = tmpReplaceBlocksList
 
+                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 1)
+
             Case ControlNames.DeleteBlocksDGV.ToString
                 Dim tmpDeleteBlocksList As New List(Of String)
 
@@ -818,6 +1009,8 @@ Public Class TaskUpdateBlocks
                 Next
 
                 Me.DeleteBlocksList = tmpDeleteBlocksList
+
+                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 1)
 
             Case ControlNames.AddBlocksDGV.ToString
                 Dim tmpAddBlocksList As New List(Of String)
@@ -848,11 +1041,74 @@ Public Class TaskUpdateBlocks
 
                 Me.AddBlocksList = tmpAddBlocksList
 
+                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 1)
+
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
 
     End Sub
+
+    Private Sub DataGridViewOptions_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
+
+        Dim DGV As DataGridView = CType(sender, DataGridView)
+        Dim SelectedCell As DataGridViewComboBoxCell = CType(DGV.SelectedCells(0), DataGridViewComboBoxCell)
+        Dim CellColumn As DataGridViewComboBoxColumn = CType(DGV.Columns(e.ColumnIndex), DataGridViewComboBoxColumn)
+
+        If Not CellColumn.Name.ToLower.Contains("library") Then
+            Dim FTP As New FormTextPrompt
+            FTP.Text = "Enter Block Name"
+            If SelectedCell.Value IsNot Nothing Then FTP.TextBoxInput.Text = CStr(SelectedCell.Value)
+
+            FTP.LabelPrompt.Text = "Enter block name"
+            Dim Result = FTP.ShowDialog()
+
+            If Result = DialogResult.OK Then
+                Dim Name As String = FTP.TextBoxInput.Text
+
+                If Not CellColumn.Items.Contains(Name) Then
+                    CellColumn.Items.Add(Name)
+                End If
+
+                SelectedCell.Value = Name
+
+                If Me.ManuallyAddedBlockNames Is Nothing Then Me.ManuallyAddedBlockNames = New List(Of String)
+
+                Dim tmpManuallyAddedBlockNames As List(Of String) = Me.ManuallyAddedBlockNames
+                If Not tmpManuallyAddedBlockNames.Contains(Name) And Not Me.BlockLibraryBlockNames.Contains(Name) Then
+                    tmpManuallyAddedBlockNames.Add(Name)
+                    Me.ManuallyAddedBlockNames = tmpManuallyAddedBlockNames
+                End If
+
+            End If
+        End If
+    End Sub
+
+    Private Sub DataGridViewOptions_DataError(sender As Object, e As DataGridViewDataErrorEventArgs)
+
+    End Sub
+
+    'Private Sub DataGridView1_CellValidating(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellValidatingEventArgs)
+    '    Dim DGV As DataGridView = CType(sender, DataGridView)
+    '    Dim comboBoxColumn As DataGridViewComboBoxColumn = CType(DGV.Columns(e.ColumnIndex), DataGridViewComboBoxColumn)
+    '    If (Not comboBoxColumn.Items.Contains(e.FormattedValue)) Then
+    '        comboBoxColumn.Items.Add(e.FormattedValue)
+    '    End If
+    '    Dim comboBox As DataGridViewComboBoxCell = CType(DGV.CurrentCell, DataGridViewComboBoxCell)
+    '    Dim OwningColumn As DataGridViewComboBoxColumn = CType(comboBox.OwningColumn, DataGridViewComboBoxColumn)
+    '    comboBox.Value = OwningColumn.Items(comboBoxColumn.Items.Count - 1)
+    'End Sub
+
+
+    'Private Sub DataGridView1_EditingControlShowing(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewEditingControlShowingEventArgs)
+    '    If TypeOf e.Control Is ComboBox Then
+    '        Dim cb As ComboBox = TryCast(e.Control, ComboBox)
+    '        cb.DropDownStyle = ComboBoxStyle.DropDown
+    '        'cb.Items.Insert(cb.Items.Count - 1, cb.Text)
+    '        'cb.Items.Add(cb.Text)
+
+    '    End If
+    'End Sub
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
@@ -915,7 +1171,24 @@ Public Class TaskUpdateBlocks
                     Me.BlockLibrary = tmpFileDialog.FileName
                     TextBox = CType(ControlsDict(ControlNames.BlockLibrary.ToString), TextBox)
                     TextBox.Text = Me.BlockLibrary
+
+                    'Dim SSDoc As New HCStructuredStorageDoc(Me.BlockLibrary)
+                    'SSDoc.ReadBlockLibrary()
+
+                    'Me.BlockLibraryBlockNames = SSDoc.GetBlockLibraryBlockNames
+                    'Me.BlockLibraryBlockNames.Sort()
+
                 End If
+
+            Case ControlNames.UpdateBlockList.ToString
+                'Dim FBLBN As New FormBlockLibraryBlockNames(Me.BlockLibraryBlockNames)
+
+                'FBLBN.MaxNumChars = CStr(Me.MaxNumChars)
+                'FBLBN.MaxNumBlockViews = CStr(Me.MaxNumBlockViews)
+
+                'FBLBN.Show()
+
+                UpdateBlockList()
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -948,25 +1221,34 @@ Public Class TaskUpdateBlocks
 
         HelpString += vbCrLf + vbCrLf + "For adding and replacing, a draft file containing the new blocks is required.  "
         HelpString += "In most cases it will simply be your draft template.  "
-        HelpString += "Click the `Block Library` button to select it."
+        HelpString += "Click the `Block Library` button to select it. "
 
-        HelpString += vbCrLf + vbCrLf + "The `Add Blocks` option adds the block to the document block library.  "
-        HelpString += "A new block does not automatically appear on drawings. "
-        HelpString += "The program checks each sheet of the library "
-        HelpString += "and places an occurrence of the block on the corresponding sheet of the document.  "
-        HelpString += "It is placed at the same location, with the same scale and rotation, as the original.  "
+        HelpString += vbCrLf + vbCrLf + "To populate the combo boxes with the blocks in the library, click the `Update list` button. "
+        HelpString += "To add a block name that is not in the library, double-click the combo box. "
+        HelpString += "You can add a name to a file block list, but not to a library block list. "
+        HelpString += "Note, the combo box behavior is a little quirky.  You have to click twice to use it. "
+        HelpString += "The first click gives it `focus`, the next opens the drop down. "
+        'HelpString += "In theory there is a way around it, but it messes up the double-click function. "
 
         HelpString += vbCrLf + vbCrLf + "There are a few options.  They are described next.  "
+
         HelpString += vbCrLf + "- `Replace Blocks` `Overwrite existing with replacement`: "
-        HelpString += "This is confusing.  The point of the command is to overwrite blocks. "
-        HelpString += "This option is for a scenario where you want to replace `Block1` in the file with `Block2` in the library. "
-        HelpString += "It tells the program how to proceed if `Block2` already exists in the file. "
+        HelpString += "This is confusing; the point of the command is to overwrite blocks. "
+        HelpString += "However there is an ambiguity. "
+        HelpString += "Say you want to replace `Block1` in the file with `Block2` in the library. "
+        HelpString += "It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? "
+        HelpString += "This option tells the program how to proceed for that situation. "
+
         HelpString += vbCrLf + "- `Add Blocks` `Overwrite existing with added block`: "
-        HelpString += "Similar to above, this is for a scenario where you're adding `Block1` to the file, but it already has a `Block1`.  "
-        HelpString += "If this scenario is encountered, this option tells the program what to do. "
+        HelpString += "Similar to above, this is for when you're adding `Block1` to the file, but it already one with that name.  "
+
         HelpString += vbCrLf + "- `Add Blocks` `Report missing sheet in document`: "
-        HelpString += "As discussed above, `Add Blocks` checks every sheet in the Library. "
-        HelpString += "If the document does not have a corresponding sheet, enable this option "
+        HelpString += "The Solid Edge `Add Blocks` command updates the file's library, "
+        HelpString += "but does not add it to drawing sheets. "
+        HelpString += "So the program checks each sheet of the library "
+        HelpString += "and places an occurrence of the block on the corresponding sheet in the file.  "
+        HelpString += "It is placed at the same location, with the same scale and rotation, as the original.  "
+        HelpString += "If the file does not have a corresponding sheet, enable this option "
         HelpString += "to have it reported in the log file.  "
 
         Return HelpString

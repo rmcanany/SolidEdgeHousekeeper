@@ -754,14 +754,14 @@ Adds, replaces and/or deletes blocks in a draft file.
 
 ![UpdateBlocks](My%20Project/media/task_update_blocks.png)
 
-For adding and replacing, a draft file containing the new blocks is required.  In most cases it will simply be your draft template.  Click the `Block Library` button to select it.
+For adding and replacing, a draft file containing the new blocks is required.  In most cases it will simply be your draft template.  Click the `Block Library` button to select it. 
 
-The `Add Blocks` option adds the block to the document block library.  A new block does not automatically appear on drawings. The program checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the document.  It is placed at the same location, with the same scale and rotation, as the original.  
+To populate the combo boxes with the blocks in the library, click the `Update list` button. To add a block name that is not in the library, double-click the combo box. You can add a name to a file block list, but not to a library block list. Note, the combo box behavior is a little quirky.  You have to click twice to use it. The first click gives it `focus`, the next opens the drop down. 
 
 There are a few options.  They are described next.  
-- `Replace Blocks` `Overwrite existing with replacement`: This is confusing.  The point of the command is to overwrite blocks. This option is for a scenario where you want to replace `Block1` in the file with `Block2` in the library. It tells the program how to proceed if `Block2` already exists in the file. 
-- `Add Blocks` `Overwrite existing with added block`: Similar to above, this is for a scenario where you're adding `Block1` to the file, but it already has a `Block1`.  If this scenario is encountered, this option tells the program what to do. 
-- `Add Blocks` `Report missing sheet in document`: As discussed above, `Add Blocks` checks every sheet in the Library. If the document does not have a corresponding sheet, enable this option to have it reported in the log file.  
+- `Replace Blocks` `Overwrite existing with replacement`: This is confusing; the point of the command is to overwrite blocks. However there is an ambiguity. Say you want to replace `Block1` in the file with `Block2` in the library. It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? This option tells the program how to proceed for that situation. 
+- `Add Blocks` `Overwrite existing with added block`: Similar to above, this is for when you're adding `Block1` to the file, but it already has a `Block1`.  
+- `Add Blocks` `Report missing sheet in document`: The Solid Edge `Add Blocks` command updates the file's library, but it does not add occurrences to drawing sheets. So the program checks each sheet of the library and places an occurrence of the block on the corresponding sheet in the file.  It is placed at the same location, with the same scale and rotation, as the original.  If the file does not have a corresponding sheet, enable this option to have it reported in the log file.  
 
 </details>
 
