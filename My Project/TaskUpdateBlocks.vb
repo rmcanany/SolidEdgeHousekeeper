@@ -1233,21 +1233,21 @@ Public Class TaskUpdateBlocks
         HelpString += vbCrLf + vbCrLf + "There are a few options.  They are described next.  "
 
         HelpString += vbCrLf + "- `Replace Blocks` `Overwrite existing with replacement`: "
-        HelpString += "This is confusing; the point of the command is to overwrite blocks. "
-        HelpString += "However there is an ambiguity. "
+        HelpString += "This is confusing; the point of the command is to overwrite blocks, right? "
+        HelpString += "There is an ambiguity, however. "
         HelpString += "Say you want to replace `Block1` in the file with `Block2` in the library. "
         HelpString += "It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? "
         HelpString += "This option tells the program how to proceed for that situation. "
 
         HelpString += vbCrLf + "- `Add Blocks` `Overwrite existing with added block`: "
-        HelpString += "Similar to above, this is for when you're adding `Block1` to the file, but it already one with that name.  "
+        HelpString += "Similar to above, this is for when you're adding `Block1` to the file, but it already has one with that name.  "
 
         HelpString += vbCrLf + "- `Add Blocks` `Report missing sheet in document`: "
         HelpString += "The Solid Edge `Add Blocks` command updates the file's library, "
         HelpString += "but does not add it to drawing sheets. "
-        HelpString += "So the program checks each sheet of the library "
-        HelpString += "and places an occurrence of the block on the corresponding sheet in the file.  "
-        HelpString += "It is placed at the same location, with the same scale and rotation, as the original.  "
+        HelpString += "But you do want it on drawings, so the program checks each sheet of the library "
+        HelpString += "and places an occurrence on the corresponding sheet in the file, "
+        HelpString += "at the same location, scale, and rotation as the original.  "
         HelpString += "If the file does not have a corresponding sheet, enable this option "
         HelpString += "to have it reported in the log file.  "
 

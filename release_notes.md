@@ -19,13 +19,13 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 Sponsored by **@john.matthews3452 (Hatch)**. Thank you!
 
-Added a new command to replace, add, and/or delete drawing sheet blocks.  This should be a welcome addition for any organization, like John's, needing to bring an entire archive of drawings into compliance with an updated standard.
+Added a new command to replace, add, and/or delete drawing sheet blocks.  
 
 ![Update Blocks](My%20Project/media/task_update_blocks.png)
 
-The block library, probably just your Draft template, is the source for new or replacement blocks.
+The block library, probably just your Draft template, is the source for new or replacement blocks.  Drop downs are automatically populated with the library contents.  Blocks in the files but not in the library can be added manually.  There are options for handling name conflicts.
 
-When adding a block, the program first places it into the file's block collection.  It then checks each sheet of the library and places an occurrence of the block on the corresponding sheet of the file.  It is placed at the same location, with the same scale and rotation, as the original.
+When adding a block, the program checks each sheet of the library and places an occurrence on the corresponding sheet of the file.  It is placed at the same location, with the same scale and rotation, as the original.  If the file does not have a corresponding sheet, it can optionally be reported in the log file.
 
 See the [<ins>**Update Blocks Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-blocks) for details.
 
