@@ -756,12 +756,14 @@ Adds, replaces and/or deletes blocks in a draft file.
 
 For adding and replacing, a draft file containing the new blocks is required.  In most cases it will simply be your draft template.  Click the `Block Library` button to select it. 
 
-To populate the combo boxes with the blocks in the library, click the `Update list` button. To add a block name that is not in the library, double-click the combo box. You can add a name to a file block list, but not to a library block list. Note, the combo box behavior is a little quirky.  You have to click twice to use it. The first click gives it `focus`, the next opens the drop down. 
+To populate the combo boxes with the block names, click the `Edit list` button. On the dialog, click `Update` to populate the library blocks. The program needs to start Solid Edge to do so, which can take a bit of time. 
+
+If you have files with block names not found in the library, enter them on the `File Blocks` list.  You can delete entries no longer needed. Select the `Row Header` (the gray box left of the text) and press your keyboard's `Delete` key. 
 
 There are a few options.  They are described next.  
 - `Replace Blocks` `Overwrite existing with replacement`: This is confusing; the point of the command is to overwrite blocks, right? There is an ambiguity, however. Say you want to replace `Block1` in the file with `Block2` in the library. It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? This option tells the program how to proceed for that situation. 
 - `Add Blocks` `Overwrite existing with added block`: Similar to above, this is for when you're adding `Block1` to the file, but it already has one with that name.  
-- `Add Blocks` `Report missing sheet in document`: The Solid Edge `Add Blocks` command updates the file's library, but does not add it to drawing sheets. But you do want it on drawings, so the program checks each sheet of the library and places an occurrence on the corresponding sheet in the file, at the same location, scale, and rotation as the original.  If the file does not have a corresponding sheet, enable this option to have it reported in the log file.  
+- `Add Blocks` `Report missing sheet in document`: The Solid Edge `Add Blocks` command updates the file's library, but does not add it to drawing sheets. Since you, of course, want it on drawings, the program checks each sheet of the library and places an occurrence on the corresponding sheet in the file, at the same location, scale, and rotation as the original.  If the file does not have a corresponding sheet, enable this option to have it reported in the log file.  
 
 </details>
 

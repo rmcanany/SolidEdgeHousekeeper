@@ -1238,12 +1238,14 @@ Public Class TaskUpdateBlocks
         HelpString += "In most cases it will simply be your draft template.  "
         HelpString += "Click the `Block Library` button to select it. "
 
-        HelpString += vbCrLf + vbCrLf + "To populate the combo boxes with the blocks in the library, click the `Update list` button. "
-        HelpString += "To add a block name that is not in the library, double-click the combo box. "
-        HelpString += "You can add a name to a file block list, but not to a library block list. "
-        HelpString += "Note, the combo box behavior is a little quirky.  You have to click twice to use it. "
-        HelpString += "The first click gives it `focus`, the next opens the drop down. "
-        'HelpString += "In theory there is a way around it, but it messes up the double-click function. "
+        HelpString += vbCrLf + vbCrLf + "To populate the combo boxes with the block names, click the `Edit list` button. "
+        HelpString += "On the dialog, click `Update` to populate the library blocks. "
+        HelpString += "The program needs to start Solid Edge to do so, which can take a bit of time. "
+
+        HelpString += vbCrLf + vbCrLf + "If you have files with block names not found in the library, "
+        HelpString += "enter them on the `File Blocks` list.  "
+        HelpString += "You can delete entries no longer needed. "
+        HelpString += "Select the `Row Header` (the gray box left of the text) and press your keyboard's `Delete` key. "
 
         HelpString += vbCrLf + vbCrLf + "There are a few options.  They are described next.  "
 
@@ -1260,7 +1262,7 @@ Public Class TaskUpdateBlocks
         HelpString += vbCrLf + "- `Add Blocks` `Report missing sheet in document`: "
         HelpString += "The Solid Edge `Add Blocks` command updates the file's library, "
         HelpString += "but does not add it to drawing sheets. "
-        HelpString += "But you do want it on drawings, so the program checks each sheet of the library "
+        HelpString += "Since you, of course, want it on drawings, the program checks each sheet of the library "
         HelpString += "and places an occurrence on the corresponding sheet in the file, "
         HelpString += "at the same location, scale, and rotation as the original.  "
         HelpString += "If the file does not have a corresponding sheet, enable this option "

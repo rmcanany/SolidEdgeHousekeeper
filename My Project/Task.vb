@@ -626,6 +626,7 @@ Public MustInherit Class Task
         Dim DataGridView = New DataGridView
 
         DataGridView.EditMode = DataGridViewEditMode.EditOnEnter
+        DataGridView.EnableHeadersVisualStyles = False
 
         For Each ColumnName As String In ColumnHeaders
 
