@@ -23,22 +23,25 @@ Partial Class FormBlockLibraryBlockNames
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
-        Me.ButtonClose = New System.Windows.Forms.Button()
-        Me.ExTableLayoutPanel3 = New Housekeeper.ExTableLayoutPanel()
-        Me.TextBoxMaxNumChars = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.ExTableLayoutPanel4 = New Housekeeper.ExTableLayoutPanel()
-        Me.TextBoxMaxNumBlockViews = New System.Windows.Forms.TextBox()
+        Me.DataGridViewBlockLibraryBlockNames = New System.Windows.Forms.DataGridView()
+        Me.LibraryBlocks = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
+        Me.ButtonCancel = New System.Windows.Forms.Button()
+        Me.ButtonOK = New System.Windows.Forms.Button()
+        Me.ExTableLayoutPanel3 = New Housekeeper.ExTableLayoutPanel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ButtonUpdateLibrary = New System.Windows.Forms.Button()
+        Me.DataGridViewManuallyAddedBlockNames = New System.Windows.Forms.DataGridView()
+        Me.FileBlocks = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.LabelStatus = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ExTableLayoutPanel1.SuspendLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridViewBlockLibraryBlockNames, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ExTableLayoutPanel2.SuspendLayout()
         Me.ExTableLayoutPanel3.SuspendLayout()
-        Me.ExTableLayoutPanel4.SuspendLayout()
+        CType(Me.DataGridViewManuallyAddedBlockNames, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExTableLayoutPanel1
@@ -46,185 +49,201 @@ Partial Class FormBlockLibraryBlockNames
         Me.ExTableLayoutPanel1.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel1.ColumnCount = 1
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.DataGridView1, 0, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.DataGridViewBlockLibraryBlockNames, 0, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.Label3, 0, 2)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ExTableLayoutPanel2, 0, 4)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ExTableLayoutPanel3, 0, 2)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ExTableLayoutPanel4, 0, 3)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ExTableLayoutPanel3, 0, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.DataGridViewManuallyAddedBlockNames, 0, 3)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.Panel1, 0, 5)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
-        Me.ExTableLayoutPanel1.RowCount = 5
+        Me.ExTableLayoutPanel1.RowCount = 6
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(303, 304)
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(303, 476)
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
-        'Label1
+        'DataGridViewBlockLibraryBlockNames
         '
-        Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 8)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(215, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "To copy text select a row and enter CTRL-C"
+        Me.DataGridViewBlockLibraryBlockNames.AllowUserToAddRows = False
+        Me.DataGridViewBlockLibraryBlockNames.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DataGridViewBlockLibraryBlockNames.BackgroundColor = System.Drawing.Color.White
+        Me.DataGridViewBlockLibraryBlockNames.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridViewBlockLibraryBlockNames.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.LibraryBlocks})
+        Me.DataGridViewBlockLibraryBlockNames.EnableHeadersVisualStyles = False
+        Me.DataGridViewBlockLibraryBlockNames.Location = New System.Drawing.Point(3, 43)
+        Me.DataGridViewBlockLibraryBlockNames.MultiSelect = False
+        Me.DataGridViewBlockLibraryBlockNames.Name = "DataGridViewBlockLibraryBlockNames"
+        Me.DataGridViewBlockLibraryBlockNames.RowHeadersWidth = 30
+        Me.DataGridViewBlockLibraryBlockNames.Size = New System.Drawing.Size(297, 168)
+        Me.DataGridViewBlockLibraryBlockNames.TabIndex = 1
         '
-        'DataGridView1
+        'LibraryBlocks
         '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.BackgroundColor = System.Drawing.Color.White
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1})
-        Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridView1.Location = New System.Drawing.Point(3, 33)
-        Me.DataGridView1.MultiSelect = False
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.RowHeadersWidth = 30
-        Me.DataGridView1.Size = New System.Drawing.Size(297, 168)
-        Me.DataGridView1.TabIndex = 1
-        '
-        'Column1
-        '
-        Me.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.Column1.HeaderText = "Library Blocks"
-        Me.Column1.Name = "Column1"
-        '
-        'ExTableLayoutPanel2
-        '
-        Me.ExTableLayoutPanel2.ColumnCount = 2
-        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonClose, 1, 0)
-        Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(3, 267)
-        Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 1
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(297, 34)
-        Me.ExTableLayoutPanel2.TabIndex = 2
-        Me.ExTableLayoutPanel2.Task = Nothing
-        '
-        'ButtonClose
-        '
-        Me.ButtonClose.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.ButtonClose.Location = New System.Drawing.Point(219, 6)
-        Me.ButtonClose.Name = "ButtonClose"
-        Me.ButtonClose.Size = New System.Drawing.Size(75, 25)
-        Me.ButtonClose.TabIndex = 1
-        Me.ButtonClose.Text = "Close"
-        Me.ButtonClose.UseVisualStyleBackColor = True
-        '
-        'ExTableLayoutPanel3
-        '
-        Me.ExTableLayoutPanel3.ColumnCount = 2
-        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel3.Controls.Add(Me.TextBoxMaxNumChars, 0, 0)
-        Me.ExTableLayoutPanel3.Controls.Add(Me.Label2, 1, 0)
-        Me.ExTableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 207)
-        Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
-        Me.ExTableLayoutPanel3.RowCount = 1
-        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
-        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(297, 24)
-        Me.ExTableLayoutPanel3.TabIndex = 3
-        Me.ExTableLayoutPanel3.Task = Nothing
-        '
-        'TextBoxMaxNumChars
-        '
-        Me.TextBoxMaxNumChars.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxMaxNumChars.Location = New System.Drawing.Point(3, 3)
-        Me.TextBoxMaxNumChars.Name = "TextBoxMaxNumChars"
-        Me.TextBoxMaxNumChars.Size = New System.Drawing.Size(44, 20)
-        Me.TextBoxMaxNumChars.TabIndex = 0
-        Me.TextBoxMaxNumChars.Text = "30"
-        Me.TextBoxMaxNumChars.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Label2
-        '
-        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(53, 5)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(142, 13)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Longest block name allowed"
-        '
-        'ExTableLayoutPanel4
-        '
-        Me.ExTableLayoutPanel4.ColumnCount = 2
-        Me.ExTableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.ExTableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel4.Controls.Add(Me.TextBoxMaxNumBlockViews, 0, 0)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.Label3, 1, 0)
-        Me.ExTableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel4.Location = New System.Drawing.Point(3, 237)
-        Me.ExTableLayoutPanel4.Name = "ExTableLayoutPanel4"
-        Me.ExTableLayoutPanel4.RowCount = 1
-        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
-        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(297, 24)
-        Me.ExTableLayoutPanel4.TabIndex = 4
-        Me.ExTableLayoutPanel4.Task = Nothing
-        '
-        'TextBoxMaxNumBlockViews
-        '
-        Me.TextBoxMaxNumBlockViews.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxMaxNumBlockViews.Location = New System.Drawing.Point(3, 3)
-        Me.TextBoxMaxNumBlockViews.Name = "TextBoxMaxNumBlockViews"
-        Me.TextBoxMaxNumBlockViews.Size = New System.Drawing.Size(44, 20)
-        Me.TextBoxMaxNumBlockViews.TabIndex = 0
-        Me.TextBoxMaxNumBlockViews.Text = "2"
-        Me.TextBoxMaxNumBlockViews.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.LibraryBlocks.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.LibraryBlocks.HeaderText = "Library Blocks"
+        Me.LibraryBlocks.Name = "LibraryBlocks"
         '
         'Label3
         '
         Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(53, 5)
+        Me.Label3.Location = New System.Drawing.Point(3, 222)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(160, 13)
+        Me.Label3.Size = New System.Drawing.Size(221, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Maximum number of block views"
+        Me.Label3.Text = "Manually add/remove additional block names"
+        '
+        'ExTableLayoutPanel2
+        '
+        Me.ExTableLayoutPanel2.ColumnCount = 3
+        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonCancel, 2, 0)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonOK, 1, 0)
+        Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(3, 409)
+        Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
+        Me.ExTableLayoutPanel2.RowCount = 1
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(297, 34)
+        Me.ExTableLayoutPanel2.TabIndex = 2
+        Me.ExTableLayoutPanel2.Task = Nothing
+        '
+        'ButtonCancel
+        '
+        Me.ButtonCancel.Location = New System.Drawing.Point(219, 3)
+        Me.ButtonCancel.Name = "ButtonCancel"
+        Me.ButtonCancel.Size = New System.Drawing.Size(75, 25)
+        Me.ButtonCancel.TabIndex = 1
+        Me.ButtonCancel.Text = "Cancel"
+        Me.ButtonCancel.UseVisualStyleBackColor = True
+        '
+        'ButtonOK
+        '
+        Me.ButtonOK.Location = New System.Drawing.Point(138, 3)
+        Me.ButtonOK.Name = "ButtonOK"
+        Me.ButtonOK.Size = New System.Drawing.Size(75, 25)
+        Me.ButtonOK.TabIndex = 2
+        Me.ButtonOK.Text = "OK"
+        Me.ButtonOK.UseVisualStyleBackColor = True
+        '
+        'ExTableLayoutPanel3
+        '
+        Me.ExTableLayoutPanel3.ColumnCount = 2
+        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel3.Controls.Add(Me.Label2, 1, 0)
+        Me.ExTableLayoutPanel3.Controls.Add(Me.ButtonUpdateLibrary, 0, 0)
+        Me.ExTableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 3)
+        Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
+        Me.ExTableLayoutPanel3.RowCount = 1
+        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(297, 34)
+        Me.ExTableLayoutPanel3.TabIndex = 3
+        Me.ExTableLayoutPanel3.Task = Nothing
+        '
+        'Label2
+        '
+        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(84, 10)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(194, 13)
+        Me.Label2.TabIndex = 1
+        Me.Label2.Text = "Update block list from library (opens SE)"
+        '
+        'ButtonUpdateLibrary
+        '
+        Me.ButtonUpdateLibrary.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonUpdateLibrary.Name = "ButtonUpdateLibrary"
+        Me.ButtonUpdateLibrary.Size = New System.Drawing.Size(75, 25)
+        Me.ButtonUpdateLibrary.TabIndex = 2
+        Me.ButtonUpdateLibrary.Text = "Update"
+        Me.ButtonUpdateLibrary.UseVisualStyleBackColor = True
+        '
+        'DataGridViewManuallyAddedBlockNames
+        '
+        Me.DataGridViewManuallyAddedBlockNames.BackgroundColor = System.Drawing.Color.White
+        Me.DataGridViewManuallyAddedBlockNames.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridViewManuallyAddedBlockNames.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.FileBlocks})
+        Me.DataGridViewManuallyAddedBlockNames.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DataGridViewManuallyAddedBlockNames.EnableHeadersVisualStyles = False
+        Me.DataGridViewManuallyAddedBlockNames.Location = New System.Drawing.Point(3, 247)
+        Me.DataGridViewManuallyAddedBlockNames.Name = "DataGridViewManuallyAddedBlockNames"
+        Me.DataGridViewManuallyAddedBlockNames.RowHeadersWidth = 30
+        Me.DataGridViewManuallyAddedBlockNames.Size = New System.Drawing.Size(297, 156)
+        Me.DataGridViewManuallyAddedBlockNames.TabIndex = 4
+        '
+        'FileBlocks
+        '
+        Me.FileBlocks.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.FileBlocks.HeaderText = "File Blocks"
+        Me.FileBlocks.Name = "FileBlocks"
+        '
+        'LabelStatus
+        '
+        Me.LabelStatus.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelStatus.AutoSize = True
+        Me.LabelStatus.Location = New System.Drawing.Point(9, 5)
+        Me.LabelStatus.Name = "LabelStatus"
+        Me.LabelStatus.Size = New System.Drawing.Size(37, 13)
+        Me.LabelStatus.TabIndex = 5
+        Me.LabelStatus.Text = "Status"
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.Gainsboro
+        Me.Panel1.Controls.Add(Me.LabelStatus)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(3, 449)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(297, 24)
+        Me.Panel1.TabIndex = 5
         '
         'FormBlockLibraryBlockNames
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(303, 304)
+        Me.ClientSize = New System.Drawing.Size(303, 476)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Name = "FormBlockLibraryBlockNames"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
-        Me.Text = "Library Available Blocks"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.Text = "Edit Blocks"
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridViewBlockLibraryBlockNames, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ExTableLayoutPanel2.ResumeLayout(False)
         Me.ExTableLayoutPanel3.ResumeLayout(False)
         Me.ExTableLayoutPanel3.PerformLayout()
-        Me.ExTableLayoutPanel4.ResumeLayout(False)
-        Me.ExTableLayoutPanel4.PerformLayout()
+        CType(Me.DataGridViewManuallyAddedBlockNames, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents ExTableLayoutPanel1 As ExTableLayoutPanel
-    Friend WithEvents Label1 As Label
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents DataGridViewBlockLibraryBlockNames As DataGridView
     Friend WithEvents ExTableLayoutPanel2 As ExTableLayoutPanel
-    Friend WithEvents Column1 As DataGridViewTextBoxColumn
-    Friend WithEvents ButtonClose As Button
+    Friend WithEvents ButtonCancel As Button
     Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
-    Friend WithEvents ExTableLayoutPanel4 As ExTableLayoutPanel
-    Friend WithEvents TextBoxMaxNumChars As TextBox
-    Friend WithEvents TextBoxMaxNumBlockViews As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents ButtonUpdateLibrary As Button
+    Friend WithEvents DataGridViewManuallyAddedBlockNames As DataGridView
+    Friend WithEvents ButtonOK As Button
+    Friend WithEvents LabelStatus As Label
+    Friend WithEvents LibraryBlocks As DataGridViewTextBoxColumn
+    Friend WithEvents FileBlocks As DataGridViewTextBoxColumn
+    Friend WithEvents Panel1 As Panel
 End Class

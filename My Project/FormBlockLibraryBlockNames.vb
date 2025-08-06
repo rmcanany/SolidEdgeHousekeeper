@@ -2,110 +2,177 @@
 
 Public Class FormBlockLibraryBlockNames
 
+
+    Private _BlockLibraryBlockNames As List(Of String)
     Public Property BlockLibraryBlockNames As List(Of String)
-    Public Property FormTop As Integer
-    Public Property FormLeft As Integer
-
-    Private _MaxNumChars As String
-    Public Property MaxNumChars As String
         Get
-            Return _MaxNumChars
+            Return _BlockLibraryBlockNames
         End Get
-        Set(value As String)
-            _MaxNumChars = value
-            If Me.ExTableLayoutPanel1 IsNot Nothing Then
-                TextBoxMaxNumChars.Text = value
+        Set(value As List(Of String))
+            If value IsNot Nothing Then
+                _BlockLibraryBlockNames = value
+            Else
+                _BlockLibraryBlockNames = New List(Of String)
+            End If
+
+            If Me.DataGridViewBlockLibraryBlockNames IsNot Nothing Then
+                DataGridViewBlockLibraryBlockNames.Rows.Clear()
+                For Each s As String In _BlockLibraryBlockNames
+                    If Not s.Trim = "" Then
+                        DataGridViewBlockLibraryBlockNames.Rows.Add(s)
+                    End If
+                Next
+
+                Dim N As Integer = DataGridViewBlockLibraryBlockNames.Rows.Count
+                If Not N = 0 Then
+                    Dim H As Integer = DataGridViewBlockLibraryBlockNames.Rows(0).Height
+                    Dim MaxVisibleRows As Integer = 12
+                    If N < MaxVisibleRows Then
+                        DataGridViewBlockLibraryBlockNames.Height = (N + 1) * (H)
+                    Else
+                        DataGridViewBlockLibraryBlockNames.Height = (MaxVisibleRows + 1) * (H)
+                    End If
+                End If
+
             End If
         End Set
     End Property
 
-    Private _MaxNumBlockViews As String
-    Public Property MaxNumBlockViews As String
+    Private _ManuallyAddedBlockNames As List(Of String)
+    Public Property ManuallyAddedBlockNames As List(Of String)
         Get
-            Return _MaxNumBlockViews
+            Return _ManuallyAddedBlockNames
         End Get
-        Set(value As String)
-            _MaxNumBlockViews = value
-            If Me.ExTableLayoutPanel1 IsNot Nothing Then
-                TextBoxMaxNumBlockViews.Text = value
+        Set(value As List(Of String))
+            If value IsNot Nothing Then
+                _ManuallyAddedBlockNames = value
+            Else
+                _ManuallyAddedBlockNames = New List(Of String)
+            End If
+
+            If Me.DataGridViewManuallyAddedBlockNames IsNot Nothing Then
+                DataGridViewManuallyAddedBlockNames.Rows.Clear()
+                For Each s As String In _ManuallyAddedBlockNames
+                    DataGridViewManuallyAddedBlockNames.Rows.Add(s)
+                Next
             End If
         End Set
     End Property
 
+    Public Property BlockLibrary As String
 
-    Public Sub New(_BlockLibraryBlockNames As List(Of String))
+
+
+    Public Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.BlockLibraryBlockNames = _BlockLibraryBlockNames
+        ' The calling routine reads and writes the block name lists
 
-        'Me.StartPosition = Form_Main.StartPosition
-        If Not (Form_Main.FBLBNHeight = 0 Or Form_Main.FBLBNWidth = 0) Then
-            Me.Top = Form_Main.FBLBNTop
-            Me.Left = Form_Main.FBLBNLeft
-            Me.Height = Form_Main.FBLBNHeight
-            Me.Width = Form_Main.FBLBNWidth
-        End If
     End Sub
 
     Private Sub FormBlockLibraryBlockNames_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        DataGridView1.Rows.Clear()
 
-        For i = 0 To BlockLibraryBlockNames.Count - 1
-            DataGridView1.Rows.Add(BlockLibraryBlockNames(i))
-        Next
+        LabelStatus.Text = ""
 
-        DataGridView1.CurrentCell = DataGridView1.Rows(DataGridView1.Rows.Count - 1).Cells(0)
-        DataGridView1.ClearSelection()
+        If BlockLibraryBlockNames IsNot Nothing AndAlso BlockLibraryBlockNames.Count > 0 Then
+            DataGridViewBlockLibraryBlockNames.Rows.Clear()
+            For Each BlockName As String In BlockLibraryBlockNames
+                If Not BlockName.Trim = "" Then
+                    DataGridViewBlockLibraryBlockNames.Rows.Add(BlockName)
+                End If
+            Next
+            DataGridViewBlockLibraryBlockNames.CurrentCell = DataGridViewBlockLibraryBlockNames.Rows(DataGridViewBlockLibraryBlockNames.Rows.Count - 1).Cells(0)
+            DataGridViewBlockLibraryBlockNames.ClearSelection()
+        End If
 
-    End Sub
-
-    Private Sub DataGridView1_KeyUp(sender As Object, e As KeyEventArgs) Handles DataGridView1.KeyUp
-        If e.Control And e.KeyCode = Keys.C Then
-            If DataGridView1.SelectedRows IsNot Nothing Then
-                Dim idx As Integer = DataGridView1.SelectedRows(0).Index
-                Clipboard.SetText(Me.BlockLibraryBlockNames(idx))
-                Dim i = 0
-            End If
+        If ManuallyAddedBlockNames IsNot Nothing AndAlso ManuallyAddedBlockNames.Count > 0 Then
+            DataGridViewManuallyAddedBlockNames.Rows.Clear()
+            For Each BlockName As String In ManuallyAddedBlockNames
+                DataGridViewManuallyAddedBlockNames.Rows.Add(BlockName)
+            Next
+            DataGridViewManuallyAddedBlockNames.CurrentCell = DataGridViewManuallyAddedBlockNames.Rows(DataGridViewManuallyAddedBlockNames.Rows.Count - 1).Cells(0)
+            DataGridViewManuallyAddedBlockNames.ClearSelection()
         End If
 
     End Sub
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
-
-    End Sub
-
-    Private Sub ButtonClose_Click(sender As Object, e As EventArgs) Handles ButtonClose.Click
-        Form_Main.FBLBNTop = Me.Top
-        Form_Main.FBLBNLeft = Me.Left
-        Form_Main.FBLBNHeight = Me.Height
-        Form_Main.FBLBNWidth = Me.Width
-
-        Me.Dispose()
+    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+        Me.DialogResult = DialogResult.Cancel
     End Sub
 
     Private Sub Form_Closing(sender As Object, e As EventArgs) Handles Me.FormClosing
-        Form_Main.FBLBNTop = Me.Top
-        Form_Main.FBLBNLeft = Me.Left
-        Form_Main.FBLBNHeight = Me.Height
-        Form_Main.FBLBNWidth = Me.Width
-
-        Me.Dispose()
+        'Me.DialogResult = DialogResult.Cancel
     End Sub
 
-    Private Sub TextBoxMaxNumBlockViews_TextChanged(sender As Object, e As EventArgs) Handles TextBoxMaxNumBlockViews.TextChanged
+    Private Sub ButtonUpdateLibrary_Click(sender As Object, e As EventArgs) Handles ButtonUpdateLibrary.Click
+        Dim USEA As New UtilsSEApp(Form_Main)
+
+        LabelStatus.Text = "Starting Solid Edge..."
+
+        USEA.SEStart(
+            RunInBackground:=False,
+            UseCurrentSession:=True,
+            NoUpdateMRU:=False,
+            ProcessDraftsInactive:=False)
+
+        Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
+
+        Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
+
+        Dim tmpBlockLibraryBlockNames As New List(Of String)
+        tmpBlockLibraryBlockNames.Add("")
+
+        If Blocks IsNot Nothing Then
+            For Each Block As SolidEdgeDraft.Block In Blocks
+                tmpBlockLibraryBlockNames.Add(Block.Name)
+            Next
+        End If
+
+        Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
+
+        SEDoc.Close(False)
+
+        USEA.SEStop(UseCurrentSession:=True)
+
+        LabelStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
 
     End Sub
 
-    Private Sub TextBoxMaxNumChars_TextChanged(sender As Object, e As EventArgs) Handles TextBoxMaxNumChars.TextChanged
+    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
 
+        ' Update lists
+        Me.BlockLibraryBlockNames.Clear()
+        Me.BlockLibraryBlockNames.Add("")
+
+        For Each Row As DataGridViewRow In DataGridViewBlockLibraryBlockNames.Rows
+            If Row.IsNewRow Then Continue For
+            Dim s As String = Row.Cells(0).Value.ToString
+            If s IsNot Nothing AndAlso Not s.Trim = "" Then
+                If Not Me.BlockLibraryBlockNames.Contains(s) Then
+                    Me.BlockLibraryBlockNames.Add(s)
+                End If
+            End If
+            Me.BlockLibraryBlockNames.Sort()
+        Next
+
+        Me.ManuallyAddedBlockNames.Clear()
+        'Me.ManuallyAddedBlockNames.Add("")
+
+        For Each Row As DataGridViewRow In DataGridViewManuallyAddedBlockNames.Rows
+            If Row.IsNewRow Then Continue For
+            Dim s As String = Row.Cells(0).Value.ToString
+            If s IsNot Nothing AndAlso Not s.Trim = "" Then
+                If Not Me.ManuallyAddedBlockNames.Contains(s) Then
+                    Me.ManuallyAddedBlockNames.Add(s)
+                End If
+            End If
+            Me.ManuallyAddedBlockNames.Sort()
+        Next
+
+        Me.DialogResult = DialogResult.OK
     End Sub
-
-    Private Sub DataGridView1_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
-        Dim i = 0
-    End Sub
-
 End Class

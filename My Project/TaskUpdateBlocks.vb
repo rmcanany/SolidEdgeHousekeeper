@@ -82,6 +82,7 @@ Public Class TaskUpdateBlocks
             End If
         End Set
     End Property
+
     Private _ReportMissingSheet As Boolean
     Public Property ReportMissingSheet As Boolean
         Get
@@ -178,9 +179,14 @@ Public Class TaskUpdateBlocks
             Return _BlockLibraryBlockNames
         End Get
         Set(value As List(Of String))
-            value.Sort()
 
-            _BlockLibraryBlockNames = value
+            If value IsNot Nothing Then
+                value.Sort()
+                _BlockLibraryBlockNames = value
+            Else
+                _BlockLibraryBlockNames = New List(Of String)
+            End If
+
 
             If Me.TaskOptionsTLP IsNot Nothing And _BlockLibraryBlockNames IsNot Nothing Then
                 Dim DVGs As New List(Of DataGridView)
@@ -220,9 +226,14 @@ Public Class TaskUpdateBlocks
         End Get
         Set(value As List(Of String))
 
-            If value IsNot Nothing Then value.Sort()
+            If value IsNot Nothing Then
+                value.Sort()
+                _ManuallyAddedBlockNames = value
+            Else
+                _ManuallyAddedBlockNames = New List(Of String)
+            End If
 
-            _ManuallyAddedBlockNames = value
+
 
             If Me.TaskOptionsTLP IsNot Nothing And _ManuallyAddedBlockNames IsNot Nothing Then
                 Dim DVGs As New List(Of DataGridView)
@@ -234,17 +245,17 @@ Public Class TaskUpdateBlocks
                     For Each Column As DataGridViewComboBoxColumn In DVG.Columns
                         Column.Items.Clear()
 
+                        If _BlockLibraryBlockNames IsNot Nothing Then
+                            For Each BlockName As String In _BlockLibraryBlockNames
+                                Column.Items.Add(BlockName)
+                            Next
+                        End If
+                        If Not Column.Name.ToLower.Contains("library") Then
+                            For Each BlockName As String In _ManuallyAddedBlockNames
+                                Column.Items.Add(BlockName)
+                            Next
+                        End If
                         Try
-                            If _BlockLibraryBlockNames IsNot Nothing Then
-                                For Each BlockName As String In _BlockLibraryBlockNames
-                                    Column.Items.Add(BlockName)
-                                Next
-                            End If
-                            If Not Column.Name.ToLower.Contains("library") Then
-                                For Each BlockName As String In _ManuallyAddedBlockNames
-                                    Column.Items.Add(BlockName)
-                                Next
-                            End If
                         Catch ex As Exception
                         End Try
                     Next
@@ -253,8 +264,6 @@ Public Class TaskUpdateBlocks
             End If
         End Set
     End Property
-
-
 
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
@@ -273,7 +282,7 @@ Public Class TaskUpdateBlocks
     Enum ControlNames
         Browse
         BlockLibrary
-        UpdateBlockList
+        EditBlockList
         ReplaceBlocks
         ReplaceBlocksDGV
         ReplaceBlocksReplaceExisting
@@ -604,39 +613,39 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
-    Private Sub UpdateBlockList()
-        Dim USEA As New UtilsSEApp(Form_Main)
+    'Private Sub EditBlockList()
+    '    Dim USEA As New UtilsSEApp(Form_Main)
 
-        Form_Main.TextBoxStatus.Text = "Starting Solid Edge..."
+    '    Form_Main.TextBoxStatus.Text = "Starting Solid Edge..."
 
-        USEA.SEStart(
-            RunInBackground:=False,
-            UseCurrentSession:=True,
-            NoUpdateMRU:=False,
-            ProcessDraftsInactive:=False)
+    '    USEA.SEStart(
+    '        RunInBackground:=False,
+    '        UseCurrentSession:=True,
+    '        NoUpdateMRU:=False,
+    '        ProcessDraftsInactive:=False)
 
-        Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
+    '    Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
 
-        Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
+    '    Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
 
-        Dim tmpBlockLibraryBlockNames As New List(Of String)
-        tmpBlockLibraryBlockNames.Add("")
+    '    Dim tmpBlockLibraryBlockNames As New List(Of String)
+    '    tmpBlockLibraryBlockNames.Add("")
 
-        If Blocks IsNot Nothing Then
-            For Each Block As SolidEdgeDraft.Block In Blocks
-                tmpBlockLibraryBlockNames.Add(Block.Name)
-            Next
-        End If
+    '    If Blocks IsNot Nothing Then
+    '        For Each Block As SolidEdgeDraft.Block In Blocks
+    '            tmpBlockLibraryBlockNames.Add(Block.Name)
+    '        Next
+    '    End If
 
-        Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
+    '    Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
 
-        SEDoc.Close(False)
+    '    SEDoc.Close(False)
 
-        USEA.SEStop(UseCurrentSession:=True)
+    '    USEA.SEStop(UseCurrentSession:=True)
 
-        Form_Main.TextBoxStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
+    '    Form_Main.TextBoxStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
 
-    End Sub
+    'End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
@@ -668,7 +677,7 @@ Public Class TaskUpdateBlocks
 
         RowIndex += 1
 
-        Button = FormatOptionsButton(ControlNames.UpdateBlockList.ToString, "Update list")
+        Button = FormatOptionsButton(ControlNames.EditBlockList.ToString, "Edit list")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -703,7 +712,7 @@ Public Class TaskUpdateBlocks
         'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
         AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
         AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
-        AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
+        'AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
@@ -733,7 +742,7 @@ Public Class TaskUpdateBlocks
         'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
         AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
         AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
-        AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
+        'AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
@@ -780,7 +789,7 @@ Public Class TaskUpdateBlocks
         'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
         AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
         AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
-        AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
+        'AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
@@ -1049,40 +1058,40 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
-    Private Sub DataGridViewOptions_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
+    'Private Sub DataGridViewOptions_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
 
-        Dim DGV As DataGridView = CType(sender, DataGridView)
-        Dim SelectedCell As DataGridViewComboBoxCell = CType(DGV.SelectedCells(0), DataGridViewComboBoxCell)
-        Dim CellColumn As DataGridViewComboBoxColumn = CType(DGV.Columns(e.ColumnIndex), DataGridViewComboBoxColumn)
+    '    Dim DGV As DataGridView = CType(sender, DataGridView)
+    '    Dim SelectedCell As DataGridViewComboBoxCell = CType(DGV.SelectedCells(0), DataGridViewComboBoxCell)
+    '    Dim CellColumn As DataGridViewComboBoxColumn = CType(DGV.Columns(e.ColumnIndex), DataGridViewComboBoxColumn)
 
-        If Not CellColumn.Name.ToLower.Contains("library") Then
-            Dim FTP As New FormTextPrompt
-            FTP.Text = "Enter Block Name"
-            If SelectedCell.Value IsNot Nothing Then FTP.TextBoxInput.Text = CStr(SelectedCell.Value)
+    '    If Not CellColumn.Name.ToLower.Contains("library") Then
+    '        Dim FTP As New FormTextPrompt
+    '        FTP.Text = "Enter Block Name"
+    '        If SelectedCell.Value IsNot Nothing Then FTP.TextBoxInput.Text = CStr(SelectedCell.Value)
 
-            FTP.LabelPrompt.Text = "Enter block name"
-            Dim Result = FTP.ShowDialog()
+    '        FTP.LabelPrompt.Text = "Enter block name"
+    '        Dim Result = FTP.ShowDialog()
 
-            If Result = DialogResult.OK Then
-                Dim Name As String = FTP.TextBoxInput.Text
+    '        If Result = DialogResult.OK Then
+    '            Dim Name As String = FTP.TextBoxInput.Text
 
-                If Not CellColumn.Items.Contains(Name) Then
-                    CellColumn.Items.Add(Name)
-                End If
+    '            If Not CellColumn.Items.Contains(Name) Then
+    '                CellColumn.Items.Add(Name)
+    '            End If
 
-                SelectedCell.Value = Name
+    '            SelectedCell.Value = Name
 
-                If Me.ManuallyAddedBlockNames Is Nothing Then Me.ManuallyAddedBlockNames = New List(Of String)
+    '            If Me.ManuallyAddedBlockNames Is Nothing Then Me.ManuallyAddedBlockNames = New List(Of String)
 
-                Dim tmpManuallyAddedBlockNames As List(Of String) = Me.ManuallyAddedBlockNames
-                If Not tmpManuallyAddedBlockNames.Contains(Name) And Not Me.BlockLibraryBlockNames.Contains(Name) Then
-                    tmpManuallyAddedBlockNames.Add(Name)
-                    Me.ManuallyAddedBlockNames = tmpManuallyAddedBlockNames
-                End If
+    '            Dim tmpManuallyAddedBlockNames As List(Of String) = Me.ManuallyAddedBlockNames
+    '            If Not tmpManuallyAddedBlockNames.Contains(Name) And Not Me.BlockLibraryBlockNames.Contains(Name) Then
+    '                tmpManuallyAddedBlockNames.Add(Name)
+    '                Me.ManuallyAddedBlockNames = tmpManuallyAddedBlockNames
+    '            End If
 
-            End If
-        End If
-    End Sub
+    '        End If
+    '    End If
+    'End Sub
 
     Private Sub DataGridViewOptions_DataError(sender As Object, e As DataGridViewDataErrorEventArgs)
 
@@ -1180,15 +1189,21 @@ Public Class TaskUpdateBlocks
 
                 End If
 
-            Case ControlNames.UpdateBlockList.ToString
-                'Dim FBLBN As New FormBlockLibraryBlockNames(Me.BlockLibraryBlockNames)
+            Case ControlNames.EditBlockList.ToString
+                Dim FBLBN As New FormBlockLibraryBlockNames()
 
-                'FBLBN.MaxNumChars = CStr(Me.MaxNumChars)
-                'FBLBN.MaxNumBlockViews = CStr(Me.MaxNumBlockViews)
+                FBLBN.BlockLibraryBlockNames = Me.BlockLibraryBlockNames
+                FBLBN.ManuallyAddedBlockNames = Me.ManuallyAddedBlockNames
+                FBLBN.BlockLibrary = Me.BlockLibrary
 
-                'FBLBN.Show()
+                Dim Result As DialogResult = FBLBN.ShowDialog
 
-                UpdateBlockList()
+                If Result = DialogResult.OK Then
+                    Me.BlockLibraryBlockNames = FBLBN.BlockLibraryBlockNames
+                    Me.ManuallyAddedBlockNames = FBLBN.ManuallyAddedBlockNames
+
+                End If
+                'EditBlockList()
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
