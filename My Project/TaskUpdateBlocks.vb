@@ -1245,7 +1245,7 @@ Public Class TaskUpdateBlocks
         HelpString += vbCrLf + vbCrLf + "If you have files with block names not found in the library, "
         HelpString += "enter them on the `File Blocks` list.  "
         HelpString += "You can delete entries no longer needed. "
-        HelpString += "Select the `Row Header` (the gray box left of the text) and press your keyboard's `Delete` key. "
+        HelpString += "Select the `Row Header` (the gray box left of the text) and hit `Delete`. "
 
         HelpString += vbCrLf + vbCrLf + "There are a few options.  They are described next.  "
 
