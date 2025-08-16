@@ -1230,14 +1230,14 @@ Public Class TaskUpdateBlocks
 
         HelpString += vbCrLf + vbCrLf + "Known blocks are available in combo boxes on each list. "
         HelpString += "To populate them, click the `Edit list` button. "
-        HelpString += "On the dialog, click `Update` to read in the library blocks. "
-        HelpString += "The program needs to start Solid Edge to do so.  The status bar keeps you informed on progress. "
+        HelpString += "To get the library blocks, click `Update`. "
+        HelpString += "Note the program needs to start Solid Edge to do so. "
         HelpString += "If you have files with block names not found in the library, "
         HelpString += "enter them on the `File Blocks` list.  "
 
         HelpString += vbCrLf + vbCrLf + "There are a couple of things to note about working with the block lists. "
         HelpString += "First, you may find yourself clicking a drop down twice to choose an item. "
-        HelpString += "The combo boxes are picky -- you have to click the down arrow, "
+        HelpString += "These combo boxes are picky -- you have to click the down arrow, "
         HelpString += "not the text field, to open the drop down on the first click. "
         HelpString += "Second, to remove a row's contents, "
         HelpString += "select the `Row Header` (the gray box left of the text) and hit `Delete`. "

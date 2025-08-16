@@ -756,9 +756,9 @@ Adds, replaces and/or deletes blocks in a draft file.
 
 For adding and replacing, a draft file containing the new blocks is required.  In most cases it will simply be your draft template.  Click the `Block Library` button to select it. 
 
-Known blocks are available in combo boxes on each list. To populate them, click the `Edit list` button. On the dialog, click `Update` to read in the library blocks. The program needs to start Solid Edge to do so.  The status bar keeps you informed on progress. If you have files with block names not found in the library, enter them on the `File Blocks` list.  
+Known blocks are available in combo boxes on each list. To populate them, click the `Edit list` button. To get the library blocks, click `Update`. Note the program needs to start Solid Edge to do so. If you have files with block names not found in the library, enter them on the `File Blocks` list.  
 
-There are a couple of things to note about working with the block lists. First, you may find yourself clicking a drop down twice to choose an item. The combo boxes are picky -- you have to click the down arrow, not the text field, to open the drop down on the first click. Second, to remove a row's contents, select the `Row Header` (the gray box left of the text) and hit `Delete`. To clear the entire list, select the top-most `Row Header` and do the same.  
+There are a couple of things to note about working with the block lists. First, you may find yourself clicking a drop down twice to choose an item. These combo boxes are picky -- you have to click the down arrow, not the text field, to open the drop down on the first click. Second, to remove a row's contents, select the `Row Header` (the gray box left of the text) and hit `Delete`. To clear the entire list, select the top-most `Row Header` and do the same.  
 
 This command has a few options.  They are described next.  
 - `Replace Blocks` `Overwrite existing with replacement`: This is confusing; the point of the command is to overwrite blocks, right? There is an ambiguity, however. Say you want to replace `Block1` in the file with `Block2` in the library. It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? This option tells the program how to proceed for that situation. 
