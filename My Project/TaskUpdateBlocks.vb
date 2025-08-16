@@ -1228,9 +1228,10 @@ Public Class TaskUpdateBlocks
         HelpString += "In most cases it will simply be your draft template.  "
         HelpString += "Click the `Block Library` button to select it. "
 
-        HelpString += vbCrLf + vbCrLf + "To populate the combo boxes with the block names, click the `Edit list` button. "
-        HelpString += "On the dialog, click `Update` to populate the library blocks. "
-        HelpString += "The program needs to start Solid Edge to do so, which can take a bit of time. "
+        HelpString += vbCrLf + vbCrLf + "Known blocks are available in combo boxes on each list. "
+        HelpString += "To populate them, click the `Edit list` button. "
+        HelpString += "On the dialog, click `Update` to read in the library blocks. "
+        HelpString += "The program needs to start Solid Edge to do so.  The status bar keeps you informed on progress. "
         HelpString += "If you have files with block names not found in the library, "
         HelpString += "enter them on the `File Blocks` list.  "
 
