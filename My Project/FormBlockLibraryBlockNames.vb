@@ -56,6 +56,9 @@ Public Class FormBlockLibraryBlockNames
                     DataGridViewManuallyAddedBlockNames.Rows.Add(s)
                 Next
             End If
+
+            UpdateDGVSize(DataGridViewManuallyAddedBlockNames)
+
         End Set
     End Property
 
@@ -85,6 +88,9 @@ Public Class FormBlockLibraryBlockNames
                     DataGridViewBlockLibraryBlockNames.Rows.Add(BlockName)
                 End If
             Next
+
+            UpdateDGVSize(DataGridViewBlockLibraryBlockNames)
+
             DataGridViewBlockLibraryBlockNames.CurrentCell = DataGridViewBlockLibraryBlockNames.Rows(DataGridViewBlockLibraryBlockNames.Rows.Count - 1).Cells(0)
             DataGridViewBlockLibraryBlockNames.ClearSelection()
         End If
@@ -94,6 +100,9 @@ Public Class FormBlockLibraryBlockNames
             For Each BlockName As String In ManuallyAddedBlockNames
                 DataGridViewManuallyAddedBlockNames.Rows.Add(BlockName)
             Next
+
+            UpdateDGVSize(DataGridViewManuallyAddedBlockNames)
+
             DataGridViewManuallyAddedBlockNames.CurrentCell = DataGridViewManuallyAddedBlockNames.Rows(DataGridViewManuallyAddedBlockNames.Rows.Count - 1).Cells(0)
             DataGridViewManuallyAddedBlockNames.ClearSelection()
         End If
@@ -109,6 +118,12 @@ Public Class FormBlockLibraryBlockNames
     End Sub
 
     Private Sub ButtonUpdateLibrary_Click(sender As Object, e As EventArgs) Handles ButtonUpdateLibrary.Click
+
+        If Not IO.File.Exists(Me.BlockLibrary) Then
+            MsgBox($"Block library not found: '{Me.BlockLibrary}'", vbOKOnly, "Block Library Not Found")
+            Exit Sub
+        End If
+
         Dim USEA As New UtilsSEApp(Form_Main)
 
         LabelStatus.Text = "Starting Solid Edge..."
@@ -175,4 +190,20 @@ Public Class FormBlockLibraryBlockNames
 
         Me.DialogResult = DialogResult.OK
     End Sub
+
+    'Private Sub ButtonClearFileBlockList_Click(sender As Object, e As EventArgs)
+    '    For i = DataGridViewManuallyAddedBlockNames.Rows.Count - 1 To 0 Step -1
+    '        If DataGridViewManuallyAddedBlockNames.Rows(i).IsNewRow Then Continue For
+    '        DataGridViewManuallyAddedBlockNames.Rows.RemoveAt(i)
+    '    Next
+
+    '    UpdateDGVSize(DataGridViewManuallyAddedBlockNames)
+
+    'End Sub
+
+    Public Sub UpdateDGVSize(DGV As DataGridView)
+        DGV.Height = (DGV.Rows(0).Height + 1) * (DGV.Rows.Count + 2)
+    End Sub
+
+
 End Class

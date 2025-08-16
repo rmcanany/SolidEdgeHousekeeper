@@ -1,6 +1,4 @@
 ﻿Option Strict On
-Imports System.Drawing.Text
-Imports System.IO
 
 Public Class TaskUpdateBlocks
     Inherits Task
@@ -116,6 +114,8 @@ Public Class TaskUpdateBlocks
                 Catch ex As Exception
                 End Try
 
+                UpdateDGVSize(tmpDataGridView)
+
                 tmpDataGridView.CurrentCell = tmpDataGridView.Rows(tmpDataGridView.Rows.Count - 1).Cells(0)
                 tmpDataGridView.ClearSelection()
             End If
@@ -142,6 +142,8 @@ Public Class TaskUpdateBlocks
                 Catch ex As Exception
                 End Try
 
+                UpdateDGVSize(tmpDataGridView)
+
                 tmpDataGridView.CurrentCell = tmpDataGridView.Rows(tmpDataGridView.Rows.Count - 1).Cells(0)
                 tmpDataGridView.ClearSelection()
             End If
@@ -166,6 +168,8 @@ Public Class TaskUpdateBlocks
                     Next
                 Catch ex As Exception
                 End Try
+
+                UpdateDGVSize(tmpDataGridView)
 
                 tmpDataGridView.CurrentCell = tmpDataGridView.Rows(tmpDataGridView.Rows.Count - 1).Cells(0)
                 tmpDataGridView.ClearSelection()
@@ -284,8 +288,8 @@ Public Class TaskUpdateBlocks
         BlockLibrary
         EditBlockList
         ReplaceBlocks
-        ReplaceBlocksDGV
         ReplaceBlocksReplaceExisting
+        ReplaceBlocksDGV
         DeleteBlocks
         DeleteBlocksDGV
         AddBlocks
@@ -613,39 +617,9 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
-    'Private Sub EditBlockList()
-    '    Dim USEA As New UtilsSEApp(Form_Main)
-
-    '    Form_Main.TextBoxStatus.Text = "Starting Solid Edge..."
-
-    '    USEA.SEStart(
-    '        RunInBackground:=False,
-    '        UseCurrentSession:=True,
-    '        NoUpdateMRU:=False,
-    '        ProcessDraftsInactive:=False)
-
-    '    Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
-
-    '    Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
-
-    '    Dim tmpBlockLibraryBlockNames As New List(Of String)
-    '    tmpBlockLibraryBlockNames.Add("")
-
-    '    If Blocks IsNot Nothing Then
-    '        For Each Block As SolidEdgeDraft.Block In Blocks
-    '            tmpBlockLibraryBlockNames.Add(Block.Name)
-    '        Next
-    '    End If
-
-    '    Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
-
-    '    SEDoc.Close(False)
-
-    '    USEA.SEStop(UseCurrentSession:=True)
-
-    '    Form_Main.TextBoxStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
-
-    'End Sub
+    Public Sub UpdateDGVSize(DGV As DataGridView)
+        DGV.Height = (DGV.Rows(0).Height + 1) * (DGV.Rows.Count + 2)
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
@@ -706,13 +680,9 @@ Public Class TaskUpdateBlocks
 
         ColumnHeaders = {"File block name", "Library block name"}.ToList
         ColumnType = "Combobox"
-        'ColumnItems = Me.BlockLibraryBlockNames
         DataGridView = FormatOptionsDataGridView(ControlNames.ReplaceBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
+        AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
-        'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
-        AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
-        AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
-        'AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
@@ -736,13 +706,10 @@ Public Class TaskUpdateBlocks
 
         ColumnHeaders = {"File block name"}.ToList
         ColumnType = "Combobox"
-        'ColumnItems = Me.BlockLibraryBlockNames
         DataGridView = FormatOptionsDataGridView(ControlNames.DeleteBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
+        AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
-        'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
-        AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
-        AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
-        'AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
+        AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
@@ -783,13 +750,10 @@ Public Class TaskUpdateBlocks
 
         ColumnHeaders = {"Library block name"}.ToList
         ColumnType = "Combobox"
-        'ColumnItems = Me.BlockLibraryBlockNames
         DataGridView = FormatOptionsDataGridView(ControlNames.AddBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
+        AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
-        'AddHandler DataGridView.CellEnter, AddressOf DataGridViewOptions_CellEnter
-        AddHandler DataGridView.CellValueChanged, AddressOf DataGridViewOptions_UpdateSize
-        AddHandler DataGridView.KeyDown, AddressOf dataGridViewItems_KeyDown
-        'AddHandler DataGridView.CellDoubleClick, AddressOf DataGridViewOptions_CellContentDoubleClick
+        AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(DataGridView, 2)
         For i = 0 To ColumnHeaders.Count - 1
@@ -811,6 +775,8 @@ Public Class TaskUpdateBlocks
     End Function
 
     Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
+
+        'RemoveBlankDGVRows()
 
         If Me.IsSelectedTask Then
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
@@ -871,63 +837,6 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
-
-    Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs)
-
-        Dim DataGridView = CType(sender, DataGridView)
-        If DataGridView.SelectedCells IsNot Nothing AndAlso DataGridView.SelectedCells.Count > 0 Then
-            Dim SelectedCell = DataGridView.SelectedCells(0)
-
-            If e.Control And e.KeyCode = Keys.V Then
-                SelectedCell.Value = Clipboard.GetText.Trim
-            ElseIf e.KeyCode = Keys.Delete Or e.KeyCode = Keys.Back Then
-                SelectedCell.Value = ""
-            End If
-
-        End If
-
-    End Sub
-
-    'Public Sub DataGridViewOptions_CellEnter(sender As System.Object, e As DataGridViewCellEventArgs)
-
-    '    Dim DataGridView = CType(sender, DataGridView)
-    '    Dim RowHeight As Integer = DataGridView.Rows(0).Height
-
-    '    Dim Name = DataGridView.Name
-
-    '    Select Case Name
-    '        Case ControlNames.ReplaceBlocksDGV.ToString
-    '            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
-
-    '        Case ControlNames.DeleteBlocksDGV.ToString
-    '            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
-
-    '        Case ControlNames.AddBlocksDGV.ToString
-    '            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
-
-    '        Case Else
-    '            MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-    '    End Select
-    'End Sub
-
-    Public Sub DataGridViewOptions_UpdateSize(sender As System.Object, e As DataGridViewCellEventArgs)
-
-        Dim DataGridView = CType(sender, DataGridView)
-
-        Select Case DataGridView.Name
-            Case ControlNames.ReplaceBlocksDGV.ToString
-                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
-
-            Case ControlNames.DeleteBlocksDGV.ToString
-                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
-
-            Case ControlNames.AddBlocksDGV.ToString
-                DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
-
-            Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-        End Select
-    End Sub
 
     Public Sub DataGridViewOptions_Leave(sender As System.Object, e As System.EventArgs)
 
@@ -1058,6 +967,87 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
+    Private Sub DataGridViewOptions_DataError(sender As Object, e As DataGridViewDataErrorEventArgs)
+
+    End Sub
+
+    Private Sub DataGridViewOptions_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs)
+        ' https://stackoverflow.com/questions/3207420/datagridview-editmode-editonenter-how-to-select-the-row-to-delete-it
+
+        ' Toggles the DGV EditMode so the row headers can be used to delete a row
+
+        Dim tmpDataGridView As DataGridView = CType(sender, DataGridView)
+
+        UpdateDGVSize(tmpDataGridView)
+
+        If e.ColumnIndex = -1 Then  ' Row header column
+            tmpDataGridView.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2
+            tmpDataGridView.EndEdit()
+        ElseIf tmpDataGridView.EditMode <> DataGridViewEditMode.EditOnEnter Then
+            tmpDataGridView.EditMode = DataGridViewEditMode.EditOnEnter
+            tmpDataGridView.BeginEdit(False)
+        End If
+
+    End Sub
+
+    'Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs)
+
+    '    Dim DataGridView = CType(sender, DataGridView)
+
+    '    If DataGridView.SelectedCells IsNot Nothing AndAlso DataGridView.SelectedCells.Count > 0 Then
+    '        Dim SelectedCell = DataGridView.SelectedCells(0)
+
+    '        If e.Control And e.KeyCode = Keys.V Then
+    '            SelectedCell.Value = Clipboard.GetText.Trim
+    '        ElseIf e.KeyCode = Keys.Delete Or e.KeyCode = Keys.Back Then
+    '            SelectedCell.Value = ""
+    '        End If
+
+    '    End If
+
+    'End Sub
+
+    ''Public Sub DataGridViewOptions_CellEnter(sender As System.Object, e As DataGridViewCellEventArgs)
+
+    ''    Dim DataGridView = CType(sender, DataGridView)
+    ''    Dim RowHeight As Integer = DataGridView.Rows(0).Height
+
+    ''    Dim Name = DataGridView.Name
+
+    ''    Select Case Name
+    ''        Case ControlNames.ReplaceBlocksDGV.ToString
+    ''            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+    ''        Case ControlNames.DeleteBlocksDGV.ToString
+    ''            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+    ''        Case ControlNames.AddBlocksDGV.ToString
+    ''            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
+
+    ''        Case Else
+    ''            MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+    ''    End Select
+    ''End Sub
+
+    'Public Sub DataGridViewOptions_UpdateSize(sender As System.Object, e As DataGridViewCellEventArgs)
+
+    '    Dim DataGridView = CType(sender, DataGridView)
+
+    '    UpdateDGVSize(DataGridView)
+    '    'Select Case DataGridView.Name
+    '    '    Case ControlNames.ReplaceBlocksDGV.ToString
+    '    '        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
+
+    '    '    Case ControlNames.DeleteBlocksDGV.ToString
+    '    '        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
+
+    '    '    Case ControlNames.AddBlocksDGV.ToString
+    '    '        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
+
+    '    '    Case Else
+    '    '        MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+    '    'End Select
+    'End Sub
     'Private Sub DataGridViewOptions_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
 
     '    Dim DGV As DataGridView = CType(sender, DataGridView)
@@ -1093,9 +1083,6 @@ Public Class TaskUpdateBlocks
     '    End If
     'End Sub
 
-    Private Sub DataGridViewOptions_DataError(sender As Object, e As DataGridViewDataErrorEventArgs)
-
-    End Sub
 
     'Private Sub DataGridView1_CellValidating(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellValidatingEventArgs)
     '    Dim DGV As DataGridView = CType(sender, DataGridView)
@@ -1205,6 +1192,9 @@ Public Class TaskUpdateBlocks
                 End If
                 'EditBlockList()
 
+                'Case ControlNames.ReplaceBlocksDeleteSelectedRow.ToString
+                '    Dim tmpDGV As DataGridView = CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView)
+                '    Dim i = 0
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
@@ -1241,13 +1231,18 @@ Public Class TaskUpdateBlocks
         HelpString += vbCrLf + vbCrLf + "To populate the combo boxes with the block names, click the `Edit list` button. "
         HelpString += "On the dialog, click `Update` to populate the library blocks. "
         HelpString += "The program needs to start Solid Edge to do so, which can take a bit of time. "
-
-        HelpString += vbCrLf + vbCrLf + "If you have files with block names not found in the library, "
+        HelpString += "If you have files with block names not found in the library, "
         HelpString += "enter them on the `File Blocks` list.  "
-        HelpString += "You can delete entries no longer needed. "
-        HelpString += "Select the `Row Header` (the gray box left of the text) and hit `Delete`. "
 
-        HelpString += vbCrLf + vbCrLf + "There are a few options.  They are described next.  "
+        HelpString += vbCrLf + vbCrLf + "There are a couple of things to note about working with the block lists. "
+        HelpString += "First, you may find yourself clicking a drop down twice to choose an item. "
+        HelpString += "The combo boxes are picky -- you have to click the down arrow, "
+        HelpString += "not the text field, to open the drop down on the first click. "
+        HelpString += "Second, to remove a row's contents, "
+        HelpString += "select the `Row Header` (the gray box left of the text) and hit `Delete`. "
+        HelpString += "To clear the entire list, select the top-most `Row Header` and do the same.  "
+
+        HelpString += vbCrLf + vbCrLf + "This command has a few options.  They are described next.  "
 
         HelpString += vbCrLf + "- `Replace Blocks` `Overwrite existing with replacement`: "
         HelpString += "This is confusing; the point of the command is to overwrite blocks, right? "
