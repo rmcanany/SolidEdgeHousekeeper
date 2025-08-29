@@ -1526,6 +1526,8 @@ Public Class Form_Main
 
     Private Sub BT_AddSingleFiles_Click(sender As Object, e As EventArgs) Handles BT_AddSingleFiles.Click
 
+        Dim NewWay As Boolean = True
+
         Dim tmpFolderDialog As New OpenFileDialog
         tmpFolderDialog.Multiselect = True
         tmpFolderDialog.Filter =
@@ -1545,7 +1547,11 @@ Public Class Form_Main
 
             Dim FileLists As String = ""
             For Each tmpFile As String In tmpFolderDialog.FileNames
-                FileLists = FileLists & tmpFile & ","
+                If NewWay Then
+                    FileLists = FileLists & tmpFile & vbTab
+                Else
+                    FileLists = FileLists & tmpFile & ","
+                End If
             Next
             FileLists = FileLists.Remove(FileLists.Length - 1)  ' Remove trailing comma
 
@@ -1645,6 +1651,9 @@ Public Class Form_Main
     End Sub
 
     Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
+
+        Dim NewWay As Boolean = True
+
         Dim FTCA As New FormTeamCenterAdd(Me)
         Dim Result As DialogResult = FTCA.ShowDialog()
 
@@ -1659,7 +1668,13 @@ Public Class Form_Main
 
             Dim FileLists As String = ""
             For Each tmpFile As String In tmpFilelist
-                FileLists = FileLists & tmpFile & ","
+
+                If NewWay Then
+                    FileLists = FileLists & tmpFile & vbTab
+                Else
+                    FileLists = FileLists & tmpFile & ","
+                End If
+
             Next
             FileLists = FileLists.Remove(FileLists.Length - 1)  ' Remove trailing comma
 
@@ -1688,13 +1703,18 @@ Public Class Form_Main
 
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a list of files"
-        tmpFileDialog.Filter = "Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+        tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
 
             Dim tmpItem As New ListViewItem
 
             Select Case IO.Path.GetExtension(tmpFileDialog.FileName).ToLower
 
+                Case Is = ".tsv"
+                    tmpItem.Text = "TSV list"
+                    tmpItem.ImageKey = "csv" ' Not a typo.  Reusing 'csv'
+                    tmpItem.Tag = "tsv"
                 Case Is = ".txt"
                     tmpItem.Text = "TXT list"
                     tmpItem.ImageKey = "txt"
@@ -1715,7 +1735,10 @@ Public Class Form_Main
             tmpItem.Group = ListViewSources.Groups.Item("Sources")
 
             tmpItem.Name = tmpFileDialog.FileName
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                ListViewSources.Items.Add(tmpItem)
+                ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            End If
 
             ListViewFilesOutOfDate = True
 
@@ -2044,9 +2067,17 @@ Public Class Form_Main
 
     Private Sub BT_ExportList_Click(sender As Object, e As EventArgs) Handles BT_ExportList.Click
 
+        Dim NewWay As Boolean = True
+
         Dim tmpFileDialog As New SaveFileDialog
         tmpFileDialog.Title = "Save a list of files"
-        tmpFileDialog.Filter = "Text files|*.txt"
+
+        If NewWay Then
+            tmpFileDialog.Filter = "Tab separated variable files|*.tsv"
+        Else
+            tmpFileDialog.Filter = "Text files|*.txt"
+        End If
+
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
 
             Dim content As String = ""
@@ -2056,7 +2087,11 @@ Public Class Form_Main
                     content += tmpItem.Name
 
                     For Each subItem As ListViewItem.ListViewSubItem In tmpItem.SubItems
-                        If subItem.Bounds.Width <> 0 Then content += "," & subItem.Text
+                        If NewWay Then
+                            If subItem.Bounds.Width <> 0 Then content += vbTab & subItem.Text
+                        Else
+                            If subItem.Bounds.Width <> 0 Then content += "," & subItem.Text
+                        End If
                     Next
 
                     content += vbCrLf

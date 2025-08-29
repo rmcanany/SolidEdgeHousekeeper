@@ -228,6 +228,8 @@ Public Class UtilsFileList
         BareTopLevelAssembly As Boolean
         ) As IReadOnlyCollection(Of String)
 
+        Dim NewWay As Boolean = True
+
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim ActiveFileExtensionsList As New List(Of String)
 
@@ -321,6 +323,21 @@ Public Class UtilsFileList
 
                     End If
 
+                Case = "tsv"
+                    FMain.TextBoxStatus.Text = String.Format("Processing list '{0}'", System.IO.Path.GetFileName(Source.Name))
+
+                    If FileIO.FileSystem.FileExists(Source.Name) Then
+
+                        Dim tmpFoundFiles = IO.File.ReadAllLines(Source.Name)
+
+                        For i = 0 To tmpFoundFiles.Count - 1
+                            tmpFoundFiles(i) = tmpFoundFiles(i).Split(CChar(vbTab)).First
+                        Next
+
+                        FoundFiles = tmpFoundFiles
+
+                    End If
+
                 Case = "excel"
                     FMain.TextBoxStatus.Text = String.Format("Processing excel '{0}'", System.IO.Path.GetFileName(Source.Name))
 
@@ -338,12 +355,24 @@ Public Class UtilsFileList
 
                 Case = "Files"
                     Dim tmpFoundFiles As New List(Of String)
-                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+
+                    If NewWay Then
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
+                    Else
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+                    End If
+
                     FoundFiles = tmpFoundFiles
 
                 Case = "TeamCenter"
                     Dim tmpFoundFiles As New List(Of String)
-                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+
+                    If NewWay Then
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
+                    Else
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+                    End If
+
                     FoundFiles = tmpFoundFiles
 
                 Case = "ASM_Folder"
