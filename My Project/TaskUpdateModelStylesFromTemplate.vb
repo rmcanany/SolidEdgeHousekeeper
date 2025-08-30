@@ -267,6 +267,16 @@ Public Class TaskUpdateModelStylesFromTemplate
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        Dim tf As Boolean
+        tf = SEDoc.FullName = Me.AssemblyTemplate
+        tf = tf Or SEDoc.FullName = Me.PartTemplate
+        tf = tf Or SEDoc.FullName = Me.SheetmetalTemplate
+        If tf Then
+            TaskLogger.AddMessage("Template file itself ineligible for processing")
+            Exit Sub
+        End If
+
+
         Dim UC As New UtilsCommon
 
         Dim AsmTemplateDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
