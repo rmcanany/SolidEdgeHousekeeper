@@ -211,6 +211,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         TemplateStyleInDoc = True
                         Try
                             UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
+                            ' #### The following are not updating correctly in SE2019 with UC.CopyProperties
+                            DocDimensionStyle.HoleCalloutCounterdrill = TemplateDimensionStyle.HoleCalloutCounterdrill
+                            DocDimensionStyle.HoleCalloutCounterdrillThreaded = TemplateDimensionStyle.HoleCalloutCounterdrillThreaded
                         Catch ex As Exception
                             TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
                         End Try
@@ -221,6 +224,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Try
                         tmpDocDimensionStyle = DocDimensionStyles.Add(TemplateDimensionStyle.Name, "")
                         UC.CopyProperties(TemplateDimensionStyle, tmpDocDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
+                        ' #### The following are not updating correctly in SE2019 with UC.CopyProperties
+                        tmpDocDimensionStyle.HoleCalloutCounterdrill = TemplateDimensionStyle.HoleCalloutCounterdrill
+                        tmpDocDimensionStyle.HoleCalloutCounterdrillThreaded = TemplateDimensionStyle.HoleCalloutCounterdrillThreaded
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error adding DimensionStyle '{0}'", TemplateDimensionStyle.Name))
                     End Try
