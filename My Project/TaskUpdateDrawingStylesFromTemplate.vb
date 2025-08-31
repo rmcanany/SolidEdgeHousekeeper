@@ -210,7 +210,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     If TemplateDimensionStyle.Name = DocDimensionStyle.Name Then
                         TemplateStyleInDoc = True
                         Try
-                            UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
+                            UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
                         Catch ex As Exception
                             TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
                         End Try
@@ -220,7 +220,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Dim tmpDocDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle
                     Try
                         tmpDocDimensionStyle = DocDimensionStyles.Add(TemplateDimensionStyle.Name, "")
-                        UC.CopyProperties(TemplateDimensionStyle, tmpDocDimensionStyle)
+                        UC.CopyProperties(TemplateDimensionStyle, tmpDocDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error adding DimensionStyle '{0}'", TemplateDimensionStyle.Name))
                     End Try
@@ -256,7 +256,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     If TemplateDrawingViewStyle.Name = DocDrawingViewStyle.Name Then
                         TemplateStyleInDoc = True
                         Try
-                            UC.CopyProperties(TemplateDrawingViewStyle, DocDrawingViewStyle)
+                            UC.CopyProperties(TemplateDrawingViewStyle, DocDrawingViewStyle, TaskLogger.AddLogger($"Drawing view style {TemplateDrawingViewStyle.Name}"))
                         Catch ex As Exception
                             TaskLogger.AddMessage(String.Format("Error applying DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
                         End Try
@@ -266,7 +266,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Dim tmpDocDrawingViewStyle As SolidEdgeFrameworkSupport.DrawingViewStyle
                     Try
                         tmpDocDrawingViewStyle = DocDrawingViewStyles.Add(TemplateDrawingViewStyle.Name, "")
-                        UC.CopyProperties(TemplateDrawingViewStyle, tmpDocDrawingViewStyle)
+                        UC.CopyProperties(TemplateDrawingViewStyle, tmpDocDrawingViewStyle, TaskLogger.AddLogger($"Drawing view style {TemplateDrawingViewStyle.Name}"))
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error adding DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
                     End Try
@@ -302,7 +302,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     If TemplateLinearStyle.Name = DocLinearStyle.Name Then
                         TemplateStyleInDoc = True
                         Try
-                            UC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
+                            UC.CopyProperties(TemplateLinearStyle, DocLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
                         Catch ex As Exception
                             TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
                         End Try
@@ -312,7 +312,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Dim tmpDocLinearStyle As SolidEdgeFramework.LinearStyle
                     Try
                         tmpDocLinearStyle = DocLinearStyles.Add(TemplateLinearStyle.Name, "")
-                        UC.CopyProperties(TemplateLinearStyle, tmpDocLinearStyle)
+                        UC.CopyProperties(TemplateLinearStyle, tmpDocLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error adding LinearStyle '{0}'", TemplateLinearStyle.Name))
                     End Try
@@ -348,7 +348,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     If TemplateTableStyle.Name = DocTableStyle.Name Then
                         TemplateStyleInDoc = True
                         Try
-                            UC.CopyProperties(TemplateTableStyle, DocTableStyle)
+                            UC.CopyProperties(TemplateTableStyle, DocTableStyle, TaskLogger.AddLogger($"Table style {TemplateTableStyle.Name}"))
                             '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
                             For c = 0 To 6
                                 DocTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
@@ -364,7 +364,13 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Dim tmpDocTableStyle As SolidEdgeFrameworkSupport.TableStyle
                     Try
                         tmpDocTableStyle = DocTableStyles.Add(TemplateTableStyle.Name, "")
-                        UC.CopyProperties(TemplateTableStyle, tmpDocTableStyle)
+                        UC.CopyProperties(TemplateTableStyle, tmpDocTableStyle, TaskLogger.AddLogger($"Table style {TemplateTableStyle.Name}"))
+                        '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
+                        For c = 0 To 6
+                            tmpDocTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+                            tmpDocTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+                            tmpDocTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+                        Next
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error adding TableStyle '{0}'", TemplateTableStyle.Name))
                     End Try
@@ -400,7 +406,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     If TemplateTextCharStyle.Name = DocTextCharStyle.Name Then
                         TemplateStyleInDoc = True
                         Try
-                            UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
+                            UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
                         Catch ex As Exception
                             TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
                         End Try
@@ -410,7 +416,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Dim tmpDocTextCharStyle As SolidEdgeFramework.TextCharStyle
                     Try
                         tmpDocTextCharStyle = DocTextCharStyles.Add(TemplateTextCharStyle.Name, "")
-                        UC.CopyProperties(TemplateTextCharStyle, tmpDocTextCharStyle)
+                        UC.CopyProperties(TemplateTextCharStyle, tmpDocTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error adding TextCharStyle '{0}'", TemplateTextCharStyle.Name))
                     End Try
@@ -446,7 +452,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     If TemplateTextStyle.Name = DocTextStyle.Name Then
                         TemplateStyleInDoc = True
                         Try
-                            UC.CopyProperties(TemplateTextStyle, DocTextStyle)
+                            UC.CopyProperties(TemplateTextStyle, DocTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
                         Catch ex As Exception
                             TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
                         End Try
@@ -456,7 +462,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Dim tmpDocTextStyle As SolidEdgeFramework.TextStyle
                     Try
                         tmpDocTextStyle = DocTextStyles.Add(TemplateTextStyle.Name, "")
-                        UC.CopyProperties(TemplateTextStyle, tmpDocTextStyle)
+                        UC.CopyProperties(TemplateTextStyle, tmpDocTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error adding TextStyle '{0}'", TemplateTextStyle.Name))
                     End Try

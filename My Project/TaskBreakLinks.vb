@@ -68,6 +68,19 @@ Public Class TaskBreakLinks
         End Set
     End Property
 
+    Private _BreakDraftSymbols As Boolean
+    Public Property BreakDraftSymbols As Boolean
+        Get
+            Return _BreakDraftSymbols
+        End Get
+        Set(value As Boolean)
+            _BreakDraftSymbols = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BreakDraftSymbols.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -87,6 +100,7 @@ Public Class TaskBreakLinks
         BreakExcel
         BreakInterpartCopies
         BreakDraftModels
+        BreakDraftSymbols
         AutoHideOptions
     End Enum
 
@@ -164,13 +178,17 @@ Public Class TaskBreakLinks
             DoBreakDraftModels(SEDoc, SEApp)
         End If
 
+        If Me.BreakDraftSymbols Then
+            DoBreakDraftSymbols(SEDoc, SEApp)
+        End If
+
         If SEDoc.ReadOnly Then
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else
-            If Not TaskLogger.HasErrors Then
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
+            'If Not TaskLogger.HasErrors Then
+            'End If
+            SEDoc.Save()
+            SEApp.DoIdle()
         End If
 
     End Sub
@@ -224,7 +242,7 @@ Public Class TaskBreakLinks
                     ProcessDrawingViews(Sheets)
 
                 Catch ex As Exception
-                    Me.TaskLogger.AddMessage("Unable to process all sheets.  No changes made.")
+                    'Me.TaskLogger.AddMessage("Unable to process all sheets.  No changes made.")
                 End Try
 
         End Select
@@ -242,6 +260,7 @@ Public Class TaskBreakLinks
                 Try
                     Balloon.BalloonText = Balloon.BalloonDisplayedText
                 Catch ex2 As Exception
+                    Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'")
                 End Try
             Next
         Next
@@ -260,9 +279,49 @@ Public Class TaskBreakLinks
                 Try
                     DrawingView.Drop()
                 Catch ex2 As Exception
+                    Me.TaskLogger.AddMessage($"Unable to process drawing view on sheet '{Sheet.Name}'.")
                 End Try
             Next
         Next
+
+    End Sub
+
+
+    Private Sub DoBreakDraftSymbols(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
+
+        Dim UC As New UtilsCommon
+
+        Select Case UC.GetDocType(SEDoc)
+
+            Case "dft"
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+                Dim SheetLists As New List(Of List(Of SolidEdgeDraft.Sheet))
+                Dim SheetList As List(Of SolidEdgeDraft.Sheet)
+
+                SheetLists.Add(UC.GetSheets(tmpSEDoc, "Background"))
+                SheetLists.Add(UC.GetSheets(tmpSEDoc, "Working"))
+
+                For Each SheetList In SheetLists
+                    For Each Sheet As SolidEdgeDraft.Sheet In SheetList
+                        Dim Symbols As SolidEdgeFramework.Symbols = CType(Sheet.Symbols, SolidEdgeFramework.Symbols)
+                        If Symbols IsNot Nothing Then
+                            For Each Symbol2d As SolidEdgeFramework.Symbol2d In Symbols
+                                If Symbol2d.Class = "SolidEdge.DraftDocument" Then
+                                    Try
+                                        Symbol2d.ConvertToGroup()
+                                    Catch ex As Exception
+                                        Me.TaskLogger.AddMessage($"Unable to process symbol '{Symbol2d.Name}' on sheet '{Sheet.Name}'")
+                                    End Try
+                                End If
+                            Next
+                        End If
+                    Next
+                Next
+
+        End Select
 
     End Sub
 
@@ -270,8 +329,6 @@ Public Class TaskBreakLinks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal SEApp As SolidEdgeFramework.Application
         )
-
-        Dim FileChanged As Boolean = False
 
         Dim UC As New UtilsCommon
 
@@ -282,7 +339,6 @@ Public Class TaskBreakLinks
             Variable = Variables(VariableName)
             If (Variable.Formula.Contains(".xlsx")) Or (Variable.Formula.Contains(".xls")) Then
                 Variable.Formula = ""
-                FileChanged = True
             End If
         Next
 
@@ -293,7 +349,6 @@ Public Class TaskBreakLinks
             Dimension = Dimensions(DimensionName)
             If (Dimension.Formula.Contains(".xlsx")) Or (Dimension.Formula.Contains(".xls")) Then
                 Dimension.Formula = ""
-                FileChanged = True
             End If
         Next
 
@@ -390,7 +445,7 @@ Public Class TaskBreakLinks
                     End If
                 Next
             ElseIf CopyConstructions.Count >= 300 Then
-                Me.TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", CopyConstructions.Count.ToString))
+                Me.TaskLogger.AddMessage(String.Format("{0} construction copies exceeds maximum to process", CopyConstructions.Count.ToString))
             End If
         End If
 
@@ -440,6 +495,22 @@ Public Class TaskBreakLinks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftModels.ToString, "Break draft model links (*.dft)")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftModels.ToString, "Break draft model links (*.dft)")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftSymbols.ToString, "Break draft symbol links (*.dft)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -499,6 +570,9 @@ Public Class TaskBreakLinks
 
             Case ControlNames.BreakDraftModels.ToString
                 Me.BreakDraftModels = Checkbox.Checked
+
+            Case ControlNames.BreakDraftSymbols.ToString
+                Me.BreakDraftSymbols = Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked

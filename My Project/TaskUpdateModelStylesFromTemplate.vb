@@ -548,7 +548,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 If TemplateViewStyle.StyleName = DocViewStyle.StyleName Then
                     TemplateStyleInDoc = True
                     Try
-                        UC.CopyProperties(TemplateViewStyle, DocViewStyle)
+                        UC.CopyProperties(TemplateViewStyle, DocViewStyle, TaskLogger)
 
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error updating ViewStyle '{0}'", TemplateViewStyle.StyleName))
@@ -580,7 +580,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewViewStyle = DocViewStyles.Add(TemplateViewStyle.StyleName, "")
                 Try
-                    UC.CopyProperties(TemplateViewStyle, NewViewStyle)
+                    UC.CopyProperties(TemplateViewStyle, NewViewStyle, TaskLogger)
                 Catch ex As Exception
                     TaskLogger.AddMessage(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
                 End Try
@@ -650,7 +650,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        UC.CopyProperties(TemplateTextStyle, DocTextStyle)
+                        UC.CopyProperties(TemplateTextStyle, DocTextStyle, TaskLogger)
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
                     End Try
@@ -663,7 +663,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewTextStyle = DocTextStyles.Add(TemplateTextStyle.Name, "")
                 Try
-                    UC.CopyProperties(TemplateTextStyle, NewTextStyle)
+                    UC.CopyProperties(TemplateTextStyle, NewTextStyle, TaskLogger)
                 Catch ex As Exception
                     TaskLogger.AddMessage(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
                 End Try
@@ -716,7 +716,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
+                        UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle, TaskLogger)
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
                     End Try
@@ -730,7 +730,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewTextCharStyle = DocTextCharStyles.Add(TemplateTextCharStyle.Name, "")
                 Try
-                    UC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle)
+                    UC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle, TaskLogger)
                 Catch ex As Exception
                     TaskLogger.AddMessage(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
                 End Try
@@ -783,7 +783,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        UC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
+                        UC.CopyProperties(TemplateLinearStyle, DocLinearStyle, TaskLogger)
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
                     End Try
@@ -796,7 +796,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewLinearStyle = DocLinearStyles.Add(TemplateLinearStyle.Name, "")
                 Try
-                    UC.CopyProperties(TemplateLinearStyle, NewLinearStyle)
+                    UC.CopyProperties(TemplateLinearStyle, NewLinearStyle, TaskLogger)
                 Catch ex As Exception
                     TaskLogger.AddMessage(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
                 End Try
@@ -849,7 +849,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
+                        UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle, TaskLogger)
                     Catch ex As Exception
                         TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
 
@@ -863,7 +863,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewDimensionStyle = DocDimensionStyles.Add(TemplateDimensionStyle.Name, "")
                 Try
-                    UC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle)
+                    UC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle, TaskLogger)
                 Catch ex As Exception
                     TaskLogger.AddMessage(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
                 End Try

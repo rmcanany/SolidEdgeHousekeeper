@@ -1042,7 +1042,7 @@ Public Class UtilsCommon
         Return Valid
     End Function
 
-    Public Sub CopyProperties(Source As Object, Destination As Object)
+    Public Sub CopyProperties(Source As Object, Destination As Object, ErrorLogger As Logger)
 
         Dim sourceType As Type = HCComObject.GetCOMObjectType(Source)
         Dim destType As Type = HCComObject.GetCOMObjectType(Destination)
@@ -1058,8 +1058,17 @@ Public Class UtilsCommon
                             If destProp.PropertyType.IsAssignableFrom(sourceProp.PropertyType) Then
                                 Try
                                     Dim tmpValue = sourceProp.GetValue(Source, Nothing)
-                                    If Not tmpValue Is Nothing Then destProp.SetValue(Destination, tmpValue, Nothing)
+                                    If Not tmpValue Is Nothing Then
+                                        Try
+                                            destProp.SetValue(Destination, tmpValue, Nothing)
+                                        Catch ex2 As Exception
+                                            ErrorLogger.AddMessage($"Unable to set value for '{sourceProp.Name}'.  Exception was '{ex2.Message}'")
+                                        End Try
+                                    Else
+                                        ErrorLogger.AddMessage($"Null value returned for '{sourceProp.Name}'")
+                                    End If
                                 Catch ex As Exception
+                                    ErrorLogger.AddMessage($"Exception occurred on '{sourceProp.Name}'.  Exception was '{ex.Message}'")
                                 End Try
                             End If
                         End If
