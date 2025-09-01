@@ -366,58 +366,40 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            If DocType = ".dft" Then
-
-                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-
-                Dim PartsLists As New List(Of SolidEdgeDraft.PartsList)
-                Dim BackgroundNames As New List(Of String)
+            If DocType = ".asm" Then
+                Dim PreviewParam As SolidEdgeFramework.ApplicationGlobalConstants
+                PreviewParam = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalStoreGeometryInAssemblyForPreview
 
                 Try
-                    If ExitStatus = 0 Then
-                        For Each Sheet As SolidEdgeDraft.Sheet In tmpSEDoc.Sheets
-                            If Sheet.Section.Type = 0 Then
-                                For Each Item As Object In Sheet.DrawingObjects
-                                    Dim PartsList As SolidEdgeDraft.PartsList = TryCast(Item, SolidEdgeDraft.PartsList)
-                                    If PartsList IsNot Nothing Then
-                                        PartsLists.Add(PartsList)
-                                        BackgroundNames.Add(Sheet.Background.Name)
-                                    End If
-                                Next
-                            End If
-                        Next
-                    End If
-                Catch
+                    ' Krok 1 Vypnutí a uložení
+                    SEApp.SetGlobalParameter(PreviewParam, False)
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+                Catch ex As Exception
                     ExitStatus = 1
-                    ErrorMessageList.Add("Could not process sheets")
+                    ErrorMessageList.Add(String.Format("An error occurred disabling preview mode: {0}", ex.Message))
                 End Try
 
-                If ExitStatus = 0 And PartsLists.Count > 0 And PartsLists.Count = BackgroundNames.Count Then
-                    For i As Integer = 0 To PartsLists.Count - 1
-                        Try
-                            PartsLists(i).SavedSettings = BackgroundNames(i) + " NEW"
-                            PartsLists(i).Update()
-                            SEApp.DoIdle()
-                        Catch ex As Exception
-                            ExitStatus = 1
-                            'ErrorMessageList.Add($"Could not update parts list to '{BackgroundNames(i)} NEW'")
-                            Dim s As String
-                            s = String.Format("Could not update parts list to '{0} NEW'", BackgroundNames(i))
-                            ErrorMessageList.Add(s)
-                        End Try
-                    Next
-                End If
+                Try
+                    ' Krok 2 Zapnutí a uložení
+                    SEApp.SetGlobalParameter(PreviewParam, True)
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("An error occurred enabling preview mode: {0}", ex.Message))
+                End Try
 
-                If ExitStatus = 0 Then
-                    Try
-                        SEDoc.Save()
-                        SEApp.DoIdle()
-                    Catch
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Could not save file")
-                    End Try
-                End If
+            Else
+                Try
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("An error occurred saving the file: {0}", ex.Message))
+                End Try
             End If
+
 
             ' ############## SNIPPET CODE END ##############
 
