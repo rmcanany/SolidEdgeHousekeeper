@@ -194,166 +194,6 @@ Public Class TaskBreakLinks
     End Sub
 
 
-    Private Sub DoBreakInterpartCopies(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal SEApp As SolidEdgeFramework.Application
-        )
-
-        Dim UC As New UtilsCommon
-
-        Select Case UC.GetDocType(SEDoc)
-
-            Case "par"
-                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                tmpSEDoc.BreakAllInterpartLinks()
-
-            Case "psm"
-                Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                tmpSEDoc.BreakAllInterpartLinks()
-
-            Case "asm"
-                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-                tmpSEDoc.BreakAllInterpartLinks()
-
-        End Select
-
-    End Sub
-
-    Private Sub DoBreakDraftModels(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal SEApp As SolidEdgeFramework.Application
-        )
-
-        Dim UC As New UtilsCommon
-
-        Select Case UC.GetDocType(SEDoc)
-
-            Case "dft"
-                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-                Dim Sheets As List(Of SolidEdgeDraft.Sheet)
-
-                Try
-                    Sheets = UC.GetSheets(tmpSEDoc, "Background")
-                    ProcessCallouts(Sheets)
-                    ProcessDrawingViews(Sheets)
-
-                    Sheets = UC.GetSheets(tmpSEDoc, "Working")
-                    ProcessCallouts(Sheets)
-                    ProcessDrawingViews(Sheets)
-
-                Catch ex As Exception
-                    'Me.TaskLogger.AddMessage("Unable to process all sheets.  No changes made.")
-                End Try
-
-        End Select
-
-    End Sub
-
-    Private Sub ProcessCallouts(Sheets As List(Of SolidEdgeDraft.Sheet))
-        Dim Sheet As SolidEdgeDraft.Sheet
-        Dim Balloons As SolidEdgeFrameworkSupport.Balloons
-        Dim Balloon As SolidEdgeFrameworkSupport.Balloon
-
-        For Each Sheet In Sheets
-            Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
-            For Each Balloon In Balloons
-                Try
-                    Balloon.BalloonText = Balloon.BalloonDisplayedText
-                Catch ex2 As Exception
-                    Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'")
-                End Try
-            Next
-        Next
-
-    End Sub
-
-    Private Sub ProcessDrawingViews(Sheets As List(Of SolidEdgeDraft.Sheet))
-        Dim Sheet As SolidEdgeDraft.Sheet
-        Dim DrawingViews As SolidEdgeDraft.DrawingViews
-        Dim DrawingView As SolidEdgeDraft.DrawingView
-
-        For Each Sheet In Sheets
-            DrawingViews = Sheet.DrawingViews
-            For Each DrawingView In DrawingViews
-                ' Some drawing views are already 2D
-                Try
-                    DrawingView.Drop()
-                Catch ex2 As Exception
-                    Me.TaskLogger.AddMessage($"Unable to process drawing view on sheet '{Sheet.Name}'.")
-                End Try
-            Next
-        Next
-
-    End Sub
-
-
-    Private Sub DoBreakDraftSymbols(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal SEApp As SolidEdgeFramework.Application
-        )
-
-        Dim UC As New UtilsCommon
-
-        Select Case UC.GetDocType(SEDoc)
-
-            Case "dft"
-                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-                Dim SheetLists As New List(Of List(Of SolidEdgeDraft.Sheet))
-                Dim SheetList As List(Of SolidEdgeDraft.Sheet)
-
-                SheetLists.Add(UC.GetSheets(tmpSEDoc, "Background"))
-                SheetLists.Add(UC.GetSheets(tmpSEDoc, "Working"))
-
-                For Each SheetList In SheetLists
-                    For Each Sheet As SolidEdgeDraft.Sheet In SheetList
-                        Dim Symbols As SolidEdgeFramework.Symbols = CType(Sheet.Symbols, SolidEdgeFramework.Symbols)
-                        If Symbols IsNot Nothing Then
-                            For Each Symbol2d As SolidEdgeFramework.Symbol2d In Symbols
-                                If Symbol2d.Class = "SolidEdge.DraftDocument" Then
-                                    Try
-                                        Symbol2d.ConvertToGroup()
-                                    Catch ex As Exception
-                                        Me.TaskLogger.AddMessage($"Unable to process symbol '{Symbol2d.Name}' on sheet '{Sheet.Name}'")
-                                    End Try
-                                End If
-                            Next
-                        End If
-                    Next
-                Next
-
-        End Select
-
-    End Sub
-
-    Private Sub DoBreakExcel(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal SEApp As SolidEdgeFramework.Application
-        )
-
-        Dim UC As New UtilsCommon
-
-        Dim Variables = UC.GetDocVariables(SEDoc)
-        Dim Variable As SolidEdgeFramework.variable
-
-        For Each VariableName As String In Variables.Keys
-            Variable = Variables(VariableName)
-            If (Variable.Formula.Contains(".xlsx")) Or (Variable.Formula.Contains(".xls")) Then
-                Variable.Formula = ""
-            End If
-        Next
-
-        Dim Dimensions = UC.GetDocDimensions(SEDoc)
-        Dim Dimension As SolidEdgeFrameworkSupport.Dimension
-
-        For Each DimensionName As String In Dimensions.Keys
-            Dimension = Dimensions(DimensionName)
-            If (Dimension.Formula.Contains(".xlsx")) Or (Dimension.Formula.Contains(".xls")) Then
-                Dimension.Formula = ""
-            End If
-        Next
-
-    End Sub
-
     Private Sub DoBreakDesignCopies(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal SEApp As SolidEdgeFramework.Application
@@ -451,6 +291,165 @@ Public Class TaskBreakLinks
 
     End Sub
 
+    Private Sub DoBreakExcel(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
+
+        Dim UC As New UtilsCommon
+
+        Dim Variables = UC.GetDocVariables(SEDoc)
+        Dim Variable As SolidEdgeFramework.variable
+
+        For Each VariableName As String In Variables.Keys
+            Variable = Variables(VariableName)
+            If (Variable.Formula.Contains(".xlsx")) Or (Variable.Formula.Contains(".xls")) Then
+                Variable.Formula = ""
+            End If
+        Next
+
+        Dim Dimensions = UC.GetDocDimensions(SEDoc)
+        Dim Dimension As SolidEdgeFrameworkSupport.Dimension
+
+        For Each DimensionName As String In Dimensions.Keys
+            Dimension = Dimensions(DimensionName)
+            If (Dimension.Formula.Contains(".xlsx")) Or (Dimension.Formula.Contains(".xls")) Then
+                Dimension.Formula = ""
+            End If
+        Next
+
+    End Sub
+
+    Private Sub DoBreakInterpartCopies(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
+
+        Dim UC As New UtilsCommon
+
+        Select Case UC.GetDocType(SEDoc)
+
+            Case "par"
+                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                tmpSEDoc.BreakAllInterpartLinks()
+
+            Case "psm"
+                Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                tmpSEDoc.BreakAllInterpartLinks()
+
+            Case "asm"
+                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                tmpSEDoc.BreakAllInterpartLinks()
+
+        End Select
+
+    End Sub
+
+    Private Sub DoBreakDraftModels(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
+
+        Dim UC As New UtilsCommon
+
+        Select Case UC.GetDocType(SEDoc)
+
+            Case "dft"
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+                Dim Sheets As List(Of SolidEdgeDraft.Sheet)
+
+                Try
+                    Sheets = UC.GetSheets(tmpSEDoc, "Background")
+                    ProcessCallouts(Sheets)
+                    ProcessDrawingViews(Sheets)
+
+                    Sheets = UC.GetSheets(tmpSEDoc, "Working")
+                    ProcessCallouts(Sheets)
+                    ProcessDrawingViews(Sheets)
+
+                Catch ex As Exception
+                    'Me.TaskLogger.AddMessage("Unable to process all sheets.  No changes made.")
+                End Try
+
+        End Select
+
+    End Sub
+
+    Private Sub ProcessCallouts(Sheets As List(Of SolidEdgeDraft.Sheet))
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim Balloons As SolidEdgeFrameworkSupport.Balloons
+        Dim Balloon As SolidEdgeFrameworkSupport.Balloon
+
+        For Each Sheet In Sheets
+            Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
+            For Each Balloon In Balloons
+                Try
+                    Balloon.BalloonText = Balloon.BalloonDisplayedText
+                Catch ex2 As Exception
+                    Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'")
+                End Try
+            Next
+        Next
+
+    End Sub
+
+    Private Sub ProcessDrawingViews(Sheets As List(Of SolidEdgeDraft.Sheet))
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews
+        Dim DrawingView As SolidEdgeDraft.DrawingView
+
+        For Each Sheet In Sheets
+            DrawingViews = Sheet.DrawingViews
+            For Each DrawingView In DrawingViews
+                ' Some drawing views are already 2D
+                Try
+                    DrawingView.Drop()
+                Catch ex2 As Exception
+                    Me.TaskLogger.AddMessage($"Unable to process drawing view on sheet '{Sheet.Name}'.")
+                End Try
+            Next
+        Next
+
+    End Sub
+
+    Private Sub DoBreakDraftSymbols(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
+
+        Dim UC As New UtilsCommon
+
+        Select Case UC.GetDocType(SEDoc)
+
+            Case "dft"
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+                Dim SheetLists As New List(Of List(Of SolidEdgeDraft.Sheet))
+                Dim SheetList As List(Of SolidEdgeDraft.Sheet)
+
+                SheetLists.Add(UC.GetSheets(tmpSEDoc, "Background"))
+                SheetLists.Add(UC.GetSheets(tmpSEDoc, "Working"))
+
+                For Each SheetList In SheetLists
+                    For Each Sheet As SolidEdgeDraft.Sheet In SheetList
+                        Dim Symbols As SolidEdgeFramework.Symbols = CType(Sheet.Symbols, SolidEdgeFramework.Symbols)
+                        If Symbols IsNot Nothing Then
+                            For Each Symbol2d As SolidEdgeFramework.Symbol2d In Symbols
+                                If Symbol2d.Class = "SolidEdge.DraftDocument" Then
+                                    Try
+                                        Symbol2d.ConvertToGroup()
+                                    Catch ex As Exception
+                                        Me.TaskLogger.AddMessage($"Unable to process symbol '{Symbol2d.Name}' on sheet '{Sheet.Name}'")
+                                    End Try
+                                End If
+                            Next
+                        End If
+                    Next
+                Next
+
+        End Select
+
+    End Sub
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -462,7 +461,7 @@ Public Class TaskBreakLinks
 
         RowIndex = 0
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDesignCopies.ToString, "Break part copy design links (*.par, *.psm)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDesignCopies.ToString, "Part copy design links (*.par, *.psm)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -470,7 +469,7 @@ Public Class TaskBreakLinks
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.BreakConstructionCopies.ToString, "Break part copy construction links (*.par, *.psm)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakConstructionCopies.ToString, "Part copy construction links (*.par, *.psm)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -478,7 +477,7 @@ Public Class TaskBreakLinks
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.BreakExcel.ToString, "Break Excel links (*.*)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakExcel.ToString, "Excel links (*.*)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -486,7 +485,7 @@ Public Class TaskBreakLinks
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.BreakInterpartCopies.ToString, "Break all interpart links (*.par, *.psm, *.asm)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakInterpartCopies.ToString, "All interpart links (*.par, *.psm, *.asm)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -494,7 +493,7 @@ Public Class TaskBreakLinks
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftModels.ToString, "Break draft model links (*.dft)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftModels.ToString, "Draft model links (*.dft)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -502,15 +501,7 @@ Public Class TaskBreakLinks
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftModels.ToString, "Break draft model links (*.dft)")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        ControlsDict(CheckBox.Name) = CheckBox
-
-        RowIndex += 1
-
-        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftSymbols.ToString, "Break draft symbol links (*.dft)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDraftSymbols.ToString, "Draft symbol links (*.dft)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -540,6 +531,7 @@ Public Class TaskBreakLinks
             tf = tf Or Me.BreakExcel
             tf = tf Or Me.BreakInterpartCopies
             tf = tf Or Me.BreakDraftModels
+            tf = tf Or Me.BreakDraftSymbols
 
             If Not tf Then
                 ErrorLogger.AddMessage("Select at least one type of link to break")
@@ -595,14 +587,14 @@ Public Class TaskBreakLinks
 
         HelpString += vbCrLf + vbCrLf + "The command options are explained below. "
 
-        HelpString += vbCrLf + vbCrLf + "`Break part copy design links` and `Break part copy construction links` "
+        HelpString += vbCrLf + vbCrLf + "`Part copy design links` and `Part copy construction links` "
         HelpString += "remove links created with the `Part Copy` command. "
         HelpString += "The geometry remains intact."
 
-        HelpString += vbCrLf + vbCrLf + "`Break Excel links` removes Excel references from `Variable` and `Dimension` formulas. "
+        HelpString += vbCrLf + vbCrLf + "`Excel links` removes Excel references from `Variable` and `Dimension` formulas. "
         HelpString += "In both cases, the value remains as it was before the link was removed."
 
-        HelpString += vbCrLf + vbCrLf + "`Break all interpart links` is the sledgehammer option. "
+        HelpString += vbCrLf + vbCrLf + "`All interpart links` is the sledgehammer option. "
         HelpString += "It removes the links cited above. "
         HelpString += "It also removes `included links` in profiles and `pasted links` in the variable table. "
         HelpString += "It might do more.  The complete API documentation (below) is, uh, short on details. "
@@ -610,7 +602,7 @@ Public Class TaskBreakLinks
         HelpString += vbCrLf + vbCrLf + "![Break all interpart links](My%20Project/media/break_all_interpart_links_documentation.png)"
 
 
-        HelpString += vbCrLf + vbCrLf + "`Break draft model links` converts drawing views to 2D, "
+        HelpString += vbCrLf + vbCrLf + "`Draft model links` converts drawing views to 2D, "
         HelpString += "removing external references in the process. "
         HelpString += "In testing it quickly became apparent that this operation "
         HelpString += "also converts Property text to blank lines in Callouts. "
@@ -621,6 +613,9 @@ Public Class TaskBreakLinks
         HelpString += "That's in the program, but only for Callouts. "
         HelpString += "If you have TextBoxes, Blocks, or other objects that use Property text, let me know. "
         HelpString += "I can try to address those in a future release. "
+
+        HelpString += vbCrLf + vbCrLf + "`Draft symbol links` converts symbol blocks to geometry, "
+        HelpString += "removing external references in the process. "
 
         Return HelpString
     End Function

@@ -783,19 +783,21 @@ Breaks external links to a file.  This is irreversible, so you know, think about
 
 The command options are explained below. 
 
-`Break part copy design links` and `Break part copy construction links` remove links created with the `Part Copy` command. The geometry remains intact.
+`Part copy design links` and `Part copy construction links` remove links created with the `Part Copy` command. The geometry remains intact.
 
-`Break Excel links` removes Excel references from `Variable` and `Dimension` formulas. In both cases, the value remains as it was before the link was removed.
+`Excel links` removes Excel references from `Variable` and `Dimension` formulas. In both cases, the value remains as it was before the link was removed.
 
-`Break all interpart links` is the sledgehammer option. It removes the links cited above. It also removes `included links` in profiles and `pasted links` in the variable table. It might do more.  The complete API documentation (below) is, uh, short on details. 
+`All interpart links` is the sledgehammer option. It removes the links cited above. It also removes `included links` in profiles and `pasted links` in the variable table. It might do more.  The complete API documentation (below) is, uh, short on details. 
 
 ![Break all interpart links](My%20Project/media/break_all_interpart_links_documentation.png)
 
-`Break draft model links` converts drawing views to 2D, removing external references in the process. In testing it quickly became apparent that this operation also converts Property text to blank lines in Callouts. 
+`Draft model links` converts drawing views to 2D, removing external references in the process. In testing it quickly became apparent that this operation also converts Property text to blank lines in Callouts. 
 
 ![Title Block](My%20Project/media/title_block.png)
 
 Luckily, Solid Edge can take care of that. That's in the program, but only for Callouts. If you have TextBoxes, Blocks, or other objects that use Property text, let me know. I can try to address those in a future release. 
+
+`Draft symbol links` converts symbol blocks to geometry, removing external references in the process. 
 
 </details>
 

@@ -1058,7 +1058,7 @@ Public Class UtilsCommon
                             If destProp.PropertyType.IsAssignableFrom(sourceProp.PropertyType) Then
                                 Try
                                     Dim tmpValue = sourceProp.GetValue(Source, Nothing)
-                                    If Not tmpValue Is Nothing Then
+                                    If tmpValue IsNot Nothing Then
                                         Try
                                             destProp.SetValue(Destination, tmpValue, Nothing)
                                         Catch ex2 As Exception
