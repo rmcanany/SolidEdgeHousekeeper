@@ -53,15 +53,22 @@ See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/
 
 ### Run External Program
 
-Added an option to hide the popup window of the external program (Thank you **@[Robin BIoomberg]!**)  This keeps you from being interrupted every few seconds while trying to get other work done.
+Added a code snippet example (contributed by **@ih0nza**.  Thank you!)  The program toggles assembly preview off and on, saving the file each time.  It is meant to improve loading times.  [<ins>**Check it out!**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/blob/main/Snippets/SaveAndTogglePreviewGeometry.snp)
 
 ![Run External Program](My%20Project/media/task_run_external_program.png)
 
-Added the ability to refer to Solid Edge type libraries in code snippets.  Previously, only Visual Basic types were recognized.
+Added an option to hide the popup window of the external program (Thank you **@[Robin BIoomberg]!**)  This keeps you from being interrupted every few seconds while trying to get other work done.
+
+Added a code snippet example to update the properties of a parts list from another entry in `DraftList.txt`.  (Thank you again **@[Robin BIoomberg]!**)  
+
+Added the ability to refer to Solid Edge type libraries in code snippets (Thank you **@artem1t**!).  Previously, only Visual Basic types were recognized.
 
 Added an option to delete temp files created by the snippet functionality.  Normally you want this enabled, but can disable it if you need to inspect the `*.ps1` file created by the command for any reason.
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
+
+Also see the [<ins>**Housekeeper External Programs Snippets Section**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) for examples.
+
 
 ### File List
 
@@ -71,17 +78,17 @@ Fixed an issue where properties on the list were not being shown for read-only f
 
 Fixed an issue where a server query was not returning results when the query contained a property formula.
 
-![Configuration Tab -- General Page](My%20Project/media/configuration_tab_general_page.png)
+Fixed an issue where directories with commas were causing some input sources to return no results.
+
+Added a warning for `Move to Recycle Bin` for network files where the server may not have a recycle bin.
 
 Added a reminder to update the file list if any changes to the input list is made.  This is for new or infrequent users.  It's very annoying.  Turn it off on the **Configuration Tab -- General Page**.
 
 See the [<ins>**File List Options Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#file-list-options) for details.
 
-### Update Parts Lists
+### Break Links
 
-Added an example code snippet to update the properties of a parts list from another entry in `DraftList.txt`.  (Thank you **@[Robin BIoomberg]!**)  
-
-See the [<ins>**Housekeeper External Programs Snippets Section**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets) for details.
+Added an option to break block symbol links (Thank you **@john.matthews3452!**)
 
 ### Open Draft Files Inactive
 
@@ -102,6 +109,12 @@ From a bug report on Github (Thank you **@DieCola85!**), Francesco figured out t
 #### Run in Background
 
 Added a command compatability check for background processing.  (Thank you **@DieCola85!**)
+
+#### Update Drawing from Template
+
+Improved error reporting of object property assignments.
+
+Fixed an issue with counter drill feature callouts on earlier versions of Solid Edge.
 
 ## V2025.2 Enhancements/Fixes
 
