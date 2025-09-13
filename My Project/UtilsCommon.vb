@@ -1065,7 +1065,7 @@ Public Class UtilsCommon
                                             ErrorLogger.AddMessage($"Unable to set value for '{sourceProp.Name}'.  Exception was '{ex2.Message}'")
                                         End Try
                                     Else
-                                        ErrorLogger.AddMessage($"Null value returned for '{sourceProp.Name}'")
+                                        'ErrorLogger.AddMessage($"Null value returned for '{sourceProp.Name}'")
                                     End If
                                 Catch ex As Exception
                                     ErrorLogger.AddMessage($"Exception occurred on '{sourceProp.Name}'.  Exception was '{ex.Message}'")

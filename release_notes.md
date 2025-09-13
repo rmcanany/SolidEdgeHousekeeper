@@ -110,11 +110,11 @@ From a bug report on Github (Thank you **@DieCola85!**), Francesco figured out t
 
 Added a command compatability check for background processing.  (Thank you **@DieCola85!**)
 
-#### Update Drawing from Template
+#### Update Model/Drawing from Template
+
+Fixed an issue with counter drill feature callouts on earlier versions of Solid Edge (Thank you **@TeeVar**!).
 
 Improved error reporting of object property assignments.
-
-Fixed an issue with counter drill feature callouts on earlier versions of Solid Edge.
 
 ## V2025.2 Enhancements/Fixes
 
