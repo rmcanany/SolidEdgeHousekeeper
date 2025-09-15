@@ -897,7 +897,11 @@ Public Class UtilsPreferences
 
         WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
 
-        s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+        Try
+            s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+        Catch ex As Exception
+            Exit Sub
+        End Try
 
         NewList = s.Split(CChar(",")).ToList
 
