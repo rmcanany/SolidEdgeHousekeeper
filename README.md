@@ -1246,12 +1246,13 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 <details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskRunExternalProgram.png"><img src="My%20Project/media/spacer.png">OPEN SOURCE PACKAGES</h2></summary>
 
 This project uses these awesome open source packages.
-- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)
 - Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)
-- Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)
 - Expression editor [<ins>**FastColoredTextBox**</ins>](https://github.com/PavelTorgashov/FastColoredTextBox)
-- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)
+- Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)
+- File and folder dialogs [<ins>**CommonFileDialogs**</ins>](https://github.com/emako/CommonFileDialogs)
 - Icons [<ins>**Icons8**</ins>](https://icons8.com)
+- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)
+- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)
 </details>
 
 
