@@ -887,17 +887,15 @@ Public Class UtilsPreferences
 
         Dim DoubleQuote As Char = Chr(34)
 
-        Dim WC As New System.Net.WebClient
-
         Dim CurrentVersionList As List(Of String) = CurrentVersion.Split(CChar(".")).ToList
 
         CurrentYear = CInt(CurrentVersionList(0))
         CurrentIdx = CInt(CurrentVersionList(1))
         ' ignore bugfix number
 
-        WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
-
         Try
+            Dim WC As New System.Net.WebClient
+            WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
             s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
         Catch ex As Exception
             Exit Sub
