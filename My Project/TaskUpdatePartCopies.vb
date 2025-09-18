@@ -103,7 +103,7 @@ Public Class TaskUpdatePartCopies
                 Models = tmpSEDoc.Models
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{0}' not recognized", Me.Name, DocType))
+                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select
 
         Dim TF As Boolean
