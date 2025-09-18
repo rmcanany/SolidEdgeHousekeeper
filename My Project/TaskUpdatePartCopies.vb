@@ -94,6 +94,10 @@ Public Class TaskUpdatePartCopies
         Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
+            Case = "asm"
+                ' Nothing to do here for now.
+                ' Could add an option to activate and update all.
+
             Case = "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
                 Models = tmpSEDoc.Models
@@ -103,12 +107,13 @@ Public Class TaskUpdatePartCopies
                 Models = tmpSEDoc.Models
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                'MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                Me.TaskLogger.AddMessage($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
         Dim TF As Boolean
 
-        If Not Models Is Nothing Then
+        If Models IsNot Nothing Then
             If (Models.Count > 0) And (Models.Count < 300) Then
                 For Each Model In Models
                     CopiedParts = Model.CopiedParts
