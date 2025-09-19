@@ -125,6 +125,7 @@ Public Class TaskEditProperties
         Me.Category = "Edit"
         Me.RequiresMaterialTable = True
         Me.RequiresPropertiesData = True
+        Me.RequiresLinkManagementOrder = True
         SetColorFromCategory(Me)
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
@@ -306,6 +307,7 @@ Public Class TaskEditProperties
 
         If Proceed Then
             SSDoc.ReadProperties(Me.PropertiesData)
+            SSDoc.ReadLinks(Me.LinkManagementOrder)
 
             For Each RowIndexString In PropertiesToEditDict.Keys
 

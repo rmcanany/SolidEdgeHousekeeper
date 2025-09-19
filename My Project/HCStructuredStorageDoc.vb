@@ -545,7 +545,7 @@ Public Class HCStructuredStorageDoc
                     Throw New Exception("LinkNames not initialized")
                 End If
 
-                If ModelIdx > Me.LinkNames.Items.Count - 1 Then
+                If ModelIdx > Me.LinkNames.Items.Count Then
                     Return Nothing
                 End If
 
