@@ -80,6 +80,10 @@ Public Class UtilsPreferences
         Dim IgnoreNames As New List(Of String)
         IgnoreNames.AddRange({"version", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
         IgnoreNames.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
+        If SavingPresets Then IgnoreNames.AddRange({"left", "top", "width", "height"})
+        If SavingPresets And Not FMain.PresetsSaveFileFilters Then
+            IgnoreNames.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
+        End If
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
@@ -91,8 +95,8 @@ Public Class UtilsPreferences
                 Dim PropModule As String = PropInfo.Module.ToString.ToLower
 
                 Dim tf As Boolean
-                tf = (Not SavingPresets) And ({"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
-                tf = tf Or PropModule.Contains("housekeeper")
+                'tf = (Not SavingPresets) And ({"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
+                tf = PropModule.Contains("housekeeper")
                 tf = tf And Not IgnoreNames.Contains(PropInfo.Name.ToLower)
                 tf = tf And ValidPropTypes.Contains(PropType)
 

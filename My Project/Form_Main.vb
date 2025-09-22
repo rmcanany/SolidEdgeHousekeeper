@@ -878,6 +878,8 @@ Public Class Form_Main
         End Set
     End Property
 
+    Public Property PresetsSaveFileFilters As Boolean
+
     Public Property SolidEdgeRequired As Integer
 
     Private _ListOfColumns As List(Of PropertyColumn)
@@ -1213,7 +1215,7 @@ Public Class Form_Main
 
         ' Other JSON
         Me.TextBoxStatus.Text = "Updating JSON PresetsList"
-        Me.Presets = Me.Presets
+        Me.Presets = Me.Presets  ' Triggers save of presets JSON
 
 
         ' Save settings
@@ -3577,7 +3579,7 @@ Public Class Form_Main
                 Me.Presets.Items.Add(tmpPreset)
             End If
 
-            Me.Presets = Me.Presets ' Trigger update
+            Me.Presets = Me.Presets ' Triggers JSON update
 
             'SaveSettings()
             'Application.DoEvents()
@@ -3777,6 +3779,13 @@ Public Class Form_Main
     Private Sub ComboBoxExpressionEditorLanguage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxExpressionEditorLanguage.SelectedIndexChanged
         Me.ExpressionEditorLanguage = ComboBoxExpressionEditorLanguage.Text
     End Sub
+
+    Private Sub ButtonPresetsOptions_Click(sender As Object, e As EventArgs) Handles ButtonPresetsOptions.Click
+        Dim FPO As New FormPresetsOptions(Me)
+        FPO.ShowDialog()
+        ' No result action needed.  FPO sets values in this file as needed.
+    End Sub
+
 End Class
 
 

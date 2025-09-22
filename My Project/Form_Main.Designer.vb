@@ -257,6 +257,7 @@ Partial Class Form_Main
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.ButtonPresetsOptions = New System.Windows.Forms.ToolStripButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -790,7 +791,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 15)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks
@@ -2801,7 +2802,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.SetColumnSpan(Me.ToolStripPresets, 4)
         Me.ToolStripPresets.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripPresets.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete})
+        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete, Me.ButtonPresetsOptions})
         Me.ToolStripPresets.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripPresets.Name = "ToolStripPresets"
         Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
@@ -3037,6 +3038,16 @@ Partial Class Form_Main
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
+        '
+        'ButtonPresetsOptions
+        '
+        Me.ButtonPresetsOptions.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ButtonPresetsOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetsOptions.Image = Global.Housekeeper.My.Resources.Resources.config
+        Me.ButtonPresetsOptions.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetsOptions.Name = "ButtonPresetsOptions"
+        Me.ButtonPresetsOptions.Size = New System.Drawing.Size(23, 23)
+        Me.ButtonPresetsOptions.Text = "ToolStripButton2"
         '
         'Form_Main
         '
@@ -3358,4 +3369,5 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel12 As ExTableLayoutPanel
     Friend WithEvents ComboBoxExpressionEditorLanguage As ComboBox
     Friend WithEvents LabelExpressionEditorLanguage As Label
+    Friend WithEvents ButtonPresetsOptions As ToolStripButton
 End Class
