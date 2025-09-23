@@ -41,38 +41,38 @@ Public Class UtilsPreferences
         Dim Value As String
         Dim PropType As String
 
-        ' ###### For reporting Properties not processed.  For occasional checks.  Can cause an exception closing the form.
-        Dim ReportIgnoredProperties As Boolean = False
-        Dim MaxIgnoredShowPerPage = 20
-        Dim IgnoredCount As Integer = 0
-        Dim s As String = ""
+        '' ###### For reporting Properties not processed.  For occasional checks.  Can cause an exception closing the form.
+        'Dim ReportIgnoredProperties As Boolean = False
+        'Dim MaxIgnoredShowPerPage = 20
+        'Dim IgnoredCount As Integer = 0
+        'Dim s As String = ""
 
-        Dim KeepProps As New List(Of String)
-        KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
-        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports"})
+        'Dim KeepProps As New List(Of String)
+        'KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
+        'KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports"})
 
-        'KeepProps.AddRange({"LinkManagementFilename", "LinkManagementOrder"})
-        KeepProps.AddRange({"LinkManagementFilename"})
+        ''KeepProps.AddRange({"LinkManagementFilename", "LinkManagementOrder"})
+        'KeepProps.AddRange({"LinkManagementFilename"})
 
-        KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
-        KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
-        KeepProps.AddRange({"SortNone", "KeepUnsortedDuplicates", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
-        KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction"})
-        KeepProps.AddRange({"AssemblyTemplate", "PartTemplate", "SheetmetalTemplate", "DraftTemplate", "MaterialTable", "UseTemplateProperties"})
-        KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU", "RemindFilelistUpdate"})
-        KeepProps.AddRange({"ListViewUpdateFrequency", "FileListFontSize", "GroupFiles", "RememberTasks", "RunInBackground"})
-        KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
-        KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
-        KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
-        KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
-        KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
-        KeepProps.AddRange({"TCCachePath", "TCItemIDRx", "TCRevisionRx"})
-        KeepProps.AddRange({"ProcessDraftsInactive", "ExpressionEditorLanguage"})
+        'KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
+        'KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
+        'KeepProps.AddRange({"SortNone", "KeepUnsortedDuplicates", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
+        'KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction"})
+        'KeepProps.AddRange({"AssemblyTemplate", "PartTemplate", "SheetmetalTemplate", "DraftTemplate", "MaterialTable", "UseTemplateProperties"})
+        'KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU", "RemindFilelistUpdate"})
+        'KeepProps.AddRange({"ListViewUpdateFrequency", "FileListFontSize", "GroupFiles", "RememberTasks", "RunInBackground"})
+        'KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
+        'KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
+        'KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
+        'KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
+        'KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
+        'KeepProps.AddRange({"TCCachePath", "TCItemIDRx", "TCRevisionRx"})
+        'KeepProps.AddRange({"ProcessDraftsInactive", "ExpressionEditorLanguage"})
 
-        If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
+        'If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
 
-        Dim tmpMissingProperties As New List(Of String)
-        Dim tmpUnhandledPropTypes As New List(Of String)
+        'Dim tmpMissingProperties As New List(Of String)
+        'Dim tmpUnhandledPropTypes As New List(Of String)
 
         Dim ValidPropTypes As New List(Of String)
         ValidPropTypes.AddRange({"string", "double", "int32", "boolean", "list`1"})
@@ -102,22 +102,22 @@ Public Class UtilsPreferences
 
                 If Not tf Then Continue For
             Else
-                If Not KeepProps.Contains(PropInfo.Name) Then
+                'If Not KeepProps.Contains(PropInfo.Name) Then
 
-                    If ReportIgnoredProperties Then
-                        s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
-                        If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
-                            s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
-                            MsgBox(s, vbOKOnly)
-                            s = ""
-                            IgnoredCount = -1
-                        End If
-                        IgnoredCount += 1
+                '    If ReportIgnoredProperties Then
+                '        s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
+                '        If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
+                '            s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
+                '            MsgBox(s, vbOKOnly)
+                '            s = ""
+                '            IgnoredCount = -1
+                '        End If
+                '        IgnoredCount += 1
 
-                    End If
+                '    End If
 
-                    Continue For
-                End If
+                '    Continue For
+                'End If
 
             End If
 
@@ -145,7 +145,6 @@ Public Class UtilsPreferences
                         Value = "False"
                     Case "list`1"
                         Value = JsonConvert.SerializeObject(New List(Of String))
-                        'MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' detected", PropInfo.PropertyType.Name))
                     Case Else
                         MsgBox(String.Format("In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
                         'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)

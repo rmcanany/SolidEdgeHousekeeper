@@ -116,6 +116,14 @@ Fixed an issue with counter drill feature callouts on earlier versions of Solid 
 
 Improved error reporting of object property assignments.
 
+#### Edit Properties
+
+Improved error reporting for malformed `Find` and `Replace` strings.  (Thank you **@robbin70!**)
+
+#### Presets
+
+Added an option to ignore file filter settings when saving a Preset.  (Thank you **@ih0nza!**)  This can avoid an unnecessary update to the file list in certain situations.
+
 ## V2025.2 Enhancements/Fixes
 
 We'll get to the highlights in just a second, but first some big news...  Housekeeper has its first **Sponsor!**  
