@@ -257,6 +257,7 @@ Partial Class Form_Main
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.ButtonPresetsOptions = New System.Windows.Forms.ToolStripButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -790,7 +791,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(55, 22)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks
@@ -966,7 +967,7 @@ Partial Class Form_Main
         Me.TaskHeaderNameLabel.Location = New System.Drawing.Point(213, 9)
         Me.TaskHeaderNameLabel.Name = "TaskHeaderNameLabel"
         Me.TaskHeaderNameLabel.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
-        Me.TaskHeaderNameLabel.Size = New System.Drawing.Size(80, 15)
+        Me.TaskHeaderNameLabel.Size = New System.Drawing.Size(81, 15)
         Me.TaskHeaderNameLabel.TabIndex = 7
         Me.TaskHeaderNameLabel.Text = "TASK NAME"
         '
@@ -1056,7 +1057,7 @@ Partial Class Form_Main
         Me.LabelTLAListOptions.AutoSize = True
         Me.LabelTLAListOptions.Location = New System.Drawing.Point(3, 12)
         Me.LabelTLAListOptions.Name = "LabelTLAListOptions"
-        Me.LabelTLAListOptions.Size = New System.Drawing.Size(80, 15)
+        Me.LabelTLAListOptions.Size = New System.Drawing.Size(82, 15)
         Me.LabelTLAListOptions.TabIndex = 0
         Me.LabelTLAListOptions.Text = "LIST OPTIONS"
         '
@@ -1133,7 +1134,7 @@ Partial Class Form_Main
         Me.LabelTLASearchOptions.AutoSize = True
         Me.LabelTLASearchOptions.Location = New System.Drawing.Point(3, 172)
         Me.LabelTLASearchOptions.Name = "LabelTLASearchOptions"
-        Me.LabelTLASearchOptions.Size = New System.Drawing.Size(103, 15)
+        Me.LabelTLASearchOptions.Size = New System.Drawing.Size(104, 15)
         Me.LabelTLASearchOptions.TabIndex = 21
         Me.LabelTLASearchOptions.Text = "SEARCH OPTIONS"
         '
@@ -1157,7 +1158,7 @@ Partial Class Form_Main
         Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(3, 205)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(354, 19)
+        Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(355, 19)
         Me.RadioButtonTLATopDown.TabIndex = 12
         Me.RadioButtonTLATopDown.TabStop = True
         Me.RadioButtonTLATopDown.Text = "Top Down Search -- Best for self-contained project directories"
@@ -1325,7 +1326,7 @@ Partial Class Form_Main
         Me.LabelStatusAfter.Location = New System.Drawing.Point(161, 7)
         Me.LabelStatusAfter.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusAfter.Name = "LabelStatusAfter"
-        Me.LabelStatusAfter.Size = New System.Drawing.Size(81, 15)
+        Me.LabelStatusAfter.Size = New System.Drawing.Size(84, 15)
         Me.LabelStatusAfter.TabIndex = 95
         Me.LabelStatusAfter.Text = "STATUS AFTER"
         '
@@ -1345,7 +1346,7 @@ Partial Class Form_Main
         Me.LabelStatusBefore.Location = New System.Drawing.Point(9, 35)
         Me.LabelStatusBefore.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusBefore.Name = "LabelStatusBefore"
-        Me.LabelStatusBefore.Size = New System.Drawing.Size(89, 15)
+        Me.LabelStatusBefore.Size = New System.Drawing.Size(91, 15)
         Me.LabelStatusBefore.TabIndex = 94
         Me.LabelStatusBefore.Text = "STATUS BEFORE"
         '
@@ -2480,7 +2481,7 @@ Partial Class Form_Main
         Me.Label1.Location = New System.Drawing.Point(3, 200)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 10, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(387, 105)
+        Me.Label1.Size = New System.Drawing.Size(386, 105)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = resources.GetString("Label1.Text")
         '
@@ -2715,10 +2716,9 @@ Partial Class Form_Main
         'TextBoxListViewUpdateFrequency
         '
         Me.TextBoxListViewUpdateFrequency.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxListViewUpdateFrequency.Location = New System.Drawing.Point(5, 1)
-        Me.TextBoxListViewUpdateFrequency.Margin = New System.Windows.Forms.Padding(5, 1, 4, 3)
+        Me.TextBoxListViewUpdateFrequency.Location = New System.Drawing.Point(3, 3)
         Me.TextBoxListViewUpdateFrequency.Name = "TextBoxListViewUpdateFrequency"
-        Me.TextBoxListViewUpdateFrequency.Size = New System.Drawing.Size(41, 23)
+        Me.TextBoxListViewUpdateFrequency.Size = New System.Drawing.Size(44, 23)
         Me.TextBoxListViewUpdateFrequency.TabIndex = 0
         Me.TextBoxListViewUpdateFrequency.Text = "1"
         '
@@ -2781,10 +2781,9 @@ Partial Class Form_Main
         Me.ComboBoxExpressionEditorLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxExpressionEditorLanguage.FormattingEnabled = True
         Me.ComboBoxExpressionEditorLanguage.Items.AddRange(New Object() {"NCalc", "VB"})
-        Me.ComboBoxExpressionEditorLanguage.Location = New System.Drawing.Point(5, 1)
-        Me.ComboBoxExpressionEditorLanguage.Margin = New System.Windows.Forms.Padding(5, 1, 4, 3)
+        Me.ComboBoxExpressionEditorLanguage.Location = New System.Drawing.Point(3, 3)
         Me.ComboBoxExpressionEditorLanguage.Name = "ComboBoxExpressionEditorLanguage"
-        Me.ComboBoxExpressionEditorLanguage.Size = New System.Drawing.Size(66, 23)
+        Me.ComboBoxExpressionEditorLanguage.Size = New System.Drawing.Size(69, 23)
         Me.ComboBoxExpressionEditorLanguage.TabIndex = 0
         '
         'LabelExpressionEditorLanguage
@@ -2793,7 +2792,7 @@ Partial Class Form_Main
         Me.LabelExpressionEditorLanguage.AutoSize = True
         Me.LabelExpressionEditorLanguage.Location = New System.Drawing.Point(78, 4)
         Me.LabelExpressionEditorLanguage.Name = "LabelExpressionEditorLanguage"
-        Me.LabelExpressionEditorLanguage.Size = New System.Drawing.Size(149, 15)
+        Me.LabelExpressionEditorLanguage.Size = New System.Drawing.Size(148, 15)
         Me.LabelExpressionEditorLanguage.TabIndex = 1
         Me.LabelExpressionEditorLanguage.Text = "Expression editor language"
         '
@@ -2803,7 +2802,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.SetColumnSpan(Me.ToolStripPresets, 4)
         Me.ToolStripPresets.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripPresets.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete})
+        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete, Me.ButtonPresetsOptions})
         Me.ToolStripPresets.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripPresets.Name = "ToolStripPresets"
         Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
@@ -3039,6 +3038,16 @@ Partial Class Form_Main
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
+        '
+        'ButtonPresetsOptions
+        '
+        Me.ButtonPresetsOptions.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ButtonPresetsOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetsOptions.Image = Global.Housekeeper.My.Resources.Resources.config
+        Me.ButtonPresetsOptions.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetsOptions.Name = "ButtonPresetsOptions"
+        Me.ButtonPresetsOptions.Size = New System.Drawing.Size(23, 23)
+        Me.ButtonPresetsOptions.Text = "ToolStripButton2"
         '
         'Form_Main
         '
@@ -3360,4 +3369,5 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel12 As ExTableLayoutPanel
     Friend WithEvents ComboBoxExpressionEditorLanguage As ComboBox
     Friend WithEvents LabelExpressionEditorLanguage As Label
+    Friend WithEvents ButtonPresetsOptions As ToolStripButton
 End Class

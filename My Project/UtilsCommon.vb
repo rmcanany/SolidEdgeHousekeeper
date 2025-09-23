@@ -954,7 +954,7 @@ Public Class UtilsCommon
                     If FoundProp IsNot Nothing Then
                         tmpValue = FoundProp.Value.ToString
                     Else
-                        ErrorLogger.AddMessage($"Unable to process property '{PropertySet}.{PropertyName}'")
+                        ErrorLogger.AddMessage($"Unable to process property '{PropertySet}.{PropertyName}' in formula '{Formula}'")
                     End If
                 End If
 

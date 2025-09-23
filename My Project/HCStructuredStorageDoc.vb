@@ -76,6 +76,9 @@ Public Class HCStructuredStorageDoc
     End Sub
 
     Public Sub ReadLinks(_LinkManagementOrder As List(Of String))
+        If _LinkManagementOrder Is Nothing Then
+            Throw New Exception("LinkManagementOrder is null.  Set LinkMgmt.txt on the Configuration Tab -- Top Level Assembly Page")
+        End If
         Me.LinkManagementOrder = _LinkManagementOrder
         Me.LinkNames = New LinkFullNames(cf, IsFOA(), Me.LinkManagementOrder, Me.FullName)
     End Sub
@@ -542,10 +545,16 @@ Public Class HCStructuredStorageDoc
 
             Else
                 If Me.LinkNames Is Nothing Then
-                    Throw New Exception("LinkNames not initialized")
+                    ErrorLogger.AddMessage("LinkNames not initialized")
+                    Return Nothing
                 End If
 
-                If ModelIdx > Me.LinkNames.Items.Count - 1 Then
+                If Not Me.DocType = "dft" Then
+                    ErrorLogger.AddMessage($"*.{DocType} files do not support '|R1' type references")
+                    Return Nothing
+                End If
+
+                If ModelIdx > Me.LinkNames.Items.Count Then
                     Return Nothing
                 End If
 

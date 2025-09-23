@@ -428,6 +428,12 @@ Public Class TaskCheckLinks
                 ErrorLogger.AddMessage("Select at least one folder or top-level assembly to assess misplaced links")
             End If
 
+            If Me.StructuredStorageEdit Then
+                If Me.LinkManagementOrder Is Nothing OrElse LinkManagementOrder.Count = 0 Then
+                    ErrorLogger.AddMessage("Populate LinkMgmt.txt file name on the Configuration Tab -- Templates page")
+                End If
+
+            End If
         End If
 
     End Sub

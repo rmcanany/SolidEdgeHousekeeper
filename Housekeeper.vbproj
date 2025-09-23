@@ -197,6 +197,12 @@
     <Compile Include="My Project\FormBlockLibraryBlockNames.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormPresetsOptions.Designer.vb">
+      <DependentUpon>FormPresetsOptions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormPresetsOptions.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormTeamCenterAdd.Designer.vb">
       <DependentUpon>FormTeamCenterAdd.vb</DependentUpon>
     </Compile>
@@ -399,6 +405,9 @@
   <ItemGroup>
     <EmbeddedResource Include="My Project\FormBlockLibraryBlockNames.resx">
       <DependentUpon>FormBlockLibraryBlockNames.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormPresetsOptions.resx">
+      <DependentUpon>FormPresetsOptions.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPropertyPicker.resx">
       <DependentUpon>FormPropertyPicker.vb</DependentUpon>

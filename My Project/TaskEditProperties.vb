@@ -125,6 +125,7 @@ Public Class TaskEditProperties
         Me.Category = "Edit"
         Me.RequiresMaterialTable = True
         Me.RequiresPropertiesData = True
+        Me.RequiresLinkManagementOrder = True
         SetColorFromCategory(Me)
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
@@ -306,6 +307,7 @@ Public Class TaskEditProperties
 
         If Proceed Then
             SSDoc.ReadProperties(Me.PropertiesData)
+            SSDoc.ReadLinks(Me.LinkManagementOrder)
 
             For Each RowIndexString In PropertiesToEditDict.Keys
 
@@ -841,8 +843,16 @@ Public Class TaskEditProperties
 
             End If
 
-            If (Not Me.SolidEdgeRequired) And (Me.PropertiesData.Items.Count = 0) Then
-                ErrorLogger.AddMessage("Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page")
+            If Not Me.SolidEdgeRequired Then
+                If Me.PropertiesData.Items.Count = 0 Then
+                    ErrorLogger.AddMessage("Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page")
+                End If
+                If Me.LinkManagementOrder Is Nothing Then
+                    ErrorLogger.AddMessage("LinkManagementOrder is null.  Set LinkMgmt.txt on the Configuration Tab -- Top Level Assembly Page")
+                End If
+                If Me.LinkManagementOrder.Count = 0 Then
+                    ErrorLogger.AddMessage("LinkMgmt.txt file does not contain any search order information")
+                End If
             End If
         End If
 
