@@ -94,6 +94,7 @@ Partial Class FormPresetsOptions
         Me.ClientSize = New System.Drawing.Size(340, 89)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Name = "FormPresetsOptions"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Presets Options"
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
