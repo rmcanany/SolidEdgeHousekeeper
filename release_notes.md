@@ -76,9 +76,9 @@ Contributed by **@Francesco Arfilli**.  Thank you!
 
 Fixed an issue where properties on the list were not being shown for read-only files.  (Thank you **@ih0nza!**)
 
-Fixed an issue where a server query was not returning results when the query contained a property formula.
+Fixed an issue where directories with commas were causing some input sources to return no results.  (Thank you **@collands!**)
 
-Fixed an issue where directories with commas were causing some input sources to return no results.
+Fixed an issue where a server query was not returning results when the query contained a property formula.
 
 Added a warning for `Move to Recycle Bin` for network files where the server may not have a recycle bin.
 
@@ -120,9 +120,19 @@ Improved error reporting of object property assignments.
 
 Improved error reporting for malformed `Find` and `Replace` strings.  (Thank you **@robbin70!**)
 
+Fixed an issue where some date properties we not found when using the option `Run Task without Solid Edge`.
+
 #### Presets
 
 Added an option to ignore file filter settings when saving a Preset.  (Thank you **@ih0nza!**)  This can avoid an unnecessary update to the file list in certain situations.
+
+#### Update Part Copies
+
+Added `*.asm` files as a valid part copy source.  (Thank you **@sven-11111!**)  Previously, only `*.par` and `*.psm` files were allowed.
+
+Added document type to the reporting of unrecognized file types.  Previously only the task name was logged.
+
+
 
 ## V2025.2 Enhancements/Fixes
 

@@ -243,6 +243,9 @@ Public Class TaskPrint
                 End If
             Catch ex As Exception
                 TaskLogger.AddMessage(String.Format("Print drawing sheet {0} did not succeed", Sheet.Name))
+                'If PaperSizeConstant.ToString.ToLower.Contains("custom") Then
+                '    TaskLogger.AddMessage($"PaperSizeConstant '{PaperSizeConstant.ToString}', X '{}', Y '{}'")
+                'End If
             End Try
         Next
 
@@ -306,9 +309,10 @@ Public Class TaskPrint
             End If
 
             If Filter.ToLower = "all" Then
-                If Not Name.ToLower.Contains("custom") Then
-                    SheetSizeList.Add(Name)
-                End If
+                SheetSizeList.Add(Name)
+                'If Not Name.ToLower.Contains("custom") Then
+                '    SheetSizeList.Add(Name)
+                'End If
             End If
         Next
 
@@ -456,9 +460,9 @@ Public Class TaskPrint
             Case ControlNames.SelectSheets.ToString
                 Dim FSS As New FormSheetSelector(Me)
 
-                FSS.ShowSheetSelector()
+                Dim Result As DialogResult = FSS.ShowDialog()
 
-                If FSS.DialogResult = DialogResult.OK Then
+                If Result = DialogResult.OK Then
 
                     Me.SelectedSheetsList = FSS.SelectedSheets
 

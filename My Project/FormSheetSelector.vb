@@ -3,6 +3,7 @@
 Public Class FormSheetSelector
 	Public Property SelectedSheets As New List(Of String)
 	Public Property Task As TaskPrint
+
 	Dim SheetSizeList As New List(Of String)
 
 
@@ -17,9 +18,9 @@ Public Class FormSheetSelector
 
 	End Sub
 
-	Public Sub ShowSheetSelector()
-		Me.ShowDialog()
-	End Sub
+	'Public Sub ShowSheetSelector()
+	'	Me.ShowDialog()
+	'End Sub
 
 
 	Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
