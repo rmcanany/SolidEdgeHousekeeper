@@ -126,6 +126,10 @@ Fixed an issue where some date properties we not found when using the option `Ru
 
 Added an option to ignore file filter settings when saving a Preset.  (Thank you **@ih0nza!**)  This can avoid an unnecessary update to the file list in certain situations.
 
+#### Create Flat Pattern (Housekeeper External Program)
+
+Fixed an issue where the cut size variables were not being updated. (Thank you again **@robbin70!**) 
+
 #### Update Part Copies
 
 Added `*.asm` files as a valid part copy source.  (Thank you **@sven-11111!**)  Previously, only `*.par` and `*.psm` files were allowed.
