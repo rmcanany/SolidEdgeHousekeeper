@@ -242,10 +242,10 @@ Public Class TaskPrint
                     SEApp.DoIdle()
                 End If
             Catch ex As Exception
-                TaskLogger.AddMessage(String.Format("Print drawing sheet {0} did not succeed", Sheet.Name))
                 'If PaperSizeConstant.ToString.ToLower.Contains("custom") Then
                 '    TaskLogger.AddMessage($"PaperSizeConstant '{PaperSizeConstant.ToString}', X '{}', Y '{}'")
                 'End If
+                TaskLogger.AddMessage(String.Format("Print drawing sheet {0} did not succeed", Sheet.Name))
             End Try
         Next
 

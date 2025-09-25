@@ -205,6 +205,8 @@ Public Class TaskUpdateModelSizeInVariableTable
 
         Dim UC As New UtilsCommon
 
+        DocVariableDict = UC.GetDocVariables(SEDoc)
+
         ' Generates an exception on some Model Bodies
         Try
             Range = UC.GetDocRange(SEDoc)

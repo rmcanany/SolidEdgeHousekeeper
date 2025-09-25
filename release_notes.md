@@ -116,19 +116,23 @@ Fixed an issue with counter drill feature callouts on earlier versions of Solid 
 
 Improved error reporting of object property assignments.
 
+#### Presets
+
+Added an option to ignore file filter settings when saving a Preset.  (Thank you **@ih0nza!**)  This can avoid an unnecessary update to the file list in certain situations.
+
 #### Edit Properties
 
 Improved error reporting for malformed `Find` and `Replace` strings.  (Thank you **@robbin70!**)
 
 Fixed an issue where some date properties we not found when using the option `Run Task without Solid Edge`.
 
-#### Presets
-
-Added an option to ignore file filter settings when saving a Preset.  (Thank you **@ih0nza!**)  This can avoid an unnecessary update to the file list in certain situations.
-
 #### Create Flat Pattern (Housekeeper External Program)
 
 Fixed an issue where the cut size variables were not being updated. (Thank you again **@robbin70!**) 
+
+#### Update Model Size in Variable Table
+
+Fixed an issue where existing variables were not updated.  (Thank you one more time **@robbin70!**)
 
 #### Update Part Copies
 
@@ -136,7 +140,9 @@ Added `*.asm` files as a valid part copy source.  (Thank you **@sven-11111!**)  
 
 Added document type to the reporting of unrecognized file types.  Previously only the task name was logged.
 
+#### Print Task
 
+Added an option to print drawings with custom sheet sizes.  (Thank you **@ih0nza!**)
 
 ## V2025.2 Enhancements/Fixes
 

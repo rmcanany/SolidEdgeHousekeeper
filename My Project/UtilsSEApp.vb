@@ -79,6 +79,8 @@ Public Class UtilsSEApp
 
     Public Sub SEStop(UseCurrentSession As Boolean)
 
+        SEApp.DisplayAlerts = True
+
         If Not UseCurrentSession Then
 
             FMain.TextBoxStatus.Text = "Closing Solid Edge..."
