@@ -92,7 +92,7 @@ Added an option to break block symbol links (Thank you **@john.matthews3452!**)
 
 ### Open Draft Files Inactive
 
-Added an option to open draft files in inactive mode.  (Thank you **@ih0nza!**)  The option is on the **Configuration Tab -- General Page**.  It is meant to speed up processing of large assembly drawings.
+Added an option to open draft files in inactive mode.  (Thank you **@ih0nza!**)  It is meant to speed up processing of large assembly drawings.
 
 Not all commands that process drawings are compatible with this option.  If there is a conflict, it is reported to the user before processing begins.
 
@@ -118,13 +118,13 @@ Improved error reporting of object property assignments.
 
 #### Presets
 
-Added an option to ignore file filter settings when saving a Preset.  (Thank you **@ih0nza!**)  This can avoid an unnecessary update to the file list in certain situations.
+Added an option to ignore file filter settings when saving a Preset.  (Thank you **@ih0nza!**)  This can avoid an unnecessary update to the file list in certain situations.  Set it on the new **Presets Options Page**.
 
 #### Edit Properties
 
 Improved error reporting for malformed `Find` and `Replace` strings.  (Thank you **@robbin70!**)
 
-Fixed an issue where some date properties we not found when using the option `Run Task without Solid Edge`.
+Fixed an issue where some date properties we not found when using the option `Run Task without Solid Edge`.  (Thank you **@Francesco Arfilli!**)
 
 #### Create Flat Pattern (Housekeeper External Program)
 
@@ -132,7 +132,11 @@ Fixed an issue where the cut size variables were not being updated. (Thank you a
 
 #### Update Model Size in Variable Table
 
-Fixed an issue where existing variables were not updated.  (Thank you one more time **@robbin70!**)
+Fixed an issue where existing variables were not updated.  (Thank you yet again **@robbin70!**)
+
+#### Use Existing Solid Edge Session (if any)
+
+Fixed an issue where user messages were not re-enabled after processing.  (Thank you one more time **@robbin70!**)
 
 #### Update Part Copies
 
