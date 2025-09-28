@@ -128,7 +128,7 @@ Fixed an issue where some date properties we not found when using the option `Ru
 
 #### Create Flat Pattern (Housekeeper External Program)
 
-Fixed an issue where the cut size variables were not being updated. (Thank you again **@robbin70!**) 
+Fixed an issue where the cut size variables were not set. (Thank you again **@robbin70!**) 
 
 #### Update Model Size in Variable Table
 
