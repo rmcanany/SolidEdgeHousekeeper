@@ -261,13 +261,20 @@ Public Class TaskEditVariables
 
         End If
 
-        If Not TaskLogger.HasErrors Then
-            If SEDoc.ReadOnly Then
-                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
+        'If Not TaskLogger.HasErrors Then
+        '    If SEDoc.ReadOnly Then
+        '        TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+        '    Else
+        '        SEDoc.Save()
+        '        SEApp.DoIdle()
+        '    End If
+        'End If
+
+        If SEDoc.ReadOnly Then
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
         End If
 
     End Sub
