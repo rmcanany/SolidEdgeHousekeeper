@@ -517,20 +517,25 @@ Public Class UtilsFileList
 
         Dim tmpFoundFiles As New List(Of String)
         For Each item In FoundFiles
-            tf = UC.FilenameIsOK(item)
-            tf = tf And IO.File.Exists(item)
 
-            ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
-            ' Causes a problem comparing extensions
-            Try
-                tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
-            Catch ex As Exception
-                ' MsgBox("Catch")
-            End Try
+            If item IsNot Nothing Then 'better handling of first item being Nothing; this will not cause the excepetion; it's always better to handle known issues
 
-            If tf Then
-                tmpFoundFiles.Add(item)
+                tf = UC.FilenameIsOK(item)
+                tf = tf And IO.File.Exists(item)
+
+                ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
+                ' Causes a problem comparing extensions
+                Try
+                    tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
+                Catch ex As Exception
+                    ' MsgBox("Catch")
+                End Try
+
+                If tf Then
+                    tmpFoundFiles.Add(item)
+                End If
             End If
+
         Next
         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
