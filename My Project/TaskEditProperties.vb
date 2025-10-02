@@ -850,7 +850,7 @@ Public Class TaskEditProperties
                 If Me.LinkManagementOrder Is Nothing Then
                     ErrorLogger.AddMessage("LinkManagementOrder is null.  Set LinkMgmt.txt on the Configuration Tab -- Top Level Assembly Page")
                 End If
-                If Me.LinkManagementOrder.Count = 0 Then
+                If Me.LinkManagementOrder IsNot Nothing AndAlso Me.LinkManagementOrder.Count = 0 Then
                     ErrorLogger.AddMessage("LinkMgmt.txt file does not contain any search order information")
                 End If
             End If

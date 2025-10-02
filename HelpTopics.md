@@ -251,7 +251,9 @@ Getting properties for a large number of files can take some time.  If that's th
 
 ![File list edit and sort](My%20Project/media/file_list_edit_and_sort.png)
 
-You can edit properties directly on the list.  Double-click the property and enter the new value as shown above.  You can also sort the list by column.  Click the column header to sort.  Click it again to reverse the order.  The column header indicates the sort state.
+You can edit properties directly on the list.  Double-click the property and enter the new value as shown above.  Note some properties are, in reality, exposed variables.  These can be changed on the list, but will revert back to their original values when the file is opened.
+
+You can also sort the list by column.  Click the column header to sort.  Click it again to reverse the order.  The column header indicates the sort state.
 
 </details>
 
