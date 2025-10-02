@@ -146,7 +146,7 @@ Partial Class FormVariableInputEditor
         Me.Label9.AutoSize = True
         Me.Label9.Location = New System.Drawing.Point(377, 10)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(56, 15)
+        Me.Label9.Size = New System.Drawing.Size(57, 15)
         Me.Label9.TabIndex = 2
         Me.Label9.Text = "Unit Type"
         '
@@ -166,7 +166,7 @@ Partial Class FormVariableInputEditor
         Me.Label11.AutoSize = True
         Me.Label11.Location = New System.Drawing.Point(579, 10)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(79, 15)
+        Me.Label11.Size = New System.Drawing.Size(78, 15)
         Me.Label11.TabIndex = 4
         Me.Label11.Text = "Expose Name"
         '
@@ -235,7 +235,7 @@ Partial Class FormVariableInputEditor
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(110, 15)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(63, 15)
+        Me.Label13.Size = New System.Drawing.Size(62, 15)
         Me.Label13.TabIndex = 1
         Me.Label13.Text = "EX: Expose"
         '
@@ -327,11 +327,12 @@ Partial Class FormVariableInputEditor
         Me.ButtonDeleteRow.Name = "ButtonDeleteRow"
         Me.ButtonDeleteRow.Size = New System.Drawing.Size(23, 22)
         Me.ButtonDeleteRow.Text = "ToolStripButton3"
+        Me.ButtonDeleteRow.ToolTipText = "Delete row"
         '
         'ToolStripLabel2
         '
         Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(60, 22)
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
         Me.ToolStripLabel2.Text = "Row Tools"
         '
         'ToolStripSeparator3
