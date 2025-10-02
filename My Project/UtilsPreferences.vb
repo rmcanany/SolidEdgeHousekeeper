@@ -865,6 +865,9 @@ Public Class UtilsPreferences
                         LinkManagementOrder.Add(Line)
                     End If
                 Next
+            Else
+                msg = String.Format("LinkMgmt.txt file '{0}' is empty.{1}", LinkManagementFilename, vbCrLf)
+                MsgBox(msg)
             End If
 
         End If

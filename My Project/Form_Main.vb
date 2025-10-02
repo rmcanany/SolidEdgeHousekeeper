@@ -1082,7 +1082,7 @@ Public Class Form_Main
 
         CarIcona()
 
-        If (Not Me.LinkManagementFilename Is Nothing) AndAlso (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
+        If (Me.LinkManagementFilename IsNot Nothing) AndAlso (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
             Me.LinkManagementOrder = UP.GetLinkManagementOrder()
         End If
 

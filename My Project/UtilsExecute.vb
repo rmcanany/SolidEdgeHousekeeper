@@ -236,6 +236,19 @@ Public Class UtilsExecute
                     StartLogger.AddMessage($"{Task.Description} cannot run in background")
                 End If
 
+                '' This check belongs in the Task.CheckStartConditions
+                '' because it will know if UseStructuredStorage is active.
+                '' Running in SE does not require it.  I think.
+                'If Task.RequiresLinkManagementOrder Then
+                '    If FMain.LinkManagementOrder Is Nothing Then
+                '        StartLogger.AddMessage($"{Task.Description} requires a valid LinkMgmt.txt file")
+                '    Else
+                '        If FMain.LinkManagementOrder.Count = 0 Then
+                '            StartLogger.AddMessage($"{Task.Description} LinkMgmt.txt does not contain any search order information.")
+                '        End If
+                '    End If
+                'End If
+
                 Dim SubLogger As Logger = StartLogger.AddLogger(Task.Description)
                 Task.CheckStartConditions(SubLogger)
             End If
