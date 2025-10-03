@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Text.RegularExpressions
+Imports System.Windows.Media.Media3D
 Imports FastColoredTextBoxNS
 Imports PanoramicData.NCalcExtensions
 
@@ -147,7 +148,7 @@ Public Class FormExpressionEditor
 
     End Sub
 
-    Private Sub BT_Test_Click(sender As Object, e As EventArgs) Handles BT_Test.Click
+    Private Sub BT_Test_Click(sender As Object, e As EventArgs) Handles BT_Test.Click, BT_TestOnCurrentFile.Click
 
         Dim calculation As String = TextEditorFormula.Text
 
@@ -159,6 +160,8 @@ Public Class FormExpressionEditor
             If Not Parameters.Contains(MatchString.Value) Then Parameters.Add(MatchString.Value)
         Next
 
+        Dim UC As New UtilsCommon
+
         For Each Parameter In Parameters
 
             Dim tmpVal As String = ""
@@ -167,7 +170,50 @@ Public Class FormExpressionEditor
                 tmpVal = SavedParameters.Item(Parameter)
             End If
 
-            tmpVal = InputBox("Insert value for parameter: " & Parameter,, tmpVal)
+
+            If sender.Equals(BT_Test) Then
+
+                tmpVal = InputBox("Insert value for parameter: " & Parameter,, tmpVal)
+
+            Else
+
+                ' Test on current file
+                ' This a concept and must be implemented properly.
+                ' I wrote this code RAW and is not perfect; I always forget how to use the proper method you have developed in UtilsCommon.vb please replace it with the proper one.
+                ' F.Arfilli
+
+                Dim SEApp As SolidEdgeFramework.Application
+                Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument
+
+                Try
+                    SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+                    SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                Catch ex As Exception
+                    MsgBox("Error connecting to Solid Edge or no document open.", MsgBoxStyle.Exclamation, "Error")
+                    Exit Sub
+                End Try
+
+
+                Dim PropertySet = UC.PropSetFromFormula(Parameter)
+                Dim PropertyName = UC.PropNameFromFormula(Parameter)
+                Dim ModelIdx = UC.ModelIdxFromFormula(Parameter)
+
+                If PropertyName.ToLower = "File Name".ToLower Then
+                    tmpVal = System.IO.Path.GetFileName(SEDoc.FullName)                  ' C:\project\part.par -> part.par
+                ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
+                    tmpVal = SEDoc.FullName                                              ' C:\project\part.par -> C:\project\part.par
+                ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
+                    tmpVal = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)  ' C:\project\part.par -> part
+
+                Else
+                    Dim FoundProp = UC.GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
+                    If FoundProp IsNot Nothing Then
+                        tmpVal = FoundProp.Value.ToString
+                    End If
+                End If
+
+            End If
+
 
             If SavedParameters.ContainsKey(Parameter) Then
                 SavedParameters.Item(Parameter) = tmpVal

@@ -40,6 +40,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.BT_TestOnCurrentFile = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -53,11 +54,11 @@ Partial Class FormExpressionEditor
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.White
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditorLabel, Me.BT_Test, Me.BT_Clear, Me.BT_InsertProp, Me.ToolStripSeparator1, Me.SavedExpressionsLabel, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditorLabel, Me.BT_Test, Me.BT_TestOnCurrentFile, Me.BT_Clear, Me.BT_InsertProp, Me.ToolStripSeparator1, Me.SavedExpressionsLabel, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(625, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(784, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -163,6 +164,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorFormula.IsReplaceMode = False
         Me.TextEditorFormula.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -170,7 +172,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorFormula.Size = New System.Drawing.Size(625, 200)
+        Me.TextEditorFormula.Size = New System.Drawing.Size(784, 200)
         Me.TextEditorFormula.TabIndex = 3
         Me.TextEditorFormula.Zoom = 100
         '
@@ -185,6 +187,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorResults.IsReplaceMode = False
         Me.TextEditorResults.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -192,7 +195,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorResults.Size = New System.Drawing.Size(625, 132)
+        Me.TextEditorResults.Size = New System.Drawing.Size(784, 132)
         Me.TextEditorResults.TabIndex = 4
         Me.TextEditorResults.Zoom = 100
         '
@@ -210,15 +213,24 @@ Partial Class FormExpressionEditor
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TextEditorResults)
-        Me.SplitContainer1.Size = New System.Drawing.Size(625, 336)
+        Me.SplitContainer1.Size = New System.Drawing.Size(784, 336)
         Me.SplitContainer1.SplitterDistance = 200
         Me.SplitContainer1.TabIndex = 5
+        '
+        'BT_TestOnCurrentFile
+        '
+        Me.BT_TestOnCurrentFile.Image = Global.Housekeeper.My.Resources.Resources.Play
+        Me.BT_TestOnCurrentFile.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_TestOnCurrentFile.Name = "BT_TestOnCurrentFile"
+        Me.BT_TestOnCurrentFile.Size = New System.Drawing.Size(94, 22)
+        Me.BT_TestOnCurrentFile.Text = "Test on Edge"
+        Me.BT_TestOnCurrentFile.ToolTipText = "Test on current Solid Edge file"
         '
         'FormExpressionEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(625, 361)
+        Me.ClientSize = New System.Drawing.Size(784, 361)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -255,4 +267,5 @@ Partial Class FormExpressionEditor
     Friend WithEvents EditorLabel As ToolStripLabel
     Friend WithEvents BT_InsertProp As ToolStripButton
     Friend WithEvents SavedExpressionsLabel As ToolStripLabel
+    Friend WithEvents BT_TestOnCurrentFile As ToolStripButton
 End Class
