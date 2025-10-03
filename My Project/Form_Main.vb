@@ -1144,9 +1144,9 @@ Public Class Form_Main
                 Task.IsSelectedDraft = False
             End If
 
-            If Task.RequiresLinkManagementOrder Then
-                Task.LinkManagementOrder = Me.LinkManagementOrder
-            End If
+            'If Task.RequiresLinkManagementOrder Then
+            Task.LinkManagementOrder = Me.LinkManagementOrder
+            'End If
 
             If Task.RequiresPropertiesData Then
                 Task.PropertiesData = Me.PropertiesData

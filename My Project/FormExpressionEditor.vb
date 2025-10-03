@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Text.RegularExpressions
-Imports System.Windows.Media.Media3D
+'Imports System.Windows.Media.Media3D
 Imports FastColoredTextBoxNS
 Imports PanoramicData.NCalcExtensions
 
@@ -182,11 +182,14 @@ Public Class FormExpressionEditor
                 ' I wrote this code RAW and is not perfect; I always forget how to use the proper method you have developed in UtilsCommon.vb please replace it with the proper one.
                 ' F.Arfilli
 
+                Dim USEA As New UtilsSEApp(Form_Main)
+
                 Dim SEApp As SolidEdgeFramework.Application
                 Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument
 
                 Try
-                    SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+                    USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+                    SEApp = USEA.SEApp
                     SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
                 Catch ex As Exception
                     MsgBox("Error connecting to Solid Edge or no document open.", MsgBoxStyle.Exclamation, "Error")
@@ -194,24 +197,31 @@ Public Class FormExpressionEditor
                 End Try
 
 
-                Dim PropertySet = UC.PropSetFromFormula(Parameter)
+                Dim PropertySetName = UC.PropSetFromFormula(Parameter)
                 Dim PropertyName = UC.PropNameFromFormula(Parameter)
                 Dim ModelIdx = UC.ModelIdxFromFormula(Parameter)
 
-                If PropertyName.ToLower = "File Name".ToLower Then
-                    tmpVal = System.IO.Path.GetFileName(SEDoc.FullName)                  ' C:\project\part.par -> part.par
-                ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
-                    tmpVal = SEDoc.FullName                                              ' C:\project\part.par -> C:\project\part.par
-                ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
-                    tmpVal = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)  ' C:\project\part.par -> part
+                'If PropertyName.ToLower = "File Name".ToLower Then
+                '    tmpVal = System.IO.Path.GetFileName(SEDoc.FullName)                  ' C:\project\part.par -> part.par
+                'ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
+                '    tmpVal = SEDoc.FullName                                              ' C:\project\part.par -> C:\project\part.par
+                'ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
+                '    tmpVal = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)  ' C:\project\part.par -> part
 
+                'Else
+                '    Dim FoundProp = UC.GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
+                '    If FoundProp IsNot Nothing Then
+                '        tmpVal = FoundProp.Value.ToString
+                '    End If
+                'End If
+
+                ' UC.GetPropValue calls UC.ProcessSpecialProperty for filename-type properties.
+                Dim tmpObj = UC.GetPropValue(SEDoc, PropertySetName, PropertyName, ModelIdx, AddProp:=False)
+                If tmpObj IsNot Nothing Then
+                    tmpVal = tmpObj.ToString
                 Else
-                    Dim FoundProp = UC.GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
-                    If FoundProp IsNot Nothing Then
-                        tmpVal = FoundProp.Value.ToString
-                    End If
+                    tmpVal = "Property not found"
                 End If
-
             End If
 
 

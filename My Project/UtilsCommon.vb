@@ -804,6 +804,10 @@ Public Class UtilsCommon
         '     "System.File Name"                 ' C:\project\part.par -> part.par
         '     "System.File Name (no extension)"  ' C:\project\part.par -> part
 
+        ' We could eventually add other Housekeeper special properties if the need arises.
+        '     Current date/time
+        '     ???
+
         PropName = PropName.ToLower
 
         Dim Proceed As Boolean = True
