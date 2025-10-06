@@ -79,7 +79,7 @@ Public Class UtilsSEApp
 
     Public Sub SEStop(UseCurrentSession As Boolean)
 
-        SEApp.DisplayAlerts = True
+        If SEApp IsNot Nothing Then SEApp.DisplayAlerts = True
 
         If Not UseCurrentSession Then
 

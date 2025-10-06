@@ -99,6 +99,7 @@ Public Class TaskSetDocumentStatus
         Try
             SSDoc = New HCStructuredStorageDoc(FullName)
             SSDoc.ReadProperties(Me.PropertiesData)
+            'SSDoc.ReadVariableNames()
         Catch ex As Exception
             Proceed = False
             TaskLogger.AddMessage("Unable to open file")

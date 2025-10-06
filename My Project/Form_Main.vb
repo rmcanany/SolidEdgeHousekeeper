@@ -10,7 +10,7 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property Version As String = "2025.3"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
+    Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
 
 
     Private lvwColumnSorter As ListViewColumnSorter
@@ -3400,6 +3400,7 @@ Public Class Form_Main
         Try
             SSDoc = New HCStructuredStorageDoc(FullName)
             SSDoc.ReadProperties(Me.PropertiesData)
+            'SSDoc.ReadVariableNames()
         Catch ex As Exception
             ' Couldn't open read-write.  Nothing to do here.
             MsgBox("The property cannot be changed.  The file may be read-only or already open elsewhere.", vbOKOnly)
