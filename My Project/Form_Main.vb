@@ -1944,15 +1944,56 @@ Public Class Form_Main
 
     Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
 
-        If Me.SortRandomSample Then
-            Dim Result As MsgBoxResult = MsgBox("INFO: Sort Random Sample enabled.  Select Cancel to quit.", vbOKCancel)
-            If Result = MsgBoxResult.Cancel Then Exit Sub
+        If My.Computer.Keyboard.ShiftKeyDown Then
+
+#Region "TOBEMOVED"
+            Me.Cursor = Cursors.WaitCursor
+
+            Dim ElapsedTime As Double
+            Dim ElapsedTimeText As String
+
+            Dim StartTime As DateTime = Now
+
+            Me.TextBoxStatus.Text = "Updating properties..."
+            Me.LabelTimeRemaining.Text = ""
+            System.Windows.Forms.Application.DoEvents()
+#End Region
+
+            ' Core function is here
+            ListViewFiles.BeginUpdate()
+
+            Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
+            UFL.UpdatePropertiesColumns()
+
+            ListViewFiles.EndUpdate()
+            ' End of core function
+#Region "TOBEMOVED"
+            Me.Cursor = Cursors.Default
+
+            ElapsedTime = Now.Subtract(StartTime).TotalMinutes
+            If ElapsedTime < 60 Then
+                ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+            Else
+                ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
+            End If
+
+            Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
+            Me.TextBoxStatus.Text = String.Format("Updated properties in {0} files in {1}", filecount, ElapsedTimeText)
+#End Region
+
+        Else
+
+            If Me.SortRandomSample Then
+                Dim Result As MsgBoxResult = MsgBox("INFO: Sort Random Sample enabled.  Select Cancel to quit.", vbOKCancel)
+                If Result = MsgBoxResult.Cancel Then Exit Sub
+            End If
+
+            ButtonProcess.Text = "Process"
+
+            Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
+            UFL.New_UpdateFileList()
+
         End If
-
-        ButtonProcess.Text = "Process"
-
-        Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
-        UFL.New_UpdateFileList()
 
     End Sub
 
