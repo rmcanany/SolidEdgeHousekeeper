@@ -77,49 +77,36 @@ Public Class UtilsPreferences
         Dim ValidPropTypes As New List(Of String)
         ValidPropTypes.AddRange({"string", "double", "int32", "boolean", "list`1"})
 
-        Dim IgnoreNames As New List(Of String)
-        IgnoreNames.AddRange({"version", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
-        IgnoreNames.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
-        If SavingPresets Then IgnoreNames.AddRange({"left", "top", "width", "height"})
+        Dim SkipProps As New List(Of String)
+        SkipProps.AddRange({"version", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
+        SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
+        'If SavingPresets Then SkipProps.AddRange({"left", "top", "width", "height"})
         If SavingPresets And Not FMain.PresetsSaveFileFilters Then
-            IgnoreNames.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
+            SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
         End If
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
             PropType = PropInfo.PropertyType.Name.ToLower
 
-            Dim NewWay As Boolean = True
-            If NewWay Then
+            Dim PropModule As String = PropInfo.Module.ToString.ToLower
 
-                Dim PropModule As String = PropInfo.Module.ToString.ToLower
+            'If SkipProps.Contains(PropInfo.Name.ToLower) Then Continue For
 
-                Dim tf As Boolean
-                'tf = (Not SavingPresets) And ({"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
-                tf = PropModule.Contains("housekeeper")
-                tf = tf And Not IgnoreNames.Contains(PropInfo.Name.ToLower)
-                tf = tf And ValidPropTypes.Contains(PropType)
+            'Dim tf As Boolean
+            ''tf = (Not SavingPresets) And ({"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
+            'tf = PropModule.Contains("housekeeper") Or Not SkipProps.Contains(PropInfo.Name.ToLower)
+            'tf = tf And ValidPropTypes.Contains(PropType)
 
-                If Not tf Then Continue For
-            Else
-                'If Not KeepProps.Contains(PropInfo.Name) Then
+            'If Not tf Then Continue For
 
-                '    If ReportIgnoredProperties Then
-                '        s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
-                '        If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
-                '            s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
-                '            MsgBox(s, vbOKOnly)
-                '            s = ""
-                '            IgnoredCount = -1
-                '        End If
-                '        IgnoredCount += 1
+            Dim tf As Boolean
+            tf = PropInfo.Module.ToString.ToLower.Contains("housekeeper")
+            tf = tf Or (Not SavingPresets And {"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
+            If Not tf Then Continue For
 
-                '    End If
+            If SkipProps.Contains(PropInfo.Name.ToLower) Then Continue For
 
-                '    Continue For
-                'End If
-
-            End If
 
             Value = Nothing
 

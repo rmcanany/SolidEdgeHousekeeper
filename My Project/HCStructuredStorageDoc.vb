@@ -2441,15 +2441,15 @@ Public Class HCStructuredStorageDoc
 
             FormatByteString(ByteArray)
 
-            Dim NamedBytes As List(Of List(Of Byte))
-            NamedBytes = GetNamesBytes(ByteArray)
+            'Dim NamedBytes As List(Of List(Of Byte))
+            'NamedBytes = GetNamesBytes(ByteArray)
 
-            If NamedBytes IsNot Nothing Then
-                For Each NamedByteList As List(Of Byte) In NamedBytes
-                    Dim s As String = System.Text.Encoding.Unicode.GetString(NamedByteList.ToArray)
-                    Items.Add(s)
-                Next
-            End If
+            'If NamedBytes IsNot Nothing Then
+            '    For Each NamedByteList As List(Of Byte) In NamedBytes
+            '        Dim s As String = System.Text.Encoding.Unicode.GetString(NamedByteList.ToArray)
+            '        Items.Add(s)
+            '    Next
+            'End If
 
         End Sub
 
