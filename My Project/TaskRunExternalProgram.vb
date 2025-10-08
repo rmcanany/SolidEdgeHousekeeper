@@ -366,40 +366,34 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            If DocType = ".asm" Then
-                Dim PreviewParam As SolidEdgeFramework.ApplicationGlobalConstants
-                PreviewParam = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalStoreGeometryInAssemblyForPreview
+            Dim HoleDataCollection As SolidEdgePart.HoleDataCollection = Nothing
 
-                Try
-                    ' Krok 1 Vypnutí a uložení
-                    SEApp.SetGlobalParameter(PreviewParam, False)
-                    SEDoc.Save()
-                    SEApp.DoIdle()
-                Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("An error occurred disabling preview mode: {0}", ex.Message))
-                End Try
+            Select Case DocType
+                Case ".par"
+                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                    HoleDataCollection = tmpSEDoc.HoleDataCollection
+                Case ".psm"
+                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                    HoleDataCollection = tmpSEDoc.HoleDataCollection
+            End Select
 
-                Try
-                    ' Krok 2 Zapnutí a uložení
-                    SEApp.SetGlobalParameter(PreviewParam, True)
-                    SEDoc.Save()
-                    SEApp.DoIdle()
-                Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("An error occurred enabling preview mode: {0}", ex.Message))
-                End Try
+            If HoleDataCollection IsNot Nothing Then
+                For Each item As SolidEdgePart.HoleData In HoleDataCollection
 
-            Else
-                Try
-                    SEDoc.Save()
-                    SEApp.DoIdle()
-                Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("An error occurred saving the file: {0}", ex.Message))
-                End Try
+                    If item.ThreadDescription = "R 2-11" Then
+
+                        item.Size = "R 2-11"
+                        item.Standard = "ISO Metric"
+                        item.SubType = "Filettatura gas conico"
+                        item.ThreadDiameterOption = CType(2, SolidEdgePart.ThreadDiameterOptionConstants)
+                        item.ThreadDepth = 0.02
+                        item.ThreadExternalDiameter = 0.0603
+                        item.ThreadTaperAngle = 0.031415926535897934
+
+                    End If
+
+                Next
             End If
-
 
             ' ############## SNIPPET CODE END ##############
 

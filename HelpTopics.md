@@ -224,6 +224,7 @@ Referring to the toolbar diagram, tool group 5,
 
 Referring to the toolbar diagram, tool group 6, 
 - Click ![Update](Resources/Synch_16.png) to populate the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
+- To update the files' property display, but not the files themselves, hold the Shift key and press the update button.
 
 </details>
 
@@ -246,6 +247,8 @@ Click ![Columns](Resources/icons8_table_properties_16.png) to open the column se
 ![Customize file list columns](My%20Project/media/file_list_columns_customize.png)
 
 Click the Add button to bring up the Property Selector dialog.  By default, it shows properties you added to your Favorites.  To show all properties, click the Show All Props button.  Note, before you can use properties, they must first be read from your templates.  See the [<ins>**Templates Page**</ins>](#templates-page) for details.
+
+As noted above, you can update the files' property display without updating the file list.  Hold the Shift key and click the Update button to do so.
 
 Getting properties for a large number of files can take some time.  If that's the case, when you click Update, the program asks whether or not to display them.
 

@@ -2456,157 +2456,116 @@ Public Class HCStructuredStorageDoc
         Private Function GetNamesBytes(ByteArray As Byte()) As List(Of List(Of Byte))
 
             'BYTE STREAM FORMAT
-            '
-            'Strings are null-terminated (&H00) 2-byte Unicode.  MSB can be anything, LSB must be non zero.
-            'The first letter of each string is aligned in the diagram to more easily see the pattern.
-            '
-            '                              \|/ Number of letters in string           \|/ Last letter offset = 2 * Number of letters + 4 + 1 
-            '          Offset --->    0  1  2  3  4     6     8    10    12    14    16 \|/ Null terminator
-            '           Value --->    Z  Z NZ  Z  Z  A NZ  A NZ  A NZ  A NZ  A NZ  A NZ  Z \|/ Number of block views
-            '48 05 00 00 00 7f 17 00 00 00 06 00 00 00 42 00 6c 00 6f 00 63 00 6b 00 31 00 01
-            ' H  .  .  .  .  .  .  .  .  .  .  .  .  .  B  .  l  .  o  .  c  .  k  .  1  .  .
-            '                                        x                                x    /|\ This value was copied from the next row for reference
-            '      01 00 00 00 7e 17 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
-            '       .  .  .  .  ~  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
-            '                                        x                          x    
-            '               88 15 00 00 00 03 00 00 00 43 00 4f 00 47 00       
-            '                ?  .  .  .  .  .  .  .  .  C  .  O  .  G  .       
-            '                                        x              x        
-            '      01 00 00 00 89 15 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
-            '       .  .  .  .  ?  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
-            '                                        x                          x    
-            '               a3 16 00 00 00 04 00 00 00 73 00 6c 00 6f 00 74 00     
-            '                ?  .  .  .  .  .  .  .  .  s  .  l  .  o  .  t  .     
-            '                                        x                    x      
-            ' Value legend
-            '    A Anything
-            '   NZ Non zero
-            '    Z Zero
-
-            Dim MaxNumChars As Integer = 30
-            Dim MaxNumBlockViews As Integer = 2
+            ' See C:\data\CAD\scripts\SolidEdgeHousekeeper\reference\20251003_structured_storage_variables\worksheet.ods
 
             Dim ByteLists As New List(Of List(Of Byte))
-            Dim C As Integer = ByteArray.Count
-            Dim NumBlockViews As Integer = 0
+            Dim C As Integer
 
-            Dim SearchStart As Integer = CInt(ByteArray.Count / 2)
+            C = ByteArray.Count
 
-            For i = SearchStart To C - 1
+            Dim InBeginning As Boolean = True
+            Dim BeginningDataLength As Integer = 44
+            Dim InNamedViews As Boolean = False
+            Dim NamedViewsDataLength As Integer = 133
+            Dim InDefaultViews As Boolean = False
+            Dim DefaultViewsDataLength As Integer = 17
+            Dim InFeatures As Boolean = False
+            Dim FeaturesDataLength As Integer = 53
+            Dim InVariables As Boolean = False
+            Dim VariablesDataLength As Integer = 21
 
+            Dim NameCharCount As Integer
+            Dim NameCharCountIdx As Integer
+            Dim NameStartIdx As Integer
+            Dim NameEndIdx As Integer
+
+            Dim DescriptionCharCount As Integer
+            Dim DescriptionCharCountIdx As Integer
+            Dim DescriptionStartIdx As Integer
+            Dim DescriptionEndIdx As Integer
+
+            Dim CurrentIdx As Integer = 0
+
+            Dim tf As Boolean
+
+            While True
                 Dim ByteList As New List(Of Byte)
+                'Dim PeekAheadIdx As Integer
 
-                ' Check for leading pattern Z Z NZ Z Z
-                If i + 0 < C AndAlso Not ByteArray(i) = &H0 Then Continue For
-                If i + 1 < C AndAlso Not ByteArray(i + 1) = &H0 Then Continue For
-                If i + 2 < C AndAlso ByteArray(i + 2) = &H0 Then Continue For
-                If i + 3 < C AndAlso Not ByteArray(i + 3) = &H0 Then Continue For
-                If i + 4 < C AndAlso Not ByteArray(i + 4) = &H0 Then Continue For
-
-                ' Check for null terminator
-                If Not i + 2 < C Then Exit For
-
-                Dim NumChars = CInt(ByteArray(i + 2))
-                If NumChars > MaxNumChars Then Continue For
-                Dim TerminatorIdx = i + 2 * NumChars + 4 + 1
-                If TerminatorIdx < C AndAlso Not ByteArray(TerminatorIdx) = &H0 Then Continue For
-
-                ' Check Unicode
-                For j = i + 6 To i + 6 + 2 * (NumChars - 1) Step 2
-                    If j < C AndAlso ByteArray(j) = &H0 Then  ' There may be other invalid hex values
-                        Continue For
-                    Else
-                        ' These need to be in reverse order for the unicode translation to work properly
-                        ByteList.Add(ByteArray(j))
-                        ByteList.Add(ByteArray(j - 1))
-                    End If
-                Next
-
-                If NumBlockViews = 0 Then
-                    NumBlockViews = CInt(ByteArray(TerminatorIdx + 1))
-                    If Not NumBlockViews <= MaxNumBlockViews Then
-                        NumBlockViews = 0
-                        Continue For
-                    End If
-
-                    ByteLists.Add(ByteList)
-                Else
-                    NumBlockViews -= 1
+                If InBeginning Then
+                    CurrentIdx += BeginningDataLength ' 0 -> 44
+                    InBeginning = False
+                    InNamedViews = True
+                    'Continue While
                 End If
 
-            Next
+                If InNamedViews Then
+                    NameCharCountIdx = CurrentIdx ' Includes null terminator.  Unicode length will be 2 bytes shorter
+                    NameCharCount = CInt(ByteArray(NameCharCountIdx))
+                    NameStartIdx = NameCharCountIdx + 3
+                    NameEndIdx = NameStartIdx + 2 * (NameCharCount - 1) - 1
 
-            'Dim View1ByteList As New List(Of Byte)
-            'View1ByteList.AddRange({&H0, &H56, &H0, &H69, &H0, &H65, &H0, &H77, &H0, &H31})
+                    DescriptionCharCountIdx = CurrentIdx + 2 + 2 * (NameCharCount - 1) + 2
+                    DescriptionCharCount = CInt(ByteArray(DescriptionCharCountIdx))
+                    DescriptionStartIdx = DescriptionCharCountIdx + 3
+                    DescriptionEndIdx = DescriptionStartIdx + 2 * (DescriptionCharCount - 1) - 1
 
-            'Dim View1StartIdxList As New List(Of Integer)
+                    For j = NameStartIdx To NameEndIdx
+                        ByteList.Add(ByteArray(j))
+                    Next
 
-            'Dim IndicatorNameStart As New List(Of Byte)
-            'IndicatorNameStart.AddRange({&H1, &H0})  ' In reverse order
+                    For j = DescriptionStartIdx To DescriptionEndIdx
+                        ByteList.Add(ByteArray(j))
+                    Next
 
-            'Dim IndicatorNameEnd As New List(Of Byte)
-            'IndicatorNameEnd.AddRange({&H0, &H0})  ' In reverse order, kinda
+                    ByteLists.Add(ByteList)
 
-            '' Forward pass to find start idx of each "View1"
-            'For i = 0 To ByteArray.Count - View1ByteList.Count - 1
-            '    Dim Matched As Boolean = True
+                    CurrentIdx = DescriptionEndIdx + 3 + NamedViewsDataLength
 
-            '    For j = 0 To View1ByteList.Count - 1
-            '        If Not ByteArray(i + j) = View1ByteList(j) Then
+                    ' Check if this is the last Named View
 
-            '            If j = View1ByteList.Count - 1 Then
-            '                ' Found a View that is not View1
-            '                MsgBox("Cannot currently process blocks with more than 1 view.  Exiting...", vbOKOnly)
-            '                Return Nothing
-            '            End If
-            '            Matched = False
-            '            Exit For
-            '        End If
-            '    Next
+                    tf = ByteArray(CurrentIdx + 5) = &H0
+                    tf = tf And ByteArray(CurrentIdx + 6) = &H0
+                    tf = tf And ByteArray(CurrentIdx + 7) = &H0
+                    If tf Then
+                        CurrentIdx += 4
+                        InNamedViews = False
+                        InDefaultViews = True
+                    End If
 
-            '    If Matched Then View1StartIdxList.Add(i)
+                End If
 
-            'Next
+                If InDefaultViews Then
+                    NameCharCountIdx = CurrentIdx ' Includes null terminator.  Unicode length will be 2 bytes shorter
+                    NameCharCount = CInt(ByteArray(NameCharCountIdx))
+                    NameStartIdx = NameCharCountIdx + 3
+                    NameEndIdx = NameStartIdx + 2 * (NameCharCount - 1) - 1
 
-            'If View1StartIdxList.Count = 0 Then Return Nothing
+                    ' Check if this is a default view
+                    tf = ByteArray(NameEndIdx + 4) = &H21
+                    tf = tf Or ByteArray(NameEndIdx + 4) = &H22
+                    tf = tf Or ByteArray(NameEndIdx + 4) = &H23
+                    If Not tf Then
+                        InDefaultViews = False
+                        InFeatures = True
+                    Else
+                        For j = NameCharCountIdx To NameEndIdx
+                            ByteList.Add(ByteArray(j))
+                        Next
 
+                        ByteLists.Add(ByteList)
 
-            'For i = View1StartIdxList.Count - 1 To 0 Step -1
-            '    Dim idx = View1StartIdxList(i)
+                        CurrentIdx = NameEndIdx + 3 + DefaultViewsDataLength
+                    End If
 
-            '    idx -= 1
+                End If
 
-            '    Do Until ByteArray(idx) = IndicatorNameStart(0) And ByteArray(idx - 1) = IndicatorNameStart(1)
-            '        idx -= 1
+                If InFeatures Then
 
-            '        If idx < 0 Then
-            '            Return Nothing
-            '        End If
-            '    Loop
+                End If
 
-            '    idx -= 1
+            End While
 
-            '    Dim ReversedByteList As New List(Of Byte)
-
-            '    Do Until ByteArray(idx) = IndicatorNameEnd(0) And ByteArray(idx - 1) = IndicatorNameEnd(1)
-
-            '        ReversedByteList.Add(ByteArray(idx))
-            '        idx -= 1
-
-            '        If idx < 0 Then
-            '            Return Nothing
-            '        End If
-            '    Loop
-
-            '    Dim ByteList As New List(Of Byte)
-
-            '    For j = ReversedByteList.Count - 1 To 0 Step -1
-            '        ByteList.Add(ReversedByteList(j))
-            '    Next
-
-            '    ByteLists.Add(ByteList)
-
-            'Next
 
             Return ByteLists
 
@@ -2618,7 +2577,7 @@ Public Class HCStructuredStorageDoc
             Dim ByteList As New List(Of String)
             Dim CharList As New List(Of String)
 
-            Dim SaveDir As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\reference\20251003_imhex"
+            Dim SaveDir As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\reference\20251003_structured_storage_variables"
             Dim TsvFilename As String = IO.Path.GetExtension(Me.FullName).Replace(".", "_")
             TsvFilename = $"{SaveDir}\PartsLiteStream{TsvFilename}.tsv"
             Dim Modelfilename = IO.Path.GetFileName(Me.FullName)

@@ -13,6 +13,16 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
+## V2025.4 
+
+### File List
+
+Contributed by **@[Francesco Arfilli].**  Thank you!
+
+#### Update file properties display
+
+Added the ability to update the display of file properties without updating the list itself.  This can be a time saver on a large top-level assembly, or with a time-consuming sort option.  To do so, hold down the Shift key and click the Update button.
+
 ## V2025.3 Enhancements/Fixes
 
 ### Update Blocks
