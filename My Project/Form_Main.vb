@@ -1704,43 +1704,48 @@ Public Class Form_Main
     Private Sub BT_AddFromlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromlist.Click
 
         Dim tmpFileDialog As New OpenFileDialog
-        tmpFileDialog.Title = "Select a list of files"
+        tmpFileDialog.Title = "Select list of files"
         tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+        tmpFileDialog.Multiselect = True
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
 
-            Dim tmpItem As New ListViewItem
+            For Each tmpFileName As String In tmpFileDialog.FileNames
 
-            Select Case IO.Path.GetExtension(tmpFileDialog.FileName).ToLower
+                Dim tmpItem As New ListViewItem
 
-                Case Is = ".tsv"
-                    tmpItem.Text = "TSV list"
-                    tmpItem.ImageKey = "csv" ' Not a typo.  Reusing 'csv'
-                    tmpItem.Tag = "tsv"
-                Case Is = ".txt"
-                    tmpItem.Text = "TXT list"
-                    tmpItem.ImageKey = "txt"
-                    tmpItem.Tag = "txt"
-                Case Is = ".csv"
-                    tmpItem.Text = "CSV list"
-                    tmpItem.ImageKey = "csv"
-                    tmpItem.Tag = "csv"
-                Case Is = ".xls", ".xlsx", ".xlsm"
-                    tmpItem.Text = "Excel list"
-                    tmpItem.ImageKey = "excel"
-                    tmpItem.Tag = "excel"
-                Case Else
-                    MsgBox(String.Format("{0}: Extension {1} not recognized", Me.ToString, IO.Path.GetExtension(tmpFileDialog.FileName).ToLower))
-            End Select
+                Select Case IO.Path.GetExtension(tmpFileName).ToLower
 
-            tmpItem.SubItems.Add(tmpFileDialog.FileName)
-            tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                    Case Is = ".tsv"
+                        tmpItem.Text = "TSV list"
+                        tmpItem.ImageKey = "csv" ' Not a typo.  Reusing 'csv'
+                        tmpItem.Tag = "tsv"
+                    Case Is = ".txt"
+                        tmpItem.Text = "TXT list"
+                        tmpItem.ImageKey = "txt"
+                        tmpItem.Tag = "txt"
+                    Case Is = ".csv"
+                        tmpItem.Text = "CSV list"
+                        tmpItem.ImageKey = "csv"
+                        tmpItem.Tag = "csv"
+                    Case Is = ".xls", ".xlsx", ".xlsm"
+                        tmpItem.Text = "Excel list"
+                        tmpItem.ImageKey = "excel"
+                        tmpItem.Tag = "excel"
+                    Case Else
+                        MsgBox(String.Format("{0}: Extension {1} not recognized", Me.ToString, IO.Path.GetExtension(tmpFileName).ToLower))
+                End Select
 
-            tmpItem.Name = tmpFileDialog.FileName
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
-                ListViewSources.Items.Add(tmpItem)
-                ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-            End If
+                tmpItem.SubItems.Add(tmpFileName)
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+
+                tmpItem.Name = tmpFileName
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                    ListViewSources.Items.Add(tmpItem)
+                    ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+
+            Next
 
             ListViewFilesOutOfDate = True
 
