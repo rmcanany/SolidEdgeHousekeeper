@@ -74,8 +74,8 @@ Public Class UtilsPreferences
         'Dim tmpMissingProperties As New List(Of String)
         'Dim tmpUnhandledPropTypes As New List(Of String)
 
-        Dim ValidPropTypes As New List(Of String)
-        ValidPropTypes.AddRange({"string", "double", "int32", "boolean", "list`1"})
+        'Dim ValidPropTypes As New List(Of String)
+        'ValidPropTypes.AddRange({"string", "double", "int32", "boolean", "list`1"})
 
         Dim SkipProps As New List(Of String)
         SkipProps.AddRange({"version", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
@@ -91,22 +91,12 @@ Public Class UtilsPreferences
 
             Dim PropModule As String = PropInfo.Module.ToString.ToLower
 
-            'If SkipProps.Contains(PropInfo.Name.ToLower) Then Continue For
-
-            'Dim tf As Boolean
-            ''tf = (Not SavingPresets) And ({"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
-            'tf = PropModule.Contains("housekeeper") Or Not SkipProps.Contains(PropInfo.Name.ToLower)
-            'tf = tf And ValidPropTypes.Contains(PropType)
-
-            'If Not tf Then Continue For
-
             Dim tf As Boolean
             tf = PropInfo.Module.ToString.ToLower.Contains("housekeeper")
             tf = tf Or (Not SavingPresets And {"Left", "Top", "Width", "Height"}.ToList.Contains(PropInfo.Name))
             If Not tf Then Continue For
 
             If SkipProps.Contains(PropInfo.Name.ToLower) Then Continue For
-
 
             Value = Nothing
 
