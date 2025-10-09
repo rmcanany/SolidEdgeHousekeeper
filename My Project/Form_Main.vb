@@ -1965,12 +1965,15 @@ Public Class Form_Main
 #End Region
 
             ' Core function is here
-            ListViewFiles.BeginUpdate()
+            Me.StopProcess = False
+            Me.ButtonCancel.Text = "Stop"
 
             Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
+            Me.Cursor = Cursors.WaitCursor
             UFL.UpdatePropertiesColumns()
+            Me.Cursor = Cursors.Default
 
-            ListViewFiles.EndUpdate()
+            Me.ButtonCancel.Text = "Cancel"
             ' End of core function
 #Region "TOBEMOVED"
             Me.Cursor = Cursors.Default
@@ -2215,6 +2218,8 @@ Public Class Form_Main
 
     Private Sub BT_RemoveFromList_Click(sender As Object, e As EventArgs) Handles BT_RemoveFromList.Click
 
+        ListViewFiles.BeginUpdate()     '##### Inserted for performance reason, removing a large number of items is nearly instantaneous now
+
         For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
             Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
             tmpItem.Remove()
@@ -2229,6 +2234,7 @@ Public Class Form_Main
             ListViewFilesOutOfDate = True
         End If
 
+        ListViewFiles.EndUpdate()
 
     End Sub
 
