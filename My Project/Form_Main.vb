@@ -2215,6 +2215,8 @@ Public Class Form_Main
 
     Private Sub BT_RemoveFromList_Click(sender As Object, e As EventArgs) Handles BT_RemoveFromList.Click
 
+        ListViewFiles.BeginUpdate()     '##### Inserted for performance reason, removing a large number of items is nearly instantaneous now
+
         For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
             Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
             tmpItem.Remove()
@@ -2229,6 +2231,7 @@ Public Class Form_Main
             ListViewFilesOutOfDate = True
         End If
 
+        ListViewFiles.EndUpdate()
 
     End Sub
 

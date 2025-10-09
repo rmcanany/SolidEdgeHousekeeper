@@ -1146,7 +1146,7 @@ Public Class UtilsFileList
             Try
                 'Adding extra properties data if needed
                 For Each PropColumn In FMain.ListOfColumns
-                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" And PropColumn.Visible Then '###### Only a visible column need a value. F.Arfilli
                         Dim PropValue As String = Nothing
                         Dim tmpColor As Color = LVItem.BackColor 'Color.White ####### Changed to reflect the file read-only backcolor
                         Try
