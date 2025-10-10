@@ -2221,8 +2221,11 @@ Public Class Form_Main
         ListViewFiles.BeginUpdate()     '##### Inserted for performance reason, removing a large number of items is nearly instantaneous now
 
         For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
-            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
-            tmpItem.Remove()
+            'Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+            'tmpItem.Remove()
+
+            ListViewFiles.Items.RemoveAt(ListViewFiles.SelectedItems.Item(i).Index)     '#### Another performance improovement; .Items.RemoveAt is faster than .Item.Remove
+
         Next
 
         If Not ListViewSources.SelectedItems.Count = 0 Then
@@ -2267,7 +2270,7 @@ Public Class Form_Main
                 End If
                 s = $"{s}{Indent}{NonLocalFiles(i)}{vbCrLf}"
             Next
-            Dim Result = MsgBox(s, vbYesNo)
+            Dim Result = MsgBox(s, MsgBoxStyle.Critical)
             If Result = MsgBoxResult.No Then
                 Exit Sub
             End If
