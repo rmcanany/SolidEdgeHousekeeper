@@ -2261,7 +2261,7 @@ Public Class Form_Main
         Next
 
         If Not NonLocalFiles.Count = 0 Then
-            Dim s As String = $"Network files will be permanently deleted.  Do you wish to continue?{vbCrLf}"
+            Dim s As String = $"Network files will be permanently deleted.  Do you wish to continue?{vbCrLf}{vbCrLf}"
             Dim Indent As String = "    "
             For i = 0 To NonLocalFiles.Count - 1
                 If i = 10 Then
@@ -2270,10 +2270,12 @@ Public Class Form_Main
                 End If
                 s = $"{s}{Indent}{NonLocalFiles(i)}{vbCrLf}"
             Next
-            Dim Result = MsgBox(s, MsgBoxStyle.Critical)
+
+            Dim Result = MessageBox.Show(s, "Warning !", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)
             If Result = MsgBoxResult.No Then
                 Exit Sub
             End If
+
         End If
 
         For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
