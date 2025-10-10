@@ -22,47 +22,48 @@ Partial Class FormSplash
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        PictureBox1 = New PictureBox()
-        TextBoxStatus = New TextBox()
-        CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
-        SuspendLayout()
-        ' 
-        ' PictureBox1
-        ' 
-        PictureBox1.Image = My.Resources.Resources.splash_logo_01
-        PictureBox1.InitialImage = Nothing
-        PictureBox1.Location = New Point(2, 2)
-        PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(396, 146)
-        PictureBox1.SizeMode = PictureBoxSizeMode.Zoom
-        PictureBox1.TabIndex = 0
-        PictureBox1.TabStop = False
-        ' 
-        ' TextBoxStatus
-        ' 
-        TextBoxStatus.BorderStyle = BorderStyle.None
-        TextBoxStatus.Location = New Point(3, 148)
-        TextBoxStatus.Name = "TextBoxStatus"
-        TextBoxStatus.Size = New Size(393, 16)
-        TextBoxStatus.TabIndex = 1
-        ' 
-        ' FormSplash
-        ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
-        AutoScaleMode = AutoScaleMode.Font
-        BackColor = SystemColors.ActiveCaption
-        ClientSize = New Size(400, 167)
-        Controls.Add(TextBoxStatus)
-        Controls.Add(PictureBox1)
-        FormBorderStyle = FormBorderStyle.None
-        Name = "FormSplash"
-        StartPosition = FormStartPosition.CenterScreen
-        Text = "Splash"
-        CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
-        ResumeLayout(False)
-        PerformLayout()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.LabelStatus = New System.Windows.Forms.Label()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = Global.Housekeeper.My.Resources.Resources.splash_logo_01
+        Me.PictureBox1.InitialImage = Nothing
+        Me.PictureBox1.Location = New System.Drawing.Point(2, 2)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(339, 127)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 0
+        Me.PictureBox1.TabStop = False
+        '
+        'LabelStatus
+        '
+        Me.LabelStatus.AutoSize = True
+        Me.LabelStatus.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.LabelStatus.Location = New System.Drawing.Point(0, 132)
+        Me.LabelStatus.Name = "LabelStatus"
+        Me.LabelStatus.Size = New System.Drawing.Size(0, 13)
+        Me.LabelStatus.TabIndex = 2
+        '
+        'FormSplash
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(343, 145)
+        Me.Controls.Add(Me.LabelStatus)
+        Me.Controls.Add(Me.PictureBox1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.Name = "FormSplash"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Splash"
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
+
     End Sub
 
     Friend WithEvents PictureBox1 As PictureBox
-    Friend WithEvents TextBoxStatus As TextBox
+    Friend WithEvents LabelStatus As Label
 End Class
