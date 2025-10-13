@@ -161,6 +161,7 @@ Public Class FormExpressionEditor
         Next
 
         Dim UC As New UtilsCommon
+        Dim UP As New UtilsPreferences
 
         For Each Parameter In Parameters
 
@@ -253,7 +254,8 @@ Public Class FormExpressionEditor
         ElseIf TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then
             Dim UPS As New UtilsPowerShell
             Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(calculation.Split(CChar(vbCrLf)).ToList)
-            Dim PowerShellFilename As String = $"{IO.Path.GetTempPath}\HousekeeperExpression.ps1"
+
+            Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
             IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
 
             Try

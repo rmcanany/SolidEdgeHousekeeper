@@ -8,9 +8,13 @@ Public Class HCErrorLogger
     Public Property Abort As Boolean
 
 
-    Public Sub New()
+    Public Sub New(CallingProgramName As String)
+        ' Create a directory in Temp for the calling program if it does not exist
+        Dim DirName As String = $"{IO.Path.GetTempPath}\{CallingProgramName}"
+        If Not IO.Directory.Exists(DirName) Then IO.Directory.CreateDirectory(DirName)
+
         Me.Timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-        Me.LogfileName = String.Format("{0}\Housekeeper_{1}.log", IO.Path.GetTempPath, Timestamp)
+        Me.LogfileName = $"{DirName}\{Me.Timestamp}.log"
         Me.FileLoggers = New List(Of Logger)
         Me.Abort = False
 
@@ -54,7 +58,35 @@ Public Class HCErrorLogger
 
     End Sub
 
-    Public Function FormatReport() As List(Of String)
+    Public Sub ReportErrors(UseMessageBox As Boolean)
+        If Me.HasErrors Then
+            Save()
+            If Not UseMessageBox Then
+                Try
+                    ' Try to use the default application to open the file.
+                    Process.Start(Me.LogfileName)
+                Catch ex As Exception
+                    ' If none, open with notepad.exe
+                    Process.Start("notepad.exe", Me.LogfileName)
+                End Try
+            Else
+                Dim Outlist As List(Of String) = FormatReport()
+
+                Dim Outstring As String = ""
+                For Each s As String In Outlist
+                    'Outstring = String.Format("{0}{1}{2}", Outstring, s, vbCrLf)
+                    Outstring = $"{Outstring}{s}{vbCrLf}"
+                Next
+
+                MsgBox(Outstring, vbOKOnly)
+
+            End If
+
+        End If
+
+    End Sub
+
+    Private Function FormatReport() As List(Of String)
         Dim Outlist As New List(Of String)
 
         If HasErrors() Then

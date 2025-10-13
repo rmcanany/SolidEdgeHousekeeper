@@ -230,7 +230,11 @@ Public Class UtilsPreferences
         End If
     End Sub
 
-
+    Public Function GetTempDirectory() As String
+        Dim DirName As String = $"{IO.Path.GetTempPath}\Housekeeper"
+        If Not IO.Directory.Exists(DirName) Then IO.Directory.CreateDirectory(DirName)
+        Return DirName
+    End Function
 
     '###### HELP FILE BASE URL ######
     Public Function GetHelpfileBaseURLFilename() As String

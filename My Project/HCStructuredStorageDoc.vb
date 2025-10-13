@@ -400,6 +400,7 @@ Public Class HCStructuredStorageDoc
         Dim OutString As String = Nothing
 
         Dim UC As New UtilsCommon
+        Dim UP As New UtilsPreferences
 
         Dim Proceed As Boolean = True
 
@@ -483,7 +484,8 @@ Public Class HCStructuredStorageDoc
                 Else  ' Must be VB
                     Dim UPS As New UtilsPowerShell
                     Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(OutString.Split(CChar(vbCrLf)).ToList)
-                    Dim PowerShellFilename As String = $"{IO.Path.GetTempPath}\HousekeeperExpression.ps1"
+
+                    Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
                     IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
 
                     Try

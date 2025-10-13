@@ -366,33 +366,25 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            Dim HoleDataCollection As SolidEdgePart.HoleDataCollection = Nothing
+            If DocType = ".asm" Then
+                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
-            Select Case DocType
-                Case ".par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                    HoleDataCollection = tmpSEDoc.HoleDataCollection
-                Case ".psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                    HoleDataCollection = tmpSEDoc.HoleDataCollection
-            End Select
+                If tmpSEDoc.WeldmentAssembly Then
+                    Try
+                        Dim PropertySets As SolidEdgeFramework.PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
+                        Dim PropertySet As SolidEdgeFramework.Properties = PropertySets.Item("Custom")
+                        Dim Prop As SolidEdgeFramework.Property = PropertySet.Item("IsWeldment")
 
-            If HoleDataCollection IsNot Nothing Then
-                For Each item As SolidEdgePart.HoleData In HoleDataCollection
+                        Prop.Value = "True"
 
-                    If item.ThreadDescription = "R 2-11" Then
-
-                        item.Size = "R 2-11"
-                        item.Standard = "ISO Metric"
-                        item.SubType = "Filettatura gas conico"
-                        item.ThreadDiameterOption = CType(2, SolidEdgePart.ThreadDiameterOptionConstants)
-                        item.ThreadDepth = 0.02
-                        item.ThreadExternalDiameter = 0.0603
-                        item.ThreadTaperAngle = 0.031415926535897934
-
-                    End If
-
-                Next
+                        PropertySets.Save()
+                        SEApp.DoIdle()
+                        SEDoc.Save()
+                        SEApp.DoIdle()
+                    Catch ex As Exception
+                        ErrorMessageList.Add("Unable to process 'IsWeldment' property")
+                    End Try
+                End If
             End If
 
             ' ############## SNIPPET CODE END ##############

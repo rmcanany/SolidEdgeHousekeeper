@@ -888,6 +888,7 @@ Public Class UtilsCommon
         Dim ExpressionLanguage As String = ""
 
         Dim UFC As New UtilsFilenameCharmap
+        Dim UP As New UtilsPreferences
 
         If IsExpression And Instring.StartsWith("EXPRESSION_") Then
             Dim TextToRemove As String = Instring.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
@@ -1001,8 +1002,8 @@ Public Class UtilsCommon
                 Else  ' Must be VB
                     Dim UPS As New UtilsPowerShell
                     Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(Outstring.Split(CChar(vbCrLf)).ToList)
-                    Dim PowerShellFilename As String = $"{IO.Path.GetTempPath}\HousekeeperExpression.ps1"
-                    IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
+
+                    Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
 
                     Try
                         Outstring = UPS.RunExpressionScript(PowerShellFilename)

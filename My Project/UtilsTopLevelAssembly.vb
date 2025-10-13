@@ -248,9 +248,12 @@ Public Class UtilsTopLevelAssembly
     Private Sub ReportUnrelatedFiles(UnrelatedFiles As List(Of String))
 
         If UnrelatedFiles.Count > 0 Then
+            Dim UP As New UtilsPreferences
+
             Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+
             Dim LogfileName As String
-            LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
+            LogfileName = $"{UP.GetTempDirectory}\{Timestamp}_Unrelated_Files.log"
 
             Try
                 Using writer As New IO.StreamWriter(LogfileName, True)
@@ -287,6 +290,8 @@ Public Class UtilsTopLevelAssembly
         Dim ActiveFileExtensionsList As New List(Of String)
         Dim UnrelatedFiles As New List(Of String)
 
+        Dim UP As New UtilsPreferences
+
         If TopLevelFolders.Count = 0 Then
             Exit Sub
         End If
@@ -313,8 +318,9 @@ Public Class UtilsTopLevelAssembly
 
         If UnrelatedFiles.Count > 0 Then
             Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+
             Dim LogfileName As String
-            LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
+            LogfileName = $"{UP.GetTempDirectory}\{Timestamp}_Unrelated_Files.log"
 
             Try
                 Using writer As New IO.StreamWriter(LogfileName, True)

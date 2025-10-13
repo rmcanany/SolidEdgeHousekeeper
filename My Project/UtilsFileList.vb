@@ -704,6 +704,7 @@ Public Class UtilsFileList
         Dim Filename As String
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
+        Dim UP As New UtilsPreferences
 
         For Each Filename In Foundfiles
 
@@ -737,8 +738,9 @@ Public Class UtilsFileList
 
         If MissingFilesList.Count > 0 Then
             Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+
             Dim MissingFilesFileName As String
-            MissingFilesFileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Missing_Files.log"
+            MissingFilesFileName = $"{UP.GetTempDirectory}\{Timestamp}_Missing_Files.log"
 
             Try
                 Using writer As New IO.StreamWriter(MissingFilesFileName, True)

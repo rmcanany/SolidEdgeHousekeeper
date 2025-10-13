@@ -24,7 +24,7 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        Me.ErrorLogger = New HCErrorLogger
+        Me.ErrorLogger = New HCErrorLogger("Housekeeper")
 
         FMain.SaveSettings(SavingPresets:=False)  ' Updates JSON Properties and saves settings
 
@@ -104,14 +104,15 @@ Public Class UtilsExecute
         FMain.ButtonCancel.Text = "Cancel"
 
         If Me.ErrorLogger.HasErrors Then
-            Me.ErrorLogger.Save()
-            Try
-                ' Try to use the default application to open the file.
-                Process.Start(Me.ErrorLogger.LogfileName)
-            Catch ex As Exception
-                ' If none, open with notepad.exe
-                Process.Start("notepad.exe", Me.ErrorLogger.LogfileName)
-            End Try
+            'Me.ErrorLogger.Save()
+            'Try
+            '    ' Try to use the default application to open the file.
+            '    Process.Start(Me.ErrorLogger.LogfileName)
+            'Catch ex As Exception
+            '    ' If none, open with notepad.exe
+            '    Process.Start("notepad.exe", Me.ErrorLogger.LogfileName)
+            'End Try
+            Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
         Else
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
@@ -123,7 +124,7 @@ Public Class UtilsExecute
     Public Function CheckStartConditions() As Boolean
         Dim Proceed As Boolean = True
 
-        Dim ErrorLogger As New HCErrorLogger
+        Dim ErrorLogger As New HCErrorLogger("Housekeeper")
         Dim HeaderLogger As Logger = ErrorLogger.AddFile("Please correct the following before continuing")
         Dim StartLogger As Logger = HeaderLogger.AddLogger("")
 
@@ -281,19 +282,21 @@ Public Class UtilsExecute
 
         FMain.TextBoxStatus.Text = ""
 
-        Dim Outlist As List(Of String) = ErrorLogger.FormatReport()
+        'Dim Outlist As List(Of String) = ErrorLogger.FormatReport()
 
-        If Outlist.Count > 0 Then
-            Proceed = False
+        'If Outlist.Count > 0 Then
+        '    Proceed = False
 
-            Dim Outstring As String = ""
-            For Each s As String In Outlist
-                Outstring = String.Format("{0}{1}{2}", Outstring, s, vbCrLf)
-            Next
+        '    Dim Outstring As String = ""
+        '    For Each s As String In Outlist
+        '        Outstring = String.Format("{0}{1}{2}", Outstring, s, vbCrLf)
+        '    Next
 
-            MsgBox(Outstring, vbOKOnly)
+        '    MsgBox(Outstring, vbOKOnly)
 
-        End If
+        'End If
+
+        ErrorLogger.ReportErrors(UseMessageBox:=True)
 
         Return Proceed
     End Function
