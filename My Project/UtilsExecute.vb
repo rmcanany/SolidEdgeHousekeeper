@@ -160,16 +160,16 @@ Public Class UtilsExecute
             FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
             Application.DoEvents()
 
-            If Filename.Group.Name <> "Sources" Then
+            If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
 
-                If Not Filename.ForeColor = Color.Red Then Filename.ImageKey = "Unchecked"
+                Filename.ImageKey = "Unchecked"
 
-                'If Not FileIO.FileSystem.FileExists(Filename.Name) Then
-                'StartLogger.AddMessage("File not found, or Path exceeds maximum length")
-                'StartLogger.AddMessage(CType(Filename.Name, String))
-                'FMain.ListViewFilesOutOfDate = True
-                'Exit For
-                'End If
+                If Not FileIO.FileSystem.FileExists(Filename.Name) Then
+                    StartLogger.AddMessage("File not found, or Path exceeds maximum length")
+                    StartLogger.AddMessage(CType(Filename.Name, String))
+                    FMain.ListViewFilesOutOfDate = True
+                    Exit For
+                End If
 
             End If
         Next
@@ -383,7 +383,7 @@ Public Class UtilsExecute
             msg = String.Format("{0}/{1} {2}", FilesToProcessCompleted + 1, FilesToProcessTotal, System.IO.Path.GetFileName(FileToProcess))
             FMain.TextBoxStatus.Text = msg
 
-            If IO.File.Exists(FileToProcess) Then ProcessFile(FileToProcess, Filetype)
+            ProcessFile(FileToProcess, Filetype)
 
             If Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
                 Dim tmpPath As String = System.IO.Path.GetDirectoryName(FileToProcess)

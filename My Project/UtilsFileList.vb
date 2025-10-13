@@ -508,7 +508,7 @@ Public Class UtilsFileList
                 tmpLVItem.ImageKey = "Error"
                 tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
                 tmpLVItem.Name = FoundFile
-                tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+                tmpLVItem.Group = ListViewFiles.Groups.Item("Excluded") 'ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
 
                 tmpLVItem.ToolTipText = "File not found"
 
@@ -540,9 +540,9 @@ Public Class UtilsFileList
 
             If item IsNot Nothing Then 'better handling of first item being Nothing; this will not cause the excepetion; it's always better to handle known issues
 
-                'tf = UC.FilenameIsOK(item)             ' Testing file not found
-                'tf = tf And IO.File.Exists(item)       ' Testing file not found
-                tf = True
+                tf = UC.FilenameIsOK(item)             ' Testing file not found
+                tf = tf And IO.File.Exists(item)       ' Testing file not found
+                'tf = True
 
                 ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
                 ' Causes a problem comparing extensions
