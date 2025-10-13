@@ -160,7 +160,7 @@ Public Class UtilsExecute
             FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
             Application.DoEvents()
 
-            If Filename.Group.Name <> "Sources" Then
+            If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
 
                 Filename.ImageKey = "Unchecked"
 
@@ -170,6 +170,7 @@ Public Class UtilsExecute
                     FMain.ListViewFilesOutOfDate = True
                     Exit For
                 End If
+
             End If
         Next
 

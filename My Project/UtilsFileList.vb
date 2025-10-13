@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Reflection
 Imports ListViewExtended
 
 Public Class UtilsFileList
@@ -494,7 +495,26 @@ Public Class UtilsFileList
                 If tmpFinfo.IsReadOnly Then tmpLVItem.BackColor = Color.LightGray : tmpLVItem.SubItems.Item(1).BackColor = Color.LightGray '<----- setting the read-only backcolor
 
                 ListViewFiles.Items.Add(tmpLVItem)
+            Else
+                ' Trying to add a file that does not exist
+                Dim tmpLVItem As New ListViewItem
 
+                tmpLVItem.BackColor = Color.White
+
+                tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
+                tmpLVItem.UseItemStyleForSubItems = False
+                tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+
+                tmpLVItem.ImageKey = "Error"
+                tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
+                tmpLVItem.Name = FoundFile
+                tmpLVItem.Group = ListViewFiles.Groups.Item("Excluded") 'ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+
+                tmpLVItem.ToolTipText = "File not found"
+
+                tmpLVItem.ForeColor = Color.Red : tmpLVItem.SubItems.Item(1).ForeColor = Color.Red
+
+                ListViewFiles.Items.Add(tmpLVItem)
             End If
 
             NumProcessed += 1
@@ -520,8 +540,9 @@ Public Class UtilsFileList
 
             If item IsNot Nothing Then 'better handling of first item being Nothing; this will not cause the excepetion; it's always better to handle known issues
 
-                tf = UC.FilenameIsOK(item)
-                tf = tf And IO.File.Exists(item)
+                tf = UC.FilenameIsOK(item)             ' Testing file not found
+                tf = tf And IO.File.Exists(item)       ' Testing file not found
+                tf = True   '<-------- SHOW THE FILE NOT FOUND
 
                 ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
                 ' Causes a problem comparing extensions

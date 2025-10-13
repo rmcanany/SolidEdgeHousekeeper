@@ -2160,7 +2160,7 @@ Public Class Form_Main
 
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
 
-            If ListViewFiles.Items.Item(i).ImageKey <> "Error" Then ListViewFiles.Items.Item(i).Remove()
+            If ListViewFiles.Items.Item(i).ImageKey <> "Error" Then ListViewFiles.Items.RemoveAt(ListViewFiles.Items.Item(i).Index) ' Item(i).Remove()
 
         Next
 
