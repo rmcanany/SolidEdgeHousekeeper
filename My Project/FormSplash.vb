@@ -26,7 +26,7 @@
     End Sub
 
     Public Sub UpdateStatus(Message As String)
-        TextBoxStatus.Text = String.Format(" {0}", Message)
+        LabelStatus.Text = String.Format(" {0}", Message)
         Application.DoEvents()
     End Sub
 
