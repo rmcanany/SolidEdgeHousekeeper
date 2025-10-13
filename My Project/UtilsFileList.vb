@@ -542,7 +542,7 @@ Public Class UtilsFileList
 
                 tf = UC.FilenameIsOK(item)             ' Testing file not found
                 tf = tf And IO.File.Exists(item)       ' Testing file not found
-                'tf = True
+                tf = True   '<-------- SHOW THE FILE NOT FOUND
 
                 ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
                 ' Causes a problem comparing extensions
