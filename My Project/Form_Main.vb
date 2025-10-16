@@ -3844,6 +3844,45 @@ Public Class Form_Main
         ' No result action needed.  FPO sets values in this file as needed.
     End Sub
 
+    Private Sub BT_Copy_Click(sender As Object, e As EventArgs) Handles BT_Copy.Click
+
+        Dim ColonneNascoste As New List(Of Integer)
+
+        For Each item As ColumnHeader In ListViewFiles.Columns
+
+            If item.Width = 0 Then ColonneNascoste.Add(item.Index)
+
+        Next
+
+        Dim tmpText As String = ""
+
+        For Each item As ListViewItem In ListViewFiles.SelectedItems
+
+            Dim i = 0
+
+            For Each subItem As ListViewItem.ListViewSubItem In item.SubItems
+
+                If Not ColonneNascoste.Contains(i) Then tmpText &= subItem.Text & vbTab
+                i += 1
+
+            Next
+
+            tmpText = tmpText.TrimEnd(CType(vbTab, Char)) & vbCrLf
+
+        Next
+
+        Clipboard.Clear()
+        Clipboard.SetText(tmpText)
+
+    End Sub
+
+    Private Sub BT_SelectAll_Click(sender As Object, e As EventArgs) Handles BT_SelectAll.Click
+
+        For Each item As ListViewItem In ListViewFiles.Items
+            item.Selected = True
+        Next
+
+    End Sub
 End Class
 
 

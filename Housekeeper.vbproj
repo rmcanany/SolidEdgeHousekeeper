@@ -637,6 +637,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <None Include="Resources\icons8_select_all_16.png" />
+    <None Include="Resources\icons8_copy_16.png" />
     <None Include="Resources\teamcenter.png" />
     <None Include="Resources\TaskCheckFilename.png" />
     <None Include="Resources\splash_logo_02.png" />
