@@ -234,6 +234,7 @@ Partial Class Form_Main
         Me.ButtonPresetLoad = New System.Windows.Forms.ToolStripButton()
         Me.ButtonPresetSave = New System.Windows.Forms.ToolStripButton()
         Me.ButtonPresetDelete = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonPresetsOptions = New System.Windows.Forms.ToolStripButton()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -247,6 +248,8 @@ Partial Class Form_Main
         Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.BT_Open = New System.Windows.Forms.ToolStripMenuItem()
         Me.BT_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_SelectAll = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_Copy = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_FindLinks = New System.Windows.Forms.ToolStripMenuItem()
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
@@ -257,7 +260,6 @@ Partial Class Form_Main
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.ButtonPresetsOptions = New System.Windows.Forms.ToolStripButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -2860,6 +2862,16 @@ Partial Class Form_Main
         Me.ButtonPresetDelete.Text = "ToolStripButton2"
         Me.ButtonPresetDelete.ToolTipText = "Delete preset"
         '
+        'ButtonPresetsOptions
+        '
+        Me.ButtonPresetsOptions.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ButtonPresetsOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetsOptions.Image = Global.Housekeeper.My.Resources.Resources.config
+        Me.ButtonPresetsOptions.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetsOptions.Name = "ButtonPresetsOptions"
+        Me.ButtonPresetsOptions.Size = New System.Drawing.Size(23, 23)
+        Me.ButtonPresetsOptions.Text = "ToolStripButton2"
+        '
         'TextBoxStatus
         '
         Me.TextBoxStatus.BackColor = System.Drawing.Color.White
@@ -2966,9 +2978,9 @@ Partial Class Form_Main
         '
         'Menu_ListViewFile
         '
-        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_ExcludeFromProcessing, Me.BT_RemoveFromList, Me.ToolStripSeparator13, Me.BT_MoveToRecycleBin})
+        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.BT_SelectAll, Me.BT_Copy, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_ExcludeFromProcessing, Me.BT_RemoveFromList, Me.ToolStripSeparator13, Me.BT_MoveToRecycleBin})
         Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
-        Me.Menu_ListViewFile.Size = New System.Drawing.Size(206, 176)
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(206, 242)
         '
         'BT_Open
         '
@@ -2983,6 +2995,20 @@ Partial Class Form_Main
         Me.BT_OpenFolder.Name = "BT_OpenFolder"
         Me.BT_OpenFolder.Size = New System.Drawing.Size(205, 22)
         Me.BT_OpenFolder.Text = "Open folder"
+        '
+        'BT_SelectAll
+        '
+        Me.BT_SelectAll.Image = Global.Housekeeper.My.Resources.Resources.Select_all
+        Me.BT_SelectAll.Name = "BT_SelectAll"
+        Me.BT_SelectAll.Size = New System.Drawing.Size(205, 22)
+        Me.BT_SelectAll.Text = "Select all"
+        '
+        'BT_Copy
+        '
+        Me.BT_Copy.Image = Global.Housekeeper.My.Resources.Resources.Copy
+        Me.BT_Copy.Name = "BT_Copy"
+        Me.BT_Copy.Size = New System.Drawing.Size(205, 22)
+        Me.BT_Copy.Text = "Copy"
         '
         'ToolStripSeparator8
         '
@@ -3038,16 +3064,6 @@ Partial Class Form_Main
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'ButtonPresetsOptions
-        '
-        Me.ButtonPresetsOptions.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.ButtonPresetsOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonPresetsOptions.Image = Global.Housekeeper.My.Resources.Resources.config
-        Me.ButtonPresetsOptions.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonPresetsOptions.Name = "ButtonPresetsOptions"
-        Me.ButtonPresetsOptions.Size = New System.Drawing.Size(23, 23)
-        Me.ButtonPresetsOptions.Text = "ToolStripButton2"
         '
         'Form_Main
         '
@@ -3370,4 +3386,6 @@ Partial Class Form_Main
     Friend WithEvents ComboBoxExpressionEditorLanguage As ComboBox
     Friend WithEvents LabelExpressionEditorLanguage As Label
     Friend WithEvents ButtonPresetsOptions As ToolStripButton
+    Friend WithEvents BT_Copy As ToolStripMenuItem
+    Friend WithEvents BT_SelectAll As ToolStripMenuItem
 End Class
