@@ -21,7 +21,13 @@ Contributed by **@[Francesco Arfilli].**  Thank you!
 
 #### Update file properties display
 
-Added the ability to update the display of file properties without updating the list itself.  This can be a time saver on a large top-level assembly, or with a time-consuming sort option.  To do so, hold down the Shift key and click the Update button.
+Added the ability to update the display of file properties without updating the list itself.  This can be a time saver on a large top-level assembly, or with a time-consuming sort option.  To do so, hold down the `Shift` key and click the `Update` button.
+
+#### Shortcut menu
+
+Added `Select all` and `Copy` to the menu.  The former selects all items on the list.  The latter copies selected items to the clipboard.  Column headers are not copied.  
+
+This can be handy when you need to quickly copy list items into Excel for further processing or sharing with others.  Combined with Housekeeper's extensive filtering and sorting capabilities this can be a powerful and flexible way to extract and convey information.
 
 ## V2025.3 Enhancements/Fixes
 

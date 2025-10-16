@@ -268,6 +268,8 @@ If you select one or more files on the list, you can click the right mouse butto
 
 - **Open:** Opens the files in Solid Edge.
 - **Open folder:** Opens the files in Windows File Explorer.
+- **Select all:** Selects all files on the list.
+- **Copy:**  Copies all selected list items to the clipboard.  Does not include column headers.
 - **Find linked files:** Populates the list with files linked to a top-level assembly.  Similar to **Update** but no other File Sources are processed.
 - **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
 - **Exclude from processing:** Moves the files to the *Excluded files* section of the list.  If the files are already in that section, they are moved back.
