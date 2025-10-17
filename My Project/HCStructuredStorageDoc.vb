@@ -357,7 +357,8 @@ Public Class HCStructuredStorageDoc
                     NewSecurity = StatusSecurityMapping.ssmReleased
             End Select
 
-            Success = SetPropValue("System", "Doc_Security", NewSecurity, AddProperty:=False)
+            'Success = SetPropValue("System", "Doc_Security", NewSecurity, AddProperty:=False)
+            Success = SetPropValue("System", "Security", NewSecurity, AddProperty:=False)
             Success = Success And SetPropValue("System", "Status", NewStatusConstant, AddProperty:=False)
         End If
 
@@ -628,6 +629,7 @@ Public Class HCStructuredStorageDoc
             For Each PropSet In Me.PropSets.Items
                 If Not PropSet.Name.ToLower = "custom" Then
                     For Each P As Prop In PropSet.Items
+                        Dim tmpPName As String = P.Name
                         If P.Name = PropNameEnglish Then
                             Prop = P
                             Exit For

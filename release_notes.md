@@ -29,6 +29,10 @@ Added `Select all` and `Copy` to the menu.  The former selects all items on the 
 
 This can be handy when you need to quickly copy list items into Excel for further processing or sharing with others.  Combined with Housekeeper's extensive filtering and sorting capabilities this can be a powerful and flexible way to extract and convey information.
 
+### Other
+
+- Fixed a regression with Set Document Status (Thank you **@TeeVar!**).
+
 ## V2025.3 Enhancements/Fixes
 
 ### Update Blocks
