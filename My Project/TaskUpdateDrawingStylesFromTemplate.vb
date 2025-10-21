@@ -361,6 +361,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                                 DocTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
                                 DocTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
                             Next
+                            '#### 20251021 CopyProperties not doing these either
+                            DocTableStyle.HeaderTextStyle = TemplateTableStyle.HeaderTextStyle
+                            DocTableStyle.DataTextStyle = TemplateTableStyle.DataTextStyle
                         Catch ex As Exception
                             TaskLogger.AddMessage(String.Format("Error applying TableStyle '{0}'", TemplateTableStyle.Name))
                         End Try
