@@ -55,7 +55,7 @@ Public Class UtilsSEApp
                 SEApp.Interactive = True
                 SEApp.ScreenUpdating = True
                 SEApp.Visible = True
-                SEApp.WindowState = 2  'Maximizes Solid Edge
+                If Not UseCurrentSession Then SEApp.WindowState = 2  'Maximizes Solid Edge
                 'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
             End If
 
