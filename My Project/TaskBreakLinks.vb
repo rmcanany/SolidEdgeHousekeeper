@@ -3,6 +3,19 @@
 Public Class TaskBreakLinks
     Inherits Task
 
+    Private _AllowPartialSuccess As Boolean
+    Public Property AllowPartialSuccess As Boolean
+        Get
+            Return _AllowPartialSuccess
+        End Get
+        Set(value As Boolean)
+            _AllowPartialSuccess = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AllowPartialSuccess.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _BreakDesignCopies As Boolean
     Public Property BreakDesignCopies As Boolean
         Get
@@ -95,6 +108,7 @@ Public Class TaskBreakLinks
     End Property
 
     Enum ControlNames
+        AllowPartialSuccess
         BreakDesignCopies
         BreakConstructionCopies
         BreakExcel
@@ -185,10 +199,17 @@ Public Class TaskBreakLinks
         If SEDoc.ReadOnly Then
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else
-            'If Not TaskLogger.HasErrors Then
-            'End If
-            SEDoc.Save()
-            SEApp.DoIdle()
+            If TaskLogger.HasErrors Then
+                If Me.AllowPartialSuccess Then
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+                Else
+                    TaskLogger.AddMessage("Errors encountered.  No changes made")
+                End If
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
         End If
 
     End Sub
@@ -434,13 +455,19 @@ Public Class TaskBreakLinks
                         Dim Symbols As SolidEdgeFramework.Symbols = CType(Sheet.Symbols, SolidEdgeFramework.Symbols)
                         If Symbols IsNot Nothing Then
                             For Each Symbol2d As SolidEdgeFramework.Symbol2d In Symbols
-                                If Symbol2d.Class = "SolidEdge.DraftDocument" Then
-                                    Try
-                                        Symbol2d.ConvertToGroup()
-                                    Catch ex As Exception
+                                Try
+                                    Dim SourceFilename As String = Symbol2d.SourceDoc
+                                    If IO.File.Exists(SourceFilename) Then
+                                        If Symbol2d.Class = "SolidEdge.DraftDocument" Then
+                                            Symbol2d.ConvertToGroup()
+                                        End If
+                                    Else
                                         Me.TaskLogger.AddMessage($"Unable to process symbol '{Symbol2d.Name}' on sheet '{Sheet.Name}'")
-                                    End Try
-                                End If
+                                        Me.TaskLogger.AddMessage($"    Linked file not found '{SourceFilename}'")
+                                    End If
+                                Catch ex As Exception
+                                    Me.TaskLogger.AddMessage($"Unable to process symbol '{Symbol2d.Name}' on sheet '{Sheet.Name}'")
+                                End Try
                             Next
                         End If
                     Next
@@ -460,6 +487,14 @@ Public Class TaskBreakLinks
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.AllowPartialSuccess.ToString, "Allow partial success")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.BreakDesignCopies.ToString, "Part copy design links (*.par, *.psm)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
@@ -548,6 +583,9 @@ Public Class TaskBreakLinks
 
         Select Case Name
 
+            Case ControlNames.AllowPartialSuccess.ToString
+                Me.AllowPartialSuccess = Checkbox.Checked
+
             Case ControlNames.BreakDesignCopies.ToString
                 Me.BreakDesignCopies = Checkbox.Checked
 
@@ -586,6 +624,12 @@ Public Class TaskBreakLinks
         HelpString += vbCrLf + vbCrLf + "![BreakLinks](My%20Project/media/task_break_links.png)"
 
         HelpString += vbCrLf + vbCrLf + "The command options are explained below. "
+
+        HelpString += vbCrLf + vbCrLf + "`Allow partial success` "
+        HelpString += "Disabling this option means the file will not be saved if any errors occur. "
+        HelpString += "The error will still be reported in the log file, alerting you to investiage manually. "
+        HelpString += "Since breaking links is irreversible, this is the safest option.  "
+        HelpString += "However, it can also be a nuisance.  That is why it is presented as an option. "
 
         HelpString += vbCrLf + vbCrLf + "`Part copy design links` and `Part copy construction links` "
         HelpString += "remove links created with the `Part Copy` command. "

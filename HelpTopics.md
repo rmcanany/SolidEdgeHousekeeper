@@ -792,6 +792,8 @@ Breaks external links to a file.  This is irreversible, so you know, think about
 
 The command options are explained below. 
 
+`Allow partial success` Disabling this option means the file will not be saved if any errors occur. The error will still be reported in the log file, alerting you to investiage manually. Since breaking links is irreversible, this is the safest option.  However, it can also be a nuisance.  That is why it is presented as an option. 
+
 `Part copy design links` and `Part copy construction links` remove links created with the `Part Copy` command. The geometry remains intact.
 
 `Excel links` removes Excel references from `Variable` and `Dimension` formulas. In both cases, the value remains as it was before the link was removed.

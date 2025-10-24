@@ -275,6 +275,7 @@ Public Class FormPropertyListCustomize
     End Sub
 
     Private Sub CustomizeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomizeToolStripMenuItem.Click
+
         Dim FPLCM As New FormPropertyListCustomizeManualEntry(Form_Main.PropertiesData)
 
         Dim Result = FPLCM.ShowDialog()

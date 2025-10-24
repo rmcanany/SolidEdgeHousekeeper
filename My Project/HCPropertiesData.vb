@@ -176,6 +176,7 @@ Public Class HCPropertiesData
         Dim tf As Boolean
         Dim PropID As Integer
 
+        ' Need to do with SE to get localized names.  Can't use SSDoc.
         PropertySets = New SolidEdgeFileProperties.PropertySets
 
 
@@ -480,6 +481,7 @@ Public Class HCPropertiesData
             tmpPropertyData.EnglishName = EnglishName
             tmpPropertyData.PropertySource = PropertyData.PropertySourceConstants.Manual
             tmpPropertyData.FavoritesListIdx = FavoritesListIdx
+            tmpPropertyData.SSName = ""
             tmpPropertyData.TypeName = PropertyData.TypeNameConstants._Unknown
 
         Else

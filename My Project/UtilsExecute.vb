@@ -281,21 +281,16 @@ Public Class UtilsExecute
             FMain.ListViewUpdateFrequency = "1"
         End Try
 
+        ' Check if Spy for Solid Edge is running
+        'Dim ProcessList = Diagnostics.Process.GetProcesses
+        Dim SESpyProcess = Diagnostics.Process.GetProcessesByName("spyse")
+        If Not SESpyProcess.Length = 0 Then
+            StartLogger.AddMessage("Close Spy for Solid Edge")
+        End If
+
         FMain.TextBoxStatus.Text = ""
 
-        'Dim Outlist As List(Of String) = ErrorLogger.FormatReport()
-
-        'If Outlist.Count > 0 Then
-        '    Proceed = False
-
-        '    Dim Outstring As String = ""
-        '    For Each s As String In Outlist
-        '        Outstring = String.Format("{0}{1}{2}", Outstring, s, vbCrLf)
-        '    Next
-
-        '    MsgBox(Outstring, vbOKOnly)
-
-        'End If
+        If StartLogger.HasErrors Then Proceed = False
 
         ErrorLogger.ReportErrors(UseMessageBox:=True)
 
