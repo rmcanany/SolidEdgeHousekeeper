@@ -27,6 +27,19 @@
         End Set
     End Property
 
+    Private _TCItemIDName As String
+    Public Property TCItemIDName As String
+        Get
+            Return _TCItemIDName
+        End Get
+        Set(value As String)
+            _TCItemIDName = value
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                TextBoxTCItemIDName.Text = value
+            End If
+        End Set
+    End Property
+
 
     Public Sub New(_FMain As Form_Main)
         ' This call is required by the designer.
@@ -56,5 +69,10 @@
     Private Sub FormTeamCenterSettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.TCItemIDRx = Me.FMain.TCItemIDRx
         Me.TCRevisionRx = Me.FMain.TCRevisionRx
+        Me.TCItemIDName = Me.FMain.TCItemIDName
+    End Sub
+
+    Private Sub TextBoxTCItemIDName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxTCItemIDName.TextChanged
+        Me.TCItemIDName = TextBoxTCItemIDName.Text
     End Sub
 End Class

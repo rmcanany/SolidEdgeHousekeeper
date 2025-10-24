@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "08"  ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "09"  ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -968,6 +968,8 @@ Public Class Form_Main
     Public Property TCCachePath As String
     Public Property TCItemIDRx As String
     Public Property TCRevisionRx As String
+    Public Property TCItemIDName As String
+
 
     Public Property FBLBNTop As Integer  ' Remember FormBlockLibraryBlockNames size and position
     Public Property FBLBNLeft As Integer

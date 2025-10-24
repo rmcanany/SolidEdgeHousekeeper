@@ -79,8 +79,9 @@ Public Class FormTeamCenterAdd
                         itemAttributes(0, 1) = itemID
 
                         ' Retrieve all revisions for the item
-                        TCE.GetAllRevisions(itemAttributes, "MFK9Item1", revisions)
+                        'TCE.GetAllRevisions(itemAttributes, "MFK9Item1", revisions)
                         'TCE.GetAllRevisions(itemAttributes, "Standard_CI", revisions)
+                        TCE.GetAllRevisions(itemAttributes, FMain.TCItemIDName, revisions)
 
                         ' Check if revisions were found
                         If revisions IsNot Nothing Then
@@ -118,8 +119,9 @@ Public Class FormTeamCenterAdd
 
                     ' ###### Is this function call valid for all TeamCenter sites? ######
 
-                    TCE.GetAllRevisions(MFKAttributes2, "MFK9Item1", RevIdAndUIDs2)
+                    'TCE.GetAllRevisions(MFKAttributes2, "MFK9Item1", RevIdAndUIDs2)
                     'TCE.GetAllRevisions(MFKAttributes2, "Standard_CI", RevIdAndUIDs2)
+                    TCE.GetAllRevisions(MFKAttributes2, FMain.TCItemIDName, RevIdAndUIDs2)
 
                     Dim revisionExists As Boolean = False
                     If RevIdAndUIDs2 IsNot Nothing Then
@@ -477,6 +479,7 @@ Public Class FormTeamCenterAdd
         If FTCS.DialogResult = DialogResult.OK Then
             Me.FMain.TCItemIDRx = FTCS.TCItemIDRx
             Me.FMain.TCRevisionRx = FTCS.TCRevisionRx
+            Me.FMain.TCItemIDName = FTCS.TCItemIDName
         End If
 
     End Sub
