@@ -7,6 +7,7 @@ Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 
+Add check For missing %temp% directory
 
 Public Class Form_Main
 
