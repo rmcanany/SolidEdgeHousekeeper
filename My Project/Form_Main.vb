@@ -7,7 +7,7 @@ Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 
-Add check For missing %temp% directory
+'Add check For missing %temp% directory
 
 Public Class Form_Main
 
@@ -158,10 +158,12 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _LinkManagementFilename = value
-            If IO.File.Exists(value) Then
-                Dim UP As New UtilsPreferences
-                Me.LinkManagementOrder = UP.GetLinkManagementOrder()
-            End If
+            'If IO.File.Exists(value) Then
+            '    Dim UP As New UtilsPreferences
+            '    Me.LinkManagementOrder = UP.GetLinkManagementOrder()
+            'End If
+            Dim UP As New UtilsPreferences
+            Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaluts to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
             If Me.TabControl1 IsNot Nothing Then
                 TextBoxLinkManagementFilename.Text = value
             End If
@@ -1085,9 +1087,10 @@ Public Class Form_Main
 
         CarIcona()
 
-        If (Me.LinkManagementFilename IsNot Nothing) AndAlso (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
-            Me.LinkManagementOrder = UP.GetLinkManagementOrder()
-        End If
+        'If (Me.LinkManagementFilename IsNot Nothing) AndAlso (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
+        '    Me.LinkManagementOrder = UP.GetLinkManagementOrder()
+        'End If
+        Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaluts to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
 
         '###### INITIALIZE FILE LIST IF NEEDED ######
 
@@ -1178,6 +1181,7 @@ Public Class Form_Main
 
         If Me.TCItemIDRx Is Nothing OrElse Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
         If Me.TCRevisionRx Is Nothing OrElse Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
+        If Me.TCItemIDName Is Nothing OrElse Me.TCItemIDName.Trim = "" Then TCItemIDName = "MFK9Item1"
 
         If Not Presets Then Splash.UpdateStatus("Wrapping up")
 

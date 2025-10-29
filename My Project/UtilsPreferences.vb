@@ -834,8 +834,8 @@ Public Class UtilsPreferences
         Try
             Contents = IO.File.ReadAllLines(LinkManagementFilename)
         Catch ex As Exception
-            msg = String.Format("LinkMgmt.txt file '{0}' (on Configuration Tab) not found.{1}", LinkManagementFilename, vbCrLf)
-            MsgBox(msg)
+            'msg = String.Format("LinkMgmt.txt file '{0}' (on Configuration Tab) not found.{1}", LinkManagementFilename, vbCrLf)
+            'MsgBox(msg)
         End Try
 
         If Contents IsNot Nothing Then
@@ -847,11 +847,15 @@ Public Class UtilsPreferences
                     End If
                 Next
             Else
-                msg = String.Format("LinkMgmt.txt file '{0}' is empty.{1}", LinkManagementFilename, vbCrLf)
-                MsgBox(msg)
+                'msg = String.Format("LinkMgmt.txt file '{0}' is empty.{1}", LinkManagementFilename, vbCrLf)
+                'MsgBox(msg)
             End If
 
         End If
+
+        For Each s As String In ValidOrders
+            If Not LinkManagementOrder.Contains(s) Then LinkManagementOrder.Add(s)
+        Next
 
         Return LinkManagementOrder
     End Function
