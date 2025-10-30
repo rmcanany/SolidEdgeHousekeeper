@@ -1,4 +1,6 @@
 ﻿Option Strict On
+Imports System.Security.AccessControl
+Imports FastColoredTextBoxNS
 
 Public Class TaskPrint
 
@@ -135,6 +137,11 @@ Public Class TaskPrint
     End Property
 
     Public Property SelectedSheetsList As List(Of String)
+    Public Property CustomUnits As String
+    Public Property CustomXMin As Double
+    Public Property CustomXMax As Double
+    Public Property CustomYMin As Double
+    Public Property CustomYMax As Double
 
 
     Enum ControlNames
@@ -181,6 +188,11 @@ Public Class TaskPrint
         Me.PrintAsBlack = False
         Me.ScaleLineTypes = False
         Me.ScaleLineWidths = False
+        Me.CustomUnits = "in"
+        Me.CustomXMin = 0
+        Me.CustomXMax = 0
+        Me.CustomYMin = 0
+        Me.CustomYMax = 0
 
         Me.SelectedSheetsList = New List(Of String)
     End Sub
@@ -237,9 +249,31 @@ Public Class TaskPrint
             PaperSizeConstant = SheetSetup.SheetSizeOption
             Try
                 If SelectedSheetsList.Contains(PaperSizeConstant.ToString) Then
-                    DraftPrinter.AddSheet(Sheet)
-                    DraftPrinter.PrintOut()
-                    SEApp.DoIdle()
+                    If Not PaperSizeConstant.ToString.ToLower.Contains("custom") Then
+                        DraftPrinter.AddSheet(Sheet)
+                        DraftPrinter.PrintOut()
+                        SEApp.DoIdle()
+                    Else
+                        Dim W As Double = SheetSetup.SheetWidth
+                        Dim H As Double = SheetSetup.SheetHeight
+                        If Me.CustomUnits = "mm" Then
+                            W = 1000 * W
+                            H = 1000 * H
+                        Else
+                            W = 1000 * W / 25.4
+                            H = 1000 * H / 25.4
+                        End If
+                        Dim tf As Boolean = True
+                        tf = tf And W >= Me.CustomXMin
+                        tf = tf And W <= Me.CustomXMax
+                        tf = tf And H >= Me.CustomYMin
+                        tf = tf And H <= Me.CustomYMax
+                        If tf Then
+                            DraftPrinter.AddSheet(Sheet)
+                            DraftPrinter.PrintOut()
+                            SEApp.DoIdle()
+                        End If
+                    End If
                 End If
             Catch ex As Exception
                 'If PaperSizeConstant.ToString.ToLower.Contains("custom") Then
@@ -464,17 +498,17 @@ Public Class TaskPrint
 
                 If Result = DialogResult.OK Then
 
-                    Me.SelectedSheetsList = FSS.SelectedSheets
+                    'Me.SelectedSheetsList = FSS.SelectedSheets  ' Handled in FSS along with custom size ranges
 
+                    ' Update textbox
                     Dim s = ""
                     For Each SheetSize As String In Me.SelectedSheetsList
-                        If s = "" Then
+                        If s = "" Then ' First item
                             s = SheetSize
                         Else
                             s = String.Format("{0} {1}", s, SheetSize)
                         End If
                     Next
-
                     TextBox = CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox)
                     TextBox.Text = s
 

@@ -17,7 +17,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 We'll get right to the updates, but first some exciting news -- Housekeeper has two new **Sponsors:** **Breit Ideas** and **Pelican Industries!** 
 
-Now, on to those updates.
+Now, on to those updates...
 
 ### Replace OLE Links
 
@@ -30,15 +30,13 @@ It's pretty general-purpose and you may be able to use it as-is.  However, if yo
 See the [<ins>**Replace OLE Links Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ReplaceOLELinks#readme) for details.
 
 
-
-
 ### File List
 
 Contributed by **@[Francesco Arfilli].**  Thank you!
 
 #### Update file properties display
 
-Added the ability to update the display of file properties without updating the list itself.  This can be a time saver on a large top-level assembly, or a time-consuming filter or sort option.  To do so, hold down the `Shift` key and click the `Update` button.
+Added the ability to update the display of file properties without updating the list itself.  This can be a time saver on a large top-level assembly, or with time-consuming filter or sort options.  To do so, hold down the `Shift` key and click the `Update` button.
 
 #### Shortcut menu
 
@@ -58,7 +56,7 @@ See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/S
 ### Other
 
 - Fixed a regression with Set Document Status (Thank you **@TeeVar!**).
-- Fixed an issue adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]!** and **@Monostre!**)
+- Fixed an issue adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]** and **@Monostre!**)
 - Fixed an issue with `Add from Team Center` where the `ItemID` variable name was hard-coded in the program (Thank you **@sjim99!**).  It is now entered by the user on the Settings page.
 - Added an option, `Allow partial success` to the `Break Links` command (Thank you **john.matthews3452!**).  Previously any error caused the file to not be saved.
 - Fixed an issue with `Update Drawing Styles from Template` where Table text was not updated correctly (Thank you **@robbin70!**).  Changed the processing order so that dependent objects are now processed after their dependencies.
