@@ -890,7 +890,7 @@ Note, Solid Edge presents exposed variables as Custom properties.  You can chang
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskEditVariables.png"><img src="My%20Project/media/spacer.png">Edit variables</h3></summary>
 
-Adds, changes, and/or exposes variables. 
+Adds, changes, renames, and/or exposes variables. 
 
 ![EditVariables](My%20Project/media/task_edit_variables.png)
 
@@ -902,9 +902,11 @@ The Variable name is required.  There are restrictions on the name.  It cannot s
 
 If a variable on the list is not in the file, it can optionally be added.  Set the behavior on the Options panel. 
 
-The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
+The number/formula is not required if only renaming or exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
 
 You can use a file property in the formula.  Right-click the formula text box and select Insert Property to do so.  Note, the property is a static copy.  If it changes, this command needs to be run again to update the variable.  
+
+If renaming a variable, the new name has the same limitations as above. 
 
 If exposing a variable, the Expose name defaults to the variable name. You can optionally change it.  The Expose name does not have restrictions like the variable name. 
 
@@ -1222,6 +1224,8 @@ If you use more than one printer, use the `Edit task list` function on the **Tas
 You assign sheet sizes to a printer with the `Select Sheets` button. Print jobs are routed on a per-sheet basis. So if a drawing has some sheets that need a printer and others that need a plotter, it will do what you expect. 
 
 ![Printer_Setup](My%20Project/media/sheet_selector.png)
+
+If you select the custom size option from the sheet selector, you need to supply a range of sheet sizes to accept. 
 
 This command may not work with PDF printers. Try the Save As PDF command instead. 
 

@@ -140,6 +140,8 @@ Public Class TaskEditVariables
             '        "VariableName":"v1"
             '        "Formula":"1",
             '        "UnitType":"Distance",
+            '        "ChangeName":"True",
+            '        "NewName":"length"
             '        "Expose":"True",
             '        "ExposeName":"var1"
             '    },
@@ -195,6 +197,8 @@ Public Class TaskEditVariables
                 End If
 
                 Dim UnitType As SolidEdgeConstants.UnitTypeConstants = UC.GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
+                Dim ChangeName As Boolean = VariablesToEditDict(RowIndex)("ChangeName").Trim.ToLower = "true"
+                Dim NewName As String = VariablesToEditDict(RowIndex)("NewName").Trim
                 Dim Expose As Boolean = VariablesToEditDict(RowIndex)("Expose").Trim.ToLower = "true"
                 Dim ExposeName As String = VariablesToEditDict(RowIndex)("ExposeName").Trim
 
@@ -229,6 +233,10 @@ Public Class TaskEditVariables
                     Try
                         If DocDimensionDict.Keys.Contains(VariableName) Then
                             Dimension = DocDimensionDict(VariableName)
+                            If ChangeName Then
+                                'Dimension.Name = NewName
+                                Dimension.VariableTableName = NewName
+                            End If
                             If Expose Then
                                 Dimension.Expose = CInt(Expose)
                                 If Not ExposeName = "" Then
@@ -241,6 +249,10 @@ Public Class TaskEditVariables
 
                         ElseIf DocVariableDict.Keys.Contains(VariableName) Then
                             Variable = DocVariableDict(VariableName)
+                            If ChangeName Then
+                                Variable.Name = NewName
+                                'Variable.VariableTableName = NewName
+                            End If
                             If Expose Then
                                 Variable.Expose = CInt(Expose)
                                 If Not ExposeName = "" Then
@@ -402,7 +414,7 @@ Public Class TaskEditVariables
     Private Function GetHelpText() As String
         Dim HelpString As String
 
-        HelpString = "Adds, changes, and/or exposes variables. "
+        HelpString = "Adds, changes, renames, and/or exposes variables. "
 
         HelpString += vbCrLf + vbCrLf + "![EditVariables](My%20Project/media/task_edit_variables.png)"
 
@@ -417,7 +429,7 @@ Public Class TaskEditVariables
         HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added.  "
         HelpString += "Set the behavior on the Options panel. "
 
-        HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
+        HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only renaming or exposing an existing variable, "
         HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
         HelpString += "program will report an error."
 
@@ -425,6 +437,8 @@ Public Class TaskEditVariables
         HelpString += "Right-click the formula text box and select Insert Property to do so.  "
         HelpString += "Note, the property is a static copy.  "
         HelpString += "If it changes, this command needs to be run again to update the variable.  "
+
+        HelpString += vbCrLf + vbCrLf + "If renaming a variable, the new name has the same limitations as above. "
 
         HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name. "
         HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "

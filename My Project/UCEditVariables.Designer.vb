@@ -27,30 +27,36 @@ Partial Class UCEditVariables
         Me.CheckBoxSelect = New System.Windows.Forms.CheckBox()
         Me.TextBoxVariableName = New System.Windows.Forms.TextBox()
         Me.TextBoxFormula = New System.Windows.Forms.TextBox()
-        Me.ComboBoxUnitType = New System.Windows.Forms.ComboBox()
-        Me.CheckBoxExpose = New System.Windows.Forms.CheckBox()
-        Me.TextBoxExposeName = New System.Windows.Forms.TextBox()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ComboBoxUnitType = New System.Windows.Forms.ComboBox()
+        Me.TextBoxExposeName = New System.Windows.Forms.TextBox()
+        Me.CheckBoxExpose = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxChangeName = New System.Windows.Forms.CheckBox()
+        Me.TextBoxChangeName = New System.Windows.Forms.TextBox()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExTableLayoutPanel1
         '
-        Me.ExTableLayoutPanel1.ColumnCount = 6
+        Me.ExTableLayoutPanel1.ColumnCount = 8
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxSelect, 0, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxVariableName, 1, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxFormula, 2, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ComboBoxUnitType, 3, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxExpose, 4, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxExposeName, 5, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxExposeName, 7, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxExpose, 6, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxChangeName, 4, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxChangeName, 5, 0)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
@@ -79,48 +85,17 @@ Partial Class UCEditVariables
         '
         Me.TextBoxVariableName.Location = New System.Drawing.Point(33, 3)
         Me.TextBoxVariableName.Name = "TextBoxVariableName"
-        Me.TextBoxVariableName.Size = New System.Drawing.Size(154, 23)
+        Me.TextBoxVariableName.Size = New System.Drawing.Size(116, 23)
         Me.TextBoxVariableName.TabIndex = 1
         '
         'TextBoxFormula
         '
         Me.TextBoxFormula.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBoxFormula.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxFormula.Location = New System.Drawing.Point(193, 3)
+        Me.TextBoxFormula.Location = New System.Drawing.Point(155, 3)
         Me.TextBoxFormula.Name = "TextBoxFormula"
-        Me.TextBoxFormula.Size = New System.Drawing.Size(154, 23)
+        Me.TextBoxFormula.Size = New System.Drawing.Size(116, 23)
         Me.TextBoxFormula.TabIndex = 2
-        '
-        'ComboBoxUnitType
-        '
-        Me.ComboBoxUnitType.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBoxUnitType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBoxUnitType.FormattingEnabled = True
-        Me.ComboBoxUnitType.Location = New System.Drawing.Point(353, 3)
-        Me.ComboBoxUnitType.Name = "ComboBoxUnitType"
-        Me.ComboBoxUnitType.Size = New System.Drawing.Size(154, 23)
-        Me.ComboBoxUnitType.TabIndex = 3
-        '
-        'CheckBoxExpose
-        '
-        Me.CheckBoxExpose.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxExpose.AutoSize = True
-        Me.CheckBoxExpose.Location = New System.Drawing.Point(514, 5)
-        Me.CheckBoxExpose.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBoxExpose.Name = "CheckBoxExpose"
-        Me.CheckBoxExpose.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.CheckBoxExpose.Size = New System.Drawing.Size(22, 19)
-        Me.CheckBoxExpose.TabIndex = 4
-        Me.CheckBoxExpose.Text = "CheckBox2"
-        Me.CheckBoxExpose.UseVisualStyleBackColor = True
-        '
-        'TextBoxExposeName
-        '
-        Me.TextBoxExposeName.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxExposeName.Location = New System.Drawing.Point(543, 3)
-        Me.TextBoxExposeName.Name = "TextBoxExposeName"
-        Me.TextBoxExposeName.Size = New System.Drawing.Size(154, 23)
-        Me.TextBoxExposeName.TabIndex = 5
         '
         'ContextMenuStrip1
         '
@@ -131,8 +106,58 @@ Partial Class UCEditVariables
         'InsertPropertyToolStripMenuItem
         '
         Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
-        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
         Me.InsertPropertyToolStripMenuItem.Text = "Insert Property"
+        '
+        'ComboBoxUnitType
+        '
+        Me.ComboBoxUnitType.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBoxUnitType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxUnitType.FormattingEnabled = True
+        Me.ComboBoxUnitType.Location = New System.Drawing.Point(277, 3)
+        Me.ComboBoxUnitType.Name = "ComboBoxUnitType"
+        Me.ComboBoxUnitType.Size = New System.Drawing.Size(116, 23)
+        Me.ComboBoxUnitType.TabIndex = 3
+        '
+        'TextBoxExposeName
+        '
+        Me.TextBoxExposeName.Location = New System.Drawing.Point(581, 3)
+        Me.TextBoxExposeName.Name = "TextBoxExposeName"
+        Me.TextBoxExposeName.Size = New System.Drawing.Size(116, 23)
+        Me.TextBoxExposeName.TabIndex = 5
+        '
+        'CheckBoxExpose
+        '
+        Me.CheckBoxExpose.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxExpose.AutoSize = True
+        Me.CheckBoxExpose.Location = New System.Drawing.Point(552, 5)
+        Me.CheckBoxExpose.Margin = New System.Windows.Forms.Padding(4)
+        Me.CheckBoxExpose.Name = "CheckBoxExpose"
+        Me.CheckBoxExpose.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
+        Me.CheckBoxExpose.Size = New System.Drawing.Size(22, 19)
+        Me.CheckBoxExpose.TabIndex = 4
+        Me.CheckBoxExpose.Text = "CheckBox2"
+        Me.CheckBoxExpose.UseVisualStyleBackColor = True
+        '
+        'CheckBoxChangeName
+        '
+        Me.CheckBoxChangeName.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxChangeName.AutoSize = True
+        Me.CheckBoxChangeName.Location = New System.Drawing.Point(399, 5)
+        Me.CheckBoxChangeName.Name = "CheckBoxChangeName"
+        Me.CheckBoxChangeName.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
+        Me.CheckBoxChangeName.Size = New System.Drawing.Size(24, 19)
+        Me.CheckBoxChangeName.TabIndex = 6
+        Me.CheckBoxChangeName.Text = "CheckBox1"
+        Me.CheckBoxChangeName.UseVisualStyleBackColor = True
+        '
+        'TextBoxChangeName
+        '
+        Me.TextBoxChangeName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxChangeName.Location = New System.Drawing.Point(429, 3)
+        Me.TextBoxChangeName.Name = "TextBoxChangeName"
+        Me.TextBoxChangeName.Size = New System.Drawing.Size(116, 23)
+        Me.TextBoxChangeName.TabIndex = 7
         '
         'UCEditVariables
         '
@@ -159,4 +184,6 @@ Partial Class UCEditVariables
     Friend WithEvents TextBoxExposeName As TextBox
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
     Friend WithEvents InsertPropertyToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents CheckBoxChangeName As CheckBox
+    Friend WithEvents TextBoxChangeName As TextBox
 End Class

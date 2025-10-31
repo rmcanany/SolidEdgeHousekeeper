@@ -35,7 +35,7 @@ Public Class FormVariableInputEditor
                 If IsNumeric(UC.VariableName(0)) Then
                     s = String.Format("{0}{1}Remove leading numbers from variable name '{2}'{3}", s, indent, UC.VariableName, vbCrLf)
                 End If
-                If (UC.Formula = "") And (Not UC.Expose) Then
+                If (UC.Formula = "") And (Not (UC.Expose Or UC.ChangeName)) Then
                     s = String.Format("{0}{1}Enter a number/formula for '{2}'{3}", s, indent, UC.VariableName, vbCrLf)
                 End If
             End If
@@ -62,6 +62,8 @@ Public Class FormVariableInputEditor
                 d("VariableName") = UC.VariableName
                 d("Formula") = UC.Formula
                 d("UnitType") = UC.UnitType
+                d("ChangeName") = CStr(UC.ChangeName)
+                d("NewName") = UC.NewName
                 d("Expose") = CStr(UC.Expose)
                 d("ExposeName") = UC.ExposeName
 
@@ -84,6 +86,8 @@ Public Class FormVariableInputEditor
             NewUC.VariableName = JSONDict(Key)("VariableName")
             NewUC.Formula = JSONDict(Key)("Formula")
             NewUC.UnitType = JSONDict(Key)("UnitType")
+            NewUC.ChangeName = CBool(JSONDict(Key)("ChangeName"))
+            NewUC.NewName = JSONDict(Key)("NewName")
             NewUC.Expose = CBool(JSONDict(Key)("Expose"))
             NewUC.ExposeName = JSONDict(Key)("ExposeName")
 

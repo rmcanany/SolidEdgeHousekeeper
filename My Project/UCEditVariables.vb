@@ -6,6 +6,8 @@ Public Class UCEditVariables
     Public Property VariableName As String
     Public Property Formula As String
     Public Property UnitType As String
+    Public Property ChangeName As Boolean
+    Public Property NewName As String
     Public Property Expose As Boolean
     Public Property ExposeName As String
     Public Property NotifyVariableEditor As Boolean
@@ -21,6 +23,8 @@ Public Class UCEditVariables
         Me.VariableName = ""
         Me.Formula = ""
         Me.UnitType = ""
+        Me.ChangeName = False
+        Me.NewName = ""
         Me.Expose = False
         Me.ExposeName = ""
     End Sub
@@ -37,6 +41,8 @@ Public Class UCEditVariables
         Me.VariableName = ""
         Me.Formula = ""
         Me.UnitType = ""
+        Me.ChangeName = False
+        Me.NewName = ""
         Me.Expose = False
         Me.ExposeName = ""
         Me.NotifyVariableEditor = True
@@ -57,6 +63,8 @@ Public Class UCEditVariables
         TextBoxVariableName.Text = Me.VariableName
         TextBoxFormula.Text = Me.Formula
         ComboBoxUnitType.Text = Me.UnitType
+        CheckBoxChangeName.Checked = Me.ChangeName
+        TextBoxChangeName.Text = Me.NewName
         CheckBoxExpose.Checked = Me.Expose
         TextBoxExposeName.Text = Me.ExposeName
 
@@ -88,6 +96,16 @@ Public Class UCEditVariables
 
     Private Sub ComboBoxUnitType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxUnitType.SelectedIndexChanged
         Me.UnitType = ComboBoxUnitType.Text
+        Notify()
+    End Sub
+
+    Private Sub CheckBoxChangeName_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxChangeName.CheckedChanged
+        Me.ChangeName = CheckBoxChangeName.Checked
+        Notify()
+    End Sub
+
+    Private Sub TextBoxChangeName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxChangeName.TextChanged
+        Me.NewName = TextBoxChangeName.Text
         Notify()
     End Sub
 

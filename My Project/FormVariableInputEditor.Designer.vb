@@ -32,8 +32,8 @@ Partial Class FormVariableInputEditor
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.PanelVariables = New System.Windows.Forms.Panel()
         Me.ExTableLayoutPanelVariables = New Housekeeper.ExTableLayoutPanel()
         Me.UcEditVariables1 = New Housekeeper.UCEditVariables()
@@ -53,6 +53,8 @@ Partial Class FormVariableInputEditor
         Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.PanelVariables.SuspendLayout()
@@ -98,23 +100,26 @@ Partial Class FormVariableInputEditor
         'ExTableLayoutPanel1
         '
         Me.ExTableLayoutPanel1.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.ExTableLayoutPanel1.ColumnCount = 6
+        Me.ExTableLayoutPanel1.ColumnCount = 8
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.ExTableLayoutPanel1.Controls.Add(Me.Label1, 1, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.Label8, 2, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.Label9, 3, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.Label10, 4, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.Label11, 5, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.Label11, 7, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.Label10, 6, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.Label2, 4, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.Label3, 5, 0)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
         Me.ExTableLayoutPanel1.RowCount = 1
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
         Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(750, 35)
         Me.ExTableLayoutPanel1.TabIndex = 0
@@ -134,7 +139,7 @@ Partial Class FormVariableInputEditor
         '
         Me.Label8.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(205, 10)
+        Me.Label8.Location = New System.Drawing.Point(165, 10)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(106, 15)
         Me.Label8.TabIndex = 1
@@ -144,31 +149,31 @@ Partial Class FormVariableInputEditor
         '
         Me.Label9.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(377, 10)
+        Me.Label9.Location = New System.Drawing.Point(297, 10)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(57, 15)
         Me.Label9.TabIndex = 2
         Me.Label9.Text = "Unit Type"
         '
-        'Label10
-        '
-        Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(549, 10)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(20, 15)
-        Me.Label10.TabIndex = 3
-        Me.Label10.Text = "EX"
-        '
         'Label11
         '
         Me.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(579, 10)
+        Me.Label11.Location = New System.Drawing.Point(621, 10)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(78, 15)
         Me.Label11.TabIndex = 4
         Me.Label11.Text = "Expose Name"
+        '
+        'Label10
+        '
+        Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(591, 10)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(20, 15)
+        Me.Label10.TabIndex = 3
+        Me.Label10.Text = "EX"
         '
         'PanelVariables
         '
@@ -235,9 +240,9 @@ Partial Class FormVariableInputEditor
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(110, 15)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(62, 15)
+        Me.Label13.Size = New System.Drawing.Size(174, 15)
         Me.Label13.TabIndex = 1
-        Me.Label13.Text = "EX: Expose"
+        Me.Label13.Text = "CN: Change name     EX: Expose"
         '
         'Label12
         '
@@ -350,6 +355,26 @@ Partial Class FormVariableInputEditor
         Me.ButtonHelp.Text = "ToolStripButton1"
         Me.ButtonHelp.ToolTipText = "Help"
         '
+        'Label2
+        '
+        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(429, 10)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(24, 15)
+        Me.Label2.TabIndex = 5
+        Me.Label2.Text = "CN"
+        '
+        'Label3
+        '
+        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(459, 10)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(66, 15)
+        Me.Label3.TabIndex = 6
+        Me.Label3.Text = "New Name"
+        '
         'FormVariableInputEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -410,4 +435,6 @@ Partial Class FormVariableInputEditor
     Friend WithEvents ToolStripLabel2 As ToolStripLabel
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents ButtonHelp As ToolStripButton
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label3 As Label
 End Class

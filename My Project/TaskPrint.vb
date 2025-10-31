@@ -622,6 +622,9 @@ Public Class TaskPrint
 
         HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/sheet_selector.png)"
 
+        HelpString += vbCrLf + vbCrLf + "If you select the custom size option from the sheet selector, "
+        HelpString += "you need to supply a range of sheet sizes to accept. "
+
         HelpString += vbCrLf + vbCrLf + "This command may not work with PDF printers. "
         HelpString += "Try the Save As PDF command instead. "
 
