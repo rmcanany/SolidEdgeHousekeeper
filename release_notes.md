@@ -55,12 +55,19 @@ See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/S
 
 ### Other
 
-- Fixed a regression with Set Document Status (Thank you **@TeeVar!**).
-- Fixed a regression adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]** and **@Monostre!**)
-- Fixed an issue with `Add from Team Center` where the `ItemID` variable name was hard-coded in the program (Thank you **@sjim99!**).  It is now entered by the user on the Settings page.
+- Added the ability to print custom size drawing sheets (Thank you **@ih0nza!**).  On the `Sheet Selector` dialog, click `Show all sheets` and select `CustomSheetSize`.  In the table that appears, enter the range of sheet sizes to accept.
+
+- Added the ability to rename a variable with the `Edit variables` command (Thank you **@[Francesco Arfilli]!**).
+
 - Added an option, `Allow partial success` to the `Break Links` command (Thank you **john.matthews3452!**).  Previously any error caused the file to not be saved.
+
 - Fixed an issue with `Update Drawing Styles from Template` where Table text was not updated correctly (Thank you **@robbin70!**).  Changed the processing order so that dependent objects are now processed after their dependencies.
-- Added the ability to print custom size drawing sheets (Thank you **@ih0nza!**).  If selected, you need to supply a range of sheet sizes to accept.
+
+- Fixed an issue with `Add from Team Center` where the `ItemID` variable name was hard-coded in the program (Thank you **@sjim99!**).  It is now entered by the user on the Settings page.
+
+- Fixed a regression with Set Document Status (Thank you **@TeeVar!**).
+
+- Fixed a regression adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]** and **@Monostre!**)
 
 
 
