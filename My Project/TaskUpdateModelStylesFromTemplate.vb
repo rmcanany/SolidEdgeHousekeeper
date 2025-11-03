@@ -1279,11 +1279,15 @@ Public Class TaskUpdateModelStylesFromTemplate
                 tmpFileDialog.Title = "Select an assembly template file"
                 tmpFileDialog.Filter = "asm files|*.asm"
 
+                tmpFileDialog.InitialDirectory = Form_Main.SETemplatePath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.AssemblyTemplate = tmpFileDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.AssemblyTemplate.ToString), TextBox)
                     TextBox.Text = Me.AssemblyTemplate
+
+                    Form_Main.SETemplatePath = IO.Path.GetDirectoryName(Me.AssemblyTemplate)
                 End If
 
             Case ControlNames.BrowsePart.ToString
@@ -1291,11 +1295,15 @@ Public Class TaskUpdateModelStylesFromTemplate
                 tmpFileDialog.Title = "Select a part template file"
                 tmpFileDialog.Filter = "par files|*.par"
 
+                tmpFileDialog.InitialDirectory = Form_Main.SETemplatePath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.PartTemplate = tmpFileDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.PartTemplate.ToString), TextBox)
                     TextBox.Text = Me.PartTemplate
+
+                    Form_Main.SETemplatePath = IO.Path.GetDirectoryName(Me.PartTemplate)
                 End If
 
             Case ControlNames.BrowseSheetmetal.ToString
@@ -1303,11 +1311,15 @@ Public Class TaskUpdateModelStylesFromTemplate
                 tmpFileDialog.Title = "Select a sheetmetal template file"
                 tmpFileDialog.Filter = "psm files|*.psm"
 
+                tmpFileDialog.InitialDirectory = Form_Main.SETemplatePath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.SheetmetalTemplate = tmpFileDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.SheetmetalTemplate.ToString), TextBox)
                     TextBox.Text = Me.SheetmetalTemplate
+
+                    Form_Main.SETemplatePath = IO.Path.GetDirectoryName(Me.SheetmetalTemplate)
                 End If
 
             Case Else

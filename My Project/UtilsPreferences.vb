@@ -236,7 +236,93 @@ Public Class UtilsPreferences
         Return DirName
     End Function
 
+
+
+    '###### SE DEFAULT FOLDERS ######
+
+    Public Sub SetSEDefaultFolders(FMain As Form_Main)
+
+        ' Working directory
+        If FMain.WorkingFilesPath = "" Then
+            FMain.WorkingFilesPath = GetStartupDirectory()
+        End If
+
+        ' Install directory
+        Dim SEInstallData As New SEInstallDataLib.SEInstallData
+        FMain.SEInstalledPath = SEInstallData.GetInstalledPath ' eg C:\Program Files\Siemens\Solid Edge 2025\Program
+        If Not FMain.SEInstalledPath.Count <= 8 Then
+            ' Strip off trailing `\Program`
+            FMain.SEInstalledPath = FMain.SEInstalledPath.Substring(0, FMain.SEInstalledPath.Count - 8) ' eg C:\Program Files\Siemens\Solid Edge 2025
+            If Not IO.Directory.Exists(FMain.SEInstalledPath) Then
+                FMain.SEInstalledPath = ""
+            End If
+        End If
+
+        ' Templates
+        If IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.AssemblyTemplate)) Then
+            FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.AssemblyTemplate)
+        ElseIf IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.PartTemplate)) Then
+            FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.PartTemplate)
+        ElseIf IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.SheetmetalTemplate)) Then
+            FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.SheetmetalTemplate)
+        Else
+            If Not FMain.SEInstalledPath = "" Then
+                FMain.SETemplatePath = $"{FMain.SEInstalledPath}\Template"
+                If Not IO.Directory.Exists(FMain.SETemplatePath) Then FMain.SETemplatePath = FMain.SEInstalledPath
+            Else
+                FMain.SETemplatePath = FMain.SEInstalledPath
+            End If
+        End If
+
+        ' Preferences
+        If Not FMain.SEInstalledPath = "" Then
+            FMain.SEPreferencesPath = $"{FMain.SEInstalledPath}\Preferences"
+            If Not IO.Directory.Exists(FMain.SEPreferencesPath) Then FMain.SEPreferencesPath = FMain.SEInstalledPath
+        Else
+            FMain.SEPreferencesPath = FMain.SEInstalledPath
+        End If
+
+        ' Materials
+        If IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.MaterialTable)) Then
+            FMain.SEMaterialsPath = IO.Path.GetDirectoryName(FMain.MaterialTable)
+        Else
+            If Not FMain.SEPreferencesPath = "" Then
+                FMain.SEMaterialsPath = $"{FMain.SEPreferencesPath}\Materials"
+                If Not IO.Directory.Exists(FMain.SEMaterialsPath) Then FMain.SEMaterialsPath = FMain.SEInstalledPath
+            Else
+                FMain.SEMaterialsPath = FMain.SEInstalledPath
+            End If
+        End If
+
+        ' LinkMgmt.txt and FastSearchScope.txt
+        If Not FMain.SEPreferencesPath = "" Then
+            If FMain.LinkManagementFilename = "" Then
+                Dim tmpLinkManagementFilename = $"{FMain.SEPreferencesPath}\LinkMgmt.txt"
+                If IO.File.Exists(tmpLinkManagementFilename) Then
+                    FMain.LinkManagementFilename = tmpLinkManagementFilename
+                Else
+                    FMain.LinkManagementFilename = ""
+                End If
+            End If
+
+            If FMain.FastSearchScopeFilename = "" Then
+                Dim tmpFastSearchScopeFilename = $"{FMain.SEPreferencesPath}\FastSearchScope.txt"
+                If IO.File.Exists(tmpFastSearchScopeFilename) Then
+                    FMain.FastSearchScopeFilename = tmpFastSearchScopeFilename
+                Else
+                    FMain.FastSearchScopeFilename = ""
+                End If
+            End If
+
+        End If
+
+
+    End Sub
+
+
+
     '###### HELP FILE BASE URL ######
+
     Public Function GetHelpfileBaseURLFilename() As String
         Return String.Format("{0}\HelpfileBaseURL.txt", GetStartupDirectory)
     End Function

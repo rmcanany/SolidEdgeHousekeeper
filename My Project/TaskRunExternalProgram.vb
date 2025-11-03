@@ -508,11 +508,15 @@ Public Class TaskRunExternalProgram
                 tmpFileDialog.Title = "Select a program file"
                 tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1;*.snp"
 
+                tmpFileDialog.InitialDirectory = Form_Main.WorkingFilesPath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.ExternalProgram = tmpFileDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.ExternalProgram.ToString), TextBox)
                     TextBox.Text = Me.ExternalProgram
+
+                    Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.ExternalProgram)
                 End If
 
             Case Else

@@ -793,7 +793,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 15)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks

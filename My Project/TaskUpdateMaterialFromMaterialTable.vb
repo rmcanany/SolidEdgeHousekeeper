@@ -632,10 +632,14 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 tmpFileDialog.Title = "Select a material table file"
                 tmpFileDialog.Filter = "Material Documents|*.mtl"
 
+                tmpFileDialog.InitialDirectory = Form_Main.SEMaterialsPath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.MaterialTable = tmpFileDialog.FileName
                     TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
                     TextBox.Text = Me.MaterialTable
+
+                    Form_Main.SEMaterialsPath = IO.Path.GetDirectoryName(Me.MaterialTable)
                 End If
 
                 'Case ControlNames.DeleteExcludedFinish.ToString

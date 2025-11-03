@@ -981,11 +981,15 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 tmpFileDialog.Title = "Select a draft template file"
                 tmpFileDialog.Filter = "dft files|*.dft"
 
+                tmpFileDialog.InitialDirectory = Form_Main.SETemplatePath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.DraftTemplate = tmpFileDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox)
                     TextBox.Text = Me.DraftTemplate
+
+                    Form_Main.SETemplatePath = IO.Path.GetDirectoryName(Me.DraftTemplate)
                 End If
 
             Case Else

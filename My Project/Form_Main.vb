@@ -7,7 +7,6 @@ Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 
-'Add check For missing %temp% directory
 
 Public Class Form_Main
 
@@ -974,10 +973,18 @@ Public Class Form_Main
     Public Property TCItemIDName As String
 
 
-    Public Property FBLBNTop As Integer  ' Remember FormBlockLibraryBlockNames size and position
-    Public Property FBLBNLeft As Integer
-    Public Property FBLBNHeight As Integer
-    Public Property FBLBNWidth As Integer
+    'Public Property FBLBNTop As Integer  ' Remember FormBlockLibraryBlockNames size and position
+    'Public Property FBLBNLeft As Integer
+    'Public Property FBLBNHeight As Integer
+    'Public Property FBLBNWidth As Integer
+
+    Public Property SEInstalledPath As String
+    Public Property SEVersion As String
+    Public Property SETemplatePath As String
+    Public Property SEPreferencesPath As String
+    Public Property SEMaterialsPath As String
+    Public Property WorkingFilesPath As String
+
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -1191,6 +1198,8 @@ Public Class Form_Main
             UP.CheckForNewerVersion(Me.Version)
         End If
 
+        UP.SetSEDefaultFolders(Me)
+
         If Not Presets Then
             Splash.UpdateStatus("")
 
@@ -1361,9 +1370,11 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a fast search scope file"
         tmpFileDialog.Filter = "Search Scope Documents|*.txt"
+        tmpFileDialog.InitialDirectory = Me.SEPreferencesPath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.FastSearchScopeFilename = tmpFileDialog.FileName
+            Me.SEPreferencesPath = IO.Path.GetDirectoryName(Me.FastSearchScopeFilename)
         End If
 
     End Sub
@@ -1372,9 +1383,11 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a link management file"
         tmpFileDialog.Filter = "Link Management Documents|*.txt"
+        tmpFileDialog.InitialDirectory = Me.SEPreferencesPath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.LinkManagementFilename = tmpFileDialog.FileName
+            Me.SEPreferencesPath = IO.Path.GetDirectoryName(Me.LinkManagementFilename)
         End If
 
     End Sub
@@ -1546,6 +1559,7 @@ Public Class Form_Main
                                 "Part (*.par)|*.par|" +
                                 "Sheet Metal (*.psm)|*.psm|" +
                                 "Draft (*.dft)|*.dft"
+        tmpFolderDialog.InitialDirectory = Me.WorkingFilesPath
 
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
 
@@ -1583,6 +1597,7 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
+            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFolderDialog.FileNames(0))
         End If
 
     End Sub
@@ -1592,6 +1607,7 @@ Public Class Form_Main
         Dim tmpFolderDialog As New CommonOpenFileDialog
         tmpFolderDialog.IsFolderPicker = True
         tmpFolderDialog.Multiselect = True
+        tmpFolderDialog.InitialDirectory = Me.WorkingFilesPath
 
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             For Each tmpFolder As String In tmpFolderDialog.FileNames
@@ -1620,6 +1636,7 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
+            Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
         End If
 
     End Sub
@@ -1629,6 +1646,7 @@ Public Class Form_Main
         Dim tmpFolderDialog As New CommonOpenFileDialog
         tmpFolderDialog.IsFolderPicker = True
         tmpFolderDialog.Multiselect = True
+        tmpFolderDialog.InitialDirectory = Me.WorkingFilesPath
 
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             For Each tmpFolder As String In tmpFolderDialog.FileNames
@@ -1657,6 +1675,7 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
+            Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
         End If
     End Sub
 
@@ -1715,6 +1734,7 @@ Public Class Form_Main
         tmpFileDialog.Title = "Select list of files"
         tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
         tmpFileDialog.Multiselect = True
+        tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
 
@@ -1764,6 +1784,7 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
+            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
         End If
 
     End Sub
@@ -1773,6 +1794,8 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select an assembly file"
         tmpFileDialog.Filter = "asm files|*.asm"
+        tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
+
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level assembly"
@@ -1809,7 +1832,7 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
-
+            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileName)
         End If
 
     End Sub
@@ -1819,6 +1842,7 @@ Public Class Form_Main
         Dim tmpFolderDialog As New CommonOpenFileDialog
         tmpFolderDialog.IsFolderPicker = True
         tmpFolderDialog.Multiselect = True
+        tmpFolderDialog.InitialDirectory = Me.WorkingFilesPath
 
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             For Each tmpFolder As String In tmpFolderDialog.FileNames
@@ -1847,6 +1871,7 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
+            Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
         End If
     End Sub
 
@@ -2771,13 +2796,15 @@ Public Class Form_Main
 
     Private Sub ButtonAssemblyTemplate_Click(sender As Object, e As EventArgs) Handles ButtonAssemblyTemplate.Click
 
-        Dim tmpFileDialog As New OpenFileDialog
+        Dim tmpFileDialog As New OpenFileDialog()
         tmpFileDialog.Title = "Select an assembly template"
         tmpFileDialog.Filter = "Assembly Template|*.asm"
+        tmpFileDialog.InitialDirectory = Me.SETemplatePath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.AssemblyTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
+            Me.SETemplatePath = IO.Path.GetDirectoryName(Me.AssemblyTemplate)
         End If
 
     End Sub
@@ -2787,10 +2814,12 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a part template"
         tmpFileDialog.Filter = "Part Template|*.par"
+        tmpFileDialog.InitialDirectory = Me.SETemplatePath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.PartTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
+            Me.SETemplatePath = IO.Path.GetDirectoryName(Me.PartTemplate)
         End If
 
     End Sub
@@ -2800,10 +2829,12 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a sheetmetal template"
         tmpFileDialog.Filter = "Sheetmetal Template|*.psm"
+        tmpFileDialog.InitialDirectory = Me.SETemplatePath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.SheetmetalTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
+            Me.SETemplatePath = IO.Path.GetDirectoryName(Me.SheetmetalTemplate)
         End If
 
     End Sub
@@ -2813,10 +2844,12 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a draft template"
         tmpFileDialog.Filter = "Draft Template|*.dft"
+        tmpFileDialog.InitialDirectory = Me.SETemplatePath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.DraftTemplate = tmpFileDialog.FileName
             CopyTemplatesToTasks()
+            Me.SETemplatePath = IO.Path.GetDirectoryName(Me.DraftTemplate)
         End If
 
     End Sub
@@ -2826,10 +2859,12 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a material table"
         tmpFileDialog.Filter = "Material Table|*.mtl"
+        tmpFileDialog.InitialDirectory = Me.SEMaterialsPath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.MaterialTable = tmpFileDialog.FileName
             CopyTemplatesToTasks()
+            Me.SEMaterialsPath = IO.Path.GetDirectoryName(Me.MaterialTable)
         End If
 
     End Sub

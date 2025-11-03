@@ -799,16 +799,22 @@ Public Class TaskCreateDrawingOfFlatPattern
                 tmpFileDialog.Title = "Select a draft template file"
                 tmpFileDialog.Filter = "dft files|*.dft"
 
+                tmpFileDialog.InitialDirectory = Form_Main.SETemplatePath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.DraftTemplate = tmpFileDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox)
                     TextBox.Text = Me.DraftTemplate
+
+                    Form_Main.SETemplatePath = IO.Path.GetDirectoryName(Me.DraftTemplate)
                 End If
 
             Case ControlNames.BrowseNewDirDraft.ToString
                 Dim tmpFolderDialog As New CommonOpenFileDialog
                 tmpFolderDialog.IsFolderPicker = True
+
+                tmpFolderDialog.InitialDirectory = Form_Main.WorkingFilesPath
 
                 If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
                     Me.NewDirDraft = tmpFolderDialog.FileName
@@ -816,11 +822,14 @@ Public Class TaskCreateDrawingOfFlatPattern
                     TextBox = CType(ControlsDict(ControlNames.NewDirDraft.ToString), TextBox)
                     TextBox.Text = Me.NewDirDraft
 
+                    Form_Main.WorkingFilesPath = Me.NewDirDraft
                 End If
 
             Case ControlNames.BrowseNewDirPDF.ToString
                 Dim tmpFolderDialog As New CommonOpenFileDialog
                 tmpFolderDialog.IsFolderPicker = True
+
+                tmpFolderDialog.InitialDirectory = Form_Main.WorkingFilesPath
 
                 If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
                     Me.NewDirPDF = tmpFolderDialog.FileName
@@ -828,6 +837,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                     TextBox = CType(ControlsDict(ControlNames.NewDirPDF.ToString), TextBox)
                     TextBox.Text = Me.NewDirPDF
 
+                    Form_Main.WorkingFilesPath = Me.NewDirPDF
                 End If
 
             Case Else

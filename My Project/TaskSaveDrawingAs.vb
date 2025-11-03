@@ -871,12 +871,15 @@ Public Class TaskSaveDrawingAs
                 Dim tmpFolderDialog As New CommonOpenFileDialog
                 tmpFolderDialog.IsFolderPicker = True
 
+                tmpFolderDialog.InitialDirectory = Form_Main.WorkingFilesPath
+
                 If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
                     Me.NewDir = tmpFolderDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.NewDir.ToString), TextBox)
                     TextBox.Text = Me.NewDir
 
+                    Form_Main.WorkingFilesPath = Me.NewDir
                 End If
 
             Case ControlNames.BrowseWatermarkFilename.ToString
@@ -884,12 +887,15 @@ Public Class TaskSaveDrawingAs
                 tmpFileDialog.Title = "Select an image file"
                 tmpFileDialog.Filter = "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff"
 
+                tmpFileDialog.InitialDirectory = Form_Main.WorkingFilesPath
+
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.WatermarkFilename = tmpFileDialog.FileName
 
                     TextBox = CType(ControlsDict(ControlNames.WatermarkFilename.ToString), TextBox)
                     TextBox.Text = Me.WatermarkFilename
 
+                    Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.WatermarkFilename)
                 End If
 
             Case Else
