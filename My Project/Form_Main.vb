@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "09"  ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "11"  ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -157,10 +157,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _LinkManagementFilename = value
-            'If IO.File.Exists(value) Then
-            '    Dim UP As New UtilsPreferences
-            '    Me.LinkManagementOrder = UP.GetLinkManagementOrder()
-            'End If
+
             Dim UP As New UtilsPreferences
             Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaluts to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
             If Me.TabControl1 IsNot Nothing Then
@@ -767,6 +764,21 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _DebugMode As Boolean
+    Public Property DebugMode As Boolean
+        Get
+            Return _DebugMode
+        End Get
+        Set(value As Boolean)
+            _DebugMode = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxDebugMode.Checked = value
+            End If
+        End Set
+    End Property
+
+    Public Property HCDebugLogger As HCErrorLogger
+
 
     '###### HOME TAB ######
 
@@ -1016,6 +1028,10 @@ Public Class Form_Main
             Splash.UpdateStatus("Initializing")
         End If
 
+        Me.HCDebugLogger = New HCErrorLogger("Housekeeper")
+        Dim StartupLogger As Logger = Me.HCDebugLogger.AddFile("Startup")
+        StartupLogger.AddTimestamps(True)
+
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
         Dim UC As New UtilsCommon
@@ -1097,7 +1113,24 @@ Public Class Form_Main
         'If (Me.LinkManagementFilename IsNot Nothing) AndAlso (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
         '    Me.LinkManagementOrder = UP.GetLinkManagementOrder()
         'End If
-        Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaluts to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
+        Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaults to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
+
+        If Me.DebugMode Then
+            If Me.LinkManagementOrder Is Nothing Then
+                StartupLogger.AddMessage("Initialize LinkManagementOrder: 'Nothing'")
+            Else
+                Dim s As String = ""
+                For Each s1 As String In Me.LinkManagementOrder
+                    If s = "" Then
+                        s = s1
+                    Else
+                        s = $"{s}, {s1}"
+                    End If
+                Next
+                StartupLogger.AddMessage($"Initialize LinkManagementOrder: '{s}'")
+            End If
+        End If
+
 
         '###### INITIALIZE FILE LIST IF NEEDED ######
 
@@ -1158,9 +1191,13 @@ Public Class Form_Main
                 Task.IsSelectedDraft = False
             End If
 
-            'If Task.RequiresLinkManagementOrder Then
             Task.LinkManagementOrder = Me.LinkManagementOrder
-            'End If
+
+            If Me.DebugMode Then
+                If Task.LinkManagementOrder Is Nothing Then
+                    StartupLogger.AddMessage($"{Task.Description}.LinkManagementOrder: 'Nothing'")
+                End If
+            End If
 
             If Task.RequiresPropertiesData Then
                 Task.PropertiesData = Me.PropertiesData
@@ -1168,6 +1205,22 @@ Public Class Form_Main
 
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
+
+        If Me.DebugMode Then
+            If Me.LinkManagementOrder Is Nothing Then
+                StartupLogger.AddMessage("Post task initialization LinkManagementOrder: 'Nothing'")
+            Else
+                Dim s As String = ""
+                For Each s1 As String In Me.LinkManagementOrder
+                    If s = "" Then
+                        s = s1
+                    Else
+                        s = $"{s}, {s1}"
+                    End If
+                Next
+                StartupLogger.AddMessage($"Post task initialize LinkManagementOrder: '{s}'")
+            End If
+        End If
 
         AddHandler editbox.Leave, AddressOf editbox_LostFocus
         AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
@@ -1207,6 +1260,26 @@ Public Class Form_Main
             Splash.Dispose()
         End If
         Me.Cursor = Cursors.Default
+
+        If Me.DebugMode Then
+            If Me.LinkManagementOrder Is Nothing Then
+                StartupLogger.AddMessage("Post startup LinkManagementOrder: 'Nothing'")
+            Else
+                Dim s As String = ""
+                For Each s1 As String In Me.LinkManagementOrder
+                    If s = "" Then
+                        s = s1
+                    Else
+                        s = $"{s}, {s1}"
+                    End If
+                Next
+                StartupLogger.AddMessage($"Post startup LinkManagementOrder: '{s}'")
+            End If
+        End If
+
+        If Me.DebugMode Then
+            HCDebugLogger.ReportErrors(UseMessageBox:=False)
+        End If
 
     End Sub
 
@@ -1370,6 +1443,7 @@ Public Class Form_Main
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a fast search scope file"
         tmpFileDialog.Filter = "Search Scope Documents|*.txt"
+
         tmpFileDialog.InitialDirectory = Me.SEPreferencesPath
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
@@ -3925,6 +3999,10 @@ Public Class Form_Main
             item.Selected = True
         Next
 
+    End Sub
+
+    Private Sub CheckBoxDebugMode_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDebugMode.CheckedChanged
+        Me.DebugMode = CheckBoxDebugMode.Checked
     End Sub
 End Class
 

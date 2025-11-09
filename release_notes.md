@@ -25,10 +25,9 @@ Sponsored by **Breit Ideas** and **Pelican Industries.**  Thank you!
 
 This is an automated method to replace OLE inserted objects with SE-native blocks in draft files.  It works in conjunction with the `Run External Program` command in Housekeeper.
 
-It's pretty general-purpose and you may be able to use it as-is.  However, if you need to tweak things, feel free.  It's open source after all.
+A configuration file tells the program what file holds the blocks, what draft sheets to process, and the mapping between the OLE link and block names.  There is a dry-run mode to inspect the draft files and report link names without saving the files.
 
 See the [<ins>**Replace OLE Links Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ReplaceOLELinks#readme) for details.
-
 
 ### File List
 
@@ -36,22 +35,33 @@ Contributed by **@[Francesco Arfilli].**  Thank you!
 
 #### Update file properties display
 
-Added the ability to update the display of file properties without updating the list itself.  This can be a time saver on a large top-level assembly, or with time-consuming filter or sort options.  To do so, hold down the `Shift` key and click the `Update` button.
+Added the ability to update the display of file properties without updating the list itself.  This can be handy with otherwise time-consuming list operations.  To do so, hold down the `Shift` key and click the `Update` button.
 
 #### Shortcut menu
 
 Added `Select all` and `Copy` to the menu.  The former selects all items on the list.  The latter copies selected items to the clipboard.  Column headers are not copied.  
 
-This can be handy when you need to quickly copy list items into Excel for further processing or sharing with others.  Combined with Housekeeper's extensive filtering and sorting capabilities this can be a powerful and flexible way to extract and convey information.
+This is useful when you need to quickly copy list items into Excel for further processing or sharing with others.  Combined with Housekeeper's filtering and sorting capabilities, this can be a powerful and flexible way to extract and convey information.
 
 #### List processing
 
 Changed the presentation of files imported from a list.  Now missing files are added to the `Excluded files` group.  Previously they were ignored.
 
-Fixed an issue where comma characters in a file name or directory caused it to be ignored.
+Fixed an issue with imported and exported lists where comma characters in a file name or directory caused it to be ignored.
 
 See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#selection) for details.
 
+### Expression Editor
+
+Contributed by **@[Francesco Arfilli].**  Thank you!
+
+Added the ability to test an expression on a live SE file.  Previously only manually entering parameters was possible.
+
+![Expression Editor](My%20Project/media/expression_editor.png)
+
+Click the `Test on Edge` button to execute.  SE must be running with the target file active.  The program reports the result along with any parameters read from the file.
+
+Also added a couple of saved expression examples using `VB` syntax.
 
 ### Other
 
@@ -59,13 +69,15 @@ See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/S
 
 - Added the ability to rename a variable with the `Edit variables` command (Thank you **@[Francesco Arfilli]!**).
 
-- Added an option, `Allow partial success` to the `Break Links` command (Thank you **john.matthews3452!**).  Previously any error caused the file to not be saved.
+- Added an option, `Allow partial success` to the `Break Links` command (Thank you **@john.matthews3452!**).  Previously any error caused the file to not be saved.
 
-- Fixed an issue with `Update Drawing Styles from Template` where Table text was not updated correctly (Thank you **@robbin70!**).  Changed the processing order so that dependent objects are now processed after their dependencies.
+- Changed the default directory when selecting configuration files (Thank you **@robbin70!**).  Rather than using the most recent directory, it defaults to the file's expected location.  The expected location is initially based on the user's Solid Edge installation path.  It can change based on further user input.
+
+- Fixed an issue with `Update Drawing Styles from Template` where Table text was not updated correctly (Thank you again **@robbin70!**).  Changed the processing order so that dependent objects are now processed after their dependencies.
 
 - Fixed an issue with `Add from Team Center` where the `ItemID` variable name was hard-coded in the program (Thank you **@sjim99!**).  It is now entered by the user on the Settings page.
 
-- Fixed a regression with Set Document Status (Thank you **@TeeVar!**).
+- Fixed a regression with `Set Document Status` (Thank you **@TeeVar!**).
 
 - Fixed a regression adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]** and **@Monostre!**)
 

@@ -132,6 +132,7 @@ Public Class Logger
     Public Property Parent As Logger
     Public Property Loggers As List(Of Logger)
     Public Property HasErrors As Boolean
+    Public Property TimestampMessages As Boolean
     Private Property Messages As List(Of String)
 
     Public Sub New(_Name As String, _Parent As Logger)
@@ -139,7 +140,12 @@ Public Class Logger
         Me.Parent = _Parent
         Me.Loggers = New List(Of Logger)
         Me.HasErrors = False
+        Me.TimestampMessages = False
         Me.Messages = New List(Of String)
+    End Sub
+
+    Public Sub AddTimestamps(_TimestampMessages As Boolean)
+        Me.TimestampMessages = _TimestampMessages
     End Sub
 
     Public Function AddLogger(Name As String) As Logger
@@ -150,7 +156,12 @@ Public Class Logger
 
     Public Sub AddMessage(Message As String)
         Me.HasErrors = True
-        Me.Messages.Add(Message.Replace(vbCrLf, Chr(182)))
+
+        If Not Me.TimestampMessages Then
+            Me.Messages.Add(Message.Replace(vbCrLf, Chr(182)))
+        Else
+            Me.Messages.Add($"{DateTime.Now.ToString("hh:mm:ss.fff tt")}: {Message.Replace(vbCrLf, Chr(182))}")
+        End If
 
         ' Propagate error flag up to parent loggers
         Dim tmpParent As Logger = Me.Parent

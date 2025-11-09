@@ -197,26 +197,10 @@ Public Class FormExpressionEditor
                     Exit Sub
                 End Try
 
-
                 Dim PropertySetName = UC.PropSetFromFormula(Parameter)
                 Dim PropertyName = UC.PropNameFromFormula(Parameter)
                 Dim ModelIdx = UC.ModelIdxFromFormula(Parameter)
 
-                'If PropertyName.ToLower = "File Name".ToLower Then
-                '    tmpVal = System.IO.Path.GetFileName(SEDoc.FullName)                  ' C:\project\part.par -> part.par
-                'ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
-                '    tmpVal = SEDoc.FullName                                              ' C:\project\part.par -> C:\project\part.par
-                'ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
-                '    tmpVal = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)  ' C:\project\part.par -> part
-
-                'Else
-                '    Dim FoundProp = UC.GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
-                '    If FoundProp IsNot Nothing Then
-                '        tmpVal = FoundProp.Value.ToString
-                '    End If
-                'End If
-
-                ' UC.GetPropValue calls UC.ProcessSpecialProperty for filename-type properties.
                 Dim tmpObj = UC.GetPropValue(SEDoc, PropertySetName, PropertyName, ModelIdx, AddProp:=False)
                 If tmpObj IsNot Nothing Then
                     tmpVal = tmpObj.ToString
@@ -224,7 +208,6 @@ Public Class FormExpressionEditor
                     tmpVal = "Property not found"
                 End If
             End If
-
 
             If SavedParameters.ContainsKey(Parameter) Then
                 SavedParameters.Item(Parameter) = tmpVal

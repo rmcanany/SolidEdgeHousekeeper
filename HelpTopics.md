@@ -7,16 +7,16 @@
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-gold-star-16.png"><img src="My%20Project/media/spacer.png">CREDITS</h2></summary>
 
-**Sponsors**
+**Sponsors**  
 @john.matthews3452 (Hatch), Breit Ideas (breitideas.com), Pelican Industries (pelican.com)
 
-**Contributors**
+**Contributors**  
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github), @ih0nza (github), @artem1t (github)
 
-**Beta Testers**
+**Beta Testers**  
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza, @mefrebo, @KGeetings, @tempod, @john.matthews3452, @Brendan.Lee (github @Bogob22)
 
-**Helpful feedback and bug reports**
+**Helpful feedback and bug reports**  
 @SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @sven-11111, @robbin70, @collands, @WoutM25, @Monostre
 
 **Notice:**
@@ -45,6 +45,8 @@ If this is your first time here, you may want to check out the [<ins>**Quick Sta
 > *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they ever figure out how to automate me running Housekeeper, I will be out of a job!*
 
 > *Rad, this saves a mountain of time for me. Thanks!*
+
+> *Congratulations on being named a Siemens Techcxllence Award Finalist!  Your program, and the community that has grown around it, are truly an inspiration to all!*
 
 Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*, Google's Bard said:
 
@@ -648,7 +650,9 @@ This is to tell the user that the file list is not automatically populated when 
 This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once processing is complete.  However, in case of a program malfunction, it may not be able to do so.  You can manually reset the option by starting Solid Edge manually, then clicking the `Browse` button.  The checkbox is located toward the bottom of the form.  You have to select a draft file to make the checkbox active.
 - `Expression editor language`  
 Sets the programming language for the expression editor.  The choices are `NCalc` or `VB`.  See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details.
-- 
+- `Debug mode`  
+Debug mode is meant to help with troubleshooting user's site-specific issues.  It is currently limited, but will be expanded as needed in the future.
+ 
 </details>
 
 </details>
@@ -872,7 +876,7 @@ There are two programming languages available, `NCalc` and `VB`. Choose which on
 
 With `NCalc` you can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
-You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. 
+You can check your expression using the `Test` or `Test on Edge` buttons. With the former, if there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. With the latter, it reads the variables from a file.  SE must be running with the target file active.  When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. 
 
 You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to get the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
 

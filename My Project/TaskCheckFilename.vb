@@ -589,7 +589,7 @@ Public Class TaskCheckFilename
                 ErrorLogger.AddMessage("Select at least one Draft process option")
             End If
 
-            Me.LinkManagementOrder = Form_Main.LinkManagementOrder
+            'Me.LinkManagementOrder = Form_Main.LinkManagementOrder
 
             If (Me.StructuredStorageEdit) And (Me.DraftsCheckModels) And (Me.LinkManagementOrder Is Nothing) Then
                 ErrorLogger.AddMessage("Populate LinkMgmt.txt file name on the Configuration Tab -- Templates page")

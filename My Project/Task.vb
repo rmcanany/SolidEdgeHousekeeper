@@ -361,7 +361,8 @@ Public MustInherit Class Task
         IgnoreProps.AddRange({"RequiresSheetmetalTemplate", "RequiresDraftTemplate", "RequiresMaterialTable", "Category"})
         IgnoreProps.AddRange({"SolidEdgeRequired", "Application", "Document", "IsOptionsHidden"})
         IgnoreProps.AddRange({"PropertiesData"})
-        IgnoreProps.AddRange({"LinkManagementOrder", "ImageFileTypeNames", "SelectedSheetsList"})
+        'IgnoreProps.AddRange({"LinkManagementOrder", "ImageFileTypeNames", "SelectedSheetsList"})
+        IgnoreProps.AddRange({"ImageFileTypeNames", "SelectedSheetsList"})
         IgnoreProps.AddRange({"ErrorLogger", "FileLogger", "TaskLogger"})
 
         Dim s As String = ""

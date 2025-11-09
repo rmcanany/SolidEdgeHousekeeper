@@ -1105,7 +1105,11 @@ Public Class TaskSaveModelAs
                 Dim tmpFolderDialog As New CommonOpenFileDialog
                 tmpFolderDialog.IsFolderPicker = True
 
-                tmpFolderDialog.InitialDirectory = Form_Main.WorkingFilesPath
+                If IO.Directory.Exists(Me.NewDir) Then
+                    tmpFolderDialog.InitialDirectory = Me.NewDir
+                Else
+                    tmpFolderDialog.InitialDirectory = Form_Main.WorkingFilesPath
+                End If
 
                 If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
                     Me.NewDir = tmpFolderDialog.FileName
@@ -1113,7 +1117,7 @@ Public Class TaskSaveModelAs
                     TextBox = CType(ControlsDict(ControlNames.NewDir.ToString), TextBox)
                     TextBox.Text = Me.NewDir
 
-                    Form_Main.WorkingFilesPath = Me.NewDir
+                    'Form_Main.WorkingFilesPath = Me.NewDir
                 End If
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

@@ -366,25 +366,31 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            If DocType = ".asm" Then
-                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+            If DocType = ".dft" Then
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
-                If tmpSEDoc.WeldmentAssembly Then
-                    Try
-                        Dim PropertySets As SolidEdgeFramework.PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
-                        Dim PropertySet As SolidEdgeFramework.Properties = PropertySets.Item("Custom")
-                        Dim Prop As SolidEdgeFramework.Property = PropertySet.Item("IsWeldment")
+                Dim PerimeterLength As Double = 0
 
-                        Prop.Value = "True"
+                For Each Sheet As SolidEdgeDraft.Sheet In tmpSEDoc.Sheets
+                    For Each DV As SolidEdgeDraft.DrawingView In Sheet.DrawingViews
+                        If DV.DVEllipticalArcs2d IsNot Nothing AndAlso DV.DVEllipticalArcs2d.Count > 0 Then
+                            For Each DVEA As SolidEdgeDraft.DVEllipticalArc2d In DV.DVEllipticalArcs2d
+                                Dim a As Double = DVEA.MajorRadius
+                                Dim b As Double = DVEA.MinorRadius
+                                Dim e As Double = Math.Sqrt(1 - (b ^ 2 / a ^ 2))
+                                Dim Theta1 As Double = DVEA.StartAngle
+                                Dim Theta2 As Double = DVEA.SweepAngle + Theta1
+                                Dim DeltaTheta As Double = DVEA.SweepAngle / 100
 
-                        PropertySets.Save()
-                        SEApp.DoIdle()
-                        SEDoc.Save()
-                        SEApp.DoIdle()
-                    Catch ex As Exception
-                        ErrorMessageList.Add("Unable to process 'IsWeldment' property")
-                    End Try
-                End If
+                                For Theta As Double = Theta1 To Theta2 Step DeltaTheta
+                                    PerimeterLength += a * Math.Sqrt(1 - (e ^ 2) * (Math.Sin(Theta) ^ 2)) * DeltaTheta
+                                Next
+                            Next
+                        End If
+                    Next
+                Next
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Perimeter was {0}", PerimeterLength))
             End If
 
             ' ############## SNIPPET CODE END ##############
@@ -508,7 +514,11 @@ Public Class TaskRunExternalProgram
                 tmpFileDialog.Title = "Select a program file"
                 tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1;*.snp"
 
-                tmpFileDialog.InitialDirectory = Form_Main.WorkingFilesPath
+                If IO.File.Exists(Me.ExternalProgram) Then
+                    tmpFileDialog.InitialDirectory = IO.Path.GetDirectoryName(Me.ExternalProgram)
+                Else
+                    tmpFileDialog.InitialDirectory = Form_Main.WorkingFilesPath
+                End If
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.ExternalProgram = tmpFileDialog.FileName
@@ -516,7 +526,7 @@ Public Class TaskRunExternalProgram
                     TextBox = CType(ControlsDict(ControlNames.ExternalProgram.ToString), TextBox)
                     TextBox.Text = Me.ExternalProgram
 
-                    Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.ExternalProgram)
+                    'Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.ExternalProgram)
                 End If
 
             Case Else

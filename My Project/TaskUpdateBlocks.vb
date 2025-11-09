@@ -1163,7 +1163,11 @@ Public Class TaskUpdateBlocks
                 tmpFileDialog.Title = "Select a block library"
                 tmpFileDialog.Filter = "Draft Documents|*.dft"
 
-                tmpFileDialog.InitialDirectory = Form_Main.WorkingFilesPath
+                If IO.File.Exists(Me.BlockLibrary) Then
+                    tmpFileDialog.InitialDirectory = IO.Path.GetDirectoryName(Me.BlockLibrary)
+                Else
+                    tmpFileDialog.InitialDirectory = Form_Main.SETemplatePath
+                End If
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.BlockLibrary = tmpFileDialog.FileName
@@ -1176,7 +1180,7 @@ Public Class TaskUpdateBlocks
                     'Me.BlockLibraryBlockNames = SSDoc.GetBlockLibraryBlockNames
                     'Me.BlockLibraryBlockNames.Sort()
 
-                    Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.BlockLibrary)
+                    'Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.BlockLibrary)
                 End If
 
             Case ControlNames.EditBlockList.ToString

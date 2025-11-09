@@ -887,14 +887,18 @@ Public Class TaskEditProperties
                 tmpFileDialog.Title = "Select a material table file"
                 tmpFileDialog.Filter = "Material Documents|*.mtl"
 
-                tmpFileDialog.InitialDirectory = Form_Main.SEMaterialsPath
+                If IO.File.Exists(Me.MaterialTable) Then
+                    tmpFileDialog.InitialDirectory = IO.Path.GetDirectoryName(Me.MaterialTable)
+                Else
+                    tmpFileDialog.InitialDirectory = Form_Main.SEMaterialsPath
+                End If
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.MaterialTable = tmpFileDialog.FileName
                     TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
                     TextBox.Text = Me.MaterialTable
 
-                    Form_Main.SEMaterialsPath = IO.Path.GetDirectoryName(Me.MaterialTable)
+                    'Form_Main.SEMaterialsPath = IO.Path.GetDirectoryName(Me.MaterialTable)
                 End If
 
             Case Else
@@ -1092,8 +1096,9 @@ Public Class TaskEditProperties
         HelpString += "Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. "
         HelpString += "Unlike Excel, multi-line text is allowed, which can make the code more readable. "
 
-        HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` button. "
-        HelpString += "If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
+        HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` or `Test on Edge` buttons. "
+        HelpString += "With the former, if there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
+        HelpString += "With the latter, it reads the variables from a file.  SE must be running with the target file active.  "
         HelpString += "When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. "
         HelpString += "The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. "
 

@@ -258,7 +258,11 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 tmpFileDialog.Title = "Select a material library file"
                 tmpFileDialog.Filter = "mtl files|*.mtl"
 
-                tmpFileDialog.InitialDirectory = Form_Main.SEMaterialsPath
+                If IO.File.Exists(Me.MaterialTable) Then
+                    tmpFileDialog.InitialDirectory = IO.Path.GetDirectoryName(Me.MaterialTable)
+                Else
+                    tmpFileDialog.InitialDirectory = Form_Main.SEMaterialsPath
+                End If
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.MaterialTable = tmpFileDialog.FileName
@@ -266,7 +270,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
                     TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
                     TextBox.Text = Me.MaterialTable
 
-                    Form_Main.SEMaterialsPath = IO.Path.GetDirectoryName(Me.MaterialTable)
+                    'Form_Main.SEMaterialsPath = IO.Path.GetDirectoryName(Me.MaterialTable)
                 End If
 
             Case Else

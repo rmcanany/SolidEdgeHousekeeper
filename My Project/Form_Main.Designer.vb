@@ -227,6 +227,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel12 = New Housekeeper.ExTableLayoutPanel()
         Me.ComboBoxExpressionEditorLanguage = New System.Windows.Forms.ComboBox()
         Me.LabelExpressionEditorLanguage = New System.Windows.Forms.Label()
+        Me.CheckBoxDebugMode = New System.Windows.Forms.CheckBox()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -793,7 +794,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 15)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks
@@ -2519,10 +2520,11 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 11)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxProcessDraftsInactive, 0, 12)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel12, 0, 13)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 14)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 15
+        Me.ExTableLayoutPanel2.RowCount = 16
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2538,6 +2540,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
@@ -2796,6 +2799,18 @@ Partial Class Form_Main
         Me.LabelExpressionEditorLanguage.Size = New System.Drawing.Size(148, 15)
         Me.LabelExpressionEditorLanguage.TabIndex = 1
         Me.LabelExpressionEditorLanguage.Text = "Expression editor language"
+        '
+        'CheckBoxDebugMode
+        '
+        Me.CheckBoxDebugMode.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxDebugMode.AutoSize = True
+        Me.CheckBoxDebugMode.Location = New System.Drawing.Point(3, 425)
+        Me.CheckBoxDebugMode.Name = "CheckBoxDebugMode"
+        Me.CheckBoxDebugMode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxDebugMode.Size = New System.Drawing.Size(100, 19)
+        Me.CheckBoxDebugMode.TabIndex = 80
+        Me.CheckBoxDebugMode.Text = "Debug mode"
+        Me.CheckBoxDebugMode.UseVisualStyleBackColor = True
         '
         'ToolStripPresets
         '
@@ -3387,4 +3402,5 @@ Partial Class Form_Main
     Friend WithEvents ButtonPresetsOptions As ToolStripButton
     Friend WithEvents BT_Copy As ToolStripMenuItem
     Friend WithEvents BT_SelectAll As ToolStripMenuItem
+    Friend WithEvents CheckBoxDebugMode As CheckBox
 End Class

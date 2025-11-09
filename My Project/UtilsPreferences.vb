@@ -41,46 +41,11 @@ Public Class UtilsPreferences
         Dim Value As String
         Dim PropType As String
 
-        '' ###### For reporting Properties not processed.  For occasional checks.  Can cause an exception closing the form.
-        'Dim ReportIgnoredProperties As Boolean = False
-        'Dim MaxIgnoredShowPerPage = 20
-        'Dim IgnoredCount As Integer = 0
-        'Dim s As String = ""
-
-        'Dim KeepProps As New List(Of String)
-        'KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
-        'KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports"})
-
-        ''KeepProps.AddRange({"LinkManagementFilename", "LinkManagementOrder"})
-        'KeepProps.AddRange({"LinkManagementFilename"})
-
-        'KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
-        'KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
-        'KeepProps.AddRange({"SortNone", "KeepUnsortedDuplicates", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
-        'KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction"})
-        'KeepProps.AddRange({"AssemblyTemplate", "PartTemplate", "SheetmetalTemplate", "DraftTemplate", "MaterialTable", "UseTemplateProperties"})
-        'KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU", "RemindFilelistUpdate"})
-        'KeepProps.AddRange({"ListViewUpdateFrequency", "FileListFontSize", "GroupFiles", "RememberTasks", "RunInBackground"})
-        'KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
-        'KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
-        'KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
-        'KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
-        'KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
-        'KeepProps.AddRange({"TCCachePath", "TCItemIDRx", "TCRevisionRx"})
-        'KeepProps.AddRange({"ProcessDraftsInactive", "ExpressionEditorLanguage"})
-
-        'If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
-
-        'Dim tmpMissingProperties As New List(Of String)
-        'Dim tmpUnhandledPropTypes As New List(Of String)
-
-        'Dim ValidPropTypes As New List(Of String)
-        'ValidPropTypes.AddRange({"string", "double", "int32", "boolean", "list`1"})
-
         Dim SkipProps As New List(Of String)
-        SkipProps.AddRange({"version", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
+        SkipProps.AddRange({"version", "previewversion", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
-        'If SavingPresets Then SkipProps.AddRange({"left", "top", "width", "height"})
+        SkipProps.AddRange({"hcdebuglogger"})
+
         If SavingPresets And Not FMain.PresetsSaveFileFilters Then
             SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
         End If
@@ -359,6 +324,7 @@ Public Class UtilsPreferences
             Outlist.Add("\\ xxx can be any number from 0 to 9999 And YY any two letters")
             Outlist.Add("\\ xxx will be transformed in D4 syntax (example 65 will became 0065)")
             Outlist.Add("")
+
             Outlist.Add("[EXP]")
             Outlist.Add("Example If()")
             Outlist.Add("[EXP_TEXT]")
@@ -368,6 +334,7 @@ Public Class UtilsPreferences
             Outlist.Add("")
             Outlist.Add("\\Example of the usage of if() statement, valid inputs Dog, Cat, Cow")
             Outlist.Add("")
+
             Outlist.Add("[EXP]")
             Outlist.Add("Example Replace()")
             Outlist.Add("[EXP_TEXT]")
@@ -376,6 +343,7 @@ Public Class UtilsPreferences
             Outlist.Add("")
             Outlist.Add("\\ %{System.Subject} must contains 'L='")
             Outlist.Add("")
+
             Outlist.Add("[EXP]")
             Outlist.Add("Example toUpper()")
             Outlist.Add("[EXP_TEXT]")
@@ -383,6 +351,32 @@ Public Class UtilsPreferences
             Outlist.Add("toUpper('%{System.Title}')")
             Outlist.Add("")
             Outlist.Add("\\Any text will be converted in UPPERCASE")
+
+            Outlist.Add("[EXP]")
+            Outlist.Add("Example VB ToUpper")
+            Outlist.Add("[EXP_TEXT]")
+            Outlist.Add("")
+            Outlist.Add("Return ""%{System.Title}"".ToUpper()")
+            Outlist.Add("")
+            Outlist.Add("\\Any text will be converted in UPPERCASE")
+
+            Outlist.Add("[EXP]")
+            Outlist.Add("Example VB Select Case")
+            Outlist.Add("[EXP_TEXT]")
+            Outlist.Add("")
+            Outlist.Add("Dim SubDirectory as String = """"")
+            Outlist.Add("Select Case ""%{System.Category}"".ToUpper()")
+            Outlist.Add("    Case ""WATERJET""")
+            Outlist.Add("        SubDirectory = ""Kastle""")
+            Outlist.Add("    Case ""LASER"", ""WELDMENT""")
+            Outlist.Add("        SubDirectory = ""SSM""")
+            Outlist.Add("    Case Else")
+            Outlist.Add("        SubDirectory = ""Internal""")
+            Outlist.Add("End Select")
+            Outlist.Add("Return SubDirectory")
+            Outlist.Add("")
+            Outlist.Add("\\Create output that depends on category")
+
 
             IO.File.WriteAllLines(SavedExpressionsFilename, Outlist)
         End If
