@@ -293,6 +293,7 @@ Public Class FormExpressionEditor
 
         SR.Close()
 
+        If TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then TS_Language.Text = "  VB  " Else TS_Language.Text = "  NCalc  "
 
     End Sub
 
