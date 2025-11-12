@@ -27,6 +27,7 @@ Partial Class FormExpressionEditor
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.EditorLabel = New System.Windows.Forms.ToolStripLabel()
         Me.BT_Test = New System.Windows.Forms.ToolStripButton()
+        Me.BT_TestOnCurrentFile = New System.Windows.Forms.ToolStripButton()
         Me.BT_Clear = New System.Windows.Forms.ToolStripButton()
         Me.BT_InsertProp = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -37,10 +38,10 @@ Partial Class FormExpressionEditor
         Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
+        Me.TS_Language = New System.Windows.Forms.ToolStripLabel()
         Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.BT_TestOnCurrentFile = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -54,7 +55,7 @@ Partial Class FormExpressionEditor
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.White
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditorLabel, Me.BT_Test, Me.BT_TestOnCurrentFile, Me.BT_Clear, Me.BT_InsertProp, Me.ToolStripSeparator1, Me.SavedExpressionsLabel, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditorLabel, Me.BT_Test, Me.BT_TestOnCurrentFile, Me.BT_Clear, Me.BT_InsertProp, Me.ToolStripSeparator1, Me.SavedExpressionsLabel, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help, Me.TS_Language})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -76,6 +77,15 @@ Partial Class FormExpressionEditor
         Me.BT_Test.Name = "BT_Test"
         Me.BT_Test.Size = New System.Drawing.Size(48, 22)
         Me.BT_Test.Text = "Test"
+        '
+        'BT_TestOnCurrentFile
+        '
+        Me.BT_TestOnCurrentFile.Image = Global.Housekeeper.My.Resources.Resources.Play
+        Me.BT_TestOnCurrentFile.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_TestOnCurrentFile.Name = "BT_TestOnCurrentFile"
+        Me.BT_TestOnCurrentFile.Size = New System.Drawing.Size(94, 22)
+        Me.BT_TestOnCurrentFile.Text = "Test on Edge"
+        Me.BT_TestOnCurrentFile.ToolTipText = "Test on current Solid Edge file"
         '
         'BT_Clear
         '
@@ -146,12 +156,23 @@ Partial Class FormExpressionEditor
         '
         'BT_Help
         '
+        Me.BT_Help.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.BT_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_Help.Name = "BT_Help"
+        Me.BT_Help.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.BT_Help.Size = New System.Drawing.Size(23, 22)
         Me.BT_Help.Text = "Help"
+        '
+        'TS_Language
+        '
+        Me.TS_Language.BackColor = System.Drawing.Color.LimeGreen
+        Me.TS_Language.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TS_Language.ForeColor = System.Drawing.Color.GreenYellow
+        Me.TS_Language.Name = "TS_Language"
+        Me.TS_Language.Size = New System.Drawing.Size(43, 22)
+        Me.TS_Language.Text = "  XXX  "
         '
         'TextEditorFormula
         '
@@ -217,15 +238,6 @@ Partial Class FormExpressionEditor
         Me.SplitContainer1.SplitterDistance = 200
         Me.SplitContainer1.TabIndex = 5
         '
-        'BT_TestOnCurrentFile
-        '
-        Me.BT_TestOnCurrentFile.Image = Global.Housekeeper.My.Resources.Resources.Play
-        Me.BT_TestOnCurrentFile.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_TestOnCurrentFile.Name = "BT_TestOnCurrentFile"
-        Me.BT_TestOnCurrentFile.Size = New System.Drawing.Size(94, 22)
-        Me.BT_TestOnCurrentFile.Text = "Test on Edge"
-        Me.BT_TestOnCurrentFile.ToolTipText = "Test on current Solid Edge file"
-        '
         'FormExpressionEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -268,4 +280,5 @@ Partial Class FormExpressionEditor
     Friend WithEvents BT_InsertProp As ToolStripButton
     Friend WithEvents SavedExpressionsLabel As ToolStripLabel
     Friend WithEvents BT_TestOnCurrentFile As ToolStripButton
+    Friend WithEvents TS_Language As ToolStripLabel
 End Class
