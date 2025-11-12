@@ -378,9 +378,15 @@ Public Class TaskRunExternalProgram
                                 Dim a As Double = DVEA.MajorRadius
                                 Dim b As Double = DVEA.MinorRadius
                                 Dim e As Double = Math.Sqrt(1 - (b ^ 2 / a ^ 2))
+
+                                Dim SweepAngle As Double = DVEA.SweepAngle
+                                If DVEA.Orientation = SolidEdgeFrameworkSupport.Geom2dOrientationConstants.igGeom2dOrientClockwise Then
+                                    SweepAngle = -SweepAngle
+                                End If
+
                                 Dim Theta1 As Double = DVEA.StartAngle
-                                Dim Theta2 As Double = DVEA.SweepAngle + Theta1
-                                Dim DeltaTheta As Double = DVEA.SweepAngle / 100
+                                Dim Theta2 As Double = Theta1 + SweepAngle
+                                Dim DeltaTheta As Double = SweepAngle / 1000
 
                                 For Theta As Double = Theta1 To Theta2 Step DeltaTheta
                                     PerimeterLength += a * Math.Sqrt(1 - (e ^ 2) * (Math.Sin(Theta) ^ 2)) * DeltaTheta

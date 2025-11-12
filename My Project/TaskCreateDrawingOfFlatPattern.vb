@@ -321,6 +321,11 @@ Public Class TaskCreateDrawingOfFlatPattern
             Try
                 DraftDoc = CType(Documents.Add("SolidEdge.DraftDocument", Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
                 SEApp.DoIdle()
+                'Dim UP As New UtilsPreferences
+                'Dim tmpDir As String = UP.GetTempDirectory()
+                'Dim tmpFilename As String = $"{tmpDir}\tmp.dft"
+                'DraftDoc.SaveAs(tmpFilename)
+                'SEApp.DoIdle()
             Catch ex As Exception
                 TaskLogger.AddMessage(String.Format("Could not create draft document with template '{0}'", Me.DraftTemplate))
                 Exit Sub
@@ -393,10 +398,13 @@ Public Class TaskCreateDrawingOfFlatPattern
                     End If
                 End If
             End If
-            SEApp.DoIdle()
 
-            DraftDoc.Close(False)
             SEApp.DoIdle()
+            If DraftDoc IsNot Nothing Then
+                DraftDoc.Close(False)
+                SEApp.DoIdle()
+                DraftDoc = Nothing
+            End If
 
         End If
 

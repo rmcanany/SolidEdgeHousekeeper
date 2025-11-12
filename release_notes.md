@@ -15,7 +15,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2025.4 
 
-We'll get right to the updates, but first some exciting news -- Housekeeper has two new **Sponsors:** **Breit Ideas** and **Pelican Industries!** 
+We'll get right to the updates, but first some exciting news -- Housekeeper has two new sponsors: **Breit Ideas** and **Pelican Industries!** 
 
 Now, on to those updates...
 
@@ -41,7 +41,7 @@ Added the ability to update the display of file properties without updating the 
 
 Added `Select all` and `Copy` to the menu.  The former selects all items on the list.  The latter copies selected items to the clipboard.  Column headers are not copied.  
 
-This is useful when you need to quickly copy list items into Excel for further processing or sharing with others.  Combined with Housekeeper's filtering and sorting capabilities, this can be a powerful and flexible way to extract and convey information.
+This is useful when you need to quickly copy list items into Excel for further processing or sharing with others.  Combined with Housekeeper's filtering and sorting capabilities, this can be a quick way to extract and convey information.
 
 #### List processing
 
