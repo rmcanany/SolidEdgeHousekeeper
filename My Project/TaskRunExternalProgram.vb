@@ -380,7 +380,7 @@ Public Class TaskRunExternalProgram
                                 Dim e As Double = Math.Sqrt(1 - (b ^ 2 / a ^ 2))
 
                                 Dim SweepAngle As Double = DVEA.SweepAngle
-                                If DVEA.Orientation = SolidEdgeFrameworkSupport.Geom2dOrientationConstants.igGeom2dOrientClockwise Then
+                                If Not DVEA.Orientation = SolidEdgeFrameworkSupport.Geom2dOrientationConstants.igGeom2dOrientClockwise Then
                                     SweepAngle = -SweepAngle
                                 End If
 
@@ -388,9 +388,15 @@ Public Class TaskRunExternalProgram
                                 Dim Theta2 As Double = Theta1 + SweepAngle
                                 Dim DeltaTheta As Double = SweepAngle / 1000
 
+                                'ErrorMessageList.Add(String.Format("{0} {1} {2} {3} ", Theta1, Theta2, DeltaTheta, SweepAngle))
+
+                                Dim PreviousP As Double = PerimeterLength
                                 For Theta As Double = Theta1 To Theta2 Step DeltaTheta
-                                    PerimeterLength += a * Math.Sqrt(1 - (e ^ 2) * (Math.Sin(Theta) ^ 2)) * DeltaTheta
+                                    PerimeterLength += a * Math.Sqrt(1 - (e ^ 2) * (Math.Sin(Theta) ^ 2)) * Math.Abs(DeltaTheta)
                                 Next
+
+                                'ErrorMessageList.Add(String.Format("{0}", PerimeterLength - PreviousP))
+
                             Next
                         End If
                     Next
