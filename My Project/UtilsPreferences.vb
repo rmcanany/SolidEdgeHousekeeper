@@ -208,7 +208,7 @@ Public Class UtilsPreferences
     Public Sub SetSEDefaultFolders(FMain As Form_Main)
 
         ' Working directory
-        If FMain.WorkingFilesPath = "" Then
+        If Not IO.Directory.Exists(FMain.WorkingFilesPath) Then
             FMain.WorkingFilesPath = GetStartupDirectory()
         End If
 
@@ -219,68 +219,66 @@ Public Class UtilsPreferences
             ' Strip off trailing `\Program`
             FMain.SEInstalledPath = FMain.SEInstalledPath.Substring(0, FMain.SEInstalledPath.Count - 8) ' eg C:\Program Files\Siemens\Solid Edge 2025
             If Not IO.Directory.Exists(FMain.SEInstalledPath) Then
-                FMain.SEInstalledPath = ""
+                FMain.SEInstalledPath = FMain.WorkingFilesPath
             End If
         End If
 
         ' Templates
-        If IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.AssemblyTemplate)) Then
+        If IO.File.Exists(FMain.AssemblyTemplate) Then  ' Handles 'Nothing' argument correctly.
             FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.AssemblyTemplate)
-        ElseIf IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.PartTemplate)) Then
+        ElseIf IO.File.Exists(FMain.PartTemplate) Then
             FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.PartTemplate)
-        ElseIf IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.SheetmetalTemplate)) Then
+        ElseIf IO.File.Exists(FMain.SheetmetalTemplate) Then
             FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.SheetmetalTemplate)
+        ElseIf IO.File.Exists(FMain.DraftTemplate) Then
+            FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.DraftTemplate)
         Else
-            If Not FMain.SEInstalledPath = "" Then
+            If IO.Directory.Exists($"{FMain.SEInstalledPath}\Template") Then
                 FMain.SETemplatePath = $"{FMain.SEInstalledPath}\Template"
-                If Not IO.Directory.Exists(FMain.SETemplatePath) Then FMain.SETemplatePath = FMain.SEInstalledPath
             Else
                 FMain.SETemplatePath = FMain.SEInstalledPath
             End If
         End If
 
         ' Preferences
-        If Not FMain.SEInstalledPath = "" Then
-            FMain.SEPreferencesPath = $"{FMain.SEInstalledPath}\Preferences"
-            If Not IO.Directory.Exists(FMain.SEPreferencesPath) Then FMain.SEPreferencesPath = FMain.SEInstalledPath
-        Else
-            FMain.SEPreferencesPath = FMain.SEInstalledPath
+        If Not IO.Directory.Exists(FMain.SEPreferencesPath) Then
+            If Not FMain.SEInstalledPath = GetStartupDirectory() Then  ' Startup directory also has a Preferences directory.
+                If IO.Directory.Exists($"{FMain.SEInstalledPath}\Preferences") Then
+                    FMain.SEPreferencesPath = $"{FMain.SEInstalledPath}\Preferences"
+                Else
+                    FMain.SEPreferencesPath = FMain.WorkingFilesPath
+                End If
+            Else
+                FMain.SEPreferencesPath = FMain.WorkingFilesPath
+            End If
         End If
 
         ' Materials
-        If IO.Directory.Exists(IO.Path.GetDirectoryName(FMain.MaterialTable)) Then
-            FMain.SEMaterialsPath = IO.Path.GetDirectoryName(FMain.MaterialTable)
-        Else
-            If Not FMain.SEPreferencesPath = "" Then
+        If Not IO.Directory.Exists(FMain.SEMaterialsPath) Then
+            If IO.Directory.Exists($"{FMain.SEPreferencesPath}\Materials") Then
                 FMain.SEMaterialsPath = $"{FMain.SEPreferencesPath}\Materials"
-                If Not IO.Directory.Exists(FMain.SEMaterialsPath) Then FMain.SEMaterialsPath = FMain.SEInstalledPath
             Else
-                FMain.SEMaterialsPath = FMain.SEInstalledPath
+                FMain.SEMaterialsPath = FMain.WorkingFilesPath
             End If
         End If
 
-        ' LinkMgmt.txt and FastSearchScope.txt
-        If Not FMain.SEPreferencesPath = "" Then
-            If FMain.LinkManagementFilename = "" Then
-                Dim tmpLinkManagementFilename = $"{FMain.SEPreferencesPath}\LinkMgmt.txt"
-                If IO.File.Exists(tmpLinkManagementFilename) Then
-                    FMain.LinkManagementFilename = tmpLinkManagementFilename
-                Else
-                    FMain.LinkManagementFilename = ""
-                End If
+        ' LinkMgmt.txt
+        If Not IO.File.Exists(FMain.LinkManagementFilename) Then
+            If IO.File.Exists($"{FMain.SEPreferencesPath}\LinkMgmt.txt") Then
+                FMain.LinkManagementFilename = $"{FMain.SEPreferencesPath}\LinkMgmt.txt"
+            Else
+                FMain.LinkManagementFilename = ""
             End If
-
-            If FMain.FastSearchScopeFilename = "" Then
-                Dim tmpFastSearchScopeFilename = $"{FMain.SEPreferencesPath}\FastSearchScope.txt"
-                If IO.File.Exists(tmpFastSearchScopeFilename) Then
-                    FMain.FastSearchScopeFilename = tmpFastSearchScopeFilename
-                Else
-                    FMain.FastSearchScopeFilename = ""
-                End If
-            End If
-
         End If
 
+        ' FastSearchScope.txt
+        If Not IO.File.Exists(FMain.FastSearchScopeFilename) Then
+            If IO.File.Exists($"{FMain.SEPreferencesPath}\FastSearchScope.txt") Then
+                FMain.FastSearchScopeFilename = $"{FMain.SEPreferencesPath}\FastSearchScope.txt"
+            Else
+                FMain.FastSearchScopeFilename = ""
+            End If
+        End If
 
     End Sub
 
