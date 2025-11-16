@@ -95,121 +95,121 @@ Public Class UtilsPowerShell
 
     End Function
 
-    Private Function BuildSnippetFile(SnippetFilename As String) As String
-        ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/
+    'Private Function BuildSnippetFile(SnippetFilename As String) As String
+    '    ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/
 
-        Dim Toplist As New List(Of String)
-        Dim Midlist As New List(Of String)
-        Dim Botlist As New List(Of String)
-        Dim Outlist As New List(Of String)
-        Dim s As String
-        Dim Indent As String = "                "
+    '    Dim Toplist As New List(Of String)
+    '    Dim Midlist As New List(Of String)
+    '    Dim Botlist As New List(Of String)
+    '    Dim Outlist As New List(Of String)
+    '    Dim s As String
+    '    Dim Indent As String = "                "
 
-        Dim UP As New UtilsPreferences
+    '    Dim UP As New UtilsPreferences
 
-        Dim DllPath As String = UP.GetStartupDirectory
+    '    Dim DllPath As String = UP.GetStartupDirectory
 
-        Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
+    '    Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
 
-        Toplist.Add("$StartupPath = Split-Path $script:MyInvocation.MyCommand.Path")
-        Toplist.Add("")
-        Toplist.Add("$DLLs = (")
-        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeFramework.dll"",")
-        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeFrameworkSupport.dll"",")
-        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeConstants.dll"",")
-        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgePart.dll"",")
-        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeAssembly.dll"",")
-        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeDraft.dll"",")
-        Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeGeometry.dll""")
-        Toplist.Add("    )")
-        Toplist.Add("")
-        Toplist.Add("$Source = @""")
-        Toplist.Add("")
-        Toplist.Add("Imports System")
-        Toplist.Add("Imports System.Collections.Generic")
-        Toplist.Add("")
-        Toplist.Add("Public Class Snippet")
-        Toplist.Add("")
-        Toplist.Add("    Public Shared Function RunSnippet(StartupPath As String) As Integer")
-        Toplist.Add("        Dim ExitStatus As Integer = 0")
-        Toplist.Add("        Dim ErrorMessageList As New List(Of String)")
-        Toplist.Add("")
-        Toplist.Add("        Dim SEApp As SolidEdgeFramework.Application = Nothing")
-        Toplist.Add("        Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing")
-        Toplist.Add("")
-        Toplist.Add("        Try")
-        Toplist.Add("            SEApp = CType(Runtime.InteropServices.Marshal.GetActiveObject(""SolidEdge.Application""), SolidEdgeFramework.Application)")
-        Toplist.Add("            SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)")
-        Toplist.Add("            Console.WriteLine(String.Format(""Processing {0}"", SEDoc.Name))")
-        Toplist.Add("        Catch ex As Exception")
-        Toplist.Add("            ExitStatus = 1")
-        Toplist.Add("            ErrorMessageList.Add(""Unable to connect to Solid Edge, or no file is open"")")
-        Toplist.Add("        End Try")
-        Toplist.Add("")
-        Toplist.Add("        If ExitStatus = 0 Then")
-        Toplist.Add("")
-        Toplist.Add("            Dim DocType = IO.Path.GetExtension(SEDoc.Fullname)")
-        Toplist.Add("")
-        Toplist.Add("            Try")
+    '    Toplist.Add("$StartupPath = Split-Path $script:MyInvocation.MyCommand.Path")
+    '    Toplist.Add("")
+    '    Toplist.Add("$DLLs = (")
+    '    Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeFramework.dll"",")
+    '    Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeFrameworkSupport.dll"",")
+    '    Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeConstants.dll"",")
+    '    Toplist.Add($"    ""{DllPath}\Interop.SolidEdgePart.dll"",")
+    '    Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeAssembly.dll"",")
+    '    Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeDraft.dll"",")
+    '    Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeGeometry.dll""")
+    '    Toplist.Add("    )")
+    '    Toplist.Add("")
+    '    Toplist.Add("$Source = @""")
+    '    Toplist.Add("")
+    '    Toplist.Add("Imports System")
+    '    Toplist.Add("Imports System.Collections.Generic")
+    '    Toplist.Add("")
+    '    Toplist.Add("Public Class Snippet")
+    '    Toplist.Add("")
+    '    Toplist.Add("    Public Shared Function RunSnippet(StartupPath As String) As Integer")
+    '    Toplist.Add("        Dim ExitStatus As Integer = 0")
+    '    Toplist.Add("        Dim ErrorMessageList As New List(Of String)")
+    '    Toplist.Add("")
+    '    Toplist.Add("        Dim SEApp As SolidEdgeFramework.Application = Nothing")
+    '    Toplist.Add("        Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing")
+    '    Toplist.Add("")
+    '    Toplist.Add("        Try")
+    '    Toplist.Add("            SEApp = CType(Runtime.InteropServices.Marshal.GetActiveObject(""SolidEdge.Application""), SolidEdgeFramework.Application)")
+    '    Toplist.Add("            SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)")
+    '    Toplist.Add("            Console.WriteLine(String.Format(""Processing {0}"", SEDoc.Name))")
+    '    Toplist.Add("        Catch ex As Exception")
+    '    Toplist.Add("            ExitStatus = 1")
+    '    Toplist.Add("            ErrorMessageList.Add(""Unable to connect to Solid Edge, or no file is open"")")
+    '    Toplist.Add("        End Try")
+    '    Toplist.Add("")
+    '    Toplist.Add("        If ExitStatus = 0 Then")
+    '    Toplist.Add("")
+    '    Toplist.Add("            Dim DocType = IO.Path.GetExtension(SEDoc.Fullname)")
+    '    Toplist.Add("")
+    '    Toplist.Add("            Try")
 
-        Dim tmpMidlist = IO.File.ReadAllLines(SnippetFilename).ToList
-        For Each s In tmpMidlist
-            Midlist.Add(String.Format("{0}{1}", Indent, s))
-        Next
+    '    Dim tmpMidlist = IO.File.ReadAllLines(SnippetFilename).ToList
+    '    For Each s In tmpMidlist
+    '        Midlist.Add(String.Format("{0}{1}", Indent, s))
+    '    Next
 
-        Botlist.Add("            Catch ex As Exception")
-        Botlist.Add("                ExitStatus = 1")
-        Botlist.Add("                ErrorMessageList.Add(String.Format(""{0}"", ex.Message))")
-        Botlist.Add("            End Try")
-        Botlist.Add("        End If")
-        Botlist.Add("")
-        Botlist.Add("        If Not ExitStatus = 0 Then")
-        Botlist.Add("            SaveErrorMessages(StartupPath, ErrorMessageList)")
-        Botlist.Add("        End If")
-        Botlist.Add("")
-        Botlist.Add("        Return ExitStatus")
-        Botlist.Add("    End Function")
-        Botlist.Add("")
-        Botlist.Add("    Public Shared Sub LoadLibrary(ParamArray libs As Object())")
-        Botlist.Add("        For Each [lib] As String In libs")
-        Botlist.Add("            'Console.WriteLine(String.Format(""Loading library:  {0}"", [lib]))")
-        Botlist.Add("            Dim assm As System.Reflection.Assembly = System.Reflection.Assembly.LoadFrom([lib])")
-        Botlist.Add("            'Console.WriteLine(assm.GetName().ToString())")
-        Botlist.Add("        Next")
-        Botlist.Add("    End Sub")
-        Botlist.Add("")
-        Botlist.Add("    Private Shared Sub SaveErrorMessages(StartupPath As String, ErrorMessageList As List(Of String))")
-        Botlist.Add("        Dim ErrorFilename As String")
-        Botlist.Add("        ErrorFilename = String.Format(""{0}\error_messages.txt"", StartupPath)")
-        Botlist.Add("        IO.File.WriteAllLines(ErrorFilename, ErrorMessageList)")
-        Botlist.Add("    End Sub")
-        Botlist.Add("")
-        Botlist.Add("End Class")
-        Botlist.Add("""@")
-        Botlist.Add("")
-        'Botlist.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
-        Botlist.Add("Add-Type -TypeDefinition $Source -ReferencedAssemblies $DLLs -Language VisualBasic")
-        Botlist.Add("")
-        Botlist.Add("[Snippet]::LoadLibrary($DLLs)")
-        Botlist.Add("")
-        Botlist.Add("$ExitStatus = [Snippet]::RunSnippet($StartupPath)")
-        Botlist.Add("")
-        Botlist.Add("Function ExitWithCode($exitcode) {")
-        Botlist.Add("  $host.SetShouldExit($exitcode)")
-        Botlist.Add("  Exit $exitcode")
-        Botlist.Add("}")
-        Botlist.Add("")
-        Botlist.Add("ExitWithCode($ExitStatus)")
+    '    Botlist.Add("            Catch ex As Exception")
+    '    Botlist.Add("                ExitStatus = 1")
+    '    Botlist.Add("                ErrorMessageList.Add(String.Format(""{0}"", ex.Message))")
+    '    Botlist.Add("            End Try")
+    '    Botlist.Add("        End If")
+    '    Botlist.Add("")
+    '    Botlist.Add("        If Not ExitStatus = 0 Then")
+    '    Botlist.Add("            SaveErrorMessages(StartupPath, ErrorMessageList)")
+    '    Botlist.Add("        End If")
+    '    Botlist.Add("")
+    '    Botlist.Add("        Return ExitStatus")
+    '    Botlist.Add("    End Function")
+    '    Botlist.Add("")
+    '    Botlist.Add("    Public Shared Sub LoadLibrary(ParamArray libs As Object())")
+    '    Botlist.Add("        For Each [lib] As String In libs")
+    '    Botlist.Add("            'Console.WriteLine(String.Format(""Loading library:  {0}"", [lib]))")
+    '    Botlist.Add("            Dim assm As System.Reflection.Assembly = System.Reflection.Assembly.LoadFrom([lib])")
+    '    Botlist.Add("            'Console.WriteLine(assm.GetName().ToString())")
+    '    Botlist.Add("        Next")
+    '    Botlist.Add("    End Sub")
+    '    Botlist.Add("")
+    '    Botlist.Add("    Private Shared Sub SaveErrorMessages(StartupPath As String, ErrorMessageList As List(Of String))")
+    '    Botlist.Add("        Dim ErrorFilename As String")
+    '    Botlist.Add("        ErrorFilename = String.Format(""{0}\error_messages.txt"", StartupPath)")
+    '    Botlist.Add("        IO.File.WriteAllLines(ErrorFilename, ErrorMessageList)")
+    '    Botlist.Add("    End Sub")
+    '    Botlist.Add("")
+    '    Botlist.Add("End Class")
+    '    Botlist.Add("""@")
+    '    Botlist.Add("")
+    '    'Botlist.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
+    '    Botlist.Add("Add-Type -TypeDefinition $Source -ReferencedAssemblies $DLLs -Language VisualBasic")
+    '    Botlist.Add("")
+    '    Botlist.Add("[Snippet]::LoadLibrary($DLLs)")
+    '    Botlist.Add("")
+    '    Botlist.Add("$ExitStatus = [Snippet]::RunSnippet($StartupPath)")
+    '    Botlist.Add("")
+    '    Botlist.Add("Function ExitWithCode($exitcode) {")
+    '    Botlist.Add("  $host.SetShouldExit($exitcode)")
+    '    Botlist.Add("  Exit $exitcode")
+    '    Botlist.Add("}")
+    '    Botlist.Add("")
+    '    Botlist.Add("ExitWithCode($ExitStatus)")
 
-        For Each L As List(Of String) In {Toplist, Midlist, Botlist}
-            For Each s In L
-                Outlist.Add(s)
-            Next
-        Next
+    '    For Each L As List(Of String) In {Toplist, Midlist, Botlist}
+    '        For Each s In L
+    '            Outlist.Add(s)
+    '        Next
+    '    Next
 
-        IO.File.WriteAllLines(PowerShellFilename, Outlist)
+    '    IO.File.WriteAllLines(PowerShellFilename, Outlist)
 
-        Return PowerShellFilename
-    End Function
+    '    Return PowerShellFilename
+    'End Function
 
 End Class

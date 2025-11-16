@@ -1004,6 +1004,7 @@ Public Class UtilsCommon
                     Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(Outstring.Split(CChar(vbCrLf)).ToList)
 
                     Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
+                    IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
 
                     Try
                         Outstring = UPS.RunExpressionScript(PowerShellFilename)

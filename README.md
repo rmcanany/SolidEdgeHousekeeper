@@ -868,7 +868,7 @@ If you are changing `System.Material` specifically, you can also update the prop
 
 **Expressions**
 
-An `expression` is basically a program. It enables more complex manipulations of the `Replace` string. To create one, click the `Expression Editor` button on the input editor form. 
+An `expression` is basically a program. It enables more complex manipulations of the `Replace` string. To create one, right-click the `Replace` textbox and select `Edit expression`. To use one you have already saved, select `Insert expression` instead. 
 
 There are two programming languages available, `NCalc` and `VB`. Choose which one to use on the **Configuration Tab -- General Page**. `VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  `NCalc` is more like a formula in Excel. Some of its features are detailed below. 
 

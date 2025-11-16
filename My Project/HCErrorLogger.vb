@@ -10,7 +10,7 @@ Public Class HCErrorLogger
 
     Public Sub New(CallingProgramName As String)
         ' Create a directory in Temp for the calling program if it does not exist
-        Dim DirName As String = $"{IO.Path.GetTempPath}\{CallingProgramName}"
+        Dim DirName As String = $"{IO.Path.GetTempPath}{CallingProgramName}"  ' IO.Path.GetTempPath has a trailing backslash
         If Not IO.Directory.Exists(DirName) Then IO.Directory.CreateDirectory(DirName)
 
         Me.Timestamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")

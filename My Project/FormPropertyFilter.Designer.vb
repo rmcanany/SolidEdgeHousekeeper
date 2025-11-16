@@ -86,9 +86,10 @@ Partial Class FormPropertyFilter
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ButtonHelp})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel1, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripSeparator1, Me.ToolStripLabel2, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ButtonHelp})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.ToolStrip1.Size = New System.Drawing.Size(705, 25)
         Me.ToolStrip1.TabIndex = 24
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -122,6 +123,7 @@ Partial Class FormPropertyFilter
         '
         'ToolStripLabel1
         '
+        Me.ToolStripLabel1.BackColor = System.Drawing.Color.Gainsboro
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
         Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
         Me.ToolStripLabel1.Text = "Saved Settings"
@@ -163,8 +165,9 @@ Partial Class FormPropertyFilter
         '
         'ToolStripLabel2
         '
+        Me.ToolStripLabel2.BackColor = System.Drawing.Color.Gainsboro
         Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(60, 22)
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
         Me.ToolStripLabel2.Text = "Row Tools"
         '
         'ToolStripSeparator2
@@ -209,6 +212,7 @@ Partial Class FormPropertyFilter
         '
         'ButtonHelp
         '
+        Me.ButtonHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ButtonHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.ButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta

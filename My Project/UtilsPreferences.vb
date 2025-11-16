@@ -196,7 +196,9 @@ Public Class UtilsPreferences
     End Sub
 
     Public Function GetTempDirectory() As String
-        Dim DirName As String = $"{IO.Path.GetTempPath}\Housekeeper"
+        Dim junk As String = IO.Path.GetTempPath ' Already has a trailing backslash
+        'Dim DirName As String = $"{IO.Path.GetTempPath}\Housekeeper"
+        Dim DirName As String = $"{IO.Path.GetTempPath}Housekeeper"
         If Not IO.Directory.Exists(DirName) Then IO.Directory.CreateDirectory(DirName)
         Return DirName
     End Function
@@ -326,11 +328,11 @@ Public Class UtilsPreferences
             Outlist.Add("[EXP]")
             Outlist.Add("Example If()")
             Outlist.Add("[EXP_TEXT]")
-            Outlist.Add("if ('%{System.Title}' == 'Dog','Meat',")
-            Outlist.Add("if('%{System.Title}' == 'Cat','Fish',")
-            Outlist.Add("if('%{System.Title}' == 'Cow','Hay','unknown')))")
+            Outlist.Add("if ('%{System.Category}' == 'LASER','SSM',")
+            Outlist.Add("if('%{System.Category}' == 'WATERJET','Kastle',")
+            Outlist.Add("if('%{System.Category}' == 'FAB','Internal','')))")
             Outlist.Add("")
-            Outlist.Add("\\Example of the usage of if() statement, valid inputs Dog, Cat, Cow")
+            Outlist.Add("\\Example of the usage of if() statement, valid inputs LASER, WATERJET, FAB, ??")
             Outlist.Add("")
 
             Outlist.Add("[EXP]")

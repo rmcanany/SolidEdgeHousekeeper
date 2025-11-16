@@ -61,7 +61,11 @@ Added the ability to test an expression on a live SE file.  Previously only manu
 
 Click the `Test on Edge` button to execute.  SE must be running with the target file active.  The program reports the result along with any parameters read from the file.
 
-Also added a couple of saved expression examples using `VB` syntax.
+Also made the following changes.
+
+- Added the programming language choice to the toolbar.  
+- Added shortcuts to the `Property Input Editor` to insert or edit an expression.  
+- Added a couple of expression examples using `VB` syntax.
 
 ### Other
 

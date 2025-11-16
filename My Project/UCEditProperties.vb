@@ -294,7 +294,7 @@ Public Class UCEditProperties
         Notify()
     End Sub
 
-    Private Sub SelectPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
+    Private Sub ButtonInsertProperty_Click(sender As Object, e As EventArgs) Handles ButtonInsertProperty.Click
 
         Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
         Dim CaretPosition = TextBox.Text.Length
@@ -309,4 +309,73 @@ Public Class UCEditProperties
 
     End Sub
 
+    Private Sub ButtonInsertExpression_Click(sender As Object, e As EventArgs) Handles ButtonInsertExpression.Click
+
+        Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
+        Dim CaretPosition = TextBox.Text.Length
+
+
+        Dim FES As New FormExpressionSelector
+
+        Dim Result As DialogResult = FES.ShowDialog
+
+        If Result = DialogResult.OK Then
+            Dim tmpSavedExpressionsItems = FES.SavedExpressionsItems
+            Dim tmpSavedExpressionName = FES.SavedExpressionName
+
+            If Not tmpSavedExpressionName = "" And tmpSavedExpressionsItems.Keys.Contains(tmpSavedExpressionName) Then
+                Dim A As String = $"EXPRESSION_{FES.SavedExpresssionLanguage}{vbCrLf}{tmpSavedExpressionsItems(tmpSavedExpressionName)}"
+                A = A.Split(CType("\\", Char)).First
+                A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+
+                TextBox.Text = A
+
+                'TextBox.Text = tmpSavedExpressionsItems(tmpSavedExpressionName)
+
+            End If
+        End If
+
+    End Sub
+
+    Private Sub ButtonEditExpression_Click(sender As Object, e As EventArgs) Handles ButtonEditExpression.Click
+
+        Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
+        Dim CaretPosition = TextBox.Text.Length
+
+        Dim FEE As New FormExpressionEditor
+
+        Select Case Form_Main.ExpressionEditorLanguage
+            Case "VB"
+                FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+            Case "NCalc"
+                FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+            Case Else
+                MsgBox($"Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
+                Exit Sub
+        End Select
+
+        Dim Result As DialogResult = FEE.ShowDialog()
+
+        If Result = DialogResult.OK Then
+            If Not FEE.Formula = "" Then
+
+                Select Case FEE.TextEditorFormula.Language
+                    Case FastColoredTextBoxNS.Language.VB
+                        Form_Main.ExpressionEditorLanguage = "VB"
+                    Case FastColoredTextBoxNS.Language.SQL
+                        Form_Main.ExpressionEditorLanguage = "NCalc"
+                End Select
+
+                Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
+                A = A.Split(CType("\\", Char)).First
+                A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+
+                TextBox.Text = A
+
+            End If
+
+        End If
+
+
+    End Sub
 End Class

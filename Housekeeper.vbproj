@@ -197,6 +197,12 @@
     <Compile Include="My Project\FormBlockLibraryBlockNames.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormExpressionSelector.Designer.vb">
+      <DependentUpon>FormExpressionSelector.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormExpressionSelector.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormPresetsOptions.Designer.vb">
       <DependentUpon>FormPresetsOptions.vb</DependentUpon>
     </Compile>
@@ -405,6 +411,9 @@
   <ItemGroup>
     <EmbeddedResource Include="My Project\FormBlockLibraryBlockNames.resx">
       <DependentUpon>FormBlockLibraryBlockNames.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormExpressionSelector.resx">
+      <DependentUpon>FormExpressionSelector.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPresetsOptions.resx">
       <DependentUpon>FormPresetsOptions.vb</DependentUpon>

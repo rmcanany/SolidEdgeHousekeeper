@@ -320,6 +320,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             Dim DraftDoc As SolidEdgeDraft.DraftDocument = Nothing
             Try
                 DraftDoc = CType(Documents.Add("SolidEdge.DraftDocument", Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
+                'DraftDoc = CType(Documents.Open(Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
                 SEApp.DoIdle()
                 'Dim UP As New UtilsPreferences
                 'Dim tmpDir As String = UP.GetTempDirectory()

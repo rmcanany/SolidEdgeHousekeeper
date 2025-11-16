@@ -293,7 +293,11 @@ Public Class FormExpressionEditor
 
         SR.Close()
 
-        If TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then TS_Language.Text = "  VB  " Else TS_Language.Text = "  NCalc  "
+        If TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then
+            ComboBoxLanguage.Text = "VB"
+        Else
+            ComboBoxLanguage.Text = "NCalc"
+        End If
 
     End Sub
 
@@ -412,6 +416,25 @@ Public Class FormExpressionEditor
     Private Sub BT_InsertProp_Click(sender As Object, e As EventArgs) Handles BT_InsertProp.Click
         TextEditorFormula.SelectedText = """%{}"""
         TextEditorFormula.SelectionStart -= 2
+    End Sub
+
+    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+        Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+
+
+        Me.DialogResult = DialogResult.OK
+    End Sub
+
+    Private Sub ComboBoxLanguage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLanguage.SelectedIndexChanged
+        Select Case ComboBoxLanguage.Text
+            Case "VB"
+                Me.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+            Case "NCalc"
+                Me.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        End Select
     End Sub
 End Class
 

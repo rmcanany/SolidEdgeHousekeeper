@@ -23,19 +23,45 @@ Partial Class UCEditProperties
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ButtonInsertProperty = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ButtonInsertExpression = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ButtonEditExpression = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxSelected = New System.Windows.Forms.CheckBox()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
         Me.ComboBoxPropertyName = New System.Windows.Forms.ComboBox()
         Me.ComboBoxFindSearch = New System.Windows.Forms.ComboBox()
         Me.TextBoxFindString = New System.Windows.Forms.TextBox()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ComboBoxReplaceSearch = New System.Windows.Forms.ComboBox()
         Me.TextBoxReplaceString = New System.Windows.Forms.TextBox()
-        Me.ExTableLayoutPanel1.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
+        Me.ExTableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ButtonInsertProperty, Me.ButtonInsertExpression, Me.ButtonEditExpression})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(162, 70)
+        '
+        'ButtonInsertProperty
+        '
+        Me.ButtonInsertProperty.Name = "ButtonInsertProperty"
+        Me.ButtonInsertProperty.Size = New System.Drawing.Size(161, 22)
+        Me.ButtonInsertProperty.Text = "Insert property"
+        '
+        'ButtonInsertExpression
+        '
+        Me.ButtonInsertExpression.Name = "ButtonInsertExpression"
+        Me.ButtonInsertExpression.Size = New System.Drawing.Size(161, 22)
+        Me.ButtonInsertExpression.Text = "Insert expression"
+        '
+        'ButtonEditExpression
+        '
+        Me.ButtonEditExpression.Name = "ButtonEditExpression"
+        Me.ButtonEditExpression.Size = New System.Drawing.Size(161, 22)
+        Me.ButtonEditExpression.Text = "Edit expression"
         '
         'ExTableLayoutPanel1
         '
@@ -119,18 +145,6 @@ Partial Class UCEditProperties
         Me.TextBoxFindString.Size = New System.Drawing.Size(106, 23)
         Me.TextBoxFindString.TabIndex = 4
         '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 26)
-        '
-        'InsertPropertyToolStripMenuItem
-        '
-        Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
-        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
-        Me.InsertPropertyToolStripMenuItem.Text = "Insert property"
-        '
         'ComboBoxReplaceSearch
         '
         Me.ComboBoxReplaceSearch.Dock = System.Windows.Forms.DockStyle.Fill
@@ -161,9 +175,9 @@ Partial Class UCEditProperties
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "UCEditProperties"
         Me.Size = New System.Drawing.Size(700, 30)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
-        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -177,5 +191,7 @@ Partial Class UCEditProperties
     Friend WithEvents ComboBoxReplaceSearch As ComboBox
     Friend WithEvents TextBoxReplaceString As TextBox
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
-    Friend WithEvents InsertPropertyToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ButtonInsertProperty As ToolStripMenuItem
+    Friend WithEvents ButtonInsertExpression As ToolStripMenuItem
+    Friend WithEvents ButtonEditExpression As ToolStripMenuItem
 End Class

@@ -34,6 +34,8 @@ Partial Class FormVariableInputEditor
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.PanelVariables = New System.Windows.Forms.Panel()
         Me.ExTableLayoutPanelVariables = New Housekeeper.ExTableLayoutPanel()
         Me.UcEditVariables1 = New Housekeeper.UCEditVariables()
@@ -53,8 +55,6 @@ Partial Class FormVariableInputEditor
         Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.PanelVariables.SuspendLayout()
@@ -175,6 +175,26 @@ Partial Class FormVariableInputEditor
         Me.Label10.TabIndex = 3
         Me.Label10.Text = "EX"
         '
+        'Label2
+        '
+        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(429, 10)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(24, 15)
+        Me.Label2.TabIndex = 5
+        Me.Label2.Text = "CN"
+        '
+        'Label3
+        '
+        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(459, 10)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(66, 15)
+        Me.Label3.TabIndex = 6
+        Me.Label3.Text = "New Name"
+        '
         'PanelVariables
         '
         Me.PanelVariables.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -207,6 +227,7 @@ Partial Class FormVariableInputEditor
         '
         'UcEditVariables1
         '
+        Me.UcEditVariables1.ChangeName = False
         Me.UcEditVariables1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.UcEditVariables1.Expose = False
         Me.UcEditVariables1.ExposeName = ""
@@ -215,6 +236,7 @@ Partial Class FormVariableInputEditor
         Me.UcEditVariables1.Location = New System.Drawing.Point(4, 4)
         Me.UcEditVariables1.Margin = New System.Windows.Forms.Padding(4)
         Me.UcEditVariables1.Name = "UcEditVariables1"
+        Me.UcEditVariables1.NewName = ""
         Me.UcEditVariables1.NotifyVariableEditor = False
         Me.UcEditVariables1.Selected = False
         Me.UcEditVariables1.Size = New System.Drawing.Size(742, 27)
@@ -255,9 +277,10 @@ Partial Class FormVariableInputEditor
         '
         'ToolStripEditVariables
         '
-        Me.ToolStripEditVariables.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator1, Me.ComboBoxSavedSettings, Me.ButtonSaveSetting, Me.ButtonDeleteSetting, Me.ToolStripLabel1, Me.ToolStripSeparator2, Me.ButtonUp, Me.ButtonDown, Me.ButtonDeleteRow, Me.ToolStripLabel2, Me.ToolStripSeparator3, Me.ButtonHelp})
+        Me.ToolStripEditVariables.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator1, Me.ToolStripLabel1, Me.ComboBoxSavedSettings, Me.ButtonSaveSetting, Me.ButtonDeleteSetting, Me.ToolStripSeparator2, Me.ToolStripLabel2, Me.ButtonUp, Me.ButtonDown, Me.ButtonDeleteRow, Me.ToolStripSeparator3, Me.ButtonHelp})
         Me.ToolStripEditVariables.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripEditVariables.Name = "ToolStripEditVariables"
+        Me.ToolStripEditVariables.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.ToolStripEditVariables.Size = New System.Drawing.Size(759, 25)
         Me.ToolStripEditVariables.TabIndex = 8
         Me.ToolStripEditVariables.Text = "ToolStrip1"
@@ -295,6 +318,7 @@ Partial Class FormVariableInputEditor
         '
         'ToolStripLabel1
         '
+        Me.ToolStripLabel1.BackColor = System.Drawing.Color.Gainsboro
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
         Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
         Me.ToolStripLabel1.Text = "Saved Settings"
@@ -336,6 +360,7 @@ Partial Class FormVariableInputEditor
         '
         'ToolStripLabel2
         '
+        Me.ToolStripLabel2.BackColor = System.Drawing.Color.Gainsboro
         Me.ToolStripLabel2.Name = "ToolStripLabel2"
         Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
         Me.ToolStripLabel2.Text = "Row Tools"
@@ -347,6 +372,7 @@ Partial Class FormVariableInputEditor
         '
         'ButtonHelp
         '
+        Me.ButtonHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ButtonHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.ButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -354,26 +380,6 @@ Partial Class FormVariableInputEditor
         Me.ButtonHelp.Size = New System.Drawing.Size(23, 22)
         Me.ButtonHelp.Text = "ToolStripButton1"
         Me.ButtonHelp.ToolTipText = "Help"
-        '
-        'Label2
-        '
-        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(429, 10)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(24, 15)
-        Me.Label2.TabIndex = 5
-        Me.Label2.Text = "CN"
-        '
-        'Label3
-        '
-        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(459, 10)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(66, 15)
-        Me.Label3.TabIndex = 6
-        Me.Label3.Text = "New Name"
         '
         'FormVariableInputEditor
         '

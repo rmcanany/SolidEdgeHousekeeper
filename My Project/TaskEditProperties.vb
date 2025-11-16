@@ -1082,10 +1082,11 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "An `expression` is basically a program. "
         HelpString += "It enables more complex manipulations of the `Replace` string. "
-        HelpString += "To create one, click the `Expression Editor` button on the input editor form. "
+        HelpString += "To create one, right-click the `Replace` textbox and select `Edit expression`. "
+        HelpString += "To use one you have already saved, select `Insert expression` instead. "
 
         HelpString += vbCrLf + vbCrLf + "There are two programming languages available, `NCalc` and `VB`. "
-        HelpString += "Choose which one to use on the **Configuration Tab -- General Page**. "
+        HelpString += "Choose which one to use on the toolbar. "
         HelpString += "`VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  "
         HelpString += "`NCalc` is more like a formula in Excel. Some of its features are detailed below. "
 
@@ -1099,8 +1100,7 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` or `Test on Edge` buttons. "
         HelpString += "With the former, if there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
         HelpString += "With the latter, it reads the variables from a file.  SE must be running with the target file active.  "
-        HelpString += "When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. "
-        HelpString += "The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. "
+        HelpString += "To populate the `Replace` field with your expression, click `OK`, otherwise click `Cancel`. "
 
         HelpString += vbCrLf + vbCrLf + "You can `Save` or `Save As` your expression with the buttons provided. "
         HelpString += "Retreive them with the `Saved Expressions` drop-down. "

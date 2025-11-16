@@ -95,9 +95,10 @@ Partial Class FormPropertyInputEditor
         'ToolStripEditProperties
         '
         Me.ToolStripEditProperties.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStripEditProperties.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonDeleteSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ToolStripButtonUp, Me.ToolStripButtonDown, Me.ToolStripButtonDeleteRow, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ToolStripButtonExpressionEditor, Me.ToolStripSeparator5, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ToolStripButtonHelp})
+        Me.ToolStripEditProperties.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ToolStripLabel1, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonDeleteSetting, Me.ToolStripSeparator1, Me.ToolStripLabel2, Me.ToolStripButtonUp, Me.ToolStripButtonDown, Me.ToolStripButtonDeleteRow, Me.ToolStripSeparator2, Me.ToolStripButtonExpressionEditor, Me.ToolStripSeparator5, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ToolStripButtonHelp})
         Me.ToolStripEditProperties.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripEditProperties.Name = "ToolStripEditProperties"
+        Me.ToolStripEditProperties.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.ToolStripEditProperties.Size = New System.Drawing.Size(759, 25)
         Me.ToolStripEditProperties.TabIndex = 13
         Me.ToolStripEditProperties.Text = "ToolStrip1"
@@ -136,6 +137,8 @@ Partial Class FormPropertyInputEditor
         '
         'ToolStripLabel1
         '
+        Me.ToolStripLabel1.BackColor = System.Drawing.Color.Gainsboro
+        Me.ToolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
         Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
         Me.ToolStripLabel1.Text = "Saved Settings"
@@ -177,14 +180,16 @@ Partial Class FormPropertyInputEditor
         '
         'ToolStripLabel2
         '
+        Me.ToolStripLabel2.BackColor = System.Drawing.Color.Gainsboro
         Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(60, 22)
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
         Me.ToolStripLabel2.Text = "Row Tools"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator2.Visible = False
         '
         'ToolStripButtonExpressionEditor
         '
@@ -192,9 +197,10 @@ Partial Class FormPropertyInputEditor
         Me.ToolStripButtonExpressionEditor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ToolStripButtonExpressionEditor.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButtonExpressionEditor.Name = "ToolStripButtonExpressionEditor"
-        Me.ToolStripButtonExpressionEditor.Size = New System.Drawing.Size(117, 22)
+        Me.ToolStripButtonExpressionEditor.Size = New System.Drawing.Size(116, 22)
         Me.ToolStripButtonExpressionEditor.Text = "Expression Editor"
         Me.ToolStripButtonExpressionEditor.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolStripButtonExpressionEditor.Visible = False
         '
         'ToolStripSeparator5
         '
@@ -217,6 +223,7 @@ Partial Class FormPropertyInputEditor
         '
         'ToolStripButtonHelp
         '
+        Me.ToolStripButtonHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButtonHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.ToolStripButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -375,7 +382,7 @@ Partial Class FormPropertyInputEditor
         Me.Label9.AutoSize = True
         Me.Label9.Location = New System.Drawing.Point(460, 25)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(82, 15)
+        Me.Label9.Size = New System.Drawing.Size(81, 15)
         Me.Label9.TabIndex = 11
         Me.Label9.Text = "EX: Expression"
         '
@@ -384,7 +391,7 @@ Partial Class FormPropertyInputEditor
         Me.Label8.AutoSize = True
         Me.Label8.Location = New System.Drawing.Point(315, 25)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(126, 15)
+        Me.Label8.Size = New System.Drawing.Size(125, 15)
         Me.Label8.TabIndex = 10
         Me.Label8.Text = "RX: Regular Expression"
         '
@@ -393,7 +400,7 @@ Partial Class FormPropertyInputEditor
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(220, 25)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(76, 15)
+        Me.Label7.Size = New System.Drawing.Size(77, 15)
         Me.Label7.TabIndex = 9
         Me.Label7.Text = "PT: Plain Text"
         '
@@ -420,7 +427,7 @@ Partial Class FormPropertyInputEditor
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(460, 5)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(126, 15)
+        Me.Label4.Size = New System.Drawing.Size(125, 15)
         Me.Label4.TabIndex = 6
         Me.Label4.Text = "RX: Regular Expression"
         '
@@ -438,7 +445,7 @@ Partial Class FormPropertyInputEditor
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(220, 5)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(76, 15)
+        Me.Label2.Size = New System.Drawing.Size(77, 15)
         Me.Label2.TabIndex = 4
         Me.Label2.Text = "PT: Plain Text"
         '

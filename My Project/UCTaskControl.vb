@@ -182,6 +182,11 @@ Public Class UCTaskControl
     Private Sub ExpressionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpressionEditorToolStripMenuItem.Click
         'MsgBox("In UCTaskControl.vb got a ExpressionEditorToolStripMenuItem.Click event")
 
+        Dim TextBox = TryCast(ContextMenuStrip1.SourceControl, TextBox)
+        If TextBox Is Nothing Then Exit Sub
+
+        Dim CaretPosition = TextBox.Text.Length
+
         Dim TaskType As Type = Me.Task.GetType
 
         If Not (TaskType.Name = "TaskSaveDrawingAs" Or TaskType.Name = "TaskSaveModelAs") Then
@@ -202,17 +207,29 @@ Public Class UCTaskControl
                 FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
             Case Else
                 MsgBox($"UCTaskControl: Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
+                Exit Sub
         End Select
 
-        FEE.ShowDialog()
+        Dim Result As DialogResult = FEE.ShowDialog()
 
-        If Not FEE.Formula = "" Then
-            Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
-            A = A.Split(CType("\\", Char)).First
-            A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+        If Result = DialogResult.OK Then
+            If Not FEE.Formula = "" Then
 
-            Clipboard.SetText(A)
-            MessageTimeOut("Expression copied to clipboard", "Expression editor", 1)
+                Select Case FEE.TextEditorFormula.Language
+                    Case FastColoredTextBoxNS.Language.VB
+                        Form_Main.ExpressionEditorLanguage = "VB"
+                    Case FastColoredTextBoxNS.Language.SQL
+                        Form_Main.ExpressionEditorLanguage = "NCalc"
+                End Select
+
+                Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
+                A = A.Split(CType("\\", Char)).First
+                A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+
+                TextBox.Text = A
+
+            End If
+
         End If
 
     End Sub
