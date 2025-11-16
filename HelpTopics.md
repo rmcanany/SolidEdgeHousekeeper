@@ -870,13 +870,13 @@ If you are changing `System.Material` specifically, you can also update the prop
 
 An `expression` is basically a program. It enables more complex manipulations of the `Replace` string. To create one, right-click the `Replace` textbox and select `Edit expression`. To use one you have already saved, select `Insert expression` instead. 
 
-There are two programming languages available, `NCalc` and `VB`. Choose which one to use on the **Configuration Tab -- General Page**. `VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  `NCalc` is more like a formula in Excel. Some of its features are detailed below. 
+There are two programming languages available, `NCalc` and `VB`. Choose which one to use on the toolbar. `VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  `NCalc` is more like a formula in Excel. Some of its features are detailed below. 
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
 With `NCalc` you can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
-You can check your expression using the `Test` or `Test on Edge` buttons. With the former, if there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. With the latter, it reads the variables from a file.  SE must be running with the target file active.  When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. 
+You can check your expression using the `Test` or `Test on Edge` buttons. With the former, if there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. With the latter, it reads the variables from a file.  SE must be running with the target file active.  To populate the `Replace` field with your expression, click `OK`, otherwise click `Cancel`. 
 
 You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to get the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
 
