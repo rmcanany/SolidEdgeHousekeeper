@@ -26,7 +26,7 @@ Partial Class Form_Main
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
@@ -421,9 +421,9 @@ Partial Class Form_Main
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewSources.FullRowSelect = True
-        ListViewGroup1.Header = "File sources"
-        ListViewGroup1.Name = "Sources"
-        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1})
+        ListViewGroup2.Header = "File sources"
+        ListViewGroup2.Name = "Sources"
+        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup2})
         Me.ListViewSources.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewSources.HideSelection = False
         Me.ListViewSources.Location = New System.Drawing.Point(0, 0)
@@ -2538,7 +2538,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(527, 579)
@@ -2778,6 +2778,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel12.Size = New System.Drawing.Size(521, 24)
         Me.ExTableLayoutPanel12.TabIndex = 79
         Me.ExTableLayoutPanel12.Task = Nothing
+        Me.ExTableLayoutPanel12.Visible = False
         '
         'ComboBoxExpressionEditorLanguage
         '
@@ -2789,6 +2790,7 @@ Partial Class Form_Main
         Me.ComboBoxExpressionEditorLanguage.Name = "ComboBoxExpressionEditorLanguage"
         Me.ComboBoxExpressionEditorLanguage.Size = New System.Drawing.Size(69, 23)
         Me.ComboBoxExpressionEditorLanguage.TabIndex = 0
+        Me.ComboBoxExpressionEditorLanguage.Visible = False
         '
         'LabelExpressionEditorLanguage
         '
@@ -2796,9 +2798,10 @@ Partial Class Form_Main
         Me.LabelExpressionEditorLanguage.AutoSize = True
         Me.LabelExpressionEditorLanguage.Location = New System.Drawing.Point(78, 4)
         Me.LabelExpressionEditorLanguage.Name = "LabelExpressionEditorLanguage"
-        Me.LabelExpressionEditorLanguage.Size = New System.Drawing.Size(148, 15)
+        Me.LabelExpressionEditorLanguage.Size = New System.Drawing.Size(283, 15)
         Me.LabelExpressionEditorLanguage.TabIndex = 1
-        Me.LabelExpressionEditorLanguage.Text = "Expression editor language"
+        Me.LabelExpressionEditorLanguage.Text = "Expression editor language CURRENTLY NOT VISIBLE"
+        Me.LabelExpressionEditorLanguage.Visible = False
         '
         'CheckBoxDebugMode
         '

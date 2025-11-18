@@ -330,6 +330,11 @@ Public Class UCEditProperties
 
                 TextBox.Text = A
 
+                If A.ToLower.Contains("return") Then
+                    Form_Main.ExpressionEditorLanguage = "VB"
+                Else
+                    Form_Main.ExpressionEditorLanguage = "NCalc"
+                End If
                 'TextBox.Text = tmpSavedExpressionsItems(tmpSavedExpressionName)
 
             End If
@@ -353,6 +358,8 @@ Public Class UCEditProperties
                 MsgBox($"Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
                 Exit Sub
         End Select
+
+        FEE.Formula = TextBox.Text
 
         Dim Result As DialogResult = FEE.ShowDialog()
 

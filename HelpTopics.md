@@ -874,11 +874,24 @@ There are two programming languages available, `NCalc` and `VB`. Choose which on
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
+The toolbar has two sections, `Editor` and `Saved Expressions`. 
+
+`Editor` commands
+
+- `Select program language` Choose either `NCalc` or `VB` from the drop down.
+- `Test` Check your expression.  If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value.
+- `Test on Edge` Same as above except variables are read from a file.  SE must be running with the target file active. 
+- `Clear` Deletes all text from the editor window. 
+- `"%{}"` Insert property.  Brings up a form for you to choose it. 
+
+`Saved Expressions` commands
+
+- `Select` Choose a saved expression from the drop down. The drop-down comes with a few examples. You can study those to get the hang of it. 
+- `Save` Save an expression. 
+- `Save As` Save an expression with a new name. 
+- `Delete` Delete the expression from the saved expressions. 
+
 With `NCalc` you can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
-
-You can check your expression using the `Test` or `Test on Edge` buttons. With the former, if there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. With the latter, it reads the variables from a file.  SE must be running with the target file active.  To populate the `Replace` field with your expression, click `OK`, otherwise click `Cancel`. 
-
-You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to get the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
 
 `NCalc` functions
 

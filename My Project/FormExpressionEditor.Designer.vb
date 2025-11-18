@@ -73,6 +73,7 @@ Partial Class FormExpressionEditor
         Me.EditorLabel.Name = "EditorLabel"
         Me.EditorLabel.Size = New System.Drawing.Size(38, 22)
         Me.EditorLabel.Text = "Editor"
+        Me.EditorLabel.ToolTipText = "Editor functions"
         '
         'ComboBoxLanguage
         '
@@ -106,6 +107,7 @@ Partial Class FormExpressionEditor
         Me.BT_Clear.Name = "BT_Clear"
         Me.BT_Clear.Size = New System.Drawing.Size(54, 22)
         Me.BT_Clear.Text = "Clear"
+        Me.BT_Clear.ToolTipText = "Clear editor text"
         '
         'BT_InsertProp
         '
@@ -116,6 +118,7 @@ Partial Class FormExpressionEditor
         Me.BT_InsertProp.Name = "BT_InsertProp"
         Me.BT_InsertProp.Size = New System.Drawing.Size(41, 22)
         Me.BT_InsertProp.Text = """%{}"""
+        Me.BT_InsertProp.ToolTipText = "Insert property"
         '
         'ToolStripSeparator1
         '
@@ -128,6 +131,7 @@ Partial Class FormExpressionEditor
         Me.SavedExpressionsLabel.Name = "SavedExpressionsLabel"
         Me.SavedExpressionsLabel.Size = New System.Drawing.Size(101, 22)
         Me.SavedExpressionsLabel.Text = "Saved Expressions"
+        Me.SavedExpressionsLabel.ToolTipText = "Saved expression functions"
         '
         'DD_SavedExpressions
         '
@@ -136,6 +140,7 @@ Partial Class FormExpressionEditor
         Me.DD_SavedExpressions.Name = "DD_SavedExpressions"
         Me.DD_SavedExpressions.Size = New System.Drawing.Size(67, 22)
         Me.DD_SavedExpressions.Text = "Select"
+        Me.DD_SavedExpressions.ToolTipText = "Select expression"
         '
         'BT_Save
         '
@@ -144,6 +149,7 @@ Partial Class FormExpressionEditor
         Me.BT_Save.Name = "BT_Save"
         Me.BT_Save.Size = New System.Drawing.Size(51, 22)
         Me.BT_Save.Text = "Save"
+        Me.BT_Save.ToolTipText = "Save expression"
         '
         'BT_SaveAs
         '
@@ -152,6 +158,7 @@ Partial Class FormExpressionEditor
         Me.BT_SaveAs.Name = "BT_SaveAs"
         Me.BT_SaveAs.Size = New System.Drawing.Size(67, 22)
         Me.BT_SaveAs.Text = "Save As"
+        Me.BT_SaveAs.ToolTipText = "Save expression As"
         '
         'BT_Delete
         '
@@ -160,6 +167,7 @@ Partial Class FormExpressionEditor
         Me.BT_Delete.Name = "BT_Delete"
         Me.BT_Delete.Size = New System.Drawing.Size(60, 22)
         Me.BT_Delete.Text = "Delete"
+        Me.BT_Delete.ToolTipText = "Delete expression"
         '
         'ToolStripSeparator2
         '
@@ -289,7 +297,7 @@ Partial Class FormExpressionEditor
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormExpressionEditor"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Expression editor"
+        Me.Text = "Expression Editor"
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).EndInit()

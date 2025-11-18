@@ -299,6 +299,19 @@ Public Class FormExpressionEditor
             ComboBoxLanguage.Text = "NCalc"
         End If
 
+        Dim tmpFormula As String = Formula
+        tmpFormula = tmpFormula.Replace("EXPRESSION_VB", "")
+        tmpFormula = tmpFormula.Replace("EXPRESSION_NCalc", "")
+        tmpFormula = tmpFormula.Replace(Chr(182), vbCrLf)
+
+        If Not tmpFormula = "" Then
+            While tmpFormula(0) = vbCrLf Or tmpFormula(0) = vbCr Or tmpFormula(0) = vbLf
+                tmpFormula = tmpFormula.Substring(1)
+            End While
+        End If
+
+        TextEditorFormula.Text = tmpFormula
+
     End Sub
 
     Private Sub DD_SavedExpressions_DropDownItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles DD_SavedExpressions.DropDownItemClicked
@@ -309,6 +322,14 @@ Public Class FormExpressionEditor
         TextEditorFormula.Text = SavedExpressionsItems.Item(tmpItem.Text)
         CurrentExpression = tmpItem.Text
         Me.Text = "Expression editor - " & CurrentExpression
+
+        If TextEditorFormula.Text.ToLower.Contains("return") Then
+            TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+            ComboBoxLanguage.Text = "VB"
+        Else
+            TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+            ComboBoxLanguage.Text = "NCalc"
+        End If
 
     End Sub
 
@@ -414,8 +435,27 @@ Public Class FormExpressionEditor
     End Sub
 
     Private Sub BT_InsertProp_Click(sender As Object, e As EventArgs) Handles BT_InsertProp.Click
-        TextEditorFormula.SelectedText = """%{}"""
-        TextEditorFormula.SelectionStart -= 2
+        'TextEditorFormula.SelectedText = """%{}"""
+        'TextEditorFormula.SelectionStart -= 2
+
+        Dim CaretPosition = TextEditorFormula.SelectionStart
+
+        Dim FPP As New FormPropertyPicker
+
+        FPP.ShowDialog()
+
+        If FPP.DialogResult = DialogResult.OK Then
+            Dim PropString As String = FPP.PropertyString
+            Select Case Me.TextEditorFormula.Language
+                Case FastColoredTextBoxNS.Language.VB
+                    PropString = $"""{PropString}"""
+                Case FastColoredTextBoxNS.Language.SQL
+                    PropString = $"'{PropString}'"
+            End Select
+
+            TextEditorFormula.Text = TextEditorFormula.Text.Insert(CaretPosition, PropString)
+        End If
+
     End Sub
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click

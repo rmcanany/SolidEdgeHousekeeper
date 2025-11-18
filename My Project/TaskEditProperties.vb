@@ -490,7 +490,7 @@ Public Class TaskEditProperties
         End If
 
         Dim OriginalReplaceString As String = ""
-        If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString
+        If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString  ' Just for error reporting.
         ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, ReplaceSearchType = "EX")
         If ReplaceString Is Nothing Then
             If Not ReplaceSearchType = "EX" Then
@@ -1092,20 +1092,27 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
 
+        HelpString += vbCrLf + vbCrLf + "The toolbar has two sections, `Editor` and `Saved Expressions`. "
+
+        HelpString += vbCrLf + vbCrLf + "`Editor` commands"
+
+        HelpString += vbCrLf + vbCrLf + "- `Select program language` Choose either `NCalc` or `VB` from the drop down."
+        HelpString += vbCrLf + "- `Test` Check your expression.  If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value."
+        HelpString += vbCrLf + "- `Test on Edge` Same as above except variables are read from a file.  SE must be running with the target file active. "
+        HelpString += vbCrLf + "- `Clear` Deletes all text from the editor window. "
+        HelpString += vbCrLf + "- `""%{}""` Insert property.  Brings up a form for you to choose it. "
+
+        HelpString += vbCrLf + vbCrLf + "`Saved Expressions` commands"
+
+        HelpString += vbCrLf + vbCrLf + "- `Select` Choose a saved expression from the drop down. The drop-down comes with a few examples. You can study those to get the hang of it. "
+        HelpString += vbCrLf + "- `Save` Save an expression. "
+        HelpString += vbCrLf + "- `Save As` Save an expression with a new name. "
+        HelpString += vbCrLf + "- `Delete` Delete the expression from the saved expressions. "
+
         HelpString += vbCrLf + vbCrLf + "With `NCalc` you can perform string processing, "
         HelpString += "create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. "
         HelpString += "Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. "
         HelpString += "Unlike Excel, multi-line text is allowed, which can make the code more readable. "
-
-        HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` or `Test on Edge` buttons. "
-        HelpString += "With the former, if there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
-        HelpString += "With the latter, it reads the variables from a file.  SE must be running with the target file active.  "
-        HelpString += "To populate the `Replace` field with your expression, click `OK`, otherwise click `Cancel`. "
-
-        HelpString += vbCrLf + vbCrLf + "You can `Save` or `Save As` your expression with the buttons provided. "
-        HelpString += "Retreive them with the `Saved Expressions` drop-down. "
-        HelpString += "That drop-down comes with a few examples. You can study those to get the hang of it. "
-        HelpString += "To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. "
 
         HelpString += vbCrLf + vbCrLf + "`NCalc` functions"
         HelpString += vbCrLf + vbCrLf + "`concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, "
