@@ -450,7 +450,7 @@ Public Class HCStructuredStorageDoc
 
         If Proceed Then
             For Each Formula In Formulas
-                DocValue = ProcessFormula(Formula, ErrorLogger)
+                DocValue = ProcessFormula(Formula, ErrorLogger, IsExpression)
                 If DocValue Is Nothing Then
                     ErrorLogger.AddMessage($"Could not process formula '{Formula}'")
                     Return Nothing
@@ -479,6 +479,8 @@ Public Class HCStructuredStorageDoc
                         OutString = A.ToString
                     Catch ex As Exception
                         ErrorLogger.AddMessage($"Could not process expression '{OutString}'")
+                        ErrorLogger.AddMessage("Exception was:")
+                        ErrorLogger.AddMessage(ex.Message)
                         OutString = Nothing
                     End Try
 
@@ -493,6 +495,8 @@ Public Class HCStructuredStorageDoc
                         OutString = UPS.RunExpressionScript(PowerShellFilename)
                     Catch ex As Exception
                         ErrorLogger.AddMessage($"Could not process expression '{OutString}'")
+                        ErrorLogger.AddMessage("Exception was:")
+                        ErrorLogger.AddMessage(ex.Message)
                         OutString = Nothing
                     End Try
 
@@ -506,7 +510,7 @@ Public Class HCStructuredStorageDoc
     End Function
 
 
-    Private Function ProcessFormula(Formula As String, ErrorLogger As Logger) As String
+    Private Function ProcessFormula(Formula As String, ErrorLogger As Logger, IsExpression As Boolean) As String
         Dim DocValue As String = Nothing
 
         Dim UC As New UtilsCommon
@@ -549,8 +553,12 @@ Public Class HCStructuredStorageDoc
             If ModelIdx = 0 Then
                 DocValue = CStr(GetPropValue(PropertySetName, PropertyNameEnglish))
                 If DocValue Is Nothing Then
-                    ErrorLogger.AddMessage($"No value found for '{PropertySetName}.{PropertyNameEnglish}'")
-                    Return Nothing
+                    If Not IsExpression Then
+                        ErrorLogger.AddMessage($"No value found for '{PropertySetName}.{PropertyNameEnglish}'")
+                        Return Nothing
+                    Else
+                        DocValue = "Nothing"
+                    End If
                 Else
                     'If ValidFilenameRequired Then
                     '    DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
@@ -585,8 +593,12 @@ Public Class HCStructuredStorageDoc
 
                 DocValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
                 If DocValue Is Nothing Then
-                    SSDoc.Close()
-                    Return Nothing
+                    If Not IsExpression Then
+                        SSDoc.Close()
+                        Return Nothing
+                    Else
+                        DocValue = "Nothing"
+                    End If
                 Else
                     'If ValidFilenameRequired Then
                     '    DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))

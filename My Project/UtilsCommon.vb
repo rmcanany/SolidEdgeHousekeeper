@@ -959,7 +959,11 @@ Public Class UtilsCommon
                     If FoundProp IsNot Nothing Then
                         tmpValue = FoundProp.Value.ToString
                     Else
-                        ErrorLogger.AddMessage($"Unable to process property '{PropertySet}.{PropertyName}' in formula '{Formula}'")
+                        If Not IsExpression Then
+                            ErrorLogger.AddMessage($"Unable to process property '{PropertySet}.{PropertyName}' in formula '{Formula}'")
+                        Else
+                            tmpValue = "Nothing"
+                        End If
                     End If
                 End If
 
@@ -996,6 +1000,8 @@ Public Class UtilsCommon
                         Outstring = A.ToString
                     Catch ex As Exception
                         ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
+                        ErrorLogger.AddMessage("Exception was:")
+                        ErrorLogger.AddMessage(ex.Message)
                         Outstring = Nothing
                     End Try
 
@@ -1010,6 +1016,8 @@ Public Class UtilsCommon
                         Outstring = UPS.RunExpressionScript(PowerShellFilename)
                     Catch ex As Exception
                         ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
+                        ErrorLogger.AddMessage("Exception was:")
+                        ErrorLogger.AddMessage(ex.Message)
                         Outstring = Nothing
                     End Try
 
