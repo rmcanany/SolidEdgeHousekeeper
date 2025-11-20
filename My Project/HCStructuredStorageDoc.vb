@@ -930,7 +930,11 @@ Public Class HCStructuredStorageDoc
                     For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
                         CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                         Me.PropNames.Add(CorrectedName)
-                        Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
+                        Try
+                            Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
+                        Catch ex As Exception
+                            Dim i = 0
+                        End Try
                     Next
                 End If
 
@@ -1283,7 +1287,7 @@ Public Class HCStructuredStorageDoc
             tf = tf Or Me.VTType = VTPropertyType.VT_R8
             tf = tf And Me.co.HasUserDefinedProperties
             If tf Then
-                Success = MaybeChangePropType(PropertyValue)
+                'Success = MaybeChangePropType(PropertyValue)
             End If
 
             If Success Then
