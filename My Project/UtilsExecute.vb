@@ -69,10 +69,14 @@ Public Class UtilsExecute
         Next
 
         ' Process the files
-        If PartCount > 0 Then ProcessFiles("Part")
-        If SheetmetalCount > 0 Then ProcessFiles("Sheetmetal")
-        If AssemblyCount > 0 Then ProcessFiles("Assembly")
-        If DraftCount > 0 Then ProcessFiles("Draft")
+        If Not FMain.SortDependency Then
+            If PartCount > 0 Then ProcessFiles("Part")
+            If SheetmetalCount > 0 Then ProcessFiles("Sheetmetal")
+            If AssemblyCount > 0 Then ProcessFiles("Assembly")
+            If DraftCount > 0 Then ProcessFiles("Draft")
+        Else
+            If FilesToProcessTotal > 0 Then ProcessFiles("All")
+        End If
 
         If FMain.SolidEdgeRequired > 0 Then
             USEA.SEStop(FMain.UseCurrentSession)
@@ -348,6 +352,8 @@ Public Class UtilsExecute
             FilesToProcess = UFL.GetFileNames("*.psm")
         ElseIf Filetype = "Draft" Then
             FilesToProcess = UFL.GetFileNames("*.dft")
+        ElseIf Filetype = "All" Then
+            FilesToProcess = UFL.GetFileNames("*.*")
         Else
             MsgBox("In ProcessFiles(), Filetype not recognized: " + Filetype + ".  Exiting...")
             SEApp.Quit()
@@ -381,7 +387,24 @@ Public Class UtilsExecute
             msg = String.Format("{0}/{1} {2}", FilesToProcessCompleted + 1, FilesToProcessTotal, System.IO.Path.GetFileName(FileToProcess))
             FMain.TextBoxStatus.Text = msg
 
-            ProcessFile(FileToProcess, Filetype)
+            Dim tmpFiletype As String = ""
+
+            If Not Filetype = "All" Then
+                tmpFiletype = Filetype
+            Else
+                Select Case IO.Path.GetExtension(FileToProcess)
+                    Case ".asm"
+                        tmpFiletype = "Assembly"
+                    Case ".par"
+                        tmpFiletype = "Part"
+                    Case ".psm"
+                        tmpFiletype = "Sheetmetal"
+                    Case ".dft"
+                        tmpFiletype = "Draft"
+                End Select
+            End If
+
+            ProcessFile(FileToProcess, tmpFiletype)
 
             If Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
                 Dim tmpPath As String = System.IO.Path.GetDirectoryName(FileToProcess)

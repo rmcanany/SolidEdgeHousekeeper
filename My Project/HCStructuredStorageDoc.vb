@@ -557,7 +557,7 @@ Public Class HCStructuredStorageDoc
                         ErrorLogger.AddMessage($"No value found for '{PropertySetName}.{PropertyNameEnglish}'")
                         Return Nothing
                     Else
-                        DocValue = "Nothing"
+                        DocValue = "<Nothing>"
                     End If
                 Else
                     'If ValidFilenameRequired Then
@@ -597,7 +597,7 @@ Public Class HCStructuredStorageDoc
                         SSDoc.Close()
                         Return Nothing
                     Else
-                        DocValue = "Nothing"
+                        DocValue = "<Nothing>"
                     End If
                 Else
                     'If ValidFilenameRequired Then
@@ -927,14 +927,20 @@ Public Class HCStructuredStorageDoc
 
             If PropertySetName.ToLower = "custom" Then
                 If co.HasUserDefinedProperties Then
-                    For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
+                    'For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
+                    '    CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
+                    '    Me.PropNames.Add(CorrectedName)
+                    '    Try
+                    '        Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
+                    '    Catch ex As Exception
+                    '        Dim i = 0
+                    '    End Try
+                    'Next
+                    For i As Integer = 0 To co.UserDefinedProperties.Properties.Count - 1
+                        Dim OLEProp As OLEProperty = co.UserDefinedProperties.Properties(i)
                         CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                         Me.PropNames.Add(CorrectedName)
-                        Try
-                            Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
-                        Catch ex As Exception
-                            Dim i = 0
-                        End Try
+                        Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
                     Next
                 End If
 
@@ -1287,7 +1293,7 @@ Public Class HCStructuredStorageDoc
             tf = tf Or Me.VTType = VTPropertyType.VT_R8
             tf = tf And Me.co.HasUserDefinedProperties
             If tf Then
-                'Success = MaybeChangePropType(PropertyValue)
+                Success = MaybeChangePropType(PropertyValue)
             End If
 
             If Success Then

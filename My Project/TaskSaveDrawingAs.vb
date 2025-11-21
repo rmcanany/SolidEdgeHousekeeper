@@ -380,7 +380,16 @@ Public Class TaskSaveDrawingAs
             If Me.Formula.StartsWith("EXPRESSION_") Then
                 NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger, True)
 
-                If NewSubDirectoryName Is Nothing Then
+                'If NewSubDirectoryName Is Nothing Then
+                '    Success = False
+                '    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+                'Else
+                '    Dim DoNotSubstituteChars As New List(Of String)
+                '    DoNotSubstituteChars.Add("\")
+                '    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                'End If
+
+                If NewSubDirectoryName Is Nothing OrElse NewSubDirectoryName.Contains("<Nothing>") Then
                     Success = False
                     Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
                 Else

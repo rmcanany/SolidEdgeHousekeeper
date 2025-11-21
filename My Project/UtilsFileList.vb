@@ -658,15 +658,24 @@ Public Class UtilsFileList
         ' Build up list of files to process depending on which option was selected.
         Dim FoundFilesArray As String() = {}
         Dim FoundFilesList As New List(Of String)
-        Dim FileExtension As String = FileWildcard.Replace("*", "")
         Dim Filename As String
+
+        'Dim FileExtension As String = FileWildcard.Replace("*", "")
+        Dim FileExtension As String = ""
+
+        Select Case FileWildcard
+            Case "*.asm", "*.par", "*.psm", "*.dft"
+                FileExtension = FileWildcard.Replace("*", "")
+            Case "*.*"
+                FileExtension = FileWildcard
+        End Select
 
         FMain.TextBoxStatus.Text = "Getting files..."
 
         If ListViewFiles.SelectedItems.Count > 0 Then
             For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1
                 Filename = ListViewFiles.SelectedItems.Item(i).Name
-                If System.IO.Path.GetExtension(Filename) = FileExtension Then
+                If System.IO.Path.GetExtension(Filename) = FileExtension Or FileExtension = "*.*" Then
                     FoundFilesList.Add(Filename)
                 End If
             Next
@@ -675,7 +684,7 @@ Public Class UtilsFileList
 
             For i As Integer = 0 To ListViewFiles.Items.Count - 1
                 Filename = ListViewFiles.Items(i).Name
-                If System.IO.Path.GetExtension(Filename) = FileExtension Then
+                If System.IO.Path.GetExtension(Filename) = FileExtension Or FileExtension = "*.*" Then
                     If ListViewFiles.Items(i).Group.Name <> "Excluded" Then
                         If ListViewFiles.Items(i).Group.Name = "Sources" Then
                             ProcessLast.Add(Filename)

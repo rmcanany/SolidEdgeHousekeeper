@@ -962,7 +962,7 @@ Public Class UtilsCommon
                         If Not IsExpression Then
                             ErrorLogger.AddMessage($"Unable to process property '{PropertySet}.{PropertyName}' in formula '{Formula}'")
                         Else
-                            tmpValue = "Nothing"
+                            tmpValue = "<Nothing>"
                         End If
                     End If
                 End If

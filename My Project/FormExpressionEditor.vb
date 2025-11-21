@@ -205,7 +205,8 @@ Public Class FormExpressionEditor
                 If tmpObj IsNot Nothing Then
                     tmpVal = tmpObj.ToString
                 Else
-                    tmpVal = "Property not found"
+                    'tmpVal = "Property not found."
+                    tmpVal = "<Nothing>"
                 End If
             End If
 
