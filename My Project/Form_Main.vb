@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "17"  ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "18"  ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -1000,7 +1000,7 @@ Public Class Form_Main
 
     'DESCRIPTION
     'Solid Edge Housekeeper
-    'Robert McAnany 2020-2024
+    'Robert McAnany 2020-2026
     '
     'This section is about the code.  To read how to use it, see the Readme on GitHub.
     '
@@ -1710,7 +1710,9 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
-            Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
+            'Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
+            Dim tmpDir As String = tmpFolderDialog.FileNames(0)
+            Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
         End If
 
     End Sub
@@ -1749,7 +1751,9 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
-            Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
+            'Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
+            Dim tmpDir As String = tmpFolderDialog.FileNames(0)
+            Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
         End If
     End Sub
 
@@ -1945,7 +1949,9 @@ Public Class Form_Main
                 MsgBox(s, vbOKOnly)
             End If
 
-            Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
+            'Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
+            Dim tmpDir As String = tmpFolderDialog.FileNames(0)
+            Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
         End If
     End Sub
 
@@ -2008,7 +2014,7 @@ Public Class Form_Main
                             tmpLVItem.Tag = IO.Path.GetExtension(FileName).ToLower 'Backup gruppo
                             tmpLVItem.Name = FileName
                             tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FileName).ToLower)
-                            ListViewFiles.Items.Add(tmpLVItem)
+                            'ListViewFiles.Items.Add(tmpLVItem)
 
                             Dim ItemPresent As Boolean
 

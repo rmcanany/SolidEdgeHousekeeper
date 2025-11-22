@@ -49,6 +49,12 @@ Changed the presentation of files imported from a list.  Now missing files are a
 
 Fixed an issue with imported and exported lists where comma characters in a file name or directory caused it to be ignored.
 
+Fixed an issue with drag-and-drop where the file list was automatically populated from the source, bypassing any file sorting step.
+
+#### File process order
+
+Changed the order for dependency-sorted files (Thank you **@robbin70!**).  Previously it was always: `*.par`, `*.psm`, `*.asm`, `*.dft`, and secondarily by sort option.  Now, for dependency sort, the files are processed in strict dependency order, disregarding the file type.
+
 See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#selection) for details.
 
 ### Expression Editor
@@ -66,6 +72,9 @@ Also made the following changes.
 - Added the programming language choice to the toolbar.  
 - Added shortcuts to the `Property Input Editor` to insert or edit an expression.  
 - Added a couple of expression examples using `VB` syntax.
+- Changed the substitution value of missing properties to the string `"<Nothing>"`.  Previously, encountering one would trigger an error when processing (Thank you **@robbin70!**).
+- Added the ability to select a property from a list, rather than typing it in (Thank you again **@robbin70!**).
+
 
 ### Other
 
@@ -80,6 +89,10 @@ Also made the following changes.
 - Fixed an issue with `Update Drawing Styles from Template` where Table text was not updated correctly (Thank you again **@robbin70!**).  Changed the processing order so that dependent objects are now processed after their dependencies.
 
 - Fixed an issue with `Add from Team Center` where the `ItemID` variable name was hard-coded in the program (Thank you **@sjim99!**).  It is now entered by the user on the Settings page.
+
+- Fixed an issue with `Edit Properties` where floating point type custom properties caused an exception when processed in Structured Storage (Thank you **@Monostre!**).
+
+- Fixed an issue with `Run External Program` where code snippets required the presence of all referenced properties in a file even if the property was not encountered in the execution path (Thank you **@robbin70!**).
 
 - Fixed a regression with `Set Document Status` (Thank you **@TeeVar!**).
 

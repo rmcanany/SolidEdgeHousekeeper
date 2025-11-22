@@ -303,7 +303,9 @@ The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  S
 
 The `Unsorted` option is primarily intended to preserve the order of imported lists.  In some cases, for example printing job packets for distrubution, you may want to keep duplicate entries in the list.  Enable the option `Keep duplicates` to do so.
 
-The `Dependency` option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings. 
+The `Dependency` option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings.  
+
+Note this setting changes the file processing order.  By default the order is by file type beginning with `*.par` then `*.psm`, `*.asm` and finally `*.dft`.  With this option, files are processed in strict dependency order.
 
 Dependency ordering is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running `Update part copy` twice in a row.
 
@@ -1169,6 +1171,8 @@ The program defines these variables, which you can use in your code.
 - `ExitStatus` An integer.  0 = Success, 1 = Error.
 - `ErrorMessageList` A list of error messages that Housekeeper reports.
 - `DocType` The file extension of `SEDoc`.
+
+It is possible to refer to a property that may not be present in every file. Normally in that situation, it would take the value of `Nothing` at run time. Currently code snippets do not support that.  Instead, missing properties are returned as a `String` with the value of `"<Nothing>"`.  You can check for that in your snippet when needed.  
 
 </details>
 
