@@ -1144,7 +1144,9 @@ If you are writing your own program, be aware several interoperability rules app
 
 Unlike the other file types, a `*.snp` is a special file containing only a small section of code. The code snippet is the (often very short) part that does the actual task at hand. You can see a few examples [<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).
 
-The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad.  The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  
+The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, or more conveniently in the expression editor.  Click `Edit *.snp` to use the editor.  See the **Edit Properties** help topic for details on its use.  
+
+The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  
 
 The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test, and maintain a separate program to do it automatically. 
 

@@ -74,6 +74,7 @@ Also made the following changes.
 - Added a couple of expression examples using `VB` syntax.
 - Changed the substitution value of missing properties to the string `"<Nothing>"`.  Previously, encountering one would trigger an error when processing (Thank you **@robbin70!**).
 - Added the ability to select a property from a list, rather than typing it in (Thank you again **@robbin70!**).
+- Added the ability to use the editor to create, modify, and test code snippet files from the `Run External Program` interface.
 
 
 ### Other

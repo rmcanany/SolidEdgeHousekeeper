@@ -34,36 +34,37 @@ Partial Class FormExpressionEditor
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.SavedExpressionsLabel = New System.Windows.Forms.ToolStripLabel()
         Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ButtonOpen = New System.Windows.Forms.ToolStripButton()
         Me.BT_Save = New System.Windows.Forms.ToolStripButton()
         Me.BT_SaveAs = New System.Windows.Forms.ToolStripButton()
         Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
+        Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ToolStrip1.SuspendLayout()
-        CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ExTableLayoutPanel1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
-        Me.ExTableLayoutPanel1.SuspendLayout()
+        CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ToolStrip1
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.White
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditorLabel, Me.ComboBoxLanguage, Me.BT_Test, Me.BT_TestOnCurrentFile, Me.BT_Clear, Me.BT_InsertProp, Me.ToolStripSeparator1, Me.SavedExpressionsLabel, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditorLabel, Me.ComboBoxLanguage, Me.BT_Test, Me.BT_TestOnCurrentFile, Me.BT_Clear, Me.BT_InsertProp, Me.ToolStripSeparator1, Me.SavedExpressionsLabel, Me.DD_SavedExpressions, Me.ButtonOpen, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(781, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(972, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -142,6 +143,14 @@ Partial Class FormExpressionEditor
         Me.DD_SavedExpressions.Text = "Select"
         Me.DD_SavedExpressions.ToolTipText = "Select expression"
         '
+        'ButtonOpen
+        '
+        Me.ButtonOpen.Image = Global.Housekeeper.My.Resources.Resources.File
+        Me.ButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonOpen.Name = "ButtonOpen"
+        Me.ButtonOpen.Size = New System.Drawing.Size(56, 22)
+        Me.ButtonOpen.Text = "Open"
+        '
         'BT_Save
         '
         Me.BT_Save.Image = Global.Housekeeper.My.Resources.Resources.Save
@@ -185,49 +194,24 @@ Partial Class FormExpressionEditor
         Me.BT_Help.Size = New System.Drawing.Size(23, 22)
         Me.BT_Help.Text = "Help"
         '
-        'TextEditorFormula
+        'ExTableLayoutPanel1
         '
-        Me.TextEditorFormula.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
-        Me.TextEditorFormula.AutoScrollMinSize = New System.Drawing.Size(27, 14)
-        Me.TextEditorFormula.BackBrush = Nothing
-        Me.TextEditorFormula.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextEditorFormula.CharHeight = 14
-        Me.TextEditorFormula.CharWidth = 8
-        Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
-        Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorFormula.IsReplaceMode = False
-        Me.TextEditorFormula.Location = New System.Drawing.Point(0, 0)
-        Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TextEditorFormula.Name = "TextEditorFormula"
-        Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
-        Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorFormula.Size = New System.Drawing.Size(775, 245)
-        Me.TextEditorFormula.TabIndex = 3
-        Me.TextEditorFormula.Zoom = 100
-        '
-        'TextEditorResults
-        '
-        Me.TextEditorResults.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
-        Me.TextEditorResults.AutoScrollMinSize = New System.Drawing.Size(27, 14)
-        Me.TextEditorResults.BackBrush = Nothing
-        Me.TextEditorResults.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextEditorResults.CharHeight = 14
-        Me.TextEditorResults.CharWidth = 8
-        Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
-        Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorResults.IsReplaceMode = False
-        Me.TextEditorResults.Location = New System.Drawing.Point(0, 0)
-        Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TextEditorResults.Name = "TextEditorResults"
-        Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
-        Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorResults.Size = New System.Drawing.Size(775, 164)
-        Me.TextEditorResults.TabIndex = 4
-        Me.TextEditorResults.Zoom = 100
+        Me.ExTableLayoutPanel1.ColumnCount = 3
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.ExTableLayoutPanel1.Controls.Add(Me.SplitContainer1, 0, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonOK, 1, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
+        Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 25)
+        Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
+        Me.ExTableLayoutPanel1.RowCount = 2
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(972, 448)
+        Me.ExTableLayoutPanel1.TabIndex = 6
+        Me.ExTableLayoutPanel1.Task = Nothing
         '
         'SplitContainer1
         '
@@ -244,32 +228,59 @@ Partial Class FormExpressionEditor
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TextEditorResults)
-        Me.SplitContainer1.Size = New System.Drawing.Size(775, 413)
+        Me.SplitContainer1.Size = New System.Drawing.Size(966, 413)
         Me.SplitContainer1.SplitterDistance = 245
         Me.SplitContainer1.TabIndex = 5
         '
-        'ExTableLayoutPanel1
+        'TextEditorFormula
         '
-        Me.ExTableLayoutPanel1.ColumnCount = 3
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.ExTableLayoutPanel1.Controls.Add(Me.SplitContainer1, 0, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonOK, 1, 1)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
-        Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 25)
-        Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
-        Me.ExTableLayoutPanel1.RowCount = 2
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(781, 448)
-        Me.ExTableLayoutPanel1.TabIndex = 6
-        Me.ExTableLayoutPanel1.Task = Nothing
+        Me.TextEditorFormula.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.TextEditorFormula.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.TextEditorFormula.BackBrush = Nothing
+        Me.TextEditorFormula.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextEditorFormula.CharHeight = 14
+        Me.TextEditorFormula.CharWidth = 8
+        Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
+        Me.TextEditorFormula.IsReplaceMode = False
+        Me.TextEditorFormula.Location = New System.Drawing.Point(0, 0)
+        Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TextEditorFormula.Name = "TextEditorFormula"
+        Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
+        Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
+        Me.TextEditorFormula.Size = New System.Drawing.Size(966, 245)
+        Me.TextEditorFormula.TabIndex = 3
+        Me.TextEditorFormula.Zoom = 100
+        '
+        'TextEditorResults
+        '
+        Me.TextEditorResults.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.TextEditorResults.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.TextEditorResults.BackBrush = Nothing
+        Me.TextEditorResults.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextEditorResults.CharHeight = 14
+        Me.TextEditorResults.CharWidth = 8
+        Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
+        Me.TextEditorResults.IsReplaceMode = False
+        Me.TextEditorResults.Location = New System.Drawing.Point(0, 0)
+        Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TextEditorResults.Name = "TextEditorResults"
+        Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
+        Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
+        Me.TextEditorResults.Size = New System.Drawing.Size(966, 164)
+        Me.TextEditorResults.TabIndex = 4
+        Me.TextEditorResults.Zoom = 100
         '
         'ButtonOK
         '
-        Me.ButtonOK.Location = New System.Drawing.Point(622, 422)
+        Me.ButtonOK.Location = New System.Drawing.Point(813, 422)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
         Me.ButtonOK.TabIndex = 6
@@ -278,7 +289,7 @@ Partial Class FormExpressionEditor
         '
         'ButtonCancel
         '
-        Me.ButtonCancel.Location = New System.Drawing.Point(703, 422)
+        Me.ButtonCancel.Location = New System.Drawing.Point(894, 422)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
         Me.ButtonCancel.TabIndex = 7
@@ -289,7 +300,7 @@ Partial Class FormExpressionEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(781, 473)
+        Me.ClientSize = New System.Drawing.Size(972, 473)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -300,13 +311,13 @@ Partial Class FormExpressionEditor
         Me.Text = "Expression Editor"
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
-        CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
-        Me.ExTableLayoutPanel1.ResumeLayout(False)
+        CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -332,4 +343,5 @@ Partial Class FormExpressionEditor
     Friend WithEvents ButtonOK As Button
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents ComboBoxLanguage As ToolStripComboBox
+    Friend WithEvents ButtonOpen As ToolStripButton
 End Class

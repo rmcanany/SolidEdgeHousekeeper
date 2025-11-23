@@ -13,7 +13,7 @@ The quickest way to get Housekeeper is to visit the [<ins>**Releases Page**</ins
 
 Click the file `SolidEdgeHousekeeper-VYYYY.N.zip` (`YYYY` = Year, `N` = Release Number).  You may have to expand the Assets dropdown to see it.  Your browser should prompt you to save it. 
 
-Choose a convenient location on your machine. Extract the zip file (right-click > Extract All).  Verify the directory is not read-only (right-click > Properties).  The program needs write access to function properly.  
+Choose a convenient location on your machine. Extract the zip file (right-click > Extract All).  Verify the directory is not read-only or blocked (right-click > Properties).  The program needs write access to function properly.  
 
 Double-click `Housekeeper.exe` to run.  The first time you do, you may get a `Windows Protected Your PC` message.  You can click `More Info` followed by `Run Anyway` to launch the program. 
 

@@ -4,10 +4,50 @@ Imports System.Text.RegularExpressions
 'Imports System.Windows.Media.Media3D
 Imports FastColoredTextBoxNS
 Imports PanoramicData.NCalcExtensions
+Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class FormExpressionEditor
 
     Public Formula As String
+
+    Private _OutputType As String
+    Public Property OutputType As String
+        Get
+            Return _OutputType
+        End Get
+        Set(value As String)
+            _OutputType = value
+            If Me.TextEditorFormula IsNot Nothing Then
+                If value = "Snippet" Then
+                    ComboBoxLanguage.Enabled = False
+                    DD_SavedExpressions.Visible = False
+                    BT_Delete.Visible = False
+                    ButtonOpen.Visible = True
+                    BT_Test.Visible = False
+                Else
+                    ComboBoxLanguage.Enabled = True
+                    DD_SavedExpressions.Visible = True
+                    BT_Delete.Visible = True
+                    ButtonOpen.Visible = False
+                    BT_Test.Visible = True
+                End If
+            End If
+        End Set
+    End Property
+
+    Private _SnippetFilename As String
+    Public Property SnippetFilename As String
+        Get
+            Return _SnippetFilename
+        End Get
+        Set(value As String)
+            _SnippetFilename = value
+            'If Me.TabControl1 IsNot Nothing Then
+            '    TextBoxSnippetFilename.Text = value
+            'End If
+        End Set
+    End Property
+
     Dim SavedExpressionsItems As New Dictionary(Of String, String)
     Dim SavedParameters As New Dictionary(Of String, String)
 
@@ -73,6 +113,9 @@ Public Class FormExpressionEditor
 
         'TextEditorFormula.Language = CType(5, Language)
         TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL  ' Can change this as needed after instantiating the object.
+
+        OutputType = "Expression"
+        SnippetFilename = ""
 
     End Sub
 
@@ -150,120 +193,169 @@ Public Class FormExpressionEditor
 
     Private Sub BT_Test_Click(sender As Object, e As EventArgs) Handles BT_Test.Click, BT_TestOnCurrentFile.Click
 
-        Dim calculation As String = TextEditorFormula.Text
+        If Me.OutputType = "Snippet" Then
 
-        Dim Pattern As String = "%{[^}]*}"
-        Dim Matches As MatchCollection = Regex.Matches(calculation, Pattern)
-        Dim Parameters As New List(Of String)
+            Dim UPS As New UtilsPowerShell
+            Dim PowershellFilename = UPS.BuildSnippetFile(Me.SnippetFilename)
 
-        For Each MatchString As Match In Matches
-            If Not Parameters.Contains(MatchString.Value) Then Parameters.Add(MatchString.Value)
-        Next
+            Dim P As New Diagnostics.Process
+            Dim ExitCode As Integer
 
-        Dim UC As New UtilsCommon
-        Dim UP As New UtilsPreferences
+            Dim PSError As String = ""
 
-        For Each Parameter In Parameters
+            P.StartInfo.FileName = "powershell.exe"
+            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowershellFilename.Replace(" ", "` "), Chr(34))
+            P.StartInfo.RedirectStandardError = True
+            P.StartInfo.UseShellExecute = False
+            'If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
+            P.Start()
+            PSError = P.StandardError.ReadToEnd
 
-            Dim tmpVal As String = ""
+            P.WaitForExit()
+            ExitCode = P.ExitCode
 
-            If SavedParameters.ContainsKey(Parameter) Then
-                tmpVal = SavedParameters.Item(Parameter)
+            Dim ResultsMessage As String = $"Exit Code: {P.ExitCode}{vbCrLf}"
+            If Not PSError = "" Then
+                ResultsMessage = $"{ResultsMessage}Errors reported{vbCrLf}"
+                ResultsMessage = $"{ResultsMessage}{PSError}"
             End If
 
+            Dim ErrorMessageFilename = String.Format("{0}\error_messages.txt", IO.Path.GetDirectoryName(PowershellFilename))
 
-            If sender.Equals(BT_Test) Then
+            If IO.File.Exists(PowershellFilename) Then IO.File.Delete(PowershellFilename)
 
-                tmpVal = InputBox("Insert value for parameter: " & Parameter,, tmpVal)
+            If ExitCode <> 0 Then
+                If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+                    Dim ErrorMessages As List(Of String) = IO.File.ReadAllLines(ErrorMessageFilename).ToList
+                    If ErrorMessages.Count > 0 Then
+                        For Each ErrorMessageFromProgram As String In ErrorMessages
+                            ResultsMessage = $"{ResultsMessage}{vbCrLf}{ErrorMessageFromProgram}"
+                        Next
+                    End If
 
-            Else
-
-                ' Test on current file
-                ' This a concept and must be implemented properly.
-                ' I wrote this code RAW and is not perfect; I always forget how to use the proper method you have developed in UtilsCommon.vb please replace it with the proper one.
-                ' F.Arfilli
-
-                Dim USEA As New UtilsSEApp(Form_Main)
-
-                Dim SEApp As SolidEdgeFramework.Application
-                Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument
-
-                Try
-                    USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
-                    SEApp = USEA.SEApp
-                    SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-                Catch ex As Exception
-                    MsgBox("Error connecting to Solid Edge or no document open.", MsgBoxStyle.Exclamation, "Error")
-                    Exit Sub
-                End Try
-
-                Dim PropertySetName = UC.PropSetFromFormula(Parameter)
-                Dim PropertyName = UC.PropNameFromFormula(Parameter)
-                Dim ModelIdx = UC.ModelIdxFromFormula(Parameter)
-
-                Dim tmpObj = UC.GetPropValue(SEDoc, PropertySetName, PropertyName, ModelIdx, AddProp:=False)
-                If tmpObj IsNot Nothing Then
-                    tmpVal = tmpObj.ToString
-                Else
-                    'tmpVal = "Property not found."
-                    tmpVal = "<Nothing>"
+                    IO.File.Delete(ErrorMessageFilename)
                 End If
             End If
 
-            If SavedParameters.ContainsKey(Parameter) Then
-                SavedParameters.Item(Parameter) = tmpVal
-            Else
-                SavedParameters.Add(Parameter, tmpVal)
-            End If
+            TextEditorResults.Text = ResultsMessage
 
-            calculation = calculation.Replace(Parameter, tmpVal)
-            calculation = calculation.Split(CChar("\\")).First
 
-        Next
+        Else
+            Dim calculation As String = TextEditorFormula.Text
 
-        Dim Success As Boolean = True
-        Dim nCalcExpression As ExtendedExpression = Nothing
-        Dim ExpressionResult As String = ""
+            Dim Pattern As String = "%{[^}]*}"
+            Dim Matches As MatchCollection = Regex.Matches(calculation, Pattern)
+            Dim Parameters As New List(Of String)
 
-        If TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL Then
-            Try
-                nCalcExpression = New ExtendedExpression(calculation)
-                ExpressionResult = CStr(nCalcExpression.Evaluate())
-            Catch ex As Exception
-                Success = False
-                TextEditorResults.Clear()
-                TextEditorResults.Text = ex.Message
-            End Try
+            For Each MatchString As Match In Matches
+                If Not Parameters.Contains(MatchString.Value) Then Parameters.Add(MatchString.Value)
+            Next
 
-        ElseIf TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then
-            Dim UPS As New UtilsPowerShell
-            Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(calculation.Split(CChar(vbCrLf)).ToList)
+            Dim UC As New UtilsCommon
+            Dim UP As New UtilsPreferences
 
-            Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
-            IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
+            For Each Parameter In Parameters
 
-            Try
-                ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
-            Catch ex As Exception
-                Success = False
-                TextEditorResults.Clear()
-                TextEditorResults.Text = ex.Message
-            End Try
+                Dim tmpVal As String = ""
 
-        End If
+                If SavedParameters.ContainsKey(Parameter) Then
+                    tmpVal = SavedParameters.Item(Parameter)
+                End If
 
-        If Success Then
-            Dim p As String = vbCrLf & vbCrLf & "Parameters list" & vbCrLf & "---------------"
 
-            For Each tmpPar In Parameters
+                If sender.Equals(BT_Test) Then
 
-                p += vbCrLf & tmpPar & ": " & SavedParameters(tmpPar)
+                    tmpVal = InputBox("Insert value for parameter: " & Parameter,, tmpVal)
+
+                Else
+
+                    ' Test on current file
+                    ' This a concept and must be implemented properly.
+                    ' I wrote this code RAW and is not perfect; I always forget how to use the proper method you have developed in UtilsCommon.vb please replace it with the proper one.
+                    ' F.Arfilli
+
+                    Dim USEA As New UtilsSEApp(Form_Main)
+
+                    Dim SEApp As SolidEdgeFramework.Application
+                    Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument
+
+                    Try
+                        USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+                        SEApp = USEA.SEApp
+                        SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                    Catch ex As Exception
+                        MsgBox("Error connecting to Solid Edge or no document open.", MsgBoxStyle.Exclamation, "Error")
+                        Exit Sub
+                    End Try
+
+                    Dim PropertySetName = UC.PropSetFromFormula(Parameter)
+                    Dim PropertyName = UC.PropNameFromFormula(Parameter)
+                    Dim ModelIdx = UC.ModelIdxFromFormula(Parameter)
+
+                    Dim tmpObj = UC.GetPropValue(SEDoc, PropertySetName, PropertyName, ModelIdx, AddProp:=False)
+                    If tmpObj IsNot Nothing Then
+                        tmpVal = tmpObj.ToString
+                    Else
+                        'tmpVal = "Property not found."
+                        tmpVal = "<Nothing>"
+                    End If
+                End If
+
+                If SavedParameters.ContainsKey(Parameter) Then
+                    SavedParameters.Item(Parameter) = tmpVal
+                Else
+                    SavedParameters.Add(Parameter, tmpVal)
+                End If
+
+                calculation = calculation.Replace(Parameter, tmpVal)
+                calculation = calculation.Split(CChar("\\")).First
 
             Next
 
-            TextEditorResults.Clear()
-            TextEditorResults.Text = "Expression result: " & ExpressionResult & p
+            Dim Success As Boolean = True
+            Dim nCalcExpression As ExtendedExpression = Nothing
+            Dim ExpressionResult As String = ""
 
+            If TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL Then
+                Try
+                    nCalcExpression = New ExtendedExpression(calculation)
+                    ExpressionResult = CStr(nCalcExpression.Evaluate())
+                Catch ex As Exception
+                    Success = False
+                    TextEditorResults.Clear()
+                    TextEditorResults.Text = ex.Message
+                End Try
+
+            ElseIf TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then
+                Dim UPS As New UtilsPowerShell
+                Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(calculation.Split(CChar(vbCrLf)).ToList)
+
+                Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
+                IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
+
+                Try
+                    ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
+                Catch ex As Exception
+                    Success = False
+                    TextEditorResults.Clear()
+                    TextEditorResults.Text = ex.Message
+                End Try
+
+            End If
+
+            If Success Then
+                Dim p As String = vbCrLf & vbCrLf & "Parameters list" & vbCrLf & "---------------"
+
+                For Each tmpPar In Parameters
+
+                    p += vbCrLf & tmpPar & ": " & SavedParameters(tmpPar)
+
+                Next
+
+                TextEditorResults.Clear()
+                TextEditorResults.Text = "Expression result: " & ExpressionResult & p
+
+            End If
         End If
 
     End Sub
@@ -387,14 +479,21 @@ Public Class FormExpressionEditor
 
     Private Sub BT_Save_Click(sender As Object, e As EventArgs) Handles BT_Save.Click
 
-        If CurrentExpression <> "" Then
-
-            SaveExpressionItem(CurrentExpression, True)
-
+        If Me.OutputType = "Expression" Then
+            If CurrentExpression <> "" Then
+                SaveExpressionItem(CurrentExpression, True)
+            Else
+                BT_SaveAs_Click(sender, e)
+            End If
         Else
-
-            BT_SaveAs_Click(sender, e)
-
+            'MsgBox($"{OutputType}")
+            'Dim tmpFilename As String = Me.SnippetFilename.Replace(".snp", "- Copy.snp")
+            If Not IO.File.Exists(Me.SnippetFilename) Then
+                BT_SaveAs.PerformClick()
+            Else
+                System.IO.File.WriteAllText(Me.SnippetFilename, TextEditorFormula.Text)
+                Formula = TextEditorFormula.Text
+            End If
         End If
 
     End Sub
@@ -407,29 +506,49 @@ Public Class FormExpressionEditor
 
     Private Sub BT_SaveAs_Click(sender As Object, e As EventArgs) Handles BT_SaveAs.Click
 
-        Dim A = InputBox("Expression name ?", "Save expression", CurrentExpression)
+        If Me.OutputType = "Expression" Then
+            Dim A = InputBox("Expression name ?", "Save expression", CurrentExpression)
 
-        If A <> "" Then
+            If A <> "" Then
 
-            If SavedExpressionsItems.ContainsKey(A) Then
+                If SavedExpressionsItems.ContainsKey(A) Then
 
-                Dim B = MsgBox("Overwrite expression " & A & " ?", vbYesNoCancel, "Save expression")
+                    Dim B = MsgBox("Overwrite expression " & A & " ?", vbYesNoCancel, "Save expression")
 
-                Select Case B
-                    Case = MsgBoxResult.Cancel
-                        Exit Sub
-                    Case = MsgBoxResult.No
-                        BT_SaveAs_Click(sender, e)
-                    Case = MsgBoxResult.Yes
-                        SaveExpressionItem(A, True)
-                End Select
+                    Select Case B
+                        Case = MsgBoxResult.Cancel
+                            Exit Sub
+                        Case = MsgBoxResult.No
+                            BT_SaveAs_Click(sender, e)
+                        Case = MsgBoxResult.Yes
+                            SaveExpressionItem(A, True)
+                    End Select
 
-            Else
-                SaveExpressionItem(A, False)
+                Else
+                    SaveExpressionItem(A, False)
+                End If
+
+                CurrentExpression = A
+                Me.Text = "Expression editor - " & CurrentExpression
+
+            End If
+        Else
+            'MsgBox($"{OutputType}")
+            Dim tmpFileDialog As New CommonSaveFileDialog
+
+            tmpFileDialog.Title = "Enter the file name for the new part"
+            tmpFileDialog.DefaultFileName = IO.Path.GetFileName(Me.SnippetFilename)
+            tmpFileDialog.EnsureFileExists = False
+            tmpFileDialog.Filters.Add(New CommonFileDialogFilter("Solid Edge Files", "*.snp"))
+            If IO.File.Exists(Me.SnippetFilename) Then
+                tmpFileDialog.InitialDirectory = IO.Path.GetDirectoryName(Me.SnippetFilename)
             End If
 
-            CurrentExpression = A
-            Me.Text = "Expression editor - " & CurrentExpression
+            If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+                Me.SnippetFilename = tmpFileDialog.FileName
+                System.IO.File.WriteAllText(Me.SnippetFilename, TextEditorFormula.Text)
+                Formula = TextEditorFormula.Text
+            End If
 
         End If
 
@@ -464,7 +583,10 @@ Public Class FormExpressionEditor
     End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-
+        If Me.OutputType = "Snippet" And Not Formula = TextEditorFormula.Text Then
+            MsgBox("Text has changed.  Please save the file before proceeding.", vbOKOnly)
+            Exit Sub
+        End If
 
         Me.DialogResult = DialogResult.OK
     End Sub
@@ -476,6 +598,31 @@ Public Class FormExpressionEditor
             Case "NCalc"
                 Me.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
         End Select
+    End Sub
+
+    Private Sub ButtonOpen_Click(sender As Object, e As EventArgs) Handles ButtonOpen.Click
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a code snippet file"
+        tmpFileDialog.Filter = "Snippets|*.snp"
+
+        'If IO.File.Exists(Me.ExternalProgram) Then
+        '    tmpFileDialog.InitialDirectory = IO.Path.GetDirectoryName(Me.ExternalProgram)
+        'Else
+        '    tmpFileDialog.InitialDirectory = Form_Main.WorkingFilesPath
+        'End If
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Me.SnippetFilename = tmpFileDialog.FileName
+
+            Dim tmpFormula As String = ""
+            Dim InFile As List(Of String) = System.IO.File.ReadAllLines(Me.SnippetFilename).ToList
+            For Each Line As String In InFile
+                tmpFormula = $"{tmpFormula}{Line}{vbCrLf}"
+            Next
+            Formula = tmpFormula
+            Me.TextEditorFormula.Text = tmpFormula
+        End If
+
     End Sub
 End Class
 
