@@ -257,13 +257,17 @@ Public MustInherit Class Task
     End Sub
 
     Public Function GenerateLabelText() As String
+        Return GenerateLabelText(Me.ToString)
+    End Function
+
+    Public Function GenerateLabelText(InString As String) As String
         ' Scratch.TaskOpenSave -> Open save
         ' Housekeeper.TaskOpenSave -> Open save
 
-        Dim InString As String
+        'Dim InString As String
         Dim OutString As String = ""
 
-        InString = Me.ToString
+        'InString = Me.ToString
         InString = InString.Replace("Scratch.Task", "")  ' 'Scratch.TaskOpenSave' -> 'OpenSave'
         InString = InString.Replace("Housekeeper.Task", "")  ' 'Housekeeper.TaskOpenSave' -> 'OpenSave'
 
