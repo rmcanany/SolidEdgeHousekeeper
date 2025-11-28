@@ -489,16 +489,31 @@ Public Class HCStructuredStorageDoc
                     Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(OutString.Split(CChar(vbCrLf)).ToList)
 
                     Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
-                    IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
+                    'IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents, System.Text.Encoding.Unicode)
 
-                    Try
-                        OutString = UPS.RunExpressionScript(PowerShellFilename)
-                    Catch ex As Exception
-                        ErrorLogger.AddMessage($"Could not process expression '{OutString}'")
-                        ErrorLogger.AddMessage("Exception was:")
-                        ErrorLogger.AddMessage(ex.Message)
-                        OutString = Nothing
-                    End Try
+                    'Try
+                    '    OutString = UPS.RunExpressionScript(PowerShellFilename)
+                    'Catch ex As Exception
+                    '    ErrorLogger.AddMessage($"Could not process expression '{OutString}'")
+                    '    ErrorLogger.AddMessage("Exception was:")
+                    '    ErrorLogger.AddMessage(ex.Message)
+                    '    OutString = Nothing
+                    'End Try
+
+                    Dim tmpSuccess As Boolean = UPS.WriteExpressionFile(PowerShellFilename, PowerShellFileContents)
+
+                    If tmpSuccess Then
+                        Try
+                            OutString = UPS.RunExpressionScript(PowerShellFilename)
+                        Catch ex As Exception
+                            ErrorLogger.AddMessage($"Unable to process expression '{OutString}'")
+                            ErrorLogger.AddMessage("Exception was:")
+                            ErrorLogger.AddMessage(ex.Message)
+                            OutString = Nothing
+                        End Try
+                    Else
+                        ErrorLogger.AddMessage($"Unable to create file '{PowerShellFilename}'")
+                    End If
 
                 End If
 

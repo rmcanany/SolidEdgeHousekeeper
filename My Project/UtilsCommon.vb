@@ -1010,16 +1010,22 @@ Public Class UtilsCommon
                     Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(Outstring.Split(CChar(vbCrLf)).ToList)
 
                     Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
-                    IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
+                    'IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents, System.Text.Encoding.Unicode)
 
-                    Try
-                        Outstring = UPS.RunExpressionScript(PowerShellFilename)
-                    Catch ex As Exception
-                        ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
-                        ErrorLogger.AddMessage("Exception was:")
-                        ErrorLogger.AddMessage(ex.Message)
-                        Outstring = Nothing
-                    End Try
+                    Dim tmpSuccess As Boolean = UPS.WriteExpressionFile(PowerShellFilename, PowerShellFileContents)
+
+                    If tmpSuccess Then
+                        Try
+                            Outstring = UPS.RunExpressionScript(PowerShellFilename)
+                        Catch ex As Exception
+                            ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
+                            ErrorLogger.AddMessage("Exception was:")
+                            ErrorLogger.AddMessage(ex.Message)
+                            Outstring = Nothing
+                        End Try
+                    Else
+                        ErrorLogger.AddMessage($"Unable to create file '{PowerShellFilename}'")
+                    End If
 
                 End If
 

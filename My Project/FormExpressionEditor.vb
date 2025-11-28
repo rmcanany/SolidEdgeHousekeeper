@@ -331,16 +331,30 @@ Public Class FormExpressionEditor
                 Dim PowerShellFileContents As List(Of String) = UPS.BuildExpressionFile(calculation.Split(CChar(vbCrLf)).ToList)
 
                 Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
-                IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents)
 
-                Try
-                    ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
-                Catch ex As Exception
+                'IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents, System.Text.Encoding.Unicode)
+
+                'Try
+                '    ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
+                'Catch ex As Exception
+                '    Success = False
+                '    TextEditorResults.Clear()
+                '    TextEditorResults.Text = ex.Message
+                'End Try
+
+                Dim tmpSuccess As Boolean = UPS.WriteExpressionFile(PowerShellFilename, PowerShellFileContents)
+
+                If tmpSuccess Then
+                    Try
+                        ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
+                    Catch ex As Exception
+                        Success = False
+                        TextEditorResults.Clear()
+                        TextEditorResults.Text = ex.Message
+                    End Try
+                Else
                     Success = False
-                    TextEditorResults.Clear()
-                    TextEditorResults.Text = ex.Message
-                End Try
-
+                End If
             End If
 
             If Success Then

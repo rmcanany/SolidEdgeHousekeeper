@@ -243,7 +243,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
+        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextEditorFormula.IsReplaceMode = False
         Me.TextEditorFormula.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -266,7 +266,6 @@ Partial Class FormExpressionEditor
         Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorResults.IsReplaceMode = False
         Me.TextEditorResults.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)

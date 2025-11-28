@@ -35,6 +35,9 @@ Public Class UtilsPowerShell
         Dim OutList As New List(Of String)
         Dim Indent As String = "        "
 
+        'TopList.Add("$OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding")
+        TopList.Add("$InputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding")
+
         TopList.Add("$Source = @""")
         TopList.Add("")
         TopList.Add("Imports System")
@@ -53,10 +56,13 @@ Public Class UtilsPowerShell
         BotList.Add("End Class")
         BotList.Add("""@")
         BotList.Add("")
+
         BotList.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
+
         BotList.Add("")
         BotList.Add("$Result = [Expression]::RunExpression()")
         BotList.Add("Write-Output $Result")
+        BotList.Add("$Result | Out-File -FilePath 'C:\data\junk\HousekeeperExpressionResult.txt' -Encoding UTF8")
 
         For Each L As List(Of String) In {TopList, MidList, BotList}
             For Each s In L
@@ -68,18 +74,35 @@ Public Class UtilsPowerShell
 
     End Function
 
+    Public Function WriteExpressionFile(
+        PowerShellFilename As String,
+        PowerShellFileContents As List(Of String)
+        ) As Boolean
+        Dim Success As Boolean = True
+
+        Try
+            IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents, System.Text.Encoding.Unicode)
+        Catch ex As Exception
+            Success = False
+        End Try
+
+        Return Success
+    End Function
+
     Public Function RunExpressionScript(PowerShellFilename As String) As String
         Dim Result As String = ""
 
         Dim P As New Diagnostics.Process
         Dim PSError As String = ""
+
         P.StartInfo.FileName = "powershell.exe"
-        'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowerShellFilename.Replace(" ", "` "), Chr(34))
         P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
         P.StartInfo.RedirectStandardError = True
         P.StartInfo.RedirectStandardOutput = True
         P.StartInfo.UseShellExecute = False
         P.StartInfo.CreateNoWindow = True
+        P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
+
         P.Start()
         PSError = P.StandardError.ReadToEnd
         Dim PSResult As String = P.StandardOutput.ReadToEnd
@@ -207,7 +230,7 @@ Public Class UtilsPowerShell
             Next
         Next
 
-        IO.File.WriteAllLines(PowerShellFilename, Outlist)
+        IO.File.WriteAllLines(PowerShellFilename, Outlist)  ' If unicode problems arise, see WriteExpressionFile() for possible fix.
 
         Return PowerShellFilename
     End Function
