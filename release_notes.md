@@ -75,6 +75,7 @@ Also made the following changes.
 - Changed the substitution value of missing properties to the string `"<Nothing>"`.  Previously, encountering one would trigger an error when processing (Thank you **@robbin70!**).
 - Added the ability to select a property from a list, rather than typing it in (Thank you again **@robbin70!**).
 - Added the ability to use the editor to create, modify, and test code snippet files from the `Run External Program` interface.
+- Fixed an issue handling Unicode strings in expressions (Thank you one more time **@robbin70!**).
 
 
 ### Other

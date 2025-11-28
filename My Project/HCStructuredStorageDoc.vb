@@ -455,7 +455,11 @@ Public Class HCStructuredStorageDoc
                     ErrorLogger.AddMessage($"Could not process formula '{Formula}'")
                     Return Nothing
                 Else
-                    DocValues.Add(DocValue)
+                    If Not IsExpression Then
+                        DocValues.Add(DocValue)
+                    Else
+                        DocValues.Add(DocValue.Replace("""", """"""))
+                    End If
                 End If
             Next
         End If

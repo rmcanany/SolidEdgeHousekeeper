@@ -972,7 +972,11 @@ Public Class UtilsCommon
                     '    tmpValue = UFC.SubstituteIllegalCharacters(tmpValue)
                     'End If
 
-                    DocValues.Add(tmpValue)
+                    If Not IsExpression Then
+                        DocValues.Add(tmpValue)
+                    Else
+                        DocValues.Add(tmpValue.Replace("""", """"""))
+                    End If
                 Else
                     Proceed = False
                     Outstring = Nothing
