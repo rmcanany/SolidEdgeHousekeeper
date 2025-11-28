@@ -76,6 +76,7 @@ Also made the following changes.
 - Added the ability to select a property from a list, rather than typing it in (Thank you again **@robbin70!**).
 - Added the ability to use the editor to create, modify, and test code snippet files from the `Run External Program` interface.
 - Fixed an issue handling Unicode strings in expressions (Thank you one more time **@robbin70!**).
+- Fixed an issue handling doublequotes in property text (Thank you yet again **@robbin70!**).
 
 
 ### Other
