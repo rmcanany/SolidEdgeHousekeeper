@@ -1,6 +1,8 @@
 ﻿Option Strict On
+Imports Microsoft.PowerShell.Cim
+Imports SolidEdgePart
 
-Public Class TaskHideConstructions
+Public Class TaskShowHideConstructions
 
     Inherits Task
 
@@ -120,35 +122,35 @@ Public Class TaskHideConstructions
         End Set
     End Property
 
-    Private _Sketches_3dShow As Boolean
-    Public Property Sketches_3dShow As Boolean
-        Get
-            Return _Sketches_3dShow
-        End Get
-        Set(value As Boolean)
-            _Sketches_3dShow = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                Dim CB = CType(ControlsDict(ControlNames.Sketches_3dShow.ToString), CheckBox)
-                CB.Checked = Sketches_3dShow
-                If Sketches_3dShow And Sketches_3dHide Then Sketches_3dHide = False
-            End If
-        End Set
-    End Property
+    'Private _Sketches_3dShow As Boolean
+    'Public Property Sketches_3dShow As Boolean
+    '    Get
+    '        Return _Sketches_3dShow
+    '    End Get
+    '    Set(value As Boolean)
+    '        _Sketches_3dShow = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            Dim CB = CType(ControlsDict(ControlNames.Sketches_3dShow.ToString), CheckBox)
+    '            CB.Checked = Sketches_3dShow
+    '            If Sketches_3dShow And Sketches_3dHide Then Sketches_3dHide = False
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _Sketches_3dHide As Boolean
-    Public Property Sketches_3dHide As Boolean
-        Get
-            Return _Sketches_3dHide
-        End Get
-        Set(value As Boolean)
-            _Sketches_3dHide = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                Dim CB = CType(ControlsDict(ControlNames.Sketches_3dHide.ToString), CheckBox)
-                CB.Checked = Sketches_3dHide
-                If Sketches_3dHide And Sketches_3dShow Then Sketches_3dShow = False
-            End If
-        End Set
-    End Property
+    'Private _Sketches_3dHide As Boolean
+    'Public Property Sketches_3dHide As Boolean
+    '    Get
+    '        Return _Sketches_3dHide
+    '    End Get
+    '    Set(value As Boolean)
+    '        _Sketches_3dHide = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            Dim CB = CType(ControlsDict(ControlNames.Sketches_3dHide.ToString), CheckBox)
+    '            CB.Checked = Sketches_3dHide
+    '            If Sketches_3dHide And Sketches_3dShow Then Sketches_3dShow = False
+    '        End If
+    '    End Set
+    'End Property
 
     Private _CurvesShow As Boolean
     Public Property CurvesShow As Boolean
@@ -180,35 +182,35 @@ Public Class TaskHideConstructions
         End Set
     End Property
 
-    Private _ConstructionsShow As Boolean
-    Public Property ConstructionsShow As Boolean
-        Get
-            Return _ConstructionsShow
-        End Get
-        Set(value As Boolean)
-            _ConstructionsShow = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                Dim CB = CType(ControlsDict(ControlNames.ConstructionsShow.ToString), CheckBox)
-                CB.Checked = ConstructionsShow
-                If ConstructionsShow And ConstructionsHide Then ConstructionsHide = False
-            End If
-        End Set
-    End Property
+    'Private _ConstructionsShow As Boolean
+    'Public Property ConstructionsShow As Boolean
+    '    Get
+    '        Return _ConstructionsShow
+    '    End Get
+    '    Set(value As Boolean)
+    '        _ConstructionsShow = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            Dim CB = CType(ControlsDict(ControlNames.ConstructionsShow.ToString), CheckBox)
+    '            CB.Checked = ConstructionsShow
+    '            If ConstructionsShow And ConstructionsHide Then ConstructionsHide = False
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _ConstructionsHide As Boolean
-    Public Property ConstructionsHide As Boolean
-        Get
-            Return _ConstructionsHide
-        End Get
-        Set(value As Boolean)
-            _ConstructionsHide = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                Dim CB = CType(ControlsDict(ControlNames.ConstructionsHide.ToString), CheckBox)
-                CB.Checked = ConstructionsHide
-                If ConstructionsHide And ConstructionsShow Then ConstructionsShow = False
-            End If
-        End Set
-    End Property
+    'Private _ConstructionsHide As Boolean
+    'Public Property ConstructionsHide As Boolean
+    '    Get
+    '        Return _ConstructionsHide
+    '    End Get
+    '    Set(value As Boolean)
+    '        _ConstructionsHide = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            Dim CB = CType(ControlsDict(ControlNames.ConstructionsHide.ToString), CheckBox)
+    '            CB.Checked = ConstructionsHide
+    '            If ConstructionsHide And ConstructionsShow Then ConstructionsShow = False
+    '        End If
+    '    End Set
+    'End Property
 
     Private _SurfacesShow As Boolean
     Public Property SurfacesShow As Boolean
@@ -359,15 +361,15 @@ Public Class TaskHideConstructions
         Sketches
         SketchesShow
         SketchesHide
-        Sketches_3d
-        Sketches_3dShow
-        Sketches_3dHide
+        'Sketches_3d
+        'Sketches_3dShow
+        'Sketches_3dHide
         Curves
         CurvesShow
         CurvesHide
-        Constructions
-        ConstructionsShow
-        ConstructionsHide
+        'Constructions
+        'ConstructionsShow
+        'ConstructionsHide
         Surfaces
         SurfacesShow
         SurfacesHide
@@ -431,162 +433,34 @@ Public Class TaskHideConstructions
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
-        Dim NewWay As Boolean = True
-        If NewWay Then
-            DoReferencePlanes(SEApp, SEDoc)
-            DoCoordinateSystems(SEApp, SEDoc)
-        Else
-            Dim PMI As SolidEdgeFrameworkSupport.PMI = Nothing
-            Dim Sketches As SolidEdgePart.Sketchs = Nothing
-            Dim Sketch As SolidEdgePart.Sketch
-            Dim Profiles As SolidEdgePart.Profiles = Nothing
-            Dim RefPlanes As SolidEdgePart.RefPlanes = Nothing
-            Dim RefPlane As SolidEdgePart.RefPlane
-            Dim Models As SolidEdgePart.Models = Nothing
-            Dim Model As SolidEdgePart.Model
-            Dim Constructions As SolidEdgePart.Constructions = Nothing
-            Dim CoordinateSystems As SolidEdgePart.CoordinateSystems = Nothing
+        'https://community.sw.siemens.com/s/question/0D54O000071LDKJSA4/startcommand-for-command-hide-all-coordinate-systems
+        ' Reference planes
+        '     Show all: Assy 40228, Part 40228
+        '     Hide all: Assy 40018, Part 40229
+        ' Coordinate systems
+        '     Show all: Assy 40269, Part 40269
+        '     Hide all: Assy 40081, Part 40270
+        ' Sketches (includes 3DSketches)
+        '     Show all: Assy 40251, Part 40251
+        '     Hide all: Assy 40080, Part 40252
+        ' Curves
+        '     Show all: Assy 40258, Part 40258
+        '     Hide all: Assy 40084, Part 40260
+        ' Surfaces
+        '     Show all: Assy 40257, Part 40257
+        '     Hide all: Assy 40083, Part 40259
+        ' Reference Axes
+        '     Show all: Assy 40224, Part 40224
+        '     Hide all: Assy 40082, Part 40225
 
-            Dim UC As New UtilsCommon
-            Dim DocType As String = UC.GetDocType(SEDoc)
-            Dim Profile As SolidEdgePart.Profile
-
-            Select Case DocType
-                Case = "asm"
-                    Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-
-                    Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
-                    Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = tmpSEDoc.AsmRefPlanes
-
-                    Dim SketchesAssembly As SolidEdgeAssembly.ComponentLayouts
-                    Dim SketchAssembly As SolidEdgeAssembly.Layout
-
-                    PMI = CType(tmpSEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
-
-                    Try
-                        SketchesAssembly = tmpSEDoc.ComponentLayouts
-                        For Each SketchAssembly In SketchesAssembly
-                            Profile = CType(SketchAssembly.Profile, SolidEdgePart.Profile)
-                            Profile.Visible = False
-                        Next
-                    Catch ex As Exception
-                    End Try
-
-                    If Occurrences.Count = 0 Then
-                        AsmRefPlanes.Visible = True
-
-                    Else
-                        SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
-                        SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
-                        SEApp.StartCommand(CType(40080, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Sketches & 3DSketches
-                        SEApp.StartCommand(CType(40081, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Reference Axes
-                        SEApp.StartCommand(CType(40082, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Coordinate Systems
-                        SEApp.StartCommand(CType(40083, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide surfaces
-                        SEApp.StartCommand(CType(40084, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Curves
-                    End If
-
-                Case = "par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-
-                    Sketches = tmpSEDoc.Sketches
-
-                    PMI = CType(tmpSEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
-
-                    Models = tmpSEDoc.Models
-
-                    RefPlanes = tmpSEDoc.RefPlanes
-
-                    Constructions = tmpSEDoc.Constructions
-
-                    CoordinateSystems = tmpSEDoc.CoordinateSystems
-
-                Case = "psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-
-                    Dim Etches As SolidEdgePart.Etches
-                    Dim Etch As SolidEdgePart.Etch
-
-                    Sketches = tmpSEDoc.Sketches
-
-                    PMI = CType(tmpSEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
-
-                    Models = tmpSEDoc.Models
-
-                    RefPlanes = tmpSEDoc.RefPlanes
-
-                    Constructions = tmpSEDoc.Constructions
-
-                    CoordinateSystems = tmpSEDoc.CoordinateSystems
-
-                    If Models.Count > 0 Then
-                        For Each Model In Models
-                            Try
-                                Etches = Model.Etches
-                                If Not Etches Is Nothing Then
-                                    For Each Etch In Etches
-                                        Etch.Visible = True
-                                    Next
-                                End If
-                            Catch ex As Exception
-                            End Try
-                        Next
-                    End If
-
-                Case Else
-                    MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
-            End Select
-
-
-            If PMI IsNot Nothing Then
-                Try
-                    PMI.Show = False
-                    If Not DocType = "asm" Then
-                        PMI.ShowDimensions = False
-                        PMI.ShowAnnotations = False
-                    End If
-                Catch ex As Exception
-                End Try
-            End If
-
-            If (DocType = "par") Or (DocType = "psm") Then
-                If Sketches IsNot Nothing Then
-                    Try
-                        For Each Sketch In Sketches
-                            Profiles = Sketch.Profiles
-                            For Each Profile In Profiles
-                                Profile.Visible = False
-                            Next
-                        Next
-                    Catch ex As Exception
-                    End Try
-                End If
-
-                If (Models IsNot Nothing) And (RefPlanes IsNot Nothing) Then
-                    If Models.Count > 0 Then
-                        For Each RefPlane In RefPlanes
-                            RefPlane.Visible = False
-                        Next
-                    Else
-                        For Each RefPlane In RefPlanes
-                            RefPlane.Visible = True
-                        Next
-                    End If
-                End If
-
-                If Constructions IsNot Nothing Then
-                    'Some imported files crash on this command
-                    Try
-                        Constructions.Visible = False
-                    Catch ex As Exception
-                    End Try
-                End If
-
-                If CoordinateSystems IsNot Nothing Then
-                    CoordinateSystems.Visible = False
-                End If
-
-            End If
-        End If
+        DoReferencePlanes(SEApp, SEDoc)
+        DoCoordinateSystems(SEApp, SEDoc)
+        DoSketches(SEApp, SEDoc)
+        DoCurves(SEApp, SEDoc)
+        DoSurfaces(SEApp, SEDoc)
+        DoPhysicalPropertySymbols(SEApp, SEDoc)
+        DoReferenceAxes(SEApp, SEDoc)
+        DoPMIs(SEApp, SEDoc)
 
         If SEDoc.ReadOnly Then
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
@@ -597,13 +471,14 @@ Public Class TaskHideConstructions
 
     End Sub
 
+
     Private Sub DoReferencePlanes(
         SEApp As SolidEdgeFramework.Application,
         SEDoc As SolidEdgeFramework.SolidEdgeDocument)
 
         If Not (Me.ReferencePlanesShow Or Me.ReferencePlanesHide) Then Exit Sub
 
-        Dim Show As Boolean = Me.ReferenceAxesShow ' False means Hide
+        Dim Show As Boolean = Me.ReferencePlanesShow ' False means Hide
 
         Dim UC As New UtilsCommon
         Dim DocType As String = UC.GetDocType(SEDoc)
@@ -612,66 +487,32 @@ Public Class TaskHideConstructions
             Case "asm"
                 Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
                 Dim OccurrenceCount As Integer = tmpSEDoc.Occurrences.Count
-                Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = tmpSEDoc.AsmRefPlanes
 
-                If Show Then
-                    AsmRefPlanes.Visible = True
-                    For Each AsmRefPlane As SolidEdgeAssembly.AsmRefPlane In AsmRefPlanes
-                        If AsmRefPlane.Global Then
-                            AsmRefPlane.Visible = False
-                            AsmRefPlane.Visible = True
-                        Else
-                            AsmRefPlane.Visible = False
-                        End If
-                    Next
+                If Show Or OccurrenceCount = 0 Then
+                    Dim ShowCommand As Integer = 40228
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
                 Else
-                    If OccurrenceCount = 0 Then
-                        AsmRefPlanes.Visible = True
-                        For Each AsmRefPlane As SolidEdgeAssembly.AsmRefPlane In AsmRefPlanes
-                            If AsmRefPlane.Global Then
-                                AsmRefPlane.Visible = False
-                                AsmRefPlane.Visible = True
-                            Else
-                                AsmRefPlane.Visible = False
-                            End If
-                        Next
-                    Else
-                        Dim HideCommand = SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes
-                        SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
-                    End If
+                    Dim HideCommand = SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
                 End If
 
             Case "par", "psm"
-                Dim RefPlanes As SolidEdgePart.RefPlanes = Nothing
                 Dim ModelsCount As Integer
 
                 If DocType = "par" Then
                     Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                    RefPlanes = tmpSEDoc.RefPlanes
                     ModelsCount = tmpSEDoc.Models.Count
                 Else
                     Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                    RefPlanes = tmpSEDoc.RefPlanes
                     ModelsCount = tmpSEDoc.Models.Count
                 End If
 
-                For Each RefPlane As SolidEdgePart.RefPlane In RefPlanes
-                    If RefPlane.Global Then
-                        If Show Then
-                            RefPlane.Visible = True
-                        Else
-                            If ModelsCount = 0 Then
-                                RefPlane.Visible = True
-                            Else
-                                RefPlane.Visible = False
-                            End If
-                        End If
-                    Else
-                        RefPlane.Visible = False
-                    End If
-                Next
-                If Show Then
-
+                If Show Or ModelsCount = 0 Then
+                    Dim ShowCommand As Integer = 40228
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40229
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
                 End If
         End Select
 
@@ -683,6 +524,191 @@ Public Class TaskHideConstructions
 
         If Not (Me.CoordinateSystemsShow Or Me.CoordinateSystemsHide) Then Exit Sub
 
+        Dim Show As Boolean = Me.CoordinateSystemsShow ' False means Hide
+
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
+
+        Select Case DocType
+            Case "asm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40269
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40081
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+            Case "par", "psm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40269
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40270
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+        End Select
+    End Sub
+
+    Private Sub DoSketches(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument)
+
+        If Not (Me.SketchesShow Or Me.SketchesHide) Then Exit Sub
+
+        Dim Show As Boolean = Me.SketchesShow ' False means Hide
+
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
+
+        Select Case DocType
+            Case "asm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40251
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40080
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+            Case "par", "psm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40251
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40252
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+        End Select
+    End Sub
+
+    Private Sub DoCurves(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument)
+
+        If Not (Me.CurvesShow Or Me.CurvesHide) Then Exit Sub
+
+        Dim Show As Boolean = Me.CurvesShow ' False means Hide
+
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
+
+        Select Case DocType
+            Case "asm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40258
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40084
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+            Case "par", "psm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40258
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40260
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+        End Select
+
+    End Sub
+
+    Private Sub DoSurfaces(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument)
+
+        If Not (Me.SurfacesShow Or Me.SurfacesHide) Then Exit Sub
+
+        Dim Show As Boolean = Me.SurfacesShow ' False means Hide
+
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
+
+        'Dim Constructions As SolidEdgePart.Constructions = Nothing
+
+        Select Case DocType
+            Case "asm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40257
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40083
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+            Case "par", "psm"
+                If Show Then
+                    Dim ShowCommand As Integer = 40257
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                Else
+                    Dim HideCommand As Integer = 40259
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
+                End If
+
+        End Select
+
+    End Sub
+
+    Private Sub DoPhysicalPropertySymbols(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument)
+
+        If Not (Me.PhysicalPropertySymbolsShow Or Me.PhysicalPropertySymbolsHide) Then Exit Sub
+
+        Dim Show As Boolean = Me.PhysicalPropertySymbolsShow ' False means Hide
+
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
+
+        Dim Models As SolidEdgePart.Models = Nothing
+
+        Select Case DocType
+            Case "asm"
+                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                Dim PhysicalProperties As SolidEdgeAssembly.PhysicalProperties = tmpSEDoc.PhysicalProperties
+
+                PhysicalProperties.DisplayCenterOfMass = Show
+                PhysicalProperties.DisplayPrincipalAxes = Show
+                PhysicalProperties.DisplayCenterOfVolume = Show
+
+            Case "par"
+                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                Models = tmpSEDoc.Models
+
+            Case "psm"
+                Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                Models = tmpSEDoc.Models
+
+        End Select
+
+        If DocType = "par" Or DocType = "psm" Then
+            If Models IsNot Nothing AndAlso Models.Count > 0 Then
+                For Each Model As SolidEdgePart.Model In Models
+                    ' Can crash on certain models
+                    Try
+                        Model.DisplayCenterOfMass = Show
+                        Model.DisplayPrincipalAxes = Show
+                        Model.DisplayCenterOfVolume = Show
+                    Catch ex As Exception
+                    End Try
+
+                Next
+
+            End If
+        End If
+    End Sub
+
+    Private Sub DoReferenceAxes(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument)
+
+        If Not (Me.ReferenceAxesShow Or Me.ReferenceAxesHide) Then Exit Sub
+
         Dim Show As Boolean = Me.ReferenceAxesShow ' False means Hide
 
         Dim UC As New UtilsCommon
@@ -690,46 +716,68 @@ Public Class TaskHideConstructions
 
         Select Case DocType
             Case "asm"
-                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-                Dim CoordinateSystems As SolidEdgePart.CoordinateSystems = tmpSEDoc.CoordinateSystems
-
                 If Show Then
-                    CoordinateSystems.Visible = True
-                    For Each CoordinateSystem As SolidEdgePart.CoordinateSystem In CoordinateSystems
-                        CoordinateSystem.Visible = False
-                        CoordinateSystem.Visible = True
-                    Next
+                    Dim ShowCommand As Integer = 40224
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
                 Else
-                    Dim HideCoordinateSystems = 40082
-                    SEApp.StartCommand(CType(HideCoordinateSystems, SolidEdgeFramework.SolidEdgeCommandConstants))
+                    Dim HideCommand As Integer = 40082
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
                 End If
 
             Case "par", "psm"
-                Dim CoordinateSystems As SolidEdgePart.CoordinateSystems = Nothing
-
-                If DocType = "par" Then
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                    CoordinateSystems = tmpSEDoc.CoordinateSystems
-                Else
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                    CoordinateSystems = tmpSEDoc.CoordinateSystems
-                End If
-
                 If Show Then
-                    CoordinateSystems.Visible = True
-                    For Each CoordinateSystem As SolidEdgePart.CoordinateSystem In CoordinateSystems
-                        CoordinateSystem.Visible = False
-                        CoordinateSystem.Visible = True
-                    Next
+                    Dim ShowCommand As Integer = 40224
+                    SEApp.StartCommand(CType(ShowCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
                 Else
-                    CoordinateSystems.Visible = False
-                    For Each CoordinateSystem As SolidEdgePart.CoordinateSystem In CoordinateSystems
-                        CoordinateSystem.Visible = True
-                        CoordinateSystem.Visible = False
-                    Next
+                    Dim HideCommand As Integer = 40225
+                    SEApp.StartCommand(CType(HideCommand, SolidEdgeFramework.SolidEdgeCommandConstants))
                 End If
+
         End Select
+
     End Sub
+
+    Private Sub DoPMIs(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument)
+
+        If Not (Me.PMIShow Or Me.PMIHide) Then Exit Sub
+
+        Dim Show As Boolean = Me.PMIShow ' False means Hide
+
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
+
+        Dim PMI As SolidEdgeFrameworkSupport.PMI = Nothing
+
+        Select Case DocType
+            Case "asm"
+                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                PMI = CType(tmpSEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
+
+            Case "par"
+                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                PMI = CType(tmpSEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
+
+            Case "psm"
+                Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                PMI = CType(tmpSEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
+
+        End Select
+
+        If PMI IsNot Nothing Then
+            Try
+                PMI.Show = Show
+                If Not DocType = "asm" Then
+                    PMI.ShowDimensions = Show
+                    PMI.ShowAnnotations = Show
+                End If
+            Catch ex As Exception
+            End Try
+        End If
+
+    End Sub
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -764,20 +812,20 @@ Public Class TaskHideConstructions
 
         Dim ShowList As New List(Of String)
         ShowList.AddRange({ControlNames.AllShow.ToString, ControlNames.ReferencePlanesShow.ToString, ControlNames.CoordinateSystemsShow.ToString})
-        ShowList.AddRange({ControlNames.SketchesShow.ToString, ControlNames.Sketches_3dShow.ToString, ControlNames.CurvesShow.ToString})
-        ShowList.AddRange({ControlNames.ConstructionsShow.ToString, ControlNames.SurfacesShow.ToString, ControlNames.PhysicalPropertySymbolsShow.ToString})
+        ShowList.AddRange({ControlNames.SketchesShow.ToString, ControlNames.CurvesShow.ToString})
+        ShowList.AddRange({ControlNames.SurfacesShow.ToString, ControlNames.PhysicalPropertySymbolsShow.ToString})
         ShowList.AddRange({ControlNames.ReferenceAxesShow.ToString, ControlNames.PMIShow.ToString})
 
         Dim HideList As New List(Of String)
         HideList.AddRange({ControlNames.AllHide.ToString, ControlNames.ReferencePlanesHide.ToString, ControlNames.CoordinateSystemsHide.ToString})
-        HideList.AddRange({ControlNames.SketchesHide.ToString, ControlNames.Sketches_3dHide.ToString, ControlNames.CurvesHide.ToString})
-        HideList.AddRange({ControlNames.ConstructionsHide.ToString, ControlNames.SurfacesHide.ToString, ControlNames.PhysicalPropertySymbolsHide.ToString})
+        HideList.AddRange({ControlNames.SketchesHide.ToString, ControlNames.CurvesHide.ToString})
+        HideList.AddRange({ControlNames.SurfacesHide.ToString, ControlNames.PhysicalPropertySymbolsHide.ToString})
         HideList.AddRange({ControlNames.ReferenceAxesHide.ToString, ControlNames.PMIHide.ToString})
 
         Dim LabelList As New List(Of String)
         LabelList.AddRange({ControlNames.All.ToString, ControlNames.ReferencePlanes.ToString, ControlNames.CoordinateSystems.ToString})
-        LabelList.AddRange({ControlNames.Sketches.ToString, ControlNames.Sketches_3d.ToString, ControlNames.Curves.ToString})
-        LabelList.AddRange({ControlNames.Constructions.ToString, ControlNames.Surfaces.ToString, ControlNames.PhysicalPropertySymbols.ToString})
+        LabelList.AddRange({ControlNames.Sketches.ToString, ControlNames.Curves.ToString})
+        LabelList.AddRange({ControlNames.Surfaces.ToString, ControlNames.PhysicalPropertySymbols.ToString})
         LabelList.AddRange({ControlNames.ReferenceAxes.ToString, ControlNames.PMI.ToString})
 
 
@@ -803,7 +851,7 @@ Public Class TaskHideConstructions
             Label = FormatOptionsLabel(LabelName, GenerateLabelText(LabelName))
             tmpTLPOptions.Controls.Add(Label, 3, RowIndex)
             ControlsDict(Label.Name) = Label
-            If Label.Text = "Sketches_3d" Then Label.Text = "3DSketches"
+            'If Label.Text = "Sketches_3d" Then Label.Text = "3DSketches"
             If Label.Text = "P m i" Then Label.Text = "PMI"
 
         Next
@@ -844,9 +892,9 @@ Public Class TaskHideConstructions
                     Me.ReferencePlanesShow = True
                     Me.CoordinateSystemsShow = True
                     Me.SketchesShow = True
-                    Me.Sketches_3dShow = True
+                    'Me.Sketches_3dShow = True
                     Me.CurvesShow = True
-                    Me.ConstructionsShow = True
+                    'Me.ConstructionsShow = True
                     Me.SurfacesShow = True
                     Me.PhysicalPropertySymbolsShow = True
                     Me.ReferenceAxesShow = True
@@ -861,9 +909,9 @@ Public Class TaskHideConstructions
                     Me.ReferencePlanesHide = True
                     Me.CoordinateSystemsHide = True
                     Me.SketchesHide = True
-                    Me.Sketches_3dHide = True
+                    'Me.Sketches_3dHide = True
                     Me.CurvesHide = True
-                    Me.ConstructionsHide = True
+                    'Me.ConstructionsHide = True
                     Me.SurfacesHide = True
                     Me.PhysicalPropertySymbolsHide = True
                     Me.ReferenceAxesHide = True
@@ -888,11 +936,11 @@ Public Class TaskHideConstructions
             Case ControlNames.SketchesHide.ToString
                 Me.SketchesHide = Checkbox.Checked
 
-            Case ControlNames.Sketches_3dShow.ToString
-                Me.Sketches_3dShow = Checkbox.Checked
+            'Case ControlNames.Sketches_3dShow.ToString
+            '    Me.Sketches_3dShow = Checkbox.Checked
 
-            Case ControlNames.Sketches_3dHide.ToString
-                Me.Sketches_3dHide = Checkbox.Checked
+            'Case ControlNames.Sketches_3dHide.ToString
+            '    Me.Sketches_3dHide = Checkbox.Checked
 
             Case ControlNames.CurvesShow.ToString
                 Me.CurvesShow = Checkbox.Checked
@@ -900,11 +948,11 @@ Public Class TaskHideConstructions
             Case ControlNames.CurvesHide.ToString
                 Me.CurvesHide = Checkbox.Checked
 
-            Case ControlNames.ConstructionsShow.ToString
-                Me.ConstructionsShow = Checkbox.Checked
+            'Case ControlNames.ConstructionsShow.ToString
+            '    Me.ConstructionsShow = Checkbox.Checked
 
-            Case ControlNames.ConstructionsHide.ToString
-                Me.ConstructionsHide = Checkbox.Checked
+            'Case ControlNames.ConstructionsHide.ToString
+            '    Me.ConstructionsHide = Checkbox.Checked
 
             Case ControlNames.SurfacesShow.ToString
                 Me.SurfacesShow = Checkbox.Checked
@@ -945,7 +993,12 @@ Public Class TaskHideConstructions
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Hides all non-model elements such as reference planes, PMI dimensions, etc."
+        HelpString = "Shows or hides non-model elements such as reference planes, PMI dimensions, etc."
+
+        HelpString += vbCrLf + vbCrLf + "![ShowHideConstructions](My%20Project/media/task_show_hide_constructions.png)"
+
+        HelpString += vbCrLf + vbCrLf + "To leave an element's display unchanged, disable both its `Show` and `Hide` check boxes."
+
 
         Return HelpString
     End Function

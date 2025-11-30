@@ -85,6 +85,8 @@ Also made the following changes.
 
 - Added the ability to rename a variable with the `Edit variables` command (Thank you **@[Francesco Arfilli]!**).
 
+- Renamed the `Hide Constructions` task to `Show Hide Constructions` and added options to set display state based on element type (Thank you again **@[Francesco Arfilli]!**).
+
 - Added an option, `Allow partial success` to the `Break Links` command (Thank you **@john.matthews3452!**).  Previously any error caused the file to not be saved.
 
 - Changed the default directory when selecting configuration files (Thank you **@robbin70!**).  Rather than using the most recent directory, it defaults to the file's expected location.  The expected location is initially based on the user's Solid Edge installation path.  It can change based on further user input.
@@ -95,11 +97,11 @@ Also made the following changes.
 
 - Fixed an issue with `Edit Properties` where floating point type custom properties caused an exception when processed in Structured Storage (Thank you **@Monostre!**).
 
-- Fixed an issue with `Run External Program` where code snippets required the presence of all referenced properties in a file even if the property was not encountered in the execution path (Thank you **@robbin70!**).
+- Fixed an issue with `Run External Program` where code snippets required the presence of all referenced properties in a file even if the property was not encountered in the execution path (Thank you one more time **@robbin70!**).
 
 - Fixed a regression with `Set Document Status` (Thank you **@TeeVar!**).
 
-- Fixed a regression adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]** and **@Monostre!**)
+- Fixed a regression when adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]** and **@Monostre!**)
 
 
 

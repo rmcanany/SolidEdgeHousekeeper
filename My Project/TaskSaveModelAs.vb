@@ -684,7 +684,7 @@ Public Class TaskSaveModelAs
         Dim UC As New UtilsCommon
 
         If Me.HideConstructions Then
-            Dim TaskHideConstructions As New TaskHideConstructions
+            Dim TaskHideConstructions As New TaskShowHideConstructions
             TaskHideConstructions.FileLogger = Me.FileLogger
 
             TaskHideConstructions.Process(SEDoc, SEApp)

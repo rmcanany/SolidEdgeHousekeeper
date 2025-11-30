@@ -376,7 +376,7 @@
     <Compile Include="My Project\TaskEditVariables.vb" />
     <Compile Include="My Project\TaskFitView.vb" />
     <Compile Include="My Project\TaskCreateDrawingOfFlatPattern.vb" />
-    <Compile Include="My Project\TaskHideConstructions.vb" />
+    <Compile Include="My Project\TaskShowHideConstructions.vb" />
     <Compile Include="My Project\TaskOpenSave.vb" />
     <Compile Include="My Project\TaskPrint.vb" />
     <Compile Include="My Project\TaskUpdateFlatPattern.vb" />

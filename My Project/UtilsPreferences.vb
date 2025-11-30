@@ -798,7 +798,7 @@ Public Class UtilsPreferences
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskRemoveFaceStyleOverrides)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
-        TaskList.Add(New TaskHideConstructions)
+        TaskList.Add(New TaskShowHideConstructions)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskFitView)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)

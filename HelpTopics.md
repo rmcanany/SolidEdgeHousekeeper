@@ -1008,9 +1008,13 @@ Face style overrides change a part's appearance in the assembly. This command ca
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskHideConstructions.png"><img src="My%20Project/media/spacer.png">Hide constructions</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskShowHideConstructions.png"><img src="My%20Project/media/spacer.png">Show hide constructions</h3></summary>
 
-Hides all non-model elements such as reference planes, PMI dimensions, etc.
+Shows or hides non-model elements such as reference planes, PMI dimensions, etc.
+
+![ShowHideConstructions](My%20Project/media/task_show_hide_constructions.png)
+
+To leave an element's display unchanged, disable both its `Show` and `Hide` check boxes.
 
 </details>
 
