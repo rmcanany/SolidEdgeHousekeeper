@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "20"  ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "21"  ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -2176,6 +2176,9 @@ Public Class Form_Main
                 End If
 
             Next
+
+            ListViewFiles.SelectedItems.Clear()
+
         End If
 
         If e.Control And e.KeyCode = Keys.C Then
@@ -2317,6 +2320,8 @@ Public Class Form_Main
             End If
 
         Next
+
+        ListViewFiles.SelectedItems.Clear()
 
         If Not ListViewSources.SelectedItems.Count = 0 Then
             For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
