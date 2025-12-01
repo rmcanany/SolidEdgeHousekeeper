@@ -269,41 +269,17 @@ Public Class TaskRunExternalProgram
 
             If DocType = ".dft" Then
                 Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+                Dim Blocks As SolidEdgeDraft.Blocks = tmpSEDoc.Blocks
 
-                Dim PerimeterLength As Double = 0
-
-                For Each Sheet As SolidEdgeDraft.Sheet In tmpSEDoc.Sheets
-                    For Each DV As SolidEdgeDraft.DrawingView In Sheet.DrawingViews
-                        If DV.DVEllipticalArcs2d IsNot Nothing AndAlso DV.DVEllipticalArcs2d.Count > 0 Then
-                            For Each DVEA As SolidEdgeDraft.DVEllipticalArc2d In DV.DVEllipticalArcs2d
-                                Dim a As Double = DVEA.MajorRadius
-                                Dim b As Double = DVEA.MinorRadius
-                                Dim e As Double = Math.Sqrt(1 - (b ^ 2 / a ^ 2))
-
-                                Dim SweepAngle As Double = DVEA.SweepAngle
-                                If Not DVEA.Orientation = SolidEdgeFrameworkSupport.Geom2dOrientationConstants.igGeom2dOrientClockwise Then
-                                    SweepAngle = -SweepAngle
-                                End If
-
-                                Dim Theta1 As Double = DVEA.StartAngle
-                                Dim Theta2 As Double = Theta1 + SweepAngle
-                                Dim DeltaTheta As Double = SweepAngle / 1000
-
-                                'ErrorMessageList.Add(String.Format("{0} {1} {2} {3} ", Theta1, Theta2, DeltaTheta, SweepAngle))
-
-                                Dim PreviousP As Double = PerimeterLength
-                                For Theta As Double = Theta1 To Theta2 Step DeltaTheta
-                                    PerimeterLength += a * Math.Sqrt(1 - (e ^ 2) * (Math.Sin(Theta) ^ 2)) * Math.Abs(DeltaTheta)
-                                Next
-
-                                'ErrorMessageList.Add(String.Format("{0}", PerimeterLength - PreviousP))
-
-                            Next
-                        End If
-                    Next
+                For Each Block As SolidEdgeDraft.Block In Blocks
+                    Dim BlockName As String = Block.Name
+                    Try
+                        Block.Delete()
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Could not delete block '{0}'", BlockName))
+                    End Try
                 Next
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Perimeter was {0}", PerimeterLength))
             End If
 
             ' ############## SNIPPET CODE END ##############

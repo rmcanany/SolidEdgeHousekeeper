@@ -62,7 +62,7 @@ Public Class UtilsPowerShell
         BotList.Add("")
         BotList.Add("$Result = [Expression]::RunExpression()")
         BotList.Add("Write-Output $Result")
-        BotList.Add("$Result | Out-File -FilePath 'C:\data\junk\HousekeeperExpressionResult.txt' -Encoding UTF8")
+        'BotList.Add("$Result | Out-File -FilePath 'C:\data\junk\HousekeeperExpressionResult.txt' -Encoding UTF8")
 
         For Each L As List(Of String) In {TopList, MidList, BotList}
             For Each s In L
