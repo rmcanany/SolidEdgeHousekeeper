@@ -861,7 +861,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         HelpString += "To use the draft template defined on the **Configuration Tab -- Templates Page**, "
         HelpString += "enable the option `Use configuration page templates.`"
 
-        HelpString += vbCrLf + "- **Replace Drawing Border:** Replace the drawing border in the file with one of the same name in the template. "
+        HelpString += vbCrLf + "- **Update Drawing Border:** Replace the drawing border in the file with one of the same name in the template. "
         HelpString += vbCrLf + "  - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. "
         HelpString += "If a match is found, that border is used as the replacement. "
         HelpString += vbCrLf + "  - **If matched by sheet size: Rename sheet:** If a size match is found, this option renames "
