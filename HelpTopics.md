@@ -998,7 +998,13 @@ Updates styles and/or background sheets from a template you specify.
 
 ![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template.png)
 
-These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. If you need one or more of those styles updated, please ask on the Forum. 
+**Options**
+- **Dft Template:** Drawing that contains the desired styles and background sheets. To use the draft template defined on the **Configuration Tab -- Templates Page**, enable the option `Use configuration page templates.`
+- **Replace Drawing Border:** Replace the drawing border in the file with one of the same name in the template. 
+  - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. If a match is found, that border is used as the replacement. 
+  - **If matched by sheet size: Rename sheet:** If a size match is found, this option renames the background to match the template. 
+
+- **Update Styles:** Updates styles from template.  These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. If you need one or more of those styles updated, please ask on the Forum. 
 
 </details>
 

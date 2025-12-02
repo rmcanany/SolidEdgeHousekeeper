@@ -43,6 +43,32 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End Set
     End Property
 
+    Private _MatchSheetSize As Boolean
+    Public Property MatchSheetSize As Boolean
+        Get
+            Return _MatchSheetSize
+        End Get
+        Set(value As Boolean)
+            _MatchSheetSize = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.MatchSheetSize.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _RenameSheet As Boolean
+    Public Property RenameSheet As Boolean
+        Get
+            Return _RenameSheet
+        End Get
+        Set(value As Boolean)
+            _RenameSheet = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.RenameSheet.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _UpdateStyles As Boolean
     Public Property UpdateStyles As Boolean
         Get
@@ -75,6 +101,8 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Browse
         DraftTemplate
         UpdateBorder
+        MatchSheetSize
+        RenameSheet
         UpdateStyles
         AutoHideOptions
     End Enum
@@ -137,11 +165,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument = Nothing
 
-        'Dim DocStyleNames As New List(Of String)
-        'Dim TemplateStyleNames As New List(Of String)
-        'Dim MissingStyles As String = ""
-
-        Dim UC As New UtilsCommon
+        'Dim UC As New UtilsCommon
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -157,20 +181,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         SEApp.DoIdle()
 
         If Me.UpdateBorder And SETemplateDoc IsNot Nothing Then
-            Dim TemplateSheetNames As New List(Of String)
-
-            For Each Sheet In UC.GetSheets(SETemplateDoc, "Background")
-                TemplateSheetNames.Add(Sheet.Name)
-            Next
-
-            For Each Sheet In UC.GetSheets(tmpSEDoc, "Background")
-                If TemplateSheetNames.Contains(Sheet.Name) Then
-                    Sheet.ReplaceBackground(DraftTemplate, Sheet.Name)
-                    SEApp.DoIdle()
-                Else
-                    TaskLogger.AddMessage(String.Format("Template has no background named '{0}'", Sheet.Name))
-                End If
-            Next
+            DoReplaceBorders(tmpSEDoc, SETemplateDoc, SEApp)
 
         End If
 
@@ -188,8 +199,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         If Me.UpdateStyles And SETemplateDoc IsNot Nothing Then
 
-            'Dim TemplateStyleInDoc As Boolean
-
             DoLinearStyles(tmpSEDoc, SETemplateDoc)
 
             DoTextCharStyles(tmpSEDoc, SETemplateDoc)
@@ -202,306 +211,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
             DoTableStyles(tmpSEDoc, SETemplateDoc)
 
-            '' ############ DimensionStyles ############
 
-            'Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
-            'DocDimensionStyles = CType(tmpSEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
-
-            'Dim TemplateDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
-            'TemplateDimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
-
-            'For Each TemplateDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In TemplateDimensionStyles
-            '    If Not TemplateStyleNames.Contains(TemplateDimensionStyle.Name) Then
-            '        TemplateStyleNames.Add(TemplateDimensionStyle.Name)
-            '    End If
-            '    TemplateStyleInDoc = False
-            '    For Each DocDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In DocDimensionStyles
-            '        If Not DocStyleNames.Contains(DocDimensionStyle.Name) Then
-            '            DocStyleNames.Add(DocDimensionStyle.Name)
-            '        End If
-            '        If TemplateDimensionStyle.Name = DocDimensionStyle.Name Then
-            '            TemplateStyleInDoc = True
-            '            Try
-            '                UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
-            '                ' #### The following are not updating correctly in SE2019 with UC.CopyProperties
-            '                DocDimensionStyle.HoleCalloutCounterdrill = TemplateDimensionStyle.HoleCalloutCounterdrill
-            '                DocDimensionStyle.HoleCalloutCounterdrillThreaded = TemplateDimensionStyle.HoleCalloutCounterdrillThreaded
-            '            Catch ex As Exception
-            '                TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
-            '            End Try
-            '        End If
-            '    Next
-            '    If Not TemplateStyleInDoc Then
-            '        Dim tmpDocDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle
-            '        Try
-            '            tmpDocDimensionStyle = DocDimensionStyles.Add(TemplateDimensionStyle.Name, "")
-            '            UC.CopyProperties(TemplateDimensionStyle, tmpDocDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
-            '            ' #### The following are not updating correctly in SE2019 with UC.CopyProperties
-            '            tmpDocDimensionStyle.HoleCalloutCounterdrill = TemplateDimensionStyle.HoleCalloutCounterdrill
-            '            tmpDocDimensionStyle.HoleCalloutCounterdrillThreaded = TemplateDimensionStyle.HoleCalloutCounterdrillThreaded
-            '        Catch ex As Exception
-            '            TaskLogger.AddMessage(String.Format("Error adding DimensionStyle '{0}'", TemplateDimensionStyle.Name))
-            '        End Try
-            '    End If
-            'Next
-
-            'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-            'If Len(MissingStyles) > 0 Then
-            '    TaskLogger.AddMessage(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
-            'End If
-            'DocStyleNames.Clear()
-            'TemplateStyleNames.Clear()
-            'MissingStyles = ""
-
-
-            '' ############ DrawingViewStyles ############
-
-            'Dim DocDrawingViewStyles As SolidEdgeFrameworkSupport.DrawingViewStyles
-            'DocDrawingViewStyles = CType(tmpSEDoc.DrawingViewStyles, SolidEdgeFrameworkSupport.DrawingViewStyles)
-
-            'Dim TemplateDrawingViewStyles As SolidEdgeFrameworkSupport.DrawingViewStyles
-            'TemplateDrawingViewStyles = CType(SETemplateDoc.DrawingViewStyles, SolidEdgeFrameworkSupport.DrawingViewStyles)
-
-            'For Each TemplateDrawingViewStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In TemplateDrawingViewStyles
-            '    If Not TemplateStyleNames.Contains(TemplateDrawingViewStyle.Name) Then
-            '        TemplateStyleNames.Add(TemplateDrawingViewStyle.Name)
-            '    End If
-            '    TemplateStyleInDoc = False
-            '    For Each DocDrawingViewStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In DocDrawingViewStyles
-            '        If Not DocStyleNames.Contains(DocDrawingViewStyle.Name) Then
-            '            DocStyleNames.Add(DocDrawingViewStyle.Name)
-            '        End If
-            '        If TemplateDrawingViewStyle.Name = DocDrawingViewStyle.Name Then
-            '            TemplateStyleInDoc = True
-            '            Try
-            '                UC.CopyProperties(TemplateDrawingViewStyle, DocDrawingViewStyle, TaskLogger.AddLogger($"Drawing view style {TemplateDrawingViewStyle.Name}"))
-            '            Catch ex As Exception
-            '                TaskLogger.AddMessage(String.Format("Error applying DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
-            '            End Try
-            '        End If
-            '    Next
-            '    If Not TemplateStyleInDoc Then
-            '        Dim tmpDocDrawingViewStyle As SolidEdgeFrameworkSupport.DrawingViewStyle
-            '        Try
-            '            tmpDocDrawingViewStyle = DocDrawingViewStyles.Add(TemplateDrawingViewStyle.Name, "")
-            '            UC.CopyProperties(TemplateDrawingViewStyle, tmpDocDrawingViewStyle, TaskLogger.AddLogger($"Drawing view style {TemplateDrawingViewStyle.Name}"))
-            '        Catch ex As Exception
-            '            TaskLogger.AddMessage(String.Format("Error adding DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
-            '        End Try
-            '    End If
-            'Next
-
-            'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-            'If Len(MissingStyles) > 0 Then
-            '    TaskLogger.AddMessage(String.Format("Drawing View styles in Draft but not in Template: {0}", MissingStyles))
-            'End If
-            'DocStyleNames.Clear()
-            'TemplateStyleNames.Clear()
-            'MissingStyles = ""
-
-
-            '' ############ LinearStyles ############
-
-            'Dim DocLinearStyles As SolidEdgeFramework.LinearStyles
-            'DocLinearStyles = CType(tmpSEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
-
-            'Dim TemplateLinearStyles As SolidEdgeFramework.LinearStyles
-            'TemplateLinearStyles = CType(SETemplateDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
-
-            'For Each TemplateLinearStyle As SolidEdgeFramework.LinearStyle In TemplateLinearStyles
-            '    If Not TemplateStyleNames.Contains(TemplateLinearStyle.Name) Then
-            '        TemplateStyleNames.Add(TemplateLinearStyle.Name)
-            '    End If
-            '    TemplateStyleInDoc = False
-            '    For Each DocLinearStyle As SolidEdgeFramework.LinearStyle In DocLinearStyles
-            '        If Not DocStyleNames.Contains(DocLinearStyle.Name) Then
-            '            DocStyleNames.Add(DocLinearStyle.Name)
-            '        End If
-            '        If TemplateLinearStyle.Name = DocLinearStyle.Name Then
-            '            TemplateStyleInDoc = True
-            '            Try
-            '                UC.CopyProperties(TemplateLinearStyle, DocLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
-            '            Catch ex As Exception
-            '                TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
-            '            End Try
-            '        End If
-            '    Next
-            '    If Not TemplateStyleInDoc Then
-            '        Dim tmpDocLinearStyle As SolidEdgeFramework.LinearStyle
-            '        Try
-            '            tmpDocLinearStyle = DocLinearStyles.Add(TemplateLinearStyle.Name, "")
-            '            UC.CopyProperties(TemplateLinearStyle, tmpDocLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
-            '        Catch ex As Exception
-            '            TaskLogger.AddMessage(String.Format("Error adding LinearStyle '{0}'", TemplateLinearStyle.Name))
-            '        End Try
-            '    End If
-            'Next
-
-            'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-            'If Len(MissingStyles) > 0 Then
-            '    TaskLogger.AddMessage(String.Format("Linear styles in Draft but not in Template: {0}", MissingStyles))
-            'End If
-            'DocStyleNames.Clear()
-            'TemplateStyleNames.Clear()
-            'MissingStyles = ""
-
-
-            '' ############ TableStyles ############
-
-            'Dim DocTableStyles As SolidEdgeFrameworkSupport.TableStyles
-            'DocTableStyles = CType(tmpSEDoc.TableStyles, SolidEdgeFrameworkSupport.TableStyles)
-
-            'Dim TemplateTableStyles As SolidEdgeFrameworkSupport.TableStyles
-            'TemplateTableStyles = CType(SETemplateDoc.TableStyles, SolidEdgeFrameworkSupport.TableStyles)
-
-            'For Each TemplateTableStyle As SolidEdgeFrameworkSupport.TableStyle In TemplateTableStyles
-            '    If Not TemplateStyleNames.Contains(TemplateTableStyle.Name) Then
-            '        TemplateStyleNames.Add(TemplateTableStyle.Name)
-            '    End If
-            '    TemplateStyleInDoc = False
-            '    For Each DocTableStyle As SolidEdgeFrameworkSupport.TableStyle In DocTableStyles
-            '        If Not DocStyleNames.Contains(DocTableStyle.Name) Then
-            '            DocStyleNames.Add(DocTableStyle.Name)
-            '        End If
-            '        If TemplateTableStyle.Name = DocTableStyle.Name Then
-            '            TemplateStyleInDoc = True
-            '            Try
-            '                UC.CopyProperties(TemplateTableStyle, DocTableStyle, TaskLogger.AddLogger($"Table style {TemplateTableStyle.Name}"))
-            '                '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
-            '                For c = 0 To 6
-            '                    DocTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '                    DocTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '                    DocTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '                Next
-            '                ''#### 20251021 CopyProperties not doing these either
-            '                'DocTableStyle.HeaderTextStyle = TemplateTableStyle.HeaderTextStyle
-            '                'DocTableStyle.DataTextStyle = TemplateTableStyle.DataTextStyle
-            '            Catch ex As Exception
-            '                TaskLogger.AddMessage(String.Format("Error applying TableStyle '{0}'", TemplateTableStyle.Name))
-            '            End Try
-            '        End If
-            '    Next
-            '    If Not TemplateStyleInDoc Then
-            '        Dim tmpDocTableStyle As SolidEdgeFrameworkSupport.TableStyle
-            '        Try
-            '            tmpDocTableStyle = DocTableStyles.Add(TemplateTableStyle.Name, "")
-            '            'SEDoc.Save()
-            '            'SEApp.DoIdle()
-            '            UC.CopyProperties(TemplateTableStyle, tmpDocTableStyle, TaskLogger.AddLogger($"Table style {TemplateTableStyle.Name}"))
-            '            '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
-            '            For c = 0 To 6
-            '                tmpDocTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '                tmpDocTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '                tmpDocTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '            Next
-            '            ''#### 20251021 CopyProperties not doing these either
-            '            'tmpDocTableStyle.HeaderTextStyle = TemplateTableStyle.HeaderTextStyle
-            '            'tmpDocTableStyle.DataTextStyle = TemplateTableStyle.DataTextStyle
-            '        Catch ex As Exception
-            '            TaskLogger.AddMessage(String.Format("Error adding TableStyle '{0}'", TemplateTableStyle.Name))
-            '        End Try
-            '    End If
-            'Next
-
-            'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-            'If Len(MissingStyles) > 0 Then
-            '    TaskLogger.AddMessage(String.Format("Table styles in Draft but not in Template: {0}", MissingStyles))
-            'End If
-            'DocStyleNames.Clear()
-            'TemplateStyleNames.Clear()
-            'MissingStyles = ""
-
-
-            '' ############ TextCharStyles ############
-
-            'Dim DocTextCharStyles As SolidEdgeFramework.TextCharStyles
-            'DocTextCharStyles = CType(tmpSEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
-
-            'Dim TemplateTextCharStyles As SolidEdgeFramework.TextCharStyles
-            'TemplateTextCharStyles = CType(SETemplateDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
-
-            'For Each TemplateTextCharStyle As SolidEdgeFramework.TextCharStyle In TemplateTextCharStyles
-            '    If Not TemplateStyleNames.Contains(TemplateTextCharStyle.Name) Then
-            '        TemplateStyleNames.Add(TemplateTextCharStyle.Name)
-            '    End If
-            '    TemplateStyleInDoc = False
-            '    For Each DocTextCharStyle As SolidEdgeFramework.TextCharStyle In DocTextCharStyles
-            '        If Not DocStyleNames.Contains(DocTextCharStyle.Name) Then
-            '            DocStyleNames.Add(DocTextCharStyle.Name)
-            '        End If
-            '        If TemplateTextCharStyle.Name = DocTextCharStyle.Name Then
-            '            TemplateStyleInDoc = True
-            '            Try
-            '                UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
-            '            Catch ex As Exception
-            '                TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
-            '            End Try
-            '        End If
-            '    Next
-            '    If Not TemplateStyleInDoc Then
-            '        Dim tmpDocTextCharStyle As SolidEdgeFramework.TextCharStyle
-            '        Try
-            '            tmpDocTextCharStyle = DocTextCharStyles.Add(TemplateTextCharStyle.Name, "")
-            '            UC.CopyProperties(TemplateTextCharStyle, tmpDocTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
-            '        Catch ex As Exception
-            '            TaskLogger.AddMessage(String.Format("Error adding TextCharStyle '{0}'", TemplateTextCharStyle.Name))
-            '        End Try
-            '    End If
-            'Next
-
-            'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-            'If Len(MissingStyles) > 0 Then
-            '    TaskLogger.AddMessage(String.Format("Text Char styles in Draft but not in Template: {0}", MissingStyles))
-            'End If
-            'DocStyleNames.Clear()
-            'TemplateStyleNames.Clear()
-            'MissingStyles = ""
-
-
-            '' ############ TextStyles ############
-
-            'Dim DocTextStyles As SolidEdgeFramework.TextStyles
-            'DocTextStyles = CType(tmpSEDoc.TextStyles, SolidEdgeFramework.TextStyles)
-
-            'Dim TemplateTextStyles As SolidEdgeFramework.TextStyles
-            'TemplateTextStyles = CType(SETemplateDoc.TextStyles, SolidEdgeFramework.TextStyles)
-
-            'For Each TemplateTextStyle As SolidEdgeFramework.TextStyle In TemplateTextStyles
-            '    If Not TemplateStyleNames.Contains(TemplateTextStyle.Name) Then
-            '        TemplateStyleNames.Add(TemplateTextStyle.Name)
-            '    End If
-            '    TemplateStyleInDoc = False
-            '    For Each DocTextStyle As SolidEdgeFramework.TextStyle In DocTextStyles
-            '        If Not DocStyleNames.Contains(DocTextStyle.Name) Then
-            '            DocStyleNames.Add(DocTextStyle.Name)
-            '        End If
-            '        If TemplateTextStyle.Name = DocTextStyle.Name Then
-            '            TemplateStyleInDoc = True
-            '            Try
-            '                UC.CopyProperties(TemplateTextStyle, DocTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
-            '            Catch ex As Exception
-            '                TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
-            '            End Try
-            '        End If
-            '    Next
-            '    If Not TemplateStyleInDoc Then
-            '        Dim tmpDocTextStyle As SolidEdgeFramework.TextStyle
-            '        Try
-            '            tmpDocTextStyle = DocTextStyles.Add(TemplateTextStyle.Name, "")
-            '            UC.CopyProperties(TemplateTextStyle, tmpDocTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
-            '        Catch ex As Exception
-            '            TaskLogger.AddMessage(String.Format("Error adding TextStyle '{0}'", TemplateTextStyle.Name))
-            '        End Try
-            '    End If
-            'Next
-
-            'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-            'If Len(MissingStyles) > 0 Then
-            '    TaskLogger.AddMessage(String.Format("Text styles in Draft but not in Template: {0}", MissingStyles))
-            'End If
-            'DocStyleNames.Clear()
-            'TemplateStyleNames.Clear()
-            'MissingStyles = ""
         End If
 
         If SETemplateDoc IsNot Nothing Then
@@ -519,6 +229,61 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     End Sub
 
+    Private Sub DoReplaceBorders(
+        tmpSEDoc As SolidEdgeDraft.DraftDocument,
+        SETemplateDoc As SolidEdgeDraft.DraftDocument,
+        SEApp As SolidEdgeFramework.Application)
+
+        Dim UC As New UtilsCommon
+
+        Dim TemplateSheets As List(Of SolidEdgeDraft.Sheet) = UC.GetSheets(SETemplateDoc, "Background")
+        Dim TemplateSheetNames As New List(Of String)
+        Dim TemplateSheetSizeOptions As New List(Of SolidEdgeDraft.PaperSizeConstants)
+
+        For Each Sheet As SolidEdgeDraft.Sheet In TemplateSheets
+            TemplateSheetNames.Add(Sheet.Name)
+            TemplateSheetSizeOptions.Add(Sheet.SheetSetup.SheetSizeOption)
+        Next
+
+        Dim tmpSEDocSheets As List(Of SolidEdgeDraft.Sheet) = UC.GetSheets(tmpSEDoc, "Background")
+        Dim tmpSEDocSheetNames As New List(Of String)
+        Dim tmpSEDocSheetSizeOptions As New List(Of SolidEdgeDraft.PaperSizeConstants)
+
+        For Each Sheet As SolidEdgeDraft.Sheet In tmpSEDocSheets
+            tmpSEDocSheetNames.Add(Sheet.Name)
+            tmpSEDocSheetSizeOptions.Add(Sheet.SheetSetup.SheetSizeOption)
+        Next
+
+        For i As Integer = 0 To tmpSEDocSheets.Count - 1
+            Dim tmpSEDocSheet As SolidEdgeDraft.Sheet = tmpSEDocSheets(i)
+            Dim tmpSEDocSheetName As String = tmpSEDocSheetNames(i)
+            Dim tmpSEDocSheetSizeOption As SolidEdgeDraft.PaperSizeConstants = tmpSEDocSheetSizeOptions(i)
+
+            If TemplateSheetNames.Contains(tmpSEDocSheetName) Then
+                tmpSEDocSheet.ReplaceBackground(DraftTemplate, tmpSEDocSheetName)
+                SEApp.DoIdle()
+            ElseIf Me.MatchSheetSize And TemplateSheetSizeOptions.Contains(tmpSEDocSheetSizeOption) Then
+                Dim j As Integer = TemplateSheetSizeOptions.IndexOf(tmpSEDocSheetSizeOption)
+                tmpSEDocSheet.ReplaceBackground(DraftTemplate, TemplateSheetNames(j))
+                SEApp.DoIdle()
+                If Me.RenameSheet Then
+                    tmpSEDocSheet.Name = TemplateSheetNames(j)
+                End If
+            Else
+                TaskLogger.AddMessage("Template has no matching background")
+            End If
+        Next
+
+        'For Each Sheet In UC.GetSheets(tmpSEDoc, "Background")
+        '    If TemplateSheetNames.Contains(Sheet.Name) Then
+        '        Sheet.ReplaceBackground(DraftTemplate, Sheet.Name)
+        '        SEApp.DoIdle()
+        '    Else
+        '        TaskLogger.AddMessage(String.Format("Template has no background named '{0}'", Sheet.Name))
+        '    End If
+        'Next
+
+    End Sub
 
     Private Function DocStyleNotInTemplate(
        DocStyleNameList As List(Of String),
@@ -932,6 +697,24 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.MatchSheetSize.ToString, "If no matching name: Match by sheet size")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.RenameSheet.ToString, "If matched by sheet size: Rename sheet")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.UpdateStyles.ToString, "Update styles")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -1023,17 +806,26 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
                 End If
 
+            Case ControlNames.UpdateBorder.ToString
+                Me.UpdateBorder = Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.MatchSheetSize.ToString), CheckBox).Visible = Me.UpdateBorder
+                CType(ControlsDict(ControlNames.RenameSheet.ToString), CheckBox).Visible = Me.UpdateBorder
+
+            Case ControlNames.MatchSheetSize.ToString
+                Me.MatchSheetSize = Checkbox.Checked
+
+            Case ControlNames.RenameSheet.ToString
+                Me.RenameSheet = Checkbox.Checked
+
+            Case ControlNames.UpdateStyles.ToString
+                Me.UpdateStyles = Checkbox.Checked
+
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
                 If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
                     Me.AutoHideOptions = Checkbox.Checked
                 End If
-
-            Case ControlNames.UpdateBorder.ToString
-                Me.UpdateBorder = Checkbox.Checked
-
-            Case ControlNames.UpdateStyles.ToString
-                Me.UpdateStyles = Checkbox.Checked
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -1063,8 +855,20 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         HelpString += vbCrLf + vbCrLf + "![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template.png)"
 
+        HelpString += vbCrLf + vbCrLf + "**Options**"
+
+        HelpString += vbCrLf + "- **Dft Template:** Drawing that contains the desired styles and background sheets. "
+        HelpString += "To use the draft template defined on the **Configuration Tab -- Templates Page**, "
+        HelpString += "enable the option `Use configuration page templates.`"
+
+        HelpString += vbCrLf + "- **Replace Drawing Border:** Replace the drawing border in the file with one of the same name in the template. "
+        HelpString += vbCrLf + "  - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. "
+        HelpString += "If a match is found, that border is used as the replacement. "
+        HelpString += vbCrLf + "  - **If matched by sheet size: Rename sheet:** If a size match is found, this option renames "
+        HelpString += "the background to match the template. "
+
         HelpString += vbCrLf + vbCrLf
-        HelpString += "These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. "
+        HelpString += "- **Update Styles:** Updates styles from template.  These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. "
         HelpString += "These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. "
         HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. "
         HelpString += "If you need one or more of those styles updated, please ask on the Forum. "

@@ -124,6 +124,8 @@ Public Class FormBlockLibraryBlockNames
             Exit Sub
         End If
 
+        Me.Cursor = Cursors.WaitCursor
+
         Dim USEA As New UtilsSEApp(Form_Main)
 
         LabelStatus.Text = "Starting Solid Edge..."
@@ -154,6 +156,8 @@ Public Class FormBlockLibraryBlockNames
         USEA.SEStop(UseCurrentSession:=True)
 
         LabelStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
+
+        Me.Cursor = Cursors.Default
 
     End Sub
 
