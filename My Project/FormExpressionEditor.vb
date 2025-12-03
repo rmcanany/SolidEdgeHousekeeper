@@ -406,15 +406,30 @@ Public Class FormExpressionEditor
             ComboBoxLanguage.Text = "NCalc"
         End If
 
+        Dim tmpSavedExpressionsItems = SavedExpressionsItems
+
         Dim tmpFormula As String = Formula
-        tmpFormula = tmpFormula.Replace("EXPRESSION_VB", "")
-        tmpFormula = tmpFormula.Replace("EXPRESSION_NCalc", "")
+        tmpFormula = tmpFormula.Replace($"EXPRESSION_VB{Chr(182)}", "")
+        tmpFormula = tmpFormula.Replace($"EXPRESSION_NCalc{Chr(182)}", "")
         tmpFormula = tmpFormula.Replace(Chr(182), vbCrLf)
 
         If Not tmpFormula = "" Then
-            While tmpFormula(0) = vbCrLf Or tmpFormula(0) = vbCr Or tmpFormula(0) = vbLf
-                tmpFormula = tmpFormula.Substring(1)
-            End While
+
+            ' Populate DD_SavedExpressions if tmpFormula found
+            For Each SavedName As String In SavedExpressionsItems.Keys
+                'calculation = calculation.Split(CChar("\\")).First
+                If tmpFormula = SavedExpressionsItems(SavedName).Split(CChar("\\")).First Then
+                    DD_SavedExpressions.Text = SavedName
+                    Me.Text = "Expression editor - " & SavedName
+                    Exit For
+                End If
+            Next
+
+            '' Delete leading blank lines
+            'While tmpFormula(0) = vbCrLf Or tmpFormula(0) = vbCr Or tmpFormula(0) = vbLf
+            '    tmpFormula = tmpFormula.Substring(1)
+            'End While
+
         End If
 
         TextEditorFormula.Text = tmpFormula
@@ -550,7 +565,7 @@ Public Class FormExpressionEditor
             'MsgBox($"{OutputType}")
             Dim tmpFileDialog As New CommonSaveFileDialog
 
-            tmpFileDialog.Title = "Enter the file name for the new part"
+            tmpFileDialog.Title = "Enter the file name for the new snippet file"
             tmpFileDialog.DefaultFileName = IO.Path.GetFileName(Me.SnippetFilename)
             tmpFileDialog.EnsureFileExists = False
             tmpFileDialog.Filters.Add(New CommonFileDialogFilter("Solid Edge Files", "*.snp"))

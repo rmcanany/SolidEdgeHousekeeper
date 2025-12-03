@@ -257,6 +257,18 @@ Public Class FormVariableInputEditor
             ComboBoxSavedSettings.Items.Add(Key)
         Next
 
+        ' Update ComboboxSavedSettings.Text with a saved name if it exists.
+        If Me.SavedSettingsDict IsNot Nothing AndAlso Me.SavedSettingsDict.Keys.Count > 0 Then
+            For Each SavedName As String In Me.SavedSettingsDict.Keys
+                Dim d As Dictionary(Of String, Dictionary(Of String, String)) = Me.SavedSettingsDict(SavedName)
+                Dim tmpJSONString As String = JsonConvert.SerializeObject(d)
+                If tmpJSONString = Me.JSONString Then
+                    ComboBoxSavedSettings.Text = SavedName
+                    Exit For
+                End If
+            Next
+        End If
+
     End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click

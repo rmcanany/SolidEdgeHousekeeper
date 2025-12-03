@@ -47,9 +47,9 @@ This is useful when you need to quickly copy list items into Excel for further p
 
 Changed the presentation of files imported from a list.  Now missing files are added to the `Excluded files` group.  Previously they were ignored.
 
-Fixed an issue with imported and exported lists where comma characters in a file name or directory caused it to be ignored.
+Fixed an issue with imported and exported lists where comma characters in a file name or directory caused it to be ignored (Thank you **@collands!**).
 
-Fixed an issue with drag-and-drop where the file list was automatically populated from the source, bypassing any file sorting step.
+Fixed an issue with drag-and-drop where the file list was automatically populated from the source, bypassing any file sorting step (Thank you **@sven-11111!**).
 
 #### File process order
 
@@ -78,6 +78,17 @@ Also made the following changes.
 - Fixed an issue handling Unicode strings in expressions (Thank you one more time **@robbin70!**).
 - Fixed an issue handling doublequotes in property text (Thank you yet again **@robbin70!**).
 
+See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/1229ffbdd9bf8fd801faf959c4362113349ab5ad/HelpTopics.md#edit-properties) for details.
+
+### Update Drawing Styles from Template
+
+Added the ability to replace a drawing border even if the file and template background sheets do not have the same name (Thank you **@sven-11111!**).
+
+![Update Drawing Styles from Template](My%20Project/media/task_update_drawing_styles_from_template.png)
+
+If the name match fails, the program optionally searches for backgrounds with the same height and width and does the update if found.  You can also optionally rename the file's background sheet to that found in the template.
+
+See the [<ins>**Update Drawing Styles from Template Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/1229ffbdd9bf8fd801faf959c4362113349ab5ad/HelpTopics.md#update-drawing-styles-from-template) for details.
 
 ### Other
 
@@ -96,8 +107,6 @@ Also made the following changes.
 - Fixed an issue with `Add from Team Center` where the `ItemID` variable name was hard-coded in the program (Thank you **@sjim99!**).  It is now entered by the user on the Settings page.
 
 - Fixed an issue with `Edit Properties` where floating point type custom properties caused an exception when processed in Structured Storage (Thank you **@Monostre!**).
-
-- Fixed an issue with `Run External Program` where code snippets required the presence of all referenced properties in a file even if the property was not encountered in the execution path (Thank you one more time **@robbin70!**).
 
 - Fixed a regression with `Set Document Status` (Thank you **@TeeVar!**).
 

@@ -1000,7 +1000,7 @@ Updates styles and/or background sheets from a template you specify.
 
 **Options**
 - **Dft Template:** Drawing that contains the desired styles and background sheets. To use the draft template defined on the **Configuration Tab -- Templates Page**, enable the option `Use configuration page templates.`
-- **Replace Drawing Border:** Replace the drawing border in the file with one of the same name in the template. 
+- **Update Drawing Border:** Replace the drawing border in the file with one of the same name in the template. 
   - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. If a match is found, that border is used as the replacement. 
   - **If matched by sheet size: Rename sheet:** If a size match is found, this option renames the background to match the template. 
 
