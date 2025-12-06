@@ -977,6 +977,21 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _ActivePreset As String
+    Public Property ActivePreset As String
+        Get
+            Return _ActivePreset
+        End Get
+        Set(value As String)
+            _ActivePreset = value
+            If Me.TabControl1 IsNot Nothing Then
+                ComboBoxPresetName.Text = value
+            End If
+        End Set
+    End Property
+
+
+
     Public Property PropertyFilters As PropertyFilters
 
     Public Property TCCachePath As String
@@ -3727,6 +3742,8 @@ Public Class Form_Main
             Next
 
             If GotAMatch Then
+                Me.ActivePreset = Name
+
                 UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
                 UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
                 UP.SavePropertyFiltersJSON(tmpPreset.PropertyFiltersJSON)
@@ -3769,6 +3786,8 @@ Public Class Form_Main
             If Not GotAMatch Then
                 tmpPreset = New Preset
             End If
+
+            Me.ActivePreset = Name
 
             SaveSettings(SavingPresets:=True)  ' Updates the task list and form properties to their current state.
 

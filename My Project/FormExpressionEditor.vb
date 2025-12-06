@@ -418,7 +418,13 @@ Public Class FormExpressionEditor
             ' Populate DD_SavedExpressions if tmpFormula found
             For Each SavedName As String In SavedExpressionsItems.Keys
                 'calculation = calculation.Split(CChar("\\")).First
-                If tmpFormula = SavedExpressionsItems(SavedName).Split(CChar("\\")).First Then
+                Dim tmpComparison As String = SavedExpressionsItems(SavedName).Split(CChar("\\")).First
+                'If tmpFormula = SavedExpressionsItems(SavedName).Split(CChar("\\")).First Then
+                '    DD_SavedExpressions.Text = SavedName
+                '    Me.Text = "Expression editor - " & SavedName
+                '    Exit For
+                'End If
+                If SavedExpressionsItems(SavedName).Contains(tmpFormula) Then
                     DD_SavedExpressions.Text = SavedName
                     Me.Text = "Expression editor - " & SavedName
                     Exit For
