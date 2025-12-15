@@ -417,21 +417,54 @@ Public Class HCStructuredStorageDoc
 
         Dim ExpressionLanguage As String = ""
 
-        If IsExpression And InString.StartsWith("EXPRESSION_") Then
-            Dim TextToRemove As String = InString.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
+        'If IsExpression And InString.StartsWith("EXPRESSION_") Then
+        '    Dim TextToRemove As String = InString.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
 
-            Select Case TextToRemove
-                Case "EXPRESSION_VB"
-                    ExpressionLanguage = "VB"
-                Case "EXPRESSION_NCalc"
-                    ExpressionLanguage = "NCalc"
-                Case Else
-                    ErrorLogger.AddMessage($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
-                    'MsgBox($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
-                    Return Nothing
-            End Select
+        '    Select Case TextToRemove
+        '        Case "EXPRESSION_VB"
+        '            ExpressionLanguage = "VB"
+        '        Case "EXPRESSION_NCalc"
+        '            ExpressionLanguage = "NCalc"
+        '        Case Else
+        '            ErrorLogger.AddMessage($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
+        '            'MsgBox($"SubstitutePropertyFormulas: Expression header not recognized '{TextToRemove}'")
+        '            Return Nothing
+        '    End Select
 
-            InString = InString.Replace($"{TextToRemove}{vbCrLf}", "")
+        '    InString = InString.Replace($"{TextToRemove}{vbCrLf}", "")
+
+        'End If
+        If IsExpression Then
+            If InString.StartsWith("EXPRESSION_") Then
+                Dim TextToRemove As String = InString.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
+
+                Select Case TextToRemove
+                    Case "EXPRESSION_VB"
+                        ExpressionLanguage = "VB"
+                    Case "EXPRESSION_NCalc"
+                        ExpressionLanguage = "NCalc"
+                    Case Else
+                        MsgBox($"SubstitutePropertyFormula: Expression header not recognized '{TextToRemove}'")
+                        Return Nothing
+                End Select
+
+                InString = InString.Replace($"{TextToRemove}{vbCrLf}", "")
+
+            ElseIf InString.StartsWith("SavedSetting:") Then  ' eg SavedSetting:StdNummer
+
+                Dim SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String))
+                SavedExpressionsDict = UP.GetSavedExpressionsDict()
+
+                Dim SaveName As String = InString.Replace("SavedSetting:", "")
+                If SavedExpressionsDict.Keys.Contains(SaveName) Then
+                    ExpressionLanguage = SavedExpressionsDict(SaveName)("Language")
+                    InString = SavedExpressionsDict(SaveName)("Expression")
+                End If
+
+            Else
+                MsgBox($"SubstitutePropertyFormula: Expression header not recognized '{InString.Split(CChar(vbCrLf))(0)}'")
+                Return Nothing
+            End If
 
         End If
 

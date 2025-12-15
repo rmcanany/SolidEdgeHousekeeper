@@ -251,6 +251,7 @@
     </Compile>
     <Compile Include="My Project\HCErrorLogger.vb" />
     <Compile Include="My Project\HCPropertiesData.vb" />
+    <Compile Include="My Project\HCSavedExpressions.vb" />
     <Compile Include="My Project\HCStructuredStorageDoc.vb" />
     <Compile Include="My Project\HCPropertyFilter.vb" />
     <Compile Include="My Project\HCPresets.vb" />

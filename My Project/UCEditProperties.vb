@@ -320,24 +320,28 @@ Public Class UCEditProperties
         Dim Result As DialogResult = FES.ShowDialog
 
         If Result = DialogResult.OK Then
-            Dim tmpSavedExpressionsItems = FES.SavedExpressionsItems
-            Dim tmpSavedExpressionName = FES.SavedExpressionName
+            'Dim tmpSavedExpressionsItems = FES.SavedExpressionsItems
+            'Dim tmpSavedExpressionName = FES.SavedExpressionName
 
-            If Not tmpSavedExpressionName = "" And tmpSavedExpressionsItems.Keys.Contains(tmpSavedExpressionName) Then
-                Dim A As String = $"EXPRESSION_{FES.SavedExpresssionLanguage}{vbCrLf}{tmpSavedExpressionsItems(tmpSavedExpressionName)}"
-                A = A.Split(CType("\\", Char)).First
-                A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+            'If Not tmpSavedExpressionName = "" And tmpSavedExpressionsItems.Keys.Contains(tmpSavedExpressionName) Then
+            '    Dim A As String = $"EXPRESSION_{FES.SavedExpresssionLanguage}{vbCrLf}{tmpSavedExpressionsItems(tmpSavedExpressionName)}"
+            '    A = A.Split(CType("\\", Char)).First
+            '    A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
 
-                TextBox.Text = A
+            '    'TextBox.Text = A
 
-                If A.ToLower.Contains("return") Then
-                    Form_Main.ExpressionEditorLanguage = "VB"
-                Else
-                    Form_Main.ExpressionEditorLanguage = "NCalc"
-                End If
-                'TextBox.Text = tmpSavedExpressionsItems(tmpSavedExpressionName)
+            '    If A.ToLower.Contains("return") Then
+            '        Form_Main.ExpressionEditorLanguage = "VB"
+            '    Else
+            '        Form_Main.ExpressionEditorLanguage = "NCalc"
+            '    End If
+            '    'TextBox.Text = tmpSavedExpressionsItems(tmpSavedExpressionName)
 
-            End If
+            '    TextBox.Text = $"SavedSetting:{tmpSavedExpressionName}"
+
+            'End If
+            Form_Main.ExpressionEditorLanguage = FES.SavedExpresssionLanguage
+            TextBox.Text = FES.OutputText
         End If
 
     End Sub
@@ -359,12 +363,14 @@ Public Class UCEditProperties
                 Exit Sub
         End Select
 
-        FEE.Formula = TextBox.Text
+        'FEE.Formula = TextBox.Text
+        FEE.InputText = TextBox.Text
 
         Dim Result As DialogResult = FEE.ShowDialog()
 
         If Result = DialogResult.OK Then
-            If Not FEE.Formula = "" Then
+            'If Not FEE.Formula = "" Then
+            If Not FEE.OutputText = "" Then
 
                 Select Case FEE.TextEditorFormula.Language
                     Case FastColoredTextBoxNS.Language.VB
@@ -373,12 +379,13 @@ Public Class UCEditProperties
                         Form_Main.ExpressionEditorLanguage = "NCalc"
                 End Select
 
-                Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
-                A = A.Split(CType("\\", Char)).First
-                A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+                'Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
+                'A = A.Split(CType("\\", Char)).First
+                'A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
 
-                TextBox.Text = A
+                'TextBox.Text = A
 
+                TextBox.Text = FEE.OutputText
             End If
 
         End If

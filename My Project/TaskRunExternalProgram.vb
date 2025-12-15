@@ -267,18 +267,26 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            If DocType = ".dft" Then
-                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-                Dim Blocks As SolidEdgeDraft.Blocks = tmpSEDoc.Blocks
+            If DocType = ".par" Then
+                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                Dim DirName As String = IO.Path.GetDirectoryName(tmpSEDoc.FullName)
 
-                For Each Block As SolidEdgeDraft.Block In Blocks
-                    Dim BlockName As String = Block.Name
-                    Try
-                        Block.Delete()
-                    Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Could not delete block '{0}'", BlockName))
-                    End Try
+                Dim PropertySets As SolidEdgeFramework.PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
+                Dim PropertySet As SolidEdgeFramework.Properties = PropertySets.Item("Custom")
+                Dim Prop As SolidEdgeFramework.Property = PropertySet.Item("index_number")
+
+                Dim start_index As Integer = CInt(Prop.Value)
+
+                For idx = start_index + 1 To 10
+                    Prop.Value = idx
+                    PropertySets.Save()
+                    SEApp.DoIdle()
+
+                    SEApp.StartCommand(CType(11292, SolidEdgeFramework.SolidEdgeCommandConstants)) ' Update active level
+                    SEApp.DoIdle()
+
+                    tmpSEDoc.SaveCopyAs(String.Format("{0}\Part_{1}", DirName, CStr(idx)))
+                    SEApp.DoIdle()
                 Next
             End If
 
@@ -434,10 +442,11 @@ Public Class TaskRunExternalProgram
                 FEE.OutputType = "Snippet"
                 If IO.Path.GetExtension(Me.ExternalProgram) = ".snp" Then
                     FEE.SnippetFilename = Me.ExternalProgram
-                    FEE.Formula = IO.File.ReadAllText(Me.ExternalProgram)
+                    'FEE.Formula = IO.File.ReadAllText(Me.ExternalProgram)
+                    FEE.InputText = IO.File.ReadAllText(Me.ExternalProgram)
                 Else
                     FEE.SnippetFilename = ""
-                    FEE.Formula = ""
+                    FEE.SnippetFormula = ""
                 End If
 
                 Dim Result As DialogResult = FEE.ShowDialog()

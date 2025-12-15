@@ -685,7 +685,7 @@ Opens a document and saves in the current version.
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskActivateAndUpdateAll.png"><img src="My%20Project/media/spacer.png">Activate and update all</h3></summary>
 
-Loads all assembly occurrences' geometry into memory and does an update. Used mainly to eliminate the gray corners on assembly drawings. 
+For parts, runs `Update active level`.  Used mainly to eliminate the gray corners on drawings. 
 
 Can run out of memory for very large assemblies.
 

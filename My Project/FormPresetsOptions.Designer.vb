@@ -26,6 +26,7 @@ Partial Class FormPresetsOptions
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.CheckBoxPresetsSaveFileFilters = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPresetsSavePropertyFilters = New System.Windows.Forms.CheckBox()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -38,26 +39,27 @@ Partial Class FormPresetsOptions
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonOK, 1, 7)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 7)
         Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxPresetsSaveFileFilters, 0, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxPresetsSavePropertyFilters, 0, 1)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
         Me.ExTableLayoutPanel1.RowCount = 8
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(340, 89)
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(340, 139)
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
         'ButtonOK
         '
         Me.ButtonOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.ButtonOK.Location = New System.Drawing.Point(183, 63)
+        Me.ButtonOK.Location = New System.Drawing.Point(183, 113)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(74, 23)
         Me.ButtonOK.TabIndex = 0
@@ -67,7 +69,7 @@ Partial Class FormPresetsOptions
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom
-        Me.ButtonCancel.Location = New System.Drawing.Point(263, 63)
+        Me.ButtonCancel.Location = New System.Drawing.Point(263, 113)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(74, 23)
         Me.ButtonCancel.TabIndex = 1
@@ -87,11 +89,23 @@ Partial Class FormPresetsOptions
         Me.CheckBoxPresetsSaveFileFilters.Text = "Save file filter settings"
         Me.CheckBoxPresetsSaveFileFilters.UseVisualStyleBackColor = True
         '
+        'CheckBoxPresetsSavePropertyFilters
+        '
+        Me.CheckBoxPresetsSavePropertyFilters.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxPresetsSavePropertyFilters.AutoSize = True
+        Me.CheckBoxPresetsSavePropertyFilters.Location = New System.Drawing.Point(3, 36)
+        Me.CheckBoxPresetsSavePropertyFilters.Name = "CheckBoxPresetsSavePropertyFilters"
+        Me.CheckBoxPresetsSavePropertyFilters.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxPresetsSavePropertyFilters.Size = New System.Drawing.Size(158, 17)
+        Me.CheckBoxPresetsSavePropertyFilters.TabIndex = 3
+        Me.CheckBoxPresetsSavePropertyFilters.Text = "Save property filter settings"
+        Me.CheckBoxPresetsSavePropertyFilters.UseVisualStyleBackColor = True
+        '
         'FormPresetsOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(340, 89)
+        Me.ClientSize = New System.Drawing.Size(340, 139)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Name = "FormPresetsOptions"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -106,4 +120,5 @@ Partial Class FormPresetsOptions
     Friend WithEvents ButtonOK As Button
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents CheckBoxPresetsSaveFileFilters As CheckBox
+    Friend WithEvents CheckBoxPresetsSavePropertyFilters As CheckBox
 End Class

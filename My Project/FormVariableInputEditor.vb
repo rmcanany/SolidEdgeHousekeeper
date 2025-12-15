@@ -247,7 +247,7 @@ Public Class FormVariableInputEditor
 
     Private Sub FormVariableInputEditor_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
 
-        PopulateForm()
+        'PopulateForm()
 
         Dim UP As New UtilsPreferences
         Me.SavedSettingsDict = UP.GetEditVariablesSavedSettings()
@@ -257,17 +257,28 @@ Public Class FormVariableInputEditor
             ComboBoxSavedSettings.Items.Add(Key)
         Next
 
-        ' Update ComboboxSavedSettings.Text with a saved name if it exists.
-        If Me.SavedSettingsDict IsNot Nothing AndAlso Me.SavedSettingsDict.Keys.Count > 0 Then
-            For Each SavedName As String In Me.SavedSettingsDict.Keys
-                Dim d As Dictionary(Of String, Dictionary(Of String, String)) = Me.SavedSettingsDict(SavedName)
-                Dim tmpJSONString As String = JsonConvert.SerializeObject(d)
-                If tmpJSONString = Me.JSONString Then
-                    ComboBoxSavedSettings.Text = SavedName
-                    Exit For
-                End If
-            Next
+        If Me.JSONString.Contains("SavedSetting:") Then 'SavedSetting:FP
+            Dim Key As String = Me.JSONString.Replace("SavedSetting:", "")
+            If Me.SavedSettingsDict.Keys.Contains(Key) Then
+                Me.JSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(Key))
+                ComboBoxSavedSettings.Text = Key
+            End If
         End If
+
+        ''Update ComboBoxSavedSettings.Text with a saved name if it exists.
+        'If Me.SavedSettingsDict IsNot Nothing AndAlso Me.SavedSettingsDict.Keys.Count > 0 Then
+        '    For Each SavedName As String In Me.SavedSettingsDict.Keys
+        '        Dim d As Dictionary(Of String, Dictionary(Of String, String)) = Me.SavedSettingsDict(SavedName)
+        '        Dim tmpJSONString As String = JsonConvert.SerializeObject(d)
+        '        If tmpJSONString = Me.JSONString Then
+        '            ComboBoxSavedSettings.Text = SavedName
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
+
+        PopulateForm()
+
 
     End Sub
 
@@ -280,10 +291,29 @@ Public Class FormVariableInputEditor
             Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
 
             JSONDict = CreateJSONDict()
-            Me.JSONString = JsonConvert.SerializeObject(JSONDict)
+
+            'Me.JSONString = JsonConvert.SerializeObject(JSONDict)
+
+            Dim SavedName As String = ComboBoxSavedSettings.Text.Trim
+
+            Dim tmpJSONString = JsonConvert.SerializeObject(JSONDict)
+            If SavedName = "" Then
+                Me.JSONString = tmpJSONString
+            ElseIf Me.SavedSettingsDict.Keys.Contains(SavedName) Then
+                If tmpJSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(SavedName)) Then
+                    Me.JSONString = $"SavedSetting:{SavedName}"
+                Else
+                    MsgBox($"The current form does not match Saved settings '{SavedName}' on file.  Please save it before continuing.")
+                    Exit Sub
+                End If
+            Else
+                MsgBox($"Saved settings does not contain '{SavedName}'.  Please save it before continuing.")
+                Exit Sub
+            End If
 
             Me.DialogResult = DialogResult.OK
         End If
+
 
     End Sub
 

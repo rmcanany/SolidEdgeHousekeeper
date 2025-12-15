@@ -890,20 +890,33 @@ Public Class UtilsCommon
         Dim UFC As New UtilsFilenameCharmap
         Dim UP As New UtilsPreferences
 
-        If IsExpression And Instring.StartsWith("EXPRESSION_") Then
-            Dim TextToRemove As String = Instring.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
+        If IsExpression Then
+            If Instring.StartsWith("EXPRESSION_") Then
+                Dim TextToRemove As String = Instring.Split(CChar(vbCrLf))(0)  ' EXPRESSION_VB, EXPRESSION_SQL
 
-            Select Case TextToRemove
-                Case "EXPRESSION_VB"
-                    ExpressionLanguage = "VB"
-                Case "EXPRESSION_NCalc"
-                    ExpressionLanguage = "NCalc"
-                Case Else
-                    MsgBox($"SubstitutePropertyFormula: Expression header not recognized '{TextToRemove}'")
-                    Return Nothing
-            End Select
+                Select Case TextToRemove
+                    Case "EXPRESSION_VB"
+                        ExpressionLanguage = "VB"
+                    Case "EXPRESSION_NCalc"
+                        ExpressionLanguage = "NCalc"
+                    Case Else
+                        MsgBox($"SubstitutePropertyFormula: Expression header not recognized '{TextToRemove}'")
+                        Return Nothing
+                End Select
 
-            Instring = Instring.Replace($"{TextToRemove}{vbCrLf}", "")
+                Instring = Instring.Replace($"{TextToRemove}{vbCrLf}", "")
+
+            ElseIf Instring.StartsWith("SavedSetting:") Then  ' eg SavedSetting:StdNummer
+
+                Dim SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String))
+                SavedExpressionsDict = UP.GetSavedExpressionsDict()
+
+                Dim SaveName As String = Instring.Replace("SavedSetting:", "")
+                If SavedExpressionsDict.Keys.Contains(SaveName) Then
+                    ExpressionLanguage = SavedExpressionsDict(SaveName)("Language")
+                    Instring = SavedExpressionsDict(SaveName)("Expression")
+                End If
+            End If
 
         End If
 

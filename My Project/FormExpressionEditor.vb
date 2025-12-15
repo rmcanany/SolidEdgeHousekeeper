@@ -5,10 +5,15 @@ Imports System.Text.RegularExpressions
 Imports FastColoredTextBoxNS
 Imports PanoramicData.NCalcExtensions
 Imports Microsoft.WindowsAPICodePack.Dialogs
+Imports System.Diagnostics.Eventing.Reader
+Imports System.Management.Automation
 
 Public Class FormExpressionEditor
 
-    Public Formula As String
+    Public SnippetFormula As String
+
+    Public InputText As String
+    Public OutputText As String
 
     Private _OutputType As String
     Public Property OutputType As String
@@ -48,7 +53,7 @@ Public Class FormExpressionEditor
         End Set
     End Property
 
-    Dim SavedExpressionsItems As New Dictionary(Of String, String)
+    'Dim SavedExpressionsItems As New Dictionary(Of String, String)
     Dim SavedParameters As New Dictionary(Of String, String)
 
     Dim popupMenu As FastColoredTextBoxNS.AutocompleteMenu
@@ -61,6 +66,8 @@ Public Class FormExpressionEditor
 
     Dim CurrentExpression As String
 
+    'Dim SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String))
+    Dim SavedExpressions As HCSavedExpressions
 
     Public Sub New()
 
@@ -117,36 +124,102 @@ Public Class FormExpressionEditor
         OutputType = "Expression"
         SnippetFilename = ""
 
+        InputText = ""
+        OutputText = ""
+
     End Sub
 
+    Private Function GetExpressionLanguage(Expression As String) As String
+        Dim Language As String = ""
+        If Expression.ToLower.Contains("return") Then
+            Language = "VB"
+        Else
+            Language = "NCalc"
+        End If
+        Return Language
+    End Function
+    Private Function GetExpressionComments(Expression As String) As String
+        Dim Comments As String = ""
+        Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
+        Comments = TrimCR(ExpressionAndComments(1))
+        Return Comments
+    End Function
+    Private Function GetExpressionExpression(Expression As String) As String
+        Dim TrimmedExpression As String = ""
+        Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
+        TrimmedExpression = TrimCR(ExpressionAndComments(0))
+        Return TrimmedExpression
+    End Function
 
     Private Sub SaveExpressionItem(ExpressionName As String, Overwrite As Boolean)
 
-        Dim tmpExpressionsText As String = ""
+        'Dim tmpExpressionsText As String = ""
+        'Dim tmpName = ExpressionName.Replace(vbCrLf, "")
+
+        'If Overwrite Then
+
+        '    'SavedExpressionsItems.Item(ExpressionName) = TextEditorFormula.Text
+        '    SavedExpressionsDict(tmpName)("Language") = GetExpressionLanguage(TextEditorFormula.Text)
+        '    SavedExpressionsDict(tmpName)("Comments") = GetExpressionComments(TextEditorFormula.Text)
+        '    SavedExpressionsDict(tmpName)("Expression") = GetExpressionExpression(TextEditorFormula.Text)
+        'Else
+
+        '    DD_SavedExpressions.DropDownItems.Add(tmpName)
+        '    'SavedExpressionsItems.Add(ExpressionName.Replace(vbCrLf, ""), TextEditorFormula.Text)
+        '    SavedExpressionsDict(tmpName)("Language") = GetExpressionLanguage(TextEditorFormula.Text)
+        '    SavedExpressionsDict(tmpName)("Comments") = GetExpressionComments(TextEditorFormula.Text)
+        '    SavedExpressionsDict(tmpName)("Expression") = GetExpressionExpression(TextEditorFormula.Text)
+
+        'End If
+
+        'Dim UP As New UtilsPreferences
+        'UP.SaveSavedExpressionsDict(SavedExpressionsDict)
+
+        ''For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
+
+        ''    'tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
+        ''    tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text)
+
+        ''Next
+
+        ''Dim UP As New UtilsPreferences
+        ''Dim PreferencesDirectory = UP.GetPreferencesDirectory()
+
+        ''Dim SavedExpressionsFilename = UP.GetSavedExpressionsFilename()
+
+        ''IO.File.WriteAllText(SavedExpressionsFilename, tmpExpressionsText)
+
+        Dim Name As String = ExpressionName.Replace(vbCrLf, "")
+        Dim SE As SavedExpression = SavedExpressions.GetSavedExpression(Name)
+
+        Dim tmpLanguage = GetExpressionLanguage(TextEditorFormula.Text)
+        Dim tmpComments = SavedExpressions.StringToListOfString(GetExpressionComments(TextEditorFormula.Text))
+        Dim tmpExpression = SavedExpressions.StringToListOfString(GetExpressionExpression(TextEditorFormula.Text))
 
         If Overwrite Then
-
-            SavedExpressionsItems.Item(ExpressionName) = TextEditorFormula.Text
-
+            If SE Is Nothing Then
+                MsgBox($"Name not found in Saved Expressions: '{Name}'")
+                Exit Sub
+            Else
+                SE.Language = tmpLanguage
+                SE.Comments = tmpComments
+                SE.Expression = tmpExpression
+            End If
         Else
-
-            DD_SavedExpressions.DropDownItems.Add(ExpressionName.Replace(vbCrLf, ""))
-            SavedExpressionsItems.Add(ExpressionName.Replace(vbCrLf, ""), TextEditorFormula.Text)
-
+            If SE IsNot Nothing Then
+                MsgBox($"Name already found in Saved Expressions: '{Name}'")
+                Exit Sub
+            Else
+                SavedExpressions.Items.Add(New SavedExpression)
+                SE = SavedExpressions.Items(SavedExpressions.Items.Count - 1)
+                SE.Name = Name
+                SE.Language = tmpLanguage
+                SE.Comments = tmpComments
+                SE.Expression = tmpExpression
+            End If
         End If
 
-        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
-
-            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
-
-        Next
-
-        Dim UP As New UtilsPreferences
-        Dim PreferencesDirectory = UP.GetPreferencesDirectory()
-
-        Dim SavedExpressionsFilename = UP.GetSavedExpressionsFilename()
-
-        IO.File.WriteAllText(SavedExpressionsFilename, tmpExpressionsText)
+        SavedExpressions.Save()
 
     End Sub
 
@@ -163,17 +236,24 @@ Public Class FormExpressionEditor
         Next
 
 
-        SavedExpressionsItems.Remove(ExpressionName)
+        ''SavedExpressionsItems.Remove(ExpressionName)
+        'SavedExpressionsDict.Remove(ExpressionName)
 
-        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
+        ''For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
 
-            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
+        ''    tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
 
-        Next
+        ''Next
 
-        Dim UP As New UtilsPreferences
+        ''Dim UP As New UtilsPreferences
 
-        IO.File.WriteAllText(UP.GetSavedExpressionsFilename, tmpExpressionsText)
+        ''IO.File.WriteAllText(UP.GetSavedExpressionsFilename, tmpExpressionsText)
+
+        'Dim UP As New UtilsPreferences
+        'UP.SaveSavedExpressionsDict(SavedExpressionsDict)
+
+        SavedExpressions.DeleteSavedExpression(ExpressionName)
+        SavedExpressions.Save()
 
         TextEditorFormula.Clear()
         CurrentExpression = ""
@@ -183,13 +263,136 @@ Public Class FormExpressionEditor
 
     End Sub
 
+    Private Function TrimCR(InString As String) As String
+
+        'Leading carriage return
+        While InString(0) = vbCrLf Or InString(0) = vbCr Or InString(0) = vbLf
+            InString = InString.Substring(1)
+        End While
+
+        'Trailing carriage return
+        While InString(InString.Count - 1) = vbCrLf Or InString(InString.Count - 1) = vbCr Or InString(InString.Count - 1) = vbLf
+            InString = InString.Substring(0, InString.Count - 1)
+        End While
+
+        'Add one trailing carriage return
+        InString = $"{InString}{vbCrLf}"
+
+        Return InString
+    End Function
 
 
-    Private Sub FormNCalc_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+    Private Sub FormNCalc_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-        Formula = TextEditorFormula.Text
+        TextEditorFormula.WordWrap = True
+        TextEditorResults.WordWrap = True
+
+        Dim UP As New UtilsPreferences
+
+        SavedExpressions = Form_Main.SavedExpressions
+
+        For Each tmpSE As SavedExpression In SavedExpressions.Items
+            DD_SavedExpressions.DropDownItems.Add(tmpSE.Name)
+        Next
+        DD_SavedExpressions.DropDownItems.Add("Anonymous")
+
+        If TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then
+            ComboBoxLanguage.Text = "VB"
+        Else
+            ComboBoxLanguage.Text = "NCalc"
+        End If
+
+        If OutputType = "Expression" Then
+
+            Dim SE As SavedExpression = SavedExpressions.GetSavedExpressionFromShorthandText(InputText)
+
+            If SE IsNot Nothing Then
+                Me.CurrentExpression = SE.Name
+                DD_SavedExpressions.Text = SE.Name
+                Me.Text = $"Expression editor - {SE.Name}"
+
+                Select Case SE.Language
+                    Case "VB"
+                        TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+                        ComboBoxLanguage.Text = "VB"
+                    Case "NCalc"
+                        TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+                        ComboBoxLanguage.Text = "NCalc"
+                End Select
+
+                TextEditorFormula.Text = SavedExpressions.ListOfStringToString(SE.Expression)
+
+            Else  ' Unrecognized expression
+                Me.CurrentExpression = "Anonymous"
+                DD_SavedExpressions.Text = "Anonymous"
+                Me.Text = "Expression editor - Anonymous"
+
+                Dim tmpText = InputText
+                tmpText = tmpText.Replace($"EXPRESSION_VB{Chr(182)}", "")
+                tmpText = tmpText.Replace($"EXPRESSION_NCalc{Chr(182)}", "")
+                tmpText = tmpText.Replace(Chr(182), vbCrLf)
+                TextEditorFormula.Text = tmpText
+
+            End If
+
+        Else ' Snippet
+            TextEditorFormula.Text = InputText
+        End If
 
     End Sub
+
+    'Private Sub FormNCalc_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+
+    '    'Formula = TextEditorFormula.Text
+    '    Me.DialogResult = DialogResult.Cancel
+
+    'End Sub
+
+    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+        Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+
+        If Me.OutputType = "Snippet" Then
+            If Not SnippetFormula = TextEditorFormula.Text Then
+                MsgBox("Text has changed.  Please save the file before proceeding.", vbOKOnly)
+                Exit Sub
+            Else
+                Me.OutputText = SnippetFilename
+            End If
+        Else
+            If CurrentExpression = "Anonymous" Then
+                Dim tmpText As String = ""
+                If TextEditorFormula.Text.ToLower.Contains("return") Then
+                    tmpText = $"EXPRESSION_VB{Chr(182)}"
+                Else
+                    tmpText = $"EXPRESSION_NCalc{Chr(182)}"
+                End If
+                tmpText = $"{tmpText}{TextEditorFormula.Text.Replace(vbCrLf, Chr(182))}"
+                Me.OutputText = tmpText
+
+            Else
+                Dim SE As SavedExpression = SavedExpressions.GetSavedExpression(CurrentExpression)
+                If SE Is Nothing Then
+                    MsgBox($"Current expression not saved: '{CurrentExpression}'.  Please save it before continuing.", vbOKOnly)
+                    Exit Sub
+                Else
+                    Dim tmpExpression As String = SavedExpressions.ListOfStringToString(SE.Expression)
+                    If Not TextEditorFormula.Text = tmpExpression Then
+                        MsgBox("Text has changed.  Please save the expression before proceeding.", vbOKOnly)
+                        Exit Sub
+                    End If
+                End If
+
+                Me.OutputText = $"SavedSetting:{CurrentExpression}"
+
+            End If
+        End If
+
+        Me.DialogResult = DialogResult.OK
+    End Sub
+
 
     Private Sub BT_Test_Click(sender As Object, e As EventArgs) Handles BT_Test.Click, BT_TestOnCurrentFile.Click
 
@@ -332,16 +535,6 @@ Public Class FormExpressionEditor
 
                 Dim PowerShellFilename As String = $"{UP.GetTempDirectory}\HousekeeperExpression.ps1"
 
-                'IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents, System.Text.Encoding.Unicode)
-
-                'Try
-                '    ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
-                'Catch ex As Exception
-                '    Success = False
-                '    TextEditorResults.Clear()
-                '    TextEditorResults.Text = ex.Message
-                'End Try
-
                 Dim tmpSuccess As Boolean = UPS.WriteExpressionFile(PowerShellFilename, PowerShellFileContents)
 
                 If tmpSuccess Then
@@ -374,91 +567,62 @@ Public Class FormExpressionEditor
 
     End Sub
 
-    Private Sub FormNCalc_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-        TextEditorFormula.WordWrap = True
-        TextEditorResults.WordWrap = True
 
-        Dim UP As New UtilsPreferences
-        Dim PreferencesDirectory = UP.GetPreferencesDirectory()
-
-        Dim SavedExpressionsFilename = UP.GetSavedExpressionsFilename()
-
-        Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
-        Dim SavedExpressions = SR.ReadToEnd
-
-        Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
-
-        For Each Expression In Expressions
-
-            Dim ExpressionItems = Expression.Split(New String() {"[EXP_TEXT]"}, StringSplitOptions.RemoveEmptyEntries)
-            If ExpressionItems.Length = 2 Then
-                DD_SavedExpressions.DropDownItems.Add(ExpressionItems(0).Replace(vbCrLf, ""))
-                SavedExpressionsItems.Add(ExpressionItems(0).Replace(vbCrLf, ""), ExpressionItems(1))
-            End If
-        Next
-
-        SR.Close()
-
-        If TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB Then
-            ComboBoxLanguage.Text = "VB"
-        Else
-            ComboBoxLanguage.Text = "NCalc"
-        End If
-
-        Dim tmpSavedExpressionsItems = SavedExpressionsItems
-
-        Dim tmpFormula As String = Formula
-        tmpFormula = tmpFormula.Replace($"EXPRESSION_VB{Chr(182)}", "")
-        tmpFormula = tmpFormula.Replace($"EXPRESSION_NCalc{Chr(182)}", "")
-        tmpFormula = tmpFormula.Replace(Chr(182), vbCrLf)
-
-        If Not tmpFormula = "" Then
-
-            ' Populate DD_SavedExpressions if tmpFormula found
-            For Each SavedName As String In SavedExpressionsItems.Keys
-                'calculation = calculation.Split(CChar("\\")).First
-                Dim tmpComparison As String = SavedExpressionsItems(SavedName).Split(CChar("\\")).First
-                'If tmpFormula = SavedExpressionsItems(SavedName).Split(CChar("\\")).First Then
-                '    DD_SavedExpressions.Text = SavedName
-                '    Me.Text = "Expression editor - " & SavedName
-                '    Exit For
-                'End If
-                If SavedExpressionsItems(SavedName).Contains(tmpFormula) Then
-                    DD_SavedExpressions.Text = SavedName
-                    Me.Text = "Expression editor - " & SavedName
-                    Exit For
-                End If
-            Next
-
-            '' Delete leading blank lines
-            'While tmpFormula(0) = vbCrLf Or tmpFormula(0) = vbCr Or tmpFormula(0) = vbLf
-            '    tmpFormula = tmpFormula.Substring(1)
-            'End While
-
-        End If
-
-        TextEditorFormula.Text = tmpFormula
-
-    End Sub
 
     Private Sub DD_SavedExpressions_DropDownItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles DD_SavedExpressions.DropDownItemClicked
 
         Dim tmpItem As ToolStripItem = e.ClickedItem
-
-        TextEditorFormula.Clear()
-        TextEditorFormula.Text = SavedExpressionsItems.Item(tmpItem.Text)
         CurrentExpression = tmpItem.Text
-        Me.Text = "Expression editor - " & CurrentExpression
+        DD_SavedExpressions.Text = CurrentExpression
 
-        If TextEditorFormula.Text.ToLower.Contains("return") Then
-            TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
-            ComboBoxLanguage.Text = "VB"
+        'TextEditorFormula.Clear()
+
+        ''TextEditorFormula.Text = SavedExpressionsItems.Item(tmpItem.Text)
+        'TextEditorFormula.Text = SavedExpressionsDict(tmpItem.Text)("Expression")
+        'CurrentExpression = tmpItem.Text
+        'Me.Text = "Expression editor - " & CurrentExpression
+
+        Dim SE As SavedExpression = SavedExpressions.GetSavedExpression(CurrentExpression)
+        If SE IsNot Nothing Then
+            Me.Text = $"Expression editor - {CurrentExpression}"
+
+            Select Case SE.Language
+                Case "VB"
+                    TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+                    ComboBoxLanguage.Text = "VB"
+                Case "NCalc"
+                    TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+                    ComboBoxLanguage.Text = "NCalc"
+            End Select
+
+            TextEditorFormula.Text = SavedExpressions.ListOfStringToString(SE.Expression)
         Else
-            TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
-            ComboBoxLanguage.Text = "NCalc"
-        End If
+            If TextEditorFormula.Text.ToLower.Contains("return") Then
+                TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+                ComboBoxLanguage.Text = "VB"
+            Else
+                TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+                ComboBoxLanguage.Text = "NCalc"
+            End If
 
+        End If
+        'If TextEditorFormula.Text.ToLower.Contains("return") Then
+        '    TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+        '    ComboBoxLanguage.Text = "VB"
+        'Else
+        '    TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        '    ComboBoxLanguage.Text = "NCalc"
+        'End If
+
+        'Select Case SavedExpressionsDict(tmpItem.Text)("Language")
+        '    Case "VB"
+        '        TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+        '        ComboBoxLanguage.Text = "VB"
+        '    Case "NCalc"
+        '        TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        '        ComboBoxLanguage.Text = "NCalc"
+        'End Select
     End Sub
 
     Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click
@@ -489,8 +653,28 @@ Public Class FormExpressionEditor
 
         If A <> "" Then
 
-            If SavedExpressionsItems.ContainsKey(A) Then
+            ''If SavedExpressionsItems.ContainsKey(A) Then
+            'If SavedExpressionsDict.ContainsKey(A) Then
 
+            '    Dim B = MsgBox("Delete expression " & A & " ?", vbYesNoCancel, "Delete expression")
+
+            '    Select Case B
+            '        Case = MsgBoxResult.Cancel
+            '            Exit Sub
+            '        Case = MsgBoxResult.No
+            '            BT_Delete_Click(sender, e)
+            '        Case = MsgBoxResult.Yes
+            '            DeleteExpressionItem(A)
+            '    End Select
+
+            'Else
+
+            '    MsgBox("Expression " & A & " not found.", MsgBoxStyle.Exclamation, "Delete expression")
+
+            'End If
+
+            Dim SE As SavedExpression = SavedExpressions.GetSavedExpression(A)
+            If SE IsNot Nothing Then
                 Dim B = MsgBox("Delete expression " & A & " ?", vbYesNoCancel, "Delete expression")
 
                 Select Case B
@@ -507,7 +691,6 @@ Public Class FormExpressionEditor
                 MsgBox("Expression " & A & " not found.", MsgBoxStyle.Exclamation, "Delete expression")
 
             End If
-
         End If
 
     End Sub
@@ -515,7 +698,8 @@ Public Class FormExpressionEditor
     Private Sub BT_Save_Click(sender As Object, e As EventArgs) Handles BT_Save.Click
 
         If Me.OutputType = "Expression" Then
-            If CurrentExpression <> "" Then
+            'If CurrentExpression <> "" Then
+            If Not (CurrentExpression = "" Or CurrentExpression = "Anonymous") Then
                 SaveExpressionItem(CurrentExpression, True)
             Else
                 BT_SaveAs_Click(sender, e)
@@ -527,7 +711,7 @@ Public Class FormExpressionEditor
                 BT_SaveAs.PerformClick()
             Else
                 System.IO.File.WriteAllText(Me.SnippetFilename, TextEditorFormula.Text)
-                Formula = TextEditorFormula.Text
+                SnippetFormula = TextEditorFormula.Text
             End If
         End If
 
@@ -542,12 +726,17 @@ Public Class FormExpressionEditor
     Private Sub BT_SaveAs_Click(sender As Object, e As EventArgs) Handles BT_SaveAs.Click
 
         If Me.OutputType = "Expression" Then
-            Dim A = InputBox("Expression name ?", "Save expression", CurrentExpression)
+            Dim A As String = ""
+            If Not (CurrentExpression = "" Or CurrentExpression = "Anonymous") Then
+                A = InputBox("Expression name ?", "Save expression", CurrentExpression)
+            Else
+                A = InputBox("Expression name ?", "Save expression", "")
+            End If
 
-            If A <> "" Then
+            If Not (A = "" Or A = "Anonymous") Then
 
-                If SavedExpressionsItems.ContainsKey(A) Then
-
+                Dim SE As SavedExpression = SavedExpressions.GetSavedExpression(A)
+                If SE IsNot Nothing Then
                     Dim B = MsgBox("Overwrite expression " & A & " ?", vbYesNoCancel, "Save expression")
 
                     Select Case B
@@ -566,6 +755,8 @@ Public Class FormExpressionEditor
                 CurrentExpression = A
                 Me.Text = "Expression editor - " & CurrentExpression
 
+            Else
+                MsgBox($"Expression name not valid: '{A}'")
             End If
         Else
             'MsgBox($"{OutputType}")
@@ -582,7 +773,7 @@ Public Class FormExpressionEditor
             If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                 Me.SnippetFilename = tmpFileDialog.FileName
                 System.IO.File.WriteAllText(Me.SnippetFilename, TextEditorFormula.Text)
-                Formula = TextEditorFormula.Text
+                SnippetFormula = TextEditorFormula.Text
             End If
 
         End If
@@ -613,19 +804,6 @@ Public Class FormExpressionEditor
 
     End Sub
 
-    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
-        Me.DialogResult = DialogResult.Cancel
-    End Sub
-
-    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-        If Me.OutputType = "Snippet" And Not Formula = TextEditorFormula.Text Then
-            MsgBox("Text has changed.  Please save the file before proceeding.", vbOKOnly)
-            Exit Sub
-        End If
-
-        Me.DialogResult = DialogResult.OK
-    End Sub
-
     Private Sub ComboBoxLanguage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxLanguage.SelectedIndexChanged
         Select Case ComboBoxLanguage.Text
             Case "VB"
@@ -654,7 +832,7 @@ Public Class FormExpressionEditor
             For Each Line As String In InFile
                 tmpFormula = $"{tmpFormula}{Line}{vbCrLf}"
             Next
-            Formula = tmpFormula
+            SnippetFormula = tmpFormula
             Me.TextEditorFormula.Text = tmpFormula
         End If
 

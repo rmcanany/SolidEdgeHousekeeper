@@ -330,7 +330,7 @@ Public Class FormPropertyInputEditor
 
     Private Sub FormPropertyInputEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        PopulateForm()
+        'PopulateForm()
 
         t.Interval = 1500
         AddHandler t.Tick, AddressOf HandleTimerTick
@@ -343,17 +343,25 @@ Public Class FormPropertyInputEditor
             ComboBoxSavedSettings.Items.Add(Key)
         Next
 
-        ' Update ComboboxSavedSettings.Text with a saved name if it exists.
-        If Me.SavedSettingsDict IsNot Nothing AndAlso Me.SavedSettingsDict.Keys.Count > 0 Then
-            For Each SavedName As String In Me.SavedSettingsDict.Keys
-                Dim d As Dictionary(Of String, Dictionary(Of String, String)) = Me.SavedSettingsDict(SavedName)
-                Dim tmpJSONString As String = JsonConvert.SerializeObject(d)
-                If tmpJSONString = Me.JSONString Then
-                    ComboBoxSavedSettings.Text = SavedName
-                    Exit For
-                End If
-            Next
+        If Me.JSONString.Contains("SavedSetting:") Then  'eg, SavedSetting:ParamFix
+            Dim Key As String = Me.JSONString.Replace("SavedSetting:", "")
+            If Me.SavedSettingsDict.Keys.Contains(Key) Then
+                Me.JSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(Key))
+                ComboBoxSavedSettings.Text = Key
+            End If
         End If
+
+        '' Update ComboboxSavedSettings.Text with a saved name if it exists.
+        'If Me.SavedSettingsDict IsNot Nothing AndAlso Me.SavedSettingsDict.Keys.Count > 0 Then
+        '    For Each SavedName As String In Me.SavedSettingsDict.Keys
+        '        Dim d As Dictionary(Of String, Dictionary(Of String, String)) = Me.SavedSettingsDict(SavedName)
+        '        Dim tmpJSONString As String = JsonConvert.SerializeObject(d)
+        '        If tmpJSONString = Me.JSONString Then
+        '            ComboBoxSavedSettings.Text = SavedName
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
 
         ' Check for imported template properties
         Dim tf As Boolean
@@ -373,6 +381,8 @@ Public Class FormPropertyInputEditor
             Me.DialogResult = DialogResult.Cancel
         End If
 
+        PopulateForm()
+
 
     End Sub
 
@@ -388,7 +398,23 @@ Public Class FormPropertyInputEditor
             Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
 
             JSONDict = CreateJSONDict()  ' Reads UCList contents
-            Me.JSONString = JsonConvert.SerializeObject(JSONDict)
+
+            Dim SavedName As String = ComboBoxSavedSettings.Text.Trim
+
+            Dim tmpJSONString = JsonConvert.SerializeObject(JSONDict)
+            If SavedName = "" Then
+                Me.JSONString = tmpJSONString
+            ElseIf Me.SavedSettingsDict.Keys.Contains(SavedName) Then
+                If tmpJSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(SavedName)) Then
+                    Me.JSONString = $"SavedSetting:{SavedName}"
+                Else
+                    MsgBox($"The current form does not match Saved settings '{SavedName}' on file.  Please save it before continuing.")
+                    Exit Sub
+                End If
+            Else
+                MsgBox($"Saved settings does not contain '{SavedName}'.  Please save it before continuing.")
+                Exit Sub
+            End If
 
             Me.DialogResult = DialogResult.OK
         End If
@@ -465,12 +491,21 @@ Public Class FormPropertyInputEditor
     End Sub
 
     Private Sub ButtonSaveSettings_Click(sender As Object, e As EventArgs) Handles ButtonSaveSettings.Click
-        Dim Name As String = ComboBoxSavedSettings.Text
+        Dim Name As String = ComboBoxSavedSettings.Text.Trim
         Dim Proceed As Boolean = True
 
         If Name = "" Then
-            Proceed = False
-            MsgBox("Enter a name for these settings", vbOKOnly)
+            Dim FTP As New FormTextPrompt
+            FTP.Text = "Enter name"
+            FTP.TextBoxInput.Text = Name
+            FTP.LabelPrompt.Text = FTP.Text
+            Dim Result = FTP.ShowDialog()
+
+            If Result = DialogResult.OK Then
+                Name = FTP.TextBoxInput.Text
+            Else
+                Proceed = False
+            End If
         End If
 
         If Proceed And ComboBoxSavedSettings.Items.Contains(Name) Then

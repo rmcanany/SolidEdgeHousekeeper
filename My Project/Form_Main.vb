@@ -894,6 +894,8 @@ Public Class Form_Main
 
     Public Property PresetsSaveFileFilters As Boolean
 
+    Public Property PresetsSavePropertyFilters As Boolean
+
     Public Property SolidEdgeRequired As Integer
 
     Private _ListOfColumns As List(Of PropertyColumn)
@@ -1012,6 +1014,8 @@ Public Class Form_Main
     Public Property SEMaterialsPath As String
     Public Property WorkingFilesPath As String
 
+    Public Property SavedExpressions As HCSavedExpressions
+
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -1050,6 +1054,7 @@ Public Class Form_Main
 
     Private Sub Startup(Presets As Boolean)
 
+
         Me.Cursor = Cursors.WaitCursor
 
         Dim Splash As FormSplash = Nothing
@@ -1077,6 +1082,7 @@ Public Class Form_Main
         UP.CreateSavedExpressions()
         UP.CreateInteractiveEditCommands()
 
+        Me.SavedExpressions = New HCSavedExpressions
 
         '###### LOAD MAIN FORM SAVED SETTINGS IF ANY ######
 
@@ -3746,7 +3752,9 @@ Public Class Form_Main
 
                 UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
                 UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
-                UP.SavePropertyFiltersJSON(tmpPreset.PropertyFiltersJSON)
+                If Me.PresetsSavePropertyFilters Then
+                    UP.SavePropertyFiltersJSON(tmpPreset.PropertyFiltersJSON)
+                End If
                 Me.Presets.Save()
                 'SaveSettings()  ' Incorrect.  This saves the current settings
 
@@ -3795,6 +3803,7 @@ Public Class Form_Main
             tmpPreset.TaskListJSON = UP.GetTaskListJSON()
             tmpPreset.FormSettingsJSON = UP.GetFormMainSettingsJSON
             tmpPreset.PropertyFiltersJSON = UP.GetPropertyFiltersJSON
+            tmpPreset.SavePropertyFilters = Me.PresetsSavePropertyFilters
 
             If Not GotAMatch Then
                 Me.Presets.Items.Add(tmpPreset)
@@ -3837,6 +3846,12 @@ Public Class Form_Main
         End If
         ComboBoxPresetName.Text = ""
 
+    End Sub
+
+    Private Sub ButtonPresetsOptions_Click(sender As Object, e As EventArgs) Handles ButtonPresetsOptions.Click
+        Dim FPO As New FormPresetsOptions(Me)
+        FPO.ShowDialog()
+        ' No result action needed.  FPO sets values in this file as needed.
     End Sub
 
 
@@ -3999,12 +4014,6 @@ Public Class Form_Main
 
     Private Sub ComboBoxExpressionEditorLanguage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxExpressionEditorLanguage.SelectedIndexChanged
         Me.ExpressionEditorLanguage = ComboBoxExpressionEditorLanguage.Text
-    End Sub
-
-    Private Sub ButtonPresetsOptions_Click(sender As Object, e As EventArgs) Handles ButtonPresetsOptions.Click
-        Dim FPO As New FormPresetsOptions(Me)
-        FPO.ShowDialog()
-        ' No result action needed.  FPO sets values in this file as needed.
     End Sub
 
     Private Sub BT_Copy_Click(sender As Object, e As EventArgs) Handles BT_Copy.Click
@@ -4202,6 +4211,8 @@ End Class
 
 ' Dim Defaults As New List(Of String)
 ' System.IO.File.WriteAllLines(DefaultsFilename, Defaults)
+
+' IO.File.WriteAllText(Filename, JSONString)
 
 
 ' ###### DOEVENTS, SLEEP ######

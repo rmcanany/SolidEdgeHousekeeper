@@ -9,8 +9,8 @@ Public Class TaskActivateAndUpdateAll
         Me.HelpText = GenerateHelpText()
         Me.RequiresSave = True
         Me.AppliesToAssembly = True
-        Me.AppliesToPart = False
-        Me.AppliesToSheetmetal = False
+        Me.AppliesToPart = True
+        Me.AppliesToSheetmetal = True
         Me.AppliesToDraft = False
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
@@ -48,13 +48,30 @@ Public Class TaskActivateAndUpdateAll
 
         Dim UC As New UtilsCommon
 
+        Select Case UC.GetDocType(SEDoc)
+            Case "asm"
+                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
+                tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+
+                tmpSEDoc.ActivateAll()
+                tmpSEDoc.UpdateAll()
+
+            Case "par"
+                Dim tmpSEDoc As SolidEdgePart.PartDocument
+                tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+
+                SEApp.StartCommand(CType(11292, SolidEdgeFramework.SolidEdgeCommandConstants)) ' Update active level
+                SEApp.DoIdle()
+
+            Case "psm"
+                Dim tmpsedoc As SolidEdgePart.SheetMetalDocument
+                tmpsedoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+
+                SEApp.StartCommand(CType(11292, SolidEdgeFramework.SolidEdgeCommandConstants)) ' Update active level
+                SEApp.DoIdle()
+        End Select
 
         If UC.GetDocType(SEDoc) = "asm" Then
-            Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
-            tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-
-            tmpSEDoc.ActivateAll()
-            tmpSEDoc.UpdateAll()
         End If
 
         If SEDoc.ReadOnly Then
@@ -70,7 +87,7 @@ Public Class TaskActivateAndUpdateAll
     Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
+            If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal) Then
                 ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
         End If
@@ -80,8 +97,9 @@ Public Class TaskActivateAndUpdateAll
 
     Private Function GenerateHelpText() As String
         Dim HelpString As String
-        HelpString = "Loads all assembly occurrences' geometry into memory and does an update. "
-        HelpString += "Used mainly to eliminate the gray corners on assembly drawings. "
+        HelpString = "For assemblies, loads all occurrences' geometry into memory and runs `Update all open documents`. "
+        HelpString = "For parts, runs `Update active level`.  "
+        HelpString += "Used mainly to eliminate the gray corners on drawings. "
         HelpString += vbCrLf + vbCrLf + "Can run out of memory for very large assemblies."
 
         Return HelpString

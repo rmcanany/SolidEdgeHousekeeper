@@ -44,7 +44,7 @@ Public Class UtilsPreferences
         Dim SkipProps As New List(Of String)
         SkipProps.AddRange({"version", "previewversion", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
-        SkipProps.AddRange({"hcdebuglogger"})
+        SkipProps.AddRange({"hcdebuglogger", "savedexpressions"})
 
         If SavingPresets And Not FMain.PresetsSaveFileFilters Then
             SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
@@ -72,7 +72,7 @@ Public Class UtilsPreferences
                     Value = JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
                     'MsgBox(String.Format("list`1 '{0}' detected", PropInfo.Name))
                 Case Else
-                    MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropType))
+                    MsgBox(String.Format("In UP.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropType))
                     'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
             End Select
 
@@ -302,12 +302,21 @@ Public Class UtilsPreferences
 
 
     '###### SAVED EXPRESSIONS ######
-    Public Function GetSavedExpressionsFilename() As String
-        Return String.Format("{0}\saved_expressions.txt", GetPreferencesDirectory)
+    Public Function GetSavedExpressionsFilename(CheckExisting As Boolean) As String
+        Dim Filename As String = $"{GetPreferencesDirectory()}\saved_expressions.json"
+
+        If CheckExisting Then
+            If Not IO.File.Exists(Filename) Then Filename = ""
+        End If
+
+        Return Filename
     End Function
 
     Public Sub CreateSavedExpressions()
-        Dim SavedExpressionsFilename = GetSavedExpressionsFilename()
+        Dim SavedExpressionsFilename = GetSavedExpressionsFilename(CheckExisting:=False)  'saved_expressions.json
+        SavedExpressionsFilename = IO.Path.ChangeExtension(SavedExpressionsFilename, ".txt")
+        If IO.File.Exists(SavedExpressionsFilename) Then Exit Sub
+
 
         If Not FileIO.FileSystem.FileExists(SavedExpressionsFilename) Then
             Dim Outlist As New List(Of String)
@@ -407,6 +416,120 @@ Public Class UtilsPreferences
             IO.File.WriteAllLines(SavedExpressionsFilename, Outlist)
         End If
     End Sub
+
+    Public Function GetSavedExpressionsDict() As Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim SavedExpressionsDict As New Dictionary(Of String, Dictionary(Of String, String))
+        'Format
+        '{"Hi_Mom":
+        '    {"Language": "VB",
+        '     "Comments": "Simple test" + Chr(182) + "to try it out."
+        '     "Expression": "Return "Hi Mom!""
+        '    },
+        ' "Example VB ToUpper":
+        '    {"Language": "VB",
+        '     "Comments": "Converts text to upper case"
+        '     "Expression": "Return "%{System.Title}".ToUpper()"
+        '    }
+        '}
+
+        Dim SavedExpressionsFilename As String = GetSavedExpressionsFilename(CheckExisting:=True) ' saved_expressions.json
+
+        If Not SavedExpressionsFilename = "" Then
+            Dim JSONString As String = IO.File.ReadAllText(SavedExpressionsFilename)
+            SavedExpressionsDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
+
+        Else
+            SavedExpressionsFilename = IO.Path.ChangeExtension(GetSavedExpressionsFilename(CheckExisting:=False), ".txt")
+            If Not IO.File.Exists(SavedExpressionsFilename) Then Return Nothing
+
+            Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
+            Dim SavedExpressions = SR.ReadToEnd
+
+            SR.Close()
+
+            '[EXP]
+            'Example toUpper()
+            '[EXP_TEXT]
+            'toUpper('%{System.Title}')
+            '\\Any text will be converted in UPPERCASE
+            '[EXP]
+            'Example VB ToUpper
+            '[EXP_TEXT]
+            'Return "%{System.Title}".ToUpper()
+            '\\Any text will be converted in UPPERCASE
+            '...
+
+            Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
+
+            For Each Expression In Expressions
+
+                Dim ExpressionItems = Expression.Split(New String() {"[EXP_TEXT]"}, StringSplitOptions.RemoveEmptyEntries)
+
+                If ExpressionItems.Length = 2 Then
+
+                    Dim SaveName As String = ExpressionItems(0).Replace(vbCrLf, "")
+                    'Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char)).First
+                    Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char))
+                    Dim SaveExpression As String = TrimCR(ExpressionAndComments(0))
+                    Dim SaveComments As String = ""
+                    If ExpressionAndComments.Count > 1 Then
+                        For i As Integer = 1 To ExpressionAndComments.Count - 1
+                            SaveComments = $"{SaveComments}{ExpressionAndComments(i)}{vbCrLf}"
+                        Next
+                    End If
+                    SaveComments = TrimCR(Savecomments)
+                    Dim SaveLanguage As String = ""
+                    If SaveExpression.ToLower.Contains("return") Then
+                        SaveLanguage = "VB"
+                    Else
+                        SaveLanguage = "NCalc"
+                    End If
+
+                    SavedExpressionsDict(SaveName) = New Dictionary(Of String, String)
+                    SavedExpressionsDict(SaveName)("Language") = SaveLanguage
+                    SavedExpressionsDict(SaveName)("Comments") = SaveComments
+                    SavedExpressionsDict(SaveName)("Expression") = SaveExpression
+                End If
+            Next
+
+            SaveSavedExpressionsDict(SavedExpressionsDict)
+        End If
+
+
+        Return SavedExpressionsDict
+    End Function
+
+    Public Sub SaveSavedExpressionsDict(
+        SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String)))
+
+        Dim Filename = GetSavedExpressionsFilename(CheckExisting:=False)
+
+        Dim JSONString As String = JsonConvert.SerializeObject(SavedExpressionsDict)
+        IO.File.WriteAllText(Filename, JSONString)
+
+    End Sub
+
+    Public Function TrimCR(InString As String) As String
+
+        If InString.Count > 2 Then
+            'Leading carriage returns
+            While InString(0) = vbCrLf Or InString(0) = vbCr Or InString(0) = vbLf
+                InString = InString.Substring(1)
+            End While
+
+            'Trailing carriage returns
+            While InString(InString.Count - 1) = vbCrLf Or InString(InString.Count - 1) = vbCr Or InString(InString.Count - 1) = vbLf
+                InString = InString.Substring(0, InString.Count - 1)
+            End While
+
+            'Add one trailing carriage return
+            InString = $"{InString}{vbCrLf}"
+
+        End If
+
+        Return InString
+    End Function
 
 
 

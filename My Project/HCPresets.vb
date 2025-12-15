@@ -5,6 +5,7 @@ Imports Newtonsoft.Json
 
 Public Class HCPresets
     Public Property Items As List(Of Preset)
+    Public Property SavePropertyFilters As Boolean
 
     Public Sub New()
 
@@ -61,7 +62,7 @@ Public Class Preset
     Public Property TaskListJSON As String
     Public Property FormSettingsJSON As String
     Public Property PropertyFiltersJSON As String
-
+    Public Property SavePropertyFilters As Boolean
 
     Public Sub New()
 
@@ -78,6 +79,7 @@ Public Class Preset
         tmpPresetDict("TaskListJSON") = Me.TaskListJSON
         tmpPresetDict("FormSettingsJSON") = Me.FormSettingsJSON
         tmpPresetDict("PropertyFiltersJSON") = Me.PropertyFiltersJSON
+        tmpPresetDict("SavePropertyFilters") = CStr(Me.SavePropertyFilters)
 
         If Not CheckJSONDict(tmpPresetDict) Then
             MsgBox(String.Format("{0}: Extra or missing property names in JSON dictionary", Me.ToString))
@@ -104,6 +106,7 @@ Public Class Preset
             Me.TaskListJSON = tmpPresetDict("TaskListJSON")
             Me.FormSettingsJSON = tmpPresetDict("FormSettingsJSON")
             Me.PropertyFiltersJSON = tmpPresetDict("PropertyFiltersJSON")
+            Me.SavePropertyFilters = CBool(tmpPresetDict("SavePropertyFilters"))
         Catch ex As Exception
 
         End Try
@@ -117,6 +120,7 @@ Public Class Preset
 
         ' Check for missing info
         For Each PropInfo As PropertyInfo In PropInfos
+            If PropInfo.Name = "SavePropertyFilters" Then Continue For  ' Handle previous versions of Presets without this variable.
             If Not JSONDict.Keys.Contains(PropInfo.Name) Then
                 Proceed = False
                 Exit For

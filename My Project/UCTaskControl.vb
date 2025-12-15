@@ -200,6 +200,8 @@ Public Class UCTaskControl
 
         Dim FEE As New FormExpressionEditor
 
+        FEE.InputText = TextBox.Text
+
         Select Case Form_Main.ExpressionEditorLanguage
             Case "VB"
                 FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
@@ -213,7 +215,7 @@ Public Class UCTaskControl
         Dim Result As DialogResult = FEE.ShowDialog()
 
         If Result = DialogResult.OK Then
-            If Not FEE.Formula = "" Then
+            If Not FEE.SnippetFormula = "" Then
 
                 Select Case FEE.TextEditorFormula.Language
                     Case FastColoredTextBoxNS.Language.VB
@@ -222,12 +224,13 @@ Public Class UCTaskControl
                         Form_Main.ExpressionEditorLanguage = "NCalc"
                 End Select
 
-                Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
-                A = A.Split(CType("\\", Char)).First
-                A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
+                'Dim A As String = $"EXPRESSION_{Form_Main.ExpressionEditorLanguage}{vbCrLf}{FEE.Formula}"
+                'A = A.Split(CType("\\", Char)).First
+                'A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
 
-                TextBox.Text = A
+                'TextBox.Text = A
 
+                TextBox.Text = FEE.OutputText
             End If
 
         End If
