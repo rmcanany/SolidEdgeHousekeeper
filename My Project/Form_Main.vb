@@ -1064,15 +1064,24 @@ Public Class Form_Main
             Splash.UpdateStatus("Initializing")
         End If
 
-        Me.HCDebugLogger = New HCErrorLogger("Housekeeper")
-        Dim StartupLogger As Logger = Me.HCDebugLogger.AddFile("Startup")
-        StartupLogger.AddTimestamps(True)
-
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
         Dim UC As New UtilsCommon
 
-        UP.CheckInactive(Me.Version, Me.PreviewVersion)
+        If UP.CheckInactive(Me.Version, Me.PreviewVersion) Then
+
+            Dim FilenameString As String = $"SolidEdgeHousekeeper-v{Me.Version}_BetaPreview-{Me.PreviewVersion}"
+            Dim s As String = FilenameString
+            s = $"{s}{vbCrLf} currently appears to be inactive.{vbCrLf}{vbCrLf}"
+            s = $"{s} Please contact support.{vbCrLf}"
+
+            MsgBox(s)
+            End
+        End If
+
+        Me.HCDebugLogger = New HCErrorLogger("Housekeeper")
+        Dim StartupLogger As Logger = Me.HCDebugLogger.AddFile("Startup")
+        StartupLogger.AddTimestamps(True)
 
         '###### INITIALIZE PREFERENCES IF NEEDED ######
 

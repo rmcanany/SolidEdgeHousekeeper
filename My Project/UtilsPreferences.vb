@@ -1189,23 +1189,26 @@ Public Class UtilsPreferences
         Dim s As String = ""
         Dim FilenameString As String = $"SolidEdgeHousekeeper-v{Version}_BetaPreview-{PreviewVersion}.txt"
 
-        Try
-            Dim WC As New System.Net.WebClient
-            WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
-            s = WC.DownloadString("https://github.com/rmcanany/SolidEdgeHousekeeper/tree/master/inactive")
+        If Not PreviewVersion = "" Then
+            Try
+                Dim WC As New System.Net.WebClient
+                WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
+                s = WC.DownloadString("https://github.com/rmcanany/SolidEdgeHousekeeper/tree/master/inactive")
 
-            Dim NewList As List(Of String) = s.Split(CChar(",")).ToList
+                Dim NewList As List(Of String) = s.Split(CChar(",")).ToList
 
-            'Dim tmpList As New List(Of String)
-            For Each s In NewList
-                If s.ToLower.Contains(FilenameString.ToLower) Then
-                    Inactive = True
-                    Exit For
-                End If
-            Next
+                'Dim tmpList As New List(Of String)
+                For Each s In NewList
+                    If s.ToLower.Contains(FilenameString.ToLower) Then
+                        Inactive = True
+                        Exit For
+                    End If
+                Next
 
-        Catch ex As Exception
-        End Try
+            Catch ex As Exception
+            End Try
+
+        End If
 
         Return Inactive
     End Function
