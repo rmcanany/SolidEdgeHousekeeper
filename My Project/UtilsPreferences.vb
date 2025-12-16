@@ -1181,23 +1181,33 @@ Public Class UtilsPreferences
     End Sub
 
     Public Function CheckInactive(Version As String, PreviewVersion As String) As Boolean
-        Dim Expired As Boolean = False
+        ' eg SolidEdgeHousekeeper-v2025.4_BetaPreview-01.txt
+        ' Version format: YYYY.N
+        ' PerviewVersion format: NN
+
+        Dim Inactive As Boolean = False
         Dim s As String = ""
+        Dim FilenameString As String = $"SolidEdgeHousekeeper-v{Version}_BetaPreview-{PreviewVersion}.txt"
+
         Try
             Dim WC As New System.Net.WebClient
             WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
-            s = WC.DownloadString("https://github.com/rmcanany/SolidEdgeHousekeeper/tree/master/expired")
+            s = WC.DownloadString("https://github.com/rmcanany/SolidEdgeHousekeeper/tree/master/inactive")
+
+            Dim NewList As List(Of String) = s.Split(CChar(",")).ToList
+
+            'Dim tmpList As New List(Of String)
+            For Each s In NewList
+                If s.ToLower.Contains(FilenameString.ToLower) Then
+                    Inactive = True
+                    Exit For
+                End If
+            Next
+
         Catch ex As Exception
         End Try
 
-        Dim NewList As List(Of String) = s.Split(CChar(",")).ToList
-
-        Dim tmpList As New List(Of String)
-        For Each s In NewList
-            If s.ToLower.Contains("beta") Then tmpList.Add(s)
-        Next
-
-        Return Expired
+        Return Inactive
     End Function
 
     '###### HARD CODED PATH ######
