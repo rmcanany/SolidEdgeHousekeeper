@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports Newtonsoft.Json
+Imports SolidEdgePart
 
 Public Class UtilsPreferences
 
@@ -478,7 +479,7 @@ Public Class UtilsPreferences
                             SaveComments = $"{SaveComments}{ExpressionAndComments(i)}{vbCrLf}"
                         Next
                     End If
-                    SaveComments = TrimCR(Savecomments)
+                    SaveComments = TrimCR(SaveComments)
                     Dim SaveLanguage As String = ""
                     If SaveExpression.ToLower.Contains("return") Then
                         SaveLanguage = "VB"
@@ -1179,7 +1180,25 @@ Public Class UtilsPreferences
 
     End Sub
 
+    Public Function CheckInactive(Version As String, PreviewVersion As String) As Boolean
+        Dim Expired As Boolean = False
+        Dim s As String = ""
+        Try
+            Dim WC As New System.Net.WebClient
+            WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
+            s = WC.DownloadString("https://github.com/rmcanany/SolidEdgeHousekeeper/tree/master/expired")
+        Catch ex As Exception
+        End Try
 
+        Dim NewList As List(Of String) = s.Split(CChar(",")).ToList
+
+        Dim tmpList As New List(Of String)
+        For Each s In NewList
+            If s.ToLower.Contains("beta") Then tmpList.Add(s)
+        Next
+
+        Return Expired
+    End Function
 
     '###### HARD CODED PATH ######
     Public Function GetHardCodedPath() As String

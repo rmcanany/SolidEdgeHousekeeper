@@ -1072,6 +1072,7 @@ Public Class Form_Main
         Dim UD As New UtilsDocumentation
         Dim UC As New UtilsCommon
 
+        UP.CheckInactive(Me.Version, Me.PreviewVersion)
 
         '###### INITIALIZE PREFERENCES IF NEEDED ######
 
