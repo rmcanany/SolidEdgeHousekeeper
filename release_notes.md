@@ -25,7 +25,7 @@ Sponsored by **Breit Ideas** and **Pelican Industries.**  Thank you!
 
 This is an automated method to replace OLE inserted objects with SE-native blocks in draft files.  It works in conjunction with the `Run External Program` command in Housekeeper.
 
-A configuration file tells the program what file holds the blocks, what draft sheets to process, and the mapping between the OLE link and block names.  There is a dry-run mode to inspect the draft files and report link names without saving the files.
+A configuration file tells the program what file holds the blocks, what sheet names in the draft files to process, and the mapping between the OLE link and block names.  There is a dry-run mode to inspect the draft files and report link names without saving the files.
 
 See the [<ins>**Replace OLE Links Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ReplaceOLELinks#readme) for details.
 
@@ -75,6 +75,7 @@ Also made the following changes.
 - Changed the substitution value of missing properties to the string `"<Nothing>"`.  Previously, encountering one would trigger an error when processing (Thank you **@robbin70!**).
 - Added the ability to select a property from a list, rather than typing it in (Thank you again **@robbin70!**).
 - Added the ability to use the editor to create, modify, and test code snippet files from the `Run External Program` interface.
+- Changed the handling of saved expressions (Thank you one more time **@robbin70!**).  Now expression references point to the library, rather than remaining stand-alone.  The stand-alone version can still be used.  Simply exit the expression editor without saving your code to the library.
 - Fixed an issue handling Unicode strings in expressions (Thank you one more time **@robbin70!**).
 - Fixed an issue handling doublequotes in property text (Thank you yet again **@robbin70!**).
 
