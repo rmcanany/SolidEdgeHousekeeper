@@ -1001,12 +1001,6 @@ Public Class Form_Main
     Public Property TCRevisionRx As String
     Public Property TCItemIDName As String
 
-
-    'Public Property FBLBNTop As Integer  ' Remember FormBlockLibraryBlockNames size and position
-    'Public Property FBLBNLeft As Integer
-    'Public Property FBLBNHeight As Integer
-    'Public Property FBLBNWidth As Integer
-
     Public Property SEInstalledPath As String
     Public Property SEVersion As String
     Public Property SETemplatePath As String
@@ -1054,29 +1048,28 @@ Public Class Form_Main
 
     Private Sub Startup(Presets As Boolean)
 
-
         Me.Cursor = Cursors.WaitCursor
+
+        Dim UP As New UtilsPreferences()
+        Dim UD As New UtilsDocumentation
+        Dim UC As New UtilsCommon
+
+        'If UP.CheckInactive(Me.Version, Me.PreviewVersion) Then
+
+        '    Dim FilenameString As String = $"SolidEdgeHousekeeper-v{Me.Version}_BetaPreview-{Me.PreviewVersion}"
+        '    Dim s As String = FilenameString
+        '    s = $"{s}{vbCrLf}currently appears to be inactive.{vbCrLf}{vbCrLf}"
+        '    s = $"{s}Please contact support.{vbCrLf}"
+
+        '    MsgBox(s)
+        '    End
+        'End If
 
         Dim Splash As FormSplash = Nothing
         If Not Presets Then
             Splash = New FormSplash()
             Splash.Show()
             Splash.UpdateStatus("Initializing")
-        End If
-
-        Dim UP As New UtilsPreferences()
-        Dim UD As New UtilsDocumentation
-        Dim UC As New UtilsCommon
-
-        If UP.CheckInactive(Me.Version, Me.PreviewVersion) Then
-
-            Dim FilenameString As String = $"SolidEdgeHousekeeper-v{Me.Version}_BetaPreview-{Me.PreviewVersion}"
-            Dim s As String = FilenameString
-            s = $"{s}{vbCrLf} currently appears to be inactive.{vbCrLf}{vbCrLf}"
-            s = $"{s} Please contact support.{vbCrLf}"
-
-            MsgBox(s)
-            End
         End If
 
         Me.HCDebugLogger = New HCErrorLogger("Housekeeper")
@@ -1162,21 +1155,21 @@ Public Class Form_Main
         'End If
         Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaults to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
 
-        If Me.DebugMode Then
-            If Me.LinkManagementOrder Is Nothing Then
-                StartupLogger.AddMessage("Initialize LinkManagementOrder: 'Nothing'")
-            Else
-                Dim s As String = ""
-                For Each s1 As String In Me.LinkManagementOrder
-                    If s = "" Then
-                        s = s1
-                    Else
-                        s = $"{s}, {s1}"
-                    End If
-                Next
-                StartupLogger.AddMessage($"Initialize LinkManagementOrder: '{s}'")
-            End If
-        End If
+        'If Me.DebugMode Then
+        '    If Me.LinkManagementOrder Is Nothing Then
+        '        StartupLogger.AddMessage("Initialize LinkManagementOrder: 'Nothing'")
+        '    Else
+        '        Dim s As String = ""
+        '        For Each s1 As String In Me.LinkManagementOrder
+        '            If s = "" Then
+        '                s = s1
+        '            Else
+        '                s = $"{s}, {s1}"
+        '            End If
+        '        Next
+        '        StartupLogger.AddMessage($"Initialize LinkManagementOrder: '{s}'")
+        '    End If
+        'End If
 
 
         '###### INITIALIZE FILE LIST IF NEEDED ######
@@ -1253,21 +1246,21 @@ Public Class Form_Main
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
 
-        If Me.DebugMode Then
-            If Me.LinkManagementOrder Is Nothing Then
-                StartupLogger.AddMessage("Post task initialization LinkManagementOrder: 'Nothing'")
-            Else
-                Dim s As String = ""
-                For Each s1 As String In Me.LinkManagementOrder
-                    If s = "" Then
-                        s = s1
-                    Else
-                        s = $"{s}, {s1}"
-                    End If
-                Next
-                StartupLogger.AddMessage($"Post task initialize LinkManagementOrder: '{s}'")
-            End If
-        End If
+        'If Me.DebugMode Then
+        '    If Me.LinkManagementOrder Is Nothing Then
+        '        StartupLogger.AddMessage("Post task initialization LinkManagementOrder: 'Nothing'")
+        '    Else
+        '        Dim s As String = ""
+        '        For Each s1 As String In Me.LinkManagementOrder
+        '            If s = "" Then
+        '                s = s1
+        '            Else
+        '                s = $"{s}, {s1}"
+        '            End If
+        '        Next
+        '        StartupLogger.AddMessage($"Post task initialize LinkManagementOrder: '{s}'")
+        '    End If
+        'End If
 
         AddHandler editbox.Leave, AddressOf editbox_LostFocus
         AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
@@ -1308,25 +1301,25 @@ Public Class Form_Main
         End If
         Me.Cursor = Cursors.Default
 
-        If Me.DebugMode Then
-            If Me.LinkManagementOrder Is Nothing Then
-                StartupLogger.AddMessage("Post startup LinkManagementOrder: 'Nothing'")
-            Else
-                Dim s As String = ""
-                For Each s1 As String In Me.LinkManagementOrder
-                    If s = "" Then
-                        s = s1
-                    Else
-                        s = $"{s}, {s1}"
-                    End If
-                Next
-                StartupLogger.AddMessage($"Post startup LinkManagementOrder: '{s}'")
-            End If
-        End If
+        'If Me.DebugMode Then
+        '    If Me.LinkManagementOrder Is Nothing Then
+        '        StartupLogger.AddMessage("Post startup LinkManagementOrder: 'Nothing'")
+        '    Else
+        '        Dim s As String = ""
+        '        For Each s1 As String In Me.LinkManagementOrder
+        '            If s = "" Then
+        '                s = s1
+        '            Else
+        '                s = $"{s}, {s1}"
+        '            End If
+        '        Next
+        '        StartupLogger.AddMessage($"Post startup LinkManagementOrder: '{s}'")
+        '    End If
+        'End If
 
-        If Me.DebugMode Then
-            HCDebugLogger.ReportErrors(UseMessageBox:=False)
-        End If
+        'If Me.DebugMode Then
+        '    HCDebugLogger.ReportErrors(UseMessageBox:=False)
+        'End If
 
     End Sub
 
