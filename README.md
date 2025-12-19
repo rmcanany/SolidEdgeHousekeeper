@@ -199,7 +199,7 @@ Choose this option to select files from that are currently open in Solid Edge. R
 
 - Click ![ActiveFiles](My%20Project/media/active_files.png) to select all files open in Solid Edge.
 
-When selecting, Solid Edge must be running with at least one file open.  If an open file has not been saved, the program will report an error.
+When updating the list, Solid Edge must be running with at least one file open.  If a new file has never been saved, the program will report an error.
 
 When processing, the option `Use current SE session (if any)` must be enabled.  When complete, display of the file(s) is restored.
 
