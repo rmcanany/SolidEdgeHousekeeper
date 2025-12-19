@@ -1,4 +1,6 @@
 ﻿Option Strict On
+Imports System.Security.AccessControl
+Imports FastColoredTextBoxNS
 
 Public Class TaskRunExternalProgram
 
@@ -267,27 +269,60 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            If DocType = ".par" Then
-                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                Dim DirName As String = IO.Path.GetDirectoryName(tmpSEDoc.FullName)
+            Dim Models As SolidEdgePart.Models = Nothing
+            Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
 
-                Dim PropertySets As SolidEdgeFramework.PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
-                Dim PropertySet As SolidEdgeFramework.Properties = PropertySets.Item("Custom")
-                Dim Prop As SolidEdgeFramework.Property = PropertySet.Item("index_number")
+            Select Case DocType
+                Case ".par"
+                    Dim tmpSEDoc As SolidEdgePart.PartDocument
+                    tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                    Models = tmpSEDoc.Models
+                    PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
+                Case ".psm"
+                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument
+                    tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                    Models = tmpSEDoc.Models
+                    PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
+            End Select
 
-                Dim start_index As Integer = CInt(Prop.Value)
+            If Models IsNot Nothing And PropertySets IsNot Nothing Then
 
-                For idx = start_index + 1 To 10
-                    Prop.Value = idx
-                    PropertySets.Save()
-                    SEApp.DoIdle()
+                Dim Filename As String = ""
+                Dim FoundPartCopy As Boolean = False
 
-                    SEApp.StartCommand(CType(11292, SolidEdgeFramework.SolidEdgeCommandConstants)) ' Update active level
-                    SEApp.DoIdle()
+                If Models.Count > 0 Then
+                    Dim Model = Models.Item(1)
+                    Dim PartCopies = Model.CopiedParts
+                    If PartCopies.Count > 0 Then
+                        Try
+                            Dim PartCopy = PartCopies.Item(1)
+                            Filename = PartCopy.FileName
+                            FoundPartCopy = True
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Unable to get part copy file name")
+                        End Try
+                    End If
+                End If
 
-                    tmpSEDoc.SaveCopyAs(String.Format("{0}\Part_{1}", DirName, CStr(idx)))
-                    SEApp.DoIdle()
-                Next
+                If FoundPartCopy Then
+                    Dim PropertySet = PropertySets.Item("Custom")
+                    Try
+                        Dim Prop = PropertySet.Item("PartCopyFilename")
+                        Prop.Value = Filename
+                        PropertySet.Save()
+                        SEApp.DoIdle()
+
+                        If Not SEDoc.ReadOnly Then
+                            SEDoc.Save()
+                            SEApp.DoIdle()
+                        End If
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Unable to update property value")
+                    End Try
+                End If
+
             End If
 
             ' ############## SNIPPET CODE END ##############

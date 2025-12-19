@@ -33,6 +33,17 @@ See the [<ins>**Replace OLE Links Help Topic**</ins>](https://github.com/rmcanan
 
 Contributed by **@[Francesco Arfilli].**  Thank you!
 
+#### Select files currently open in Solid Edge
+
+Added a selection option to process files currently open in Solid Edge.
+
+![Expression Editor](My%20Project/media/selection_toolbar.png)
+
+Choose ![Expression Editor](My%20Project/media/active_file.png) to select the active file only.  Choose ![Expression Editor](My%20Project/media/active_files.png) to select all open files.
+
+When processing, the option `Use current SE session (if any)` must be enabled.  When complete, display of the file(s) is restored.
+
+
 #### Update file properties display
 
 Added the ability to update the display of file properties without updating the list itself.  This can be handy with otherwise time-consuming list operations.  To do so, hold down the `Shift` key and click the `Update` button.
@@ -59,6 +70,8 @@ See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/S
 
 ### Expression Editor
 
+#### Interface improvements
+
 Contributed by **@[Francesco Arfilli].**  Thank you!
 
 Added the ability to test an expression on a live SE file.  Previously only manually entering parameters was possible.
@@ -67,14 +80,13 @@ Added the ability to test an expression on a live SE file.  Previously only manu
 
 Click the `Test on Edge` button to execute.  SE must be running with the target file active.  The program reports the result along with any parameters read from the file.
 
-Also made the following changes.
+Also added the programming choice to the toolbar.  It is updated automatically when a saved expression is chosen.
 
-- Added the programming language choice to the toolbar.  
+#### Other improvements
+
 - Added shortcuts to the `Property Input Editor` to insert or edit an expression.  
-- Added a couple of expression examples using `VB` syntax.
 - Changed the substitution value of missing properties to the string `"<Nothing>"`.  Previously, encountering one would trigger an error when processing (Thank you **@robbin70!**).
 - Added the ability to select a property from a list, rather than typing it in (Thank you again **@robbin70!**).
-- Added the ability to use the editor to create, modify, and test code snippet files from the `Run External Program` interface.
 - Changed the handling of saved expressions (Thank you one more time **@robbin70!**).  Now expression references point to the library, rather than remaining stand-alone.  The stand-alone version can still be used.  Simply exit the expression editor without saving your code to the library.
 - Fixed an issue handling Unicode strings in expressions (Thank you one more time **@robbin70!**).
 - Fixed an issue handling doublequotes in property text (Thank you yet again **@robbin70!**).
@@ -98,6 +110,8 @@ See the [<ins>**Update Drawing Styles from Template Help Topic**</ins>](https://
 - Added the ability to rename a variable with the `Edit variables` command (Thank you **@[Francesco Arfilli]!**).
 
 - Renamed the `Hide Constructions` task to `Show Hide Constructions` and added options to set display state based on element type (Thank you again **@[Francesco Arfilli]!**).
+
+- Added access to the updated Expression Editor to the `Run External Program` command (Thank you one more time **@[Francesco Arfilli]!**).  This allows you to create, modify, and test code snippet files directly from the command's interface.  Click the `Edit *.snp` button to open it.
 
 - Added an option, `Allow partial success` to the `Break Links` command (Thank you **@john.matthews3452!**).  Previously any error caused the file to not be saved.
 

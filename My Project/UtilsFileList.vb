@@ -64,6 +64,37 @@ Public Class UtilsFileList
 
         End If
 
+        If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
+            Dim USEA As New UtilsSEApp(FMain)
+            If Not USEA.SEIsRunning Then
+                ErrorList.Add("SE must be running to obtain active files")
+            Else
+                Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+                If SEDocuments.Count > 0 Then
+                    If GroupTags.Contains("ActiveFiles") Then
+                        For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
+                            If Not IO.File.Exists(SEDocument.FullName) Then
+                                ErrorList.Add($"File needs to be saved before continuing: '{SEDocument.FullName}'")
+                            End If
+                        Next
+                    End If
+                    If GroupTags.Contains("ActiveFile") Then
+                        Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
+                        ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                        FMain.ActiveFile = ActiveDocument.FullName
+                        If Not IO.File.Exists(ActiveDocument.FullName) Then
+                            Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
+                            If Not ErrorList.Contains(s) Then ErrorList.Add(s)
+                        End If
+                    End If
+                Else
+                    ErrorList.Add("SE cannot process active files with no file open.")
+                End If
+
+            End If
+
+        End If
+
         If ErrorList.Count > 0 Then
 
             Dim WarningDetected As Boolean = False
@@ -252,6 +283,18 @@ Public Class UtilsFileList
         If ActiveFileExtensionsList.Count > 0 Then
 
             Select Case Source.Tag.ToString
+
+                Case = "Files"
+                    Dim tmpFoundFiles As New List(Of String)
+
+                    If NewWay Then
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
+                    Else
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+                    End If
+
+                    FoundFiles = tmpFoundFiles
+
                 Case = "Folder"
                     FMain.TextBoxStatus.Text = String.Format("Processing folder '{0}'", System.IO.Path.GetFileName(Source.Name))
                     System.Windows.Forms.Application.DoEvents()
@@ -309,6 +352,64 @@ Public Class UtilsFileList
 
                     End If
 
+                Case = "ASM_Folder"
+                    ' Nothing to do here.  Dealt with in 'Case = "asm"'
+
+                Case = "asm"
+                    FMain.TextBoxStatus.Text = String.Format("Processing top level assy '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    System.Windows.Forms.Application.DoEvents()
+
+                    FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
+
+                Case "ActiveFile", "ActiveFiles"
+                    Dim USEA As New UtilsSEApp(FMain)
+
+                    If USEA.SEIsRunning Then
+                        'Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+                        'Dim tmpFoundFiles As New List(Of String)
+                        'If Source.Tag.ToString = "ActiveFiles" Then
+                        '    For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
+                        '        tmpFoundFiles.Add(SEDocument.FullName)
+                        '    Next
+                        'Else
+                        '    tmpFoundFiles.Add(CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument).FullName)
+                        'End If
+
+                        'FoundFiles = tmpFoundFiles
+
+                        Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+                        FMain.ActiveFiles = New List(Of String)
+                        FMain.ActiveFile = ""
+                        If SEDocuments.Count > 0 Then
+                            Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
+                            ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                            FMain.ActiveFile = ActiveDocument.FullName
+                            For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
+                                If Source.Tag.ToString = "ActiveFiles" Then
+                                    FMain.ActiveFiles.Add(SEDocument.FullName)
+                                End If
+                            Next
+
+                            If Source.Tag.ToString = "ActiveFiles" Then
+                                FoundFiles = FMain.ActiveFiles
+                            Else
+                                FoundFiles = New List(Of String) From {FMain.ActiveFile}
+                            End If
+
+                        End If
+                    End If
+
+                Case = "TeamCenter"
+                    Dim tmpFoundFiles As New List(Of String)
+
+                    If NewWay Then
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
+                    Else
+                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+                    End If
+
+                    FoundFiles = tmpFoundFiles
+
                 Case = "csv", "txt"
                     FMain.TextBoxStatus.Text = String.Format("Processing list '{0}'", System.IO.Path.GetFileName(Source.Name))
 
@@ -354,36 +455,7 @@ Public Class UtilsFileList
                     Next
                     FoundFiles = tmpFoundFiles
 
-                Case = "Files"
-                    Dim tmpFoundFiles As New List(Of String)
 
-                    If NewWay Then
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
-                    Else
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
-                    End If
-
-                    FoundFiles = tmpFoundFiles
-
-                Case = "TeamCenter"
-                    Dim tmpFoundFiles As New List(Of String)
-
-                    If NewWay Then
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
-                    Else
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
-                    End If
-
-                    FoundFiles = tmpFoundFiles
-
-                Case = "ASM_Folder"
-                    ' Nothing to do here.  Dealt with in 'Case = "asm"'
-
-                Case = "asm"
-                    FMain.TextBoxStatus.Text = String.Format("Processing top level assy '{0}'", System.IO.Path.GetFileName(Source.Name))
-                    System.Windows.Forms.Application.DoEvents()
-
-                    FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
 
                 Case Else
                     FoundFiles = Nothing

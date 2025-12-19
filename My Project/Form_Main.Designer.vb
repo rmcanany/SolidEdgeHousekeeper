@@ -55,10 +55,13 @@ Partial Class Form_Main
         Me.BT_AddFolder = New System.Windows.Forms.ToolStripButton()
         Me.BT_AddFolderSubfolders = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_TopLevelAsm = New System.Windows.Forms.ToolStripButton()
         Me.BT_ASM_Folder = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_ActiveFile = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ActiveFiles = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_AddFromlist = New System.Windows.Forms.ToolStripButton()
         Me.BT_ExportList = New System.Windows.Forms.ToolStripButton()
@@ -318,7 +321,7 @@ Partial Class Form_Main
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(559, 647)
+        Me.TabControl1.Size = New System.Drawing.Size(584, 647)
         Me.TabControl1.TabIndex = 0
         '
         'TabPageHome
@@ -333,7 +336,7 @@ Partial Class Form_Main
         Me.TabPageHome.Margin = New System.Windows.Forms.Padding(0)
         Me.TabPageHome.Name = "TabPageHome"
         Me.TabPageHome.Padding = New System.Windows.Forms.Padding(2, 2, 2, 0)
-        Me.TabPageHome.Size = New System.Drawing.Size(551, 619)
+        Me.TabPageHome.Size = New System.Drawing.Size(576, 619)
         Me.TabPageHome.TabIndex = 0
         Me.TabPageHome.Text = "Home"
         '
@@ -345,7 +348,7 @@ Partial Class Form_Main
         Me.ColumnSelectionPanel.Controls.Add(Me.ButtonCloseListOfColumns)
         Me.ColumnSelectionPanel.Controls.Add(Me.ButtonAddToListOfColumns)
         Me.ColumnSelectionPanel.Controls.Add(Me.CLB_Properties)
-        Me.ColumnSelectionPanel.Location = New System.Drawing.Point(398, 2)
+        Me.ColumnSelectionPanel.Location = New System.Drawing.Point(423, 2)
         Me.ColumnSelectionPanel.Name = "ColumnSelectionPanel"
         Me.ColumnSelectionPanel.Size = New System.Drawing.Size(146, 192)
         Me.ColumnSelectionPanel.TabIndex = 36
@@ -411,7 +414,7 @@ Partial Class Form_Main
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.ListViewFiles)
-        Me.SplitContainer1.Size = New System.Drawing.Size(547, 567)
+        Me.SplitContainer1.Size = New System.Drawing.Size(572, 567)
         Me.SplitContainer1.SplitterDistance = 126
         Me.SplitContainer1.TabIndex = 38
         '
@@ -430,7 +433,7 @@ Partial Class Form_Main
         Me.ListViewSources.Margin = New System.Windows.Forms.Padding(0)
         Me.ListViewSources.Name = "ListViewSources"
         Me.ListViewSources.ShowItemToolTips = True
-        Me.ListViewSources.Size = New System.Drawing.Size(547, 126)
+        Me.ListViewSources.Size = New System.Drawing.Size(572, 126)
         Me.ListViewSources.SmallImageList = Me.TabPage_ImageList
         Me.ListViewSources.TabIndex = 37
         Me.ListViewSources.UseCompatibleStateImageBehavior = False
@@ -489,7 +492,7 @@ Partial Class Form_Main
         Me.ListViewFiles.Name = "ListViewFiles"
         Me.ListViewFiles.OwnerDraw = True
         Me.ListViewFiles.ShowItemToolTips = True
-        Me.ListViewFiles.Size = New System.Drawing.Size(547, 437)
+        Me.ListViewFiles.Size = New System.Drawing.Size(572, 437)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
         Me.ListViewFiles.TabIndex = 32
         Me.ListViewFiles.UseCompatibleStateImageBehavior = False
@@ -514,7 +517,7 @@ Partial Class Form_Main
         Me.ToolStrip_Filter.Location = New System.Drawing.Point(2, 594)
         Me.ToolStrip_Filter.Name = "ToolStrip_Filter"
         Me.ToolStrip_Filter.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip_Filter.Size = New System.Drawing.Size(547, 25)
+        Me.ToolStrip_Filter.Size = New System.Drawing.Size(572, 25)
         Me.ToolStrip_Filter.TabIndex = 34
         Me.ToolStrip_Filter.Text = "ToolStrip1"
         '
@@ -574,11 +577,11 @@ Partial Class Form_Main
         '
         Me.ToolStrip_List.BackColor = System.Drawing.Color.White
         Me.ToolStrip_List.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddSingleFiles, Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator12, Me.BT_AddTeamCenter, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.BT_ColumnsSelect, Me.ToolStripSeparator10, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
+        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddSingleFiles, Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator12, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator4, Me.BT_ActiveFile, Me.BT_ActiveFiles, Me.ToolStripSeparator14, Me.BT_AddTeamCenter, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.BT_ColumnsSelect, Me.ToolStripSeparator10, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
         Me.ToolStrip_List.Location = New System.Drawing.Point(2, 2)
         Me.ToolStrip_List.Name = "ToolStrip_List"
         Me.ToolStrip_List.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip_List.Size = New System.Drawing.Size(547, 25)
+        Me.ToolStrip_List.Size = New System.Drawing.Size(572, 25)
         Me.ToolStrip_List.TabIndex = 33
         Me.ToolStrip_List.Text = "ToolStrip1"
         '
@@ -614,20 +617,6 @@ Partial Class Form_Main
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
         Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
         '
-        'BT_AddTeamCenter
-        '
-        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddTeamCenter.Image = Global.Housekeeper.My.Resources.Resources.teamcenter
-        Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
-        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddTeamCenter.Text = "Add TeamCenter"
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
-        '
         'BT_TopLevelAsm
         '
         Me.BT_TopLevelAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -645,6 +634,43 @@ Partial Class Form_Main
         Me.BT_ASM_Folder.Name = "BT_ASM_Folder"
         Me.BT_ASM_Folder.Size = New System.Drawing.Size(23, 22)
         Me.BT_ASM_Folder.Text = "Top level assembly folder"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_ActiveFile
+        '
+        Me.BT_ActiveFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ActiveFile.Image = Global.Housekeeper.My.Resources.Resources.active_file
+        Me.BT_ActiveFile.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ActiveFile.Name = "BT_ActiveFile"
+        Me.BT_ActiveFile.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ActiveFile.Text = "Add active file"
+        '
+        'BT_ActiveFiles
+        '
+        Me.BT_ActiveFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ActiveFiles.Image = Global.Housekeeper.My.Resources.Resources.active_files
+        Me.BT_ActiveFiles.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ActiveFiles.Name = "BT_ActiveFiles"
+        Me.BT_ActiveFiles.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ActiveFiles.Text = "Add active files"
+        '
+        'ToolStripSeparator14
+        '
+        Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_AddTeamCenter
+        '
+        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddTeamCenter.Image = Global.Housekeeper.My.Resources.Resources.teamcenter
+        Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
+        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddTeamCenter.Text = "Add TeamCenter"
         '
         'ToolStripSeparator1
         '
@@ -794,7 +820,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 15)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks
@@ -808,7 +834,7 @@ Partial Class Form_Main
         Me.TabPageTasks.Location = New System.Drawing.Point(4, 24)
         Me.TabPageTasks.Name = "TabPageTasks"
         Me.TabPageTasks.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTasks.Size = New System.Drawing.Size(551, 619)
+        Me.TabPageTasks.Size = New System.Drawing.Size(576, 619)
         Me.TabPageTasks.TabIndex = 7
         Me.TabPageTasks.Text = "Tasks"
         '
@@ -818,7 +844,7 @@ Partial Class Form_Main
         Me.TaskPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskPanel.Location = New System.Drawing.Point(3, 37)
         Me.TaskPanel.Name = "TaskPanel"
-        Me.TaskPanel.Size = New System.Drawing.Size(545, 533)
+        Me.TaskPanel.Size = New System.Drawing.Size(570, 533)
         Me.TaskPanel.TabIndex = 2
         '
         'TaskFooterPanel
@@ -828,7 +854,7 @@ Partial Class Form_Main
         Me.TaskFooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 570)
         Me.TaskFooterPanel.Name = "TaskFooterPanel"
-        Me.TaskFooterPanel.Size = New System.Drawing.Size(545, 46)
+        Me.TaskFooterPanel.Size = New System.Drawing.Size(570, 46)
         Me.TaskFooterPanel.TabIndex = 1
         '
         'EditTaskListButton
@@ -846,7 +872,7 @@ Partial Class Form_Main
         Me.TaskHeaderPanel.Dock = System.Windows.Forms.DockStyle.Top
         Me.TaskHeaderPanel.Location = New System.Drawing.Point(3, 3)
         Me.TaskHeaderPanel.Name = "TaskHeaderPanel"
-        Me.TaskHeaderPanel.Size = New System.Drawing.Size(545, 34)
+        Me.TaskHeaderPanel.Size = New System.Drawing.Size(570, 34)
         Me.TaskHeaderPanel.TabIndex = 0
         '
         'TableLayoutPanel2
@@ -875,7 +901,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(545, 34)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(570, 34)
         Me.TableLayoutPanel2.TabIndex = 0
         '
         'TaskHeaderEnableButton
@@ -956,7 +982,7 @@ Partial Class Form_Main
         '
         Me.TaskHeaderHelpButton.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskHeaderHelpButton.Image = CType(resources.GetObject("TaskHeaderHelpButton.Image"), System.Drawing.Image)
-        Me.TaskHeaderHelpButton.Location = New System.Drawing.Point(518, 3)
+        Me.TaskHeaderHelpButton.Location = New System.Drawing.Point(543, 3)
         Me.TaskHeaderHelpButton.Name = "TaskHeaderHelpButton"
         Me.TaskHeaderHelpButton.Size = New System.Drawing.Size(24, 28)
         Me.TaskHeaderHelpButton.TabIndex = 6
@@ -984,7 +1010,7 @@ Partial Class Form_Main
         Me.TabPageConfiguration.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageConfiguration.Name = "TabPageConfiguration"
         Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageConfiguration.Size = New System.Drawing.Size(551, 619)
+        Me.TabPageConfiguration.Size = New System.Drawing.Size(576, 619)
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
@@ -1002,7 +1028,7 @@ Partial Class Form_Main
         Me.TabControl2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(543, 613)
+        Me.TabControl2.Size = New System.Drawing.Size(568, 613)
         Me.TabControl2.TabIndex = 44
         '
         'TabPageTopLevelAssy
@@ -1013,7 +1039,7 @@ Partial Class Form_Main
         Me.TabPageTopLevelAssy.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageTopLevelAssy.Name = "TabPageTopLevelAssy"
         Me.TabPageTopLevelAssy.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(560, 585)
         Me.TabPageTopLevelAssy.TabIndex = 2
         Me.TabPageTopLevelAssy.Text = "Top Level Assy"
         Me.TabPageTopLevelAssy.UseVisualStyleBackColor = True
@@ -1050,7 +1076,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(552, 579)
         Me.ExTableLayoutPanel4.TabIndex = 22
         Me.ExTableLayoutPanel4.Task = Nothing
         '
@@ -1179,7 +1205,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel5.Name = "ExTableLayoutPanel5"
         Me.ExTableLayoutPanel5.RowCount = 1
         Me.ExTableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel5.Size = New System.Drawing.Size(521, 34)
+        Me.ExTableLayoutPanel5.Size = New System.Drawing.Size(546, 34)
         Me.ExTableLayoutPanel5.TabIndex = 22
         Me.ExTableLayoutPanel5.Task = Nothing
         '
@@ -1200,7 +1226,7 @@ Partial Class Form_Main
         Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(152, 5)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(367, 23)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(392, 23)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 15
         '
         'ExTableLayoutPanel10
@@ -1216,7 +1242,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel10.RowCount = 1
         Me.ExTableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.ExTableLayoutPanel10.Size = New System.Drawing.Size(521, 34)
+        Me.ExTableLayoutPanel10.Size = New System.Drawing.Size(546, 34)
         Me.ExTableLayoutPanel10.TabIndex = 23
         Me.ExTableLayoutPanel10.Task = Nothing
         '
@@ -1235,7 +1261,7 @@ Partial Class Form_Main
         Me.TextBoxLinkManagementFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxLinkManagementFilename.Location = New System.Drawing.Point(153, 5)
         Me.TextBoxLinkManagementFilename.Name = "TextBoxLinkManagementFilename"
-        Me.TextBoxLinkManagementFilename.Size = New System.Drawing.Size(365, 23)
+        Me.TextBoxLinkManagementFilename.Size = New System.Drawing.Size(390, 23)
         Me.TextBoxLinkManagementFilename.TabIndex = 1
         '
         'TabPageStatus
@@ -1246,7 +1272,7 @@ Partial Class Form_Main
         Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageStatus.Name = "TabPageStatus"
         Me.TabPageStatus.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageStatus.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageStatus.Size = New System.Drawing.Size(560, 585)
         Me.TabPageStatus.TabIndex = 3
         Me.TabPageStatus.Text = "Status"
         Me.TabPageStatus.UseVisualStyleBackColor = True
@@ -1270,7 +1296,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(552, 579)
         Me.ExTableLayoutPanel6.TabIndex = 97
         Me.ExTableLayoutPanel6.Task = Nothing
         '
@@ -2058,7 +2084,7 @@ Partial Class Form_Main
         Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageSorting.Name = "TabPageSorting"
         Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageSorting.Size = New System.Drawing.Size(560, 585)
         Me.TabPageSorting.TabIndex = 4
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
@@ -2087,7 +2113,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(552, 579)
         Me.ExTableLayoutPanel7.TabIndex = 56
         Me.ExTableLayoutPanel7.Task = Nothing
         '
@@ -2115,7 +2141,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel8.Name = "ExTableLayoutPanel8"
         Me.ExTableLayoutPanel8.RowCount = 1
         Me.ExTableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(521, 34)
+        Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(546, 34)
         Me.ExTableLayoutPanel8.TabIndex = 54
         Me.ExTableLayoutPanel8.Task = Nothing
         '
@@ -2215,7 +2241,7 @@ Partial Class Form_Main
         Me.TabPageTemplates.Location = New System.Drawing.Point(4, 24)
         Me.TabPageTemplates.Name = "TabPageTemplates"
         Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(560, 585)
         Me.TabPageTemplates.TabIndex = 7
         Me.TabPageTemplates.Text = "Templates"
         '
@@ -2394,7 +2420,7 @@ Partial Class Form_Main
         Me.TabPageServerQuery.Margin = New System.Windows.Forms.Padding(0)
         Me.TabPageServerQuery.Name = "TabPageServerQuery"
         Me.TabPageServerQuery.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageServerQuery.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageServerQuery.Size = New System.Drawing.Size(560, 585)
         Me.TabPageServerQuery.TabIndex = 8
         Me.TabPageServerQuery.Text = "Server Query"
         Me.TabPageServerQuery.UseVisualStyleBackColor = True
@@ -2419,7 +2445,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(529, 579)
+        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(554, 579)
         Me.ExTableLayoutPanel9.TabIndex = 0
         Me.ExTableLayoutPanel9.Task = Nothing
         '
@@ -2428,7 +2454,7 @@ Partial Class Form_Main
         Me.TextBoxServerConnectionString.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxServerConnectionString.Location = New System.Drawing.Point(3, 33)
         Me.TextBoxServerConnectionString.Name = "TextBoxServerConnectionString"
-        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(523, 23)
+        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(548, 23)
         Me.TextBoxServerConnectionString.TabIndex = 0
         '
         'LabelServerConnectionString
@@ -2473,7 +2499,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.RightBracket = Global.Microsoft.VisualBasic.ChrW(41)
         Me.FastColoredServerQuery.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.FastColoredServerQuery.ServiceColors = CType(resources.GetObject("FastColoredServerQuery.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.FastColoredServerQuery.Size = New System.Drawing.Size(523, 94)
+        Me.FastColoredServerQuery.Size = New System.Drawing.Size(548, 94)
         Me.FastColoredServerQuery.TabIndex = 6
         Me.FastColoredServerQuery.Zoom = 100
         '
@@ -2496,7 +2522,7 @@ Partial Class Form_Main
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(535, 585)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(560, 585)
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
@@ -2541,7 +2567,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(527, 579)
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(552, 579)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
         '
@@ -2552,7 +2578,7 @@ Partial Class Form_Main
         Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(3, 3)
         Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
         Me.CheckBoxUseCurrentSession.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxUseCurrentSession.TabIndex = 72
         Me.CheckBoxUseCurrentSession.Text = "Use current Solid Edge session (if any)"
         Me.CheckBoxUseCurrentSession.UseVisualStyleBackColor = True
@@ -2564,7 +2590,7 @@ Partial Class Form_Main
         Me.CheckBoxPropertyFilterIncludeDraftItself.Location = New System.Drawing.Point(3, 273)
         Me.CheckBoxPropertyFilterIncludeDraftItself.Name = "CheckBoxPropertyFilterIncludeDraftItself"
         Me.CheckBoxPropertyFilterIncludeDraftItself.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxPropertyFilterIncludeDraftItself.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxPropertyFilterIncludeDraftItself.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxPropertyFilterIncludeDraftItself.TabIndex = 73
         Me.CheckBoxPropertyFilterIncludeDraftItself.Text = "Property Filter -- Include the Draft file itself in search"
         Me.CheckBoxPropertyFilterIncludeDraftItself.UseVisualStyleBackColor = True
@@ -2578,7 +2604,7 @@ Partial Class Form_Main
         Me.CheckBoxWarnSave.Location = New System.Drawing.Point(3, 33)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxWarnSave.TabIndex = 70
         Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
         Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
@@ -2592,7 +2618,7 @@ Partial Class Form_Main
         Me.CheckBoxPropertyFilterIncludeDraftModel.Location = New System.Drawing.Point(3, 243)
         Me.CheckBoxPropertyFilterIncludeDraftModel.Name = "CheckBoxPropertyFilterIncludeDraftModel"
         Me.CheckBoxPropertyFilterIncludeDraftModel.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxPropertyFilterIncludeDraftModel.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxPropertyFilterIncludeDraftModel.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxPropertyFilterIncludeDraftModel.TabIndex = 52
         Me.CheckBoxPropertyFilterIncludeDraftModel.Text = "Property Filter -- Include Draft file model documents in search"
         Me.CheckBoxPropertyFilterIncludeDraftModel.UseVisualStyleBackColor = True
@@ -2604,7 +2630,7 @@ Partial Class Form_Main
         Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 63)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxNoUpdateMRU.TabIndex = 71
         Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
         Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
@@ -2616,7 +2642,7 @@ Partial Class Form_Main
         Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 213)
         Me.CheckBoxRunInBackground.Name = "CheckBoxRunInBackground"
         Me.CheckBoxRunInBackground.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxRunInBackground.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxRunInBackground.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxRunInBackground.TabIndex = 49
         Me.CheckBoxRunInBackground.Text = "Process tasks in background (no graphics)"
         Me.CheckBoxRunInBackground.UseVisualStyleBackColor = True
@@ -2634,7 +2660,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
-        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(521, 24)
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(546, 24)
         Me.ExTableLayoutPanel3.TabIndex = 73
         Me.ExTableLayoutPanel3.Task = Nothing
         '
@@ -2667,7 +2693,7 @@ Partial Class Form_Main
         Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 183)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxRememberTasks.TabIndex = 48
         Me.CheckBoxRememberTasks.Text = "Remember selected tasks between sessions"
         Me.CheckBoxRememberTasks.UseVisualStyleBackColor = True
@@ -2681,7 +2707,7 @@ Partial Class Form_Main
         Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 303)
         Me.CheckBoxCheckForNewerVersion.Name = "CheckBoxCheckForNewerVersion"
         Me.CheckBoxCheckForNewerVersion.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxCheckForNewerVersion.TabIndex = 74
         Me.CheckBoxCheckForNewerVersion.Text = "Check for newer version at startup"
         Me.CheckBoxCheckForNewerVersion.UseVisualStyleBackColor = True
@@ -2695,7 +2721,7 @@ Partial Class Form_Main
         Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 153)
         Me.CheckBoxGroupFiles.Name = "CheckBoxGroupFiles"
         Me.CheckBoxGroupFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxGroupFiles.TabIndex = 75
         Me.CheckBoxGroupFiles.Text = "Group files by type"
         Me.CheckBoxGroupFiles.UseVisualStyleBackColor = True
@@ -2713,7 +2739,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel11.RowCount = 1
         Me.ExTableLayoutPanel11.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel11.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
-        Me.ExTableLayoutPanel11.Size = New System.Drawing.Size(521, 24)
+        Me.ExTableLayoutPanel11.Size = New System.Drawing.Size(546, 24)
         Me.ExTableLayoutPanel11.TabIndex = 76
         Me.ExTableLayoutPanel11.Task = Nothing
         '
@@ -2746,7 +2772,7 @@ Partial Class Form_Main
         Me.CheckBoxRemindFilelistUpdate.Location = New System.Drawing.Point(3, 333)
         Me.CheckBoxRemindFilelistUpdate.Name = "CheckBoxRemindFilelistUpdate"
         Me.CheckBoxRemindFilelistUpdate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxRemindFilelistUpdate.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxRemindFilelistUpdate.Size = New System.Drawing.Size(546, 24)
         Me.CheckBoxRemindFilelistUpdate.TabIndex = 77
         Me.CheckBoxRemindFilelistUpdate.Text = "Remind me if I need to update the file list"
         Me.CheckBoxRemindFilelistUpdate.UseVisualStyleBackColor = True
@@ -2775,7 +2801,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel12.Name = "ExTableLayoutPanel12"
         Me.ExTableLayoutPanel12.RowCount = 1
         Me.ExTableLayoutPanel12.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel12.Size = New System.Drawing.Size(521, 24)
+        Me.ExTableLayoutPanel12.Size = New System.Drawing.Size(546, 24)
         Me.ExTableLayoutPanel12.TabIndex = 79
         Me.ExTableLayoutPanel12.Task = Nothing
         Me.ExTableLayoutPanel12.Visible = False
@@ -2826,7 +2852,7 @@ Partial Class Form_Main
         Me.ToolStripPresets.Name = "ToolStripPresets"
         Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
         Me.ToolStripPresets.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStripPresets.Size = New System.Drawing.Size(559, 26)
+        Me.ToolStripPresets.Size = New System.Drawing.Size(584, 26)
         Me.ToolStripPresets.TabIndex = 75
         Me.ToolStripPresets.Text = "ToolStrip1"
         '
@@ -2898,7 +2924,7 @@ Partial Class Form_Main
         Me.TextBoxStatus.Location = New System.Drawing.Point(2, 28)
         Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxStatus.Name = "TextBoxStatus"
-        Me.TextBoxStatus.Size = New System.Drawing.Size(555, 23)
+        Me.TextBoxStatus.Size = New System.Drawing.Size(580, 23)
         Me.TextBoxStatus.TabIndex = 1
         Me.TextBoxStatus.Text = "Select file(s) to process OR Select none to process all (ESC to clear selections)" &
     ""
@@ -2946,7 +2972,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(559, 105)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(584, 105)
         Me.TableLayoutPanel1.TabIndex = 5
         '
         'ButtonProcess
@@ -2954,7 +2980,7 @@ Partial Class Form_Main
         Me.ButtonProcess.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ButtonProcess.Image = CType(resources.GetObject("ButtonProcess.Image"), System.Drawing.Image)
         Me.ButtonProcess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonProcess.Location = New System.Drawing.Point(171, 54)
+        Me.ButtonProcess.Location = New System.Drawing.Point(196, 54)
         Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonProcess.Name = "ButtonProcess"
         Me.ButtonProcess.Size = New System.Drawing.Size(126, 49)
@@ -2968,7 +2994,7 @@ Partial Class Form_Main
         Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
         Me.ButtonCancel.Image = CType(resources.GetObject("ButtonCancel.Image"), System.Drawing.Image)
         Me.ButtonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonCancel.Location = New System.Drawing.Point(301, 54)
+        Me.ButtonCancel.Location = New System.Drawing.Point(326, 54)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(126, 49)
@@ -2981,7 +3007,7 @@ Partial Class Form_Main
         Me.ButtonHelp.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ButtonHelp.Image = CType(resources.GetObject("ButtonHelp.Image"), System.Drawing.Image)
         Me.ButtonHelp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonHelp.Location = New System.Drawing.Point(432, 55)
+        Me.ButtonHelp.Location = New System.Drawing.Point(457, 55)
         Me.ButtonHelp.Name = "ButtonHelp"
         Me.ButtonHelp.Size = New System.Drawing.Size(124, 47)
         Me.ButtonHelp.TabIndex = 4
@@ -3087,7 +3113,7 @@ Partial Class Form_Main
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(559, 752)
+        Me.ClientSize = New System.Drawing.Size(584, 752)
         Me.Controls.Add(Me.LabelTimeRemaining)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -3095,7 +3121,7 @@ Partial Class Form_Main
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(400, 200)
         Me.Margin = New System.Windows.Forms.Padding(2)
-        Me.MinimumSize = New System.Drawing.Size(575, 450)
+        Me.MinimumSize = New System.Drawing.Size(600, 450)
         Me.Name = "Form_Main"
         Me.Text = "Solid Edge Housekeeper"
         Me.TabControl1.ResumeLayout(False)
@@ -3406,4 +3432,7 @@ Partial Class Form_Main
     Friend WithEvents BT_Copy As ToolStripMenuItem
     Friend WithEvents BT_SelectAll As ToolStripMenuItem
     Friend WithEvents CheckBoxDebugMode As CheckBox
+    Friend WithEvents BT_ActiveFile As ToolStripButton
+    Friend WithEvents BT_ActiveFiles As ToolStripButton
+    Friend WithEvents ToolStripSeparator14 As ToolStripSeparator
 End Class

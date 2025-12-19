@@ -10,8 +10,8 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "24"  ' ######### Empty string for a release
+    Public Property Version As String = "2026.1"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
+    Public Property PreviewVersion As String = ""  ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -1010,6 +1010,8 @@ Public Class Form_Main
 
     Public Property SavedExpressions As HCSavedExpressions
 
+    Public Property ActiveFile As String
+    Public Property ActiveFiles As List(Of String)
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -1995,6 +1997,27 @@ Public Class Form_Main
         End If
     End Sub
 
+    Private Sub BT_ActiveFile_Click(sender As Object, e As EventArgs) Handles BT_ActiveFile.Click
+        Dim tmpItem As New ListViewItem
+        tmpItem.Text = "Active file"
+        tmpItem.Group = ListViewSources.Groups.Item("Sources")
+        tmpItem.ImageKey = "ActiveFile"
+        tmpItem.Tag = "ActiveFile"
+        tmpItem.Name = "ActiveFile"
+        If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
+    End Sub
+
+    Private Sub BT_ActiveFiles_Click(sender As Object, e As EventArgs) Handles BT_ActiveFiles.Click
+        Dim tmpItem As New ListViewItem
+        tmpItem.Text = "Active files"
+        tmpItem.Group = ListViewSources.Groups.Item("Sources")
+        tmpItem.ImageKey = "ActiveFiles"
+        tmpItem.Tag = "ActiveFiles"
+        tmpItem.Name = "ActiveFiles"
+        If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+    End Sub
+
     Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
 
         e.Effect = DragDropEffects.Copy
@@ -2258,6 +2281,8 @@ Public Class Form_Main
         CaricaImmagine16x16(TabPage_ImageList, "Down", My.Resources.down)
         CaricaImmagine16x16(TabPage_ImageList, "Files", My.Resources.Files)
         CaricaImmagine16x16(TabPage_ImageList, "teamcenter", My.Resources.teamcenter)
+        CaricaImmagine16x16(TabPage_ImageList, "ActiveFile", My.Resources.active_file)
+        CaricaImmagine16x16(TabPage_ImageList, "ActiveFiles", My.Resources.active_files)
 
     End Sub
 
@@ -4062,6 +4087,7 @@ Public Class Form_Main
     Private Sub CheckBoxDebugMode_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDebugMode.CheckedChanged
         Me.DebugMode = CheckBoxDebugMode.Checked
     End Sub
+
 End Class
 
 

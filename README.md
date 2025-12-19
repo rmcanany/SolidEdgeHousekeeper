@@ -141,29 +141,10 @@ The dialog that appears with these commands has `multi-select` enabled, meaning 
 
 </details>
 
-<details><summary><h4 style="margin:0px; display:inline-block">Select from TeamCenter</h4></summary>
-
-Choose this option to select files from TeamCenter. Referring to the toolbar diagram, tool group 2, 
-
-- Click ![TeamCenter](Resources/teamcenter.png) to select files from TeamCenter.  The following dialog is displayed.
-
-![Add Teamcenter Items](My%20Project/media/add_teamcenter_items.png)
-
-You search by Item ID and Revision, pasting from Excel if desired.  Prompts for a login if required.  If the Revision field is blank, it returns the most recent.  You can filter by file type.  You can add all files, or select from the list. 
-
-The files are downloaded to your cache, then copied into Housekeeper's file list.  
-
-![Add Teamcenter Options](My%20Project/media/add_teamcenter_options.png)
-
-The options button ![Options](Resources/icons8_Tools_16.png) lets you enter a regular expression to use to validate the Item ID and Revision.  For no validation, enter `^.*$`.  Regular expressions are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [<ins>**REGEX in .NET**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
-
-The options page also holds the variable for the site-specific name of the item ID collection.  For example, `MFK9Item1` or `Standard_CI`.
-
-</details>
 
 <details><summary><h4 style="margin:0px; display:inline-block">Select by Top Level Assembly</h4></summary>
 
-Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 3, 
+Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, 
 
 - click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly
 - click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files
@@ -206,11 +187,47 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 
 </details>
 
+OK, that's enough about top-level assemblies.  Let's get back back to our remaining file selection options.
+
+</details>
+
+<details><summary><h4 style="margin:0px; display:inline-block">Select from Active SE Files</h4></summary>
+
+Choose this option to select files from that are currently open in Solid Edge. Referring to the toolbar diagram, tool group 3, 
+
+- Click ![ActiveFile](My%20Project/media/active_file.png) to select the file that is active in Solid Edge.
+
+- Click ![ActiveFiles](My%20Project/media/active_files.png) to select all files open in Solid Edge.
+
+When selecting, Solid Edge must be running with at least one file open.  If an open file has not been saved, the program will report an error.
+
+When processing, the option `Use current SE session (if any)` must be enabled.  When complete, display of the file(s) is restored.
+
+</details>
+
+<details><summary><h4 style="margin:0px; display:inline-block">Select from TeamCenter</h4></summary>
+
+Choose this option to select files from TeamCenter. Referring to the toolbar diagram, tool group 4, 
+
+- Click ![TeamCenter](Resources/teamcenter.png) to select files from TeamCenter.  The following dialog is displayed.
+
+![Add Teamcenter Items](My%20Project/media/add_teamcenter_items.png)
+
+You search by Item ID and Revision, pasting from Excel if desired.  Prompts for a login if required.  If the Revision field is blank, it returns the most recent.  You can filter by file type.  You can add all files, or select from the list. 
+
+The files are downloaded to your cache, then copied into Housekeeper's file list.  
+
+![Add Teamcenter Options](My%20Project/media/add_teamcenter_options.png)
+
+The options button ![Options](Resources/icons8_Tools_16.png) lets you enter a regular expression to use to validate the Item ID and Revision.  For no validation, enter `^.*$`.  Regular expressions are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [<ins>**REGEX in .NET**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
+
+The options page also holds the variable for the site-specific name of the item ID collection.  For example, `MFK9Item1` or `Standard_CI`.
+
 </details>
 
 <details><summary><h4 style="margin:0px; display:inline-block">Select by List</h4></summary>
 
-OK, that's enough about top-level assemblies.  Getting back to our file selection options, referring to the toolbar diagram, tool group 4, 
+Referring to the toolbar diagram, tool group 5, 
 - Click ![Import List](Resources/icons8_Import_16.png) to import a list
 - Click ![Export List](Resources/icons8_Export_16.png) to export one
 
@@ -220,7 +237,7 @@ If you are importing a list from another source, be aware that the file names mu
 
 <details><summary><h4 style="margin:0px; display:inline-block">Tools</h4></summary>
 
-Referring to the toolbar diagram, tool group 5, 
+Referring to the toolbar diagram, tool group 6, 
 - Click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
 - Click ![Remove All](Resources/icons8_trash_16.png) to remove all folders and files from the list.
 
@@ -228,7 +245,7 @@ Referring to the toolbar diagram, tool group 5,
 
 <details><summary><h4 style="margin:0px; display:inline-block">Update</h4></summary>
 
-Referring to the toolbar diagram, tool group 6, 
+Referring to the toolbar diagram, tool group 7, 
 - Click ![Update](Resources/Synch_16.png) to populate the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 - To update the files' property display, but not the files themselves, hold the Shift key and press the update button.
 
@@ -236,7 +253,7 @@ Referring to the toolbar diagram, tool group 6,
 
 <details><summary><h4 style="margin:0px; display:inline-block">File Type</h4></summary>
 
-You can limit the search to return only selected types of Solid Edge files. Referring to the toolbar diagram, tool group 7, 
+You can limit the search to return only selected types of Solid Edge files. Referring to the toolbar diagram, tool group 8, 
 - Click ![Assembly](Resources/ST9%20-%20asm.png) to toggle assembly file selection
 - Click ![Part](Resources/ST9%20-%20par.png)  to toggle part file selection
 - Click ![Sheet Metal](Resources/ST9%20-%20psm.png)  to toggle sheet metal file selection
@@ -246,7 +263,7 @@ You can limit the search to return only selected types of Solid Edge files. Refe
 
 <details><summary><h4 style="margin:0px; display:inline-block">File List Options</h4></summary>
 
-You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 8. 
+You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 9. 
 
 Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the left below
 
@@ -650,8 +667,6 @@ Uses GitHub's API to get the most recent version and compare it to the running v
 This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
 - `Process drawing files as inactive`  
 This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once processing is complete.  However, in case of a program malfunction, it may not be able to do so.  You can manually reset the option by starting Solid Edge manually, then clicking the `Browse` button.  The checkbox is located toward the bottom of the form.  You have to select a draft file to make the checkbox active.
-- `Expression editor language`  
-Sets the programming language for the expression editor.  The choices are `NCalc` or `VB`.  See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details.
 - `Debug mode`  
 Debug mode is meant to help with troubleshooting user's site-specific issues.  It is currently limited, but will be expanded as needed in the future.
  

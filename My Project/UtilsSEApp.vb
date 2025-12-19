@@ -105,10 +105,17 @@ Public Class UtilsSEApp
 
             System.Threading.Thread.Sleep(100)
 
+        Else
+            RestoreOpenDocuments()
         End If
 
     End Sub
 
+    Private Sub RestoreOpenDocuments()
+        For Each Filename As String In FMain.ActiveFiles
+            SEApp.Documents.Open(Filename)
+        Next
+    End Sub
     Private Sub SEGarbageCollect(ByVal obj As Object)
         Try
             '******* Added because of .NET
@@ -177,7 +184,7 @@ Public Class UtilsSEApp
         End Try
 
         If Not SEApp Is Nothing Then
-            SEApp = Nothing
+            'SEApp = Nothing
             Return True
         Else
             Return False

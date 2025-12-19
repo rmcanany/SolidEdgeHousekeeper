@@ -141,29 +141,10 @@ The dialog that appears with these commands has `multi-select` enabled, meaning 
 
 </details>
 
-<details open><summary><h4 style="margin:0px; display:inline-block">Select from TeamCenter</h4></summary>
-
-Choose this option to select files from TeamCenter. Referring to the toolbar diagram, tool group 2, 
-
-- Click ![TeamCenter](Resources/teamcenter.png) to select files from TeamCenter.  The following dialog is displayed.
-
-![Add Teamcenter Items](My%20Project/media/add_teamcenter_items.png)
-
-You search by Item ID and Revision, pasting from Excel if desired.  Prompts for a login if required.  If the Revision field is blank, it returns the most recent.  You can filter by file type.  You can add all files, or select from the list. 
-
-The files are downloaded to your cache, then copied into Housekeeper's file list.  
-
-![Add Teamcenter Options](My%20Project/media/add_teamcenter_options.png)
-
-The options button ![Options](Resources/icons8_Tools_16.png) lets you enter a regular expression to use to validate the Item ID and Revision.  For no validation, enter `^.*$`.  Regular expressions are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [<ins>**REGEX in .NET**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
-
-The options page also holds the variable for the site-specific name of the item ID collection.  For example, `MFK9Item1` or `Standard_CI`.
-
-</details>
 
 <details open><summary><h4 style="margin:0px; display:inline-block">Select by Top Level Assembly</h4></summary>
 
-Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 3, 
+Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, 
 
 - click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly
 - click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files
@@ -205,6 +186,40 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 ![Top level assembly options](My%20Project/media/top_level_assy_diagram.png)
 
 </details>
+
+</details>
+
+<details open><summary><h4 style="margin:0px; display:inline-block">Select from Active SE Files</h4></summary>
+
+Choose this option to select files from that are currently open in Solid Edge. Referring to the toolbar diagram, tool group 3, 
+
+- Click ![ActiveFile](My%20Project/media/active_file.png) to select the file that is active in Solid Edge.
+
+- Click ![ActiveFiles](My%20Project/media/active_files.png) to select all files open in Solid Edge.
+
+When selecting, Solid Edge must be running with at least one file open.  If an open file has not been saved, the program will report an error.
+
+When processing, the option `Use current SE session (if any)` must be enabled.  When complete, display of the file(s) is restored.
+
+</details>
+
+<details open><summary><h4 style="margin:0px; display:inline-block">Select from TeamCenter</h4></summary>
+
+Choose this option to select files from TeamCenter. Referring to the toolbar diagram, tool group 4, 
+
+- Click ![TeamCenter](Resources/teamcenter.png) to select files from TeamCenter.  The following dialog is displayed.
+
+![Add Teamcenter Items](My%20Project/media/add_teamcenter_items.png)
+
+You search by Item ID and Revision, pasting from Excel if desired.  Prompts for a login if required.  If the Revision field is blank, it returns the most recent.  You can filter by file type.  You can add all files, or select from the list. 
+
+The files are downloaded to your cache, then copied into Housekeeper's file list.  
+
+![Add Teamcenter Options](My%20Project/media/add_teamcenter_options.png)
+
+The options button ![Options](Resources/icons8_Tools_16.png) lets you enter a regular expression to use to validate the Item ID and Revision.  For no validation, enter `^.*$`.  Regular expressions are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [<ins>**REGEX in .NET**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
+
+The options page also holds the variable for the site-specific name of the item ID collection.  For example, `MFK9Item1` or `Standard_CI`.
 
 </details>
 
