@@ -2,7 +2,7 @@
   <p align=center>
   <img src="My%20Project/media/logo.png" width=50%;>
   <p align=center>
-  <span class="description">Robert McAnany 2025</span>
+  <span class="description">Robert McAnany 2026</span>
 </div>
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-gold-star-16.png"><img src="My%20Project/media/spacer.png">CREDITS</h2></summary>

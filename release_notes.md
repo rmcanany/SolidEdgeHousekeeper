@@ -2,7 +2,7 @@
   <p align=center>
   <img src="My%20Project/media/logo.png" width=50%;>
   <p align=center>
-  <span class="description">Robert McAnany 2025</span>
+  <span class="description">Robert McAnany 2026</span>
 </div>
 
 # Release Notes
@@ -13,7 +13,7 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
-## V2025.4 
+## V2026.1
 
 We'll get right to the updates, but first some exciting news -- Housekeeper has two new sponsors: **Breit Ideas** and **Pelican Industries!** 
 
@@ -40,6 +40,8 @@ Added a selection option to process files currently open in Solid Edge.
 ![Expression Editor](My%20Project/media/selection_toolbar.png)
 
 Choose ![Expression Editor](My%20Project/media/active_file.png) to select the active file only.  Choose ![Expression Editor](My%20Project/media/active_files.png) to select all open files.
+
+When updating the list, Solid Edge must be running with at least one file open.  If a new file has never been saved, the program will report an error.
 
 When processing, the option `Use current SE session (if any)` must be enabled.  When complete, display of the file(s) is restored.
 
