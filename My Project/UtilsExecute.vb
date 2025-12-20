@@ -292,6 +292,12 @@ Public Class UtilsExecute
             StartLogger.AddMessage("Close Spy for Solid Edge")
         End If
 
+        ' Check if Housekeeper is already running
+        Dim HousekeeperProcess = Diagnostics.Process.GetProcessesByName("Housekeeper")
+        If HousekeeperProcess.Length > 1 Then
+            StartLogger.AddMessage("Housekeeper is already running")
+        End If
+
         FMain.TextBoxStatus.Text = ""
 
         If StartLogger.HasErrors Then Proceed = False
