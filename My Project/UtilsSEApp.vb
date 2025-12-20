@@ -112,9 +112,16 @@ Public Class UtilsSEApp
     End Sub
 
     Private Sub RestoreOpenDocuments()
+        Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument = Nothing
+        Dim tmpDocument As SolidEdgeFramework.SolidEdgeDocument
+
         For Each Filename As String In FMain.ActiveFiles
-            SEApp.Documents.Open(Filename)
+            tmpDocument = CType(SEApp.Documents.Open(Filename), SolidEdgeFramework.SolidEdgeDocument)
+            If Filename = FMain.ActiveFile Then ActiveDocument = tmpDocument
+            SEApp.DoIdle()
         Next
+        If ActiveDocument IsNot Nothing Then ActiveDocument.Activate()
+        SEApp.DoIdle()
     End Sub
     Private Sub SEGarbageCollect(ByVal obj As Object)
         Try
