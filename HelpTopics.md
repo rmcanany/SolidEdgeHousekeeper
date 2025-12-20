@@ -8,7 +8,7 @@
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-gold-star-16.png"><img src="My%20Project/media/spacer.png">CREDITS</h2></summary>
 
 **Sponsors**  
-@john.matthews3452 (Hatch), Breit Ideas (breitideas.com), Pelican Industries (pelican.com)
+@john.matthews3452 (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (pelican.com)
 
 **Contributors**  
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github), @ih0nza (github), @artem1t (github)
@@ -28,7 +28,7 @@
 
 Solid Edge Housekeeper is a batch utility for finding annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
-If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  Something else to check out is [<ins>**Solid Edge Storekeeper**</ins>](https://github.com/rmcanany/SolidEdgeStorekeeper#readme).  That is a separate utility to create, organize and share standard parts.
+If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  Something else to check out is [<ins>**Solid Edge Storekeeper**</ins>](https://github.com/rmcanany/SolidEdgeStorekeeper#readme).  That is a separate open source utility to create, organize and share standard parts.
 
 <p align="center">
   <img src="My%20Project/media/home_tab_done.png">
@@ -40,13 +40,13 @@ If this is your first time here, you may want to check out the [<ins>**Quick Sta
 
 > *This is going to save me SO MUCH TIME!  Thank you for sharing!*
 
-> *Thank you for all your time and effort (...) Also thanks a lot for making it open source. I constantly reference your code for my own macros, which motivates me to make my projects open source as well.*
+> *I just got a new job and my first assignment was updating THOUSANDS of old drawings.  No one could believe it was done in two days.  Because of your tool, my boss now thinks I'm a GENIUS!  I can't thank you enough!*
 
 > *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they ever figure out how to automate me running Housekeeper, I will be out of a job!*
 
-> *Rad, this saves a mountain of time for me. Thanks!*
+> *Thank you for all your time and effort (...) Also thanks a lot for making it open source. I constantly reference your code for my own macros, which motivates me to make my projects open source as well.*
 
-> *Congratulations on being named a Siemens Techcxllence Award Finalist!  Your program, and the community that has grown around it, are truly an inspiration to all!*
+> *Congratulations on being named a Siemens Techcellence Award Finalist!  Your program, and the community which has grown around it, are truly an inspiration to all!*
 
 Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*, Google's Bard said:
 
