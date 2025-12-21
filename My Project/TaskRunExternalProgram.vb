@@ -269,62 +269,35 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
+            Dim FlatPatternModels As SolidEdgePart.FlatPatternModels = Nothing
             Dim Models As SolidEdgePart.Models = Nothing
-            Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
 
             Select Case DocType
                 Case ".par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument
-                    tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                    FlatPatternModels = tmpSEDoc.FlatPatternModels
                     Models = tmpSEDoc.Models
-                    PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
                 Case ".psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument
-                    tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                    FlatPatternModels = tmpSEDoc.FlatPatternModels
                     Models = tmpSEDoc.Models
-                    PropertySets = CType(tmpSEDoc.Properties, SolidEdgeFramework.PropertySets)
             End Select
 
-            If Models IsNot Nothing And PropertySets IsNot Nothing Then
-
-                Dim Filename As String = ""
-                Dim FoundPartCopy As Boolean = False
-
-                If Models.Count > 0 Then
-                    Dim Model = Models.Item(1)
-                    Dim PartCopies = Model.CopiedParts
-                    If PartCopies.Count > 0 Then
-                        Try
-                            Dim PartCopy = PartCopies.Item(1)
-                            Filename = PartCopy.FileName
-                            FoundPartCopy = True
-                        Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Unable to get part copy file name")
-                        End Try
-                    End If
-                End If
-
-                If FoundPartCopy Then
-                    Dim PropertySet = PropertySets.Item("Custom")
-                    Try
-                        Dim Prop = PropertySet.Item("PartCopyFilename")
-                        Prop.Value = Filename
-                        PropertySet.Save()
-                        SEApp.DoIdle()
-
-                        If Not SEDoc.ReadOnly Then
-                            SEDoc.Save()
-                            SEApp.DoIdle()
-                        End If
-                    Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Unable to update property value")
-                    End Try
-                End If
-
+            If FlatPatternModels.Count > 1 Then
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("FlatPatternModels.Count = {0}", FlatPatternModels.Count))
             End If
+            If FlatPatternModels.Count = 1 Then
+                Dim FlatPatternModel As SolidEdgePart.FlatPatternModel
+                FlatPatternModel = FlatPatternModels.Item(1)
 
+                Dim FlatPatterns As SolidEdgePart.FlatPatterns
+                FlatPatterns = FlatPatternModel.FlatPatterns
+                If FlatPatterns.Count > 1 Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("FlatPatterns.Count = {0}", FlatPatterns.Count))
+                End If
+            End If
             ' ############## SNIPPET CODE END ##############
 
         Catch ex As Exception

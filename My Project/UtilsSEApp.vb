@@ -22,6 +22,7 @@ Public Class UtilsSEApp
         ProcessDraftsInactive As Boolean)
 
         FMain.TextBoxStatus.Text = "Starting Solid Edge..."
+        Dim NoCurrentSessionFound As Boolean = False
 
         Try
 
@@ -31,7 +32,8 @@ Public Class UtilsSEApp
                 Catch ex As Exception
                     SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
                     FMain.ActiveFile = ""
-                    FMain.ActiveFiles.Clear()
+                    FMain.ActiveFiles = New List(Of String)
+                    NoCurrentSessionFound = True
                 End Try
             Else
                 SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -57,7 +59,15 @@ Public Class UtilsSEApp
                 SEApp.Interactive = True
                 SEApp.ScreenUpdating = True
                 SEApp.Visible = True
-                If Not UseCurrentSession Then SEApp.WindowState = 2  'Maximizes Solid Edge
+
+                If UseCurrentSession Then
+                    If NoCurrentSessionFound Then
+                        SEApp.WindowState = 2  'Maximizes Solid Edge
+                    End If
+                Else
+                    SEApp.WindowState = 2
+                End If
+
                 'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
             End If
 
