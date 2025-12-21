@@ -1226,7 +1226,7 @@ As illustrated in the examples, a `Property set`, either `System` or `Custom`, i
 
 It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 
-Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. The `DXF Flat` option saves the flat pattern of the sheet metal file. 
+Sheetmetal files (including `*.par` "switched to" sheetmetal) have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. The `DXF Flat` option saves the flat pattern of the sheet metal file. 
 
 The `PDF Drawing` option saves the drawing of the sheet metal file. The drawing must have the same name as the model, and be in the same directory. A more flexible option may be to use `Save Drawing As` command, using a `Property Filter` if needed. 
 
