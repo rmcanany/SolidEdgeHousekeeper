@@ -1352,7 +1352,8 @@ Public Class TaskSaveModelAs
         HelpString += "You can/should edit it to change the replacement characters to your preference. "
         HelpString += "The file is created the first time you run Housekeeper.  For details, see the header comments in that file. "
 
-        HelpString += vbCrLf + vbCrLf + "Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. "
+        HelpString += vbCrLf + vbCrLf + "Sheetmetal files (including `*.par` ""switched to"" sheetmetal) "
+        HelpString += "have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. "
         HelpString += "The `DXF Flat` option saves the flat pattern of the sheet metal file. "
 
         HelpString += vbCrLf + vbCrLf + "The `PDF Drawing` option saves the drawing of the sheet metal file. "
