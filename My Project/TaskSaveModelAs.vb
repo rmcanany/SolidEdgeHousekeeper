@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports Microsoft.WindowsAPICodePack.Dialogs
+Imports SolidEdgePart
 
 Public Class TaskSaveModelAs
 
@@ -388,27 +389,27 @@ Public Class TaskSaveModelAs
                 End If
 
 
-            Case = "par"
-                NewFilename = GenerateNewFilename(SEDoc, NewExtension)
+            'Case = "par"
+            '    NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                If Not TaskLogger.HasErrors Then
-                    FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+            '    If Not TaskLogger.HasErrors Then
+            '        FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
-                    Try
-                        If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-                            SaveAsModel(SEDoc, NewFilename, SEApp)
-                        Else  ' Saving as image
-                            SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
-                        End If
-                    Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
-                    End Try
+            '        Try
+            '            If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
+            '                SaveAsModel(SEDoc, NewFilename, SEApp)
+            '            Else  ' Saving as image
+            '                SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
+            '            End If
+            '        Catch ex As Exception
+            '            TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+            '        End Try
 
-                End If
+            '    End If
 
 
-            Case = "psm"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+            Case = "par", "psm"
+                'Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
 
                 Dim DraftFilename As String
                 Dim SEDraftDoc As SolidEdgeDraft.DraftDocument = Nothing
@@ -422,10 +423,10 @@ Public Class TaskSaveModelAs
                         If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
 
                             If NewExtension = ".dxf" Then
-                                SaveAsFlatDXF(tmpSEDoc, NewFilename, SEApp)
+                                SaveAsFlatDXF(SEDoc, NewFilename, SEApp, DocType)
 
                             ElseIf NewExtension = ".pdf" Then
-                                DraftFilename = System.IO.Path.ChangeExtension(tmpSEDoc.FullName, ".dft")
+                                DraftFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
                                 If Not FileIO.FileSystem.FileExists(DraftFilename) Then
                                     TaskLogger.AddMessage(String.Format("Draft document not found '{0}'", DraftFilename))
                                 Else
@@ -639,19 +640,53 @@ Public Class TaskSaveModelAs
     End Sub
 
     Private Sub SaveAsFlatDXF(
-        SEDoc As SolidEdgePart.SheetMetalDocument,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         NewFilename As String,
-        SEApp As SolidEdgeFramework.Application
+        SEApp As SolidEdgeFramework.Application,
+        DocType As String
         )
+        Dim FlatPatternModels As SolidEdgePart.FlatPatternModels = Nothing
+        Dim Models As SolidEdgePart.Models = Nothing
 
-        Dim Models As SolidEdgePart.Models
-
-        Models = SEDoc.Models
+        Select Case DocType
+            Case "par"
+                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, PartDocument)
+                FlatPatternModels = tmpSEDoc.FlatPatternModels
+                Models = tmpSEDoc.Models
+            Case "psm"
+                Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                FlatPatternModels = tmpSEDoc.FlatPatternModels
+                Models = tmpSEDoc.Models
+        End Select
         Try
-            Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
-            SEApp.DoIdle()
+            'FlatPatternModels = tmpSEDoc.FlatPatternModels
+            If FlatPatternModels IsNot Nothing AndAlso FlatPatternModels.Count > 0 Then
+                Dim FlatPattern As SolidEdgePart.FlatPatternModel
+                FlatPattern = FlatPatternModels.Item(1)
+                If FlatPattern.IsUpToDate Then
+
+                    Try
+                        'Models = tmpSEDoc.Models
+                        If Models IsNot Nothing AndAlso Models.Count > 0 Then
+                            Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
+                            SEApp.DoIdle()
+                        Else
+                            Me.TaskLogger.AddMessage("No model detected")
+                        End If
+                    Catch ex As Exception
+                        Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.", NewFilename))
+                        Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
+                    End Try
+                Else
+                    Me.TaskLogger.AddMessage("Flat pattern reported out of date")
+                End If
+            Else
+                Me.TaskLogger.AddMessage("No flat pattern detected")
+            End If
         Catch ex As Exception
-            Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.  Please verify a flat pattern is present.", NewFilename))
+            Me.TaskLogger.AddMessage("Error accessing a flat pattern model.")
+            Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
+
         End Try
 
     End Sub

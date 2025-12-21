@@ -30,6 +30,8 @@ Public Class UtilsSEApp
                     SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
                 Catch ex As Exception
                     SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+                    FMain.ActiveFile = ""
+                    FMain.ActiveFiles.Clear()
                 End Try
             Else
                 SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
