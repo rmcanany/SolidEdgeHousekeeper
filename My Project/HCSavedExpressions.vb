@@ -101,6 +101,11 @@ Public Class HCSavedExpressions
                 tmpSE.Name = tmpName
                 tmpSE.Language = Language
                 tmpSE.Comments = CommentList
+
+                Dim ExpressionString As String = ListOfStringToString(ExpressionList)
+                ExpressionString = ExpressionString.Trim()
+                ExpressionList = StringToListOfString(ExpressionString)
+
                 tmpSE.Expression = ExpressionList
 
                 Me.Items.Add(tmpSE)
@@ -110,64 +115,64 @@ Public Class HCSavedExpressions
             Save()
 
         Else
-            Dim SavedExpressionsDict As New Dictionary(Of String, Dictionary(Of String, String))
+            'Dim SavedExpressionsDict As New Dictionary(Of String, Dictionary(Of String, String))
 
-            Dim SR As IO.StreamReader = IO.File.OpenText(Filename)
-            Dim SavedExpressions = SR.ReadToEnd
+            'Dim SR As IO.StreamReader = IO.File.OpenText(Filename)
+            'Dim SavedExpressions = SR.ReadToEnd
 
-            SR.Close()
+            'SR.Close()
 
-            SavedExpressions = SavedExpressions.Replace(vbLf, Chr(182)).Replace(vbCr, Chr(182))
-            SavedExpressions = SavedExpressions.Replace(Chr(182), vbCrLf)
+            'SavedExpressions = SavedExpressions.Replace(vbLf, Chr(182)).Replace(vbCr, Chr(182))
+            'SavedExpressions = SavedExpressions.Replace(Chr(182), vbCrLf)
 
-            Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
+            'Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
 
-            For Each Expression In Expressions
+            'For Each Expression In Expressions
 
-                Dim ExpressionItems = Expression.Split(New String() {"[EXP_TEXT]"}, StringSplitOptions.RemoveEmptyEntries)
+            '    Dim ExpressionItems = Expression.Split(New String() {"[EXP_TEXT]"}, StringSplitOptions.RemoveEmptyEntries)
 
-                If ExpressionItems.Length = 2 Then
+            '    If ExpressionItems.Length = 2 Then
 
-                    Dim SaveName As String = ExpressionItems(0).Replace(vbCrLf, "")
-                    'Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char)).First
-                    Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char))
-                    Dim SaveExpression As String = UP.TrimCR(ExpressionAndComments(0))
-                    Dim SaveComments As String = ""
-                    If ExpressionAndComments.Count > 1 Then
-                        For i As Integer = 1 To ExpressionAndComments.Count - 1
-                            SaveComments = $"{SaveComments}{ExpressionAndComments(i)}{vbCrLf}"
-                        Next
-                    End If
-                    SaveComments = UP.TrimCR(SaveComments)
-                    Dim SaveLanguage As String = ""
-                    If SaveExpression.ToLower.Contains("return") Then
-                        SaveLanguage = "VB"
-                    Else
-                        SaveLanguage = "NCalc"
-                    End If
+            '        Dim SaveName As String = ExpressionItems(0).Replace(vbCrLf, "")
+            '        'Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char)).First
+            '        Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char))
+            '        Dim SaveExpression As String = UP.TrimCR(ExpressionAndComments(0))
+            '        Dim SaveComments As String = ""
+            '        If ExpressionAndComments.Count > 1 Then
+            '            For i As Integer = 1 To ExpressionAndComments.Count - 1
+            '                SaveComments = $"{SaveComments}{ExpressionAndComments(i)}{vbCrLf}"
+            '            Next
+            '        End If
+            '        SaveComments = UP.TrimCR(SaveComments)
+            '        Dim SaveLanguage As String = ""
+            '        If SaveExpression.ToLower.Contains("return") Then
+            '            SaveLanguage = "VB"
+            '        Else
+            '            SaveLanguage = "NCalc"
+            '        End If
 
-                    SavedExpressionsDict(SaveName) = New Dictionary(Of String, String)
-                    SavedExpressionsDict(SaveName)("Language") = SaveLanguage
-                    SavedExpressionsDict(SaveName)("Comments") = SaveComments
-                    SavedExpressionsDict(SaveName)("Expression") = SaveExpression
-                End If
-            Next
+            '        SavedExpressionsDict(SaveName) = New Dictionary(Of String, String)
+            '        SavedExpressionsDict(SaveName)("Language") = SaveLanguage
+            '        SavedExpressionsDict(SaveName)("Comments") = SaveComments
+            '        SavedExpressionsDict(SaveName)("Expression") = SaveExpression
+            '    End If
+            'Next
 
-            Me.Items.Clear()
+            'Me.Items.Clear()
 
-            For Each Name As String In SavedExpressionsDict.Keys
-                Me.Items.Add(New SavedExpression)
-                Dim tmpSE As SavedExpression = Me.Items(Me.Items.Count - 1)
-                tmpSE.Name = Name
-                tmpSE.Language = SavedExpressionsDict(Name)("Language")
-                'tmpSE.Comments = SavedExpressionsDict(Name)("Comments").Split(New String() {vbCrLf}, StringSplitOptions.RemoveEmptyEntries).ToList
-                'tmpSE.Expression = SavedExpressionsDict(Name)("Expression").Split(New String() {vbCrLf}, StringSplitOptions.RemoveEmptyEntries).ToList
-                tmpSE.Comments = SavedExpressionsDict(Name)("Comments").Split(CType(vbCrLf, Char)).ToList
-                tmpSE.Expression = SavedExpressionsDict(Name)("Expression").Split(CType(vbCrLf, Char)).ToList
-                Dim i = 0
-            Next
+            'For Each Name As String In SavedExpressionsDict.Keys
+            '    Me.Items.Add(New SavedExpression)
+            '    Dim tmpSE As SavedExpression = Me.Items(Me.Items.Count - 1)
+            '    tmpSE.Name = Name
+            '    tmpSE.Language = SavedExpressionsDict(Name)("Language")
+            '    'tmpSE.Comments = SavedExpressionsDict(Name)("Comments").Split(New String() {vbCrLf}, StringSplitOptions.RemoveEmptyEntries).ToList
+            '    'tmpSE.Expression = SavedExpressionsDict(Name)("Expression").Split(New String() {vbCrLf}, StringSplitOptions.RemoveEmptyEntries).ToList
+            '    tmpSE.Comments = SavedExpressionsDict(Name)("Comments").Split(CType(vbCrLf, Char)).ToList
+            '    tmpSE.Expression = SavedExpressionsDict(Name)("Expression").Split(CType(vbCrLf, Char)).ToList
+            '    Dim i = 0
+            'Next
 
-            Save()
+            'Save()
         End If
 
     End Sub
@@ -197,6 +202,9 @@ Public Class HCSavedExpressions
         If ShorthandText.StartsWith("SavedSetting:") Then
             Name = ShorthandText.Replace("SavedSetting:", "")
             SE = GetSavedExpression(Name)
+            If SE Is Nothing Then
+                MsgBox($"Expression not recognized: '{ShorthandText}'")
+            End If
         End If
 
         If ShorthandText.StartsWith("EXPRESSION_") Then
@@ -258,9 +266,11 @@ Public Class HCSavedExpressions
     End Function
 
     Public Function StringToListOfString(InString As String) As List(Of String)
-        Dim tmpInString As String = InString.Replace(vbLf, vbCrLf).Replace(vbCr, vbCrLf)
+        'Dim tmpInString As String = InString.Replace(vbLf, vbCrLf).Replace(vbCr, vbCrLf)
+        Dim tmpInString As String = InString.Replace(vbCrLf, Chr(182)).Replace(vbLf, Chr(182)).Replace(vbCr, Chr(182))
         Dim OutList As List(Of String)
-        OutList = tmpInString.Split(CChar(vbCrLf)).ToList
+        OutList = tmpInString.Split(Chr(182)).ToList
+        If OutList Is Nothing Then OutList = New List(Of String)
         Return OutList
     End Function
 

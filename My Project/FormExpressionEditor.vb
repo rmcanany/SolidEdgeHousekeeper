@@ -140,14 +140,17 @@ Public Class FormExpressionEditor
     End Function
     Private Function GetExpressionComments(Expression As String) As String
         Dim Comments As String = ""
-        Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
-        Comments = TrimCR(ExpressionAndComments(1))
+        'Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
+        'Comments = TrimCR(ExpressionAndComments(1))
+        Dim ExpressionAndComments = Expression.Split(CType("\\", Char))
+        If ExpressionAndComments.Count > 1 Then Comments = ExpressionAndComments(1).Trim()
         Return Comments
     End Function
     Private Function GetExpressionExpression(Expression As String) As String
         Dim TrimmedExpression As String = ""
-        Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
-        TrimmedExpression = TrimCR(ExpressionAndComments(0))
+        'Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
+        Dim ExpressionAndComments = Expression.Split(CType("\\", Char))
+        TrimmedExpression = ExpressionAndComments(0).Trim()
         Return TrimmedExpression
     End Function
 
@@ -220,7 +223,7 @@ Public Class FormExpressionEditor
         End If
 
         SavedExpressions.Save()
-
+        TextEditorFormula.Text = SavedExpressions.ListOfStringToString(tmpExpression)
     End Sub
 
     Private Sub DeleteExpressionItem(ExpressionName As String)
@@ -263,23 +266,31 @@ Public Class FormExpressionEditor
 
     End Sub
 
-    Private Function TrimCR(InString As String) As String
+    'Private Function TrimCR(InString As String) As String
 
-        'Leading carriage return
-        While InString(0) = vbCrLf Or InString(0) = vbCr Or InString(0) = vbLf
-            InString = InString.Substring(1)
-        End While
 
-        'Trailing carriage return
-        While InString(InString.Count - 1) = vbCrLf Or InString(InString.Count - 1) = vbCr Or InString(InString.Count - 1) = vbLf
-            InString = InString.Substring(0, InString.Count - 1)
-        End While
+    '    'If InString.Count > 0 Then
+    '    '    'Leading carriage return
+    '    '    While InString(0) = vbCrLf Or InString(0) = vbCr Or InString(0) = vbLf
+    '    '        InString = InString.Substring(1)
+    '    '    End While
 
-        'Add one trailing carriage return
-        InString = $"{InString}{vbCrLf}"
+    '    '    'Trailing carriage return
+    '    '    While InString(InString.Count - 1) = vbCrLf Or InString(InString.Count - 1) = vbCr Or InString(InString.Count - 1) = vbLf
+    '    '        InString = InString.Substring(0, InString.Count - 1)
+    '    '    End While
 
-        Return InString
-    End Function
+    '    'End If
+
+    '    ''Add one trailing carriage return
+    '    'InString = $"{InString}{vbCrLf}"
+
+    '    'Return InString
+
+    '    Dim OutString As String = InString.Trim()
+    '    OutString = $"{OutString}{vbCrLf}"
+    '    Return OutString
+    'End Function
 
 
     Private Sub FormNCalc_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -730,7 +741,7 @@ Public Class FormExpressionEditor
             If Not (CurrentExpression = "" Or CurrentExpression = "Anonymous") Then
                 A = InputBox("Expression name ?", "Save expression", CurrentExpression)
             Else
-                A = InputBox("Expression name ?", "Save expression", "")
+                A = InputBox("Expression name ?", "Save expression", "Enter name")
             End If
 
             If Not (A = "" Or A = "Anonymous") Then
@@ -754,6 +765,10 @@ Public Class FormExpressionEditor
 
                 CurrentExpression = A
                 Me.Text = "Expression editor - " & CurrentExpression
+                If Not DD_SavedExpressions.DropDownItems.ContainsKey(CurrentExpression) Then
+                    DD_SavedExpressions.DropDownItems.Add(CurrentExpression)
+                    DD_SavedExpressions.Text = CurrentExpression
+                End If
 
             Else
                 MsgBox($"Expression name not valid: '{A}'")

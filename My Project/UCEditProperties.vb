@@ -320,26 +320,6 @@ Public Class UCEditProperties
         Dim Result As DialogResult = FES.ShowDialog
 
         If Result = DialogResult.OK Then
-            'Dim tmpSavedExpressionsItems = FES.SavedExpressionsItems
-            'Dim tmpSavedExpressionName = FES.SavedExpressionName
-
-            'If Not tmpSavedExpressionName = "" And tmpSavedExpressionsItems.Keys.Contains(tmpSavedExpressionName) Then
-            '    Dim A As String = $"EXPRESSION_{FES.SavedExpresssionLanguage}{vbCrLf}{tmpSavedExpressionsItems(tmpSavedExpressionName)}"
-            '    A = A.Split(CType("\\", Char)).First
-            '    A = A.Replace(vbCrLf, Chr(182))  ' Chr(182) is the extended ascii paragraph symbol
-
-            '    'TextBox.Text = A
-
-            '    If A.ToLower.Contains("return") Then
-            '        Form_Main.ExpressionEditorLanguage = "VB"
-            '    Else
-            '        Form_Main.ExpressionEditorLanguage = "NCalc"
-            '    End If
-            '    'TextBox.Text = tmpSavedExpressionsItems(tmpSavedExpressionName)
-
-            '    TextBox.Text = $"SavedSetting:{tmpSavedExpressionName}"
-
-            'End If
             Form_Main.ExpressionEditorLanguage = FES.SavedExpresssionLanguage
             TextBox.Text = FES.OutputText
         End If
@@ -359,8 +339,7 @@ Public Class UCEditProperties
             Case "NCalc"
                 FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
             Case Else
-                MsgBox($"Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
-                Exit Sub
+                FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
         End Select
 
         'FEE.Formula = TextBox.Text

@@ -653,35 +653,44 @@ Public Class TaskSaveModelAs
                 Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, PartDocument)
                 FlatPatternModels = tmpSEDoc.FlatPatternModels
                 Models = tmpSEDoc.Models
+                'Dim ActiveEnvironment As String = SEApp.ActiveEnvironment
+                'If ActiveEnvironment = "SheetMetal" Then
+                '    FlatPatternModels = tmpSEDoc.FlatPatternModels
+                '    Models = tmpSEDoc.Models
+                'End If
             Case "psm"
                 Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                 FlatPatternModels = tmpSEDoc.FlatPatternModels
                 Models = tmpSEDoc.Models
         End Select
         Try
-            'FlatPatternModels = tmpSEDoc.FlatPatternModels
-            If FlatPatternModels IsNot Nothing AndAlso FlatPatternModels.Count > 0 Then
-                Dim FlatPattern As SolidEdgePart.FlatPatternModel
-                FlatPattern = FlatPatternModels.Item(1)
-                If FlatPattern.IsUpToDate Then
+            If FlatPatternModels IsNot Nothing Then
+                If FlatPatternModels.Count > 0 Then
+                    Dim FlatPattern As SolidEdgePart.FlatPatternModel
+                    FlatPattern = FlatPatternModels.Item(1)
+                    If FlatPattern.IsUpToDate Then
 
-                    Try
-                        'Models = tmpSEDoc.Models
-                        If Models IsNot Nothing AndAlso Models.Count > 0 Then
-                            Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
-                            SEApp.DoIdle()
-                        Else
-                            Me.TaskLogger.AddMessage("No model detected")
-                        End If
-                    Catch ex As Exception
-                        Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.", NewFilename))
-                        Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
-                    End Try
+                        Try
+                            If Models IsNot Nothing AndAlso Models.Count > 0 Then
+                                Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
+                                SEApp.DoIdle()
+                            Else
+                                Me.TaskLogger.AddMessage("No model detected")
+                            End If
+                        Catch ex As Exception
+                            Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.", NewFilename))
+                            If ex.Message.Contains("E_POINTER") Then
+                                Me.TaskLogger.AddMessage("Possibly the flat pattern was a 'Blank', not a 'Flatten'.")
+                            Else
+                                Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
+                            End If
+                        End Try
+                    Else
+                        Me.TaskLogger.AddMessage("Flat pattern reported out of date")
+                    End If
                 Else
-                    Me.TaskLogger.AddMessage("Flat pattern reported out of date")
+                    Me.TaskLogger.AddMessage("No flat pattern detected")
                 End If
-            Else
-                Me.TaskLogger.AddMessage("No flat pattern detected")
             End If
         Catch ex As Exception
             Me.TaskLogger.AddMessage("Error accessing a flat pattern model.")
@@ -1355,6 +1364,9 @@ Public Class TaskSaveModelAs
         HelpString += vbCrLf + vbCrLf + "Sheetmetal files (including `*.par` ""switched to"" sheetmetal) "
         HelpString += "have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. "
         HelpString += "The `DXF Flat` option saves the flat pattern of the sheet metal file. "
+        HelpString += "Note the file's flat pattern must be of type `Flatten`, not `Blank`. "
+        HelpString += "The program is not able to handle the latter.  You will have to do those manually. "
+        HelpString += "If such a condition is found, it is reported in the log file. "
 
         HelpString += vbCrLf + vbCrLf + "The `PDF Drawing` option saves the drawing of the sheet metal file. "
         HelpString += "The drawing must have the same name as the model, and be in the same directory. "

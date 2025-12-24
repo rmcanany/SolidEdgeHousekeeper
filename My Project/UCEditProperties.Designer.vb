@@ -43,24 +43,24 @@ Partial Class UCEditProperties
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ButtonInsertProperty, Me.ButtonInsertExpression, Me.ButtonEditExpression})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(162, 70)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 92)
         '
         'ButtonInsertProperty
         '
         Me.ButtonInsertProperty.Name = "ButtonInsertProperty"
-        Me.ButtonInsertProperty.Size = New System.Drawing.Size(161, 22)
+        Me.ButtonInsertProperty.Size = New System.Drawing.Size(180, 22)
         Me.ButtonInsertProperty.Text = "Insert property"
         '
         'ButtonInsertExpression
         '
         Me.ButtonInsertExpression.Name = "ButtonInsertExpression"
-        Me.ButtonInsertExpression.Size = New System.Drawing.Size(161, 22)
+        Me.ButtonInsertExpression.Size = New System.Drawing.Size(180, 22)
         Me.ButtonInsertExpression.Text = "Insert expression"
         '
         'ButtonEditExpression
         '
         Me.ButtonEditExpression.Name = "ButtonEditExpression"
-        Me.ButtonEditExpression.Size = New System.Drawing.Size(161, 22)
+        Me.ButtonEditExpression.Size = New System.Drawing.Size(180, 22)
         Me.ButtonEditExpression.Text = "Edit expression"
         '
         'ExTableLayoutPanel1

@@ -908,13 +908,25 @@ Public Class UtilsCommon
 
             ElseIf Instring.StartsWith("SavedSetting:") Then  ' eg SavedSetting:StdNummer
 
-                Dim SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String))
-                SavedExpressionsDict = UP.GetSavedExpressionsDict()
+                'Dim SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String))
+                'SavedExpressionsDict = UP.GetSavedExpressionsDict()
+
+                'Dim SaveName As String = Instring.Replace("SavedSetting:", "")
+                'If SavedExpressionsDict.Keys.Contains(SaveName) Then
+                '    ExpressionLanguage = SavedExpressionsDict(SaveName)("Language")
+                '    Instring = SavedExpressionsDict(SaveName)("Expression")
+                'End If
+
+                Dim SavedExpressions As New HCSavedExpressions
 
                 Dim SaveName As String = Instring.Replace("SavedSetting:", "")
-                If SavedExpressionsDict.Keys.Contains(SaveName) Then
-                    ExpressionLanguage = SavedExpressionsDict(SaveName)("Language")
-                    Instring = SavedExpressionsDict(SaveName)("Expression")
+                Dim tmpSE As SavedExpression = SavedExpressions.GetSavedExpression(SaveName)
+                If tmpSE IsNot Nothing Then
+                    ExpressionLanguage = tmpSE.Language
+                    Instring = SavedExpressions.ListOfStringToString(tmpSE.Expression)
+                Else
+                    MsgBox($"SubstitutePropertyFormula: Saved expression not found '{SaveName}'")
+                    Return Nothing
                 End If
             End If
 

@@ -125,7 +125,9 @@ See the [<ins>**Update Drawing Styles from Template Help Topic**</ins>](https://
 
 - Fixed an issue with `Edit Properties` where floating point type custom properties caused an exception when processed in Structured Storage (Thank you **@Monostre!**).
 
-- Fixed a regression with `Set Document Status` (Thank you **@TeeVar!**).
+- Fixed an issue with `Save Model As` where `*.par` files were not being saved to `*.dxf Flat` even though they contained flat patterns (Thank you **@TeeVar!**).
+
+- Fixed a regression with `Set Document Status` (Thank you again **@TeeVar!**).
 
 - Fixed a regression when adding a new property with the `Edit Properties` command (Thank you **@[Robin BIomberg]** and **@Monostre!**)
 

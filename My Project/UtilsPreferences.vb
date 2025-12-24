@@ -418,119 +418,119 @@ Public Class UtilsPreferences
         End If
     End Sub
 
-    Public Function GetSavedExpressionsDict() As Dictionary(Of String, Dictionary(Of String, String))
+    'Public Function GetSavedExpressionsDict() As Dictionary(Of String, Dictionary(Of String, String))
 
-        Dim SavedExpressionsDict As New Dictionary(Of String, Dictionary(Of String, String))
-        'Format
-        '{"Hi_Mom":
-        '    {"Language": "VB",
-        '     "Comments": "Simple test" + Chr(182) + "to try it out."
-        '     "Expression": "Return "Hi Mom!""
-        '    },
-        ' "Example VB ToUpper":
-        '    {"Language": "VB",
-        '     "Comments": "Converts text to upper case"
-        '     "Expression": "Return "%{System.Title}".ToUpper()"
-        '    }
-        '}
+    '    Dim SavedExpressionsDict As New Dictionary(Of String, Dictionary(Of String, String))
+    '    'Format
+    '    '{"Hi_Mom":
+    '    '    {"Language": "VB",
+    '    '     "Comments": "Simple test" + Chr(182) + "to try it out."
+    '    '     "Expression": "Return "Hi Mom!""
+    '    '    },
+    '    ' "Example VB ToUpper":
+    '    '    {"Language": "VB",
+    '    '     "Comments": "Converts text to upper case"
+    '    '     "Expression": "Return "%{System.Title}".ToUpper()"
+    '    '    }
+    '    '}
 
-        Dim SavedExpressionsFilename As String = GetSavedExpressionsFilename(CheckExisting:=True) ' saved_expressions.json
+    '    Dim SavedExpressionsFilename As String = GetSavedExpressionsFilename(CheckExisting:=True) ' saved_expressions.json
 
-        If Not SavedExpressionsFilename = "" Then
-            Dim JSONString As String = IO.File.ReadAllText(SavedExpressionsFilename)
-            SavedExpressionsDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
+    '    If Not SavedExpressionsFilename = "" Then
+    '        Dim JSONString As String = IO.File.ReadAllText(SavedExpressionsFilename)
+    '        SavedExpressionsDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
 
-        Else
-            SavedExpressionsFilename = IO.Path.ChangeExtension(GetSavedExpressionsFilename(CheckExisting:=False), ".txt")
-            If Not IO.File.Exists(SavedExpressionsFilename) Then Return Nothing
+    '    Else
+    '        SavedExpressionsFilename = IO.Path.ChangeExtension(GetSavedExpressionsFilename(CheckExisting:=False), ".txt")
+    '        If Not IO.File.Exists(SavedExpressionsFilename) Then Return Nothing
 
-            Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
-            Dim SavedExpressions = SR.ReadToEnd
+    '        Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
+    '        Dim SavedExpressions = SR.ReadToEnd
 
-            SR.Close()
+    '        SR.Close()
 
-            '[EXP]
-            'Example toUpper()
-            '[EXP_TEXT]
-            'toUpper('%{System.Title}')
-            '\\Any text will be converted in UPPERCASE
-            '[EXP]
-            'Example VB ToUpper
-            '[EXP_TEXT]
-            'Return "%{System.Title}".ToUpper()
-            '\\Any text will be converted in UPPERCASE
-            '...
+    '        '[EXP]
+    '        'Example toUpper()
+    '        '[EXP_TEXT]
+    '        'toUpper('%{System.Title}')
+    '        '\\Any text will be converted in UPPERCASE
+    '        '[EXP]
+    '        'Example VB ToUpper
+    '        '[EXP_TEXT]
+    '        'Return "%{System.Title}".ToUpper()
+    '        '\\Any text will be converted in UPPERCASE
+    '        '...
 
-            Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
+    '        Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
 
-            For Each Expression In Expressions
+    '        For Each Expression In Expressions
 
-                Dim ExpressionItems = Expression.Split(New String() {"[EXP_TEXT]"}, StringSplitOptions.RemoveEmptyEntries)
+    '            Dim ExpressionItems = Expression.Split(New String() {"[EXP_TEXT]"}, StringSplitOptions.RemoveEmptyEntries)
 
-                If ExpressionItems.Length = 2 Then
+    '            If ExpressionItems.Length = 2 Then
 
-                    Dim SaveName As String = ExpressionItems(0).Replace(vbCrLf, "")
-                    'Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char)).First
-                    Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char))
-                    Dim SaveExpression As String = TrimCR(ExpressionAndComments(0))
-                    Dim SaveComments As String = ""
-                    If ExpressionAndComments.Count > 1 Then
-                        For i As Integer = 1 To ExpressionAndComments.Count - 1
-                            SaveComments = $"{SaveComments}{ExpressionAndComments(i)}{vbCrLf}"
-                        Next
-                    End If
-                    SaveComments = TrimCR(SaveComments)
-                    Dim SaveLanguage As String = ""
-                    If SaveExpression.ToLower.Contains("return") Then
-                        SaveLanguage = "VB"
-                    Else
-                        SaveLanguage = "NCalc"
-                    End If
+    '                Dim SaveName As String = ExpressionItems(0).Replace(vbCrLf, "")
+    '                'Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char)).First
+    '                Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char))
+    '                Dim SaveExpression As String = TrimCR(ExpressionAndComments(0))
+    '                Dim SaveComments As String = ""
+    '                If ExpressionAndComments.Count > 1 Then
+    '                    For i As Integer = 1 To ExpressionAndComments.Count - 1
+    '                        SaveComments = $"{SaveComments}{ExpressionAndComments(i)}{vbCrLf}"
+    '                    Next
+    '                End If
+    '                SaveComments = TrimCR(SaveComments)
+    '                Dim SaveLanguage As String = ""
+    '                If SaveExpression.ToLower.Contains("return") Then
+    '                    SaveLanguage = "VB"
+    '                Else
+    '                    SaveLanguage = "NCalc"
+    '                End If
 
-                    SavedExpressionsDict(SaveName) = New Dictionary(Of String, String)
-                    SavedExpressionsDict(SaveName)("Language") = SaveLanguage
-                    SavedExpressionsDict(SaveName)("Comments") = SaveComments
-                    SavedExpressionsDict(SaveName)("Expression") = SaveExpression
-                End If
-            Next
+    '                SavedExpressionsDict(SaveName) = New Dictionary(Of String, String)
+    '                SavedExpressionsDict(SaveName)("Language") = SaveLanguage
+    '                SavedExpressionsDict(SaveName)("Comments") = SaveComments
+    '                SavedExpressionsDict(SaveName)("Expression") = SaveExpression
+    '            End If
+    '        Next
 
-            SaveSavedExpressionsDict(SavedExpressionsDict)
-        End If
+    '        SaveSavedExpressionsDict(SavedExpressionsDict)
+    '    End If
 
 
-        Return SavedExpressionsDict
-    End Function
+    '    Return SavedExpressionsDict
+    'End Function
 
-    Public Sub SaveSavedExpressionsDict(
-        SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String)))
+    'Public Sub SaveSavedExpressionsDict(
+    '    SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String)))
 
-        Dim Filename = GetSavedExpressionsFilename(CheckExisting:=False)
+    '    Dim Filename = GetSavedExpressionsFilename(CheckExisting:=False)
 
-        Dim JSONString As String = JsonConvert.SerializeObject(SavedExpressionsDict)
-        IO.File.WriteAllText(Filename, JSONString)
+    '    Dim JSONString As String = JsonConvert.SerializeObject(SavedExpressionsDict)
+    '    IO.File.WriteAllText(Filename, JSONString)
 
-    End Sub
+    'End Sub
 
-    Public Function TrimCR(InString As String) As String
+    'Public Function TrimCR(InString As String) As String
 
-        If InString.Count > 2 Then
-            'Leading carriage returns
-            While InString(0) = vbCrLf Or InString(0) = vbCr Or InString(0) = vbLf
-                InString = InString.Substring(1)
-            End While
+    '    If InString.Count > 2 Then
+    '        'Leading carriage returns
+    '        While InString(0) = vbCrLf Or InString(0) = vbCr Or InString(0) = vbLf
+    '            InString = InString.Substring(1)
+    '        End While
 
-            'Trailing carriage returns
-            While InString(InString.Count - 1) = vbCrLf Or InString(InString.Count - 1) = vbCr Or InString(InString.Count - 1) = vbLf
-                InString = InString.Substring(0, InString.Count - 1)
-            End While
+    '        'Trailing carriage returns
+    '        While InString(InString.Count - 1) = vbCrLf Or InString(InString.Count - 1) = vbCr Or InString(InString.Count - 1) = vbLf
+    '            InString = InString.Substring(0, InString.Count - 1)
+    '        End While
 
-            'Add one trailing carriage return
-            InString = $"{InString}{vbCrLf}"
+    '        'Add one trailing carriage return
+    '        InString = $"{InString}{vbCrLf}"
 
-        End If
+    '    End If
 
-        Return InString
-    End Function
+    '    Return InString
+    'End Function
 
 
 
@@ -1212,6 +1212,8 @@ Public Class UtilsPreferences
 
         Return Inactive
     End Function
+
+
 
     '###### HARD CODED PATH ######
     Public Function GetHardCodedPath() As String
