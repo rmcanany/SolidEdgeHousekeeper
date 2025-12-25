@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "25"  ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "26"  ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -1278,7 +1278,7 @@ Public Class Form_Main
         If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
 
         If Not (Me.ExpressionEditorLanguage = "VB" Or Me.ExpressionEditorLanguage = "NCalc") Then
-            Me.ExpressionEditorLanguage = "NCalc"
+            Me.ExpressionEditorLanguage = "VB"
         End If
 
         If Me.TCItemIDRx Is Nothing OrElse Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"

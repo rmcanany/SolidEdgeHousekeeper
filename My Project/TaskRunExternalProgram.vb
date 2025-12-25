@@ -1,5 +1,5 @@
 ﻿Option Strict On
-Imports System.Security.AccessControl
+
 Imports FastColoredTextBoxNS
 
 Public Class TaskRunExternalProgram
@@ -268,36 +268,25 @@ Public Class TaskRunExternalProgram
 
         Try
             ' ############## SNIPPET CODE START ##############
+            'string title = "war and peace";
 
-            Dim FlatPatternModels As SolidEdgePart.FlatPatternModels = Nothing
-            Dim Models As SolidEdgePart.Models = Nothing
+            'TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
-            Select Case DocType
-                Case ".par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                    FlatPatternModels = tmpSEDoc.FlatPatternModels
-                    Models = tmpSEDoc.Models
-                Case ".psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                    FlatPatternModels = tmpSEDoc.FlatPatternModels
-                    Models = tmpSEDoc.Models
-            End Select
+            'title = textInfo.ToTitleCase(title); 
+            'Console.WriteLine(title) ; //War And Peace
 
-            If FlatPatternModels.Count > 1 Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("FlatPatternModels.Count = {0}", FlatPatternModels.Count))
-            End If
-            If FlatPatternModels.Count = 1 Then
-                Dim FlatPatternModel As SolidEdgePart.FlatPatternModel
-                FlatPatternModel = FlatPatternModels.Item(1)
+            '//When text is ALL UPPERCASE...
+            'title = "WAR AND PEACE" ;
 
-                Dim FlatPatterns As SolidEdgePart.FlatPatterns
-                FlatPatterns = FlatPatternModel.FlatPatterns
-                If FlatPatterns.Count > 1 Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("FlatPatterns.Count = {0}", FlatPatterns.Count))
-                End If
-            End If
+            'title = textInfo.ToTitleCase(title); 
+            'Console.WriteLine(title) ; //WAR AND PEACE
+
+            '//You need to call ToLower to make it work
+            'title = textInfo.ToTitleCase(title.ToLower()); 
+            'Console.WriteLine(title) ; //War And Peace
+
+
+
             ' ############## SNIPPET CODE END ##############
 
         Catch ex As Exception

@@ -179,6 +179,23 @@ Public Class UCTaskControl
 
     End Sub
 
+    Private Sub InsertExpressionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertExpressionToolStripMenuItem.Click
+
+        Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
+        Dim CaretPosition = TextBox.Text.Length
+
+
+        Dim FES As New FormExpressionSelector
+
+        Dim Result As DialogResult = FES.ShowDialog
+
+        If Result = DialogResult.OK Then
+            Form_Main.ExpressionEditorLanguage = FES.SavedExpresssionLanguage
+            TextBox.Text = FES.OutputText
+        End If
+
+    End Sub
+
     Private Sub ExpressionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpressionEditorToolStripMenuItem.Click
         'MsgBox("In UCTaskControl.vb got a ExpressionEditorToolStripMenuItem.Click event")
 
@@ -215,7 +232,7 @@ Public Class UCTaskControl
         Dim Result As DialogResult = FEE.ShowDialog()
 
         If Result = DialogResult.OK Then
-            If Not FEE.SnippetFormula = "" Then
+            If Not FEE.OutputText = "" Then
 
                 Select Case FEE.TextEditorFormula.Language
                     Case FastColoredTextBoxNS.Language.VB

@@ -195,7 +195,6 @@ Public Class HCSavedExpressions
         ' SavedSetting:StdNummer
         ' EXPRESSION_VB¶Return "%{System.Title}".ToUpper¶
 
-
         Dim SE As SavedExpression = Nothing
         Dim Name As String
 
@@ -203,7 +202,7 @@ Public Class HCSavedExpressions
             Name = ShorthandText.Replace("SavedSetting:", "")
             SE = GetSavedExpression(Name)
             If SE Is Nothing Then
-                MsgBox($"Expression not recognized: '{ShorthandText}'")
+                MsgBox($"Expression name not recognized: '{Name}'")
             End If
         End If
 
@@ -221,10 +220,6 @@ Public Class HCSavedExpressions
                         tmpExpression = $"{tmpExpression}{Line}{vbCrLf}"
                     Next
 
-                    'If tmpFormula.Contains(tmpExpression) Or tmpExpression.Contains(tmpFormula) Then
-                    '    SE = tmpSE
-                    '    Exit For
-                    'End If
                     Dim tmptmpFormula = tmpFormula.ToLower.Replace(vbCrLf, "").Replace(vbLf, "").Replace(vbCr, "")
                     Dim tmptmpExpression = tmpExpression.ToLower.Replace(vbCrLf, "").Replace(vbLf, "").Replace(vbCr, "")
                     If tmptmpFormula.Contains(tmptmpExpression) Or tmptmpExpression.Contains(tmptmpFormula) Then

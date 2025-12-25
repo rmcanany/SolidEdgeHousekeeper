@@ -1,7 +1,6 @@
 ﻿Option Strict On
 
 Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports SolidEdgePart
 
 Public Class TaskSaveModelAs
 
@@ -514,7 +513,7 @@ Public Class TaskSaveModelAs
         If Not Me.UseSubdirectoryFormula Then
             NewSubDirectoryName = ""
         Else
-            If Me.Formula.StartsWith("EXPRESSION_") Then
+            If Me.Formula.StartsWith("EXPRESSION_") Or Me.Formula.StartsWith("SavedSetting:") Then
                 NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger, True)
                 'NewSubDirectoryName = NewSubDirectoryName.Replace("/", "\")
 
@@ -561,7 +560,7 @@ Public Class TaskSaveModelAs
         If Not Me.ChangeFilename Then
             NewFilenameWOExt = OldFilenameWOExt
         Else
-            If Me.FilenameFormula.StartsWith("EXPRESSION_") Then
+            If Me.FilenameFormula.StartsWith("EXPRESSION_") Or Me.FilenameFormula.StartsWith("SavedSetting:") Then
                 NewFilenameWOExt = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData, TaskLogger, True)
 
                 If NewFilenameWOExt Is Nothing Then
@@ -650,7 +649,7 @@ Public Class TaskSaveModelAs
 
         Select Case DocType
             Case "par"
-                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, PartDocument)
+                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
                 FlatPatternModels = tmpSEDoc.FlatPatternModels
                 Models = tmpSEDoc.Models
                 'Dim ActiveEnvironment As String = SEApp.ActiveEnvironment

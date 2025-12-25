@@ -1,6 +1,4 @@
 ﻿Option Strict On
-Imports Microsoft.PowerShell.Cim
-Imports SolidEdgePart
 
 Public Class TaskShowHideConstructions
 

@@ -36,6 +36,7 @@ Partial Class UCTaskControl
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExpressionEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.InsertExpressionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TLP.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -216,9 +217,9 @@ Partial Class UCTaskControl
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem, Me.ExpressionEditorToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem, Me.InsertExpressionToolStripMenuItem, Me.ExpressionEditorToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 70)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 92)
         '
         'InsertPropertyToolStripMenuItem
         '
@@ -231,6 +232,12 @@ Partial Class UCTaskControl
         Me.ExpressionEditorToolStripMenuItem.Name = "ExpressionEditorToolStripMenuItem"
         Me.ExpressionEditorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ExpressionEditorToolStripMenuItem.Text = "Expression editor"
+        '
+        'InsertExpressionToolStripMenuItem
+        '
+        Me.InsertExpressionToolStripMenuItem.Name = "InsertExpressionToolStripMenuItem"
+        Me.InsertExpressionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.InsertExpressionToolStripMenuItem.Text = "Insert expression"
         '
         'UCTaskControl
         '
@@ -265,4 +272,5 @@ Partial Class UCTaskControl
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
     Friend WithEvents InsertPropertyToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExpressionEditorToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents InsertExpressionToolStripMenuItem As ToolStripMenuItem
 End Class

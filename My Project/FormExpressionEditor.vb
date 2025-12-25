@@ -1,12 +1,9 @@
 ﻿Option Strict On
 
 Imports System.Text.RegularExpressions
-'Imports System.Windows.Media.Media3D
 Imports FastColoredTextBoxNS
-Imports PanoramicData.NCalcExtensions
 Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports System.Diagnostics.Eventing.Reader
-Imports System.Management.Automation
+Imports PanoramicData.NCalcExtensions
 
 Public Class FormExpressionEditor
 
