@@ -46,7 +46,8 @@ Public Class FormPropertyInputEditor
 
     Private Function CheckInputs() As Boolean
         Dim InputsOK As Boolean = True
-        Dim s As String = ""
+        Dim s As String = "" ' Errors
+        Dim w As String = "" ' Warnings
         Dim indent As String = "    "
 
         Dim UtilsCommon As New UtilsCommon
@@ -85,9 +86,33 @@ Public Class FormPropertyInputEditor
 
                 End If
 
+                If UC.ReplaceSearch = "EX" Then
+                    If Not (UC.ReplaceString.StartsWith("EXPRESSION_") Or UC.ReplaceString.StartsWith("SavedSetting:")) Then
+                        s = String.Format("{0}{1}'{2}' is not valid Expression syntax{3}", s, indent, UC.ReplaceString, vbCrLf)
+                    End If
+                Else
+                    If (UC.ReplaceString.StartsWith("EXPRESSION_") Or UC.ReplaceString.StartsWith("SavedSetting:")) Then
+                        w = String.Format("{0}{1}Usually a '{2}' search does not use Expression syntax '{3}'{4}", w, indent, UC.ReplaceSearch, UC.ReplaceString, vbCrLf)
+                    End If
+                End If
+
+                If Not UC.FindSearch = "WC" Then
+                    If UC.FindString = "*" Then
+                        w = String.Format("{0}{1}Usually a find string '{2}' is used with a 'WC' search{3}", w, indent, UC.FindString, vbCrLf)
+                    End If
+                End If
+
             End If
 
         Next
+
+        If Not w = "" Then
+            w = String.Format("Warning{0}{1}{2}Do you wish to continue?", vbCrLf, w, vbCrLf)
+            Dim Result = MsgBox(w, vbYesNo)
+            If Result = MsgBoxResult.No Then
+                InputsOK = False
+            End If
+        End If
 
         If Not s = "" Then
             InputsOK = False
@@ -350,18 +375,6 @@ Public Class FormPropertyInputEditor
                 ComboBoxSavedSettings.Text = Key
             End If
         End If
-
-        '' Update ComboboxSavedSettings.Text with a saved name if it exists.
-        'If Me.SavedSettingsDict IsNot Nothing AndAlso Me.SavedSettingsDict.Keys.Count > 0 Then
-        '    For Each SavedName As String In Me.SavedSettingsDict.Keys
-        '        Dim d As Dictionary(Of String, Dictionary(Of String, String)) = Me.SavedSettingsDict(SavedName)
-        '        Dim tmpJSONString As String = JsonConvert.SerializeObject(d)
-        '        If tmpJSONString = Me.JSONString Then
-        '            ComboBoxSavedSettings.Text = SavedName
-        '            Exit For
-        '        End If
-        '    Next
-        'End If
 
         ' Check for imported template properties
         Dim tf As Boolean

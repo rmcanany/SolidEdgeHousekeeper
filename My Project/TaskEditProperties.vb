@@ -489,15 +489,17 @@ Public Class TaskEditProperties
             If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
         End If
 
-        Dim OriginalReplaceString As String = ""
-        If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString  ' Just for error reporting.
-        ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, ReplaceSearchType = "EX")
-        If ReplaceString Is Nothing Then
-            If Not ReplaceSearchType = "EX" Then
-                s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
-                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
-            Else
+        If ReplaceSearchType = "EX" Then
+            Dim OriginalReplaceString As String = ReplaceString  ' Just for error reporting.
+            ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, True)
+            If ReplaceString Is Nothing OrElse ReplaceString.Contains("<Nothing>") Then
                 s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
+                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+            End If
+        Else
+            ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger)
+            If ReplaceString Is Nothing Then
+                s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
                 If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
             End If
         End If
@@ -554,16 +556,19 @@ Public Class TaskEditProperties
                     If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End If
 
-                Dim OriginalReplaceString As String = ""
-                If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString
-                ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, ReplaceSearchType = "EX")
-                If ReplaceString Is Nothing Then
-                    Proceed = False
-                    If Not ReplaceSearchType = "EX" Then
-                        s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
-                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
-                    Else
+                If ReplaceSearchType = "EX" Then
+                    Dim OriginalReplaceString As String = ReplaceString
+                    ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, True)
+                    If ReplaceString Is Nothing OrElse ReplaceString.Contains("<Nothing>") Then
+                        Proceed = False
                         s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
+                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+                    End If
+                Else
+                    ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger)
+                    If ReplaceString Is Nothing Then
+                        Proceed = False
+                        s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                     End If
                 End If

@@ -742,7 +742,7 @@ Public Class UtilsFileList
                 FileExtension = FileWildcard
         End Select
 
-        FMain.TextBoxStatus.Text = "Getting files..."
+        'FMain.TextBoxStatus.Text = "Getting files..."
 
         If ListViewFiles.SelectedItems.Count > 0 Then
             For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1

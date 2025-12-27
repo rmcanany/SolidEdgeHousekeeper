@@ -1,7 +1,6 @@
 ﻿Option Strict On
 
 Imports Newtonsoft.Json
-'Imports SolidEdgePart
 
 Public Class UtilsPreferences
 
