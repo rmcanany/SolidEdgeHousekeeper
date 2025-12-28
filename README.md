@@ -1218,7 +1218,11 @@ You can optionally rename the file or create subdirectories using a formula simi
 - `Project %{System.Project Name}` 
 - `%{System.Material}\%{System.Sheet Metal Gage}` 
 
-Another option to create the new file or subdirectory name is to use the Expression Editor.  This can be especially handy if an `If` statement is needed for any reason.  For details on the Expression Editor, refer to the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  You'll have to scroll down a bit to see it.
+One more thing about those properties.  Some aren't "real properties", but rather `Exposed variables`.  In those cases, you have to refer to the `Exposed name`. That can get tricky for variables automatically exposed by Solid Edge, as some utilize the local language.  
+
+One recent example is the sheet metal variable `MaterialThickness`. In English it's exposed as `%{Custom.Material Thickness}`, in Polish it's `%{Custom.Grubość materiału}`, etc. It gets even a bit more complicated.  I had a recent report that `%{Custom.Material Thickness}` works even if Polish is in use, but only if the file was a `*.par` `Switched to PSM`.  Anyway, what's important is to check the `Variable Table` and see what the `Exposed Name` actually is.  
+
+Another option to create the new file or subdirectory name is to use the Expression Editor.  This can be especially handy if an `If` statement is needed for any reason. For details on the Expression Editor, refer to the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  You'll have to scroll down a bit to see it.
 
 You can enter a subdirectory formula even if `Original directory` is enabled. In that case, it is interpreted as a subdirectory under the original directory. 
 

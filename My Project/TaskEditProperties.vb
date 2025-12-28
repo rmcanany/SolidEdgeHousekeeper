@@ -492,7 +492,7 @@ Public Class TaskEditProperties
         If ReplaceSearchType = "EX" Then
             Dim OriginalReplaceString As String = ReplaceString  ' Just for error reporting.
             ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, True)
-            If ReplaceString Is Nothing OrElse ReplaceString.Contains("<Nothing>") Then
+            If ReplaceString Is Nothing OrElse ReplaceString.ToLower.Contains("<nothing>") Then
                 s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
                 If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
             End If
@@ -559,7 +559,7 @@ Public Class TaskEditProperties
                 If ReplaceSearchType = "EX" Then
                     Dim OriginalReplaceString As String = ReplaceString
                     ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, True)
-                    If ReplaceString Is Nothing OrElse ReplaceString.Contains("<Nothing>") Then
+                    If ReplaceString Is Nothing OrElse ReplaceString.ToLower.Contains("<nothing>") Then
                         Proceed = False
                         s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)

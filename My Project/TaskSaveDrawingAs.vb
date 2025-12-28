@@ -380,7 +380,7 @@ Public Class TaskSaveDrawingAs
             If Me.Formula.StartsWith("EXPRESSION_") Or Me.Formula.StartsWith("SavedSetting:") Then
                 NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger, True)
 
-                If NewSubDirectoryName Is Nothing OrElse NewSubDirectoryName.Contains("<Nothing>") Then
+                If NewSubDirectoryName Is Nothing OrElse NewSubDirectoryName.ToLower.Contains("<nothing>") Then
                     Success = False
                     Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
                 Else
@@ -417,7 +417,7 @@ Public Class TaskSaveDrawingAs
             If Me.FilenameFormula.StartsWith("EXPRESSION_") Or Me.Formula.StartsWith("SavedSetting:") Then
                 NewFilenameWOExt = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData, TaskLogger, True)
 
-                If NewFilenameWOExt Is Nothing OrElse NewFilenameWOExt.Contains("<Nothing>") Then
+                If NewFilenameWOExt Is Nothing OrElse NewFilenameWOExt.ToLower.Contains("<nothing>") Then
                     Success = False
                     Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
                 Else

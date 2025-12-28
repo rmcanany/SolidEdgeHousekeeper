@@ -516,7 +516,7 @@ Public Class TaskSaveModelAs
             If Me.Formula.StartsWith("EXPRESSION_") Or Me.Formula.StartsWith("SavedSetting:") Then
                 NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger, True)
 
-                If NewSubDirectoryName Is Nothing OrElse NewSubDirectoryName.Contains("<Nothing>") Then
+                If NewSubDirectoryName Is Nothing OrElse NewSubDirectoryName.ToLower.Contains("<nothing>") Then
                     Success = False
                     Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
                 Else
@@ -553,7 +553,7 @@ Public Class TaskSaveModelAs
             If Me.FilenameFormula.StartsWith("EXPRESSION_") Or Me.FilenameFormula.StartsWith("SavedSetting:") Then
                 NewFilenameWOExt = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.FilenameFormula, Me.PropertiesData, TaskLogger, True)
 
-                If NewFilenameWOExt Is Nothing OrElse NewFilenameWOExt.Contains("<Nothing>") Then
+                If NewFilenameWOExt Is Nothing OrElse NewFilenameWOExt.ToLower.Contains("<nothing>") Then
                     Success = False
                     Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
                 Else
@@ -680,6 +680,8 @@ Public Class TaskSaveModelAs
                 Else
                     Me.TaskLogger.AddMessage("No flat pattern detected")
                 End If
+            Else
+                Me.TaskLogger.AddMessage("No flat pattern detected")
             End If
         Catch ex As Exception
             Me.TaskLogger.AddMessage("Error accessing a flat pattern model.")
@@ -1332,8 +1334,18 @@ Public Class TaskSaveModelAs
         HelpString += vbCrLf + "- `Project %{System.Project Name}` "
         HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "
 
+        HelpString += vbCrLf + vbCrLf + "One more thing about those properties.  Some aren't ""real properties"", "
+        HelpString += "but rather `Exposed variables`.  In those cases, you have to refer to the `Exposed name`. "
+        HelpString += "That can get tricky for variables automatically exposed by Solid Edge, as some utilize the local language.  "
+
+        HelpString += vbCrLf + vbCrLf + "One recent example is the sheet metal variable `MaterialThickness`. "
+        HelpString += "In English it's exposed as `%{Custom.Material Thickness}`, in Polish it's `%{Custom.Grubość materiału}`, etc. "
+        HelpString += "It gets even a bit more complicated.  I had a recent report that `%{Custom.Material Thickness}` "
+        HelpString += "works even if Polish is in use, but only if the file was a `*.par` `Switched to PSM`.  "
+        HelpString += "Anyway, what's important is to check the `Variable Table` and see what the `Exposed Name` actually is.  "
+
         HelpString += vbCrLf + vbCrLf + "Another option to create the new file or subdirectory name is to use the Expression Editor.  "
-        HelpString += "This can be especially handy if an `If` statement is needed for any reason.  "
+        HelpString += "This can be especially handy if an `If` statement is needed for any reason. "
         HelpString += "For details on the Expression Editor, refer to the "
         HelpString += "[<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties).  "
         HelpString += "You'll have to scroll down a bit to see it."
