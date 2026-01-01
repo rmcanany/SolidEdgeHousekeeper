@@ -572,11 +572,15 @@ Public Class HCStructuredStorageDoc
     End Function
 
 
-    Private Function ProcessFormula(Formula As String, ErrorLogger As Logger, IsExpression As Boolean) As String
+    Private Function ProcessFormula(
+        Formula As String,
+        ErrorLogger As Logger,
+        IsExpression As Boolean
+        ) As String
+
         Dim DocValue As String = Nothing
 
         Dim UC As New UtilsCommon
-        Dim UFC As New UtilsFilenameCharmap
 
         Dim PropertySetName As String
         Dim PropertyName As String
@@ -596,8 +600,6 @@ Public Class HCStructuredStorageDoc
         End If
 
         If (PropertySetName = "Server") And (PropertyName = "Query") Then
-            'Return Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
-
             Dim tmpServerQuery = SubstitutePropertyFormulas(Form_Main.ServerQuery, ErrorLogger)
             Return Form_Main.ExecuteQuery(FullName, tmpServerQuery, ModelIdx).Replace(vbCrLf, " ")
         End If
@@ -621,10 +623,6 @@ Public Class HCStructuredStorageDoc
                     Else
                         DocValue = "<Nothing>"
                     End If
-                Else
-                    'If ValidFilenameRequired Then
-                    '    DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
-                    'End If
                 End If
 
             Else
@@ -661,20 +659,10 @@ Public Class HCStructuredStorageDoc
                     Else
                         DocValue = "<Nothing>"
                     End If
-                Else
-                    'If ValidFilenameRequired Then
-                    '    DocValue = UFC.SubstituteIllegalCharacters(DocValue, New List(Of String))
-                    'End If
                 End If
 
                 SSDoc.Close()
             End If
-
-        Else
-            ' Changing back to returning Nothing.
-            ' This routine is called by SubstitutePropertyFormulas, which is used in many places.
-            ' They all already have ways of handling return values of Nothing.
-            'DocValue = "*** PROPERTY NOT FOUND ***" '<-------- IS THIS ACCETTABLE ?
 
         End If
 

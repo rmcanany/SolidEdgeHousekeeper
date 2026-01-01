@@ -225,6 +225,7 @@ Public Class HCPropertiesData
                         Prop = CType(PropertySet.Item(i), SolidEdgeFileProperties.Property)
                         PropName = Prop.Name
                         PropID = Prop.ID
+
                     Catch ex As Exception
                         Dim s = "Error building PropertiesData: "
                         s = String.Format("{0} PropertySetName '{1}', Item Number '{2}', PropName '{3}'", s, PropertySetActualName, PropID, PropName)
