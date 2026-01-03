@@ -1049,12 +1049,15 @@ Public Class Form_Main
 
         'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
         'string[] args = Environment.GetCommandLineArgs();
-        Dim Args = Environment.GetCommandLineArgs.ToList
-        Dim s As String = ""
-        For Each s1 As String In Args
-            s = $"{s}{s1}{vbCrLf}"
-        Next
-        MsgBox(s)
+        Dim Args As List(Of String) = Environment.GetCommandLineArgs.ToList
+        If Args.Count > 1 Then
+            Dim s As String = ""
+            For Each s1 As String In Args
+                s = $"{s}{s1}{vbCrLf}"
+            Next
+            MsgBox($"Incoming arguments:{vbCrLf}{s}")
+
+        End If
     End Sub
 
     Private Sub Startup(Presets As Boolean)

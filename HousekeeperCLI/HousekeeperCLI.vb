@@ -52,15 +52,17 @@ Module HousekeeperCLI
         P.WaitForExit()
         Dim ExitCode = P.ExitCode
 
-        Console.WriteLine(Args.Count)
+        Console.WriteLine("RECEIVED ARGUMENTS")
         For Each s As String In Args
             Console.WriteLine(s)
         Next
 
+        Console.WriteLine("EXISTING LOG FILES")
         For Each s As String In FoundFiles
             Console.WriteLine(s)
         Next
 
+        Console.WriteLine("NEW LOG FILES")
         For Each s As String In NewFoundFiles
             If Not FoundFiles.Contains(s) Then
                 Console.WriteLine(s)
