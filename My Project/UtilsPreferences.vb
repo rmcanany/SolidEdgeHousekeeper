@@ -45,6 +45,7 @@ Public Class UtilsPreferences
         SkipProps.AddRange({"version", "previewversion", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
         SkipProps.AddRange({"hcdebuglogger", "savedexpressions"})
+        SkipProps.AddRange({"cliactive", "clipreset", "clifilelistname"})
 
         If SavingPresets And Not FMain.PresetsSaveFileFilters Then
             SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})

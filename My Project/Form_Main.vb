@@ -1022,6 +1022,10 @@ Public Class Form_Main
     Public Property ActiveFile As String
     Public Property ActiveFiles As List(Of String)
 
+    Public Property CLIActive As Boolean = False
+    Public Property CLIPreset As String = ""
+    Public Property CLIFileListName As String = ""
+
     'DESCRIPTION
     'Solid Edge Housekeeper
     'Robert McAnany 2020-2026
@@ -1051,13 +1055,49 @@ Public Class Form_Main
         'string[] args = Environment.GetCommandLineArgs();
         Dim Args As List(Of String) = Environment.GetCommandLineArgs.ToList
         If Args.Count > 1 Then
-            Dim s As String = ""
-            For Each s1 As String In Args
-                s = $"{s}{s1}{vbCrLf}"
-            Next
-            MsgBox($"Incoming arguments:{vbCrLf}{s}")
+            If Args.Count = 5 Then
+                For i As Integer = 1 To 3
+                    If Args(i).ToLower = "-l" Then
+                        Me.CLIFileListName = Args(i + 1)
+                    End If
+                    If Args(i).ToLower = "-p" Then
+                        Me.CLIPreset = Args(i + 1)
+                    End If
+                Next
+            Else
+                Dim s As String = ""
+                Dim c As Integer = 1
+                For Each s1 As String In Args
+                    s = $"    {c}: {s}{s1}{vbCrLf}"
+                    c += 1
+                Next
+                MsgBox($"Invalid number incoming arguments:{vbCrLf}{s}")
+                End
+            End If
+            If Me.CLIPreset = "" Or Me.CLIFileListName = "" Then
+                Dim s As String = ""
+                If Me.CLIPreset = "" Then s = $"{s}Preset not found.{vbCrLf}"
+                If Me.CLIFileListName = "" Then s = $"{s}File list not found.{vbCrLf}"
+                MsgBox(s)
+                End
+            Else
+                Me.CLIActive = True
+
+                'Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
+                'Me.RemindFilelistUpdate = False
+                'Me.BT_AddFromlist.PerformClick()
+                'Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
+                'MsgBox("Here")
+                'Me.BT_Update.PerformClick()
+            End If
 
         End If
+        'Me.ActivePreset
+        'Me.ButtonPresetLoad.PerformClick()
+        'BT_AddFromlist
+        'Me.CLIInvocation
+        'Me.CLITextFilename
+        'BT_Update
     End Sub
 
     Private Sub Startup(Presets As Boolean)
@@ -1335,6 +1375,16 @@ Public Class Form_Main
         '    HCDebugLogger.ReportErrors(UseMessageBox:=False)
         'End If
 
+        If Me.CLIActive Then
+
+            Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
+            Me.RemindFilelistUpdate = False
+            Me.BT_AddFromlist.PerformClick()
+            Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
+            'MsgBox("Here")
+            Me.BT_Update.PerformClick()
+
+        End If
     End Sub
 
 
@@ -1862,16 +1912,25 @@ Public Class Form_Main
 
     Private Sub BT_AddFromlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromlist.Click
 
-        Dim tmpFileDialog As New OpenFileDialog
-        tmpFileDialog.Title = "Select list of files"
-        tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
-        tmpFileDialog.Multiselect = True
-        tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
+        Dim tmpFilenameList As New List(Of String)
 
-        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+        If Me.CLIActive Then
+            tmpFilenameList.Add(Me.CLIFileListName)
+        Else
+            Dim tmpFileDialog As New OpenFileDialog
+            tmpFileDialog.Title = "Select list of files"
+            tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+            tmpFileDialog.Multiselect = True
+            tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
 
-            For Each tmpFileName As String In tmpFileDialog.FileNames
+            If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+                tmpFilenameList.AddRange(tmpFileDialog.FileNames)
+                Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+            End If
+        End If
 
+        If tmpFilenameList.Count > 0 Then
+            For Each tmpFileName As String In tmpFilenameList
                 Dim tmpItem As New ListViewItem
 
                 Select Case IO.Path.GetExtension(tmpFileName).ToLower
@@ -1904,20 +1963,67 @@ Public Class Form_Main
                     ListViewSources.Items.Add(tmpItem)
                     ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
                 End If
-
             Next
-
             ListViewFilesOutOfDate = True
-
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
-            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
         End If
+
+
+        'Dim tmpFileDialog As New OpenFileDialog
+        'tmpFileDialog.Title = "Select list of files"
+        'tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+        'tmpFileDialog.Multiselect = True
+        'tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
+
+        'If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+
+        '    For Each tmpFileName As String In tmpFileDialog.FileNames
+
+        '        Dim tmpItem As New ListViewItem
+
+        '        Select Case IO.Path.GetExtension(tmpFileName).ToLower
+
+        '            Case Is = ".tsv"
+        '                tmpItem.Text = "TSV list"
+        '                tmpItem.ImageKey = "csv" ' Not a typo.  Reusing 'csv'
+        '                tmpItem.Tag = "tsv"
+        '            Case Is = ".txt"
+        '                tmpItem.Text = "TXT list"
+        '                tmpItem.ImageKey = "txt"
+        '                tmpItem.Tag = "txt"
+        '            Case Is = ".csv"
+        '                tmpItem.Text = "CSV list"
+        '                tmpItem.ImageKey = "csv"
+        '                tmpItem.Tag = "csv"
+        '            Case Is = ".xls", ".xlsx", ".xlsm"
+        '                tmpItem.Text = "Excel list"
+        '                tmpItem.ImageKey = "excel"
+        '                tmpItem.Tag = "excel"
+        '            Case Else
+        '                MsgBox(String.Format("{0}: Extension {1} not recognized", Me.ToString, IO.Path.GetExtension(tmpFileName).ToLower))
+        '        End Select
+
+        '        tmpItem.SubItems.Add(tmpFileName)
+        '        tmpItem.Group = ListViewSources.Groups.Item("Sources")
+
+        '        tmpItem.Name = tmpFileName
+        '        If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+        '            ListViewSources.Items.Add(tmpItem)
+        '            ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        '        End If
+
+        '    Next
+
+        '    ListViewFilesOutOfDate = True
+
+        '    'If Me.RemindFilelistUpdate Then
+        '    '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+        '    '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+        '    '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+        '    '    MsgBox(s, vbOKOnly)
+        '    'End If
+
+        '    Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+        'End If
 
     End Sub
 
