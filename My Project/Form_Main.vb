@@ -1040,22 +1040,22 @@ Public Class Form_Main
     '    -- Place yours in the the appropriate category.
     '    -- For a new category, also update Task.SetColorFromCategory().
 
-    'Public Sub New()
+    Public Sub New()
 
-    '    ' This call is required by the designer.
-    '    InitializeComponent()
+        ' This call is required by the designer.
+        InitializeComponent()
 
-    '    ' Add any initialization after the InitializeComponent() call.
+        ' Add any initialization after the InitializeComponent() call.
 
-    '    'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
-    '    'string[] args = Environment.GetCommandLineArgs();
-    '    Dim Args = Environment.GetCommandLineArgs.ToList
-    '    Dim s As String = ""
-    '    For Each s1 As String In Args
-    '        s = $"{s}{s1}{vbCrLf}"
-    '    Next
-    '    MsgBox(s)
-    'End Sub
+        'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
+        'string[] args = Environment.GetCommandLineArgs();
+        Dim Args = Environment.GetCommandLineArgs.ToList
+        Dim s As String = ""
+        For Each s1 As String In Args
+            s = $"{s}{s1}{vbCrLf}"
+        Next
+        MsgBox(s)
+    End Sub
 
     Private Sub Startup(Presets As Boolean)
 
