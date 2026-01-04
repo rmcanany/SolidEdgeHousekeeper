@@ -316,6 +316,10 @@ Public Class HCPropertiesData
         Dim tmptmpItems As New List(Of PropertyData)
         For Each Item As PropertyData In tmpItems
             If Not Item.Name.Contains("PotentialCustomMaterial_") Then
+                If Item.EnglishName.Contains("PotentialCustomMaterial_") Then
+                    Item.EnglishName = Item.Name
+                    Item.PropID = -1
+                End If
                 tmptmpItems.Add(Item)
             End If
         Next
