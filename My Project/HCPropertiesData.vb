@@ -270,7 +270,6 @@ Public Class HCPropertiesData
                         If tf Then
 
                             tmpPropertyData = New PropertyData
-                            tmpItems.Add(tmpPropertyData)
 
                             tmpPropertyData.Name = PropName
                             tmpPropertyData.PropertySetName = PropertySetHousekeeperName
@@ -302,6 +301,10 @@ Public Class HCPropertiesData
                                     Dim s As String = String.Format("In PropertiesDataPopulate, PropTypeName '{0}' not recognized", PropTypeName)
                                     MsgBox(s, vbOKOnly)
                             End Select
+
+                            tmpItems.Add(tmpPropertyData)
+
+
                         End If
                     End If
 
@@ -310,7 +313,19 @@ Public Class HCPropertiesData
 
         Next
 
-        Return tmpItems
+        Dim tmptmpItems As New List(Of PropertyData)
+        For Each Item As PropertyData In tmpItems
+            If Not Item.Name.Contains("PotentialCustomMaterial_") Then
+                If Item.EnglishName.Contains("PotentialCustomMaterial_") Then
+                    Item.EnglishName = Item.Name
+                    Item.PropID = -1
+                End If
+                tmptmpItems.Add(Item)
+            End If
+        Next
+
+        Return tmptmpItems
+
     End Function
 
     Public Sub Populate(TemplateList As List(Of String))
@@ -338,7 +353,7 @@ Public Class HCPropertiesData
         ' ###### GET KNOWN SYSTEM PROPERTIES ######
 
         For Each PropertySetActualName In PropertySetActualNames
-            For PropID = 0 To 50  ' Current max not including Custom is 27
+            For PropID = 0 To 2500  ' Current max not including Custom is 27
                 tmpPropertyData = New PropertyData(PropertySetActualName, PropID)
                 If tmpPropertyData.Name IsNot Nothing Then
                     tmpItems.Add(tmpPropertyData)
@@ -1007,6 +1022,57 @@ Public Class PropertyData
                         Me.TypeName = TypeNameConstants._Double
                     Case 32
                         Me.EnglishName = "Bead Material"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+
+                    Case 2001
+                        Me.EnglishName = "PotentialCustomMaterial_01"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2002
+                        Me.EnglishName = "PotentialCustomMaterial_02"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2003
+                        Me.EnglishName = "PotentialCustomMaterial_03"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2004
+                        Me.EnglishName = "PotentialCustomMaterial_04"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2005
+                        Me.EnglishName = "PotentialCustomMaterial_05"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2006
+                        Me.EnglishName = "PotentialCustomMaterial_06"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2007
+                        Me.EnglishName = "PotentialCustomMaterial_07"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2008
+                        Me.EnglishName = "PotentialCustomMaterial_08"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2009
+                        Me.EnglishName = "PotentialCustomMaterial_09"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 2010
+                        Me.EnglishName = "PotentialCustomMaterial_10"
                         Me.Name = Me.EnglishName
                         Me.SSName = ""
                         Me.TypeName = TypeNameConstants._String
