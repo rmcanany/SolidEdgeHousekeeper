@@ -1023,7 +1023,7 @@ Public Class Form_Main
     Public Property ActiveFiles As List(Of String)
 
     Public Property CLIActive As Boolean = False
-    Public Property CLIPreset As String = ""
+    Public Property CLIPresetName As String = ""
     Public Property CLIFileListName As String = ""
 
     'DESCRIPTION
@@ -1061,7 +1061,7 @@ Public Class Form_Main
                         Me.CLIFileListName = Args(i + 1)
                     End If
                     If Args(i).ToLower = "-p" Then
-                        Me.CLIPreset = Args(i + 1)
+                        Me.CLIPresetName = Args(i + 1)
                     End If
                 Next
             Else
@@ -1074,9 +1074,9 @@ Public Class Form_Main
                 MsgBox($"Invalid number incoming arguments:{vbCrLf}{s}")
                 End
             End If
-            If Me.CLIPreset = "" Or Me.CLIFileListName = "" Then
+            If Me.CLIPresetName = "" Or Me.CLIFileListName = "" Then
                 Dim s As String = ""
-                If Me.CLIPreset = "" Then s = $"{s}Preset not found.{vbCrLf}"
+                If Me.CLIPresetName = "" Then s = $"{s}Preset not found.{vbCrLf}"
                 If Me.CLIFileListName = "" Then s = $"{s}File list not found.{vbCrLf}"
                 MsgBox(s)
                 End
@@ -1100,7 +1100,7 @@ Public Class Form_Main
         'BT_Update
     End Sub
 
-    Private Sub Startup(Presets As Boolean)
+    Private Sub Startup(SavingPresets As Boolean)
 
         Me.Cursor = Cursors.WaitCursor
 
@@ -1120,7 +1120,7 @@ Public Class Form_Main
         'End If
 
         Dim Splash As FormSplash = Nothing
-        If Not Presets Then
+        If Not SavingPresets Then
             Splash = New FormSplash()
             Splash.Show()
             Splash.UpdateStatus("Initializing")
@@ -1132,7 +1132,7 @@ Public Class Form_Main
 
         '###### INITIALIZE PREFERENCES IF NEEDED ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Preferences")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Preferences")
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
@@ -1143,14 +1143,14 @@ Public Class Form_Main
 
         '###### LOAD MAIN FORM SAVED SETTINGS IF ANY ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Interface Preferences")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Interface Preferences")
 
         UP.GetFormMainSettings(Me)
 
 
         '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Data Structures")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Data Structures")
 
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
@@ -1190,16 +1190,16 @@ Public Class Form_Main
 
         Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
 
-        If Not Presets Then Splash.UpdateStatus("Loading Properties Data")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Properties Data")
         Me.PropertiesData = New HCPropertiesData  ' Automatically loads saved settings if any.
 
-        If Not Presets Then Splash.UpdateStatus("Loading Presets")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Presets")
         Me.Presets = New HCPresets  ' Automatically loads saved settings if any.
 
-        If Not Presets Then Splash.UpdateStatus("Loading Property Filters")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Property Filters")
         Me.PropertyFilters = New PropertyFilters  ' Automatically loads saved settings if any.
 
-        If Not Presets Then Splash.UpdateStatus("Building Readme")
+        If Not SavingPresets Then Splash.UpdateStatus("Building Readme")
         UD.BuildReadmeFile()
 
         CarIcona()
@@ -1237,7 +1237,7 @@ Public Class Form_Main
             GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
 
             For i As Integer = 0 To GroupHeaderNames.Count - 1
-                If Not Presets Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i)))
+                If Not SavingPresets Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i)))
 
                 Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
                 LVGroup.Name = GroupNames(i)
@@ -1254,14 +1254,14 @@ Public Class Form_Main
 
         '###### INITIALIZE TASK LIST ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Tasks")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Tasks")
 
         Me.TaskList = UP.GetTaskList(Splash)
 
         Dim tmpTaskPanel As Panel = Nothing
 
         For Each c As Control In TabPageTasks.Controls
-            If Not Presets Then Splash.UpdateStatus(String.Format("{0}", c.Name))
+            If Not SavingPresets Then Splash.UpdateStatus(String.Format("{0}", c.Name))
 
             If c.Name = "TaskPanel" Then
                 tmpTaskPanel = CType(c, Panel)
@@ -1275,7 +1275,7 @@ Public Class Form_Main
 
             Dim Task = TaskList(i)
 
-            If Not Presets Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name))
+            If Not SavingPresets Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name))
 
             If Not Me.RememberTasks Then
                 Task.IsSelectedTask = False
@@ -1321,9 +1321,9 @@ Public Class Form_Main
 
 
         '################# Questo risolver il problema del bordo sgrazinato della ToolStrip
-        If Not Presets Then Splash.UpdateStatus("Updating Filters")
+        If Not SavingPresets Then Splash.UpdateStatus("Updating Filters")
         ToolStrip_Filter.Renderer = New MySR()
-        If Not Presets Then Splash.UpdateStatus("Updating Presets")
+        If Not SavingPresets Then Splash.UpdateStatus("Updating Presets")
         ToolStripPresets.Renderer = New MySR()
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
@@ -1337,7 +1337,7 @@ Public Class Form_Main
         If Me.TCRevisionRx Is Nothing OrElse Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
         If Me.TCItemIDName Is Nothing OrElse Me.TCItemIDName.Trim = "" Then TCItemIDName = "MFK9Item1"
 
-        If Not Presets Then Splash.UpdateStatus("Wrapping up")
+        If Not SavingPresets Then Splash.UpdateStatus("Wrapping up")
 
         UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.
 
@@ -1347,7 +1347,7 @@ Public Class Form_Main
 
         UP.SetSEDefaultFolders(Me)
 
-        If Not Presets Then
+        If Not SavingPresets Then
             Splash.UpdateStatus("")
 
             Splash.Animate()
@@ -1375,14 +1375,27 @@ Public Class Form_Main
         '    HCDebugLogger.ReportErrors(UseMessageBox:=False)
         'End If
 
-        If Me.CLIActive Then
+        If Me.CLIActive And Not SavingPresets Then
 
-            Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
-            Me.RemindFilelistUpdate = False
-            Me.BT_AddFromlist.PerformClick()
-            Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
-            'MsgBox("Here")
-            Me.BT_Update.PerformClick()
+            If Me.Presets.Exists(CLIPresetName) Then
+                ComboBoxPresetName.Text = CLIPresetName
+                ButtonPresetLoad.PerformClick()
+
+                Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
+                Me.RemindFilelistUpdate = False
+
+                Me.BT_DeleteAll.PerformClick()
+                Me.BT_AddFromlist.PerformClick()
+
+                Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
+                'MsgBox("Here")
+
+                Me.BT_Update.PerformClick()
+
+                Me.ButtonProcess.PerformClick()
+            Else
+                MsgBox($"Preset name not found: '{Me.CLIPresetName}'")
+            End If
 
         End If
     End Sub
@@ -1615,7 +1628,7 @@ Public Class Form_Main
     ' FORM LOAD
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Startup(Presets:=False)
+        Startup(SavingPresets:=False)
     End Sub
 
 
@@ -3905,7 +3918,7 @@ Public Class Form_Main
                 'SaveSettings()  ' Incorrect.  This saves the current settings
 
                 Application.DoEvents()
-                Startup(Presets:=True)
+                Startup(SavingPresets:=True)
 
             End If
 

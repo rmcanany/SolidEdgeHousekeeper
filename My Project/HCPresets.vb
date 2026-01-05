@@ -55,6 +55,19 @@ Public Class HCPresets
         IO.File.WriteAllText(Outfile, JSONString)
 
     End Sub
+
+    Public Function Exists(Name As String) As Boolean
+        Dim Success As Boolean = False
+
+        For Each Item As Preset In Me.Items
+            If Item.Name.ToLower = Name.ToLower Then
+                Success = True
+                Exit For
+            End If
+        Next
+
+        Return Success
+    End Function
 End Class
 
 Public Class Preset
