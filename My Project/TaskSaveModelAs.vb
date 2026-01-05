@@ -348,28 +348,9 @@ Public Class TaskSaveModelAs
                     NewFilename = GenerateNewFilename(SEDoc, NewExtension)  ' Updates TaskLogger
 
                     If Not TaskLogger.HasErrors Then
-                        FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
-                        Try
-                            If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-                                SaveAsModel(SEDoc, NewFilename, SEApp)
-                            Else  ' Saving as image
-                                SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
-                            End If
-                        Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
-                        End Try
+                        If Not NewExtension = ".dxf" Then
 
-                    End If
-
-                Else
-                    Members = tmpSEDoc.AssemblyFamilyMembers
-                    For Each Member In Members
-                        Members.ActivateMember(Member.MemberName)
-
-                        NewFilename = GenerateNewFilename(SEDoc, NewExtension, Member.MemberName)
-
-                        If Not TaskLogger.HasErrors Then
                             FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
                             Try
@@ -381,6 +362,37 @@ Public Class TaskSaveModelAs
                             Catch ex As Exception
                                 TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
                             End Try
+                        Else
+                            TaskLogger.AddMessage($"Cannot save '{DocType}' file as '{NewExtension}'")
+                        End If
+
+                    End If
+
+                Else
+                    Members = tmpSEDoc.AssemblyFamilyMembers
+                    For Each Member In Members
+                        Members.ActivateMember(Member.MemberName)
+
+                        NewFilename = GenerateNewFilename(SEDoc, NewExtension, Member.MemberName)
+
+                        If Not TaskLogger.HasErrors Then
+
+                            If Not NewExtension = ".dxf" Then
+                                FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+
+                                Try
+                                    If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
+                                        SaveAsModel(SEDoc, NewFilename, SEApp)
+                                    Else  ' Saving as image
+                                        SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
+                                    End If
+                                Catch ex As Exception
+                                    TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+                                End Try
+                            Else
+                                TaskLogger.AddMessage($"Cannot save '{DocType}' file as '{NewExtension}'")
+
+                            End If
 
                         End If
 
@@ -415,46 +427,51 @@ Public Class TaskSaveModelAs
 
                 NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                If Not TaskLogger.HasErrors Then
-                    FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+                If NewExtension = ".dxf" Then
+                    SaveAsFlatDXF(SEDoc, NewFilename, SEApp, DocType)
+                Else
+                    If Not TaskLogger.HasErrors Then
 
-                    Try
-                        If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
+                        FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
-                            If NewExtension = ".dxf" Then
-                                SaveAsFlatDXF(SEDoc, NewFilename, SEApp, DocType)
+                        Try
+                            If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
 
-                            ElseIf NewExtension = ".pdf" Then
-                                DraftFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
-                                If Not FileIO.FileSystem.FileExists(DraftFilename) Then
-                                    TaskLogger.AddMessage(String.Format("Draft document not found '{0}'", DraftFilename))
+                                If NewExtension = ".dxf" Then
+                                    SaveAsFlatDXF(SEDoc, NewFilename, SEApp, DocType)
+
+                                ElseIf NewExtension = ".pdf" Then
+                                    DraftFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
+                                    If Not FileIO.FileSystem.FileExists(DraftFilename) Then
+                                        TaskLogger.AddMessage(String.Format("Draft document not found '{0}'", DraftFilename))
+                                    Else
+                                        SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
+                                        SEApp.DoIdle()
+
+                                        SaveAsDrawing(SEDraftDoc, NewFilename, SEApp)
+                                    End If
+
                                 Else
-                                    SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
-                                    SEApp.DoIdle()
-
-                                    SaveAsDrawing(SEDraftDoc, NewFilename, SEApp)
+                                    SaveAsModel(SEDoc, NewFilename, SEApp)
                                 End If
 
-                            Else
-                                SaveAsModel(SEDoc, NewFilename, SEApp)
+
+                            Else  ' Saving as image
+                                SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                             End If
+                        Catch ex As Exception
+                            TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+                        End Try
 
+                        Try
+                            If Not SEDraftDoc Is Nothing Then
+                                SEDraftDoc.Close(False)
+                                SEApp.DoIdle()
+                            End If
+                        Catch ex As Exception
+                        End Try
 
-                        Else  ' Saving as image
-                            SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
-                        End If
-                    Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
-                    End Try
-
-                    Try
-                        If Not SEDraftDoc Is Nothing Then
-                            SEDraftDoc.Close(False)
-                            SEApp.DoIdle()
-                        End If
-                    Catch ex As Exception
-                    End Try
-
+                    End If
                 End If
 
             Case Else
@@ -638,44 +655,47 @@ Public Class TaskSaveModelAs
         Dim Models As SolidEdgePart.Models = Nothing
 
         Select Case DocType
+            Case "asm"
+                Me.TaskLogger.AddMessage("Cannot save an assembly as a DXF Flat pattern")
+                Exit Sub
             Case "par"
                 Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
                 FlatPatternModels = tmpSEDoc.FlatPatternModels
                 Models = tmpSEDoc.Models
-                'Dim ActiveEnvironment As String = SEApp.ActiveEnvironment
-                'If ActiveEnvironment = "SheetMetal" Then
-                '    FlatPatternModels = tmpSEDoc.FlatPatternModels
-                '    Models = tmpSEDoc.Models
-                'End If
             Case "psm"
                 Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                 FlatPatternModels = tmpSEDoc.FlatPatternModels
                 Models = tmpSEDoc.Models
         End Select
+
         Try
             If FlatPatternModels IsNot Nothing Then
                 If FlatPatternModels.Count > 0 Then
                     Dim FlatPattern As SolidEdgePart.FlatPatternModel
                     FlatPattern = FlatPatternModels.Item(1)
-                    If FlatPattern.IsUpToDate Then
 
-                        Try
-                            If Models IsNot Nothing AndAlso Models.Count > 0 Then
-                                Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
-                                SEApp.DoIdle()
-                            Else
-                                Me.TaskLogger.AddMessage("No model detected")
-                            End If
-                        Catch ex As Exception
-                            Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.", NewFilename))
-                            If ex.Message.Contains("E_POINTER") Then
-                                Me.TaskLogger.AddMessage("Possibly the flat pattern was a 'Blank', not a 'Flatten'.")
-                            Else
-                                Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
-                            End If
-                        End Try
+                    If FlatPattern.Blanks.Count > 0 Then
+                        Me.TaskLogger.AddMessage("The flat pattern is a 'Blank', not a 'Flatten'.  'Blanks' cannot be processed automatically.'")
                     Else
-                        Me.TaskLogger.AddMessage("Flat pattern reported out of date")
+                        If FlatPattern.IsUpToDate Then
+
+                            Try
+                                If Models IsNot Nothing AndAlso Models.Count > 0 Then
+                                    If Not TaskLogger.HasErrors Then
+                                        FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+                                        Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
+                                        SEApp.DoIdle()
+                                    End If
+                                Else
+                                    Me.TaskLogger.AddMessage("No model detected")
+                                End If
+                            Catch ex As Exception
+                                Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.", NewFilename))
+                                Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
+                            End Try
+                        Else
+                            Me.TaskLogger.AddMessage("Flat pattern reported out of date")
+                        End If
                     End If
                 Else
                     Me.TaskLogger.AddMessage("No flat pattern detected")
