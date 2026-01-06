@@ -7,8 +7,9 @@ Module HousekeeperCLI
         '    'MsgBox("Argument error")
         '    End
         'End If
+
         Dim ArgsString As String = ""
-        For Each s As String In Args
+        For Each s As String In Args  ' eg. [-p, SetDocumentStatus_T2, -l, .\file list.txt] ' Note last arg has a space character in it.
             If s.Contains(" ") Then
                 ArgsString = $"{ArgsString} ""{s}"""
             Else
@@ -16,7 +17,9 @@ Module HousekeeperCLI
             End If
         Next
 
-        Dim Source = $"{System.IO.Path.GetTempPath()}Housekeeper"
+        'MsgBox(ArgsString)
+
+        Dim Source = $"{System.IO.Path.GetTempPath()}Housekeeper"  ' GetTempPath already has an ending '\'
         Dim ActiveFileExtensionsList As New List(Of String)
         ActiveFileExtensionsList.Add("*.log")
 
@@ -24,41 +27,29 @@ Module HousekeeperCLI
                                      FileIO.SearchOption.SearchTopLevelOnly,
                                      ActiveFileExtensionsList.ToArray)
 
-        Dim NewFoundFiles As New List(Of String)
-        NewFoundFiles.Add($"{Source}\junk.log")
-        NewFoundFiles.Add($"{Source}\junk2.log")
-
         Dim P As New Diagnostics.Process
 
-        P.StartInfo.FileName = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Debug\Housekeeper.exe"
-        'P.StartInfo.Arguments = "-p ""Preset 123"" -l ""test 02.txt"""
+        'MsgBox($"AppDomain.CurrentDomain.BaseDirectory {AppDomain.CurrentDomain.BaseDirectory}")
+
+        'P.StartInfo.FileName = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Debug\Housekeeper.exe"
+        P.StartInfo.FileName = $"{AppDomain.CurrentDomain.BaseDirectory}Housekeeper.exe"
         P.StartInfo.Arguments = ArgsString
         P.StartInfo.RedirectStandardOutput = True
         P.StartInfo.UseShellExecute = False
-        'If Me.HideConsoleWindow Then
-        '    P.StartInfo.RedirectStandardError = True
-        '    P.StartInfo.UseShellExecute = False
-        '    P.StartInfo.CreateNoWindow = True
-        'End If
-        P.Start()
-        'If Me.HideConsoleWindow Then PSError = P.StandardError.ReadToEnd
-        'End If
 
-        'If Not PSError = "" Then
-        '    TaskLogger.AddMessage("The external program reported the following error")
-        '    TaskLogger.AddMessage(PSError)
-        'End If
+        P.Start()
 
         P.WaitForExit()
         Dim ExitCode = P.ExitCode
 
+        Dim NewFoundFiles = FileIO.FileSystem.GetFiles(Source,
+                                     FileIO.SearchOption.SearchTopLevelOnly,
+                                     ActiveFileExtensionsList.ToArray)
+
+
+        ' ###### These are written to stdout which are received by the calling program
         Console.WriteLine("RECEIVED ARGUMENTS")
         For Each s As String In Args
-            Console.WriteLine(s)
-        Next
-
-        Console.WriteLine("EXISTING LOG FILES")
-        For Each s As String In FoundFiles
             Console.WriteLine(s)
         Next
 
@@ -69,7 +60,6 @@ Module HousekeeperCLI
             End If
         Next
 
-        'MsgBox(ArgsString)
     End Sub
 
 End Module

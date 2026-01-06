@@ -45,13 +45,17 @@ Public Class UtilsPreferences
         SkipProps.AddRange({"version", "previewversion", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
         SkipProps.AddRange({"hcdebuglogger", "savedexpressions"})
-        SkipProps.AddRange({"cliactive", "clipreset", "clifilelistname"})
+        SkipProps.AddRange({"cliactive", "clipresetname", "clifilelistname"})
 
         If SavingPresets And Not FMain.PresetsSaveFileFilters Then
             SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
         End If
 
+        Dim AllProps As New List(Of String)
+
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
+
+            AllProps.Add(PropInfo.Name.ToLower)
 
             PropType = PropInfo.PropertyType.Name.ToLower
 
@@ -102,7 +106,16 @@ Public Class UtilsPreferences
 
         IO.File.WriteAllText(Outfile, JSONString)
 
-
+        Dim MissingProps As String = ""
+        For Each s As String In SkipProps
+            If Not AllProps.Contains(s) Then
+                MissingProps = $"{MissingProps}    {s}{vbCrLf}"
+            End If
+        Next
+        If Not MissingProps = "" Then
+            MissingProps = $"SkipProps not found in AllProps {vbCrLf}{MissingProps}"
+            MsgBox(MissingProps)
+        End If
     End Sub
 
     Public Sub GetFormMainSettings(FMain As Form_Main)

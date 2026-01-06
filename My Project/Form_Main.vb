@@ -1054,6 +1054,13 @@ Public Class Form_Main
         'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
         'string[] args = Environment.GetCommandLineArgs();
         Dim Args As List(Of String) = Environment.GetCommandLineArgs.ToList
+
+        Dim s As String = ""
+        For Each s1 In Args
+            s = $"{s}, {s1}"
+        Next
+        'MsgBox(s)
+
         If Args.Count > 1 Then
             If Args.Count = 5 Then
                 For i As Integer = 1 To 3
@@ -1065,7 +1072,7 @@ Public Class Form_Main
                     End If
                 Next
             Else
-                Dim s As String = ""
+                s = ""
                 Dim c As Integer = 1
                 For Each s1 As String In Args
                     s = $"    {c}: {s}{s1}{vbCrLf}"
@@ -1075,14 +1082,14 @@ Public Class Form_Main
                 End
             End If
             If Me.CLIPresetName = "" Or Me.CLIFileListName = "" Then
-                Dim s As String = ""
+                s = ""
                 If Me.CLIPresetName = "" Then s = $"{s}Preset not found.{vbCrLf}"
                 If Me.CLIFileListName = "" Then s = $"{s}File list not found.{vbCrLf}"
                 MsgBox(s)
                 End
             Else
                 Me.CLIActive = True
-
+                'MsgBox($"'{CLIActive}', '{CLIPresetName}', '{CLIFileListName}'")
                 'Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
                 'Me.RemindFilelistUpdate = False
                 'Me.BT_AddFromlist.PerformClick()
@@ -1375,7 +1382,9 @@ Public Class Form_Main
         '    HCDebugLogger.ReportErrors(UseMessageBox:=False)
         'End If
 
+        'MsgBox(Me.CLIPresetName)
         If Me.CLIActive And Not SavingPresets Then
+            'MsgBox(Me.CLIPresetName)
 
             If Me.Presets.Exists(CLIPresetName) Then
                 ComboBoxPresetName.Text = CLIPresetName
@@ -1388,13 +1397,14 @@ Public Class Form_Main
                 Me.BT_AddFromlist.PerformClick()
 
                 Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
-                'MsgBox("Here")
 
                 Me.BT_Update.PerformClick()
 
                 Me.ButtonProcess.PerformClick()
             Else
-                MsgBox($"Preset name not found: '{Me.CLIPresetName}'")
+                'MsgBox($"Preset name not found: '{CLIPresetName}'")
+                StartupLogger.AddMessage($"Preset name not found: '{CLIPresetName}'")
+                HCDebugLogger.Save()
             End If
 
         End If
