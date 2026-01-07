@@ -48,10 +48,10 @@ Module HousekeeperCLI
 
 
         ' ###### These are written to stdout which are received by the calling program
-        Console.WriteLine("RECEIVED ARGUMENTS")
-        For Each s As String In Args
-            Console.WriteLine(s)
-        Next
+        Console.WriteLine($"COMMAND ARGUMENTS: '{ArgsString}'")
+        'For Each s As String In Args
+        '    Console.WriteLine(s)
+        'Next
 
         Console.WriteLine("NEW LOG FILES")
         For Each s As String In NewFoundFiles

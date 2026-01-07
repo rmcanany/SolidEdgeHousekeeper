@@ -1407,7 +1407,10 @@ Public Class Form_Main
                 HCDebugLogger.Save()
             End If
 
+            ButtonCancel.PerformClick()
+
         End If
+
     End Sub
 
 
@@ -1632,6 +1635,9 @@ Public Class Form_Main
     Private Sub ButtonProcess_Click(sender As Object, e As EventArgs) Handles ButtonProcess.Click
         Dim UE As New UtilsExecute(Me)
         UE.ProcessAll()
+        If Me.CLIActive Then
+            ButtonCancel.PerformClick()
+        End If
     End Sub
 
 

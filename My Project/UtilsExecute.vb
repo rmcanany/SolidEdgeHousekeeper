@@ -108,7 +108,11 @@ Public Class UtilsExecute
         FMain.ButtonCancel.Text = "Cancel"
 
         If Me.ErrorLogger.HasErrors Then
-            'Me.ErrorLogger.Save()
+            If FMain.CLIActive Then
+                Me.ErrorLogger.Save()
+            Else
+                Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
+            End If
             'Try
             '    ' Try to use the default application to open the file.
             '    Process.Start(Me.ErrorLogger.LogfileName)
@@ -116,7 +120,6 @@ Public Class UtilsExecute
             '    ' If none, open with notepad.exe
             '    Process.Start("notepad.exe", Me.ErrorLogger.LogfileName)
             'End Try
-            Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
         Else
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
@@ -302,7 +305,11 @@ Public Class UtilsExecute
 
         If StartLogger.HasErrors Then Proceed = False
 
-        ErrorLogger.ReportErrors(UseMessageBox:=True)
+        If FMain.CLIActive Then
+            ErrorLogger.Save()
+        Else
+            ErrorLogger.ReportErrors(UseMessageBox:=True)
+        End If
 
         Return Proceed
     End Function
