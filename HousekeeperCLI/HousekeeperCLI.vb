@@ -48,12 +48,9 @@ Module HousekeeperCLI
 
 
         ' ###### These are written to stdout which are received by the calling program
-        Console.WriteLine($"COMMAND ARGUMENTS: '{ArgsString}'")
-        'For Each s As String In Args
-        '    Console.WriteLine(s)
-        'Next
+        Console.WriteLine($"Command line: '{ArgsString}'")
 
-        Console.WriteLine("NEW LOG FILES")
+        ' List any new log files found, if any
         For Each s As String In NewFoundFiles
             If Not FoundFiles.Contains(s) Then
                 Console.WriteLine(s)
