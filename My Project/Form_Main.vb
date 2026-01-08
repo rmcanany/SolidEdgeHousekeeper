@@ -1055,6 +1055,10 @@ Public Class Form_Main
         'string[] args = Environment.GetCommandLineArgs();
         Dim Args As List(Of String) = Environment.GetCommandLineArgs.ToList
 
+        ' Args are passed as a string
+        ' Whitespace separates them
+        ' eg. c:\data\housekeeper.exe -p SetDocumentStatus_T2 -l ".\file list.txt" -t "In Review"
+
         Dim s As String = ""
         For Each s1 In Args
             s = $"{s}, {s1}"
@@ -1071,6 +1075,7 @@ Public Class Form_Main
                         Me.CLIPresetName = Args(i + 1)
                     End If
                 Next
+
             Else
                 s = ""
                 Dim c As Integer = 1

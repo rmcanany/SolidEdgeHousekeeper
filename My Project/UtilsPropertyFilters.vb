@@ -289,7 +289,7 @@ Public Class UtilsPropertyFilters
         End Try
 
         DateTime = Convert.ToDateTime(Text, Globalization.CultureInfo.CurrentCulture)  ' Returns a FormatException if it doesn't work.
-        Text = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+        Text = String.Format("{0:0000}{1:00}{2:00}", DateTime.Year, DateTime.Month, DateTime.Day)
         DoubleNumber = CDbl(Text)
 
         Return DoubleNumber

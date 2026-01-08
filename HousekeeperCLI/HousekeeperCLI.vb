@@ -9,7 +9,7 @@ Module HousekeeperCLI
         'End If
 
         Dim ArgsString As String = ""
-        For Each s As String In Args  ' eg. [-p, SetDocumentStatus_T2, -l, .\file list.txt] ' Note last arg has a space character in it.
+        For Each s As String In Args  ' eg. [-p, SetDocumentStatus_T2, -l, .\file list.txt] ' Note some args have space characters.
             If s.Contains(" ") Then
                 ArgsString = $"{ArgsString} ""{s}"""
             Else
