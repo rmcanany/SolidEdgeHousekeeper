@@ -127,13 +127,15 @@ Public Class UtilsSEApp
         Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument = Nothing
         Dim tmpDocument As SolidEdgeFramework.SolidEdgeDocument
 
-        For Each Filename As String In FMain.ActiveFiles
-            tmpDocument = CType(SEApp.Documents.Open(Filename), SolidEdgeFramework.SolidEdgeDocument)
-            If Filename = FMain.ActiveFile Then ActiveDocument = tmpDocument
+        If FMain.ActiveFiles IsNot Nothing Then
+            For Each Filename As String In FMain.ActiveFiles
+                tmpDocument = CType(SEApp.Documents.Open(Filename), SolidEdgeFramework.SolidEdgeDocument)
+                If Filename = FMain.ActiveFile Then ActiveDocument = tmpDocument
+                SEApp.DoIdle()
+            Next
+            If ActiveDocument IsNot Nothing Then ActiveDocument.Activate()
             SEApp.DoIdle()
-        Next
-        If ActiveDocument IsNot Nothing Then ActiveDocument.Activate()
-        SEApp.DoIdle()
+        End If
     End Sub
     Private Sub SEGarbageCollect(ByVal obj As Object)
         Try
