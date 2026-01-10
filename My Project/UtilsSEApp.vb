@@ -91,6 +91,8 @@ Public Class UtilsSEApp
 
     Public Sub SEStop(UseCurrentSession As Boolean)
 
+        System.Threading.Thread.Sleep(1000) ' Might need a little time for the COM object to become disconneted
+
         Dim SEAppNotResponsive As Boolean = False
 
         Try
