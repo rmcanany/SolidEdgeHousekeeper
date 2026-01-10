@@ -91,18 +91,24 @@ Public Class UtilsSEApp
 
     Public Sub SEStop(UseCurrentSession As Boolean)
 
-        'If SEApp IsNot Nothing Then SEApp.DisplayAlerts = True
+        Dim SEAppNotResponsive As Boolean = False
 
-        If Not UseCurrentSession Then
+        Try
+            If SEApp IsNot Nothing Then SEApp.DisplayAlerts = True
+        Catch ex As Exception
+            SEAppNotResponsive = True
+        End Try
+
+        If Not UseCurrentSession Or SEAppNotResponsive Then
 
             FMain.TextBoxStatus.Text = "Closing Solid Edge..."
             If SEApp IsNot Nothing Then
 
-                Dim Param = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalSessionDraftOpenInactive
-                SEApp.SetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
-                SEApp.DoIdle()
-
                 Try
+                    Dim Param = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalSessionDraftOpenInactive
+                    SEApp.SetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
+                    SEApp.DoIdle()
+
                     SEApp.Quit()
                 Catch ex As Exception
                     SEKillProcess("edge")
@@ -131,10 +137,10 @@ Public Class UtilsSEApp
             For Each Filename As String In FMain.ActiveFiles
                 tmpDocument = CType(SEApp.Documents.Open(Filename), SolidEdgeFramework.SolidEdgeDocument)
                 If Filename = FMain.ActiveFile Then ActiveDocument = tmpDocument
-                If SEApp IsNot Nothing Then SEApp.DoIdle()
+                SEApp.DoIdle()
             Next
             If ActiveDocument IsNot Nothing Then ActiveDocument.Activate()
-            If SEApp IsNot Nothing Then SEApp.DoIdle()
+            SEApp.DoIdle()
         End If
     End Sub
     Private Sub SEGarbageCollect(ByVal obj As Object)

@@ -587,6 +587,7 @@ Public Class UtilsExecute
             Else
                 If FMain.SolidEdgeRequired > 0 Then
                     Dim USEA = New UtilsSEApp(FMain)
+                    USEA.SEApp = SEApp
 
                     USEA.SEStop(FMain.UseCurrentSession)
                     SEApp = Nothing
