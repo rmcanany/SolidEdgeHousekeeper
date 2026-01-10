@@ -91,7 +91,7 @@ Public Class UtilsSEApp
 
     Public Sub SEStop(UseCurrentSession As Boolean)
 
-        If SEApp IsNot Nothing Then SEApp.DisplayAlerts = True
+        'If SEApp IsNot Nothing Then SEApp.DisplayAlerts = True
 
         If Not UseCurrentSession Then
 
@@ -131,10 +131,10 @@ Public Class UtilsSEApp
             For Each Filename As String In FMain.ActiveFiles
                 tmpDocument = CType(SEApp.Documents.Open(Filename), SolidEdgeFramework.SolidEdgeDocument)
                 If Filename = FMain.ActiveFile Then ActiveDocument = tmpDocument
-                SEApp.DoIdle()
+                If SEApp IsNot Nothing Then SEApp.DoIdle()
             Next
             If ActiveDocument IsNot Nothing Then ActiveDocument.Activate()
-            SEApp.DoIdle()
+            If SEApp IsNot Nothing Then SEApp.DoIdle()
         End If
     End Sub
     Private Sub SEGarbageCollect(ByVal obj As Object)
