@@ -11,9 +11,12 @@ Public Class UtilsExecute
     Public Property StartTime As DateTime
     Public Property ErrorLogger As HCErrorLogger
 
+    Private Property USEA As UtilsSEApp
+
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
+        Me.USEA = New UtilsSEApp(Me.FMain)
     End Sub
 
 
@@ -45,11 +48,11 @@ Public Class UtilsExecute
 
         TotalAborts = 0
 
-        Dim USEA = New UtilsSEApp(FMain)
+        'Dim USEA = New UtilsSEApp(FMain)
 
         If FMain.SolidEdgeRequired > 0 Then
-            USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
-            SEApp = USEA.SEApp
+            Me.USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
+            Me.SEApp = Me.USEA.SEApp
         End If
 
         Me.StartTime = Now
@@ -132,10 +135,10 @@ Public Class UtilsExecute
         Dim HeaderLogger As Logger = ErrorLogger.AddFile("Please correct the following before continuing")
         Dim StartLogger As Logger = HeaderLogger.AddLogger("")
 
-        Dim USEA = New UtilsSEApp(FMain)
+        'Dim USEA = New UtilsSEApp(FMain)
 
         If Not FMain.UseCurrentSession Then
-            If USEA.SEIsRunning() Then
+            If Me.USEA.SEIsRunning() Then
                 StartLogger.AddMessage("Close Solid Edge")
             End If
         End If
@@ -144,7 +147,7 @@ Public Class UtilsExecute
             StartLogger.AddMessage("Cannot use current session AND run in background.  Disable one or the other on the Configuration Tab -- General Page.")
         End If
 
-        If USEA.DMIsRunning() Then
+        If Me.USEA.DMIsRunning() Then
             StartLogger.AddMessage("Close Revision Manager")
         End If
 
@@ -579,14 +582,14 @@ Public Class UtilsExecute
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
                 If FMain.SolidEdgeRequired > 0 Then
-                    Dim USEA = New UtilsSEApp(FMain)
-                    USEA.SEApp = SEApp
+                    'Dim USEA = New UtilsSEApp(FMain)
+                    'USEA.SEApp = SEApp
 
-                    USEA.SEStop(FMain.UseCurrentSession)
-                    SEApp = Nothing
+                    'USEA.SEStop(FMain.UseCurrentSession)
+                    'SEApp = Nothing
 
-                    USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
-                    SEApp = USEA.SEApp
+                    Me.USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
+                    Me.SEApp = Me.USEA.SEApp
                 End If
             End If
 
