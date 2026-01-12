@@ -84,6 +84,9 @@ Public Class UtilsSEApp
                 SEApp.DelayCompute = True
                 SEApp.Interactive = False
                 SEApp.ScreenUpdating = False
+
+                'This belongs in UtilsExecute for assembly files, probably not for the InteractiveEdit command
+                'Or in each task that accepts assembly files and might benefit from the setting.
                 'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
             Else
                 SEApp.Visible = True
@@ -94,11 +97,15 @@ Public Class UtilsSEApp
                 If UseCurrentSession Then
                     If NoCurrentSessionFound Then
                         SEApp.WindowState = 2  'Maximizes Solid Edge
+                    Else
+                        ' Should leave it in its existing state
                     End If
                 Else
                     SEApp.WindowState = 2
                 End If
 
+                'This belongs in UtilsExecute for assembly files, probably not for the InteractiveEdit command
+                'Or in each task that accepts assembly files and might benefit from the setting.
                 'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
             End If
 
