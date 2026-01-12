@@ -31,7 +31,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ListViewFilesOutOfDate = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.TabControl1 IsNot Nothing And Not Me.RunningStartup Then
                 If ListViewFilesOutOfDate Then
                     BT_Update.BackColor = Color.Orange
 
@@ -1026,6 +1026,8 @@ Public Class Form_Main
     Public Property CLIPresetName As String = ""
     Public Property CLIFileListName As String = ""
 
+    Private Property RunningStartup As Boolean
+
     'DESCRIPTION
     'Solid Edge Housekeeper
     'Robert McAnany 2020-2026
@@ -1113,6 +1115,8 @@ Public Class Form_Main
     End Sub
 
     Private Sub Startup(SavingPresets As Boolean)
+
+        Me.RunningStartup = True
 
         Me.Cursor = Cursors.WaitCursor
 
@@ -1416,6 +1420,7 @@ Public Class Form_Main
 
         End If
 
+        Me.RunningStartup = False
     End Sub
 
 
