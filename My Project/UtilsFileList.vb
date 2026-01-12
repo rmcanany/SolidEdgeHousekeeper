@@ -65,7 +65,7 @@ Public Class UtilsFileList
         End If
 
         If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
-            Dim USEA As New UtilsSEApp(FMain)
+            Dim USEA As New UtilsSEApp(FMain, New Logger("UtilsSEApp", Nothing))
             If Not USEA.SEIsRunning Then
                 ErrorList.Add("SE must be running to obtain active files")
             Else
@@ -362,7 +362,7 @@ Public Class UtilsFileList
                     FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
 
                 Case "ActiveFile", "ActiveFiles"
-                    Dim USEA As New UtilsSEApp(FMain)
+                    Dim USEA As New UtilsSEApp(FMain, New Logger("UtilsSEApp", Nothing))
 
                     If USEA.SEIsRunning Then
                         'Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents

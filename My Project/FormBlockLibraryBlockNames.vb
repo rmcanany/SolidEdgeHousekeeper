@@ -126,7 +126,7 @@ Public Class FormBlockLibraryBlockNames
 
         Me.Cursor = Cursors.WaitCursor
 
-        Dim USEA As New UtilsSEApp(Form_Main)
+        Dim USEA As New UtilsSEApp(Form_Main, New Logger("Update block library", Nothing))
 
         LabelStatus.Text = "Starting Solid Edge..."
 
