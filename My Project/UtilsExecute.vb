@@ -11,9 +11,13 @@ Public Class UtilsExecute
     Public Property StartTime As DateTime
     Public Property ErrorLogger As HCErrorLogger
 
+    Private Property USEA As UtilsSEApp
+
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
+        Me.ErrorLogger = New HCErrorLogger("Housekeeper")
+        Me.USEA = New UtilsSEApp(Me.FMain, Me.ErrorLogger.AddFile("UtilsSEApp"))
     End Sub
 
 
@@ -24,7 +28,7 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        Me.ErrorLogger = New HCErrorLogger("Housekeeper")
+        'Me.ErrorLogger = New HCErrorLogger("Housekeeper")
 
         FMain.SaveSettings(SavingPresets:=False)  ' Updates JSON Properties and saves settings
 
@@ -45,11 +49,11 @@ Public Class UtilsExecute
 
         TotalAborts = 0
 
-        Dim USEA = New UtilsSEApp(FMain)
+        'Dim USEA = New UtilsSEApp(FMain)
 
         If FMain.SolidEdgeRequired > 0 Then
-            USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
-            SEApp = USEA.SEApp
+            Me.USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
+            Me.SEApp = Me.USEA.SEApp
         End If
 
         Me.StartTime = Now
@@ -108,11 +112,7 @@ Public Class UtilsExecute
         FMain.ButtonCancel.Text = "Cancel"
 
         If Me.ErrorLogger.HasErrors Then
-            If FMain.CLIActive Then
-                Me.ErrorLogger.Save()
-            Else
-                Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
-            End If
+            'Me.ErrorLogger.Save()
             'Try
             '    ' Try to use the default application to open the file.
             '    Process.Start(Me.ErrorLogger.LogfileName)
@@ -120,6 +120,7 @@ Public Class UtilsExecute
             '    ' If none, open with notepad.exe
             '    Process.Start("notepad.exe", Me.ErrorLogger.LogfileName)
             'End Try
+            Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
         Else
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
@@ -135,10 +136,10 @@ Public Class UtilsExecute
         Dim HeaderLogger As Logger = ErrorLogger.AddFile("Please correct the following before continuing")
         Dim StartLogger As Logger = HeaderLogger.AddLogger("")
 
-        Dim USEA = New UtilsSEApp(FMain)
+        'Dim USEA = New UtilsSEApp(FMain)
 
         If Not FMain.UseCurrentSession Then
-            If USEA.SEIsRunning() Then
+            If Me.USEA.SEIsRunning() Then
                 StartLogger.AddMessage("Close Solid Edge")
             End If
         End If
@@ -147,7 +148,7 @@ Public Class UtilsExecute
             StartLogger.AddMessage("Cannot use current session AND run in background.  Disable one or the other on the Configuration Tab -- General Page.")
         End If
 
-        If USEA.DMIsRunning() Then
+        If Me.USEA.DMIsRunning() Then
             StartLogger.AddMessage("Close Revision Manager")
         End If
 
@@ -305,11 +306,7 @@ Public Class UtilsExecute
 
         If StartLogger.HasErrors Then Proceed = False
 
-        If FMain.CLIActive Then
-            ErrorLogger.Save()
-        Else
-            ErrorLogger.ReportErrors(UseMessageBox:=True)
-        End If
+        ErrorLogger.ReportErrors(UseMessageBox:=True)
 
         Return Proceed
     End Function
@@ -586,14 +583,14 @@ Public Class UtilsExecute
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
                 If FMain.SolidEdgeRequired > 0 Then
-                    Dim USEA = New UtilsSEApp(FMain)
-                    USEA.SEApp = SEApp
+                    'Dim USEA = New UtilsSEApp(FMain)
+                    'USEA.SEApp = SEApp
 
-                    USEA.SEStop(FMain.UseCurrentSession)
-                    SEApp = Nothing
+                    'USEA.SEStop(FMain.UseCurrentSession)
+                    'SEApp = Nothing
 
-                    USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
-                    SEApp = USEA.SEApp
+                    Me.USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
+                    Me.SEApp = Me.USEA.SEApp
                 End If
             End If
 
