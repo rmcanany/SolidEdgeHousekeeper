@@ -98,7 +98,7 @@ Public Class UtilsSEApp
                     If NoCurrentSessionFound Then
                         SEApp.WindowState = 2  'Maximizes Solid Edge
                     Else
-                        ' Should leave it in its existing state
+                        ' Should leave it in its existing status
                     End If
                 Else
                     SEApp.WindowState = 2
