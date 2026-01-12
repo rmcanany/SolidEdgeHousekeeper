@@ -11,12 +11,16 @@ Public Class UtilsSEApp
 
     Private Property EdgeProcess As Diagnostics.Process
     Private Property ErrorLogger As Logger
+    Private Property CurrentlyOpenFiles As List(Of String)
+    Private Property CurrentlyActiveFile As String
+
 
     Public Sub New(_FMain As Form_Main, _ErrorLogger As Logger)
         Me.FMain = _FMain
         Me.ErrorLogger = _ErrorLogger
 
         Me.EdgeProcess = New Diagnostics.Process
+        Me.CurrentlyOpenFiles = New List(Of String)
     End Sub
 
 
@@ -32,7 +36,9 @@ Public Class UtilsSEApp
 
         If SEIsRunning() Then
             Me.EdgeProcess = GetEdgeProcess()
-            If Me.EdgeProcess Is Nothing Then ErrorLogger.AddMessage("Unable to obtain process 'edge.exe'")
+            If Me.EdgeProcess Is Nothing Then
+                ErrorLogger.AddMessage("Unable to obtain process 'edge.exe'")
+            End If
         Else
             NoCurrentSessionFound = True
             Me.EdgeProcess.StartInfo.FileName = "edge.exe"
@@ -101,6 +107,18 @@ Public Class UtilsSEApp
             SEApp.GetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
             SEApp.SetGlobalParameter(Param, ProcessDraftsInactive)
 
+            ' Save currently open document names, if any.
+            If Not SEApp.Documents.Count = 0 Then
+                Dim Docs As SolidEdgeFramework.Documents = SEApp.Documents
+                Dim ActiveDoc As SolidEdgeFramework.SolidEdgeDocument = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                For Each Doc As SolidEdgeFramework.SolidEdgeDocument In Docs
+                    Me.CurrentlyOpenFiles.Add(Doc.FullName)
+                    ActiveDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                    If Doc Is ActiveDoc Then
+                        Me.CurrentlyActiveFile = Doc.FullName
+                    End If
+                Next
+            End If
             'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
         End If
 
@@ -261,10 +279,10 @@ Public Class UtilsSEApp
         Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument = Nothing
         Dim tmpDocument As SolidEdgeFramework.SolidEdgeDocument
 
-        If FMain.ActiveFiles IsNot Nothing Then
-            For Each Filename As String In FMain.ActiveFiles
+        If Me.CurrentlyOpenFiles IsNot Nothing Then
+            For Each Filename As String In Me.CurrentlyOpenFiles
                 tmpDocument = CType(SEApp.Documents.Open(Filename), SolidEdgeFramework.SolidEdgeDocument)
-                If Filename = FMain.ActiveFile Then ActiveDocument = tmpDocument
+                If Filename = Me.CurrentlyActiveFile Then ActiveDocument = tmpDocument
                 SEApp.DoIdle()
             Next
             If ActiveDocument IsNot Nothing Then ActiveDocument.Activate()

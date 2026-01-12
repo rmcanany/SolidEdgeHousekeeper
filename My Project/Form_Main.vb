@@ -31,7 +31,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ListViewFilesOutOfDate = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.TabControl1 IsNot Nothing And Not RunningStartup Then
                 If ListViewFilesOutOfDate Then
                     BT_Update.BackColor = Color.Orange
 
@@ -1022,6 +1022,8 @@ Public Class Form_Main
     Public Property ActiveFile As String
     Public Property ActiveFiles As List(Of String)
 
+    Private Property RunningStartup As Boolean
+
     'DESCRIPTION
     'Solid Edge Housekeeper
     'Robert McAnany 2020-2026
@@ -1059,6 +1061,7 @@ Public Class Form_Main
 
     Private Sub Startup(Presets As Boolean)
 
+        RunningStartup = True
         Me.Cursor = Cursors.WaitCursor
 
         Dim UP As New UtilsPreferences()
@@ -1331,6 +1334,8 @@ Public Class Form_Main
         'If Me.DebugMode Then
         '    HCDebugLogger.ReportErrors(UseMessageBox:=False)
         'End If
+
+        RunningStartup = False
 
     End Sub
 
