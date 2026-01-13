@@ -120,7 +120,11 @@ Public Class UtilsExecute
             '    ' If none, open with notepad.exe
             '    Process.Start("notepad.exe", Me.ErrorLogger.LogfileName)
             'End Try
-            Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
+            If FMain.CLIActive Then
+                Me.ErrorLogger.Save()
+            Else
+                Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
+            End If
         Else
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
