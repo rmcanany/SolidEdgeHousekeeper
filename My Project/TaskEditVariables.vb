@@ -132,7 +132,15 @@ Public Class TaskEditVariables
         VariablesToEdit = Me.JSONString
 
         If Not VariablesToEdit = "" Then
-            tmpVariablesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
+            If VariablesToEdit.StartsWith("SavedSetting") Then
+                Dim UP As New UtilsPreferences
+
+                Dim EditVariablesSavedSettingsDict = UP.GetEditVariablesSavedSettings
+                Dim Key = Me.JSONString.Split(":"c)(1)
+                tmpVariablesToEditDict = EditVariablesSavedSettingsDict(Key)
+            Else
+                tmpVariablesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
+            End If
             ' Dictionary format
             '{
             '    "1":

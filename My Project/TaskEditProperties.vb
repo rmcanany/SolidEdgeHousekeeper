@@ -212,7 +212,17 @@ Public Class TaskEditProperties
             '...
             '}
 
-            PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+            If PropertiesToEdit.StartsWith("SavedSetting") Then
+                Dim UP As New UtilsPreferences
+                Dim EditPropertiesSavedSettingsDict = UP.GetEditPropertiesSavedSettings
+                Dim Key As String = Me.JSONString.Split(":"c)(1)
+                PropertiesToEditDict = EditPropertiesSavedSettingsDict(Key)
+                Dim i = 0
+            Else
+                PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+
+            End If
+
 
         Else
             TaskLogger.AddMessage("No properties provided")
