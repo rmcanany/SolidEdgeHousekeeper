@@ -51,7 +51,7 @@ Public Class HCStructuredStorageDoc
                 Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.Read)
             End If
         Catch ex As Exception
-            'Dim L As Integer = Me.FullName.Count
+            Dim exm = ex.Message
             Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
         End Try
 

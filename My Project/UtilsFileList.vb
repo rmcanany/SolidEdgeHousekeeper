@@ -4,15 +4,15 @@ Imports System.Reflection
 Imports ListViewExtended
 
 Public Class UtilsFileList
-    Public Property ListViewFiles As ListView
+    Public Property ListViewFiles As ListViewCollapsible
     Public Property ListViewSources As ListView
     Public Property FMain As Form_Main
 
 
-    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewCollapsible, ListViewSources As ListView)
+    Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
-        Me.ListViewFiles = ListViewFiles
-        Me.ListViewSources = ListViewSources
+        Me.ListViewFiles = Me.FMain.ListViewFiles
+        Me.ListViewSources = Me.FMain.ListViewSources
     End Sub
 
 
@@ -65,10 +65,13 @@ Public Class UtilsFileList
         End If
 
         If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
-            Dim USEA As New UtilsSEApp(FMain, New Logger("UtilsSEApp", Nothing))
+            Dim USEA = FMain.USEA
+            USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
             If Not USEA.SEIsRunning Then
                 ErrorList.Add("SE must be running to obtain active files")
             Else
+                USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+
                 Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
                 If SEDocuments.Count > 0 Then
                     If GroupTags.Contains("ActiveFiles") Then
@@ -362,22 +365,14 @@ Public Class UtilsFileList
                     FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
 
                 Case "ActiveFile", "ActiveFiles"
-                    Dim USEA As New UtilsSEApp(FMain, New Logger("UtilsSEApp", Nothing))
+                    Dim USEA = Me.FMain.USEA
+                    USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
 
                     If USEA.SEIsRunning Then
-                        'Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
-                        'Dim tmpFoundFiles As New List(Of String)
-                        'If Source.Tag.ToString = "ActiveFiles" Then
-                        '    For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
-                        '        tmpFoundFiles.Add(SEDocument.FullName)
-                        '    Next
-                        'Else
-                        '    tmpFoundFiles.Add(CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument).FullName)
-                        'End If
 
-                        'FoundFiles = tmpFoundFiles
-
+                        USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=False, ProcessDraftsInactive:=False)
                         Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+
                         FMain.ActiveFiles = New List(Of String)
                         FMain.ActiveFile = ""
                         If SEDocuments.Count > 0 Then

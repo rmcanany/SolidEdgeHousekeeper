@@ -10,14 +10,14 @@ Public Class UtilsSEApp
     Private Property PreviousProcessDraftsInactive As Object  ' In reality this is a boolean
 
     Private Property EdgeProcess As Diagnostics.Process
-    Private Property ErrorLogger As Logger
+    Public Property ErrorLogger As Logger
     Private Property CurrentlyOpenFiles As List(Of String)
     Private Property CurrentlyActiveFile As String
 
 
-    Public Sub New(_FMain As Form_Main, _ErrorLogger As Logger)
+    Public Sub New(_FMain As Form_Main)
         Me.FMain = _FMain
-        Me.ErrorLogger = _ErrorLogger
+        'Me.ErrorLogger = _ErrorLogger
 
         Me.EdgeProcess = New Diagnostics.Process
         Me.CurrentlyOpenFiles = New List(Of String)

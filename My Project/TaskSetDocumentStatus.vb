@@ -102,7 +102,7 @@ Public Class TaskSetDocumentStatus
             'SSDoc.ReadVariableNames()
         Catch ex As Exception
             Proceed = False
-            TaskLogger.AddMessage("Unable to open file")
+            TaskLogger.AddMessage($"Unable to open file: {ex.Message}")
 
         End Try
 
