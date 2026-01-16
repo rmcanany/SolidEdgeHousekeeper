@@ -69,6 +69,8 @@ Public Class UtilsFileList
             If Not USEA.SEIsRunning Then
                 ErrorList.Add("SE must be running to obtain active files")
             Else
+                USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+
                 Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
                 If SEDocuments.Count > 0 Then
                     If GroupTags.Contains("ActiveFiles") Then
@@ -377,7 +379,9 @@ Public Class UtilsFileList
 
                         'FoundFiles = tmpFoundFiles
 
+                        USEA.SEStart(RunInBackground:=True, UseCurrentSession:=True, NoUpdateMRU:=False, ProcessDraftsInactive:=False)
                         Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+
                         FMain.ActiveFiles = New List(Of String)
                         FMain.ActiveFile = ""
                         If SEDocuments.Count > 0 Then

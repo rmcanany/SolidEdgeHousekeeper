@@ -615,7 +615,9 @@ There are a lot of properties in a Solid Edge file.  This is where you decide wh
   <img src="My%20Project/media/customize_property_list.png">
 </p>
 
-The **Available Properties** are populated by clicking the `Update` button.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
+The **Available Properties** are populated by clicking the `Update` button.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Favorite Properties** list and add it manually.
+
+Note, if you have added custom properterties to your Material Table, you can get those, too.  However there is a trick.  You have to temporarily set the material containing those properties in one of your templates for them to be found.  After updating, you can change the material back to None.  In the future, we will parse the Material Table for that information, but that is not currently available.
 
 </details>
 
