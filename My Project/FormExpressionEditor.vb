@@ -485,7 +485,8 @@ Public Class FormExpressionEditor
                     ' I wrote this code RAW and is not perfect; I always forget how to use the proper method you have developed in UtilsCommon.vb please replace it with the proper one.
                     ' F.Arfilli
 
-                    Dim USEA As New UtilsSEApp(Form_Main, New Logger("Expression editor", Nothing))
+                    Dim USEA As New UtilsSEApp(Form_Main)
+                    USEA.ErrorLogger = New Logger("Expression editor", Nothing)
 
                     Dim SEApp As SolidEdgeFramework.Application
                     Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument

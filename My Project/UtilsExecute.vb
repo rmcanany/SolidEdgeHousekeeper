@@ -17,7 +17,8 @@ Public Class UtilsExecute
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
         Me.ErrorLogger = New HCErrorLogger("Housekeeper")
-        Me.USEA = New UtilsSEApp(Me.FMain, Me.ErrorLogger.AddFile("UtilsSEApp"))
+        Me.USEA = Me.FMain.USEA
+        USEA.ErrorLogger = Me.ErrorLogger.AddFile("UtilsSEApp")
     End Sub
 
 
@@ -37,7 +38,7 @@ Public Class UtilsExecute
             Exit Sub
         End If
 
-        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
+        Dim UFL As New UtilsFileList(FMain)
 
         FilesToProcessTotal = UFL.GetTotalFilesToProcess()
         FilesToProcessCompleted = 0
@@ -204,7 +205,7 @@ Public Class UtilsExecute
                 SelectedTasksCount += 1
 
                 If Task.RequiresSourceDirectories Then
-                    Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
+                    Dim UFL As New UtilsFileList(FMain)
                     Task.SourceDirectories = UFL.GetSourceDirectories()
                 End If
 
@@ -352,7 +353,7 @@ Public Class UtilsExecute
         Dim FileToProcess As String
         Dim msg As String
 
-        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
+        Dim UFL As New UtilsFileList(FMain)
 
         If Filetype = "Assembly" Then
             FilesToProcess = UFL.GetFileNames("*.asm")

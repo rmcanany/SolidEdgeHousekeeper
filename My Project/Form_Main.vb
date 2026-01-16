@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "30"  ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "31"  ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -921,7 +921,7 @@ Public Class Form_Main
                     End If
                 Next
 
-                Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
+                Dim UFL As New UtilsFileList(Me)
                 Me.Cursor = Cursors.WaitCursor
                 UFL.UpdatePropertiesColumns()
                 Me.Cursor = Cursors.Default
@@ -1021,6 +1021,7 @@ Public Class Form_Main
 
     Public Property ActiveFile As String
     Public Property ActiveFiles As List(Of String)
+    Public Property USEA As UtilsSEApp
 
     Private Property RunningStartup As Boolean
 
@@ -1334,6 +1335,9 @@ Public Class Form_Main
         'If Me.DebugMode Then
         '    HCDebugLogger.ReportErrors(UseMessageBox:=False)
         'End If
+
+        Me.USEA = New UtilsSEApp(Me)
+        Me.USEA.ErrorLogger = New Logger("Dummy", Nothing)
 
         RunningStartup = False
 
@@ -2158,7 +2162,7 @@ Public Class Form_Main
             Me.StopProcess = False
             Me.ButtonCancel.Text = "Stop"
 
-            Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
+            Dim UFL As New UtilsFileList(Me)
             Me.Cursor = Cursors.WaitCursor
             UFL.UpdatePropertiesColumns()
             Me.Cursor = Cursors.Default
@@ -2188,7 +2192,7 @@ Public Class Form_Main
 
             ButtonProcess.Text = "Process"
 
-            Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
+            Dim UFL As New UtilsFileList(Me)
             UFL.New_UpdateFileList()
 
         End If
@@ -3508,7 +3512,7 @@ Public Class Form_Main
                 tmpListOfColumns.Add(PropColumn)
             Next
             Me.ListOfColumns = tmpListOfColumns  ' Trigger update
-            Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
+            Dim UFL As New UtilsFileList(Me)
             Me.Cursor = Cursors.WaitCursor
             UFL.UpdatePropertiesColumns()
             Me.Cursor = Cursors.Default

@@ -44,7 +44,7 @@ Public Class UtilsPreferences
         Dim SkipProps As New List(Of String)
         SkipProps.AddRange({"version", "previewversion", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
-        SkipProps.AddRange({"hcdebuglogger", "savedexpressions"})
+        SkipProps.AddRange({"hcdebuglogger", "savedexpressions", "usea"})
 
         If SavingPresets And Not FMain.PresetsSaveFileFilters Then
             SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
@@ -72,7 +72,7 @@ Public Class UtilsPreferences
                     Value = JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
                     'MsgBox(String.Format("list`1 '{0}' detected", PropInfo.Name))
                 Case Else
-                    MsgBox(String.Format("In UP.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropType))
+                    MsgBox(String.Format("In UP.SaveFormMainSettings: PropInfo.Name '{0}' not recognized", PropInfo.Name.ToLower))
                     'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
             End Select
 
