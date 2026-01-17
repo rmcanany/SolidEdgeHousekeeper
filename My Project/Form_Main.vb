@@ -1403,6 +1403,11 @@ Public Class Form_Main
                 ComboBoxPresetName.Text = CLIPresetName
                 ButtonPresetLoad.PerformClick()
 
+                Me.FilterAsm = True
+                Me.FilterPar = True
+                Me.FilterPsm = True
+                Me.FilterDft = True
+
                 Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
                 Me.RemindFilelistUpdate = False
 
@@ -1957,6 +1962,7 @@ Public Class Form_Main
 
         Dim tmpFilenameList As New List(Of String)
 
+        'MsgBox($"{Me.CLIActive} {Me.CLIFileListName}")
         If Me.CLIActive Then
             tmpFilenameList.Add(Me.CLIFileListName)
         Else
