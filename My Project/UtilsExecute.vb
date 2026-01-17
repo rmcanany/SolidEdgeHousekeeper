@@ -12,6 +12,7 @@ Public Class UtilsExecute
     Public Property ErrorLogger As HCErrorLogger
 
     Private Property USEA As UtilsSEApp
+    Private Property MaxEdgeProcessMemoryUsage As Long = 0
 
 
     Public Sub New(_Form_Main As Form_Main)
@@ -127,6 +128,8 @@ Public Class UtilsExecute
         End If
 
         FMain.Cursor = Cursors.Default
+
+        'MsgBox($"MaxEdgePeakMemorySize {Me.MaxEdgeProcessMemoryUsage}")
 
     End Sub
 
@@ -515,6 +518,8 @@ Public Class UtilsExecute
 
                 End If
             End If
+
+            'If Me.USEA.GetEdgeProcessMemoryUsage > Me.MaxEdgeProcessMemoryUsage Then Me.MaxEdgeProcessMemoryUsage = Me.USEA.GetEdgeProcessMemoryUsage
 
 
             '###### PERFORM TASKS ######

@@ -401,4 +401,9 @@ Public Class UtilsSEApp
 
     End Function
 
+    Public Function GetEdgeProcessMemoryUsage() As Long
+        'Return Me.EdgeProcess.HandleCount
+        Return Me.EdgeProcess.WorkingSet64
+    End Function
+
 End Class
