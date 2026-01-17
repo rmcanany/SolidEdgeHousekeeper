@@ -1412,7 +1412,7 @@ Public Class Form_Main
                 Me.RemindFilelistUpdate = False
 
                 Me.BT_DeleteAll.PerformClick()
-                Me.BT_AddFromlist.PerformClick()
+                Me.BT_AddFromlist.PerformClick()  ' Added CLIFilelist if needed.
 
                 Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
 
