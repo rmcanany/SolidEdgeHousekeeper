@@ -1097,22 +1097,9 @@ Public Class Form_Main
                 End
             Else
                 Me.CLIActive = True
-                'MsgBox($"'{CLIActive}', '{CLIPresetName}', '{CLIFileListName}'")
-                'Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
-                'Me.RemindFilelistUpdate = False
-                'Me.BT_AddFromlist.PerformClick()
-                'Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
-                'MsgBox("Here")
-                'Me.BT_Update.PerformClick()
             End If
 
         End If
-        'Me.ActivePreset
-        'Me.ButtonPresetLoad.PerformClick()
-        'BT_AddFromlist
-        'Me.CLIInvocation
-        'Me.CLITextFilename
-        'BT_Update
     End Sub
 
     Private Sub Startup(SavingPresets As Boolean)
@@ -1403,22 +1390,34 @@ Public Class Form_Main
                 ComboBoxPresetName.Text = CLIPresetName
                 ButtonPresetLoad.PerformClick()
 
+                ' Remember old settings
+                Dim OldFilterAsm = Me.FilterAsm
+                Dim OldFilterPar = Me.FilterPar
+                Dim OldFilterPsm = Me.FilterPsm
+                Dim OldFilterDft = Me.FilterDft
+                Dim OldRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
+
+                ' Change settings
                 Me.FilterAsm = True
                 Me.FilterPar = True
                 Me.FilterPsm = True
                 Me.FilterDft = True
-
-                Dim tmpRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
                 Me.RemindFilelistUpdate = False
 
                 Me.BT_DeleteAll.PerformClick()
-                Me.BT_AddFromlist.PerformClick()  ' Added CLIFilelist if needed.
-
-                Me.RemindFilelistUpdate = tmpRemindFilelistUpdate
+                Me.BT_AddFromlist.PerformClick()  ' Adds CLIFilelist if needed.
 
                 Me.BT_Update.PerformClick()
 
                 Me.ButtonProcess.PerformClick()
+
+                ' Restore settings
+                Me.FilterAsm = OldFilterAsm
+                Me.FilterPar = OldFilterPar
+                Me.FilterPsm = OldFilterPsm
+                Me.FilterDft = OldFilterDft
+                Me.RemindFilelistUpdate = OldRemindFilelistUpdate
+
             Else
                 'MsgBox($"Preset name not found: '{CLIPresetName}'")
                 StartupLogger.AddMessage($"Preset name not found: '{CLIPresetName}'")
