@@ -3,10 +3,6 @@
 Module HousekeeperCLI
 
     Sub Main(ByVal Args() As String)
-        'If Not Args.Count = 4 Then
-        '    'MsgBox("Argument error")
-        '    End
-        'End If
 
         Dim ArgsString As String = ""
         For Each s As String In Args  ' eg. [-p, SetDocumentStatus_T2, -l, .\file list.txt] ' Note some args have space characters.
@@ -17,13 +13,11 @@ Module HousekeeperCLI
             End If
         Next
 
-        'MsgBox(ArgsString)
-
-        Dim Source = $"{System.IO.Path.GetTempPath()}Housekeeper"  ' GetTempPath already has an ending '\'
+        Dim LogDirectory = $"{System.IO.Path.GetTempPath()}Housekeeper"  ' GetTempPath already has an ending '\'
         Dim ActiveFileExtensionsList As New List(Of String)
         ActiveFileExtensionsList.Add("*.log")
 
-        Dim FoundFiles = FileIO.FileSystem.GetFiles(Source,
+        Dim OldLogFiles = FileIO.FileSystem.GetFiles(LogDirectory,
                                      FileIO.SearchOption.SearchTopLevelOnly,
                                      ActiveFileExtensionsList.ToArray)
 
@@ -42,7 +36,7 @@ Module HousekeeperCLI
         P.WaitForExit()
         Dim ExitCode = P.ExitCode
 
-        Dim NewFoundFiles = FileIO.FileSystem.GetFiles(Source,
+        Dim NewLogFiles = FileIO.FileSystem.GetFiles(LogDirectory,
                                      FileIO.SearchOption.SearchTopLevelOnly,
                                      ActiveFileExtensionsList.ToArray)
 
@@ -51,8 +45,8 @@ Module HousekeeperCLI
         Console.WriteLine($"Command line: '{ArgsString}'")
 
         ' List any new log files found, if any
-        For Each s As String In NewFoundFiles
-            If Not FoundFiles.Contains(s) Then
+        For Each s As String In NewLogFiles
+            If Not OldLogFiles.Contains(s) Then
                 Console.WriteLine(s)
             End If
         Next

@@ -1060,7 +1060,7 @@ Public Class Form_Main
 
         ' Args are passed as a string
         ' Whitespace separates them
-        ' eg. c:\data\housekeeper.exe -p SetDocumentStatus_T2 -l ".\file list.txt" -t "In Review"
+        ' eg. c:\data\housekeeper.exe -p SetDocumentStatus_T2 -l ".\file list.txt"
 
         Dim s As String = ""
         For Each s1 In Args
