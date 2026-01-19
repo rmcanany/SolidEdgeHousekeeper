@@ -245,6 +245,17 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             TemplateSheetSizeOptions.Add(Sheet.SheetSetup.SheetSizeOption)
         Next
 
+        Dim tmpDocSheetsInUse As List(Of SolidEdgeDraft.Sheet) = UC.GetSheets(tmpSEDoc, "Working")
+        Dim tmpDocSheetsInUseNames As New List(Of String)
+        For Each tmpSheet As SolidEdgeDraft.Sheet In tmpDocSheetsInUse
+            Try
+                Dim tmpName As String = tmpSheet.Background.Name
+                If Not tmpDocSheetsInUseNames.Contains(tmpName) Then tmpDocSheetsInUseNames.Add(tmpName)
+            Catch ex As Exception
+
+            End Try
+        Next
+
         Dim tmpSEDocSheets As List(Of SolidEdgeDraft.Sheet) = UC.GetSheets(tmpSEDoc, "Background")
         Dim tmpSEDocSheetNames As New List(Of String)
         Dim tmpSEDocSheetSizeOptions As New List(Of SolidEdgeDraft.PaperSizeConstants)
@@ -270,7 +281,10 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     tmpSEDocSheet.Name = TemplateSheetNames(j)
                 End If
             Else
-                TaskLogger.AddMessage("Template has no matching background")
+                If tmpDocSheetsInUseNames.Contains(tmpSEDocSheetName) Then
+                    TaskLogger.AddMessage($"Template has no matching background '{tmpSEDocSheetName}'")
+
+                End If
             End If
         Next
 
@@ -316,6 +330,19 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         ' ############ DimensionStyles ############
 
+        Dim DocStyleNamesInUse As New List(Of String)
+        Dim Dims = UC.GetDocDimensions(CType(tmpSEDoc, SolidEdgeFramework.SolidEdgeDocument))
+        For Each DimName As String In Dims.Keys
+            Dim tmpDim As SolidEdgeFrameworkSupport.Dimension = Dims(DimName)
+            If Not DocStyleNamesInUse.Contains(tmpDim.Style.Name) Then
+                DocStyleNamesInUse.Add(tmpDim.Style.Name)
+            End If
+        Next
+        'Dim NewWay As Boolean = True
+        'If NewWay Then
+        '    Dim i = 0
+        'End If
+
         Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
         DocDimensionStyles = CType(tmpSEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
 
@@ -357,7 +384,11 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             End If
         Next
 
-        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        'If Len(MissingStyles) > 0 Then
+        '    TaskLogger.AddMessage(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
+        'End If
+        MissingStyles = DocStyleNotInTemplate(DocStyleNamesInUse, TemplateStyleNames)
         If Len(MissingStyles) > 0 Then
             TaskLogger.AddMessage(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
         End If
@@ -411,10 +442,10 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             End If
         Next
 
-        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-        If Len(MissingStyles) > 0 Then
-            TaskLogger.AddMessage(String.Format("Drawing View styles in Draft but not in Template: {0}", MissingStyles))
-        End If
+        'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        'If Len(MissingStyles) > 0 Then
+        '    TaskLogger.AddMessage(String.Format("Drawing View styles in Draft but not in Template: {0}", MissingStyles))
+        'End If
 
     End Sub
 
