@@ -65,33 +65,38 @@ Public Class UtilsFileList
         End If
 
         If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
-            Dim USEA = FMain.USEA
-            USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
-            If Not USEA.SEIsRunning Then
-                ErrorList.Add("SE must be running to obtain active files")
+            If FMain.SortDependency Then
+                ErrorList.Add("Active files cannot run with Sort Dependency enabled")
             Else
-                USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
-
-                Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
-                If SEDocuments.Count > 0 Then
-                    If GroupTags.Contains("ActiveFiles") Then
-                        For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
-                            If Not IO.File.Exists(SEDocument.FullName) Then
-                                ErrorList.Add($"File needs to be saved before continuing: '{SEDocument.FullName}'")
-                            End If
-                        Next
-                    End If
-                    If GroupTags.Contains("ActiveFile") Then
-                        Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
-                        ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-                        FMain.ActiveFile = ActiveDocument.FullName
-                        If Not IO.File.Exists(ActiveDocument.FullName) Then
-                            Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
-                            If Not ErrorList.Contains(s) Then ErrorList.Add(s)
-                        End If
-                    End If
+                Dim USEA = FMain.USEA
+                USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
+                If Not USEA.SEIsRunning Then
+                    ErrorList.Add("SE must be running to obtain active files")
                 Else
-                    ErrorList.Add("SE cannot process active files with no file open.")
+                    USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+
+                    Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+                    If SEDocuments.Count > 0 Then
+                        If GroupTags.Contains("ActiveFiles") Then
+                            For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
+                                If Not IO.File.Exists(SEDocument.FullName) Then
+                                    ErrorList.Add($"File needs to be saved before continuing: '{SEDocument.FullName}'")
+                                End If
+                            Next
+                        End If
+                        If GroupTags.Contains("ActiveFile") Then
+                            Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
+                            ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                            FMain.ActiveFile = ActiveDocument.FullName
+                            If Not IO.File.Exists(ActiveDocument.FullName) Then
+                                Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
+                                If Not ErrorList.Contains(s) Then ErrorList.Add(s)
+                            End If
+                        End If
+                    Else
+                        ErrorList.Add("SE cannot process active files with no file open.")
+                    End If
+
                 End If
 
             End If
@@ -809,7 +814,7 @@ Public Class UtilsFileList
             System.Windows.Forms.Application.DoEvents()
 
             Try
-                SSDoc = New HCStructuredStorageDoc(Filename)
+                SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
             Catch ex As Exception
                 If SSDoc IsNot Nothing Then SSDoc.Close()
@@ -894,7 +899,7 @@ Public Class UtilsFileList
                         If ValidExtensions.Contains(IO.Path.GetExtension(SSLinkName)) Then
                             If IO.File.Exists(SSLinkName) Then
                                 Try
-                                    SSLinkDoc = New HCStructuredStorageDoc(SSLinkName)
+                                    SSLinkDoc = New HCStructuredStorageDoc(SSLinkName, _OpenReadWrite:=False)
                                     SSLinkDoc.ReadLinks(FMain.LinkManagementOrder)
                                     LinkDict(SSDocName).Add(SSLinkName)
                                     LinkDict = GetLinks(SSLinkDoc, LinkDict, MissingFilesList)
