@@ -7,19 +7,22 @@ Public Class UtilsFileList
     Public Property ListViewFiles As ListViewCollapsible
     Public Property ListViewSources As ListView
     Public Property FMain As Form_Main
-
+    Public Property ErrorLogger As HCErrorLogger
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
         Me.ListViewFiles = Me.FMain.ListViewFiles
         Me.ListViewSources = Me.FMain.ListViewSources
+        Me.ErrorLogger = New HCErrorLogger("Housekeeper")
     End Sub
 
 
     Private Function CheckStartConditions(ByRef BareTopLevelAssembly As Boolean) As Boolean
         Dim Proceed As Boolean = True
 
-        Dim ErrorList As New List(Of String)
+        Dim StartLogger As Logger = ErrorLogger.AddFile("Check Start Conditions")
+
+        'Dim ErrorList As New List(Of String)
         Dim GroupTags As New List(Of String)
         Dim msg As String
 
@@ -35,7 +38,8 @@ Public Class UtilsFileList
             If GroupTags.Contains("ASM_Folder") Then
                 msg = "A top level assembly folder was found with no top level assembly specified.  "
                 msg += "Please add an assembly, or delete the folder(s)."
-                ErrorList.Add(msg)
+                'ErrorList.Add(msg)
+                StartLogger.AddMessage(msg)
             End If
         End If
 
@@ -43,12 +47,14 @@ Public Class UtilsFileList
 
             If (FMain.TLABottomUp) And (Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename)) Then
                 msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
-                ErrorList.Add(msg)
+                'ErrorList.Add(msg)
+                StartLogger.AddMessage(msg)
             End If
 
             If (FMain.TLATopDown) And (Not FileIO.FileSystem.FileExists(FMain.LinkManagementFilename)) Then
                 msg = "LinkMgmt.txt file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
-                ErrorList.Add(msg)
+                'ErrorList.Add(msg)
+                StartLogger.AddMessage(msg)
             End If
 
             If Not (GroupTags.Contains("ASM_Folder")) Then
@@ -56,7 +62,9 @@ Public Class UtilsFileList
                 If FMain.WarnBareTLA Then
                     msg = "A top-level assembly with no top-level folder detected.  "
                     msg += "No 'Where Used' will be performed."
-                    ErrorList.Add(msg)
+                    msg += "Disable this check on the Configuration Tab -- Top Level Assembly page"
+                    'ErrorList.Add(msg)
+                    StartLogger.AddMessage(msg)
                 Else
                     BareTopLevelAssembly = True
                 End If
@@ -66,12 +74,14 @@ Public Class UtilsFileList
 
         If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
             If FMain.SortDependency Then
-                ErrorList.Add("Active files cannot run with Sort Dependency enabled")
+                'ErrorList.Add("Active files cannot run with Sort Dependency enabled")
+                StartLogger.AddMessage("Active files cannot run with Sort Dependency enabled")
             Else
                 Dim USEA = FMain.USEA
                 USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
                 If Not USEA.SEIsRunning Then
-                    ErrorList.Add("SE must be running to obtain active files")
+                    'ErrorList.Add("SE must be running to obtain active files")
+                    StartLogger.AddMessage("SE must be running to obtain active files")
                 Else
                     USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
 
@@ -80,7 +90,8 @@ Public Class UtilsFileList
                         If GroupTags.Contains("ActiveFiles") Then
                             For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
                                 If Not IO.File.Exists(SEDocument.FullName) Then
-                                    ErrorList.Add($"File needs to be saved before continuing: '{SEDocument.FullName}'")
+                                    '                                    ErrorList.Add($"File needs to be saved before continuing: '{SEDocument.FullName}'")
+                                    StartLogger.AddMessage($"File needs to be saved before continuing: '{SEDocument.FullName}'")
                                 End If
                             Next
                         End If
@@ -90,11 +101,13 @@ Public Class UtilsFileList
                             FMain.ActiveFile = ActiveDocument.FullName
                             If Not IO.File.Exists(ActiveDocument.FullName) Then
                                 Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
-                                If Not ErrorList.Contains(s) Then ErrorList.Add(s)
+                                'If Not ErrorList.Contains(s) Then ErrorList.Add(s)
+                                If Not StartLogger.ContainsMessage(s) Then StartLogger.AddMessage(s)
                             End If
                         End If
                     Else
-                        ErrorList.Add("SE cannot process active files with no file open.")
+                        'ErrorList.Add("SE cannot process active files with no file open.")
+                        StartLogger.AddMessage("SE cannot process active files with no file open.")
                     End If
 
                 End If
@@ -103,33 +116,38 @@ Public Class UtilsFileList
 
         End If
 
-        If ErrorList.Count > 0 Then
+        'If ErrorList.Count > 0 Then
 
-            Dim WarningDetected As Boolean = False
+        '    Dim WarningDetected As Boolean = False
 
-            Dim ErrorMessage As String = ""
-            For Each s As String In ErrorList
-                If s.Contains("no top-level folder") Then WarningDetected = True
-                ErrorMessage = String.Format("{0}{1}{2}", ErrorMessage, s, vbCrLf)
-            Next
+        '    Dim ErrorMessage As String = ""
+        '    For Each s As String In ErrorList
+        '        If s.Contains("no top-level folder") Then WarningDetected = True
+        '        ErrorMessage = String.Format("{0}{1}{2}", ErrorMessage, s, vbCrLf)
+        '    Next
 
-            If (WarningDetected) And (ErrorList.Count = 1) Then
+        '    If (WarningDetected) And (ErrorList.Count = 1) Then
 
-                ErrorMessage = String.Format("{0}{1}Click OK to continue, or Cancel to stop.", ErrorMessage, vbCrLf)
-                ErrorMessage = String.Format("{0}{1}Disable this message on the Configuration Tab -- Top Level Assembly Page.", ErrorMessage, vbCrLf)
+        '        ErrorMessage = String.Format("{0}{1}Click OK to continue, or Cancel to stop.", ErrorMessage, vbCrLf)
+        '        ErrorMessage = String.Format("{0}{1}Disable this message on the Configuration Tab -- Top Level Assembly Page.", ErrorMessage, vbCrLf)
 
-                Dim Result As MsgBoxResult = MsgBox(ErrorMessage, vbOKCancel)
-                If Result = MsgBoxResult.Ok Then
-                    BareTopLevelAssembly = True
-                    Proceed = True
-                Else
-                    Proceed = False
-                End If
-            Else
-                MsgBox(ErrorMessage, vbOKOnly)
-                Proceed = False
-            End If
+        '        Dim Result As MsgBoxResult = MsgBox(ErrorMessage, vbOKCancel)
+        '        If Result = MsgBoxResult.Ok Then
+        '            BareTopLevelAssembly = True
+        '            Proceed = True
+        '        Else
+        '            Proceed = False
+        '        End If
+        '    Else
+        '        MsgBox(ErrorMessage, vbOKOnly)
+        '        Proceed = False
+        '    End If
 
+        'End If
+
+        If Me.ErrorLogger.HasErrors Then
+            Me.ErrorLogger.ReportErrors(UseMessageBox:=True)
+            Proceed = False
         End If
 
         Return Proceed
@@ -158,8 +176,6 @@ Public Class UtilsFileList
         If FMain.FilterPsm Then ActiveFileExtensionsList.Add("*.psm")
         If FMain.FilterDft Then ActiveFileExtensionsList.Add("*.dft")
 
-        ListViewFiles.BeginUpdate()
-
         ListViewFiles.Items.Clear()
 
 
@@ -173,8 +189,10 @@ Public Class UtilsFileList
 
         Dim tmpFoundFiles As New List(Of String)
 
+        Dim FindFilesLogger As Logger = Me.ErrorLogger.AddFile("Find Files")
+
         For Each item As ListViewItem In ListViewSources.Items
-            Dim tmptmpFoundFiles = FindFiles(item, BareTopLevelAssembly)
+            Dim tmptmpFoundFiles = FindFiles(item, BareTopLevelAssembly, FindFilesLogger)
             If tmptmpFoundFiles IsNot Nothing Then
                 tmpFoundFiles.AddRange(tmptmpFoundFiles)
             End If
@@ -200,7 +218,7 @@ Public Class UtilsFileList
         ' Dependency sort
         If Not FoundFiles Is Nothing Then
             If FMain.SortDependency Then
-                FoundFiles = GetDependencySortedFiles(FoundFiles)
+                FoundFiles = GetDependencySortedFiles(FoundFiles, FindFilesLogger)
             End If
         End If
 
@@ -216,7 +234,7 @@ Public Class UtilsFileList
             ' Filter by properties
             If FMain.EnablePropertyFilter Then
                 System.Threading.Thread.Sleep(100)
-                Dim UPF As New UtilsPropertyFilters(Me.FMain)
+                Dim UPF As New UtilsPropertyFilters(Me.FMain, FindFilesLogger)
                 FoundFiles = UPF.FilterProperties(FoundFiles)
             End If
 
@@ -236,17 +254,26 @@ Public Class UtilsFileList
             End If
         End If
 
+        If Me.ErrorLogger.HasErrors Then
+            ErrorLogger.ReportErrors(UseMessageBox:=False)
+            FMain.StopProcess = False
+            FMain.ButtonCancel.Text = "Cancel"
+
+            FMain.Cursor = Cursors.Default
+            Exit Sub
+        End If
+
+        ListViewFiles.BeginUpdate()
 
         ' Populate ListView
         If Not FoundFiles Is Nothing Then
             PopulateListView(FoundFiles)
         End If
 
+        ListViewFiles.EndUpdate()
 
         FMain.StopProcess = False
         FMain.ButtonCancel.Text = "Cancel"
-
-        ListViewFiles.EndUpdate()
 
         FMain.Cursor = Cursors.Default
 
@@ -265,8 +292,13 @@ Public Class UtilsFileList
 
     Private Function FindFiles(
         Source As ListViewItem,
-        BareTopLevelAssembly As Boolean
+        BareTopLevelAssembly As Boolean,
+        FindFilesLogger As Logger
         ) As IReadOnlyCollection(Of String)
+
+        ' Searches one Source from ListViewSources.  They are aggregated in the calling function.
+
+        Dim SubLogger As Logger = FindFilesLogger.AddLogger(Source.Name)
 
         Dim NewWay As Boolean = True
 
@@ -305,7 +337,7 @@ Public Class UtilsFileList
 
                 Case = "Folder"
                     FMain.TextBoxStatus.Text = String.Format("Processing folder '{0}'", System.IO.Path.GetFileName(Source.Name))
-                    System.Windows.Forms.Application.DoEvents()
+        System.Windows.Forms.Application.DoEvents()
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
                         Try
@@ -313,9 +345,10 @@ Public Class UtilsFileList
                                      FileIO.SearchOption.SearchTopLevelOnly,
                                      ActiveFileExtensionsList.ToArray)
                         Catch ex As Exception
-                            Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
-                            s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
-                            MsgBox(s, vbOKOnly)
+                            'Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
+                            's = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
+                            'MsgBox(s, vbOKOnly)
+                            SubLogger.AddMessage($"Could not process {Source.Name}: {ex.Message}")
                             FoundFiles = Nothing
                         End Try
                     End If
@@ -354,8 +387,9 @@ Public Class UtilsFileList
                         FoundFiles = tmpFoundFiles
 
                         If Not s = "" Then
-                            s = String.Format("The following folder(s) could not be processed and were ignored{0}{1}", vbCrLf, s)
-                            MsgBox(s, vbOKOnly)
+                            s = String.Format("Could not process the following folder(s) in {Source.Name}{0}{1}", vbCrLf, s)
+                            'MsgBox(s, vbOKOnly)
+                            SubLogger.AddMessage(s)
                         End If
 
                     End If
@@ -799,11 +833,18 @@ Public Class UtilsFileList
         Return Count
     End Function
 
-    Private Function GetDependencySortedFiles(Foundfiles As IReadOnlyCollection(Of String)) As IReadOnlyCollection(Of String)
+    Private Function GetDependencySortedFiles(
+        Foundfiles As IReadOnlyCollection(Of String),
+        FindFilesLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim SubLogger As Logger = FindFilesLogger.AddLogger("Dependency Sort")
+
         Dim OutList As New List(Of String)
         Dim MissingFilesList As New List(Of String)
         Dim DependencyDict As New Dictionary(Of String, List(Of String))
         Dim Filename As String
+        Dim Proceed As Boolean = True
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
         Dim UP As New UtilsPreferences
@@ -817,7 +858,10 @@ Public Class UtilsFileList
                 SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
             Catch ex As Exception
+                SubLogger.AddMessage(ex.Message)
                 If SSDoc IsNot Nothing Then SSDoc.Close()
+                Proceed = False
+                Continue For
             End Try
 
             Dim tmpDependencyDict As New Dictionary(Of String, List(Of String))
@@ -836,33 +880,39 @@ Public Class UtilsFileList
 
         Next
 
-        OutList = SortByDependency(DependencyDict)
+        If Proceed Then
+            OutList = SortByDependency(DependencyDict)
 
-        If MissingFilesList.Count > 0 Then
-            Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+            If MissingFilesList.Count > 0 Then
+                Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
 
-            Dim MissingFilesFileName As String
-            MissingFilesFileName = $"{UP.GetTempDirectory}\{Timestamp}_Missing_Files.log"
-
-            Try
-                Using writer As New IO.StreamWriter(MissingFilesFileName, True)
-                    writer.WriteLine("FILES NOT FOUND")
-                    For Each Filename In MissingFilesList
-                        writer.WriteLine(String.Format(Filename))
-                    Next
-                End Using
+                Dim MissingFilesFileName As String
+                MissingFilesFileName = $"{UP.GetTempDirectory}\{Timestamp}_Missing_Files.log"
 
                 Try
-                    ' Try to use the default application to open the file.
-                    Process.Start(MissingFilesFileName)
+                    Using writer As New IO.StreamWriter(MissingFilesFileName, True)
+                        writer.WriteLine("Information Only: These linked files were not found")
+                        For Each Filename In MissingFilesList
+                            writer.WriteLine(String.Format(Filename))
+                        Next
+                    End Using
+
+                    Try
+                        ' Try to use the default application to open the file.
+                        Process.Start(MissingFilesFileName)
+                    Catch ex As Exception
+                        ' If none, open with notepad.exe
+                        Process.Start("notepad.exe", MissingFilesFileName)
+                    End Try
+
+
                 Catch ex As Exception
-                    ' If none, open with notepad.exe
-                    Process.Start("notepad.exe", MissingFilesFileName)
                 End Try
 
-
-            Catch ex As Exception
-            End Try
+            End If
+            'For Each MissingFile As String In MissingFilesList
+            '        SubLogger.AddMessage($"Not found: {MissingFile}")
+            '    Next
 
         End If
 
