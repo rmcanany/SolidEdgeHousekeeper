@@ -136,8 +136,8 @@ Public Class UtilsExecute
     Public Function CheckStartConditions() As Boolean
         Dim Proceed As Boolean = True
 
-        Dim ErrorLogger As New HCErrorLogger("Housekeeper")
-        Dim HeaderLogger As Logger = ErrorLogger.AddFile("Please correct the following before continuing")
+        Dim tmpErrorLogger As New HCErrorLogger("Housekeeper")
+        Dim HeaderLogger As Logger = tmpErrorLogger.AddFile("Please correct the following before continuing")
         Dim StartLogger As Logger = HeaderLogger.AddLogger("")
 
         'Dim USEA = New UtilsSEApp(FMain)
@@ -310,7 +310,7 @@ Public Class UtilsExecute
 
         If StartLogger.HasErrors Then Proceed = False
 
-        ErrorLogger.ReportErrors(UseMessageBox:=True)
+        tmpErrorLogger.ReportErrors(UseMessageBox:=True)
 
         Return Proceed
     End Function

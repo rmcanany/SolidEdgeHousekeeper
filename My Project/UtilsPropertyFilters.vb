@@ -6,11 +6,15 @@ Public Class UtilsPropertyFilters
 
     Public Property FMain As Form_Main
     Public Property PropertyFilter As HCPropertyFilter
+    Public Property SubLogger As Logger
+    Public Property MissingFilesList As List(Of String)
 
-
-    Public Sub New(_Form_Main As Form_Main)
+    Public Sub New(_Form_Main As Form_Main, _FileListLogger As Logger)
         Me.FMain = _Form_Main
         Me.PropertyFilter = FMain.PropertyFilters.GetActivePropertyFilter
+        'Me.FileListLogger = _FileListLogger
+        Me.SubLogger = _FileListLogger.AddLogger("Property Filter")
+        Me.MissingFilesList = New List(Of String)
     End Sub
 
 
@@ -28,10 +32,47 @@ Public Class UtilsPropertyFilters
 
         FilteredFiles = ProcessFiles(LocalFoundFiles)
 
+        ReportMissingFiles()
+
         FMain.TextBoxStatus.Text = ""
 
         Return FilteredFiles
     End Function
+
+    Private Sub ReportMissingFiles()
+
+        If Me.MissingFilesList.Count > 0 Then
+
+            Dim UP As New UtilsPreferences
+
+            Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+
+            Dim MissingFilesFileName As String
+            MissingFilesFileName = $"{UP.GetTempDirectory}\{Timestamp}_Missing_Files_Property_Filter.log"
+
+            Try
+                Using writer As New IO.StreamWriter(MissingFilesFileName, True)
+                    writer.WriteLine("Information Only: These file's properties were not processed")
+                    For Each Filename In MissingFilesList
+                        writer.WriteLine(String.Format(Filename))
+                    Next
+                End Using
+
+                Try
+                    ' Try to use the default application to open the file.
+                    Process.Start(MissingFilesFileName)
+                Catch ex As Exception
+                    ' If none, open with notepad.exe
+                    Process.Start("notepad.exe", MissingFilesFileName)
+                End Try
+
+
+            Catch ex As Exception
+            End Try
+
+        End If
+
+    End Sub
 
     Private Function ProcessFiles(
         FoundFiles As List(Of String)
@@ -103,6 +144,8 @@ Public Class UtilsPropertyFilters
                     SSDoc.Close()
                 Catch ex As Exception
                     If SSDoc IsNot Nothing Then SSDoc.Close()
+                    'Me.SubLogger.AddMessage($"{FoundFile}: {ex.Message}")
+                    Me.MissingFilesList.Add(FoundFile)
                     GotAMatch = False
                 End Try
 
@@ -138,6 +181,8 @@ Public Class UtilsPropertyFilters
             SSDoc.ReadLinks(FMain.LinkManagementOrder)
         Catch ex As Exception
             If SSDoc IsNot Nothing Then SSDoc.Close()
+            'Me.SubLogger.AddMessage($"{FoundFile}: {ex.Message}")
+            Me.MissingFilesList.Add(FoundFile)
             Return False
         End Try
 
