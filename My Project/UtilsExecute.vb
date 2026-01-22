@@ -194,7 +194,7 @@ Public Class UtilsExecute
         FMain.ListViewFiles.EndUpdate()
 
         If FMain.ListViewFiles.Items.Count = 0 Then
-            StartLogger.AddMessage("Select an input directory with files to process")
+            StartLogger.AddMessage("No files to process")
         End If
 
         If FMain.EnableFileWildcard Then

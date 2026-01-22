@@ -73,46 +73,49 @@ Public Class UtilsFileList
         End If
 
         If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
-            If FMain.SortDependency Then
-                'ErrorList.Add("Active files cannot run with Sort Dependency enabled")
-                StartLogger.AddMessage("Active files cannot run with Sort Dependency enabled")
+
+            Dim USEA = FMain.USEA
+            USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
+            If Not USEA.SEIsRunning Then
+                'ErrorList.Add("SE must be running to obtain active files")
+                StartLogger.AddMessage("SE must be running to obtain active files")
             Else
-                Dim USEA = FMain.USEA
-                USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
-                If Not USEA.SEIsRunning Then
-                    'ErrorList.Add("SE must be running to obtain active files")
-                    StartLogger.AddMessage("SE must be running to obtain active files")
-                Else
-                    USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+                USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
 
-                    Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
-                    If SEDocuments.Count > 0 Then
-                        If GroupTags.Contains("ActiveFiles") Then
-                            For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
-                                If Not IO.File.Exists(SEDocument.FullName) Then
-                                    '                                    ErrorList.Add($"File needs to be saved before continuing: '{SEDocument.FullName}'")
-                                    StartLogger.AddMessage($"File needs to be saved before continuing: '{SEDocument.FullName}'")
-                                End If
-                            Next
-                        End If
-                        If GroupTags.Contains("ActiveFile") Then
-                            Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
-                            ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-                            FMain.ActiveFile = ActiveDocument.FullName
-                            If Not IO.File.Exists(ActiveDocument.FullName) Then
-                                Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
-                                'If Not ErrorList.Contains(s) Then ErrorList.Add(s)
-                                If Not StartLogger.ContainsMessage(s) Then StartLogger.AddMessage(s)
+                Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+                If SEDocuments.Count > 0 Then
+                    If GroupTags.Contains("ActiveFiles") Then
+                        For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
+                            If Not IO.File.Exists(SEDocument.FullName) Then
+                                'ErrorList.Add($"File needs to be saved before continuing: '{SEDocument.FullName}'")
+                                StartLogger.AddMessage($"File needs to be saved before continuing: '{SEDocument.FullName}'")
                             End If
-                        End If
-                    Else
-                        'ErrorList.Add("SE cannot process active files with no file open.")
-                        StartLogger.AddMessage("SE cannot process active files with no file open.")
+                        Next
                     End If
-
+                    If GroupTags.Contains("ActiveFile") Then
+                        Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
+                        ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                        FMain.ActiveFile = ActiveDocument.FullName
+                        If Not IO.File.Exists(ActiveDocument.FullName) Then
+                            Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
+                            'If Not ErrorList.Contains(s) Then ErrorList.Add(s)
+                            If Not StartLogger.ContainsMessage(s) Then StartLogger.AddMessage(s)
+                        End If
+                    End If
+                Else
+                    'ErrorList.Add("SE cannot process active files with no file open.")
+                    StartLogger.AddMessage("SE cannot process active files with no file open.")
                 End If
 
             End If
+
+            '' Moved check to HCStructuredStorage
+            'If FMain.SortDependency Then
+            '    'ErrorList.Add("Active files cannot run with Sort Dependency enabled")
+            '    StartLogger.AddMessage("Active files cannot run with Sort Dependency enabled")
+            'Else
+
+            'End If
 
         End If
 
