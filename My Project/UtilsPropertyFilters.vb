@@ -82,12 +82,16 @@ Public Class UtilsPropertyFilters
         Dim FilteredFiles As New List(Of String)
         Dim GotAMatch As Boolean
 
+        Dim N As Integer = 0
+        Dim Tot As Integer = FoundFiles.Count
+
         For Each FoundFile In FoundFiles
             If Form_Main.StopProcess Then
                 Exit For
             End If
 
-            FMain.TextBoxStatus.Text = String.Format("Property Filter {0}", System.IO.Path.GetFileName(FoundFile))
+            N += 1
+            FMain.TextBoxStatus.Text = $"{N}/{Tot} Property Filter {System.IO.Path.GetFileName(FoundFile)}"
 
             GotAMatch = ProcessFile(FoundFile)
             If GotAMatch Then
