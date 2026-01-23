@@ -861,7 +861,7 @@ Public Class UtilsFileList
                 SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
             Catch ex As Exception
-                SubLogger.AddMessage(ex.Message)
+                SubLogger.AddMessage($"{Filename}: {ex.Message}")
                 If SSDoc IsNot Nothing Then SSDoc.Close()
                 Proceed = False
                 Continue For
