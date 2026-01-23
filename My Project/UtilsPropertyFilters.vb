@@ -145,7 +145,8 @@ Public Class UtilsPropertyFilters
                 Catch ex As Exception
                     If SSDoc IsNot Nothing Then SSDoc.Close()
                     'Me.SubLogger.AddMessage($"{FoundFile}: {ex.Message}")
-                    Me.MissingFilesList.Add(FoundFile)
+                    Dim s As String = $"{FoundFile}: {ex.Message}"
+                    If Not Me.MissingFilesList.Contains(s) Then Me.MissingFilesList.Add(s)
                     GotAMatch = False
                 End Try
 
@@ -182,7 +183,8 @@ Public Class UtilsPropertyFilters
         Catch ex As Exception
             If SSDoc IsNot Nothing Then SSDoc.Close()
             'Me.SubLogger.AddMessage($"{FoundFile}: {ex.Message}")
-            Me.MissingFilesList.Add(FoundFile)
+            Dim s As String = $"{FoundFile}: {ex.Message}"
+            If Not Me.MissingFilesList.Contains(s) Then Me.MissingFilesList.Add(s)
             Return False
         End Try
 
