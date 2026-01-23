@@ -32,7 +32,7 @@ Public Class UtilsPropertyFilters
 
         FilteredFiles = ProcessFiles(LocalFoundFiles)
 
-        ReportMissingFiles()
+        'ReportMissingFiles()
 
         FMain.TextBoxStatus.Text = ""
 
