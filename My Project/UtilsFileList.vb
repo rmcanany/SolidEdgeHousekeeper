@@ -852,9 +852,14 @@ Public Class UtilsFileList
         Dim SSDoc As HCStructuredStorageDoc = Nothing
         Dim UP As New UtilsPreferences
 
+        Dim N As Integer = 0
+        Dim Tot As Integer = Foundfiles.Count
+
         For Each Filename In Foundfiles
 
-            FMain.TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
+            N += 1
+
+            FMain.TextBoxStatus.Text = $"{N}/{Tot} Dependency Sort {IO.Path.GetFileName(Filename)}"
             System.Windows.Forms.Application.DoEvents()
 
             Try
