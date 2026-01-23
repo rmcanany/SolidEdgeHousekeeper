@@ -861,7 +861,8 @@ Public Class UtilsFileList
                 SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
             Catch ex As Exception
-                SubLogger.AddMessage($"{Filename}: {ex.Message}")
+                'SubLogger.AddMessage($"{Filename}: {ex.Message}")
+                SubLogger.AddMessage($"{ex.Message}")
                 If SSDoc IsNot Nothing Then SSDoc.Close()
                 Proceed = False
                 Continue For
@@ -886,33 +887,33 @@ Public Class UtilsFileList
         If Proceed Then
             OutList = SortByDependency(DependencyDict)
 
-            If MissingFilesList.Count > 0 Then
-                Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+            'If MissingFilesList.Count > 0 Then
+            '    Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
 
-                Dim MissingFilesFileName As String
-                MissingFilesFileName = $"{UP.GetTempDirectory}\{Timestamp}_Missing_Files.log"
+            '    Dim MissingFilesFileName As String
+            '    MissingFilesFileName = $"{UP.GetTempDirectory}\{Timestamp}_Missing_Files.log"
 
-                Try
-                    Using writer As New IO.StreamWriter(MissingFilesFileName, True)
-                        writer.WriteLine("Information Only: These linked files were not found")
-                        For Each Filename In MissingFilesList
-                            writer.WriteLine(String.Format(Filename))
-                        Next
-                    End Using
+            '    Try
+            '        Using writer As New IO.StreamWriter(MissingFilesFileName, True)
+            '            writer.WriteLine("Information Only: These linked files were not found")
+            '            For Each Filename In MissingFilesList
+            '                writer.WriteLine(String.Format(Filename))
+            '            Next
+            '        End Using
 
-                    Try
-                        ' Try to use the default application to open the file.
-                        Process.Start(MissingFilesFileName)
-                    Catch ex As Exception
-                        ' If none, open with notepad.exe
-                        Process.Start("notepad.exe", MissingFilesFileName)
-                    End Try
+            '        Try
+            '            ' Try to use the default application to open the file.
+            '            Process.Start(MissingFilesFileName)
+            '        Catch ex As Exception
+            '            ' If none, open with notepad.exe
+            '            Process.Start("notepad.exe", MissingFilesFileName)
+            '        End Try
 
 
-                Catch ex As Exception
-                End Try
+            '    Catch ex As Exception
+            '    End Try
 
-            End If
+            'End If
             'For Each MissingFile As String In MissingFilesList
             '        SubLogger.AddMessage($"Not found: {MissingFile}")
             '    Next
@@ -958,6 +959,9 @@ Public Class UtilsFileList
                                     LinkDict = GetLinks(SSLinkDoc, LinkDict, MissingFilesList)
                                     SSLinkDoc.Close()
                                 Catch ex As Exception
+                                    If Not MissingFilesList.Contains($"{SSLinkName}: {ex.Message}") Then
+                                        MissingFilesList.Add($"{SSLinkName}: {ex.Message}")
+                                    End If
                                     If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
                                 End Try
                             Else
