@@ -41,7 +41,7 @@ Public Class TaskUpdatePartCopies
         Me.Description = GenerateLabelText()
         Me.HelpText = GetHelpText()
         Me.RequiresSave = True
-        Me.AppliesToAssembly = False
+        Me.AppliesToAssembly = True
         Me.AppliesToPart = True
         Me.AppliesToSheetmetal = True
         Me.AppliesToDraft = False
@@ -97,6 +97,15 @@ Public Class TaskUpdatePartCopies
             Case = "asm"
                 ' Nothing to do here for now.
                 ' Could add an option to activate and update all.
+
+                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
+                tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+
+                tmpSEDoc.ActivateAll()
+                tmpSEDoc.UpdateAll()
+
+                'tmpSEDoc.Save()
+                'SEApp.DoIdle()
 
             Case = "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
