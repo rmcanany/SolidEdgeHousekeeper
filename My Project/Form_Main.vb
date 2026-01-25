@@ -31,7 +31,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ListViewFilesOutOfDate = value
-            If Me.TabControl1 IsNot Nothing And Not RunningStartup Then
+            If Me.TabControl1 IsNot Nothing And Not Me.RunningStartup Then
                 If ListViewFilesOutOfDate Then
                     BT_Update.BackColor = Color.Orange
 
@@ -1023,6 +1023,10 @@ Public Class Form_Main
     Public Property ActiveFiles As List(Of String)
     Public Property USEA As UtilsSEApp
 
+    Public Property CLIActive As Boolean = False
+    Public Property CLIPresetName As String = ""
+    Public Property CLIFileListName As String = ""
+
     Private Property RunningStartup As Boolean
 
     'DESCRIPTION
@@ -1043,26 +1047,65 @@ Public Class Form_Main
     '    -- Place yours in the the appropriate category.
     '    -- For a new category, also update Task.SetColorFromCategory().
 
-    'Public Sub New()
+    Public Sub New()
 
-    '    ' This call is required by the designer.
-    '    InitializeComponent()
+        ' This call is required by the designer.
+        InitializeComponent()
 
-    '    ' Add any initialization after the InitializeComponent() call.
+        ' Add any initialization after the InitializeComponent() call.
 
-    '    'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
-    '    'string[] args = Environment.GetCommandLineArgs();
-    '    Dim Args = Environment.GetCommandLineArgs.ToList
-    '    Dim s As String = ""
-    '    For Each s1 As String In Args
-    '        s = $"{s}{s1}{vbCrLf}"
-    '    Next
-    '    MsgBox(s)
-    'End Sub
+        'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
+        'string[] args = Environment.GetCommandLineArgs();
+        Dim Args As List(Of String) = Environment.GetCommandLineArgs.ToList
 
-    Private Sub Startup(Presets As Boolean)
+        ' Args are passed as a string
+        ' Whitespace separates them
+        ' eg. c:\data\housekeeper.exe -p SetDocumentStatus_T2 -l ".\file list.txt"
 
-        RunningStartup = True
+        Dim s As String = ""
+        For Each s1 In Args
+            s = $"{s}, {s1}"
+        Next
+        'MsgBox(s)
+
+        If Args.Count > 1 Then
+            If Args.Count = 5 Then
+                For i As Integer = 1 To 3
+                    If Args(i).ToLower = "-l" Then
+                        Me.CLIFileListName = Args(i + 1)
+                    End If
+                    If Args(i).ToLower = "-p" Then
+                        Me.CLIPresetName = Args(i + 1)
+                    End If
+                Next
+
+            Else
+                s = ""
+                Dim c As Integer = 1
+                For Each s1 As String In Args
+                    s = $"    {c}: {s}{s1}{vbCrLf}"
+                    c += 1
+                Next
+                MsgBox($"Invalid number incoming arguments:{vbCrLf}{s}")
+                End
+            End If
+            If Me.CLIPresetName = "" Or Me.CLIFileListName = "" Then
+                s = ""
+                If Me.CLIPresetName = "" Then s = $"{s}Preset not found.{vbCrLf}"
+                If Me.CLIFileListName = "" Then s = $"{s}File list not found.{vbCrLf}"
+                MsgBox(s)
+                End
+            Else
+                Me.CLIActive = True
+            End If
+
+        End If
+    End Sub
+
+    Private Sub Startup(SavingPresets As Boolean)
+
+        Me.RunningStartup = True
+
         Me.Cursor = Cursors.WaitCursor
 
         Dim UP As New UtilsPreferences()
@@ -1081,7 +1124,7 @@ Public Class Form_Main
         'End If
 
         Dim Splash As FormSplash = Nothing
-        If Not Presets Then
+        If Not SavingPresets Then
             Splash = New FormSplash()
             Splash.Show()
             Splash.UpdateStatus("Initializing")
@@ -1093,7 +1136,7 @@ Public Class Form_Main
 
         '###### INITIALIZE PREFERENCES IF NEEDED ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Preferences")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Preferences")
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
@@ -1104,14 +1147,14 @@ Public Class Form_Main
 
         '###### LOAD MAIN FORM SAVED SETTINGS IF ANY ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Interface Preferences")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Interface Preferences")
 
         UP.GetFormMainSettings(Me)
 
 
         '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Data Structures")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Data Structures")
 
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
@@ -1151,16 +1194,16 @@ Public Class Form_Main
 
         Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
 
-        If Not Presets Then Splash.UpdateStatus("Loading Properties Data")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Properties Data")
         Me.PropertiesData = New HCPropertiesData  ' Automatically loads saved settings if any.
 
-        If Not Presets Then Splash.UpdateStatus("Loading Presets")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Presets")
         Me.Presets = New HCPresets  ' Automatically loads saved settings if any.
 
-        If Not Presets Then Splash.UpdateStatus("Loading Property Filters")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Property Filters")
         Me.PropertyFilters = New PropertyFilters  ' Automatically loads saved settings if any.
 
-        If Not Presets Then Splash.UpdateStatus("Building Readme")
+        If Not SavingPresets Then Splash.UpdateStatus("Building Readme")
         UD.BuildReadmeFile()
 
         CarIcona()
@@ -1198,7 +1241,7 @@ Public Class Form_Main
             GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
 
             For i As Integer = 0 To GroupHeaderNames.Count - 1
-                If Not Presets Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i)))
+                If Not SavingPresets Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i)))
 
                 Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
                 LVGroup.Name = GroupNames(i)
@@ -1215,14 +1258,14 @@ Public Class Form_Main
 
         '###### INITIALIZE TASK LIST ######
 
-        If Not Presets Then Splash.UpdateStatus("Loading Tasks")
+        If Not SavingPresets Then Splash.UpdateStatus("Loading Tasks")
 
         Me.TaskList = UP.GetTaskList(Splash)
 
         Dim tmpTaskPanel As Panel = Nothing
 
         For Each c As Control In TabPageTasks.Controls
-            If Not Presets Then Splash.UpdateStatus(String.Format("{0}", c.Name))
+            If Not SavingPresets Then Splash.UpdateStatus(String.Format("{0}", c.Name))
 
             If c.Name = "TaskPanel" Then
                 tmpTaskPanel = CType(c, Panel)
@@ -1236,7 +1279,7 @@ Public Class Form_Main
 
             Dim Task = TaskList(i)
 
-            If Not Presets Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name))
+            If Not SavingPresets Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name))
 
             If Not Me.RememberTasks Then
                 Task.IsSelectedTask = False
@@ -1282,9 +1325,9 @@ Public Class Form_Main
 
 
         '################# Questo risolver il problema del bordo sgrazinato della ToolStrip
-        If Not Presets Then Splash.UpdateStatus("Updating Filters")
+        If Not SavingPresets Then Splash.UpdateStatus("Updating Filters")
         ToolStrip_Filter.Renderer = New MySR()
-        If Not Presets Then Splash.UpdateStatus("Updating Presets")
+        If Not SavingPresets Then Splash.UpdateStatus("Updating Presets")
         ToolStripPresets.Renderer = New MySR()
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
@@ -1298,7 +1341,7 @@ Public Class Form_Main
         If Me.TCRevisionRx Is Nothing OrElse Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
         If Me.TCItemIDName Is Nothing OrElse Me.TCItemIDName.Trim = "" Then TCItemIDName = "MFK9Item1"
 
-        If Not Presets Then Splash.UpdateStatus("Wrapping up")
+        If Not SavingPresets Then Splash.UpdateStatus("Wrapping up")
 
         UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.
 
@@ -1308,7 +1351,7 @@ Public Class Form_Main
 
         UP.SetSEDefaultFolders(Me)
 
-        If Not Presets Then
+        If Not SavingPresets Then
             Splash.UpdateStatus("")
 
             Splash.Animate()
@@ -1339,8 +1382,53 @@ Public Class Form_Main
         Me.USEA = New UtilsSEApp(Me)
         Me.USEA.ErrorLogger = New Logger("Dummy", Nothing)
 
-        RunningStartup = False
+        'MsgBox(Me.CLIPresetName)
+        If Me.CLIActive And Not SavingPresets Then
+            'MsgBox(Me.CLIPresetName)
 
+            If Me.Presets.Exists(CLIPresetName) Then
+                ComboBoxPresetName.Text = CLIPresetName
+                ButtonPresetLoad.PerformClick()
+
+                ' Remember old settings
+                Dim OldFilterAsm = Me.FilterAsm
+                Dim OldFilterPar = Me.FilterPar
+                Dim OldFilterPsm = Me.FilterPsm
+                Dim OldFilterDft = Me.FilterDft
+                Dim OldRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
+
+                ' Change settings
+                Me.FilterAsm = True
+                Me.FilterPar = True
+                Me.FilterPsm = True
+                Me.FilterDft = True
+                Me.RemindFilelistUpdate = False
+
+                Me.BT_DeleteAll.PerformClick()
+                Me.BT_AddFromlist.PerformClick()  ' Adds CLIFilelist if needed.
+
+                Me.BT_Update.PerformClick()
+
+                Me.ButtonProcess.PerformClick()
+
+                ' Restore settings
+                Me.FilterAsm = OldFilterAsm
+                Me.FilterPar = OldFilterPar
+                Me.FilterPsm = OldFilterPsm
+                Me.FilterDft = OldFilterDft
+                Me.RemindFilelistUpdate = OldRemindFilelistUpdate
+
+            Else
+                'MsgBox($"Preset name not found: '{CLIPresetName}'")
+                StartupLogger.AddMessage($"Preset name not found: '{CLIPresetName}'")
+                HCDebugLogger.Save()
+            End If
+
+            ButtonCancel.PerformClick()
+
+        End If
+
+        Me.RunningStartup = False
     End Sub
 
 
@@ -1565,13 +1653,16 @@ Public Class Form_Main
     Private Sub ButtonProcess_Click(sender As Object, e As EventArgs) Handles ButtonProcess.Click
         Dim UE As New UtilsExecute(Me)
         UE.ProcessAll()
+        If Me.CLIActive Then
+            ButtonCancel.PerformClick()
+        End If
     End Sub
 
 
     ' FORM LOAD
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Startup(Presets:=False)
+        Startup(SavingPresets:=False)
     End Sub
 
 
@@ -1868,16 +1959,26 @@ Public Class Form_Main
 
     Private Sub BT_AddFromlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromlist.Click
 
-        Dim tmpFileDialog As New OpenFileDialog
-        tmpFileDialog.Title = "Select list of files"
-        tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
-        tmpFileDialog.Multiselect = True
-        tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
+        Dim tmpFilenameList As New List(Of String)
 
-        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+        'MsgBox($"{Me.CLIActive} {Me.CLIFileListName}")
+        If Me.CLIActive Then
+            tmpFilenameList.Add(Me.CLIFileListName)
+        Else
+            Dim tmpFileDialog As New OpenFileDialog
+            tmpFileDialog.Title = "Select list of files"
+            tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+            tmpFileDialog.Multiselect = True
+            tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
 
-            For Each tmpFileName As String In tmpFileDialog.FileNames
+            If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+                tmpFilenameList.AddRange(tmpFileDialog.FileNames)
+                Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+            End If
+        End If
 
+        If tmpFilenameList.Count > 0 Then
+            For Each tmpFileName As String In tmpFilenameList
                 Dim tmpItem As New ListViewItem
 
                 Select Case IO.Path.GetExtension(tmpFileName).ToLower
@@ -1910,20 +2011,67 @@ Public Class Form_Main
                     ListViewSources.Items.Add(tmpItem)
                     ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
                 End If
-
             Next
-
             ListViewFilesOutOfDate = True
-
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
-            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
         End If
+
+
+        'Dim tmpFileDialog As New OpenFileDialog
+        'tmpFileDialog.Title = "Select list of files"
+        'tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+        'tmpFileDialog.Multiselect = True
+        'tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
+
+        'If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+
+        '    For Each tmpFileName As String In tmpFileDialog.FileNames
+
+        '        Dim tmpItem As New ListViewItem
+
+        '        Select Case IO.Path.GetExtension(tmpFileName).ToLower
+
+        '            Case Is = ".tsv"
+        '                tmpItem.Text = "TSV list"
+        '                tmpItem.ImageKey = "csv" ' Not a typo.  Reusing 'csv'
+        '                tmpItem.Tag = "tsv"
+        '            Case Is = ".txt"
+        '                tmpItem.Text = "TXT list"
+        '                tmpItem.ImageKey = "txt"
+        '                tmpItem.Tag = "txt"
+        '            Case Is = ".csv"
+        '                tmpItem.Text = "CSV list"
+        '                tmpItem.ImageKey = "csv"
+        '                tmpItem.Tag = "csv"
+        '            Case Is = ".xls", ".xlsx", ".xlsm"
+        '                tmpItem.Text = "Excel list"
+        '                tmpItem.ImageKey = "excel"
+        '                tmpItem.Tag = "excel"
+        '            Case Else
+        '                MsgBox(String.Format("{0}: Extension {1} not recognized", Me.ToString, IO.Path.GetExtension(tmpFileName).ToLower))
+        '        End Select
+
+        '        tmpItem.SubItems.Add(tmpFileName)
+        '        tmpItem.Group = ListViewSources.Groups.Item("Sources")
+
+        '        tmpItem.Name = tmpFileName
+        '        If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+        '            ListViewSources.Items.Add(tmpItem)
+        '            ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        '        End If
+
+        '    Next
+
+        '    ListViewFilesOutOfDate = True
+
+        '    'If Me.RemindFilelistUpdate Then
+        '    '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+        '    '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+        '    '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+        '    '    MsgBox(s, vbOKOnly)
+        '    'End If
+
+        '    Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+        'End If
 
     End Sub
 
@@ -3805,7 +3953,7 @@ Public Class Form_Main
                 'SaveSettings()  ' Incorrect.  This saves the current settings
 
                 Application.DoEvents()
-                Startup(Presets:=True)
+                Startup(SavingPresets:=True)
 
             End If
 
