@@ -1724,13 +1724,6 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
             Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFolderDialog.FileNames(0))
         End If
 
@@ -1763,16 +1756,8 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
             Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
-            'Dim tmpDir As String = tmpFolderDialog.FileNames(0)
-            'Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
+
         End If
 
     End Sub
@@ -1804,14 +1789,7 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
 
-            'Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
             Dim tmpDir As String = tmpFolderDialog.FileNames(0)
             Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
         End If
@@ -1855,13 +1833,6 @@ Public Class Form_Main
             End If
 
             Me.ListViewFilesOutOfDate = True
-
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
 
         End If
     End Sub
@@ -1915,13 +1886,6 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
             Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
         End If
 
@@ -1963,13 +1927,6 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
             Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileName)
         End If
 
@@ -2002,14 +1959,6 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
-            'Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
             Dim tmpDir As String = tmpFolderDialog.FileNames(0)
             Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
         End If
