@@ -1291,11 +1291,11 @@ Public Class Form_Main
 
             Task.LinkManagementOrder = Me.LinkManagementOrder
 
-            If Me.DebugMode Then
-                If Task.LinkManagementOrder Is Nothing Then
-                    StartupLogger.AddMessage($"{Task.Description}.LinkManagementOrder: 'Nothing'")
-                End If
-            End If
+            'If Me.DebugMode Then
+            '    If Task.LinkManagementOrder Is Nothing Then
+            '        StartupLogger.AddMessage($"{Task.Description}.LinkManagementOrder: 'Nothing'")
+            '    End If
+            'End If
 
             If Task.RequiresPropertiesData Then
                 Task.PropertiesData = Me.PropertiesData
@@ -1815,13 +1815,6 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
             Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFolderDialog.FileNames(0))
         End If
 
@@ -1854,16 +1847,8 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
             Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
-            'Dim tmpDir As String = tmpFolderDialog.FileNames(0)
-            'Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
+
         End If
 
     End Sub
@@ -1895,14 +1880,7 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
 
-            'Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
             Dim tmpDir As String = tmpFolderDialog.FileNames(0)
             Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
         End If
@@ -1946,13 +1924,6 @@ Public Class Form_Main
             End If
 
             Me.ListViewFilesOutOfDate = True
-
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
 
         End If
     End Sub
@@ -2013,6 +1984,8 @@ Public Class Form_Main
                 End If
             Next
             ListViewFilesOutOfDate = True
+
+            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
         End If
 
 
@@ -2111,13 +2084,6 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
             Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileName)
         End If
 
@@ -2150,14 +2116,6 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
-            'If Me.RemindFilelistUpdate Then
-            '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-            '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-            '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-            '    MsgBox(s, vbOKOnly)
-            'End If
-
-            'Me.WorkingFilesPath = tmpFolderDialog.FileNames(0)
             Dim tmpDir As String = tmpFolderDialog.FileNames(0)
             Me.WorkingFilesPath = IO.Directory.GetParent(tmpDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
         End If
@@ -3944,7 +3902,11 @@ Public Class Form_Main
             If GotAMatch Then
                 Me.ActivePreset = Name
 
+                'Dim tmpRememberTasks = Me.RememberTasks
+                'Me.RememberTasks = True
                 UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
+                'Me.RememberTasks = tmpRememberTasks
+
                 UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
                 If Me.PresetsSavePropertyFilters Then
                     UP.SavePropertyFiltersJSON(tmpPreset.PropertyFiltersJSON)
@@ -3953,8 +3915,11 @@ Public Class Form_Main
                 'SaveSettings()  ' Incorrect.  This saves the current settings
 
                 Application.DoEvents()
-                Startup(SavingPresets:=True)
 
+                'Dim tmpRememberTasks = Me.RememberTasks
+                'Me.RememberTasks = True
+                Startup(SavingPresets:=True)
+                'Me.RememberTasks = tmpRememberTasks
             End If
 
         Else
@@ -3991,7 +3956,10 @@ Public Class Form_Main
 
             Me.ActivePreset = Name
 
+            'Dim tmpRememberTasks = Me.RememberTasks
+            'Me.RememberTasks = True
             SaveSettings(SavingPresets:=True)  ' Updates the task list and form properties to their current state.
+            'Me.RememberTasks = tmpRememberTasks
 
             tmpPreset.Name = Name
             tmpPreset.TaskListJSON = UP.GetTaskListJSON()
