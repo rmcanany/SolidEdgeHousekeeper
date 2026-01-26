@@ -1985,7 +1985,7 @@ Public Class Form_Main
             Next
             ListViewFilesOutOfDate = True
 
-            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFilenameList(0))
         End If
 
 
