@@ -520,7 +520,7 @@ Public Class FormExpressionEditor
                 End If
 
                 calculation = calculation.Replace(Parameter, tmpVal)
-                calculation = calculation.Split(CChar("\\")).First
+                'calculation = calculation.Split(CChar("\\")).First
 
             Next
 
