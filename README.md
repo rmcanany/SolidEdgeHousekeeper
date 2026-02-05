@@ -54,7 +54,7 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
 > *She was the only one who could clean up the mess that Solid Edge users make.*
 
 > *How did Solid Edge Housekeeper break up with her partner?*  
-> *"It's not you, it's your `Interpart` dependencies".*
+> *"It's not you, it's your `Interpart dependencies`".*
 
 *Download Tracker*
 
@@ -78,7 +78,7 @@ The preferred method is to clone the project and compile it yourself.  The other
 
 Click the file `SolidEdgeHousekeeper-VYYYY.N.zip` (`YYYY` = Year, `N` = Release Number).  You may have to expand the Assets dropdown to see it.  Your browser should prompt you to save it. 
 
-Choose a convenient location on your machine. Extract the zip file (right-click > Extract All).  Verify the directory is not read-only (right-click > Properties).  The program needs write access to function properly.  
+Choose a convenient location on your machine. Extract the zip file (right-click > Extract All).  Verify the extracted directory (not the `*.zip` file) is not Read-Only or Blocked (right-click > Properties).  The program needs write access to function properly.  
 
 Double-click `Housekeeper.exe` to run.  The first time you do, you may get a `Windows Protected Your PC` message.  You can click `More Info` followed by `Run Anyway` to launch the program. 
 
