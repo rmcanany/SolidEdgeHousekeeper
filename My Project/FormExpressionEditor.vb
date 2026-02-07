@@ -345,6 +345,7 @@ Public Class FormExpressionEditor
 
         Else ' Snippet
             TextEditorFormula.Text = InputText
+            Me.SnippetFormula = InputText
         End If
 
     End Sub
