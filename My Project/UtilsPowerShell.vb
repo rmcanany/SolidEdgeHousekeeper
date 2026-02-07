@@ -150,6 +150,8 @@ Public Class UtilsPowerShell
         Toplist.Add("")
         Toplist.Add("Imports System")
         Toplist.Add("Imports System.Collections.Generic")
+        Toplist.Add("Imports Microsoft.VisualBasic")
+        Toplist.Add("Imports System.Linq")
         Toplist.Add("")
         Toplist.Add("Public Class Snippet")
         Toplist.Add("")
