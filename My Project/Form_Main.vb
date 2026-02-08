@@ -1016,7 +1016,6 @@ Public Class Form_Main
     Public Property SEPreferencesPath As String
     Public Property SEMaterialsPath As String
     Public Property WorkingFilesPath As String
-
     Public Property SavedExpressions As HCSavedExpressions
 
     Public Property ActiveFile As String

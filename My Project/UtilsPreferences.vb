@@ -47,8 +47,12 @@ Public Class UtilsPreferences
         SkipProps.AddRange({"cliactive", "clipresetname", "clifilelistname"})
         SkipProps.AddRange({"hcdebuglogger", "savedexpressions", "usea"})
 
-        If SavingPresets And Not FMain.PresetsSaveFileFilters Then
-            SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
+        If SavingPresets Then
+            'SkipProps.AddRange({"seinstalledpath", "seversion", "setemplatepath"})
+            'SkipProps.AddRange({"sepreferencespath", "sematerialspath", "seworkingpath"})
+            If Not FMain.PresetsSaveFileFilters Then
+                SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
+            End If
         End If
 
         Dim AllProps As New List(Of String)
