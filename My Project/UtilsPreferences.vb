@@ -46,8 +46,12 @@ Public Class UtilsPreferences
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
         SkipProps.AddRange({"hcdebuglogger", "savedexpressions", "usea"})
 
-        If SavingPresets And Not FMain.PresetsSaveFileFilters Then
-            SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
+        If SavingPresets Then
+            'SkipProps.AddRange({"seinstalledpath", "seversion", "setemplatepath"})
+            'SkipProps.AddRange({"sepreferencespath", "sematerialspath", "seworkingpath"})
+            If Not FMain.PresetsSaveFileFilters Then
+                SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
+            End If
         End If
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos

@@ -297,6 +297,7 @@ Public Class TaskRunExternalProgram
                 LUT("A2-quer") = "T - A2"
                 LUT("A1-quer") = "T - A1"
                 LUT("A0-quer") = "T - A0"
+                'LUT("B-Sheet") = "ANSI"
 
                 '#### END USER INPUT ####
 
