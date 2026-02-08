@@ -1010,8 +1010,8 @@ Public Class Form_Main
     Public Property TCRevisionRx As String
     Public Property TCItemIDName As String
 
-    Public Property SEInstalledPath As String
-    Public Property SEVersion As String
+    'Public Property SEInstalledPath As String
+    'Public Property SEVersion As String
     Public Property SETemplatePath As String
     Public Property SEPreferencesPath As String
     Public Property SEMaterialsPath As String

@@ -47,8 +47,7 @@ Public Class UtilsPreferences
         SkipProps.AddRange({"hcdebuglogger", "savedexpressions", "usea"})
 
         If SavingPresets Then
-            'SkipProps.AddRange({"seinstalledpath", "seversion", "setemplatepath"})
-            'SkipProps.AddRange({"sepreferencespath", "sematerialspath", "seworkingpath"})
+            'SkipProps.AddRange({"setemplatepath", "sepreferencespath", "sematerialspath", "seworkingpath"})
             If Not FMain.PresetsSaveFileFilters Then
                 SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
             End If
@@ -220,12 +219,12 @@ Public Class UtilsPreferences
 
         ' Install directory
         Dim SEInstallData As New SEInstallDataLib.SEInstallData
-        FMain.SEInstalledPath = SEInstallData.GetInstalledPath ' eg C:\Program Files\Siemens\Solid Edge 2025\Program
-        If Not FMain.SEInstalledPath.Count <= 8 Then
+        Dim SEInstalledPath As String = SEInstallData.GetInstalledPath ' eg C:\Program Files\Siemens\Solid Edge 2025\Program
+        If Not SEInstalledPath.Count <= 8 Then
             ' Strip off trailing `\Program`
-            FMain.SEInstalledPath = FMain.SEInstalledPath.Substring(0, FMain.SEInstalledPath.Count - 8) ' eg C:\Program Files\Siemens\Solid Edge 2025
-            If Not IO.Directory.Exists(FMain.SEInstalledPath) Then
-                FMain.SEInstalledPath = FMain.WorkingFilesPath
+            SEInstalledPath = SEInstalledPath.Substring(0, SEInstalledPath.Count - 8) ' eg C:\Program Files\Siemens\Solid Edge 2025
+            If Not IO.Directory.Exists(SEInstalledPath) Then
+                SEInstalledPath = FMain.WorkingFilesPath
             End If
         End If
 
@@ -239,18 +238,18 @@ Public Class UtilsPreferences
         ElseIf IO.File.Exists(FMain.DraftTemplate) Then
             FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.DraftTemplate)
         Else
-            If IO.Directory.Exists($"{FMain.SEInstalledPath}\Template") Then
-                FMain.SETemplatePath = $"{FMain.SEInstalledPath}\Template"
+            If IO.Directory.Exists($"{SEInstalledPath}\Template") Then
+                FMain.SETemplatePath = $"{SEInstalledPath}\Template"
             Else
-                FMain.SETemplatePath = FMain.SEInstalledPath
+                FMain.SETemplatePath = SEInstalledPath
             End If
         End If
 
         ' Preferences
         If Not IO.Directory.Exists(FMain.SEPreferencesPath) Then
-            If Not FMain.SEInstalledPath = GetStartupDirectory() Then  ' Startup directory also has a Preferences directory.
-                If IO.Directory.Exists($"{FMain.SEInstalledPath}\Preferences") Then
-                    FMain.SEPreferencesPath = $"{FMain.SEInstalledPath}\Preferences"
+            If Not SEInstalledPath = GetStartupDirectory() Then  ' Startup directory also has a Preferences directory.
+                If IO.Directory.Exists($"{SEInstalledPath}\Preferences") Then
+                    FMain.SEPreferencesPath = $"{SEInstalledPath}\Preferences"
                 Else
                     FMain.SEPreferencesPath = FMain.WorkingFilesPath
                 End If
