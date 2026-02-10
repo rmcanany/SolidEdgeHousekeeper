@@ -168,24 +168,55 @@ Public Class UtilsExecute
 
         FMain.ListViewFiles.BeginUpdate()
 
-        For Each Filename As ListViewItem In FMain.ListViewFiles.Items
+        If FMain.ListViewFiles.SelectedItems.Count = 0 Then     'Check only selected files if process selected
 
-            FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
-            Application.DoEvents()
+            For Each Filename As ListViewItem In FMain.ListViewFiles.Items
 
-            If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
+                '########## can be unified in a sub
+                FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
+                Application.DoEvents()
 
-                Filename.ImageKey = "Unchecked"
+                If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
 
-                If Not FileIO.FileSystem.FileExists(Filename.Name) Then
-                    StartLogger.AddMessage("File not found, or Path exceeds maximum length")
-                    StartLogger.AddMessage(CType(Filename.Name, String))
-                    FMain.ListViewFilesOutOfDate = True
-                    Exit For
+                    Filename.ImageKey = "Unchecked"
+
+                    If Not FileIO.FileSystem.FileExists(Filename.Name) Then
+                        StartLogger.AddMessage("File not found, or Path exceeds maximum length")
+                        StartLogger.AddMessage(CType(Filename.Name, String))
+                        FMain.ListViewFilesOutOfDate = True
+                        Exit For
+                    End If
+
                 End If
+                '##########
+            Next
 
-            End If
-        Next
+        Else
+
+            For Each Filename As ListViewItem In FMain.ListViewFiles.SelectedItems
+
+                '########## can be unified in a sub
+                FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
+                Application.DoEvents()
+
+                If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
+
+                    Filename.ImageKey = "Unchecked"
+
+                    If Not FileIO.FileSystem.FileExists(Filename.Name) Then
+                        StartLogger.AddMessage("File not found, or Path exceeds maximum length")
+                        StartLogger.AddMessage(CType(Filename.Name, String))
+                        FMain.ListViewFilesOutOfDate = True
+                        Exit For
+                    End If
+
+                End If
+                '##########
+            Next
+
+        End If
+
+
 
         FMain.ListViewFiles.EndUpdate()
 
