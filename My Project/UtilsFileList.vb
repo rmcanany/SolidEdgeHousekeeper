@@ -1237,34 +1237,39 @@ Public Class UtilsFileList
 
         For Each tmpLVItem As ListViewItem In ListViewFiles.Items
 
-            If tmpLVItem.SubItems.Count > 2 Then
+            If tmpLVItem.Group.Name <> "Excluded" Then  'Ignore excluded files from update
 
-                Do Until tmpLVItem.SubItems.Count = 2
+                If tmpLVItem.SubItems.Count > 2 Then
 
-                    tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
+                    Do Until tmpLVItem.SubItems.Count = 2
 
-                Loop
+                        tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
 
-            End If
+                    Loop
 
-            tmpLVItem.UseItemStyleForSubItems = False
-
-            Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
-
-            FMain.TextBoxStatus.Text = String.Format("Getting properties {0}", System.IO.Path.GetFileName(FullName))
-            If NumProcessed Mod 100 = 0 Then
-                System.Windows.Forms.Application.DoEvents()
-                If FMain.StopProcess Then
-                    Exit For
                 End If
 
+                tmpLVItem.UseItemStyleForSubItems = False
+
+                Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
+
+                FMain.TextBoxStatus.Text = String.Format("Getting properties {0}", System.IO.Path.GetFileName(FullName))
+                If NumProcessed Mod 100 = 0 Then
+                    System.Windows.Forms.Application.DoEvents()
+                    If FMain.StopProcess Then
+                        Exit For
+                    End If
+
+                End If
+
+                Dim IsReadOnly As Boolean = tmpLVItem.SubItems(0).BackColor = Color.LightGray
+
+                UpdateLVItem(tmpLVItem, IsReadOnly)
+
             End If
 
-            Dim IsReadOnly As Boolean = tmpLVItem.SubItems(0).BackColor = Color.LightGray
-
-            UpdateLVItem(tmpLVItem, IsReadOnly)
-
             NumProcessed += 1
+
         Next
 
         CreateColumns()
