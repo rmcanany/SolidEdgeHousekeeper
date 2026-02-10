@@ -110,9 +110,11 @@ Public Class UtilsSEApp
             SEApp.SetGlobalParameter(Param, ProcessDraftsInactive)
 
             ' Save currently open document names, if any.
+            Me.CurrentlyOpenFiles.Clear() '<--- reset between sessions
             If Not SEApp.Documents.Count = 0 Then
                 Dim Docs As SolidEdgeFramework.Documents = SEApp.Documents
                 Dim ActiveDoc As SolidEdgeFramework.SolidEdgeDocument = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+
                 For Each Doc As SolidEdgeFramework.SolidEdgeDocument In Docs
                     Me.CurrentlyOpenFiles.Add(Doc.FullName)
                     ActiveDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
