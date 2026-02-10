@@ -4,15 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Housekeeper", "Housekeeper.vbproj", "{F923060F-7F29-4637-BB23-0C402AA6DB62}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C} = {5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B72BE7BA-D479-4DC3-B8AD-8DCEBDCD1F7A}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ListViewExtended", "My Project\ListViewExtended\ListViewExtended\ListViewExtended.vbproj", "{67573F49-3C86-4D74-B051-861E43F8D192}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HousekeeperCLI", "HousekeeperCLI\HousekeeperCLI.vbproj", "{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}"
+	ProjectSection(SolutionItems) = preProject
+		My Project\ListViewExtended\ListViewExtended\bin\Debug\netstandard2.0\ListViewExtended.dll = My Project\ListViewExtended\ListViewExtended\bin\Debug\netstandard2.0\ListViewExtended.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,28 +26,9 @@ Global
 		{F923060F-7F29-4637-BB23-0C402AA6DB62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F923060F-7F29-4637-BB23-0C402AA6DB62}.Release|x64.ActiveCfg = Release|Any CPU
 		{F923060F-7F29-4637-BB23-0C402AA6DB62}.Release|x64.Build.0 = Release|Any CPU
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Debug|x64.ActiveCfg = Debug|x64
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Debug|x64.Build.0 = Debug|x64
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Release|x64.ActiveCfg = Release|Any CPU
-		{67573F49-3C86-4D74-B051-861E43F8D192}.Release|x64.Build.0 = Release|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Debug|x64.Build.0 = Debug|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Release|x64.ActiveCfg = Release|Any CPU
-		{5B44C97E-96D4-4C50-ACAF-93EE250A2F6C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{67573F49-3C86-4D74-B051-861E43F8D192} = {B72BE7BA-D479-4DC3-B8AD-8DCEBDCD1F7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CC559A0C-CD7A-4C2A-99F2-75796CA5BF28}

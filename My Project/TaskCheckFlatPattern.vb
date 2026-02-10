@@ -90,6 +90,12 @@ Public Class TaskCheckFlatPattern
                     If Not FlatpatternModel.FlatPatterns.Item(1).Status = SolidEdgePart.FeatureStatusConstants.igFeatureOK Then
                         TaskLogger.AddMessage("Flat pattern is out of date")
                     End If
+
+                    If FlatpatternModel.FlatPatterns.Item(1).ShowDimensions = False Then
+                        FlatpatternModel.FlatPatterns.Item(1).ShowDimensions = True
+                        FlatpatternModel.UpdateCutSize()
+                    End If
+
                 Next
             Else
                 TaskLogger.AddMessage("No flat patterns found")

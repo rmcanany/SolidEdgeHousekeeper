@@ -3853,9 +3853,25 @@ Public Class Form_Main
     Private Sub ListViewFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListViewFiles.SelectedIndexChanged
 
         If ListViewFiles.SelectedItems.Count > 0 Then
+
             ButtonProcess.Text = "    Process selected"
+
+            If TextBoxStatus.Text.Contains(" - Selected files: ") Then
+                Dim k = TextBoxStatus.Text.IndexOf(" - Selected files")
+                TextBoxStatus.Text = TextBoxStatus.Text.Substring(0, k).TrimEnd() & " - Selected files: " & ListViewFiles.SelectedItems.Count.ToString
+            Else
+                TextBoxStatus.Text = TextBoxStatus.Text & " - Selected files: " & ListViewFiles.SelectedItems.Count.ToString
+            End If
+
         Else
+
             ButtonProcess.Text = "Process"
+
+            If TextBoxStatus.Text.Contains(" - Selected files: ") Then
+                Dim k = TextBoxStatus.Text.IndexOf(" - Selected files")
+                TextBoxStatus.Text = TextBoxStatus.Text.Substring(0, k).TrimEnd()
+            End If
+
         End If
 
     End Sub
