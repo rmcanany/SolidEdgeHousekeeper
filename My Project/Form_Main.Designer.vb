@@ -26,7 +26,7 @@ Partial Class Form_Main
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
@@ -242,13 +242,11 @@ Partial Class Form_Main
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.ButtonProcess = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonHelp = New System.Windows.Forms.Button()
-        Me.Label_FileCounter = New System.Windows.Forms.Label()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.BT_Open = New System.Windows.Forms.ToolStripMenuItem()
@@ -265,6 +263,9 @@ Partial Class Form_Main
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label_FileCounter = New System.Windows.Forms.Label()
+        Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -309,6 +310,7 @@ Partial Class Form_Main
         Me.ToolStripPresets.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -425,9 +427,9 @@ Partial Class Form_Main
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewSources.FullRowSelect = True
-        ListViewGroup1.Header = "File sources"
-        ListViewGroup1.Name = "Sources"
-        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1})
+        ListViewGroup2.Header = "File sources"
+        ListViewGroup2.Name = "Sources"
+        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup2})
         Me.ListViewSources.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewSources.HideSelection = False
         Me.ListViewSources.Location = New System.Drawing.Point(0, 0)
@@ -2491,7 +2493,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2940,16 +2941,6 @@ Partial Class Form_Main
         '
         Me.ToolTip1.ShowAlways = True
         '
-        'LabelTimeRemaining
-        '
-        Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelTimeRemaining.AutoSize = True
-        Me.LabelTimeRemaining.Location = New System.Drawing.Point(12, 722)
-        Me.LabelTimeRemaining.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
-        Me.LabelTimeRemaining.Size = New System.Drawing.Size(0, 15)
-        Me.LabelTimeRemaining.TabIndex = 4
-        '
         'PrintDialog1
         '
         Me.PrintDialog1.UseEXDialog = True
@@ -2966,7 +2957,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxStatus, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.ButtonHelp, 3, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label_FileCounter, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel3, 0, 2)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 647)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -3016,16 +3007,6 @@ Partial Class Form_Main
         Me.ButtonHelp.TabIndex = 4
         Me.ButtonHelp.Text = "Help"
         Me.ButtonHelp.UseVisualStyleBackColor = True
-        '
-        'Label_FileCounter
-        '
-        Me.Label_FileCounter.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_FileCounter.Location = New System.Drawing.Point(3, 52)
-        Me.Label_FileCounter.Name = "Label_FileCounter"
-        Me.Label_FileCounter.Size = New System.Drawing.Size(188, 53)
-        Me.Label_FileCounter.TabIndex = 76
-        Me.Label_FileCounter.Text = "0 files - 0 selected"
-        Me.Label_FileCounter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ToolStripButton1
         '
@@ -3121,13 +3102,49 @@ Partial Class Form_Main
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 1
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.LabelTimeRemaining, 0, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label_FileCounter, 0, 0)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 55)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 2
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(188, 47)
+        Me.TableLayoutPanel3.TabIndex = 76
+        '
+        'Label_FileCounter
+        '
+        Me.Label_FileCounter.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label_FileCounter.Location = New System.Drawing.Point(3, 0)
+        Me.Label_FileCounter.Name = "Label_FileCounter"
+        Me.Label_FileCounter.Size = New System.Drawing.Size(182, 23)
+        Me.Label_FileCounter.TabIndex = 77
+        Me.Label_FileCounter.Text = "0 files - 0 selected"
+        Me.Label_FileCounter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'LabelTimeRemaining
+        '
+        Me.LabelTimeRemaining.AutoSize = True
+        Me.LabelTimeRemaining.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelTimeRemaining.Location = New System.Drawing.Point(2, 23)
+        Me.LabelTimeRemaining.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
+        Me.LabelTimeRemaining.Size = New System.Drawing.Size(184, 24)
+        Me.LabelTimeRemaining.TabIndex = 78
+        Me.LabelTimeRemaining.Text = "0 time left"
+        Me.LabelTimeRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(584, 752)
-        Me.Controls.Add(Me.LabelTimeRemaining)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -3206,8 +3223,9 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        Me.TableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
@@ -3219,7 +3237,6 @@ Partial Class Form_Main
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents TabPageConfiguration As TabPage
-    Friend WithEvents LabelTimeRemaining As Label
     Friend WithEvents PrintDialog1 As PrintDialog
     Friend WithEvents TabPage_ImageList As ImageList
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
@@ -3448,5 +3465,7 @@ Partial Class Form_Main
     Friend WithEvents BT_ActiveFile As ToolStripButton
     Friend WithEvents BT_ActiveFiles As ToolStripButton
     Friend WithEvents ToolStripSeparator14 As ToolStripSeparator
+    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
+    Friend WithEvents LabelTimeRemaining As Label
     Friend WithEvents Label_FileCounter As Label
 End Class
