@@ -111,7 +111,7 @@ Public Class UtilsSEApp
 
             ' Save currently open document names, if any.
             Me.CurrentlyOpenFiles.Clear() '<--- reset between sessions
-            If Not SEApp.Documents.Count = 0 Then
+            If Not SEApp.Documents.Count = 0 And Not RunInBackground Then
                 Dim Docs As SolidEdgeFramework.Documents = SEApp.Documents
                 Dim ActiveDoc As SolidEdgeFramework.SolidEdgeDocument = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
 
