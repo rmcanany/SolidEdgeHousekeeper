@@ -248,6 +248,7 @@ Partial Class Form_Main
         Me.ButtonProcess = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonHelp = New System.Windows.Forms.Button()
+        Me.Label_FileCounter = New System.Windows.Forms.Label()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.BT_Open = New System.Windows.Forms.ToolStripMenuItem()
@@ -2490,6 +2491,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2964,6 +2966,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxStatus, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.ButtonHelp, 3, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label_FileCounter, 0, 2)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 647)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -3013,6 +3016,16 @@ Partial Class Form_Main
         Me.ButtonHelp.TabIndex = 4
         Me.ButtonHelp.Text = "Help"
         Me.ButtonHelp.UseVisualStyleBackColor = True
+        '
+        'Label_FileCounter
+        '
+        Me.Label_FileCounter.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label_FileCounter.Location = New System.Drawing.Point(3, 52)
+        Me.Label_FileCounter.Name = "Label_FileCounter"
+        Me.Label_FileCounter.Size = New System.Drawing.Size(188, 53)
+        Me.Label_FileCounter.TabIndex = 76
+        Me.Label_FileCounter.Text = "0 files - 0 selected"
+        Me.Label_FileCounter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ToolStripButton1
         '
@@ -3435,4 +3448,5 @@ Partial Class Form_Main
     Friend WithEvents BT_ActiveFile As ToolStripButton
     Friend WithEvents BT_ActiveFiles As ToolStripButton
     Friend WithEvents ToolStripSeparator14 As ToolStripSeparator
+    Friend WithEvents Label_FileCounter As Label
 End Class
