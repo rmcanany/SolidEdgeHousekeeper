@@ -47,7 +47,7 @@ Public Class UtilsPreferences
         SkipProps.AddRange({"hcdebuglogger", "savedexpressions", "usea"})
 
         If SavingPresets Then
-            SkipProps.AddRange({"setemplatepath", "sepreferencespath", "sematerialspath", "seworkingpath"})
+            SkipProps.AddRange({"setemplatepath", "sepreferencespath", "sematerialspath", "workingfilespath"})
             If Not FMain.PresetsSaveFileFilters Then
                 SkipProps.AddRange({"filterasm", "filterpar", "filterpsm", "filterdft"})
             End If
