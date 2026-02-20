@@ -15,7 +15,9 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.1
 
-We'll get right to the updates, but first some exciting news -- Housekeeper has two new sponsors: **Breit Ideas** and **Pelican Industries!** 
+We'll get right to the updates, but first some exciting news -- Housekeeper has three new sponsors: **Breit Ideas**, **Pelican Industries**, and **TECHTORY Automation GmbH!**
+
+Oh, and a request.  I continue to update the `User Feedback` section of the Readme as comments come in.  What's kinda missing is info about results.  Any estimate on how much time you save using it, or about any other advantages you find, would be very welcome!
 
 Now, on to those updates...
 
@@ -28,6 +30,22 @@ This is an automated method to replace OLE inserted objects with SE-native block
 A configuration file tells the program what file holds the blocks, what sheet names in the draft files to process, and the mapping between the OLE link and block names.  There is a dry-run mode to inspect the draft files and report link names without saving the files.
 
 See the [<ins>**Replace OLE Links Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ReplaceOLELinks#readme) for details.
+
+### Update Parts List Style from Template
+
+Sponsored by **TECHTORY Automation GmbH.**  Thank you!
+
+This command, as its name suggests, updates Parts List Styles in your drawings.  It works in conjunction with the `Run External Program` command in Housekeeper.
+
+A configuration file tells the program where to look for the new styles, and the mapping between the sheet sizes and the parts list styles.
+
+There is already a command in Housekeeper, `Update Drawings`, that updates Parts Lists.  However it only updates the *contents* of the file, not the *styles*.  
+
+There is another command, `Update Drawing Styles from Template`, that could have been modified to do it.  However, it takes quite a bit of work on the GUI to do so.  An external command is simpler and quicker to implement.  Also, since it is anticipated that this will be a fairly infrequent need, we opted for the latter approach.
+
+See the [<ins>**Update Parts List Style from Template Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/UpdatePartsListStyleFromTemplate#readme) for details.
+
+
 
 ### File List
 
@@ -43,7 +61,7 @@ Choose ![Expression Editor](My%20Project/media/active_file.png) to select the ac
 
 When updating the list, Solid Edge must be running with at least one file open.  If a new file has never been saved, the program will report an error.
 
-When processing, the option `Use current SE session (if any)` must be enabled.  When complete, display of the file(s) is restored.
+When processing, the option `Use current SE session (if any)` does not have to be enabled.  However if it is, when processing is complete, display of the file(s) is restored.
 
 
 #### Update file properties display
@@ -62,7 +80,7 @@ Changed the presentation of files imported from a list.  Now missing files are a
 
 Fixed an issue with imported and exported lists where comma characters in a file name or directory caused it to be ignored (Thank you **@collands!**).
 
-Fixed an issue with drag-and-drop where the file list was automatically populated from the source, bypassing any file sorting step (Thank you **@sven-11111!**).
+Fixed an issue with drag-and-drop where the file list was automatically populated from the source, bypassing any file filtering or sorting step (Thank you **@sven-11111!**).
 
 #### File process order
 
@@ -86,12 +104,15 @@ Also added the programming choice to the toolbar.  It is updated automatically w
 
 #### Other improvements
 
+These were all requested/reported by **@robbin70**.  Thank you!
+
 - Added shortcuts to the `Property Input Editor` to insert or edit an expression.  
-- Changed the substitution value of missing properties to the string `"<Nothing>"`.  Previously, encountering one would trigger an error when processing (Thank you **@robbin70!**).
-- Added the ability to select a property from a list, rather than typing it in (Thank you again **@robbin70!**).
-- Changed the handling of saved expressions (Thank you one more time **@robbin70!**).  Now expression references point to the library, rather than remaining stand-alone.  The stand-alone version can still be used.  Simply exit the expression editor without saving your code to the library.
-- Fixed an issue handling Unicode strings in expressions (Thank you one more time **@robbin70!**).
-- Fixed an issue handling doublequotes in property text (Thank you yet again **@robbin70!**).
+- Changed the substitution value of missing properties to the string `"<Nothing>"`.  Previously, encountering one would trigger an error when processing.
+- Added the ability to select a property from a list, rather than typing it in.
+- Changed the handling of saved expressions.  Now expression references point to the library, rather than remaining stand-alone.  The stand-alone version can still be used.  Simply exit the expression editor without saving your code to the library.
+- Fixed an issue handling Unicode strings in expressions.
+- Fixed an issue handling doublequotes (") in property text.
+- Fixed an issue handling backslash (\\) in expressions.
 
 See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/1229ffbdd9bf8fd801faf959c4362113349ab5ad/HelpTopics.md#edit-properties) for details.
 

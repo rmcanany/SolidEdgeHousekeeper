@@ -8,7 +8,7 @@
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-gold-star-16.png"><img src="My%20Project/media/spacer.png">CREDITS</h2></summary>
 
 **Sponsors**  
-@john.matthews3452 (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (pelican.com)
+Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (pelican.com), TECHTORY Automation GmbH (techtory.de)
 
 **Contributors**  
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github), @ih0nza (github), @artem1t (github)
