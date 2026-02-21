@@ -10,8 +10,8 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property Version As String = "2025.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "36" ' ######### Empty string for a release
+    Public Property Version As String = "2026.1"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
+    Public Property PreviewVersion As String = "" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
