@@ -1234,4 +1234,5 @@ Public Class UtilsPreferences
 
         Return tf
     End Function
+
 End Class
