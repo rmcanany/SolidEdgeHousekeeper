@@ -21,31 +21,6 @@ Oh, and a request.  I continue to update the `User Feedback` section of the Read
 
 Now, on to those updates...
 
-### Replace OLE Links
-
-Sponsored by **Breit Ideas** and **Pelican Industries.**  Thank you!
-
-This is an automated method to replace OLE inserted objects with SE-native blocks in draft files.  It works in conjunction with the `Run External Program` command in Housekeeper.
-
-A configuration file tells the program what file holds the blocks, what sheet names in the draft files to process, and the mapping between the OLE link and block names.  There is a dry-run mode to inspect the draft files and report link names without saving the files.
-
-See the [<ins>**Replace OLE Links Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ReplaceOLELinks#readme) for details.
-
-### Update Parts List Style from Template
-
-Sponsored by **TECHTORY Automation GmbH.**  Thank you!
-
-This command, as its name suggests, updates Parts List Styles in your drawings.  It works in conjunction with the `Run External Program` command in Housekeeper.
-
-A configuration file tells the program where to look for the new styles, and the mapping between the sheet sizes and the parts list styles.
-
-There is already a command in Housekeeper, `Update Drawings`, that updates Parts Lists.  However it only updates the *contents* of the file, not the *styles*.  
-
-There is another command, `Update Drawing Styles from Template`, that could have been modified to do it.  However, it takes quite a bit of work on the GUI to do so.  An external command is simpler and quicker to implement.  Also, since it is anticipated that this will be a fairly infrequent need, we opted for the latter approach.
-
-See the [<ins>**Update Parts List Style from Template Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/UpdatePartsListStyleFromTemplate#readme) for details.
-
-
 
 ### File List
 
@@ -87,6 +62,33 @@ Fixed an issue with drag-and-drop where the file list was automatically populate
 Changed the order for dependency-sorted files (Thank you **@robbin70!**).  Previously it was always: `*.par`, `*.psm`, `*.asm`, `*.dft`, and secondarily by sort option.  Now, for dependency sort, the files are processed in strict dependency order, disregarding the file type.
 
 See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#selection) for details.
+
+
+
+### Update Parts List Style from Template
+
+Sponsored by **TECHTORY Automation GmbH.**  Thank you!
+
+This command, as its name suggests, updates Parts List Styles in your drawings.  It works in conjunction with the `Run External Program` command in Housekeeper.
+
+A configuration file tells the program where to look for the new styles, and the mapping between the sheet sizes and the parts list styles.
+
+There is already a command in Housekeeper, `Update Drawings`, that updates Parts Lists.  However it only updates the *contents*, not the *styles*.  
+
+There is another command, `Update Drawing Styles from Template`, that could have been modified to do it.  However, creating or modifying a Task takes quite a bit of programming time, especially the GUI.  An external command is simpler and quicker to implement.  Also, since it is anticipated that this will be a fairly infrequent need, we opted for the latter approach.
+
+See the [<ins>**Update Parts List Style from Template Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/UpdatePartsListStyleFromTemplate#readme) for details.
+
+### Replace OLE Links
+
+Sponsored by **Breit Ideas** and **Pelican Industries.**  Thank you!
+
+This is an automated method to replace OLE inserted objects with SE-native blocks in draft files.  It works in conjunction with the `Run External Program` command in Housekeeper.
+
+A configuration file tells the program what file holds the blocks, what sheet names in the draft files to process, and the mapping between the OLE link and block names.  There is a dry-run mode to inspect the draft files and report link names without saving the files.
+
+See the [<ins>**Replace OLE Links Help Topic**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ReplaceOLELinks#readme) for details.
+
 
 ### Expression Editor
 
