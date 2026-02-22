@@ -48,6 +48,10 @@ Public Class UtilsDocumentation
         Dim HelpfileBaseURLFilename As String
         Dim Outlist As New List(Of String)
 
+        If Not UP.RunningDevCode Then
+            Exit Sub
+        End If
+
         ' Format example (in testing, this was line 1 from the api results)
         '"{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29"""
 
@@ -87,6 +91,11 @@ Public Class UtilsDocumentation
 
     Public Sub BuildReadmeFile()
         Dim UP As New UtilsPreferences
+
+        If Not UP.RunningDevCode Then
+            Exit Sub
+        End If
+
         Dim ReadmeFileName As String = String.Format("{0}\README.md", UP.GetHardCodedPath)
 
         Dim HelpTopicsFileName As String = ReadmeFileName.Replace("README", "HelpTopics")

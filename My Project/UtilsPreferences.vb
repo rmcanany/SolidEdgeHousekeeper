@@ -974,6 +974,11 @@ Public Class UtilsPreferences
     End Function
 
     Private Sub CheckForUnknownTasks(KnownTasks As List(Of String))
+
+        If Not RunningDevCode() Then
+            Exit Sub
+        End If
+
         Dim HardcodedPath = String.Format("{0}\My Project", GetHardCodedPath)
         Dim Filenames As List(Of String)
         Dim Filename As String
@@ -1222,4 +1227,11 @@ Public Class UtilsPreferences
         Return "C:\data\CAD\scripts\SolidEdgeHousekeeper"
     End Function
 
+    Public Function RunningDevCode() As Boolean
+        Dim tf As Boolean
+        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath() ' eg C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Debug
+        tf = StartupPath.Contains(GetHardCodedPath)
+
+        Return tf
+    End Function
 End Class

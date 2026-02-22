@@ -10,8 +10,8 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property Version As String = "2026.1"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "" ' ######### Empty string for a release
+    Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
+    Public Property PreviewVersion As String = "01" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -4225,7 +4225,7 @@ End Class
 
 ' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
 
-' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()  ' eg C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Debug
 
 
 ' ###### TEXT FILE IO ######
