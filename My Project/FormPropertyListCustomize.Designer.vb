@@ -36,6 +36,7 @@ Partial Class FormPropertyListCustomize
         Me.ButtonAdd = New System.Windows.Forms.Button()
         Me.ButtonMoveDown = New System.Windows.Forms.Button()
         Me.ButtonMoveUp = New System.Windows.Forms.Button()
+        Me.ButtonDeleteAvailable = New System.Windows.Forms.Button()
         Me.DataGridViewSource = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTarget = New System.Windows.Forms.DataGridView()
         Me.CheckBoxSortSourceList = New System.Windows.Forms.CheckBox()
@@ -98,7 +99,7 @@ Partial Class FormPropertyListCustomize
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ExTableLayoutPanel1.ColumnCount = 3
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.ExTableLayoutPanel1.Controls.Add(Me.ExTableLayoutPanel2, 1, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.DataGridViewSource, 0, 0)
@@ -115,55 +116,58 @@ Partial Class FormPropertyListCustomize
         'ExTableLayoutPanel2
         '
         Me.ExTableLayoutPanel2.ColumnCount = 1
-        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonRemove, 0, 2)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonAdd, 0, 1)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonMoveDown, 0, 4)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonMoveUp, 0, 3)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonDeleteAvailable, 0, 6)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(223, 3)
+        Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(207, 3)
         Me.ExTableLayoutPanel2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 6
+        Me.ExTableLayoutPanel2.RowCount = 8
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(109, 299)
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(142, 299)
         Me.ExTableLayoutPanel2.TabIndex = 4
         Me.ExTableLayoutPanel2.Task = Nothing
         '
         'ButtonRemove
         '
         Me.ButtonRemove.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonRemove.Location = New System.Drawing.Point(10, 116)
+        Me.ButtonRemove.Location = New System.Drawing.Point(13, 79)
         Me.ButtonRemove.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonRemove.Name = "ButtonRemove"
-        Me.ButtonRemove.Size = New System.Drawing.Size(88, 29)
+        Me.ButtonRemove.Size = New System.Drawing.Size(115, 29)
         Me.ButtonRemove.TabIndex = 9
-        Me.ButtonRemove.Text = "<-- Remove"
+        Me.ButtonRemove.Text = "Remove Favorite"
         Me.ButtonRemove.UseVisualStyleBackColor = True
         '
         'ButtonAdd
         '
         Me.ButtonAdd.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonAdd.Location = New System.Drawing.Point(10, 79)
+        Me.ButtonAdd.Location = New System.Drawing.Point(13, 42)
         Me.ButtonAdd.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonAdd.Name = "ButtonAdd"
-        Me.ButtonAdd.Size = New System.Drawing.Size(88, 29)
+        Me.ButtonAdd.Size = New System.Drawing.Size(115, 29)
         Me.ButtonAdd.TabIndex = 8
-        Me.ButtonAdd.Text = "Add -->"
+        Me.ButtonAdd.Text = "Add Favorite"
         Me.ButtonAdd.UseVisualStyleBackColor = True
         '
         'ButtonMoveDown
         '
         Me.ButtonMoveDown.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonMoveDown.Location = New System.Drawing.Point(10, 190)
+        Me.ButtonMoveDown.Location = New System.Drawing.Point(13, 153)
         Me.ButtonMoveDown.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonMoveDown.Name = "ButtonMoveDown"
-        Me.ButtonMoveDown.Size = New System.Drawing.Size(88, 29)
+        Me.ButtonMoveDown.Size = New System.Drawing.Size(115, 29)
         Me.ButtonMoveDown.TabIndex = 5
         Me.ButtonMoveDown.Text = "Move down"
         Me.ButtonMoveDown.UseVisualStyleBackColor = True
@@ -171,13 +175,23 @@ Partial Class FormPropertyListCustomize
         'ButtonMoveUp
         '
         Me.ButtonMoveUp.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonMoveUp.Location = New System.Drawing.Point(10, 153)
+        Me.ButtonMoveUp.Location = New System.Drawing.Point(13, 116)
         Me.ButtonMoveUp.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonMoveUp.Name = "ButtonMoveUp"
-        Me.ButtonMoveUp.Size = New System.Drawing.Size(88, 29)
+        Me.ButtonMoveUp.Size = New System.Drawing.Size(115, 29)
         Me.ButtonMoveUp.TabIndex = 4
         Me.ButtonMoveUp.Text = "Move up"
         Me.ButtonMoveUp.UseVisualStyleBackColor = True
+        '
+        'ButtonDeleteAvailable
+        '
+        Me.ButtonDeleteAvailable.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.ButtonDeleteAvailable.Location = New System.Drawing.Point(13, 227)
+        Me.ButtonDeleteAvailable.Name = "ButtonDeleteAvailable"
+        Me.ButtonDeleteAvailable.Size = New System.Drawing.Size(115, 29)
+        Me.ButtonDeleteAvailable.TabIndex = 10
+        Me.ButtonDeleteAvailable.Text = "Delete Available"
+        Me.ButtonDeleteAvailable.UseVisualStyleBackColor = True
         '
         'DataGridViewSource
         '
@@ -193,7 +207,7 @@ Partial Class FormPropertyListCustomize
         Me.DataGridViewSource.ReadOnly = True
         Me.DataGridViewSource.RowHeadersVisible = False
         Me.DataGridViewSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridViewSource.Size = New System.Drawing.Size(211, 299)
+        Me.DataGridViewSource.Size = New System.Drawing.Size(195, 299)
         Me.DataGridViewSource.TabIndex = 3
         '
         'DataGridViewTarget
@@ -204,13 +218,13 @@ Partial Class FormPropertyListCustomize
         Me.DataGridViewTarget.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewTarget.ContextMenuStrip = Me.ContextMenuStrip1
         Me.DataGridViewTarget.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridViewTarget.Location = New System.Drawing.Point(340, 3)
+        Me.DataGridViewTarget.Location = New System.Drawing.Point(357, 3)
         Me.DataGridViewTarget.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.DataGridViewTarget.Name = "DataGridViewTarget"
         Me.DataGridViewTarget.ReadOnly = True
         Me.DataGridViewTarget.RowHeadersVisible = False
         Me.DataGridViewTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridViewTarget.Size = New System.Drawing.Size(212, 299)
+        Me.DataGridViewTarget.Size = New System.Drawing.Size(195, 299)
         Me.DataGridViewTarget.TabIndex = 5
         '
         'CheckBoxSortSourceList
@@ -265,4 +279,5 @@ Partial Class FormPropertyListCustomize
     Friend WithEvents ButtonRemove As Button
     Friend WithEvents DataGridViewTarget As DataGridView
     Friend WithEvents CheckBoxSortSourceList As CheckBox
+    Friend WithEvents ButtonDeleteAvailable As Button
 End Class

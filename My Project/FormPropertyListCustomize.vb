@@ -339,11 +339,9 @@ Public Class FormPropertyListCustomize
         Dim SelectedRowIndices As New List(Of Integer)
         Dim s As String = ""
 
-        Dim tmpTemplatePropertyList As New List(Of String)
+        Dim tmpFavoritesList As New List(Of String)
 
         Dim i As Integer
-
-        Dim PU As New UtilsPreferences
 
         If DataGridViewSource.SelectedRows.Count = 0 Then
             s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
@@ -358,20 +356,53 @@ Public Class FormPropertyListCustomize
 
         i = 0
         For Each Propname As String In Me.FavoritesList
-            tmpTemplatePropertyList.Add(Propname)
+            tmpFavoritesList.Add(Propname)
             i += 1
         Next
 
         i = 0
         For Each Propname As String In Me.AvailableList
             If SelectedRowIndices.Contains(i) Then
-                tmpTemplatePropertyList.Add(Propname)
+                tmpFavoritesList.Add(Propname)
             End If
             i += 1
         Next
 
-        Me.FavoritesList = tmpTemplatePropertyList
+        Me.FavoritesList = tmpFavoritesList
 
+        UpdateDataGridViewTarget()
+
+    End Sub
+
+    Private Sub ButtonDeleteAvailable_Click(sender As Object, e As EventArgs) Handles ButtonDeleteAvailable.Click
+
+        Dim SelectedRowIndices As New List(Of Integer)
+        Dim s As String = ""
+        Dim i As Integer
+
+        If DataGridViewSource.SelectedRows.Count = 0 Then
+            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
+            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            MsgBox(s)
+            Exit Sub
+        End If
+
+        For Each SelectedRow As DataGridViewRow In DataGridViewSource.SelectedRows
+            SelectedRowIndices.Add(SelectedRow.Index)
+        Next
+
+        i = 0
+        For Each Propname As String In Me.AvailableList
+            If SelectedRowIndices.Contains(i) Then
+                Form_Main.PropertiesData.DeleteProp(Propname)
+            End If
+            i += 1
+        Next
+
+        Me.AvailableList = Form_Main.PropertiesData.GetAvailableList
+        UpdateDataGridViewSource()
+
+        Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
         UpdateDataGridViewTarget()
 
     End Sub

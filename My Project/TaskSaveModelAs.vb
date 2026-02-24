@@ -539,7 +539,7 @@ Public Class TaskSaveModelAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewSubDirectoryName = UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
                 End If
 
             Else
@@ -551,7 +551,7 @@ Public Class TaskSaveModelAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewSubDirectoryName = UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
                 End If
             End If
 
@@ -576,7 +576,7 @@ Public Class TaskSaveModelAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewFilenameWOExt = UFC.SubstituteIllegalCharacters(NewFilenameWOExt, DoNotSubstituteChars)
                 End If
 
             Else
@@ -588,7 +588,7 @@ Public Class TaskSaveModelAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewFilenameWOExt = UFC.SubstituteIllegalCharacters(NewFilenameWOExt, DoNotSubstituteChars)
                 End If
 
             End If
@@ -831,6 +831,9 @@ Public Class TaskSaveModelAs
         NewFileTypeNames.Add("STL (*.stl)")
         NewFileTypeNames.Add("JT Document (*.jt)")
         NewFileTypeNames.Add("SEV (*.sev)")
+
+        'NewFileTypeNames.Add("DSTV (*.nc)")  ' Need to add checks.  See https://community.sw.siemens.com/s/question/0D5Vb000014rtz2KAA/solid-edge-housekeeper-v20261-released
+
         NewFileTypeNames.Add("bmp (*.bmp)")
         NewFileTypeNames.Add("jpg (*.jpg)")
         NewFileTypeNames.Add("png (*.png)")

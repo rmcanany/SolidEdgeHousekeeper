@@ -386,7 +386,7 @@ Public Class TaskSaveDrawingAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewSubDirectoryName = UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
                 End If
 
             Else
@@ -398,7 +398,7 @@ Public Class TaskSaveDrawingAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewSubDirectoryName = UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
                 End If
             End If
 
@@ -423,7 +423,7 @@ Public Class TaskSaveDrawingAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewFilenameWOExt = UFC.SubstituteIllegalCharacters(NewFilenameWOExt, DoNotSubstituteChars)
                 End If
 
             Else
@@ -435,7 +435,7 @@ Public Class TaskSaveDrawingAs
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
-                    UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
+                    NewFilenameWOExt = UFC.SubstituteIllegalCharacters(NewFilenameWOExt, DoNotSubstituteChars)
                 End If
 
             End If
