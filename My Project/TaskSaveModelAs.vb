@@ -831,6 +831,9 @@ Public Class TaskSaveModelAs
         NewFileTypeNames.Add("STL (*.stl)")
         NewFileTypeNames.Add("JT Document (*.jt)")
         NewFileTypeNames.Add("SEV (*.sev)")
+
+        'NewFileTypeNames.Add("DSTV (*.nc)")  ' Need to add checks.  See https://community.sw.siemens.com/s/question/0D5Vb000014rtz2KAA/solid-edge-housekeeper-v20261-released
+
         NewFileTypeNames.Add("bmp (*.bmp)")
         NewFileTypeNames.Add("jpg (*.jpg)")
         NewFileTypeNames.Add("png (*.png)")

@@ -458,6 +458,18 @@ Public Class HCPropertiesData
 
     End Sub
 
+    Public Sub DeleteProp(PropName As String)
+        Dim tmpItems As New List(Of PropertyData)
+
+        For Each Item As PropertyData In Me.Items
+            If Not Item.Name = PropName Then
+                tmpItems.Add(Item)
+            End If
+        Next
+
+        Me.Items = tmpItems
+    End Sub
+
     Public Sub AddProp(
         PropertySetActualName As String,
         PropertyName As String,
