@@ -393,6 +393,26 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property preview_hide() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("preview_hide", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property preview_show() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("preview_show", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property psm() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("psm", resourceCulture)
