@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "01" ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "02" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -1021,6 +1021,22 @@ Public Class Form_Main
     Public Property ActiveFile As String
     Public Property ActiveFiles As List(Of String)
     Public Property USEA As UtilsSEApp
+
+    Private _ShowPreview As Boolean
+    Public Property ShowPreview As Boolean
+        Get
+            Return _ShowPreview
+        End Get
+        Set(value As Boolean)
+            _ShowPreview = value
+            If Me.TabControl1 IsNot Nothing Then
+                ButtonShowPreview.Checked = _ShowPreview
+                PreviewBox.Visible = _ShowPreview
+                If _ShowPreview Then UpdatePreview()
+            End If
+        End Set
+    End Property
+
 
     Private Property RunningStartup As Boolean
 
@@ -4130,16 +4146,18 @@ Public Class Form_Main
 
     Private Sub ButtonShowPreview_Click(sender As Object, e As EventArgs) Handles ButtonShowPreview.Click
 
-        If ButtonShowPreview.Checked Then
+        'If ButtonShowPreview.Checked Then
 
-            PreviewBox.Visible = True
-            UpdatePreview()
+        '    PreviewBox.Visible = True
+        '    UpdatePreview()
 
-        Else
+        'Else
 
-            PreviewBox.Visible = False
+        '    PreviewBox.Visible = False
 
-        End If
+        'End If
+
+        Me.ShowPreview = Not Me.ShowPreview
 
     End Sub
 
