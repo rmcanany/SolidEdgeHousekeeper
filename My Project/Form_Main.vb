@@ -3719,6 +3719,30 @@ Public Class Form_Main
 
         End If
 
+        'UpdatePreview()
+
+    End Sub
+
+    Private Sub UpdatePreview()
+        If ListViewFiles.SelectedItems.Count = 1 And PreviewBox.Visible Then
+
+            Dim SEThumb = New SeThumbnailLib.SeThumbnailExtractor
+            Dim hImageSE As Integer
+            Dim PreviewPic As Image
+
+            SEThumb.GetThumbnail(ListViewFiles.SelectedItems(0).Name, hImageSE)
+
+            Try
+                PreviewPic = Image.FromHbitmap(CType(hImageSE, IntPtr))
+                PreviewBox.Size = PreviewPic.Size
+                PreviewBox.Image = PreviewPic
+            Catch ex As Exception
+
+            End Try
+
+        End If
+
+        If ListViewFiles.SelectedItems.Count <> 1 And Not IsNothing(PreviewBox.Image) Then PreviewBox.Image = Nothing
     End Sub
 
     Private Sub TextBoxServerConnectionString_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerConnectionString.TextChanged
@@ -4082,6 +4106,28 @@ Public Class Form_Main
         Me.DebugMode = CheckBoxDebugMode.Checked
     End Sub
 
+    Private Sub ButtonShowPreview_Click(sender As Object, e As EventArgs) Handles ButtonShowPreview.Click
+
+        If ButtonShowPreview.Checked Then
+
+            PreviewBox.Visible = True
+            UpdatePreview()
+
+        Else
+
+            PreviewBox.Visible = False
+
+        End If
+
+    End Sub
+
+    Private Sub ListViewFiles_ItemSelectionChanged(sender As Object, e As ListViewItemSelectionChangedEventArgs) Handles ListViewFiles.ItemSelectionChanged
+        UpdatePreview()
+    End Sub
+
+    Private Sub ListViewFiles_Invalidated(sender As Object, e As InvalidateEventArgs) Handles ListViewFiles.Invalidated
+        UpdatePreview()
+    End Sub
 End Class
 
 
