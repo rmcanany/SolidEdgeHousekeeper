@@ -3734,6 +3734,9 @@ Public Class Form_Main
 
             Try
                 PreviewPic = Image.FromHbitmap(CType(hImageSE, IntPtr))
+
+                PreviewPic = CropPreview(PreviewPic)
+
                 PreviewBox.Size = PreviewPic.Size
                 PreviewBox.Image = PreviewPic
             Catch ex As Exception
@@ -3744,6 +3747,25 @@ Public Class Form_Main
 
         If ListViewFiles.SelectedItems.Count <> 1 And Not IsNothing(PreviewBox.Image) Then PreviewBox.Image = Nothing
     End Sub
+
+    Private Function CropPreview(PreviewPic As Image) As Image
+        ' https://stackoverflow.com/questions/33635869/cropping-an-image-from-file-and-resaving-in-c-sharp
+
+        Dim W As Integer = PreviewPic.Width
+        Dim H As Integer = PreviewPic.Height
+        Dim NewH As Integer = CInt(0.85 * CDbl(H))
+        Dim Offset As Integer = H - NewH
+
+        Dim Cropped As Bitmap = New Bitmap(W, H - Offset)
+
+        Dim g As Graphics = Graphics.FromImage(Cropped)
+        g.DrawImage(PreviewPic, New Rectangle(0, 0, W, NewH), New Rectangle(0, Offset, W, NewH), GraphicsUnit.Pixel)
+
+        Return Cropped
+
+    End Function
+
+
 
     Private Sub TextBoxServerConnectionString_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerConnectionString.TextChanged
         ServerConnectionString = TextBoxServerConnectionString.Text
