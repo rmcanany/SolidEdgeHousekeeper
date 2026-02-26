@@ -56,6 +56,7 @@ Partial Class FormSplash
         Me.Controls.Add(Me.PictureBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "FormSplash"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Splash"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
