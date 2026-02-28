@@ -114,19 +114,15 @@ Public Class UtilsExecute
         FMain.ButtonCancel.Text = "Cancel"
 
         If Me.ErrorLogger.HasErrors Then
-            'Me.ErrorLogger.Save()
-            'Try
-            '    ' Try to use the default application to open the file.
-            '    Process.Start(Me.ErrorLogger.LogfileName)
-            'Catch ex As Exception
-            '    ' If none, open with notepad.exe
-            '    Process.Start("notepad.exe", Me.ErrorLogger.LogfileName)
-            'End Try
+
             If FMain.CLIActive Then
                 Me.ErrorLogger.Save()
             Else
                 Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
             End If
+
+            'Me.ErrorLogger.ReportErrors(UseMessageBox:=False)
+
         Else
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If

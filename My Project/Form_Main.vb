@@ -1037,6 +1037,9 @@ Public Class Form_Main
         End Set
     End Property
 
+    Public Property CLIActive As Boolean = False
+    Public Property CLIPresetName As String = ""
+    Public Property CLIFileListName As String = ""
 
     Private Property RunningStartup As Boolean
 
@@ -1074,6 +1077,63 @@ Public Class Form_Main
     '    Next
     '    MsgBox(s)
     'End Sub
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+        'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
+        'string[] args = Environment.GetCommandLineArgs();
+        Dim Args As List(Of String) = Environment.GetCommandLineArgs.ToList
+
+        ' Args are passed as a string
+        ' Whitespace separates them
+        ' eg. c:\data\housekeeper.exe -p SetDocumentStatus_T2 -l ".\file list.txt"
+
+        Dim s As String = ""
+        For Each s1 In Args
+            s = $"{s}, {s1}"
+        Next
+        'MsgBox(s)
+
+        If Args.Count > 1 Then
+            If Args.Count = 5 Then
+                For i As Integer = 1 To 3
+                    If Args(i).ToLower = "-l" Then
+                        Me.CLIFileListName = Args(i + 1)
+                    End If
+                    If Args(i).ToLower = "-p" Then
+                        Me.CLIPresetName = Args(i + 1)
+                    End If
+                Next
+
+            Else
+                s = ""
+                Dim c As Integer = 1
+                For Each s1 As String In Args
+                    s = $"    {c}: {s}{s1}{vbCrLf}"
+                    c += 1
+                Next
+                MsgBox($"Invalid number incoming arguments:{vbCrLf}{s}")
+                End
+            End If
+            If Me.CLIPresetName = "" Or Me.CLIFileListName = "" Then
+                s = ""
+                If Me.CLIPresetName = "" Then s = $"{s}Preset not found.{vbCrLf}"
+                If Me.CLIFileListName = "" Then s = $"{s}File list not found.{vbCrLf}"
+                MsgBox(s)
+                End
+            Else
+                Me.CLIActive = True
+            End If
+
+        End If
+    End Sub
+
+
 
     Private Sub Startup(SavingPresets As Boolean)
 
@@ -1353,6 +1413,51 @@ Public Class Form_Main
 
         Me.USEA = New UtilsSEApp(Me)
         Me.USEA.ErrorLogger = New Logger("Dummy", Nothing)
+
+        If Me.CLIActive And Not SavingPresets Then
+            'MsgBox(Me.CLIPresetName)
+
+            If Me.Presets.Exists(CLIPresetName) Then
+                ComboBoxPresetName.Text = CLIPresetName
+                ButtonPresetLoad.PerformClick()
+
+                ' Remember old settings
+                Dim OldFilterAsm = Me.FilterAsm
+                Dim OldFilterPar = Me.FilterPar
+                Dim OldFilterPsm = Me.FilterPsm
+                Dim OldFilterDft = Me.FilterDft
+                Dim OldRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
+
+                ' Change settings
+                Me.FilterAsm = True
+                Me.FilterPar = True
+                Me.FilterPsm = True
+                Me.FilterDft = True
+                Me.RemindFilelistUpdate = False
+
+                Me.BT_DeleteAll.PerformClick()
+                Me.BT_AddFromlist.PerformClick()  ' Adds CLIFilelist if needed.
+
+                Me.BT_Update.PerformClick()
+
+                Me.ButtonProcess.PerformClick()
+
+                ' Restore settings
+                Me.FilterAsm = OldFilterAsm
+                Me.FilterPar = OldFilterPar
+                Me.FilterPsm = OldFilterPsm
+                Me.FilterDft = OldFilterDft
+                Me.RemindFilelistUpdate = OldRemindFilelistUpdate
+
+            Else
+                'MsgBox($"Preset name not found: '{CLIPresetName}'")
+                StartupLogger.AddMessage($"Preset name not found: '{CLIPresetName}'")
+                HCDebugLogger.Save()
+            End If
+
+            ButtonCancel.PerformClick()
+
+        End If
 
         RunningStartup = False
 
@@ -1854,16 +1959,26 @@ Public Class Form_Main
 
     Private Sub BT_AddFromlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromlist.Click
 
-        Dim tmpFileDialog As New OpenFileDialog
-        tmpFileDialog.Title = "Select list of files"
-        tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
-        tmpFileDialog.Multiselect = True
-        tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
+        Dim tmpFilenameList As New List(Of String)
 
-        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+        'MsgBox($"{Me.CLIActive} {Me.CLIFileListName}")
+        If Me.CLIActive Then
+            tmpFilenameList.Add(Me.CLIFileListName)
+        Else
+            Dim tmpFileDialog As New OpenFileDialog
+            tmpFileDialog.Title = "Select list of files"
+            tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+            tmpFileDialog.Multiselect = True
+            tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
 
-            For Each tmpFileName As String In tmpFileDialog.FileNames
+            If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+                tmpFilenameList.AddRange(tmpFileDialog.FileNames)
+                Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+            End If
+        End If
 
+        If tmpFilenameList.Count > 0 Then
+            For Each tmpFileName As String In tmpFilenameList
                 Dim tmpItem As New ListViewItem
 
                 Select Case IO.Path.GetExtension(tmpFileName).ToLower
@@ -1896,13 +2011,70 @@ Public Class Form_Main
                     ListViewSources.Items.Add(tmpItem)
                     ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
                 End If
-
             Next
-
             ListViewFilesOutOfDate = True
 
-            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+            Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFilenameList(0))
         End If
+
+
+        'Dim tmpFileDialog As New OpenFileDialog
+        'tmpFileDialog.Title = "Select list of files"
+        'tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+        'tmpFileDialog.Multiselect = True
+        'tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
+
+        'If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+
+        '    For Each tmpFileName As String In tmpFileDialog.FileNames
+
+        '        Dim tmpItem As New ListViewItem
+
+        '        Select Case IO.Path.GetExtension(tmpFileName).ToLower
+
+        '            Case Is = ".tsv"
+        '                tmpItem.Text = "TSV list"
+        '                tmpItem.ImageKey = "csv" ' Not a typo.  Reusing 'csv'
+        '                tmpItem.Tag = "tsv"
+        '            Case Is = ".txt"
+        '                tmpItem.Text = "TXT list"
+        '                tmpItem.ImageKey = "txt"
+        '                tmpItem.Tag = "txt"
+        '            Case Is = ".csv"
+        '                tmpItem.Text = "CSV list"
+        '                tmpItem.ImageKey = "csv"
+        '                tmpItem.Tag = "csv"
+        '            Case Is = ".xls", ".xlsx", ".xlsm"
+        '                tmpItem.Text = "Excel list"
+        '                tmpItem.ImageKey = "excel"
+        '                tmpItem.Tag = "excel"
+        '            Case Else
+        '                MsgBox(String.Format("{0}: Extension {1} not recognized", Me.ToString, IO.Path.GetExtension(tmpFileName).ToLower))
+        '        End Select
+
+        '        tmpItem.SubItems.Add(tmpFileName)
+        '        tmpItem.Group = ListViewSources.Groups.Item("Sources")
+
+        '        tmpItem.Name = tmpFileName
+        '        If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+        '            ListViewSources.Items.Add(tmpItem)
+        '            ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        '        End If
+
+        '    Next
+
+        '    ListViewFilesOutOfDate = True
+
+        '    'If Me.RemindFilelistUpdate Then
+        '    '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+        '    '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+        '    '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+        '    '    MsgBox(s, vbOKOnly)
+        '    'End If
+
+        '    Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
+        'End If
+
 
     End Sub
 
