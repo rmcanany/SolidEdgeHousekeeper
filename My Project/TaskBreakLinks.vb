@@ -381,11 +381,11 @@ Public Class TaskBreakLinks
 
                 Try
                     Sheets = UC.GetSheets(tmpSEDoc, "Background")
-                    ProcessCallouts(Sheets)
+                    ProcessPropertyText(Sheets)
                     ProcessDrawingViews(Sheets)
 
                     Sheets = UC.GetSheets(tmpSEDoc, "Working")
-                    ProcessCallouts(Sheets)
+                    ProcessPropertyText(Sheets)
                     ProcessDrawingViews(Sheets)
 
                 Catch ex As Exception
@@ -396,10 +396,12 @@ Public Class TaskBreakLinks
 
     End Sub
 
-    Private Sub ProcessCallouts(Sheets As List(Of SolidEdgeDraft.Sheet))
+    Private Sub ProcessPropertyText(Sheets As List(Of SolidEdgeDraft.Sheet))
         Dim Sheet As SolidEdgeDraft.Sheet
         Dim Balloons As SolidEdgeFrameworkSupport.Balloons
         Dim Balloon As SolidEdgeFrameworkSupport.Balloon
+        Dim BlockOccurrences As SolidEdgeDraft.BlockOccurrences
+        Dim BlockOccurrence As SolidEdgeDraft.BlockOccurrence
 
         For Each Sheet In Sheets
             Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
@@ -409,6 +411,28 @@ Public Class TaskBreakLinks
                 Catch ex2 As Exception
                     Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'")
                 End Try
+            Next
+
+            BlockOccurrences = Sheet.BlockOccurrences
+            For Each BlockOccurrence In BlockOccurrences
+                Dim BlockView As SolidEdgeDraft.BlockView = BlockOccurrence.BlockView
+                Balloons = BlockView.Balloons
+                For Each Balloon In Balloons
+                    Try
+                        Balloon.BalloonText = Balloon.BalloonDisplayedText
+                    Catch ex2 As Exception
+                        Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'")
+                    End Try
+                Next
+
+                Dim BlockLabelOccurrences As SolidEdgeDraft.BlockLabelOccurrences = BlockOccurrence.BlockLabelOccurrences
+                For Each BlockLabelOccurrence As SolidEdgeDraft.BlockLabelOccurrence In BlockLabelOccurrences
+                    Try
+                        BlockLabelOccurrence.value = BlockLabelOccurrence.DisplayedText
+                    Catch ex As Exception
+                        Me.TaskLogger.AddMessage($"Unable to process block label '{BlockLabelOccurrence.Name}'")
+                    End Try
+                Next
             Next
         Next
 
