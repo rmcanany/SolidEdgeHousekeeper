@@ -1140,6 +1140,8 @@ Public Class Form_Main
         RunningStartup = True
         Me.Cursor = Cursors.WaitCursor
 
+        Dim ShowSplash As Boolean = Not (SavingPresets Or Me.CLIActive)
+
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
         Dim UC As New UtilsCommon
@@ -1156,7 +1158,7 @@ Public Class Form_Main
         'End If
 
         Dim Splash As FormSplash = Nothing
-        If Not SavingPresets Then
+        If ShowSplash Then
             Splash = New FormSplash()
             Splash.Show()
             Splash.UpdateStatus("Initializing")
@@ -1168,7 +1170,7 @@ Public Class Form_Main
 
         '###### INITIALIZE PREFERENCES IF NEEDED ######
 
-        If Not SavingPresets Then Splash.UpdateStatus("Loading Preferences")
+        If ShowSplash Then Splash.UpdateStatus("Loading Preferences")
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
@@ -1179,14 +1181,14 @@ Public Class Form_Main
 
         '###### LOAD MAIN FORM SAVED SETTINGS IF ANY ######
 
-        If Not SavingPresets Then Splash.UpdateStatus("Loading Interface Preferences")
+        If ShowSplash Then Splash.UpdateStatus("Loading Interface Preferences")
 
         UP.GetFormMainSettings(Me)
 
 
         '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
 
-        If Not SavingPresets Then Splash.UpdateStatus("Loading Data Structures")
+        If ShowSplash Then Splash.UpdateStatus("Loading Data Structures")
 
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
@@ -1226,40 +1228,25 @@ Public Class Form_Main
 
         Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
 
-        If Not SavingPresets Then Splash.UpdateStatus("Loading Properties Data")
+        If ShowSplash Then Splash.UpdateStatus("Loading Properties Data")
         Me.PropertiesData = New HCPropertiesData  ' Automatically loads saved settings if any.
 
-        If Not SavingPresets Then Splash.UpdateStatus("Loading Presets")
+        If ShowSplash Then Splash.UpdateStatus("Loading Presets")
         Me.Presets = New HCPresets  ' Automatically loads saved settings if any.
+        If Me.Presets.Items.Count = 0 Then
+            Me.PresetsSaveFileFilters = True
+            Me.PresetsSavePropertyFilters = True
+        End If
 
-        If Not SavingPresets Then Splash.UpdateStatus("Loading Property Filters")
+        If ShowSplash Then Splash.UpdateStatus("Loading Property Filters")
         Me.PropertyFilters = New PropertyFilters  ' Automatically loads saved settings if any.
 
-        If Not SavingPresets Then Splash.UpdateStatus("Building Readme")
+        If ShowSplash Then Splash.UpdateStatus("Building Readme")
         UD.BuildReadmeFile()
 
         CarIcona()
 
-        'If (Me.LinkManagementFilename IsNot Nothing) AndAlso (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
-        '    Me.LinkManagementOrder = UP.GetLinkManagementOrder()
-        'End If
         Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaults to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
-
-        'If Me.DebugMode Then
-        '    If Me.LinkManagementOrder Is Nothing Then
-        '        StartupLogger.AddMessage("Initialize LinkManagementOrder: 'Nothing'")
-        '    Else
-        '        Dim s As String = ""
-        '        For Each s1 As String In Me.LinkManagementOrder
-        '            If s = "" Then
-        '                s = s1
-        '            Else
-        '                s = $"{s}, {s1}"
-        '            End If
-        '        Next
-        '        StartupLogger.AddMessage($"Initialize LinkManagementOrder: '{s}'")
-        '    End If
-        'End If
 
 
         '###### INITIALIZE FILE LIST IF NEEDED ######
@@ -1273,7 +1260,7 @@ Public Class Form_Main
             GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
 
             For i As Integer = 0 To GroupHeaderNames.Count - 1
-                If Not SavingPresets Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i)))
+                If ShowSplash Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i)))
 
                 Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
                 LVGroup.Name = GroupNames(i)
@@ -1290,14 +1277,14 @@ Public Class Form_Main
 
         '###### INITIALIZE TASK LIST ######
 
-        If Not SavingPresets Then Splash.UpdateStatus("Loading Tasks")
+        If ShowSplash Then Splash.UpdateStatus("Loading Tasks")
 
         Me.TaskList = UP.GetTaskList(Splash)
 
         Dim tmpTaskPanel As Panel = Nothing
 
         For Each c As Control In TabPageTasks.Controls
-            If Not SavingPresets Then Splash.UpdateStatus(String.Format("{0}", c.Name))
+            If ShowSplash Then Splash.UpdateStatus(String.Format("{0}", c.Name))
 
             If c.Name = "TaskPanel" Then
                 tmpTaskPanel = CType(c, Panel)
@@ -1311,7 +1298,7 @@ Public Class Form_Main
 
             Dim Task = TaskList(i)
 
-            If Not SavingPresets Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name))
+            If ShowSplash Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name))
 
             If Not Me.RememberTasks Then
                 Task.IsSelectedTask = False
@@ -1323,12 +1310,6 @@ Public Class Form_Main
 
             Task.LinkManagementOrder = Me.LinkManagementOrder
 
-            'If Me.DebugMode Then
-            '    If Task.LinkManagementOrder Is Nothing Then
-            '        StartupLogger.AddMessage($"{Task.Description}.LinkManagementOrder: 'Nothing'")
-            '    End If
-            'End If
-
             If Task.RequiresPropertiesData Then
                 Task.PropertiesData = Me.PropertiesData
             End If
@@ -1336,30 +1317,14 @@ Public Class Form_Main
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
 
-        'If Me.DebugMode Then
-        '    If Me.LinkManagementOrder Is Nothing Then
-        '        StartupLogger.AddMessage("Post task initialization LinkManagementOrder: 'Nothing'")
-        '    Else
-        '        Dim s As String = ""
-        '        For Each s1 As String In Me.LinkManagementOrder
-        '            If s = "" Then
-        '                s = s1
-        '            Else
-        '                s = $"{s}, {s1}"
-        '            End If
-        '        Next
-        '        StartupLogger.AddMessage($"Post task initialize LinkManagementOrder: '{s}'")
-        '    End If
-        'End If
-
         AddHandler editbox.Leave, AddressOf editbox_LostFocus
         AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
 
 
         '################# Questo risolver il problema del bordo sgrazinato della ToolStrip
-        If Not SavingPresets Then Splash.UpdateStatus("Updating Filters")
+        If ShowSplash Then Splash.UpdateStatus("Updating Filters")
         ToolStrip_Filter.Renderer = New MySR()
-        If Not SavingPresets Then Splash.UpdateStatus("Updating Presets")
+        If ShowSplash Then Splash.UpdateStatus("Updating Presets")
         ToolStripPresets.Renderer = New MySR()
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
@@ -1373,7 +1338,7 @@ Public Class Form_Main
         If Me.TCRevisionRx Is Nothing OrElse Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
         If Me.TCItemIDName Is Nothing OrElse Me.TCItemIDName.Trim = "" Then TCItemIDName = "MFK9Item1"
 
-        If Not SavingPresets Then Splash.UpdateStatus("Wrapping up")
+        If ShowSplash Then Splash.UpdateStatus("Wrapping up")
 
         UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.
 
@@ -1383,7 +1348,7 @@ Public Class Form_Main
 
         UP.SetSEDefaultFolders(Me)
 
-        If Not SavingPresets Then
+        If ShowSplash Then
             Splash.UpdateStatus("")
 
             Splash.Animate()
@@ -1391,31 +1356,10 @@ Public Class Form_Main
         End If
         Me.Cursor = Cursors.Default
 
-        'If Me.DebugMode Then
-        '    If Me.LinkManagementOrder Is Nothing Then
-        '        StartupLogger.AddMessage("Post startup LinkManagementOrder: 'Nothing'")
-        '    Else
-        '        Dim s As String = ""
-        '        For Each s1 As String In Me.LinkManagementOrder
-        '            If s = "" Then
-        '                s = s1
-        '            Else
-        '                s = $"{s}, {s1}"
-        '            End If
-        '        Next
-        '        StartupLogger.AddMessage($"Post startup LinkManagementOrder: '{s}'")
-        '    End If
-        'End If
-
-        'If Me.DebugMode Then
-        '    HCDebugLogger.ReportErrors(UseMessageBox:=False)
-        'End If
-
         Me.USEA = New UtilsSEApp(Me)
         Me.USEA.ErrorLogger = New Logger("Dummy", Nothing)
 
         If Me.CLIActive And Not SavingPresets Then
-            'MsgBox(Me.CLIPresetName)
 
             If Me.Presets.Exists(CLIPresetName) Then
                 ComboBoxPresetName.Text = CLIPresetName
@@ -1429,10 +1373,12 @@ Public Class Form_Main
                 Dim OldRemindFilelistUpdate As Boolean = Me.RemindFilelistUpdate
 
                 ' Change settings
-                Me.FilterAsm = True
-                Me.FilterPar = True
-                Me.FilterPsm = True
-                Me.FilterDft = True
+                If Not Me.PresetsSaveFileFilters Then
+                    Me.FilterAsm = True
+                    Me.FilterPar = True
+                    Me.FilterPsm = True
+                    Me.FilterDft = True
+                End If
                 Me.RemindFilelistUpdate = False
 
                 Me.BT_DeleteAll.PerformClick()
@@ -1443,14 +1389,15 @@ Public Class Form_Main
                 Me.ButtonProcess.PerformClick()
 
                 ' Restore settings
-                Me.FilterAsm = OldFilterAsm
-                Me.FilterPar = OldFilterPar
-                Me.FilterPsm = OldFilterPsm
-                Me.FilterDft = OldFilterDft
+                If Not Me.PresetsSaveFileFilters Then
+                    Me.FilterAsm = OldFilterAsm
+                    Me.FilterPar = OldFilterPar
+                    Me.FilterPsm = OldFilterPsm
+                    Me.FilterDft = OldFilterDft
+                End If
                 Me.RemindFilelistUpdate = OldRemindFilelistUpdate
 
             Else
-                'MsgBox($"Preset name not found: '{CLIPresetName}'")
                 StartupLogger.AddMessage($"Preset name not found: '{CLIPresetName}'")
                 HCDebugLogger.Save()
             End If
