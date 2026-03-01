@@ -41,10 +41,10 @@ Module HousekeeperCLI
                                      ActiveFileExtensionsList.ToArray)
 
 
-        ' ###### These are written to stdout which are received by the calling program
-        Console.WriteLine($"Command line: '{ArgsString}'")
+        ' ###### These are written to stdout to be processed by the calling program
+        'Console.WriteLine($"Command line: '{ArgsString}'")
 
-        ' List any new log files found, if any
+        ' Report new log files found, if any.
         For Each s As String In NewLogFiles
             If Not OldLogFiles.Contains(s) Then
                 Console.WriteLine(s)
