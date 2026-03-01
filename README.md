@@ -679,6 +679,65 @@ Debug mode is meant to help with troubleshooting user's site-specific issues.  I
 
 </details>
 
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">COMMAND LINE INTERPRETER</h2></summary>
+
+To launch Housekeeper from the command line, use the (experimental) command.
+
+`<Path>\HousekeeperCLI.exe -P <Preset name> -L <File list>`
+
+**Arguments**
+- -P: Existing preset in Housekeeper.  If the preset is not found, an error is reported.
+- -L: Text file that contains file names to process.  Each file name must be on a separate line and include the full path.  For compatibility, the file extension must be `.txt`.
+
+**Output**
+
+If Housekeeper reports any errors, the program sends the log file name(s) to `stdout`.  These can be captured by the calling program and processed as needed.
+
+**Example PowerShell program**
+
+```
+$HousekeeperCLIPath = "C:\CAD\SolidEdgeHousekeeper-v2026.2\HousekeeperCLI.exe"
+
+# Array of preset names to process
+$PresetNames = @(
+    'TestCheckFilename_T01',
+    'TestCheckFilename_T02'
+)
+
+# Array to collect output from each test
+[array]$OutList = @()
+
+# Process presets
+ForEach ($PresetName in $PresetNames) {
+
+    # Delete the test directory if it exists
+    if (Test-Path ".\test"){
+    Remove-Item -LiteralPath ".\test" -Force -Recurse
+    }
+
+    # Copy the source files to the test directory
+    Copy-Item -Path ".\source" -Destination ".\test" -Recurse
+
+    # Generate the list of files to process
+    (Get-ChildItem ".\test" -Recurse).fullname > filelist.txt
+
+    # Run the test
+    [array]$tmpOutList = &$HousekeeperCLIPath -p $PresetName -l ".\filelist.txt"
+    $OutList += $tmpOutList
+ 
+}
+
+# Show the output
+$OutList
+
+# Keep the console displayed until the user dismisses it
+Write-Host "Press any key to continue..."
+$null = [System.Console]::ReadKey($true)
+
+```
+
+</details>
+
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
@@ -1287,66 +1346,6 @@ If you select the custom size option from the sheet selector, you need to supply
 This command may not work with PDF printers. Try the Save As PDF command instead. 
 
 </details>
-
-</details>
-
-
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">COMMAND LINE INTERPRETER</h2></summary>
-
-To launch Housekeeper from the command line, use the (experimental) command.
-
-`<Path>\HousekeeperCLI.exe -P <Preset name> -L <File list>`
-
-**Arguments**
-- -P: Existing preset in Housekeeper.  If the preset is not found, an error is reported.
-- -L: Text file that contains file names to process.  Each file name must be on a separate line and include the full path.  For compatibility, the file extension must be `.txt`.
-
-**Output**
-
-If Housekeeper reports any errors, the program sends the log file name(s) to `stdout`.  These can be captured by the calling program and processed as needed.
-
-**Example PowerShell program**
-
-```
-$HousekeeperCLIPath = "C:\CAD\SolidEdgeHousekeeper-v2026.2\HousekeeperCLI.exe"
-
-# Array of preset names to process
-$PresetNames = @(
-    'TestCheckFilename_T01',
-    'TestCheckFilename_T02'
-)
-
-# Array to collect output from each test
-[array]$OutList = @()
-
-# Process presets
-ForEach ($PresetName in $PresetNames) {
-
-    # Delete the test directory if it exists
-    if (Test-Path ".\test"){
-    Remove-Item -LiteralPath ".\test" -Force -Recurse
-    }
-
-    # Copy the source files to the test directory
-    Copy-Item -Path ".\source" -Destination ".\test" -Recurse
-
-    # Generate the list of files to process
-    (Get-ChildItem ".\test" -Recurse).fullname > filelist.txt
-
-    # Run the test
-    [array]$tmpOutList = &$HousekeeperCLIPath -p $PresetName -l ".\filelist.txt"
-    $OutList += $tmpOutList
- 
-}
-
-# Show the output
-$OutList
-
-# Keep the console displayed until the user dismisses it
-Write-Host "Press any key to continue..."
-$null = [System.Console]::ReadKey($true)
-
-```
 
 </details>
 
