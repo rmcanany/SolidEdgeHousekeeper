@@ -679,21 +679,23 @@ Debug mode is meant to help with troubleshooting user's site-specific issues.  I
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">COMMAND LINE INTERPRETER</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">COMMAND LINE</h2></summary>
 
-To launch Housekeeper from the command line, use the (experimental) command.
+To launch Housekeeper from the command line, use this (experimental) command.
 
 `<Path>\HousekeeperCLI.exe -P <Preset name> -L <File list>`
 
 **Arguments**
 - -P: Existing preset in Housekeeper.  If the preset is not found, an error is reported.
-- -L: Text file that contains file names to process.  Each file name must be on a separate line and include the full path.  For compatibility, the file extension must be `.txt`.
+- -L: Text file that contains the file names to process.  Each file name must be on a separate line and include the full path.  For compatibility, the file extension must be `.txt`.
 
 **Output**
 
 If Housekeeper reports any errors, the program sends the log file name(s) to `stdout`.  These can be captured by the calling program and processed as needed.
 
 **Example PowerShell program**
+
+This is a program we use to help automate testing of Tasks.  Its only function is to display log file names.  The logs are manually inspected by the user.
 
 ```
 $HousekeeperCLIPath = "C:\CAD\SolidEdgeHousekeeper-v2026.2\HousekeeperCLI.exe"
