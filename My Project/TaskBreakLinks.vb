@@ -678,8 +678,8 @@ Public Class TaskBreakLinks
         HelpString += vbCrLf + vbCrLf + "![Title Block](My%20Project/media/title_block.png)"
 
         HelpString += vbCrLf + vbCrLf + "Luckily, Solid Edge can take care of that. "
-        HelpString += "That's in the program, but only for Callouts. "
-        HelpString += "If you have TextBoxes, Blocks, or other objects that use Property text, let me know. "
+        HelpString += "That's in the program, but only for Callouts and Blocks. "
+        HelpString += "If you use Property text elsewhere in drawings, let me know. "
         HelpString += "I can try to address those in a future release. "
 
         HelpString += vbCrLf + vbCrLf + "`Draft symbol links` converts symbol blocks to geometry, "

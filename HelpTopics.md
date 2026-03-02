@@ -897,7 +897,7 @@ The command options are explained below.
 
 ![Title Block](My%20Project/media/title_block.png)
 
-Luckily, Solid Edge can take care of that. That's in the program, but only for Callouts. If you have TextBoxes, Blocks, or other objects that use Property text, let me know. I can try to address those in a future release. 
+Luckily, Solid Edge can take care of that. That's in the program, but only for Callouts and Blocks. If you use Property text elsewhere in drawings, let me know. I can try to address those in a future release. 
 
 `Draft symbol links` converts symbol blocks to geometry, removing external references in the process. 
 

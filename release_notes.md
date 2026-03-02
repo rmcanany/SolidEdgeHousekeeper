@@ -13,6 +13,35 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
+## V2026.2
+
+### File Preview
+
+Contributed by **@[Francesco Arfilli]** suggested by **@TeeVar.**  Thank you!
+
+Added the ability to show a thumbnail of a selected file.
+
+<p align="center">
+  <img src="My%20Project/media/preview_window.png">
+</p>
+
+See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#selection) for details.
+
+
+### Command Line
+
+Added the ability to run Housekeeper from the command line.  (Thank you **@robbin70** and **@Robin BIomberg!**)
+
+Created a separate executable, called `HousekeeperCLI.exe`, which takes two arguments.  One is a Preset, which configures Housekeeper.  The other is a text file holding the names of files to process.
+
+If any errors are reported, they are passed back to the calling program via `stdout`.
+
+See the [<ins>**Command Line Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#command-line) for details.
+
+### Break Links
+
+For the option `Draft model links`, added the processing of Blocks for property text replacement.  (Thank you **@john.matthews3452!**)
+
 ## V2026.1
 
 We'll get right to the updates, but first some exciting news -- Housekeeper has three new sponsors: **Breit Ideas**, **Pelican Industries**, and **TECHTORY Automation GmbH!**
