@@ -446,6 +446,10 @@ Public Class TaskEditVariables
         HelpString += "Note, the property is a static copy.  "
         HelpString += "If it changes, this command needs to be run again to update the variable.  "
 
+        HelpString += vbCrLf + vbCrLf + "The unit type is ignored for existing variables.  "
+        HelpString += "It is only used when adding a variable not already in the file.  "
+        HelpString += "In that case, if a unit type is not specified, the default `distance` is assumed.  "
+
         HelpString += vbCrLf + vbCrLf + "If renaming a variable, the new name has the same limitations as above. "
 
         HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name. "

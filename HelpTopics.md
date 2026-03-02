@@ -28,7 +28,7 @@ Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (
 
 Solid Edge Housekeeper is a batch utility for finding annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
-If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  Something else to check out is [<ins>**Solid Edge Storekeeper**</ins>](https://github.com/rmcanany/SolidEdgeStorekeeper#readme).  That is a separate open source utility to create, organize and share standard parts.
+If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  (Something else to check out when you have time is [<ins>**Solid Edge Storekeeper**</ins>](https://github.com/rmcanany/SolidEdgeStorekeeper#readme).  That is a separate open source utility to create, organize and share standard parts.)
 
 <p align="center">
   <img src="My%20Project/media/home_tab_done.png">
@@ -109,7 +109,7 @@ If you know .NET, or want to learn, there's more to do!  If you're new to GitHub
 
 Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See [<ins>**FILE SELECTION**</ins>](#file-selection) below for details. 
 
-If any errors are found, a log file will be written to your temp folder. It will identify each error and the file in which it occurred. When processing is complete, the log file is opened in Notepad for review. If you want to open an old log file, look for file names starting with 'Housekeeper' in the `%temp%` folder.
+If any errors are found, a log file will be written to your temp folder. It will identify each error and the file in which it occurred. When processing is complete, the log file is opened in Notepad for review. If you want to open an old log file, look in the `Housekeeper` directory in the `%temp%` folder.
 
 ![Status Bar](My%20Project/media/status_bar_ready.png)
 
@@ -204,7 +204,7 @@ Choose this option to select files from that are currently open in Solid Edge. R
 
 When updating the list, Solid Edge must be running with at least one file open.  If a new file has never been saved, the program will report an error.
 
-When processing, the option `Use current SE session (if any)` must be enabled.  When complete, display of the file(s) is restored.
+When processing, the option `Use current SE session (if any)` does not have to be enabled.  If it is, when processing is complete, display of the previously open file(s) is restored.
 
 </details>
 
@@ -1005,6 +1005,8 @@ If a variable on the list is not in the file, it can optionally be added.  Set t
 The number/formula is not required if only renaming or exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
 
 You can use a file property in the formula.  Right-click the formula text box and select Insert Property to do so.  Note, the property is a static copy.  If it changes, this command needs to be run again to update the variable.  
+
+The unit type is ignored for existing variables.  It is only used when adding a variable not already in the file.  In that case, if a unit type is not specified, the default `distance` is assumed.  
 
 If renaming a variable, the new name has the same limitations as above. 
 
