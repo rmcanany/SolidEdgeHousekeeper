@@ -32,9 +32,9 @@ See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/S
 
 Added the ability to run Housekeeper from the command line.  (Thank you **@robbin70** and **@Robin BIomberg!**)
 
-Created a separate executable, called `HousekeeperCLI.exe`, which takes two arguments.  One is a Preset, which configures Housekeeper.  The other is a text file holding the names of files to process.
+Created a separate executable, `HousekeeperCLI.exe`, which takes two arguments.  One is a Preset, which configures Housekeeper.  The other is a text file holding the names of files to process.
 
-If any errors are reported, they are passed back to the calling program via `stdout`.
+If any errors are reported, the log file names are passed back to the calling program via `stdout`.
 
 See the [<ins>**Command Line Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#command-line) for details.
 
@@ -42,6 +42,10 @@ See the [<ins>**Command Line Help Topic**</ins>](https://github.com/rmcanany/Sol
 
 For the option `Draft model links`, added the processing of Blocks for property text replacement.  (Thank you **@john.matthews3452!**)
 
+### Other
+
+- Fixed a regression in `Save As` where illegal file name characters were no longer being replaced.  (Thank you **@n0minus38!**)
+- 
 ## V2026.1
 
 We'll get right to the updates, but first some exciting news -- Housekeeper has three new sponsors: **Breit Ideas**, **Pelican Industries**, and **TECHTORY Automation GmbH!**

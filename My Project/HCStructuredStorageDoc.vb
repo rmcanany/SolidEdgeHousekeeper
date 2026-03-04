@@ -2183,7 +2183,8 @@ Public Class HCStructuredStorageDoc
                                 Case "Elongation"
                                     Matl.Elongation = CDbl(Value)
                             End Select
-
+                        Else
+                            Dim i = 0
                         End If
                     Next
                     Me.Materials.Add(Matl)

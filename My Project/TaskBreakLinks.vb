@@ -450,7 +450,9 @@ Public Class TaskBreakLinks
                 Try
                     DrawingView.Drop()
                 Catch ex2 As Exception
-                    Me.TaskLogger.AddMessage($"Unable to process drawing view on sheet '{Sheet.Name}'.")
+                    ' Dependent views (detail, cross-section, etc) are converted to 2D when their parent is.
+                    ' Can probably safely ignore the exception.
+                    ' Me.TaskLogger.AddMessage($"Unable to process drawing view on sheet '{Sheet.Name}'.")
                 End Try
             Next
         Next
