@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "03" ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "04" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -3128,7 +3128,7 @@ Public Class Form_Main
 
         Me.Cursor = Cursors.WaitCursor
 
-        Me.PropertiesData.Populate(TemplateList)
+        Me.PropertiesData.Populate(TemplateList, Me.MaterialTable)
 
         Me.Cursor = Cursors.Default
 

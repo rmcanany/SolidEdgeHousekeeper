@@ -827,6 +827,15 @@ Public Class HCStructuredStorageDoc
         Return Me.MatTable.UpdateMaterial(SSDoc)
     End Function
 
+    Public Function GetMaterialCustomProps() As List(Of String)
+        If Me.MatTable Is Nothing Then Return Nothing
+        Return Me.MatTable.CustomMaterialProperties
+    End Function
+
+    Public Function GetMaterialCustomPropsTypes() As List(Of String)
+        If Me.MatTable Is Nothing Then Return Nothing
+        Return Me.MatTable.CustomMaterialPropertiesTypes
+    End Function
 
     Public Function GetBlockLibraryBlockNames() As List(Of String)
         If Me.BlkLibrary Is Nothing Then
@@ -1989,8 +1998,10 @@ Public Class HCStructuredStorageDoc
     Private Class MaterialTable
         Public Property Materials As List(Of Material)
         Public Property Gages As List(Of Gage)
+        Public Property CustomMaterialProperties As List(Of String)
+        Public Property CustomMaterialPropertiesTypes As List(Of String)
 
-        ' This is for material table files *.mat only
+        ' This is for material table files *.mtl only
 
 
         Public Sub New(cf As CompoundFile)
@@ -2001,6 +2012,8 @@ Public Class HCStructuredStorageDoc
 
             Materials = New List(Of Material)
             Gages = New List(Of Gage)
+            CustomMaterialProperties = New List(Of String)
+            CustomMaterialPropertiesTypes = New List(Of String)
 
             cf.RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
 
@@ -2142,6 +2155,7 @@ Public Class HCStructuredStorageDoc
 
 
         Private Sub TraverseNodes(RootNode As Xml.XmlNode)
+
             For Each ChildNode As XmlElement In RootNode
                 If ChildNode.Name.ToLower = "material" Then
                     Dim Matl As New Material
@@ -2184,7 +2198,36 @@ Public Class HCStructuredStorageDoc
                                     Matl.Elongation = CDbl(Value)
                             End Select
                         Else
-                            Dim i = 0
+                            If PropertyNode.Name = "CustomPropsdata" And PropertyNode.HasChildNodes Then
+                                For Each ChildNode2 As XmlElement In PropertyNode
+                                    If ChildNode2.HasAttributes Then
+                                        Dim Name As String = ""
+                                        Dim UnitType As Integer = -1
+                                        Dim AddedProp As Boolean = False
+                                        For Each Attribute2 As XmlAttribute In ChildNode2.Attributes
+                                            If Attribute2.Name = "Name" Then
+                                                Name = Attribute2.Value
+                                                If Not CustomMaterialProperties.Contains(Name, StringComparer.OrdinalIgnoreCase) Then
+                                                    Me.CustomMaterialProperties.Add(Name)
+                                                    AddedProp = True
+                                                End If
+                                            ElseIf Attribute2.Name = "UnitType" Then
+                                                UnitType = CInt(Attribute2.Value)
+                                            End If
+                                        Next
+                                        If AddedProp Then
+                                            If UnitType = -1 Then
+                                                CustomMaterialPropertiesTypes.Add("String")
+                                            Else
+                                                CustomMaterialPropertiesTypes.Add("Double")
+                                            End If
+                                        End If
+
+                                        Dim i = 0
+                                    End If
+
+                                Next
+                            End If
                         End If
                     Next
                     Me.Materials.Add(Matl)
