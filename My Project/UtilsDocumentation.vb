@@ -272,6 +272,38 @@ Public Class UtilsDocumentation
             ReadmeOut.Add("</details>")
             ReadmeOut.Add("")
 
+
+            ReadmeOut.Add("")
+
+            msg = ""
+            ReadmeOut.Add("")
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}Resources/icons8-gold-star-16.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}BECOME A SPONSOR</h2></summary>", Chr(34), msg)
+
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+            msg = "If Housekeeper is saving you lots of time and money, we'd love to have you as a sponsor!"
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "One way is through PayPal's Donate feature."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/rmcanany)"
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "Otherwise, for electronic funds transfer or other means, please email me at rmcanany@gmail.com."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            ReadmeOut.Add("</details>")
+            ReadmeOut.Add("")
+
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
 
             ' This is a copy of the README with all sections expanded.
