@@ -1400,3 +1400,18 @@ Processing starts in Form_Main.vb.  A short description of the code's so-called 
 
 </details>
 
+
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-gold-star-16.png"><img src="My%20Project/media/spacer.png">BECOME A SPONSOR</h2></summary>
+
+If Housekeeper is saving you lots of time and money, we'd love to have you as a sponsor!  
+
+One way is through PayPal's Donate feature.
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/rmcanany)
+
+Otherwise, for electronic funds transfer or other means, please email me at rmcanany@gmail.com.
+
+
+</details>
+
+
