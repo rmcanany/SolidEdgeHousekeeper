@@ -341,7 +341,11 @@ Public Class UtilsExecute
 
         If StartLogger.HasErrors Then Proceed = False
 
-        tmpErrorLogger.ReportErrors(UseMessageBox:=True)
+        If Not FMain.CLIActive Then
+            tmpErrorLogger.ReportErrors(UseMessageBox:=True)
+        Else
+            tmpErrorLogger.Save()
+        End If
 
         Return Proceed
     End Function

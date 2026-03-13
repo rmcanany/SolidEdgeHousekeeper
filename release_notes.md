@@ -45,7 +45,9 @@ For the option `Draft model links`, added the processing of Blocks for property 
 ### Other
 
 - Fixed a regression in `Save As` where illegal file name characters were no longer being replaced.  (Thank you **@n0minus38!**)
-- 
+- Fixed an issue in the example code snippet `FitIso.snp` where the command ID for draft files was incorrect.
+
+
 ## V2026.1
 
 We'll get right to the updates, but first some exciting news -- Housekeeper has three new sponsors: **Breit Ideas**, **Pelican Industries**, and **TECHTORY Automation GmbH!**

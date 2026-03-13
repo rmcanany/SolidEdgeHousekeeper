@@ -40,6 +40,8 @@ If this is your first time here, you may want to check out the [<ins>**Quick Sta
 
 > *This is going to save me SO MUCH TIME!  Thank you for sharing!*
 
+> *We are a company based in the Netherlands and use your program often to clean up our Solid Edge models.  Thank you for a well engineered piece of open source software, and keep up the good work.*
+
 > *I just got a new job and my first assignment was updating THOUSANDS of old drawings.  No one could believe it was done in two days.  Because of your tool, my boss now thinks I'm a GENIUS!  I can't thank you enough!*
 
 > *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they ever figure out how to automate me running Housekeeper, I will be out of a job!*

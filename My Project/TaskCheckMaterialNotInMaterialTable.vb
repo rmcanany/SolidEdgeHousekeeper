@@ -163,14 +163,16 @@ Public Class TaskCheckMaterialNotInMaterialTable
         If Proceed Then
             If Matl.Trim = "" Then
                 Proceed = False
-                TaskLogger.AddMessage("Material 'None' not in material table")
+                'TaskLogger.AddMessage("Material 'None' not in material table")
+                TaskLogger.AddMessage($"Material 'None' not in {IO.Path.GetFileNameWithoutExtension(Me.MaterialTable)}")
             End If
         End If
 
         If Proceed Then
             If Not SSMatTable.MaterialInTable(Matl) Then
                 Proceed = False
-                TaskLogger.AddMessage(String.Format("Material '{0}' not in material table", Matl))
+                'TaskLogger.AddMessage(String.Format("Material '{0}' not in material table", Matl))
+                TaskLogger.AddMessage($"Material '{Matl}' not in {IO.Path.GetFileNameWithoutExtension(Me.MaterialTable)}")
             End If
         End If
 
