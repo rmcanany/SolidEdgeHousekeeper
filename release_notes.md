@@ -42,6 +42,8 @@ See the [<ins>**Command Line Help Topic**</ins>](https://github.com/rmcanany/Sol
 
 For the option `Draft model links`, added the processing of Blocks for property text replacement.  (Thank you **@john.matthews3452!**)
 
+See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#break-links) for details.
+
 ### Other
 
 - Fixed a regression in `Save As` where illegal file name characters were no longer being replaced.  (Thank you **@n0minus38!**)
