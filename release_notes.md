@@ -19,7 +19,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 Contributed by **@[Francesco Arfilli]** suggested by **@TeeVar.**  Thank you!
 
-Added the ability to show the thumbnail of a selected file.
+Added an option to show the thumbnail of a selected file.  On the toolbar, click the eye icon to toggle.
 
 <p align="center">
   <img src="My%20Project/media/preview_window.png">

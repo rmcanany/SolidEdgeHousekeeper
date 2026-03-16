@@ -268,7 +268,9 @@ You can limit the search to return only selected types of Solid Edge files. Refe
 
 <details open><summary><h4 style="margin:0px; display:inline-block">File List Options</h4></summary>
 
-You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 9. 
+You can show a file preview and/or customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 9. 
+
+Click ![Preview](My%20Project/media/preview_show.png) to enable a preview of a selected file on the list.
 
 Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the left below
 
