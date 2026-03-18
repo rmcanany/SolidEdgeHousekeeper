@@ -1043,6 +1043,10 @@ Public Class Form_Main
 
     Private Property RunningStartup As Boolean
 
+
+    Private fSEE As Form_SolidEdgeExplorer
+
+
     'DESCRIPTION
     'Solid Edge Housekeeper
     'Robert McAnany 2020-2026
@@ -3881,6 +3885,18 @@ Public Class Form_Main
         End If
 
         If ListViewFiles.SelectedItems.Count <> 1 And Not IsNothing(PreviewBox.Image) Then PreviewBox.Image = Nothing
+
+        If Not IsNothing(fSEE) Then
+
+            If ListViewFiles.SelectedItems.Count = 1 And fSEE.Visible Then
+                fSEE.FileName = ListViewFiles.SelectedItems.Item(0).Name
+                fSEE.UpdateTree()
+            End If
+
+            If ListViewFiles.SelectedItems.Count <> 1 And fSEE.Visible Then fSEE.TreeView1.Nodes.Clear()
+
+        End If
+
     End Sub
 
     Private Function CropPreview(PreviewPic As Image) As Image
@@ -4275,6 +4291,23 @@ Public Class Form_Main
         '    PreviewBox.Visible = False
 
         'End If
+
+        If My.Computer.Keyboard.ShiftKeyDown Then
+
+            fSEE = New Form_SolidEdgeExplorer()
+
+            ButtonShowPreview.Checked = Not ButtonShowPreview.Checked
+
+            If ListViewFiles.SelectedItems.Count = 1 Then
+                fSEE.FileName = ListViewFiles.SelectedItems(0).Name
+                fSEE.UpdateTree()
+            End If
+
+            fSEE.Show()
+
+            Exit Sub
+
+        End If
 
         Me.ShowPreview = Not Me.ShowPreview
 

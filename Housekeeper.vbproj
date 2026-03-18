@@ -138,8 +138,8 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OpenMcdf, Version=2.4.0.0, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
-      <HintPath>packages\OpenMcdf.2.4.0\lib\net40\OpenMcdf.dll</HintPath>
+    <Reference Include="OpenMcdf, Version=2.4.1.0, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
+      <HintPath>packages\OpenMcdf.2.4.1\lib\net40\OpenMcdf.dll</HintPath>
     </Reference>
     <Reference Include="OpenMcdf.Extensions, Version=2.3.2.0, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
       <HintPath>packages\OpenMcdf.Extensions.2.4.0\lib\net40\OpenMcdf.Extensions.dll</HintPath>
@@ -149,6 +149,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SolidEdgeExplorerDLL">
+      <HintPath>F:\Sorgenti\SolidEdgeExplorerDLL\bin\Release\netstandard2.0\SolidEdgeExplorerDLL.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
@@ -223,6 +226,12 @@
       <DependentUpon>FormTeamCenterSettings.vb</DependentUpon>
     </Compile>
     <Compile Include="My Project\FormTeamCenterSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\Form_SolidEdgeExplorer.Designer.vb">
+      <DependentUpon>Form_SolidEdgeExplorer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Form_SolidEdgeExplorer.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\HCComObject.vb" />
@@ -483,6 +492,9 @@
     <EmbeddedResource Include="My Project\FormVariableInputEditor.resx">
       <DependentUpon>FormVariableInputEditor.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Form_SolidEdgeExplorer.resx">
+      <DependentUpon>Form_SolidEdgeExplorer.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
