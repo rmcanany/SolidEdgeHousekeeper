@@ -150,7 +150,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SolidEdgeExplorerDLL">
-      <HintPath>F:\Sorgenti\SolidEdgeExplorerDLL\bin\Release\netstandard2.0\SolidEdgeExplorerDLL.dll</HintPath>
+      <HintPath>My Project\SolidEdgeExplorer\SolidEdgeExplorerDLL.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>

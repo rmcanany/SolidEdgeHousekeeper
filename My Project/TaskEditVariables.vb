@@ -179,7 +179,8 @@ Public Class TaskEditVariables
                 TaskLogger.AddMessage("Unable to access dimensions")
             End If
 
-            DocVariableDict = UC.GetDocVariables(SEDoc)
+            Dim UseDisplayName As Boolean = True
+            DocVariableDict = UC.GetDocVariables(SEDoc, UseDisplayName)
             If DocVariableDict Is Nothing Then
                 TaskLogger.AddMessage("Unable to access variables")
             End If

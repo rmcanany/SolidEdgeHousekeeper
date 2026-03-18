@@ -259,8 +259,11 @@ Public Class UtilsCommon
         Return DocDimensionDict
     End Function
 
-    Public Function GetDocVariables(SEDoc As SolidEdgeFramework.SolidEdgeDocument
+    Public Function GetDocVariables(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        UseDisplayName As Boolean
         ) As Dictionary(Of String, SolidEdgeFramework.variable)
+
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
 
         Dim Variables As SolidEdgeFramework.Variables = Nothing
@@ -283,7 +286,11 @@ Public Class UtilsCommon
 
                 If VariableTypeName.ToLower() = "variable" Then
                     Variable = CType(VariableListItem, SolidEdgeFramework.variable)
-                    DocVariableDict(Variable.DisplayName) = Variable
+                    If UseDisplayName Then
+                        DocVariableDict(Variable.DisplayName) = Variable
+                    Else
+                        DocVariableDict(Variable.Name) = Variable
+                    End If
                 End If
             Next
 
@@ -297,7 +304,8 @@ Public Class UtilsCommon
         Dim VariableFound As Boolean = False
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
 
-        DocVariableDict = GetDocVariables(SEDoc)
+        Dim UseDisplayName As Boolean = False
+        DocVariableDict = GetDocVariables(SEDoc, UseDisplayName)
         VariableFound = False
 
         For Each Key As String In DocVariableDict.Keys

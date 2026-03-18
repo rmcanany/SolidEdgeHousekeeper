@@ -17,7 +17,7 @@ Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza, @mefrebo, @KGeetings, @tempod, @john.matthews3452, @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @Monostre, @TeeVar
 
 **Helpful feedback and bug reports**  
-@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @sven-11111, @robbin70, @collands, @WoutM25, @Monostre
+@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -120,9 +120,9 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folders_16.png"><img src="My%20Project/media/spacer.png">FILE SELECTION</h2></summary>
+<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folders_16.png"><img src="My%20Project/media/spacer.png">FILE SELECTION</h2></summary>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folder_16.png"><img src="My%20Project/media/spacer.png">Selection</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folder_16.png"><img src="My%20Project/media/spacer.png">Selection</h3></summary>
 
 You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
@@ -266,11 +266,21 @@ You can limit the search to return only selected types of Solid Edge files. Refe
 
 </details>
 
-<details><summary><h4 style="margin:0px; display:inline-block">File List Options</h4></summary>
+<details open><summary><h4 style="margin:0px; display:inline-block">File List Options</h4></summary>
 
 You can show a file preview and/or customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 9. 
 
+**File Preview**
+
 Click ![Preview](My%20Project/media/preview_show.png) to enable a preview of a selected file on the list.
+
+You can get a lot of information on the file by using Solid Edge Explorer.  Hold down the shift key and click the preview icon.
+
+![Solid Edge Explorer](My%20Project/media/solid_edge_explorer.png)
+
+
+
+**Customize the List**
 
 Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the left below
 

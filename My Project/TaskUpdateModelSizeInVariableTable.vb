@@ -205,7 +205,8 @@ Public Class TaskUpdateModelSizeInVariableTable
 
         Dim UC As New UtilsCommon
 
-        DocVariableDict = UC.GetDocVariables(SEDoc)
+        Dim UseDisplayName As Boolean = True
+        DocVariableDict = UC.GetDocVariables(SEDoc, UseDisplayName)
 
         ' Generates an exception on some Model Bodies
         Try

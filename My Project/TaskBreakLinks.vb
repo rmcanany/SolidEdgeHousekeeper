@@ -319,7 +319,8 @@ Public Class TaskBreakLinks
 
         Dim UC As New UtilsCommon
 
-        Dim Variables = UC.GetDocVariables(SEDoc)
+        Dim UseDisplayName As Boolean = True
+        Dim Variables = UC.GetDocVariables(SEDoc, UseDisplayName)
         Dim Variable As SolidEdgeFramework.variable
 
         For Each VariableName As String In Variables.Keys

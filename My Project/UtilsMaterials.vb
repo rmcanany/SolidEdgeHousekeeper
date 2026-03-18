@@ -210,7 +210,10 @@ Public Class UtilsMaterials
                             ' Density is a variable, not a property
 
                             Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
-                            DocVariableDict = UC.GetDocVariables(SEDoc)
+
+                            Dim UseDisplayName As Boolean = True
+                            DocVariableDict = UC.GetDocVariables(SEDoc, UseDisplayName)
+
                             If DocVariableDict.Keys.Contains("PhysicalProperties_Density") Then
                                 ' Density from the material table is in kg/m^3
                                 ' Density in the document needs to be in its own units

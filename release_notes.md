@@ -25,6 +25,12 @@ Added an option to show the thumbnail of a selected file.  On the toolbar, click
   <img src="My%20Project/media/preview_window.png">
 </p>
 
+Added another option to display a lot of information about the selected file.  To view, hold down the shift key then click the eye icon.
+
+<p align="center">
+  <img src="My%20Project/media/solid_edge_explorer.png">
+</p>
+
 See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#selection) for details.
 
 
@@ -48,6 +54,7 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 - Fixed a regression in `Save As` where illegal file name characters were no longer being replaced.  (Thank you **@n0minus38!**)
 - Fixed an issue in the example code snippet `FitIso.snp` where the command ID for draft files was incorrect.
+- Fixed an issue in `Update Physical Properties` where a check of the mass in the variable table was not accounting for localized names.  (Thank you **@Stefano-VLN!**)
 
 
 ## V2026.1
