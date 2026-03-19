@@ -16,7 +16,7 @@ Public Class Form_SolidEdgeExplorer
                 Dim tmpPartsLiteData As New SolidEdgeExplorerDLL.PartsLiteData
                 tmpPartsLiteData.FindData(FileName)
 
-                PopulateTreeView(FileName, BitConverter.ToString(tmpPartsLiteData.RawData), tmpPartsLiteData.NamedViews, "", tmpPartsLiteData.Features, "", tmpPartsLiteData.Variables)
+                PopulateTreeView(FileName, tmpPartsLiteData) ' , , "", , "", )
 
             Catch ex As Exception
                 MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -26,7 +26,14 @@ Public Class Form_SolidEdgeExplorer
 
     End Sub
 
-    Private Sub PopulateTreeView(File As String, header As String, namedViews As List(Of NamedView), midHeader1 As String, Features As List(Of Feature), midHeader2 As String, Variables As List(Of Variable))
+    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData)
+
+        Dim header As String = BitConverter.ToString(PartsLiteData.RawData)
+        Dim namedViews As List(Of NamedView) = PartsLiteData.NamedViews
+        Dim midHeader1 As String = ""
+        Dim Features As List(Of Feature) = PartsLiteData.Features
+        Dim midHeader2 As String = ""
+        Dim Variables As List(Of Variable) = PartsLiteData.Variables
 
         TreeView1.BeginUpdate()
 
@@ -39,7 +46,7 @@ Public Class Form_SolidEdgeExplorer
         HeaderNode.ToolTipText = header
         TreeView1.Nodes.Add(HeaderNode)
 
-        Dim NamedViewsNode As New TreeNode("NamedViews (" & namedViews.Count.ToString & ")")
+        Dim NamedViewsNode As New TreeNode("NamedViews (" & namedViews.Count.ToString & "/" & PartsLiteData.ExpectedNumNamedViews.ToString & ")")
         For Each view As NamedView In namedViews
             ' Nodo principale con il nome della vista
             Dim viewNode As New TreeNode(view.Name)
@@ -68,7 +75,7 @@ Public Class Form_SolidEdgeExplorer
             TreeView1.Nodes.Add(midHeaderNode1)
         End If
 
-        Dim featuresNode As New TreeNode("Features (" & Features.Count.ToString & ")")
+        Dim featuresNode As New TreeNode("Features (" & Features.Count.ToString & "/" & PartsLiteData.ExpectedNumFeatures.ToString & ")")
         For Each feature As Feature In Features
             ' Nodo principale con il nome della feature
             Dim featureNode As New TreeNode(feature.Name)
@@ -92,7 +99,7 @@ Public Class Form_SolidEdgeExplorer
             TreeView1.Nodes.Add(midHeaderNode2)
         End If
 
-        Dim variablesNode As New TreeNode("Variables (" & Variables.Count.ToString & ")")
+        Dim variablesNode As New TreeNode("Variables (" & Variables.Count.ToString & "/" & PartsLiteData.ExpectedNumVariables.ToString & ")")
         For Each variable As Variable In Variables
             ' Nodo principale con il nome della variabile
             Dim variableNode As New TreeNode(variable.Name & " = " & variable.Value.ToString)
@@ -113,9 +120,6 @@ Public Class Form_SolidEdgeExplorer
         Next
 
         TreeView1.EndUpdate()
-
-        'TreeView1.Nodes(0).EnsureVisible()
-        'TreeView1.TopNode = TreeView1.Nodes(0)
 
     End Sub
 
