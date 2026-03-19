@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports SolidEdgeExplorerDLL
+Imports SolidEdgeFramework
 
 Public Class Form_SolidEdgeExplorer
 
@@ -18,6 +19,12 @@ Public Class Form_SolidEdgeExplorer
 
                 PopulateTreeView(FileName, tmpPartsLiteData) ' , , "", , "", )
 
+                ''Variable check and retrieval examples
+                'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
+                'Dim VolumeVariable = tmpPartsLiteData.Variables.Find(Function(x) x.Name = "Volume")
+
+                'Console.WriteLine()
+
             Catch ex As Exception
                 MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -29,11 +36,11 @@ Public Class Form_SolidEdgeExplorer
     Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData)
 
         Dim header As String = BitConverter.ToString(PartsLiteData.RawData)
-        Dim namedViews As List(Of NamedView) = PartsLiteData.NamedViews
+        Dim namedViews As List(Of SolidEdgeExplorerDLL.NamedView) = PartsLiteData.NamedViews
         Dim midHeader1 As String = ""
         Dim Features As List(Of Feature) = PartsLiteData.Features
         Dim midHeader2 As String = ""
-        Dim Variables As List(Of Variable) = PartsLiteData.Variables
+        Dim Variables As List(Of SolidEdgeExplorerDLL.Variable) = PartsLiteData.Variables
 
         TreeView1.BeginUpdate()
 
@@ -47,7 +54,7 @@ Public Class Form_SolidEdgeExplorer
         TreeView1.Nodes.Add(HeaderNode)
 
         Dim NamedViewsNode As New TreeNode("NamedViews (" & namedViews.Count.ToString & "/" & PartsLiteData.ExpectedNumNamedViews.ToString & ")")
-        For Each view As NamedView In namedViews
+        For Each view As SolidEdgeExplorerDLL.NamedView In namedViews
             ' Nodo principale con il nome della vista
             Dim viewNode As New TreeNode(view.Name)
 
@@ -100,7 +107,7 @@ Public Class Form_SolidEdgeExplorer
         End If
 
         Dim variablesNode As New TreeNode("Variables (" & Variables.Count.ToString & "/" & PartsLiteData.ExpectedNumVariables.ToString & ")")
-        For Each variable As Variable In Variables
+        For Each variable As SolidEdgeExplorerDLL.Variable In Variables
             ' Nodo principale con il nome della variabile
             Dim variableNode As New TreeNode(variable.Name & " = " & variable.Value.ToString)
 
