@@ -113,6 +113,14 @@ Public Class HCStructuredStorageDoc
         Me.VarNames = New VariableNames(Me.cf, Me.FullName)
     End Sub
 
+    Public Function GetVariable(Name As String) As SolidEdgeExplorerDLL.Variable
+        Dim tmpVariable As SolidEdgeExplorerDLL.Variable = Nothing
+        If Me.VarNames IsNot Nothing Then
+            tmpVariable = Me.VarNames.GetVariable(Name)
+        End If
+        Return tmpVariable
+    End Function
+
 
     Public Function IsFOA() As Boolean
         If IO.Path.GetExtension(Me.FullName) = ".asm" Then
@@ -2535,199 +2543,37 @@ Public Class HCStructuredStorageDoc
     End Class
 
     Private Class VariableNames
-        Public Property Items As List(Of String)
+        Public Property Items As List(Of SolidEdgeExplorerDLL.Variable)
         Private Property FullName As String
+        Private Property PartsLiteData As SolidEdgeExplorerDLL.PartsLiteData
 
         Public Sub New(cf As CompoundFile, _FullName As String)
 
             Me.FullName = _FullName
 
-            Dim ByteArray As Byte()
-            Dim AllStreams As New List(Of CFStream)
-            Dim BlockStream As CFStream = Nothing
-            'Dim RawMaterialTable As String
+            Dim stream As OpenMcdf.CFStream = cf.RootStorage.GetStream("PartsLiteData")
 
-            Me.Items = New List(Of String)
+            Me.PartsLiteData = New SolidEdgeExplorerDLL.PartsLiteData
+            PartsLiteData.FindData(stream)
 
-            cf.RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
+            Me.Items = PartsLiteData.Variables
 
-            For Each AllStream As CFStream In AllStreams
-                If AllStream.Name = "PartsLiteData" Then
-                    BlockStream = AllStream
-                End If
-            Next
-
-            ByteArray = BlockStream.GetData
-
-            FormatByteString(ByteArray)
-
-            'Dim NamedBytes As List(Of List(Of Byte))
-            'NamedBytes = GetNamesBytes(ByteArray)
-
-            'If NamedBytes IsNot Nothing Then
-            '    For Each NamedByteList As List(Of Byte) In NamedBytes
-            '        Dim s As String = System.Text.Encoding.Unicode.GetString(NamedByteList.ToArray)
-            '        Items.Add(s)
-            '    Next
-            'End If
+            Dim i = 0
+            ''Variable check and retrieval examples
+            'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
+            'Dim VolumeVariable = tmpPartsLiteData.Variables.Find(Function(x) x.Name = "Volume")
 
         End Sub
 
-        Private Function GetNamesBytes(ByteArray As Byte()) As List(Of List(Of Byte))
+        Public Function GetVariable(Name As String) As SolidEdgeExplorerDLL.Variable
+            Dim tmpVariable As SolidEdgeExplorerDLL.Variable = Nothing
 
-            'BYTE STREAM FORMAT
-            ' See C:\data\CAD\scripts\SolidEdgeHousekeeper\reference\20251003_structured_storage_variables\worksheet.ods
+            If Me.PartsLiteData.Variables.Exists(Function(x) x.Name = Name) Then
+                tmpVariable = Me.PartsLiteData.Variables.Find(Function(x) x.Name = Name)
+            End If
 
-            Dim ByteLists As New List(Of List(Of Byte))
-            Dim C As Integer
-
-            C = ByteArray.Count
-
-            Dim InBeginning As Boolean = True
-            Dim BeginningDataLength As Integer = 44
-            Dim InNamedViews As Boolean = False
-            Dim NamedViewsDataLength As Integer = 133
-            Dim InDefaultViews As Boolean = False
-            Dim DefaultViewsDataLength As Integer = 17
-            Dim InFeatures As Boolean = False
-            Dim FeaturesDataLength As Integer = 53
-            Dim InVariables As Boolean = False
-            Dim VariablesDataLength As Integer = 21
-
-            Dim NameCharCount As Integer
-            Dim NameCharCountIdx As Integer
-            Dim NameStartIdx As Integer
-            Dim NameEndIdx As Integer
-
-            Dim DescriptionCharCount As Integer
-            Dim DescriptionCharCountIdx As Integer
-            Dim DescriptionStartIdx As Integer
-            Dim DescriptionEndIdx As Integer
-
-            Dim CurrentIdx As Integer = 0
-
-            Dim tf As Boolean
-
-            While True
-                Dim ByteList As New List(Of Byte)
-                'Dim PeekAheadIdx As Integer
-
-                If InBeginning Then
-                    CurrentIdx += BeginningDataLength ' 0 -> 44
-                    InBeginning = False
-                    InNamedViews = True
-                    'Continue While
-                End If
-
-                If InNamedViews Then
-                    NameCharCountIdx = CurrentIdx ' Includes null terminator.  Unicode length will be 2 bytes shorter
-                    NameCharCount = CInt(ByteArray(NameCharCountIdx))
-                    NameStartIdx = NameCharCountIdx + 3
-                    NameEndIdx = NameStartIdx + 2 * (NameCharCount - 1) - 1
-
-                    DescriptionCharCountIdx = CurrentIdx + 2 + 2 * (NameCharCount - 1) + 2
-                    DescriptionCharCount = CInt(ByteArray(DescriptionCharCountIdx))
-                    DescriptionStartIdx = DescriptionCharCountIdx + 3
-                    DescriptionEndIdx = DescriptionStartIdx + 2 * (DescriptionCharCount - 1) - 1
-
-                    For j = NameStartIdx To NameEndIdx
-                        ByteList.Add(ByteArray(j))
-                    Next
-
-                    For j = DescriptionStartIdx To DescriptionEndIdx
-                        ByteList.Add(ByteArray(j))
-                    Next
-
-                    ByteLists.Add(ByteList)
-
-                    CurrentIdx = DescriptionEndIdx + 3 + NamedViewsDataLength
-
-                    ' Check if this is the last Named View
-
-                    tf = ByteArray(CurrentIdx + 5) = &H0
-                    tf = tf And ByteArray(CurrentIdx + 6) = &H0
-                    tf = tf And ByteArray(CurrentIdx + 7) = &H0
-                    If tf Then
-                        CurrentIdx += 4
-                        InNamedViews = False
-                        InDefaultViews = True
-                    End If
-
-                End If
-
-                If InDefaultViews Then
-                    NameCharCountIdx = CurrentIdx ' Includes null terminator.  Unicode length will be 2 bytes shorter
-                    NameCharCount = CInt(ByteArray(NameCharCountIdx))
-                    NameStartIdx = NameCharCountIdx + 3
-                    NameEndIdx = NameStartIdx + 2 * (NameCharCount - 1) - 1
-
-                    ' Check if this is a default view
-                    tf = ByteArray(NameEndIdx + 4) = &H21
-                    tf = tf Or ByteArray(NameEndIdx + 4) = &H22
-                    tf = tf Or ByteArray(NameEndIdx + 4) = &H23
-                    If Not tf Then
-                        InDefaultViews = False
-                        InFeatures = True
-                    Else
-                        For j = NameCharCountIdx To NameEndIdx
-                            ByteList.Add(ByteArray(j))
-                        Next
-
-                        ByteLists.Add(ByteList)
-
-                        CurrentIdx = NameEndIdx + 3 + DefaultViewsDataLength
-                    End If
-
-                End If
-
-                If InFeatures Then
-
-                End If
-
-            End While
-
-
-            Return ByteLists
-
+            Return tmpVariable
         End Function
-
-        Private Sub FormatByteString(ByteArray As Byte())
-            ' Utility for investigating format of ByteArray.  Not used in production.
-
-            Dim ByteList As New List(Of String)
-            Dim CharList As New List(Of String)
-
-            Dim SaveDir As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\reference\20251003_structured_storage_variables"
-            Dim TsvFilename As String = IO.Path.GetExtension(Me.FullName).Replace(".", "_")
-            TsvFilename = $"{SaveDir}\PartsLiteStream{TsvFilename}.tsv"
-            Dim Modelfilename = IO.Path.GetFileName(Me.FullName)
-
-            Dim ByteString As String = Modelfilename
-            Dim CharString As String = ""
-
-            For Each B As Byte In ByteArray
-                ByteList.Add($"{B:x2}")
-
-                If CInt(B) < 32 Then ' Non-printing.  Includes TAB character.
-                    CharList.Add(".")
-                ElseIf CInt(B) > 127 Then ' Extended ASCII
-                    CharList.Add("?")
-                ElseIf CInt(B) = 44 Then ' period character
-                    CharList.Add(";")
-                ElseIf CInt(B) = 34 Then ' double quote
-                    CharList.Add("'")
-                Else
-                    CharList.Add(System.Text.Encoding.ASCII.GetString({B}))
-                End If
-
-                ByteString = $"{ByteString}{Chr(9)}{ByteList(ByteList.Count - 1)}"
-                CharString = $"{CharString}{Chr(9)}{CharList(CharList.Count - 1)}"
-            Next
-
-            Dim Outstring As String = $"{vbCrLf}{ByteString}{vbCrLf}{CharString}{vbCrLf}"
-            System.IO.File.AppendAllText(TsvFilename, Outstring)
-
-        End Sub
 
     End Class
 

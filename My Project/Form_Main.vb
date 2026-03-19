@@ -1141,6 +1141,17 @@ Public Class Form_Main
 
     Private Sub Startup(SavingPresets As Boolean)
 
+        '' Quick try
+        'Dim JunkFilename = "C:\data\CAD\7481\7481-00001 BUHRS LEAD IN GUIDE.psm"
+        'Dim SSDoc As New HCStructuredStorageDoc(JunkFilename)
+        'SSDoc.ReadVariableNames()
+        'Dim V As SolidEdgeExplorerDLL.Variable = SSDoc.GetVariable("MaterialThickness")
+        'Dim s As String = $"{V.Name}{vbCrLf}"
+        's = $"{s}{V.ID}{vbCrLf}"
+        's = $"{s}{V.Value}{vbCrLf}"
+        'MsgBox(s)
+
+
         RunningStartup = True
         Me.Cursor = Cursors.WaitCursor
 
