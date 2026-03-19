@@ -26,7 +26,7 @@ Public Class HCStructuredStorageDoc
     Private Property MatTable As MaterialTable
     Private Property DocType As String 'asm, dft, par, psm, mtl
     Private Property BlkLibrary As BlockLibrary
-    Private Property VarNames As VariableNames
+    Private Property Vars As Variables
 
 
     Public Enum StatusSecurityMapping
@@ -103,20 +103,20 @@ Public Class HCStructuredStorageDoc
         Me.BlkLibrary = New BlockLibrary(Me.cf, Me.FullName)
     End Sub
 
-    Public Sub ReadVariableNames()
+    Public Sub ReadVariables()
         Dim Extension As String = IO.Path.GetExtension(Me.FullName)
 
         If Extension = ".dft" Then
             Throw New Exception(String.Format("Cannot get variable names for '{0}' file types", Extension))
         End If
 
-        Me.VarNames = New VariableNames(Me.cf, Me.FullName)
+        Me.Vars = New Variables(Me.cf, Me.FullName)
     End Sub
 
     Public Function GetVariable(Name As String) As SolidEdgeExplorerDLL.Variable
         Dim tmpVariable As SolidEdgeExplorerDLL.Variable = Nothing
-        If Me.VarNames IsNot Nothing Then
-            tmpVariable = Me.VarNames.GetVariable(Name)
+        If Me.Vars IsNot Nothing Then
+            tmpVariable = Me.Vars.GetVariable(Name)
         End If
         Return tmpVariable
     End Function
@@ -2542,7 +2542,7 @@ Public Class HCStructuredStorageDoc
 
     End Class
 
-    Private Class VariableNames
+    Private Class Variables
         Public Property Items As List(Of SolidEdgeExplorerDLL.Variable)
         Private Property FullName As String
         Private Property PartsLiteData As SolidEdgeExplorerDLL.PartsLiteData
