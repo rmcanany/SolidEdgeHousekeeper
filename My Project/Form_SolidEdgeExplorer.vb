@@ -19,7 +19,11 @@ Public Class Form_SolidEdgeExplorer
 
                 PopulateTreeView(FileName, tmpPartsLiteData) ' , , "", , "", )
 
-                'tmpPartsLiteData.Variables.Exists(SolidEdgeExplorerDLL.Variables >= SolidEdgeExplorerDLL.Variable.Name = "LENGTH@Sketch.1")
+                ''Variable check and retrieval examples
+                'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
+                'Dim VolumeVariable = tmpPartsLiteData.Variables.Find(Function(x) x.Name = "Volume")
+
+                'Console.WriteLine()
 
             Catch ex As Exception
                 MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
