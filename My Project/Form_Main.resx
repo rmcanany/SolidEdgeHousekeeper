@@ -160,7 +160,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADW
-        WQAAAk1TRnQBSQFMAgEBFwEAAZgBEQGYAREBEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        WQAAAk1TRnQBSQFMAgEBFwEAAaABEQGgAREBEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
         AwABYAMAAQEBAAEgBgABYJIAA0sBjAGYAZoBGwH/AY0BkAEAAf8BigGOAQAB/wGKAY4BAAH/AYoBjgEA
         Af8BigGOAQAB/wGKAY4BAAH/AYoBjgEAAf8BigGOAQAB/wGKAY4BAAH/AYoBjgEAAf8BigGOAQAB/wJo
         AV4B8AMYASEDGQEimAADAgEDAz8BbAM+AWsDAgEDGAABmQGbASIB/wGUAZYBAAH/AVcBZQEAAf8BLAFK
@@ -603,19 +603,19 @@
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACYSURBVDhPY2AYFOD/fgaWfwsY3P7PZwiF4X+LGLjR1eEE
-        f+czNP9fwPAfBc9nOEC0IX828R/9f1zt//9TGkThxnq1f3+3S7TDDfi1V/YRuiJC+Nd+2YcIFxxQvICu
-        gBAG6YEb8P+Uxip0BUTgVaMGIBnw95RGCxYFePHfU+pNCBfst2f5d0Ld8f8pTRdiMFjtfnsWuAEDCgAz
-        BaVQgdVmEwAAAABJRU5ErkJggg==
+        f+czNP9fwPAfBc9nOEC0IX828R/9f1zt//9TGkThhnq1f3+3S7TDDfi1V/YRuiJC+Nd+2YcIFxxQvICu
+        gBAG6YEb8P+Uxip0BUTgVaMGIBnw95RGCxYFePHfU+pNCBfst2f5d0Ld8f8pTRdiMFjtfnsWuAEDCgAw
+        LqVPWKqkVQAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="BT_AddFolderSubfolders.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADnSURBVDhPY2CgBvi3iIH73zyGoH8LGUzQ5YgC/9bz5f7f
-        J/u/sV723/f98m9B+O8uibno6nCCv9vF+/6f0viPjH8dkHuMrg4noNiAf1tEPX7tlXv0Y7/iGxAGaf67
+        J/u/oV723/f98m9B+O8uibno6nCCv9vF+/6f0viPjH8dkHuMrg4noNiAf1tEPX7tlXv0Y7/iGxAGaf67
         XXwmXH4eQ9Lf+Qy7/y1gCETViQYmLF0XCsLo4r93St5Bd+G/rWLF6OrABvQvWXd8wpJ1q5Hx9+1q79EN
         AHkbXT9OF4C8h2HATvFudHU4Dfi3TcT+307xMjQshq4OtwF0DcQJS9b2wgyC4Z/7ZV6iG4A1ECcuXiuD
-        rhligNILDAOwBSIuQHQgkgMABgEQnzTrz3QAAAAASUVORK5CYII=
+        rhligNILDAOwBSIuQHQgkgMAAoAQnvJPxAcAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="BT_TopLevelAsm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -714,15 +714,15 @@
   <data name="ButtonShowPreview.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHnSURBVDhP3ZBda9NgFMcfUBGv9KYggorC8EL0RsFP4Cfw
-        C3jhjVBhjOGVV9LdiDSptIrD0W1JVtrmpdtw7dw07hGV1rapFZssT2rx3dmXNFkTN6c7kojC2m+wHxx4
-        OM//dzgchHYnYY4/SbPSdYoVYzQjRilGHKGnUsf6cwNEkslAmBWYm3cnt0OJzM8Jca77QJzrem+aFX9T
-        jHCfikuH+j2f8FT6/G1OalFJ6QdWKgSTxq+rZQJBhUC+8X4Lv6rqMYbZiHDSl/BM+vQOmZrOXLgVl9bv
-        zWbNnuPYwqcm7BEwIH7Fr30ihty3DtiO0xkXslaETZj0TPqsL0dZ/rjXYOaXW612exMAYChXAMTmAAVH
-        AF0bBZR4BOcel7wvsG3bmcxkTZqT1qLx1GFEc/zQ4vPCE3O9V/MC2wBwQHoGKMYBunzlb42nIDD/wh/g
-        0TS7r7M4//DO9OwJf4uyrgcU1VhxnE3NC1zEVUBpGVCIAjQWAcQ/hUsv3/pyz3Wrymp9uVivH9xxB29I
-        RSVLbcsuGT0XTi0W/t/gzFIRProbsNax8spqfWFA/oeu6/vLmhGqvfuAP5tWJffddOWm6XxtW8UaaWBF
-        NW7Isry33xvgDSFHFc0YLmkkXtbIhFIjwZKqHunP7RL+AGmeTTZC9CPnAAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHnSURBVDhP3ZBda9NgFMcfUBGv9KYggorC2IXojYKfwE/g
+        F/DCG6HCGOKVN2PzRqRJpUUcjrglWWmbl27DtXPTuEdUWtumVmyyPOkmvs92TZM1cdNtRxJRWPsN9oMD
+        D+f5/w6Hg9DeJMILp2lOvklxUpxmpRjFSoP0eOpEd66HaDIZinAiOxRndoYTmV9j0nT7oTTd9t80J21T
+        rPiAYuQj3V5AZDx94S4vN6mk/BOrFYKN5a1rZQJhlUB+5cNv/KZqxFl2I8rLXyOT6TO7ZGoic/EOI6/f
+        n8paHdd1xM8N2CdiQMJiUAckDLnvLXBctzUqZu0ol7DoyfS5QI5xwkm/wc4sNBvN5iYAQF+uAIjLAQoP
+        Arp+A1DiCZx/WvK/wHEc91Ema9G8vBpjUkcRzQt9cy8Lz6z1Ts0P7ADAIfkFoDgP6MrVvzWagtDMq2CA
+        T8Nqv83i/ON7E1Ongi3KhhFSNXPRdTd1P3AJVwGlFUAjFKDbUUDCc7j8+n0gdzyvqi7VF4r1+uFdd/CH
+        VDQyv2Y7JbPjQf9c4f8Nzs4X4ZO3AastO68u1Wd75H8YhnGwrJsjteWP+ItlV3I/LE9pWO63NbtYIytY
+        1cxbiqLs7/Z6eEfIcVU3B0o6Yco6GVNrJFzStGPduT3CH0wsTSu1bYzjAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="new_CheckBoxFilterDft.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
