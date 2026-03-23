@@ -17,7 +17,10 @@ Public Class Form_SolidEdgeExplorer
                 Dim tmpPartsLiteData As New SolidEdgeExplorerDLL.PartsLiteData
                 tmpPartsLiteData.FindData(FileName)
 
-                PopulateTreeView(FileName, tmpPartsLiteData) ' , , "", , "", )
+                Dim tmpVariableInfos As New SolidEdgeExplorerDLL.CustomPropertyVariableInfo
+                tmpVariableInfos.FindData(FileName)
+
+                PopulateTreeView(FileName, tmpPartsLiteData, tmpVariableInfos)
 
                 ''Variable check and retrieval examples
                 'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
@@ -33,7 +36,7 @@ Public Class Form_SolidEdgeExplorer
 
     End Sub
 
-    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData)
+    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData, CustomPropertyVariableInfos As CustomPropertyVariableInfo)
 
         Dim header As String = BitConverter.ToString(PartsLiteData.RawData)
         Dim namedViews As List(Of SolidEdgeExplorerDLL.NamedView) = PartsLiteData.NamedViews
@@ -115,6 +118,11 @@ Public Class Form_SolidEdgeExplorer
             variableNode.Nodes.Add("ID: " & variable.ID.ToString())
             variableNode.Nodes.Add("Unit Type: " & variable.UnitType.ToString())
             variableNode.Nodes.Add("Value: " & variable.Value.ToString())
+
+
+            If CustomPropertyVariableInfos.VariableInfos.Exists(Function(x) x.Variable_ID = variable.ID) Then
+                variableNode.Nodes.Add("Exposed property ID: " & CustomPropertyVariableInfos.VariableInfos.Find(Function(x) x.Variable_ID = variable.ID).Property_ID.ToString)
+            End If
 
 
             ' Aggiungiamo il nodo principale al TreeView
