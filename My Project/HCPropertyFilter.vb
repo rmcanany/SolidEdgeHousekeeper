@@ -224,6 +224,7 @@ Public Class PropertyFilterCondition
         System
         Duplicate
         Server
+        Variable
     End Enum
 
     Public Enum ComparisonConstants

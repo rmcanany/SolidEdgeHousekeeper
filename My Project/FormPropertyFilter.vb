@@ -17,7 +17,7 @@ Public Class FormPropertyFilter
     Public Property PropertyFilter As HCPropertyFilter
     Public Property UCList As List(Of UCPropertyFilter)
     Public Property HelpURL As String
-    Public Property TemplatePropertyList As List(Of String)
+    Public Property FavoritesList As List(Of String)
     Public Property Formula As String
 
     Private _ShowAllProps As Boolean
@@ -43,7 +43,7 @@ Public Class FormPropertyFilter
 
         Dim UC As New UtilsCommon
 
-        Me.TemplatePropertyList = Form_Main.PropertiesData.GetFavoritesList
+        Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
         Dim UP As New UtilsPreferences
 
@@ -58,11 +58,11 @@ Public Class FormPropertyFilter
         Dim tf As Boolean
 
         tf = Form_Main.PropertiesData Is Nothing
-        tf = tf Or Me.TemplatePropertyList Is Nothing
+        tf = tf Or Me.FavoritesList Is Nothing
 
         If Not tf Then
             tf = Form_Main.PropertiesData.Items.Count = 0
-            tf = tf Or Me.TemplatePropertyList.Count = 0
+            tf = tf Or Me.FavoritesList.Count = 0
         End If
 
         If tf Then
@@ -651,7 +651,7 @@ Public Class FormPropertyFilter
                 UCList(i).ComboBoxPropertyName.Items.Clear()
                 UCList(i).ComboBoxPropertyName.Items.Add("")
 
-                For Each Key As String In Me.TemplatePropertyList
+                For Each Key As String In Me.FavoritesList
                     UCList(i).ComboBoxPropertyName.Items.Add(Key)
                 Next
                 UCList(i).ComboBoxPropertyName.Text = PreviousPropertyName

@@ -99,7 +99,7 @@ Partial Class UCPropertyFilter
         Me.ComboBoxPropertySet.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ComboBoxPropertySet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxPropertySet.FormattingEnabled = True
-        Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "Custom", "System"})
+        Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "Custom", "System", "Variable"})
         Me.ComboBoxPropertySet.Location = New System.Drawing.Point(63, 3)
         Me.ComboBoxPropertySet.Name = "ComboBoxPropertySet"
         Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 23)

@@ -216,61 +216,44 @@ Public Class UCPropertyFilter
     End Sub
 
     Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
-        Dim TryIt As Boolean = True
 
-        If Not TryIt Then
+        If Me.ProcessEvents Then
+            Me.ProcessEvents = False
+
             Me.PropertySet = ComboBoxPropertySet.Text
-            Notify()
-        Else
-            If Me.ProcessEvents Then
-                Me.ProcessEvents = False
 
-                Me.PropertySet = ComboBoxPropertySet.Text
-
-
-                Dim PreviousPropertyName = Me.PropertyName
-                Dim IsInList As Boolean = False
-                ComboBoxPropertyName.Items.Clear()
-                For Each PropName As String In FilterPropertyNames()
-                    ComboBoxPropertyName.Items.Add(PropName)
-                    If PropName = PreviousPropertyName Then IsInList = True
-                Next
-                If IsInList Then
-                    ComboBoxPropertyName.Text = PreviousPropertyName
-                Else
-                    ComboBoxPropertyName.Text = ""
-                End If
-
-                Notify()
-
-                Me.ProcessEvents = True
+            Dim PreviousPropertyName = Me.PropertyName
+            Dim IsInList As Boolean = False
+            ComboBoxPropertyName.Items.Clear()
+            For Each PropName As String In FilterPropertyNames()
+                ComboBoxPropertyName.Items.Add(PropName)
+                If PropName = PreviousPropertyName Then IsInList = True
+            Next
+            If IsInList Then
+                ComboBoxPropertyName.Text = PreviousPropertyName
+            Else
+                ComboBoxPropertyName.Text = ""
             End If
 
+            Notify()
+
+            Me.ProcessEvents = True
         End If
 
     End Sub
 
     Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
 
-        Dim TryIt As Boolean = True
+        If Me.ProcessEvents Then
+            Me.ProcessEvents = False
 
-        If Not TryIt Then
             Me.PropertyName = ComboBoxPropertyName.Text
             UpdatePropertySet()
             Notify()
 
-        Else
-            If Me.ProcessEvents Then
-                Me.ProcessEvents = False
-
-                Me.PropertyName = ComboBoxPropertyName.Text
-                UpdatePropertySet()
-                Notify()
-
-                Me.ProcessEvents = True
-            End If
-
+            Me.ProcessEvents = True
         End If
+
     End Sub
 
     Private Sub ComboBoxComparison_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxComparison.SelectedIndexChanged
