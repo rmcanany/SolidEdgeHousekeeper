@@ -110,6 +110,7 @@ Public Class TaskUpdateDrawingViews
         For Each SheetType As String In {"Working", "Background"}
             For Each Sheet In UC.GetSheets(tmpSEDoc, SheetType)
                 DrawingViews = Sheet.DrawingViews
+                Dim DVCount As Integer = 0
                 For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                     If Not DrawingView.IsUpToDate Then
                         ' Can fail if the model file is missing.
@@ -123,6 +124,13 @@ Public Class TaskUpdateDrawingViews
                         Catch ex As Exception
                         End Try
                     End If
+
+                    If DVCount = 0 Then
+                        Sheet.SheetSetup.SetDefaultDrawingViewScale(1, 1 / DrawingView.ScaleFactor)
+                        PerformedUpdate = True
+                    End If
+
+                    DVCount += 1
                 Next DrawingView
             Next Sheet
         Next
@@ -152,8 +160,8 @@ Public Class TaskUpdateDrawingViews
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Checks drawing views and parts lists, and updates them if needed."
-
+        HelpString = "Checks drawing views and parts lists, and updates them if needed.  "
+        HelpString += "Also sets each sheet scale to the same scale as the first drawing view added to it."
         Return HelpString
     End Function
 

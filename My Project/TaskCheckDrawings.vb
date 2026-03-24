@@ -81,6 +81,19 @@ Public Class TaskCheckDrawings
         End Set
     End Property
 
+    Private _SheetScale As Boolean
+    Public Property SheetScale As Boolean
+        Get
+            Return _SheetScale
+        End Get
+        Set(value As Boolean)
+            _SheetScale = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SheetScale.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -101,6 +114,7 @@ Public Class TaskCheckDrawings
         DrawingViewOnBackgroundSheet
         DrawInView
         DimensionsOverridden
+        SheetScale
         AutoHideOptions
     End Enum
 
@@ -130,6 +144,7 @@ Public Class TaskCheckDrawings
         Me.DrawingViewOnBackgroundSheet = False
         Me.DrawInView = False
         Me.DimensionsOverridden = False
+        Me.SheetScale = False
 
     End Sub
 
@@ -173,6 +188,8 @@ Public Class TaskCheckDrawings
         If Me.DrawInView Then CheckDrawInView(tmpSEDoc)
 
         If Me.DimensionsOverridden Then CheckDimensionsOverridden(tmpSEDoc)
+
+        If Me.SheetScale Then CheckSheetScale(tmpSEDoc)
 
     End Sub
 
@@ -399,6 +416,40 @@ Public Class TaskCheckDrawings
 
     End Sub
 
+    Private Sub CheckSheetScale(tmpSEDoc As SolidEdgeDraft.DraftDocument)
+
+        Dim UC As New UtilsCommon
+
+        Dim s As String
+
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
+        Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
+        Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
+
+        ' Check drawing views.
+        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
+
+            DrawingViews = Sheet.DrawingViews
+
+            If DrawingViews.Count > 0 Then
+
+                DrawingView = CType(DrawingViews(0), SolidEdgeDraft.DrawingView)
+
+                Dim PaperRatioComponent As Double
+                Dim ModelRatioComponent As Double
+                Sheet.SheetSetup.GetDefaultDrawingViewScale(PaperRatioComponent, ModelRatioComponent)
+
+                Dim SheetScale As Double = 1 / ModelRatioComponent
+
+                If Math.Abs(SheetScale - DrawingView.ScaleFactor) > 0.0001 Then
+                    s = $"Scale mismatch on {Sheet.Name}: Sheet scale {SheetScale}, Drawing view scale {DrawingView.ScaleFactor}"
+                    TaskLogger.AddMessage(s)
+                End If
+            End If
+
+        Next Sheet
+    End Sub
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -458,6 +509,14 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.SheetScale.ToString, "Sheet scale does not match first drawing view scale")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -481,6 +540,7 @@ Public Class TaskCheckDrawings
             tf = tf Or Me.DrawingViewOnBackgroundSheet
             tf = tf Or Me.DrawInView
             tf = tf Or Me.DimensionsOverridden
+            tf = tf Or Me.SheetScale
 
             If Not tf Then
                 ErrorLogger.AddMessage("Select at least one type of drawing error to check")
@@ -506,12 +566,14 @@ Public Class TaskCheckDrawings
                     Me.DrawingViewOnBackgroundSheet = True
                     Me.DrawInView = True
                     Me.DimensionsOverridden = True
+                    Me.SheetScale = True
 
                     CType(ControlsDict(ControlNames.DrawingViewsOutOfDate.ToString), CheckBox).Checked = True
                     CType(ControlsDict(ControlNames.DetachedDimensionsOrAnnotations.ToString), CheckBox).Checked = True
                     CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox).Checked = True
                     CType(ControlsDict(ControlNames.DrawInView.ToString), CheckBox).Checked = True
                     CType(ControlsDict(ControlNames.DimensionsOverridden.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.SheetScale.ToString), CheckBox).Checked = True
 
                 End If
 
@@ -520,6 +582,7 @@ Public Class TaskCheckDrawings
                 CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox).Visible = Not Checkbox.Checked
                 CType(ControlsDict(ControlNames.DrawInView.ToString), CheckBox).Visible = Not Checkbox.Checked
                 CType(ControlsDict(ControlNames.DimensionsOverridden.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.SheetScale.ToString), CheckBox).Visible = Not Checkbox.Checked
 
 
             Case ControlNames.DrawingViewsOutOfDate.ToString
@@ -536,6 +599,9 @@ Public Class TaskCheckDrawings
 
             Case ControlNames.DimensionsOverridden.ToString
                 Me.DimensionsOverridden = Checkbox.Checked
+
+            Case ControlNames.SheetScale.ToString
+                Me.SheetScale = Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
@@ -562,6 +628,7 @@ Public Class TaskCheckDrawings
         HelpString += vbCrLf + "- `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. "
         HelpString += vbCrLf + "- `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. "
         HelpString += vbCrLf + "- `Overridden dimensions`: Checks if any dimensions are not to scale, or have the value hidden. "
+        HelpString += vbCrLf + "- `Sheet scale does not match first drawing view scale`: Checks what it says. "
 
         Return HelpString
     End Function
