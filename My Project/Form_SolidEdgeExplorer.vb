@@ -20,7 +20,10 @@ Public Class Form_SolidEdgeExplorer
                 Dim tmpVariableInfos As New SolidEdgeExplorerDLL.CustomPropertyVariableInfo
                 tmpVariableInfos.FindData(FileName)
 
-                PopulateTreeView(FileName, tmpPartsLiteData, tmpVariableInfos)
+                Dim tmpProperties As New SolidEdgeExplorerDLL.Properties
+                tmpProperties.FindData(FileName)
+
+                PopulateTreeView(FileName, tmpPartsLiteData, tmpVariableInfos, tmpProperties)
 
                 ''Variable check and retrieval examples
                 'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
@@ -36,7 +39,7 @@ Public Class Form_SolidEdgeExplorer
 
     End Sub
 
-    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData, CustomPropertyVariableInfos As CustomPropertyVariableInfo)
+    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData, CustomPropertyVariableInfos As CustomPropertyVariableInfo, Properties As SolidEdgeExplorerDLL.Properties)
 
         Dim header As String = BitConverter.ToString(PartsLiteData.RawData)
         Dim namedViews As List(Of SolidEdgeExplorerDLL.NamedView) = PartsLiteData.NamedViews
@@ -52,9 +55,22 @@ Public Class Form_SolidEdgeExplorer
         Dim FileNode As New TreeNode("File: " & File)
         TreeView1.Nodes.Add(FileNode)
 
-        Dim HeaderNode As New TreeNode("Header: " & header.Substring(0, 34) & "....")
-        HeaderNode.ToolTipText = header
-        TreeView1.Nodes.Add(HeaderNode)
+        Dim PropertiesNode As New TreeNode("Properties")
+        For Each PropertySet In Properties.PropertySets
+            Dim tmpPropertySetNode As New TreeNode(PropertySet.Name)
+            For Each item In PropertySet.Items
+                Dim tmpItemNode As New TreeNode(item.OLEProp.PropertyName & " = " & item.Value.ToString)
+                tmpPropertySetNode.Nodes.Add(tmpItemNode)
+            Next
+            PropertiesNode.Nodes.Add(tmpPropertySetNode)
+        Next
+        TreeView1.Nodes.Add(PropertiesNode)
+
+
+        'Used to DEBUG PartsLiteData
+        'Dim HeaderNode As New TreeNode("Header: " & header.Substring(0, 34) & "....")
+        'HeaderNode.ToolTipText = header
+        'TreeView1.Nodes.Add(HeaderNode)
 
         Dim NamedViewsNode As New TreeNode("NamedViews (" & namedViews.Count.ToString & "/" & PartsLiteData.ExpectedNumNamedViews.ToString & ")")
         For Each view As SolidEdgeExplorerDLL.NamedView In namedViews
@@ -122,6 +138,8 @@ Public Class Form_SolidEdgeExplorer
 
             If CustomPropertyVariableInfos.VariableInfos.Exists(Function(x) x.Variable_ID = variable.ID) Then
                 variableNode.Nodes.Add("Exposed property ID: " & CustomPropertyVariableInfos.VariableInfos.Find(Function(x) x.Variable_ID = variable.ID).Property_ID.ToString)
+                variableNode.NodeFont = New Font(TreeView1.Font, FontStyle.Bold)
+                variableNode.BackColor = Color.Gainsboro
             End If
 
 
@@ -137,7 +155,6 @@ Public Class Form_SolidEdgeExplorer
         TreeView1.EndUpdate()
 
     End Sub
-
 
 End Class
 
