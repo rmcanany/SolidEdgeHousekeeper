@@ -23,13 +23,10 @@ Public Class Form_SolidEdgeExplorer
                 Dim tmpProperties As New SolidEdgeExplorerDLL.Properties
                 tmpProperties.FindData(FileName)
 
-                PopulateTreeView(FileName, tmpPartsLiteData, tmpVariableInfos, tmpProperties)
+                Dim tmpPSMCluster0 As New SolidEdgeExplorerDLL.PSMCluster0
+                tmpPSMCluster0.FindData(FileName)
 
-                ''Variable check and retrieval examples
-                'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
-                'Dim VolumeVariable = tmpPartsLiteData.Variables.Find(Function(x) x.Name = "Volume")
-
-                'Console.WriteLine()
+                PopulateTreeView(FileName, tmpPartsLiteData, tmpVariableInfos, tmpProperties, tmpPSMCluster0)
 
             Catch ex As Exception
                 MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -39,7 +36,7 @@ Public Class Form_SolidEdgeExplorer
 
     End Sub
 
-    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData, CustomPropertyVariableInfos As CustomPropertyVariableInfo, Properties As SolidEdgeExplorerDLL.Properties)
+    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData, CustomPropertyVariableInfos As CustomPropertyVariableInfo, Properties As SolidEdgeExplorerDLL.Properties, PSMCluster0 As PSMCluster0)
 
         Dim header As String = BitConverter.ToString(PartsLiteData.RawData)
         Dim namedViews As List(Of SolidEdgeExplorerDLL.NamedView) = PartsLiteData.NamedViews
@@ -54,6 +51,17 @@ Public Class Form_SolidEdgeExplorer
 
         Dim FileNode As New TreeNode("File: " & File)
         TreeView1.Nodes.Add(FileNode)
+
+        Dim DefaultsNode As New TreeNode("Defaults")
+        For Each tmpDefaul In PSMCluster0.DefaultUnits
+            Dim tmpDefaulNode As New TreeNode(tmpDefaul.Name)
+            tmpDefaulNode.Nodes.Add("Unknown1: " & tmpDefaul.Unknown1.ToString)
+            tmpDefaulNode.Nodes.Add("Unknown2: " & tmpDefaul.Unknown2.ToString)
+            tmpDefaulNode.Nodes.Add("ValueType: " & tmpDefaul.ValueType.ToString)
+            tmpDefaulNode.Nodes.Add("Value: " & tmpDefaul.Value.ToString)
+            DefaultsNode.Nodes.Add(tmpDefaulNode)
+        Next
+        TreeView1.Nodes.Add(DefaultsNode)
 
         Dim PropertiesNode As New TreeNode("Properties")
         For Each PropertySet In Properties.PropertySets
