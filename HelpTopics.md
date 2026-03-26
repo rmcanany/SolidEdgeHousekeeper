@@ -858,7 +858,7 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingViews.png"><img src="My%20Project/media/spacer.png">Update drawing views</h3></summary>
 
-Checks drawing views and parts lists, and updates them if needed.  Also sets each sheet scale to the same scale as the first drawing view added to it.
+Updates draft files.  Presents options to process drawing views, property text, parts lists, and sheet scale.  The latter option sets the scale to match the first drawing view added the sheet.  
 
 </details>
 
