@@ -26,6 +26,16 @@ Public Class Form_SolidEdgeExplorer
                 Dim tmpPSMCluster0 As New SolidEdgeExplorerDLL.PSMCluster0
                 tmpPSMCluster0.FindData(FileName)
 
+                ''Gather unit constants for in & mm
+                'Dim tmpUnitDict As New Dictionary(Of String, String)
+                'For Each DefaultUnit As SolidEdgeExplorerDLL.DefaultUnit In tmpPSMCluster0.DefaultUnits
+                '    If DefaultUnit.Name.Contains("Default") Then
+                '        If DefaultUnit.Name.Contains("Primary") Or DefaultUnit.Name.Contains("Secondary") Or DefaultUnit.Name.Contains("Tertiary") Then
+                '            tmpUnitDict(DefaultUnit.Name) = CStr(DefaultUnit.Value)
+                '        End If
+                '    End If
+                'Next
+
                 PopulateTreeView(FileName, tmpPartsLiteData, tmpVariableInfos, tmpProperties, tmpPSMCluster0)
 
             Catch ex As Exception

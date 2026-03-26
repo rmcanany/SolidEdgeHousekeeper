@@ -858,7 +858,7 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingViews.png"><img src="My%20Project/media/spacer.png">Update drawing views</h3></summary>
 
-Updates draft files.  Presents options to process drawing views, property text, parts lists, and sheet scale.  The latter option sets the scale to match the first drawing view added the sheet.  
+Updates draft files.  Presents options to process drawing views, property text, parts lists, and sheet scale.  If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  
 
 </details>
 
@@ -1230,7 +1230,7 @@ The options are:
 - `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
 - `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. 
 - `Overridden dimensions`: Checks if any dimensions are not to scale, or have the value hidden. 
-- `Sheet scale does not match first drawing view scale`: Checks what it says. 
+- `Sheet scale not linked to a drawing view`: Checks what it says. 
 
 </details>
 

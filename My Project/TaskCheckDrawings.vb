@@ -433,18 +433,23 @@ Public Class TaskCheckDrawings
 
             If DrawingViews.Count > 0 Then
 
-                DrawingView = CType(DrawingViews(0), SolidEdgeDraft.DrawingView)
+                'DrawingView = CType(DrawingViews(0), SolidEdgeDraft.DrawingView)
 
-                Dim PaperRatioComponent As Double
-                Dim ModelRatioComponent As Double
-                Sheet.SheetSetup.GetDefaultDrawingViewScale(PaperRatioComponent, ModelRatioComponent)
+                'Dim PaperRatioComponent As Double
+                'Dim ModelRatioComponent As Double
+                'Sheet.SheetSetup.GetDefaultDrawingViewScale(PaperRatioComponent, ModelRatioComponent)
 
-                Dim SheetScale As Double = 1 / ModelRatioComponent
+                'Dim SheetScale As Double = 1 / ModelRatioComponent
 
-                If Math.Abs(SheetScale - DrawingView.ScaleFactor) > 0.0001 Then
-                    s = $"Scale mismatch on {Sheet.Name}: Sheet scale {SheetScale}, Drawing view scale {DrawingView.ScaleFactor}"
-                    TaskLogger.AddMessage(s)
+                'If Math.Abs(SheetScale - DrawingView.ScaleFactor) > 0.0001 Then
+                '    s = $"Scale mismatch on {Sheet.Name}: Sheet scale {SheetScale}, Drawing view scale {DrawingView.ScaleFactor}"
+                '    TaskLogger.AddMessage(s)
+                'End If
+
+                If Sheet.SheetSetup.IsManualSheetScale Then
+                    TaskLogger.AddMessage($"Sheet '{Sheet.Name}' scale not linked to a drawing view")
                 End If
+
             End If
 
         Next Sheet
@@ -509,7 +514,7 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.SheetScale.ToString, "Sheet scale does not match first drawing view scale")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SheetScale.ToString, "Sheet scale not linked to a drawing view")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -628,7 +633,7 @@ Public Class TaskCheckDrawings
         HelpString += vbCrLf + "- `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. "
         HelpString += vbCrLf + "- `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. "
         HelpString += vbCrLf + "- `Overridden dimensions`: Checks if any dimensions are not to scale, or have the value hidden. "
-        HelpString += vbCrLf + "- `Sheet scale does not match first drawing view scale`: Checks what it says. "
+        HelpString += vbCrLf + "- `Sheet scale not linked to a drawing view`: Checks what it says. "
 
         Return HelpString
     End Function

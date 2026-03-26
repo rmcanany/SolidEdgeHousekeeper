@@ -192,8 +192,14 @@ Public Class TaskUpdateDrawingViews
                         End If
 
                         If DVCount = 0 And Me.SheetScale Then
-                            Sheet.SheetSetup.SetDefaultDrawingViewScale(1, 1 / DrawingView.ScaleFactor)
+                            'Sheet.SheetSetup.SetDefaultDrawingViewScale(1, 1 / DrawingView.ScaleFactor)
+
+                            If Sheet.SheetSetup.IsManualSheetScale Then
+                                Sheet.SheetSetup.DrawingViewForSheetScale = DrawingView
+                            End If
+
                             PerformedUpdate = True
+
                         End If
 
                         DVCount += 1
@@ -275,7 +281,7 @@ Public Class TaskUpdateDrawingViews
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.SheetScale.ToString, "Sheet scale does not match first drawing view scale")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SheetScale.ToString, "If sheet scale unlinked to a drawing view, link to the first one placed")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -341,7 +347,7 @@ Public Class TaskUpdateDrawingViews
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Updates draft files.  Presents options to process drawing views, property text, parts lists, and sheet scale.  "
-        HelpString += "The latter option sets the scale to match the first drawing view added the sheet.  "
+        HelpString += "If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  "
         Return HelpString
     End Function
 
