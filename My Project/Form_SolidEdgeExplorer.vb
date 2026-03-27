@@ -67,12 +67,6 @@ Public Class Form_SolidEdgeExplorer
 
     Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData, CustomPropertyVariableInfos As CustomPropertyVariableInfo, Properties As SolidEdgeExplorerDLL.Properties, PSMCluster0 As PSMCluster0)
 
-        'Dim header As String = BitConverter.ToString(PartsLiteData.RawData)
-        'Dim namedViews As List(Of SolidEdgeExplorerDLL.NamedView) = PartsLiteData.NamedViews
-        'Dim midHeader1 As String = ""
-        'Dim Features As List(Of Feature) = PartsLiteData.Features
-        'Dim midHeader2 As String = ""
-        'Dim Variables As List(Of SolidEdgeExplorerDLL.Variable) = PartsLiteData.Variables
 
         TreeView1.BeginUpdate()
 
@@ -87,7 +81,11 @@ Public Class Form_SolidEdgeExplorer
             tmpDefaulNode.Nodes.Add("Unknown1: " & tmpDefaul.Unknown1.ToString)
             tmpDefaulNode.Nodes.Add("Unknown2: " & tmpDefaul.Unknown2.ToString)
             tmpDefaulNode.Nodes.Add("ValueType: " & tmpDefaul.ValueType.ToString)
-            tmpDefaulNode.Nodes.Add("Value: " & tmpDefaul.Value.ToString)
+            If tmpDefaul.Name.StartsWith("Default") Then
+                tmpDefaulNode.Nodes.Add("Value: " & tmpDefaul.Value.ToString & "   " & New Utilities.UnitOfMeasure(CInt(tmpDefaul.Value)).Description)
+            Else
+                tmpDefaulNode.Nodes.Add("Value: " & tmpDefaul.Value.ToString)
+            End If
             DefaultsNode.Nodes.Add(tmpDefaulNode)
         Next
         TreeView1.Nodes.Add(DefaultsNode)
@@ -103,11 +101,6 @@ Public Class Form_SolidEdgeExplorer
         Next
         TreeView1.Nodes.Add(PropertiesNode)
 
-
-        'Used to DEBUG PartsLiteData
-        'Dim HeaderNode As New TreeNode("Header: " & header.Substring(0, 34) & "....")
-        'HeaderNode.ToolTipText = header
-        'TreeView1.Nodes.Add(HeaderNode)
 
         If Not IsNothing(PartsLiteData) Then
 
@@ -135,10 +128,6 @@ Public Class Form_SolidEdgeExplorer
             Next
             TreeView1.Nodes.Add(NamedViewsNode)
 
-            'If midHeader1.Length > 0 Then
-            '    Dim midHeaderNode1 As New TreeNode("Unknown: " & midHeader1)
-            '    TreeView1.Nodes.Add(midHeaderNode1)
-            'End If
 
             Dim featuresNode As New TreeNode("Features (" & PartsLiteData.Features.Count.ToString & "/" & PartsLiteData.ExpectedNumFeatures.ToString & ")")
             For Each feature As Feature In PartsLiteData.Features
@@ -159,10 +148,6 @@ Public Class Form_SolidEdgeExplorer
             Next
             TreeView1.Nodes.Add(featuresNode)
 
-            'If midHeader2.Length > 0 Then
-            '    Dim midHeaderNode2 As New TreeNode("Unknown: " & midHeader2)
-            '    TreeView1.Nodes.Add(midHeaderNode2)
-            'End If
 
             Dim variablesNode As New TreeNode("Variables (" & PartsLiteData.Variables.Count.ToString & "/" & PartsLiteData.ExpectedNumVariables.ToString & ")")
             For Each variable As SolidEdgeExplorerDLL.Variable In PartsLiteData.Variables
@@ -171,7 +156,7 @@ Public Class Form_SolidEdgeExplorer
 
                 ' Aggiungiamo le proprietà come sotto-nodi
                 variableNode.Nodes.Add("ID: " & variable.ID.ToString())
-                variableNode.Nodes.Add("Unit Type: " & variable.UnitType.ToString())
+                variableNode.Nodes.Add("Unit Type: " & variable.UnitType & "   " & New Utilities.UnitTypeConstant(variable.UnitType).Description)
                 variableNode.Nodes.Add("Value: " & variable.Value.ToString())
 
 
