@@ -1144,6 +1144,9 @@ Public Class Form_Main
         '' Quick try
         'Dim JunkFilename = "C:\data\CAD\7481\7481-00001 BUHRS LEAD IN GUIDE.psm"
         'Dim SSDoc As New HCStructuredStorageDoc(JunkFilename)
+        'SSDoc.ReadProperties(Me.PropertiesData)
+        'Dim tf1 As Boolean = SSDoc.IsExposedVariable("ExposedVar")
+        'Dim tf2 As Boolean = SSDoc.IsExposedVariable("UnexposedVar")
         'SSDoc.ReadVariables()
         'Dim V As SolidEdgeExplorerDLL.Variable = SSDoc.GetVariable("MaterialThickness")
         'Dim s As String = $"{V.Name}{vbCrLf}"

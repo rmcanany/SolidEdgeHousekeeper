@@ -27,6 +27,7 @@ Public Class HCStructuredStorageDoc
     Private Property DocType As String 'asm, dft, par, psm, mtl
     Private Property BlkLibrary As BlockLibrary
     Private Property Vars As Variables
+    Private Property ExposedVariablePropIDs As List(Of UInteger)
 
 
     Public Enum StatusSecurityMapping
@@ -386,6 +387,18 @@ Public Class HCStructuredStorageDoc
         Return PropNames
     End Function
 
+    Public Function IsExposedVariable(PropName As String) As Boolean
+
+        If Me.Vars Is Nothing Then
+            Me.Vars = New Variables(Me.cf, Me.FullName)
+            Me.ExposedVariablePropIDs = Me.Vars.ExposedVariablePropIDs
+        End If
+
+        Dim tmpProp As Prop = GetProp("Custom", PropName)
+
+        Return tmpProp IsNot Nothing AndAlso Me.ExposedVariablePropIDs.Contains(tmpProp.PropertyIdentifier)
+
+    End Function
     Public Function SubstitutePropertyFormulas(
          InString As String,
          ErrorLogger As Logger,
@@ -2544,8 +2557,9 @@ Public Class HCStructuredStorageDoc
 
     Private Class Variables
         Public Property Items As List(Of SolidEdgeExplorerDLL.Variable)
+        Public Property ExposedVariablePropIDs As List(Of UInteger)
         Private Property FullName As String
-        Private Property PartsLiteData As SolidEdgeExplorerDLL.PartsLiteData
+        'Private Property PartsLiteData As SolidEdgeExplorerDLL.PartsLiteData
 
         Public Sub New(cf As CompoundFile, _FullName As String)
 
@@ -2553,23 +2567,36 @@ Public Class HCStructuredStorageDoc
 
             Dim stream As OpenMcdf.CFStream = cf.RootStorage.GetStream("PartsLiteData")
 
-            Me.PartsLiteData = New SolidEdgeExplorerDLL.PartsLiteData
+            Dim PartsLiteData = New SolidEdgeExplorerDLL.PartsLiteData
             PartsLiteData.FindData(stream)
 
             Me.Items = PartsLiteData.Variables
 
-            Dim i = 0
-            ''Variable check and retrieval examples
-            'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
-            'Dim VolumeVariable = tmpPartsLiteData.Variables.Find(Function(x) x.Name = "Volume")
+            ' ####### Find exposed variables ######
+
+            Dim tmpVariableInfos As New SolidEdgeExplorerDLL.CustomPropertyVariableInfo
+            stream = cf.RootStorage.GetStream("CustomPropertyVariableInfo")
+            tmpVariableInfos.FindData(stream)
+
+            Me.ExposedVariablePropIDs = New List(Of UInteger)
+
+            For Each V As SolidEdgeExplorerDLL.Variable In Me.Items
+                If tmpVariableInfos.VariableInfos.Exists(Function(x) x.Variable_ID = V.ID) Then
+                    ExposedVariablePropIDs.Add(tmpVariableInfos.VariableInfos.Find(Function(x) x.Variable_ID = V.ID).Property_ID)
+                End If
+            Next
 
         End Sub
 
         Public Function GetVariable(Name As String) As SolidEdgeExplorerDLL.Variable
+            ''Variable check and retrieval examples
+            'Dim exists As Boolean = tmpPartsLiteData.Variables.Exists(Function(x) x.Name = "Volume")
+            'Dim VolumeVariable = tmpPartsLiteData.Variables.Find(Function(x) x.Name = "Volume")
+
             Dim tmpVariable As SolidEdgeExplorerDLL.Variable = Nothing
 
-            If Me.PartsLiteData.Variables.Exists(Function(x) x.Name = Name) Then
-                tmpVariable = Me.PartsLiteData.Variables.Find(Function(x) x.Name = Name)
+            If Me.Items.Exists(Function(x) x.Name = Name) Then
+                tmpVariable = Me.Items.Find(Function(x) x.Name = Name)
             End If
 
             Return tmpVariable
