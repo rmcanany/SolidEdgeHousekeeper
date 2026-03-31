@@ -1328,6 +1328,11 @@ Public Class UtilsFileList
                                 Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, _OpenReadWrite:=False)
                                 SSDoc.ReadProperties(FMain.PropertiesData)
 
+                                Dim PropName = UC.PropNameFromFormula(PropColumn.Formula)
+                                If Not IsReadOnly Then
+                                    IsReadOnly = SSDoc.IsExposedVariable(PropName)
+                                End If
+
                                 Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
                                 PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, tmpErrorLogger)
 
