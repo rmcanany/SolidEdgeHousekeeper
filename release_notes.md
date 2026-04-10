@@ -55,6 +55,7 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 - Fixed a regression in `Save As` where illegal file name characters were no longer being replaced.  (Thank you **@n0minus38!**)
 - Fixed an issue in the example code snippet `FitIso.snp` where the command ID for draft files was incorrect.
 - Fixed an issue in `Update Physical Properties` where a check of the mass in the variable table was not accounting for localized names.  (Thank you **@Stefano-VLN!**)
+- Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
 
 
 ## V2026.1

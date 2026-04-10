@@ -595,7 +595,9 @@ Public Class UtilsTopLevelAssembly
 
         If DraftAndModelSameName Then
             DraftFilename = System.IO.Path.ChangeExtension(Filename, ".dft")
-            AllWhereUsedFileNames.Add(DraftFilename)
+            If IO.File.Exists(DraftFilename) Then
+                AllWhereUsedFileNames.Add(DraftFilename)
+            End If
             Return AllWhereUsedFileNames
         End If
 

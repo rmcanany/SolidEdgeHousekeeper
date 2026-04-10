@@ -1,4 +1,6 @@
-﻿Imports System.IO
+﻿Option Strict On
+
+Imports System.IO
 Imports System.Text
 Imports SolidEdgeExplorerDLL
 Imports SolidEdgeFramework
@@ -160,7 +162,7 @@ Public Class Form_SolidEdgeExplorer
 
                 ' Aggiungiamo le proprietà come sotto-nodi
                 variableNode.Nodes.Add("ID: " & variable.ID.ToString())
-                variableNode.Nodes.Add("Unit Type: " & variable.UnitType & "   " & New Utilities.UnitTypeConstant(variable.UnitType).Description)
+                variableNode.Nodes.Add("Unit Type: " & variable.UnitType & "   " & New Utilities.UnitTypeConstant(CInt(variable.UnitType)).Description)
                 variableNode.Nodes.Add("Database Value: " & variable.Value.ToString())
                 variableNode.Nodes.Add("User Value: " & V.ToString())
 
@@ -200,7 +202,7 @@ Public Class Form_SolidEdgeExplorer
         For Each DefaultUnit As SolidEdgeExplorerDLL.DefaultUnit In PSMCluster0.DefaultUnits
             If DefaultUnit.Name.Contains("Default") And DefaultUnit.Name.Contains("Primary") Then
                 Dim tmpName As String = DefaultUnit.Name.Replace(vbNullChar, "")
-                LUTDefaultNameToUnitType(tmpName) = DefaultUnit.Value
+                LUTDefaultNameToUnitType(tmpName) = CInt(DefaultUnit.Value)
             End If
         Next
 
