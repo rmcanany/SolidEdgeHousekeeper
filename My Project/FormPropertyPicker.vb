@@ -14,8 +14,6 @@ Public Class FormPropertyPicker
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Dim UC As New UtilsCommon
-
         Me.PropertyOnly = True
         Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
@@ -110,6 +108,15 @@ Public Class FormPropertyPicker
     End Sub
 
     Private Sub FormPropertyPicker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        If Form_Main.PropertiesData Is Nothing OrElse Form_Main.PropertiesData.Items.Count = 0 Then
+            Dim s = "Template properties required for this command not found. "
+            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            MsgBox(s, vbOKOnly)
+            ButtonCancel.PerformClick()
+            'Exit Sub
+        End If
+
         ComboBoxPropertyName.Items.Add("")
         For Each PropName As String In Me.FavoritesList
             ComboBoxPropertyName.Items.Add(PropName)

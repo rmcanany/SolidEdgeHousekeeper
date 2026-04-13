@@ -4097,11 +4097,11 @@ Public Class Form_Main
             'OLEDB Connections lile ACCESS and EXCEL file
             If Form_Main.TextBoxServerConnectionString.Text.Contains("OLEDB") Then
 
-                Dim con As New OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
+                Dim con As New System.Data.OleDb.OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
                 con.Open()
 
-                Dim cmd As New OleDbCommand(Query, con) 'TBD <--- Convert the property formula into text
-                Dim reader As OleDbDataReader = cmd.ExecuteReader()
+                Dim cmd As New System.Data.OleDb.OleDbCommand(Query, con) 'TBD <--- Convert the property formula into text
+                Dim reader As System.Data.OleDb.OleDbDataReader = cmd.ExecuteReader()
 
                 If reader.HasRows Then
                     reader.Read()
@@ -4116,11 +4116,11 @@ Public Class Form_Main
             Else
 
                 'I suppose it is a SQL connection
-                Dim con As New SqlConnection(Form_Main.TextBoxServerConnectionString.Text)
+                Dim con As New Data.SqlClient.SqlConnection(Form_Main.TextBoxServerConnectionString.Text)
                 con.Open()
 
-                Dim cmd As New SqlCommand(Query, con)
-                Dim reader As SqlDataReader = cmd.ExecuteReader()
+                Dim cmd As New Data.SqlClient.SqlCommand(Query, con)
+                Dim reader As Data.SqlClient.SqlDataReader = cmd.ExecuteReader()
 
                 If reader.HasRows Then
                     reader.Read()

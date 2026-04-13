@@ -420,8 +420,6 @@ Public Class TaskCheckDrawings
 
         Dim UC As New UtilsCommon
 
-        Dim s As String
-
         Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
         Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing

@@ -402,7 +402,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
         Dim TemplateStyleInDoc As Boolean
-        Dim MissingStyles As String
         Dim UC As New UtilsCommon
 
         ' ############ DrawingViewStyles ############

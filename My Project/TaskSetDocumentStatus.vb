@@ -177,16 +177,16 @@ Public Class TaskSetDocumentStatus
         If Me.IsSelectedTask Then
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
                 ErrorLogger.AddMessage("Select at least one type of file to process")
-
-                If Me.NewStatus = "" Then
-                    ErrorLogger.AddMessage("Select the new status")
-                End If
-
-                If Form_Main.ProcessAsAvailable Then
-                    ErrorLogger.AddMessage("Disable 'Process as available' (Configuration Tab -- Status Page) to use this command")
-                End If
-
             End If
+
+            If Me.NewStatus = "" Then
+                ErrorLogger.AddMessage("Select the new status")
+            End If
+
+            If Form_Main.ProcessAsAvailable Then
+                ErrorLogger.AddMessage("Disable 'Process as available' (Configuration Tab -- Status Page) to use this command")
+            End If
+
         End If
 
     End Sub
