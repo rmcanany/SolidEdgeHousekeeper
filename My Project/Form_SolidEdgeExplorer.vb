@@ -28,6 +28,8 @@ Public Class Form_SolidEdgeExplorer
                 Dim tmpPSMCluster0 As New SolidEdgeExplorerDLL.PSMCluster0
                 tmpPSMCluster0.FindData(FileName)
 
+                SolidEdgeExplorerDLL.Utilities.PopulateVariableUserValues(tmpPartsLiteData, tmpPSMCluster0)
+
                 ''Gather unit constants for in & mm
                 'Dim tmpUnitDict As New Dictionary(Of String, String)
                 'For Each DefaultUnit As SolidEdgeExplorerDLL.DefaultUnit In tmpPSMCluster0.DefaultUnits
@@ -155,7 +157,8 @@ Public Class Form_SolidEdgeExplorer
             For Each variable As SolidEdgeExplorerDLL.Variable In PartsLiteData.Variables
                 ' Nodo principale con il nome della variabile
 
-                Dim V As Double = UserUnits(variable, PSMCluster0)
+                'Dim V As Double = UserUnits(variable, PSMCluster0)
+                Dim V As Double = variable.UserValue
 
                 'Dim variableNode As New TreeNode(variable.Name & " = " & variable.Value.ToString)
                 Dim variableNode As New TreeNode(variable.Name & " = " & V.ToString)
@@ -188,530 +191,530 @@ Public Class Form_SolidEdgeExplorer
 
     End Sub
 
-    Private Function UserUnits(
-        InVar As SolidEdgeExplorerDLL.Variable,
-        PSMCluster0 As SolidEdgeExplorerDLL.PSMCluster0
-        ) As Double
+    'Private Function UserUnits(
+    '    InVar As SolidEdgeExplorerDLL.Variable,
+    '    PSMCluster0 As SolidEdgeExplorerDLL.PSMCluster0
+    '    ) As Double
 
-        Dim InValue As Double = InVar.Value
-        Dim SentinelValue As Double = 123454321
-        Dim OutValue As Double = SentinelValue
+    '    Dim InValue As Double = InVar.Value
+    '    Dim SentinelValue As Double = 123454321
+    '    Dim OutValue As Double = SentinelValue
 
-        Dim LUTDefaultNameToUnitType As New Dictionary(Of String, Integer)
+    '    Dim LUTDefaultNameToUnitType As New Dictionary(Of String, Integer)
 
-        For Each DefaultUnit As SolidEdgeExplorerDLL.DefaultUnit In PSMCluster0.DefaultUnits
-            If DefaultUnit.Name.Contains("Default") And DefaultUnit.Name.Contains("Primary") Then
-                Dim tmpName As String = DefaultUnit.Name.Replace(vbNullChar, "")
-                LUTDefaultNameToUnitType(tmpName) = CInt(DefaultUnit.Value)
-            End If
-        Next
+    '    For Each DefaultUnit As SolidEdgeExplorerDLL.DefaultUnit In PSMCluster0.DefaultUnits
+    '        If DefaultUnit.Name.Contains("Default") And DefaultUnit.Name.Contains("Primary") Then
+    '            Dim tmpName As String = DefaultUnit.Name.Replace(vbNullChar, "")
+    '            LUTDefaultNameToUnitType(tmpName) = CInt(DefaultUnit.Value)
+    '        End If
+    '    Next
 
-        Dim UnitConstant As Integer = 345 ' Default to SeNone
+    '    Dim UnitConstant As Integer = 345 ' Default to SeNone
 
-        Select Case InVar.UnitType
-            Case 1
-                'Name = "igUnitDistance"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultDistancePrimary")
-            Case 2
-                'Name = "igUnitAngle"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultAnglePrimary")
-            Case 3
-                'Name = "igUnitMass"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultMassPrimary")
-            Case 4
-                'Name = "igUnitTime"
-                'UnitConstant = LUTDefaultNames("")
-            Case 5
-                'Name = "igUnitTemperature"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultTemperaturePrimary")
-            Case 6
-                'Name = "igUnitElectricCharge"
-                'UnitConstant = LUTDefaultNames("")
-            Case 7
-                'Name = "igUnitLuminousIntensity"
-                'UnitConstant = LUTDefaultNames("")
-            Case 8
-                'Name = "igUnitAmountOfSubstance"
-                'UnitConstant = LUTDefaultNames("")
-            Case 9
-                'Name = "igUnitSolidAngle"
-                'UnitConstant = LUTDefaultNames("")
-            Case 10
-                'Name = "igUnitAngularAcceleration"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultAngularAccelerationPrimary")
-            Case 11
-                'Name = "igUnitAngularMomentum"
-                'UnitConstant = LUTDefaultNames("")
-            Case 12
-                'Name = "igUnitAngularVelocity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultAngularVelocityPrimary")
-            Case 13
-                'Name = "igUnitArea"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultAreaPrimary")
-            Case 14
-                'Name = "igUnitBodyForce"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultBodyForcePrimary")
-            Case 15
-                'Name = "igUnitCoefficientOfThermalExpansion"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultCoefThermExp")
-            Case 16
-                'Name = "igUnitDensity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultDensityPrimary")
-            Case 17
-                'Name = "igUnitElectricalCapacitance"
-                'UnitConstant = LUTDefaultNames("")
-            Case 18
-                'Name = "igUnitElectricalConductance"
-                'UnitConstant = LUTDefaultNames("")
-            Case 19
-                'Name = "igUnitElectricalFieldStrength"
-                'UnitConstant = LUTDefaultNames("")
-            Case 20
-                'Name = "igUnitElectricalInductance"
-                'UnitConstant = LUTDefaultNames("")
-            Case 21
-                'Name = "igUnitElectricalPotential"
-                'UnitConstant = LUTDefaultNames("")
-            Case 22
-                'Name = "igUnitElectricalResistance"
-                'UnitConstant = LUTDefaultNames("")
-            Case 23
-                'Name = "igUnitEnergy"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultEnergyPrimary")
-            Case 24
-                'Name = "igUnitEntropy"
-                'UnitConstant = LUTDefaultNames("")
-            Case 25
-                'Name = "igUnitFilmCoefficient"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultFilmCoefficientPrimary")
-            Case 26
-                'Name = "igUnitForce"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultForcePrimary")
-            Case 27
-                'Name = "igUnitForcePerArea"
-                'UnitConstant = LUTDefaultNames("")
-            Case 28
-                'Name = "igUnitForcePerDistance"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultForceperDistancePrimary")
-            Case 29
-                'Name = "igUnitFrequency"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultFrequencyPrimary")
-            Case 30
-                'Name = "igUnitHeatCapacity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultSpecificHeat")
-            Case 31
-                'Name = "igUnitHeatFluxPerArea"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultHeatFluxperAreaPrimary")
-            Case 32
-                'Name = "igUnitHeatFluxPerDistance"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultHeatFluxPerDistancePrimary")
-            Case 33
-                'Name = "igUnitHeatSource"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultHeatSourcePrimary")
-            Case 34
-                'Name = "igUnitIlluminance"
-                'UnitConstant = LUTDefaultNames("")
-            Case 35
-                'Name = "igUnitLinearAcceleration"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultLinearAccelerationPrimary")
-            Case 36
-                'Name = "igUnitLinearPerAngular"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultLinearPerAngularPrimary")
-            Case 37
-                'Name = "igUnitLinearVelocity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultLinearVelocityPrimary")
-            Case 38
-                'Name = "igUnitLuminousFlux"
-                'UnitConstant = LUTDefaultNames("")
-            Case 39
-                'Name = "igUnitMagneticFieldStrength"
-                'UnitConstant = LUTDefaultNames("")
-            Case 40
-                'Name = "igUnitMagneticFlux"
-                'UnitConstant = LUTDefaultNames("")
-            Case 41
-                'Name = "igUnitMagneticFluxDensity"
-                'UnitConstant = LUTDefaultNames("")
-            Case 42
-                'Name = "igUnitMassFlowRate"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultMassFlowratePrimary")
-            Case 43
-                'Name = "igUnitMassMomentOfInertia"
-                'UnitConstant = LUTDefaultNames("")
-            Case 44
-                'Name = "igUnitMassPerArea"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultMassPerAreaPrimary")
-            Case 45
-                'Name = "igUnitMassPerLength"
-                'UnitConstant = LUTDefaultNames("")
-            Case 46
-                'Name = "igUnitMomentum"
-                'UnitConstant = LUTDefaultNames("")
-            Case 47
-                'Name = "igUnitPerDistance"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultPerDistancePrimary")
-            Case 48
-                'Name = "igUnitPower"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultPowerPrimary")
-            Case 49
-                'Name = "igUnitQuantityOfElectricity"
-                'UnitConstant = LUTDefaultNames("")
-            Case 50
-                'Name = "igUnitRadiantIntensity"
-                'UnitConstant = LUTDefaultNames("")
-            Case 51
-                'Name = "igUnitRotationalStiffness"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultRotationalStiffnessPrimary")
-            Case 52
-                'Name = "igUnitSecondMomentOfArea"
-                'UnitConstant = LUTDefaultNames("")
-            Case 53
-                'Name = "igUnitThermalConductivity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultThermCond")
-            Case 54
-                'Name = "igUnitDynamicViscosity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultDynamicViscosityPrimary")
-            Case 55
-                'Name = "igUnitKinematicViscosity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultKinematicVisPrimary")
-            Case 56
-                'Name = "igUnitVolume"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultVolumePrimary")
-            Case 57
-                'Name = "igUnitVolumeFlowRate"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultVolumeFlowRatePrimary")
-            Case 58
-                'Name = "igUnitScalar"
-                'UnitConstant = LUTDefaultNames("")
-            Case 59
-                'Name = "igUnitTorque"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultTorquePrimary")
-            Case 60
-                'Name = "igUnitEnergyDensity"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultEnergyDensityPrimary")
-            Case 61
-                'Name = "igUnitPressure"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultPressurePrimary")
-            Case 62
-                'Name = "igUnitHeatGeneration"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultHeatGenerationPrimary")
-            Case 63
-                'Name = "igUnitTemperatureGradient"
-                UnitConstant = LUTDefaultNameToUnitType("DefaultTemperatureGradientPrimary")
+    '    Select Case InVar.UnitType
+    '        Case 1
+    '            'Name = "igUnitDistance"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultDistancePrimary")
+    '        Case 2
+    '            'Name = "igUnitAngle"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultAnglePrimary")
+    '        Case 3
+    '            'Name = "igUnitMass"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultMassPrimary")
+    '        Case 4
+    '            'Name = "igUnitTime"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 5
+    '            'Name = "igUnitTemperature"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultTemperaturePrimary")
+    '        Case 6
+    '            'Name = "igUnitElectricCharge"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 7
+    '            'Name = "igUnitLuminousIntensity"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 8
+    '            'Name = "igUnitAmountOfSubstance"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 9
+    '            'Name = "igUnitSolidAngle"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 10
+    '            'Name = "igUnitAngularAcceleration"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultAngularAccelerationPrimary")
+    '        Case 11
+    '            'Name = "igUnitAngularMomentum"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 12
+    '            'Name = "igUnitAngularVelocity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultAngularVelocityPrimary")
+    '        Case 13
+    '            'Name = "igUnitArea"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultAreaPrimary")
+    '        Case 14
+    '            'Name = "igUnitBodyForce"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultBodyForcePrimary")
+    '        Case 15
+    '            'Name = "igUnitCoefficientOfThermalExpansion"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultCoefThermExp")
+    '        Case 16
+    '            'Name = "igUnitDensity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultDensityPrimary")
+    '        Case 17
+    '            'Name = "igUnitElectricalCapacitance"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 18
+    '            'Name = "igUnitElectricalConductance"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 19
+    '            'Name = "igUnitElectricalFieldStrength"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 20
+    '            'Name = "igUnitElectricalInductance"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 21
+    '            'Name = "igUnitElectricalPotential"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 22
+    '            'Name = "igUnitElectricalResistance"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 23
+    '            'Name = "igUnitEnergy"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultEnergyPrimary")
+    '        Case 24
+    '            'Name = "igUnitEntropy"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 25
+    '            'Name = "igUnitFilmCoefficient"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultFilmCoefficientPrimary")
+    '        Case 26
+    '            'Name = "igUnitForce"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultForcePrimary")
+    '        Case 27
+    '            'Name = "igUnitForcePerArea"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 28
+    '            'Name = "igUnitForcePerDistance"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultForceperDistancePrimary")
+    '        Case 29
+    '            'Name = "igUnitFrequency"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultFrequencyPrimary")
+    '        Case 30
+    '            'Name = "igUnitHeatCapacity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultSpecificHeat")
+    '        Case 31
+    '            'Name = "igUnitHeatFluxPerArea"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultHeatFluxperAreaPrimary")
+    '        Case 32
+    '            'Name = "igUnitHeatFluxPerDistance"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultHeatFluxPerDistancePrimary")
+    '        Case 33
+    '            'Name = "igUnitHeatSource"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultHeatSourcePrimary")
+    '        Case 34
+    '            'Name = "igUnitIlluminance"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 35
+    '            'Name = "igUnitLinearAcceleration"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultLinearAccelerationPrimary")
+    '        Case 36
+    '            'Name = "igUnitLinearPerAngular"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultLinearPerAngularPrimary")
+    '        Case 37
+    '            'Name = "igUnitLinearVelocity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultLinearVelocityPrimary")
+    '        Case 38
+    '            'Name = "igUnitLuminousFlux"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 39
+    '            'Name = "igUnitMagneticFieldStrength"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 40
+    '            'Name = "igUnitMagneticFlux"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 41
+    '            'Name = "igUnitMagneticFluxDensity"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 42
+    '            'Name = "igUnitMassFlowRate"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultMassFlowratePrimary")
+    '        Case 43
+    '            'Name = "igUnitMassMomentOfInertia"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 44
+    '            'Name = "igUnitMassPerArea"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultMassPerAreaPrimary")
+    '        Case 45
+    '            'Name = "igUnitMassPerLength"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 46
+    '            'Name = "igUnitMomentum"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 47
+    '            'Name = "igUnitPerDistance"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultPerDistancePrimary")
+    '        Case 48
+    '            'Name = "igUnitPower"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultPowerPrimary")
+    '        Case 49
+    '            'Name = "igUnitQuantityOfElectricity"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 50
+    '            'Name = "igUnitRadiantIntensity"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 51
+    '            'Name = "igUnitRotationalStiffness"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultRotationalStiffnessPrimary")
+    '        Case 52
+    '            'Name = "igUnitSecondMomentOfArea"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 53
+    '            'Name = "igUnitThermalConductivity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultThermCond")
+    '        Case 54
+    '            'Name = "igUnitDynamicViscosity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultDynamicViscosityPrimary")
+    '        Case 55
+    '            'Name = "igUnitKinematicViscosity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultKinematicVisPrimary")
+    '        Case 56
+    '            'Name = "igUnitVolume"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultVolumePrimary")
+    '        Case 57
+    '            'Name = "igUnitVolumeFlowRate"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultVolumeFlowRatePrimary")
+    '        Case 58
+    '            'Name = "igUnitScalar"
+    '            'UnitConstant = LUTDefaultNames("")
+    '        Case 59
+    '            'Name = "igUnitTorque"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultTorquePrimary")
+    '        Case 60
+    '            'Name = "igUnitEnergyDensity"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultEnergyDensityPrimary")
+    '        Case 61
+    '            'Name = "igUnitPressure"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultPressurePrimary")
+    '        Case 62
+    '            'Name = "igUnitHeatGeneration"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultHeatGenerationPrimary")
+    '        Case 63
+    '            'Name = "igUnitTemperatureGradient"
+    '            UnitConstant = LUTDefaultNameToUnitType("DefaultTemperatureGradientPrimary")
 
-        End Select
+    '    End Select
 
-        '###### UnitOfMeasureLength ######
+    '    '###### UnitOfMeasureLength ######
 
-        Dim dmPERm = 10
-        Dim cmPERm = 100
-        Dim mmPERm = 1000
-        Dim kmPERm = 0.001
-        Dim nmPERm = 1000000000
-        Dim inPERm = 1 / 0.0254
-        Dim ftPERm = inPERm / 12
-        Dim ydPERm = ftPERm / 3
-        Dim miPERm = ftPERm / 5280
-        Dim tenthPERm = inPERm * 10
-        Dim hundredthPERm = inPERm * 100
-        Dim thousandthPERm = inPERm * 1000
-        Dim polePERm = ydPERm / 5.5
-        Dim rodPERm = polePERm
-        Dim furlongPERm = miPERm * 8
-        Dim chainPERm = furlongPERm * 10
+    '    Dim dmPERm = 10
+    '    Dim cmPERm = 100
+    '    Dim mmPERm = 1000
+    '    Dim kmPERm = 0.001
+    '    Dim nmPERm = 1000000000
+    '    Dim inPERm = 1 / 0.0254
+    '    Dim ftPERm = inPERm / 12
+    '    Dim ydPERm = ftPERm / 3
+    '    Dim miPERm = ftPERm / 5280
+    '    Dim tenthPERm = inPERm * 10
+    '    Dim hundredthPERm = inPERm * 100
+    '    Dim thousandthPERm = inPERm * 1000
+    '    Dim polePERm = ydPERm / 5.5
+    '    Dim rodPERm = polePERm
+    '    Dim furlongPERm = miPERm * 8
+    '    Dim chainPERm = furlongPERm * 10
 
-        If OutValue = SentinelValue Then
-            Select Case UnitConstant
-                Case = 345
-                    'Name = "seNone", Description = "None", Symbol = ""
-                    OutValue = InValue * 1
+    '    If OutValue = SentinelValue Then
+    '        Select Case UnitConstant
+    '            Case = 345
+    '                'Name = "seNone", Description = "None", Symbol = ""
+    '                OutValue = InValue * 1
 
-                Case = 59
-                    'Name = "seLengthMeter", Description = "Meter", Symbol = "m"
-                    OutValue = InValue * 1
-                Case = 60
-                    'Name = "seLengthCentimeter", Description = "Centimeter", Symbol = "cm"
-                    OutValue = InValue * cmPERm
-                Case = 61
-                    'Name = "seLengthMillimeter", Description = "Millimeter", Symbol = "mm"
-                    OutValue = InValue * mmPERm
-                Case = 62
-                    'Name = "seLengthKilometer", Description = "Kilometer", Symbol = "km"
-                    OutValue = InValue * kmPERm
-                Case = 63
-                    'Name = "seLengthNanometer", Description = "Nanometer", Symbol = "nm"
-                    OutValue = InValue * nmPERm
-                Case = 64
-                    'Name = "seLengthInch", Description = "Inch", Symbol = "in"
-                    OutValue = InValue * inPERm
-                Case = 65
-                    'Name = "seLengthFoot", Description = "Foot", Symbol = "ft"
-                    OutValue = InValue * ftPERm
-                Case = 361
-                    'Name = "seLengthInchAbbr", Description = "Inch Abbreviated", Symbol = "''"
-                    OutValue = InValue * inPERm
-                Case = 360
-                    'Name = "seLengthFootAbbr", Description = "Foot Abbreviated", Symbol = "'"
-                    OutValue = InValue * ftPERm
-                Case = 66
-                    'Name = "seLengthYard", Description = "Yard", Symbol = "yd"
-                    OutValue = InValue * ydPERm
-                Case = 67
-                    'Name = "seLengthMile", Description = "Mile", Symbol = "mi"
-                    OutValue = InValue * miPERm
-                Case = 68
-                    'Name = "seLengthTenth", Description = "Tenth", Symbol = "tenth"
-                    OutValue = InValue * tenthPERm
-                Case = 69
-                    'Name = "seLengthHundredth", Description = "Hundredth", Symbol = "hundred"
-                    OutValue = InValue * hundredthPERm
-                Case = 70
-                    'Name = "seLengthThousandth", Description = "Thousandth", Symbol = "thousandth"
-                    OutValue = InValue * thousandthPERm
-                Case = 71
-                    'Name = "seLengthRod", Description = "Rod", Symbol = "rod"
-                    OutValue = InValue * rodPERm
-                Case = 72
-                    'Name = "seLengthPole", Description = "Pole", Symbol = "pole"
-                    OutValue = InValue * polePERm
-                Case = 74
-                    'Name = "seLengthChain", Description = "Chain", Symbol = "chain"
-                    OutValue = InValue * chainPERm
-                Case = 76
-                    'Name = "seLengthFurlong", Description = "Furlong", Symbol = "furlong"
-                    OutValue = InValue * furlongPERm
+    '            Case = 59
+    '                'Name = "seLengthMeter", Description = "Meter", Symbol = "m"
+    '                OutValue = InValue * 1
+    '            Case = 60
+    '                'Name = "seLengthCentimeter", Description = "Centimeter", Symbol = "cm"
+    '                OutValue = InValue * cmPERm
+    '            Case = 61
+    '                'Name = "seLengthMillimeter", Description = "Millimeter", Symbol = "mm"
+    '                OutValue = InValue * mmPERm
+    '            Case = 62
+    '                'Name = "seLengthKilometer", Description = "Kilometer", Symbol = "km"
+    '                OutValue = InValue * kmPERm
+    '            Case = 63
+    '                'Name = "seLengthNanometer", Description = "Nanometer", Symbol = "nm"
+    '                OutValue = InValue * nmPERm
+    '            Case = 64
+    '                'Name = "seLengthInch", Description = "Inch", Symbol = "in"
+    '                OutValue = InValue * inPERm
+    '            Case = 65
+    '                'Name = "seLengthFoot", Description = "Foot", Symbol = "ft"
+    '                OutValue = InValue * ftPERm
+    '            Case = 361
+    '                'Name = "seLengthInchAbbr", Description = "Inch Abbreviated", Symbol = "''"
+    '                OutValue = InValue * inPERm
+    '            Case = 360
+    '                'Name = "seLengthFootAbbr", Description = "Foot Abbreviated", Symbol = "'"
+    '                OutValue = InValue * ftPERm
+    '            Case = 66
+    '                'Name = "seLengthYard", Description = "Yard", Symbol = "yd"
+    '                OutValue = InValue * ydPERm
+    '            Case = 67
+    '                'Name = "seLengthMile", Description = "Mile", Symbol = "mi"
+    '                OutValue = InValue * miPERm
+    '            Case = 68
+    '                'Name = "seLengthTenth", Description = "Tenth", Symbol = "tenth"
+    '                OutValue = InValue * tenthPERm
+    '            Case = 69
+    '                'Name = "seLengthHundredth", Description = "Hundredth", Symbol = "hundred"
+    '                OutValue = InValue * hundredthPERm
+    '            Case = 70
+    '                'Name = "seLengthThousandth", Description = "Thousandth", Symbol = "thousandth"
+    '                OutValue = InValue * thousandthPERm
+    '            Case = 71
+    '                'Name = "seLengthRod", Description = "Rod", Symbol = "rod"
+    '                OutValue = InValue * rodPERm
+    '            Case = 72
+    '                'Name = "seLengthPole", Description = "Pole", Symbol = "pole"
+    '                OutValue = InValue * polePERm
+    '            Case = 74
+    '                'Name = "seLengthChain", Description = "Chain", Symbol = "chain"
+    '                OutValue = InValue * chainPERm
+    '            Case = 76
+    '                'Name = "seLengthFurlong", Description = "Furlong", Symbol = "furlong"
+    '                OutValue = InValue * furlongPERm
 
-            End Select
-        End If
+    '        End Select
+    '    End If
 
-        '###### UnitOfMeasureAngle ######
+    '    '###### UnitOfMeasureAngle ######
 
-        Dim degreePERrad = 360 / (2 * Math.PI)
-        Dim minutePERrad = degreePERrad / 60
-        Dim secondPERrad = minutePERrad / 60
-        Dim gradPERrad = 400 / (2 * Math.PI)
+    '    Dim degreePERrad = 360 / (2 * Math.PI)
+    '    Dim minutePERrad = degreePERrad / 60
+    '    Dim secondPERrad = minutePERrad / 60
+    '    Dim gradPERrad = 400 / (2 * Math.PI)
 
-        If OutValue = SentinelValue Then
-            Select Case UnitConstant
-                Case = 77
-                    'Name = "seRadian", Description = "Radian", Symbol = "rad"
-                    OutValue = InValue * 1
-                Case = 78
-                    'Name = "seAngleDegree", Description = "Degree", Symbol = "°"if the , Symbol is "°"
-                    OutValue = InValue * degreePERrad
-                Case = 79
-                    'Name = "seAngleMinute", Description = "Minute", Symbol = "'"
-                    OutValue = InValue * minutePERrad
-                Case = 80
-                    'Name = "seAngleSecond", Description = "Second", Symbol = "''"
-                    OutValue = InValue * secondPERrad
-                Case = 81
-                    'Name = "seAngleGradient", Description = "Gradient", Symbol = "gon"
-                    OutValue = InValue * gradPERrad
-                Case = 357
-                    'Name = "seAngleDegreeAbbr", Description = "Degree Abbreviated", Symbol = "°"
-                    OutValue = InValue * degreePERrad
-                Case = 358
-                    'Name = "seAngleMinuteAbbr", Description = "Minute Abbreviated", Symbol = "'"
-                    OutValue = InValue * minutePERrad
-                Case = 359
-                    'Name = "seAngleSecondAbbr", Description = "Second Abbreviated", Symbol = "''"
-                    OutValue = InValue * secondPERrad
-            End Select
-        End If
+    '    If OutValue = SentinelValue Then
+    '        Select Case UnitConstant
+    '            Case = 77
+    '                'Name = "seRadian", Description = "Radian", Symbol = "rad"
+    '                OutValue = InValue * 1
+    '            Case = 78
+    '                'Name = "seAngleDegree", Description = "Degree", Symbol = "°"if the , Symbol is "°"
+    '                OutValue = InValue * degreePERrad
+    '            Case = 79
+    '                'Name = "seAngleMinute", Description = "Minute", Symbol = "'"
+    '                OutValue = InValue * minutePERrad
+    '            Case = 80
+    '                'Name = "seAngleSecond", Description = "Second", Symbol = "''"
+    '                OutValue = InValue * secondPERrad
+    '            Case = 81
+    '                'Name = "seAngleGradient", Description = "Gradient", Symbol = "gon"
+    '                OutValue = InValue * gradPERrad
+    '            Case = 357
+    '                'Name = "seAngleDegreeAbbr", Description = "Degree Abbreviated", Symbol = "°"
+    '                OutValue = InValue * degreePERrad
+    '            Case = 358
+    '                'Name = "seAngleMinuteAbbr", Description = "Minute Abbreviated", Symbol = "'"
+    '                OutValue = InValue * minutePERrad
+    '            Case = 359
+    '                'Name = "seAngleSecondAbbr", Description = "Second Abbreviated", Symbol = "''"
+    '                OutValue = InValue * secondPERrad
+    '        End Select
+    '    End If
 
-        '###### UnitOfMeasureMass ######
+    '    '###### UnitOfMeasureMass ######
 
-        Dim gPERkg = 1000
-        Dim MgPERkg = 0.001
-        Dim lbmPERkg = 1 / 0.45359237
-        Dim slugPERkg = lbmPERkg / 32.17405
-        Dim slinchPERkg = slugPERkg * 12
-        Dim tonPERkg = 1 / 1016.047  ' Mystery number from SE
-        Dim nettonPERkg = lbmPERkg / 2000
+    '    Dim gPERkg = 1000
+    '    Dim MgPERkg = 0.001
+    '    Dim lbmPERkg = 1 / 0.45359237
+    '    Dim slugPERkg = lbmPERkg / 32.17405
+    '    Dim slinchPERkg = slugPERkg * 12
+    '    Dim tonPERkg = 1 / 1016.047  ' Mystery number from SE
+    '    Dim nettonPERkg = lbmPERkg / 2000
 
-        If OutValue = SentinelValue Then
-            Select Case UnitConstant
-                Case = 83
-                    'Name = "seMassKilogram", Description = "Kilogram", Symbol = "kg"
-                    OutValue = InValue * 1
-                Case = 84
-                    'Name = "seMassGram", Description = "Gram", Symbol = "g"
-                    OutValue = InValue * gPERkg
-                Case = 86
-                    'Name = "seMassMegagram", Description = "Megagram", Symbol = "Mg"
-                    OutValue = InValue * MgPERkg
-                Case = 88
-                    'Name = "seMassSlug", Description = "Slug", Symbol = "slug"
-                    OutValue = InValue * slugPERkg
-                Case = 89
-                    'Name = "seMassPoundMass", Description = "Pound Mass", Symbol = "lbm"
-                    OutValue = InValue * lbmPERkg
-                Case = 90
-                    'Name = "seMassSlinch", Description = "Slinch", Symbol = "slinch"
-                    OutValue = InValue * slinchPERkg
-                Case = 92
-                    'Name = "seMassTon", Description = "Ton", Symbol = "ton"
-                    OutValue = InValue * tonPERkg
-                Case = 93
-                    'Name = "seMassTonne", Description = "Tonne", Symbol = "tonne"
-                    OutValue = InValue * tonPERkg
-                Case = 94
-                    'Name = "seMassNetTon", Description = "Net Ton", Symbol = "net-ton"
-                    OutValue = InValue * nettonPERkg
-            End Select
-        End If
+    '    If OutValue = SentinelValue Then
+    '        Select Case UnitConstant
+    '            Case = 83
+    '                'Name = "seMassKilogram", Description = "Kilogram", Symbol = "kg"
+    '                OutValue = InValue * 1
+    '            Case = 84
+    '                'Name = "seMassGram", Description = "Gram", Symbol = "g"
+    '                OutValue = InValue * gPERkg
+    '            Case = 86
+    '                'Name = "seMassMegagram", Description = "Megagram", Symbol = "Mg"
+    '                OutValue = InValue * MgPERkg
+    '            Case = 88
+    '                'Name = "seMassSlug", Description = "Slug", Symbol = "slug"
+    '                OutValue = InValue * slugPERkg
+    '            Case = 89
+    '                'Name = "seMassPoundMass", Description = "Pound Mass", Symbol = "lbm"
+    '                OutValue = InValue * lbmPERkg
+    '            Case = 90
+    '                'Name = "seMassSlinch", Description = "Slinch", Symbol = "slinch"
+    '                OutValue = InValue * slinchPERkg
+    '            Case = 92
+    '                'Name = "seMassTon", Description = "Ton", Symbol = "ton"
+    '                OutValue = InValue * tonPERkg
+    '            Case = 93
+    '                'Name = "seMassTonne", Description = "Tonne", Symbol = "tonne"
+    '                OutValue = InValue * tonPERkg
+    '            Case = 94
+    '                'Name = "seMassNetTon", Description = "Net Ton", Symbol = "net-ton"
+    '                OutValue = InValue * nettonPERkg
+    '        End Select
+    '    End If
 
-        '###### UnitOfMeasureTemperature ######
+    '    '###### UnitOfMeasureTemperature ######
 
-        If OutValue = SentinelValue Then
-            Select Case UnitConstant
-                Case = 103
-                    'Name = "seKelvin", Description = "Kelvin", Symbol = "K"
-                    OutValue = InValue
-                Case = 104
-                    'Name = "seFahrenheit", Description = "Fahrenheit", Symbol = "F"
-                    OutValue = (InValue - 273.15) * 180 / 100 + 32
-                Case = 105
-                    'Name = "seCelsius", Description = "Celsius", Symbol = "C"
-                    OutValue = InValue - 273.15
-                Case = 106
-                    'Name = "seRankine", Description = "Rankine", Symbol = "R"
-                    OutValue = InValue * 180 / 100
-            End Select
-        End If
+    '    If OutValue = SentinelValue Then
+    '        Select Case UnitConstant
+    '            Case = 103
+    '                'Name = "seKelvin", Description = "Kelvin", Symbol = "K"
+    '                OutValue = InValue
+    '            Case = 104
+    '                'Name = "seFahrenheit", Description = "Fahrenheit", Symbol = "F"
+    '                OutValue = (InValue - 273.15) * 180 / 100 + 32
+    '            Case = 105
+    '                'Name = "seCelsius", Description = "Celsius", Symbol = "C"
+    '                OutValue = InValue - 273.15
+    '            Case = 106
+    '                'Name = "seRankine", Description = "Rankine", Symbol = "R"
+    '                OutValue = InValue * 180 / 100
+    '        End Select
+    '    End If
 
-        '###### UnitOfMeasureArea ######
+    '    '###### UnitOfMeasureArea ######
 
-        If OutValue = SentinelValue Then
-            Select Case UnitConstant
-                Case = 124
-                    'Name = "seMeterSquared", Description = "Squared Meter", Symbol = "m^2"
-                    OutValue = InValue * 1
-                Case = 125
-                    'Name = "seMillimeterSquared", Description = "Squared Millimeter", Symbol = "mm^2"
-                    OutValue = InValue * mmPERm ^ 2
-                Case = 126
-                    'Name = "seCentimeterSquared", Description = "Squared Centimeter", Symbol = "cm^2"
-                    OutValue = InValue * cmPERm ^ 2
-                Case = 127
-                    'Name = "seKilometerSquared", Description = "Squared Kilometer", Symbol = "km^2"
-                    OutValue = InValue * kmPERm ^ 2
-                Case = 128
-                    'Name = "seInchSquared", Description = "Squared Inch", Symbol = "in^2"
-                    OutValue = InValue * inPERm ^ 2
-                Case = 129
-                    'Name = "seFootSquared", Description = "Squared Foot", Symbol = "ft^2"
-                    OutValue = InValue * ftPERm ^ 2
-                Case = 130
-                    'Name = "seYardSquared", Description = "Squared Yard", Symbol = "yd^2"
-                    OutValue = InValue * ydPERm ^ 2
-                Case = 131
-                    'Name = "seMileSquared", Description = "Squared Mile", Symbol = "mi^2"
-                    OutValue = InValue * miPERm ^ 2
-            End Select
-        End If
+    '    If OutValue = SentinelValue Then
+    '        Select Case UnitConstant
+    '            Case = 124
+    '                'Name = "seMeterSquared", Description = "Squared Meter", Symbol = "m^2"
+    '                OutValue = InValue * 1
+    '            Case = 125
+    '                'Name = "seMillimeterSquared", Description = "Squared Millimeter", Symbol = "mm^2"
+    '                OutValue = InValue * mmPERm ^ 2
+    '            Case = 126
+    '                'Name = "seCentimeterSquared", Description = "Squared Centimeter", Symbol = "cm^2"
+    '                OutValue = InValue * cmPERm ^ 2
+    '            Case = 127
+    '                'Name = "seKilometerSquared", Description = "Squared Kilometer", Symbol = "km^2"
+    '                OutValue = InValue * kmPERm ^ 2
+    '            Case = 128
+    '                'Name = "seInchSquared", Description = "Squared Inch", Symbol = "in^2"
+    '                OutValue = InValue * inPERm ^ 2
+    '            Case = 129
+    '                'Name = "seFootSquared", Description = "Squared Foot", Symbol = "ft^2"
+    '                OutValue = InValue * ftPERm ^ 2
+    '            Case = 130
+    '                'Name = "seYardSquared", Description = "Squared Yard", Symbol = "yd^2"
+    '                OutValue = InValue * ydPERm ^ 2
+    '            Case = 131
+    '                'Name = "seMileSquared", Description = "Squared Mile", Symbol = "mi^2"
+    '                OutValue = InValue * miPERm ^ 2
+    '        End Select
+    '    End If
 
-        '###### UnitOfMeasureVolume ######
-        Dim LPERm3 = 1000
-        Dim galPERm3 = (1 / 231) * inPERm ^ 3  ' Gal/in^3 * in^3/m^3
-        Dim qtPERm3 = galPERm3 * 4
-        Dim ptPERm3 = galPERm3 * 8
-        Dim ozPERm3 = galPERm3 * 128
+    '    '###### UnitOfMeasureVolume ######
+    '    Dim LPERm3 = 1000
+    '    Dim galPERm3 = (1 / 231) * inPERm ^ 3  ' Gal/in^3 * in^3/m^3
+    '    Dim qtPERm3 = galPERm3 * 4
+    '    Dim ptPERm3 = galPERm3 * 8
+    '    Dim ozPERm3 = galPERm3 * 128
 
-        If OutValue = SentinelValue Then
-            Select Case UnitConstant
-                Case = 334
-                    'Name = "seVolumeMiterCubed", Description = "Cubed Meter", Symbol = "m^3"
-                    OutValue = InValue * 1
-                Case = 383
-                    'Name = "seVolumeDecimeterCubed", Description = "Cubed Decimeter", Symbol = "dm^3"
-                    OutValue = InValue * dmPERm ^ 3
-                Case = 366
-                    'Name = "seVolumeCentimeterCubed", Description = "Cubed Centimeter", Symbol = "cm^3"
-                    OutValue = InValue * cmPERm ^ 3
-                Case = 335
-                    'Name = "seVolumeMillimeterCubed", Description = "Cubed Millimeter", Symbol = "mm^3"
-                    OutValue = InValue * mmPERm ^ 3
-                Case = 336
-                    'Name = "seVolumeLiter", Description = "Liter", Symbol = "L"
-                    OutValue = InValue * LPERm3
-                Case = 338
-                    'Name = "seVolumeInchCubed", Description = "Cubed Inch", Symbol = "in^3"
-                    OutValue = InValue * inPERm ^ 3
-                Case = 339
-                    'Name = "seVolumeFootCubed", Description = "Cubed Foot", Symbol = "ft^3"
-                    OutValue = InValue * ftPERm ^ 3
-                Case = 340
-                    'Name = "seVolumeYardCubed", Description = "Cubed Yard", Symbol = "yd^3"
-                    OutValue = InValue * ydPERm ^ 3
-                Case = 341
-                    'Name = "seVolumeGallon", Description = "Gallon", Symbol = "gallon"
-                    OutValue = InValue * galPERm3
-                Case = 342
-                    'Name = "seVolumeQuart", Description = "Quart", Symbol = "quart"
-                    OutValue = InValue * qtPERm3
-                Case = 343
-                    'Name = "seVolumePint", Description = "Pint", Symbol = "pint"
-                    OutValue = InValue * ptPERm3
-                Case = 344
-                    'Name = "seVolumeOunce", Description = "Ounce", Symbol = "ounce"
-                    OutValue = InValue * ozPERm3
-            End Select
-        End If
+    '    If OutValue = SentinelValue Then
+    '        Select Case UnitConstant
+    '            Case = 334
+    '                'Name = "seVolumeMiterCubed", Description = "Cubed Meter", Symbol = "m^3"
+    '                OutValue = InValue * 1
+    '            Case = 383
+    '                'Name = "seVolumeDecimeterCubed", Description = "Cubed Decimeter", Symbol = "dm^3"
+    '                OutValue = InValue * dmPERm ^ 3
+    '            Case = 366
+    '                'Name = "seVolumeCentimeterCubed", Description = "Cubed Centimeter", Symbol = "cm^3"
+    '                OutValue = InValue * cmPERm ^ 3
+    '            Case = 335
+    '                'Name = "seVolumeMillimeterCubed", Description = "Cubed Millimeter", Symbol = "mm^3"
+    '                OutValue = InValue * mmPERm ^ 3
+    '            Case = 336
+    '                'Name = "seVolumeLiter", Description = "Liter", Symbol = "L"
+    '                OutValue = InValue * LPERm3
+    '            Case = 338
+    '                'Name = "seVolumeInchCubed", Description = "Cubed Inch", Symbol = "in^3"
+    '                OutValue = InValue * inPERm ^ 3
+    '            Case = 339
+    '                'Name = "seVolumeFootCubed", Description = "Cubed Foot", Symbol = "ft^3"
+    '                OutValue = InValue * ftPERm ^ 3
+    '            Case = 340
+    '                'Name = "seVolumeYardCubed", Description = "Cubed Yard", Symbol = "yd^3"
+    '                OutValue = InValue * ydPERm ^ 3
+    '            Case = 341
+    '                'Name = "seVolumeGallon", Description = "Gallon", Symbol = "gallon"
+    '                OutValue = InValue * galPERm3
+    '            Case = 342
+    '                'Name = "seVolumeQuart", Description = "Quart", Symbol = "quart"
+    '                OutValue = InValue * qtPERm3
+    '            Case = 343
+    '                'Name = "seVolumePint", Description = "Pint", Symbol = "pint"
+    '                OutValue = InValue * ptPERm3
+    '            Case = 344
+    '                'Name = "seVolumeOunce", Description = "Ounce", Symbol = "ounce"
+    '                OutValue = InValue * ozPERm3
+    '        End Select
+    '    End If
 
-        '###### UnitOfMeasureDensity ######
+    '    '###### UnitOfMeasureDensity ######
 
-        If OutValue = SentinelValue Then
-            Select Case UnitConstant
-                Case = 143
-                    'Name = "seDensityKilogramPerMeterCubed", Description = "Kilogram per Cubed Meter", Symbol = "kg/m^3"
-                    OutValue = InValue * 1
-                Case = 523
-                    'Name = "seDensityKilogramPerDecimeterCubed", Description = "Kilogram per Cubed Decimeter", Symbol = "kg/dm^3"
-                    OutValue = InValue * (1 / dmPERm ^ 3)
-                Case = 145
-                    'Name = "seDensityKilogramPerCentimeterCubed", Description = "Kilogram per Cubed Centimeter", Symbol = "kg/cm^3"
-                    OutValue = InValue * (1 / cmPERm ^ 3)
-                Case = 144
-                    'Name = "seDensitykilogramPerMillimeterCubed", Description = "Kilogram per Cubed Millimeter", Symbol = "kg/mm^3"
-                    OutValue = InValue * (1 / mmPERm ^ 3)
-                Case = 525
-                    'Name = "seDensityKilogramPerLiter", Description = "Kilogram per Liter", Symbol = "kg/L"
-                    OutValue = InValue * (1 / LPERm3)
-                Case = 520
-                    'Name = "seDensityGramPerMeterCubed", Description = "Gram per Cubed Meter", Symbol = "g/m^3"
-                    OutValue = InValue * (gPERkg / 1)
-                Case = 524
-                    'Name = "seDensityGramPerDecimeterCubed", Description = "Gram per Cubed Decimeter", Symbol = "g/dm^3"
-                    OutValue = InValue * (gPERkg / dmPERm ^ 3)
-                Case = 521
-                    'Name = "seDensityGramPerCentimeterCubed", Description = "Gram per Cubed Centimeter", Symbol = "g/cm^3"
-                    OutValue = InValue * (gPERkg / cmPERm ^ 3)
-                Case = 522
-                    'Name = "seDensityGramPerMillimeterCubed", Description = "Gram per Cubed Millimeter", Symbol = "g/mm^3"
-                    OutValue = InValue * (gPERkg / mmPERm ^ 3)
-                Case = 146
-                    'Name = "seDensityPoundMassPerFootCubed", Description = "Pound Mass per Cubed Foot", Symbol = "lbm/ft^3"
-                    OutValue = InValue * (lbmPERkg / ftPERm ^ 3)
-                Case = 147
-                    'Name = "seDensityPoundMassPerInchCubed", Description = "Pound Mass per Cubed Inch", Symbol = "lbm/in^3"
-                    OutValue = InValue * (lbmPERkg / inPERm ^ 3)
-                Case = 148
-                    'Name = "seDensitySlugPerFootCubed", Description = "Slug per Cubed Foot", Symbol = "slug/ft^3"
-                    OutValue = InValue * (slugPERkg / ftPERm ^ 3)
-                Case = 149
-                    'Name = "seDensitySlinchPerFootCubed", Description = "Slinch per Cubed Foot", Symbol = "slinch/ft^3"
-                    OutValue = InValue * (slinchPERkg / ftPERm ^ 3)
-            End Select
-        End If
+    '    If OutValue = SentinelValue Then
+    '        Select Case UnitConstant
+    '            Case = 143
+    '                'Name = "seDensityKilogramPerMeterCubed", Description = "Kilogram per Cubed Meter", Symbol = "kg/m^3"
+    '                OutValue = InValue * 1
+    '            Case = 523
+    '                'Name = "seDensityKilogramPerDecimeterCubed", Description = "Kilogram per Cubed Decimeter", Symbol = "kg/dm^3"
+    '                OutValue = InValue * (1 / dmPERm ^ 3)
+    '            Case = 145
+    '                'Name = "seDensityKilogramPerCentimeterCubed", Description = "Kilogram per Cubed Centimeter", Symbol = "kg/cm^3"
+    '                OutValue = InValue * (1 / cmPERm ^ 3)
+    '            Case = 144
+    '                'Name = "seDensitykilogramPerMillimeterCubed", Description = "Kilogram per Cubed Millimeter", Symbol = "kg/mm^3"
+    '                OutValue = InValue * (1 / mmPERm ^ 3)
+    '            Case = 525
+    '                'Name = "seDensityKilogramPerLiter", Description = "Kilogram per Liter", Symbol = "kg/L"
+    '                OutValue = InValue * (1 / LPERm3)
+    '            Case = 520
+    '                'Name = "seDensityGramPerMeterCubed", Description = "Gram per Cubed Meter", Symbol = "g/m^3"
+    '                OutValue = InValue * (gPERkg / 1)
+    '            Case = 524
+    '                'Name = "seDensityGramPerDecimeterCubed", Description = "Gram per Cubed Decimeter", Symbol = "g/dm^3"
+    '                OutValue = InValue * (gPERkg / dmPERm ^ 3)
+    '            Case = 521
+    '                'Name = "seDensityGramPerCentimeterCubed", Description = "Gram per Cubed Centimeter", Symbol = "g/cm^3"
+    '                OutValue = InValue * (gPERkg / cmPERm ^ 3)
+    '            Case = 522
+    '                'Name = "seDensityGramPerMillimeterCubed", Description = "Gram per Cubed Millimeter", Symbol = "g/mm^3"
+    '                OutValue = InValue * (gPERkg / mmPERm ^ 3)
+    '            Case = 146
+    '                'Name = "seDensityPoundMassPerFootCubed", Description = "Pound Mass per Cubed Foot", Symbol = "lbm/ft^3"
+    '                OutValue = InValue * (lbmPERkg / ftPERm ^ 3)
+    '            Case = 147
+    '                'Name = "seDensityPoundMassPerInchCubed", Description = "Pound Mass per Cubed Inch", Symbol = "lbm/in^3"
+    '                OutValue = InValue * (lbmPERkg / inPERm ^ 3)
+    '            Case = 148
+    '                'Name = "seDensitySlugPerFootCubed", Description = "Slug per Cubed Foot", Symbol = "slug/ft^3"
+    '                OutValue = InValue * (slugPERkg / ftPERm ^ 3)
+    '            Case = 149
+    '                'Name = "seDensitySlinchPerFootCubed", Description = "Slinch per Cubed Foot", Symbol = "slinch/ft^3"
+    '                OutValue = InValue * (slinchPERkg / ftPERm ^ 3)
+    '        End Select
+    '    End If
 
-        If OutValue = SentinelValue Then
-            OutValue = InValue
-        End If
+    '    If OutValue = SentinelValue Then
+    '        OutValue = InValue
+    '    End If
 
-        Return OutValue
-    End Function
+    '    Return OutValue
+    'End Function
 
 End Class
 
