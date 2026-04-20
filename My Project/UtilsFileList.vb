@@ -1330,7 +1330,13 @@ Public Class UtilsFileList
 
                                 Dim PropName = UC.PropNameFromFormula(PropColumn.Formula)
                                 If Not IsReadOnly Then
-                                    IsReadOnly = SSDoc.IsExposedVariable(PropName)
+                                    If Not LVItem.Group.Name = ".dft" Then  ' Draft files do not have a PartsLiteData stream
+                                        ' Unable to parse PartsLiteData stream in some files.
+                                        Try
+                                            IsReadOnly = SSDoc.IsExposedVariable(PropName)
+                                        Catch ex As Exception
+                                        End Try
+                                    End If
                                 End If
 
                                 Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
@@ -1344,6 +1350,7 @@ Public Class UtilsFileList
                                 ' -- If PropColumn.Formula is not found in SSDoc, there is no exception.  It returns Nothing.
                                 'PropValue = ""
                                 'tmpColor = Color.Gainsboro '<--- Properties not present ######## for some reason this doesn't work anymore
+                                Dim i = 0
                             End Try
 
                             If IsNothing(PropValue) Then
