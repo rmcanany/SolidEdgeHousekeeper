@@ -114,7 +114,7 @@ Public Class UtilsTopLevelAssembly
             Try
                 Dim FileLinks As New FileLinks(Filename)
 
-                SSDoc = New HCStructuredStorageDoc(Filename)
+                SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
                 LinkNames = SSDoc.GetLinkNames
 
@@ -122,7 +122,7 @@ Public Class UtilsTopLevelAssembly
 
                     Try
                         Try
-                            SSLinkDoc = New HCStructuredStorageDoc(LinkName)
+                            SSLinkDoc = New HCStructuredStorageDoc(LinkName, _OpenReadWrite:=False)
                         Catch ex As Exception
                             If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
                             If Not FileLinksContainer.UnprocessedFilenames.Contains(LinkName) Then

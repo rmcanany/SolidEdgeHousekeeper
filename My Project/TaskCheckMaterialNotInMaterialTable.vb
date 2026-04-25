@@ -140,8 +140,8 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Dim SSMatTable As HCStructuredStorageDoc = Nothing
 
         Try
-            SSDoc = New HCStructuredStorageDoc(FullName)
-            SSMatTable = New HCStructuredStorageDoc(Me.MaterialTable)
+            SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
+            SSMatTable = New HCStructuredStorageDoc(Me.MaterialTable, _OpenReadWrite:=False)
         Catch ex As Exception
             If SSDoc IsNot Nothing Then SSDoc.Close()
             If SSMatTable IsNot Nothing Then SSMatTable.Close()

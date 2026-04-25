@@ -3,14 +3,14 @@
 
 Option Strict On
 
-Imports System.IO
-Imports System.Text
-Imports System.Text.RegularExpressions
-Imports System.Xml
-Imports OpenMcdf
-Imports OpenMcdf.Extensions
-Imports OpenMcdf.Extensions.OLEProperties
-Imports PanoramicData.NCalcExtensions
+'Imports System.IO
+'Imports System.Text
+'Imports System.Text.RegularExpressions
+'Imports System.Xml
+'Imports OpenMcdf
+'Imports OpenMcdf.Extensions
+'Imports OpenMcdf.Extensions.OLEProperties
+'Imports PanoramicData.NCalcExtensions
 
 Public Class HCStructuredStorageDoc
 
@@ -18,14 +18,14 @@ Public Class HCStructuredStorageDoc
     Public Property OpenReadWrite As Boolean
 
     Private Property PropSets As PropertySets
-    Private Property fs As FileStream
-    Private Property cf As CompoundFile
+    Private Property fs As IO.FileStream
+    Private Property cf As OpenMcdf.RootStorage
     Private Property LinkNames As LinkFullNames
     Private Property LinkManagementOrder As List(Of String)
     Private Property PropertiesData As HCPropertiesData
     Private Property MatTable As MaterialTable
     Private Property DocType As String 'asm, dft, par, psm, mtl
-    Private Property BlkLibrary As BlockLibrary
+    'Private Property BlkLibrary As BlockLibrary
     Private Property Vars As Variables
     Private Property ExposedVariablePropIDs As List(Of UInteger)
 
@@ -40,34 +40,66 @@ Public Class HCStructuredStorageDoc
     End Enum
 
 
-    Public Sub New(_FullName As String, Optional _OpenReadWrite As Boolean = True)
+    Public Sub New(_FullName As String, _OpenReadWrite As Boolean)
 
         Me.FullName = _FullName
         Me.OpenReadWrite = _OpenReadWrite
 
+        If Me.OpenReadWrite Then
+            Dim i = 0
+        End If
         Try
             If _OpenReadWrite Then
-                Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.ReadWrite)
+                Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite)
+                'cf = OpenMcdf.RootStorage.Open(FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite)
             Else
-                Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.Read)
+                Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.Read)
+                'cf = OpenMcdf.RootStorage.OpenRead(FullName)
             End If
         Catch ex As Exception
-            Dim exm = ex.Message
             Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
         End Try
 
-        Me.cf = Nothing
         Try
-            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-            Me.cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+            'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.LeaveOpen)
+            'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.None)
+            Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.Transacted)
         Catch ex As Exception
             If Me.fs IsNot Nothing Then Me.fs.Close()
             Me.fs = Nothing
-            Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
+            Throw New Exception($"Unable to open {IO.Path.GetFileName(Me.FullName)}.  {ex.Message}")
         End Try
 
         Me.DocType = IO.Path.GetExtension(FullName).ToLower.Replace(".", "")
 
+    End Sub
+
+    Public Sub Save()
+
+        If Me.PropSets IsNot Nothing Then
+            For Each PropSet In Me.PropSets.Items
+                ' The Custom stream gets saved with DocumentSummaryInformation
+                If Not PropSet.Name.ToLower = "custom" Then
+                    PropSet.Save()
+                End If
+            Next
+        End If
+
+        Try
+            Me.cf.Commit()
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+    Public Sub Close()
+        If Me.cf IsNot Nothing Then
+            'Me.cf.Dispose()
+            Me.cf = Nothing
+        End If
+
+        If Me.fs IsNot Nothing Then Me.fs.Close()
+        Me.fs = Nothing
     End Sub
 
 
@@ -94,15 +126,16 @@ Public Class HCStructuredStorageDoc
         Me.MatTable = New MaterialTable(Me.cf)
     End Sub
 
-    Public Sub ReadBlockLibrary()
-        Dim Extension As String = IO.Path.GetExtension(Me.FullName)
 
-        If Not Extension = ".dft" Then
-            Throw New Exception(String.Format("Cannot process blocks for '{0}' file types", Extension))
-        End If
+    'Public Sub ReadBlockLibrary()
+    '    Dim Extension As String = IO.Path.GetExtension(Me.FullName)
 
-        Me.BlkLibrary = New BlockLibrary(Me.cf, Me.FullName)
-    End Sub
+    '    If Not Extension = ".dft" Then
+    '        Throw New Exception(String.Format("Cannot process blocks for '{0}' file types", Extension))
+    '    End If
+
+    '    Me.BlkLibrary = New BlockLibrary(Me.cf, Me.FullName)
+    'End Sub
 
     Public Sub ReadVariables()
         Dim Extension As String = IO.Path.GetExtension(Me.FullName)
@@ -125,42 +158,22 @@ Public Class HCStructuredStorageDoc
 
     Public Function IsFOA() As Boolean
         If IO.Path.GetExtension(Me.FullName) = ".asm" Then
-            Return Me.cf.RootStorage.ContainsStorage("Master")
+            'Return Me.cf.RootStorage.ContainsStorage("Master")
+            Return SSTools.ContainsStorage(Me.cf, "Master")
         Else
             Return False
         End If
     End Function
 
     Public Function IsFOPMaster() As Boolean
-        Return Me.cf.RootStorage.ContainsStorage("FamilyOfParts")
+        'Return Me.cf.RootStorage.ContainsStorage("FamilyOfParts")
+        Return SSTools.ContainsStorage(Me.cf, "FamilyOfParts")
     End Function
 
-    Public Function IsMaterialTable(cf As CompoundFile) As Boolean
-        Return cf.RootStorage.ContainsStream("MaterialDataEx")
+    Public Function IsMaterialTable(cf As OpenMcdf.RootStorage) As Boolean
+        'Return cf.RootStorage.ContainsStream("MaterialDataEx")
+        Return SSTools.ContainsStream(cf, "MaterialDataEx")
     End Function
-
-    Public Sub Save()
-
-        If Me.PropSets IsNot Nothing Then
-            For Each PropSet In Me.PropSets.Items
-                ' The Custom stream gets saved with DocumentSummaryInformation
-                If Not PropSet.Name.ToLower = "custom" Then
-                    PropSet.Save()
-                End If
-            Next
-        End If
-
-        Me.cf.Commit()
-
-    End Sub
-
-    Public Sub Close()
-        If Me.cf IsNot Nothing Then Me.cf.Close()
-        Me.cf = Nothing
-
-        If Me.fs IsNot Nothing Then Me.fs.Close()
-        Me.fs = Nothing
-    End Sub
 
     Public Function GetPropValue(PropSetName As String, PropNameEnglish As String) As Object
         ' Return Nothing if a value is not found
@@ -189,7 +202,7 @@ Public Class HCStructuredStorageDoc
         ' Returns Nothing if the property is not found
 
         Dim TypeName As String = Nothing
-        Dim VTType As VTPropertyType = Nothing
+        Dim VTType As OpenMcdf.Ole.VTPropertyType = Nothing
 
         If Me.PropSets Is Nothing Then
             Throw New Exception("Properties not initialized")
@@ -202,15 +215,15 @@ Public Class HCStructuredStorageDoc
         If Prop IsNot Nothing Then
             VTType = Prop.VTType
             Select Case VTType
-                Case = VTPropertyType.VT_BOOL
+                Case = OpenMcdf.Ole.VTPropertyType.VT_BOOL
                     TypeName = "Boolean"
-                Case = VTPropertyType.VT_I4
+                Case = OpenMcdf.Ole.VTPropertyType.VT_I4
                     TypeName = "Integer"
-                Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+                Case = OpenMcdf.Ole.VTPropertyType.VT_LPSTR, OpenMcdf.Ole.VTPropertyType.VT_LPWSTR
                     TypeName = "String"
-                Case = VTPropertyType.VT_FILETIME
+                Case = OpenMcdf.Ole.VTPropertyType.VT_FILETIME
                     TypeName = "Date"
-                Case = VTPropertyType.VT_R8
+                Case = OpenMcdf.Ole.VTPropertyType.VT_R8
                     TypeName = "Double"
                 Case Else
                     Dim s = GetType(HCStructuredStorageDoc).FullName
@@ -431,8 +444,8 @@ Public Class HCStructuredStorageDoc
         Dim Formulas As New List(Of String)
         Dim Formula As String
 
-        Dim Matches As MatchCollection
-        Dim MatchString As Match
+        Dim Matches As Text.RegularExpressions.MatchCollection
+        Dim MatchString As Text.RegularExpressions.Match
         Dim Pattern As String
 
         Dim ExpressionLanguage As String = ""
@@ -502,7 +515,7 @@ Public Class HCStructuredStorageDoc
 
         ' Any number of substrings that start with "%{" and end with the first encountered "}".
         Pattern = "%{[^}]*}"
-        Matches = Regex.Matches(InString, Pattern)
+        Matches = Text.RegularExpressions.Regex.Matches(InString, Pattern)
         If Matches.Count = 0 Then
             OutString = InString
             Proceed = False
@@ -541,7 +554,7 @@ Public Class HCStructuredStorageDoc
             If IsExpression Then
 
                 If ExpressionLanguage = "" Or ExpressionLanguage = "NCalc" Then
-                    Dim nCalcExpression As New ExtendedExpression(OutString)
+                    Dim nCalcExpression As New PanoramicData.NCalcExtensions.ExtendedExpression(OutString)
                     Try
                         Dim A = nCalcExpression.Evaluate()
                         OutString = A.ToString
@@ -665,7 +678,7 @@ Public Class HCStructuredStorageDoc
 
                 Dim SSDoc As HCStructuredStorageDoc = Nothing
                 Try
-                    SSDoc = New HCStructuredStorageDoc(LinkName)
+                    SSDoc = New HCStructuredStorageDoc(LinkName, _OpenReadWrite:=False)
                     SSDoc.ReadProperties(Me.PropertiesData)
                 Catch ex As Exception
                     If SSDoc IsNot Nothing Then SSDoc.Close()
@@ -789,10 +802,13 @@ Public Class HCStructuredStorageDoc
 
         Select Case Me.DocType
             Case "par", "psm"
-                Dim ParasolidStorage As CFStorage = Me.cf.RootStorage.GetStorage("PARASOLID")
-                Dim StreamList As New List(Of CFStream)
-                ParasolidStorage.VisitEntries(Sub(item) If item.IsStream Then StreamList.Add(CType(item, CFStream)), recursive:=False)
-                IsEmpty = StreamList.Count = 0
+                Dim ParasolidStorage As OpenMcdf.Storage = SSTools.GetStorage(Me.cf, "PARASOLID")
+                If ParasolidStorage IsNot Nothing Then
+                    Dim StreamList As List(Of OpenMcdf.CfbStream) = SSTools.GetStreams(ParasolidStorage, "*")
+                    IsEmpty = StreamList Is Nothing OrElse StreamList.Count = 0
+                Else
+                    IsEmpty = True
+                End If
             Case "asm", "dft"
                 If Me.LinkNames IsNot Nothing Then
                     IsEmpty = (Me.LinkNames.Items.Count = 0) And (Me.LinkNames.BadLinks.Count = 0)
@@ -858,24 +874,24 @@ Public Class HCStructuredStorageDoc
         Return Me.MatTable.CustomMaterialPropertiesTypes
     End Function
 
-    Public Function GetBlockLibraryBlockNames() As List(Of String)
-        If Me.BlkLibrary Is Nothing Then
-            Throw New Exception("Block library not initialized")
-        End If
-        Return Me.BlkLibrary.Items
-    End Function
+    'Public Function GetBlockLibraryBlockNames() As List(Of String)
+    '    If Me.BlkLibrary Is Nothing Then
+    '        Throw New Exception("Block library not initialized")
+    '    End If
+    '    Return Me.BlkLibrary.Items
+    'End Function
 
     Private Class PropertySets
         Public Property Items As List(Of PropertySet)
         Public Property OpenReadWrite As Boolean
 
-        Private Property cf As CompoundFile
+        Private Property cf As OpenMcdf.RootStorage
         Private Property FullName As String
         Private Property PropertySetNames As List(Of String)
 
 
         Public Sub New(
-            _cf As CompoundFile,
+            _cf As OpenMcdf.RootStorage,
             _FullName As String,
             _OpenReadWrite As Boolean)
 
@@ -892,8 +908,10 @@ Public Class HCStructuredStorageDoc
             tmpPropertySetNames.AddRange({"SummaryInformation", "DocumentSummaryInformation", "ExtendedSummaryInformation"})
             tmpPropertySetNames.AddRange({"ProjectInformation", "MechanicalModeling", "Custom"})
 
-            Dim cs As CFStream = Nothing
-            Dim co As OLEPropertiesContainer = Nothing
+            'Dim cs As CFStream = Nothing
+            'Dim co As OLEPropertiesContainer = Nothing
+            Dim cs As OpenMcdf.CfbStream = Nothing
+            Dim co As OpenMcdf.Ole.OlePropertiesContainer = Nothing
 
             For Each PropertySetName As String In tmpPropertySetNames
                 If Not PropertySetName = "Custom" Then
@@ -904,6 +922,7 @@ Public Class HCStructuredStorageDoc
                         Me.Items.Add(New PropertySet(Me.cf, PropertySetName, Me.OpenReadWrite))
                         Me.PropertySetNames.Add(PropertySetName)
                     Catch ex As Exception
+                        Dim i = 0
                     End Try
 
                     If (PropertySetName = "DocumentSummaryInformation") And (PropertySetNames.Contains(PropertySetName)) Then
@@ -964,19 +983,19 @@ Public Class HCStructuredStorageDoc
         Public Property Name As String
         Public Property OpenReadWrite As Boolean
 
-        Private Property cf As CompoundFile
-        Public Property cs As CFStream
-        Public Property co As OLEPropertiesContainer
+        Private Property cf As OpenMcdf.RootStorage
+        Public Property cs As OpenMcdf.CfbStream
+        Public Property co As OpenMcdf.Ole.OlePropertiesContainer
         Private Property PropNames As New List(Of String)
         Private Property PropertySetNameToStreamName As New Dictionary(Of String, String)
 
 
         Public Sub New(
-            _cf As CompoundFile,
+            _cf As OpenMcdf.RootStorage,
             PropertySetName As String,
             _OpenReadWrite As Boolean,
-            Optional _cs As CFStream = Nothing,
-            Optional _co As OLEPropertiesContainer = Nothing)
+            Optional _cs As OpenMcdf.CfbStream = Nothing,
+            Optional _co As OpenMcdf.Ole.OlePropertiesContainer = Nothing)
 
             Me.cf = _cf
             Me.Name = PropertySetName
@@ -991,13 +1010,27 @@ Public Class HCStructuredStorageDoc
 
             Dim StreamName As String = Me.PropertySetNameToStreamName(PropertySetName)
 
+            'If Not Me.Name.ToLower = "custom" Then
+            '    If Me.cf.RootStorage.ContainsStorage("Master") Then
+            '        Me.cs = Me.cf.RootStorage.GetStorage("Master").GetStream(StreamName)
+            '    Else
+            '        Me.cs = Me.cf.RootStorage.GetStream(StreamName)
+            '    End If
+            '    Me.co = Me.cs.AsOLEPropertiesContainer
+            'Else
+            '    Me.cs = _cs
+            '    Me.co = _co
+            'End If
             If Not Me.Name.ToLower = "custom" Then
-                If Me.cf.RootStorage.ContainsStorage("Master") Then
-                    Me.cs = Me.cf.RootStorage.GetStorage("Master").GetStream(StreamName)
+                If SSTools.ContainsStorage(Me.cf, "Master") Then
+                    Dim tmpStorage As OpenMcdf.Storage = Nothing
+                    Me.cf.TryOpenStorage("Master", tmpStorage)
+                    tmpStorage.TryOpenStream(StreamName, Me.cs)
+                    'Me.cs = SSTools.g
                 Else
-                    Me.cs = Me.cf.RootStorage.GetStream(StreamName)
+                    Me.cf.TryOpenStream(StreamName, Me.cs)
                 End If
-                Me.co = Me.cs.AsOLEPropertiesContainer
+                Me.co = New OpenMcdf.Ole.OlePropertiesContainer(Me.cs)
             Else
                 Me.cs = _cs
                 Me.co = _co
@@ -1006,7 +1039,7 @@ Public Class HCStructuredStorageDoc
             Dim CorrectedName As String
 
             If PropertySetName.ToLower = "custom" Then
-                If co.HasUserDefinedProperties Then
+                If SSTools.HasUserDefinedProperties(Me.co) Then
                     'For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
                     '    CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                     '    Me.PropNames.Add(CorrectedName)
@@ -1017,7 +1050,7 @@ Public Class HCStructuredStorageDoc
                     '    End Try
                     'Next
                     For i As Integer = 0 To co.UserDefinedProperties.Properties.Count - 1
-                        Dim OLEProp As OLEProperty = co.UserDefinedProperties.Properties(i)
+                        Dim OLEProp As OpenMcdf.Ole.OleProperty = co.UserDefinedProperties.Properties(i)
                         CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                         Me.PropNames.Add(CorrectedName)
                         Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
@@ -1025,7 +1058,7 @@ Public Class HCStructuredStorageDoc
                 End If
 
             Else
-                For Each OLEProp As OLEProperty In co.Properties
+                For Each OLEProp As OpenMcdf.Ole.OleProperty In co.Properties
                     CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                     Me.PropNames.Add(CorrectedName)
                     Me.Items.Add(New Prop(co, OLEProp, CorrectedName, OpenReadWrite))
@@ -1036,7 +1069,11 @@ Public Class HCStructuredStorageDoc
         End Sub
 
 
-        Private Function CorrectedOLEPropName(PropertySetName As String, OLEProp As OLEProperty) As String
+        Private Function CorrectedOLEPropName(
+            PropertySetName As String,
+            OLEProp As OpenMcdf.Ole.OleProperty
+            ) As String
+
             Dim CorrectedName As String = ""
 
             Select Case PropertySetName
@@ -1175,8 +1212,8 @@ Public Class HCStructuredStorageDoc
 
             If Not Me.OpenReadWrite Then Return False
 
-            Dim OLEProp As OLEProperty = Nothing
-            Dim UserProperties As OLEPropertiesContainer
+            Dim OLEProp As OpenMcdf.Ole.OleProperty = Nothing
+            Dim UserProperties As OpenMcdf.Ole.OlePropertiesContainer
             Dim NewPropertyId As UInteger
 
             PropertyNameEnglish = PropertyNameEnglish.ToLower
@@ -1196,14 +1233,37 @@ Public Class HCStructuredStorageDoc
                     NewPropertyId = CType(UserProperties.PropertyNames.Keys.Max() + 1, UInteger)
                 End If
 
-                UserProperties.PropertyNames(NewPropertyId) = PropertyNameEnglish
 
                 ' ###### TODO: Maybe don't assume string, but check the actual property type and proceed accordingly. ######
                 ' Probably consult PropertiesData to find that information.
-                OLEProp = UserProperties.NewProperty(VTPropertyType.VT_LPSTR, NewPropertyId)
-                OLEProp.Value = Value.ToString
+                ' 20260419 update:  Adding a custom property so possibly no entry in PropertiesData.
+                ' Could maybe key off of the Value's Type instead.
 
-                UserProperties.AddProperty(OLEProp)
+                'OLEProp = UserProperties.NewProperty(VTPropertyType.VT_LPSTR, NewPropertyId)
+
+                ' From OpenMcdf.Ole.Tests
+                'OleProperty managerProp = co.CreateProperty(VTPropertyType.VT_LPSTR, 0x0000000E, "PIDDSI_MANAGER");
+                'co.Add(managerProp);
+
+                '' 20260419 Not sure this is still needed.  It wasn't done in OpenMcdf.Ole.Tests.
+                'UserProperties.PropertyNames(NewPropertyId) = PropertyNameEnglish
+                'OLEProp = UserProperties.CreateProperty(OpenMcdf.Ole.VTPropertyType.VT_LPWSTR, NewPropertyId)
+
+                ''OLEProp = UserProperties.CreateProperty(OpenMcdf.Ole.VTPropertyType.VT_LPWSTR, NewPropertyId, PropertyNameEnglish)
+                'OLEProp.Value = Value.ToString
+
+                'UserProperties.Add(OLEProp)
+
+                'Me.co.Save(Me.cs)
+
+                'using CfbStream dsiStream = cf.OpenStream(PropertySetNames.DocSummaryInformation);
+                '            OlePropertiesContainer co = new(dsiStream);
+                '            OlePropertiesContainer userProperties = co.UserDefinedProperties!;
+                '            userProperties.AddUserDefinedProperty(VTPropertyType.VT_LPSTR, "StringProperty").Value = "Hello";
+
+                OLEProp = UserProperties.AddUserDefinedProperty(OpenMcdf.Ole.VTPropertyType.VT_LPWSTR, PropertyNameEnglish)
+                OLEProp.Value = Value.ToString
+                Me.co.Save(Me.cs)
 
             Catch ex As Exception
                 Success = False
@@ -1261,18 +1321,18 @@ Public Class HCStructuredStorageDoc
             End Get
         End Property
 
-        Public Property VTType As VTPropertyType
+        Public Property VTType As OpenMcdf.Ole.VTPropertyType
         Public Property PropertyIdentifier As UInteger
         Public Property OpenReadWrite As Boolean
 
 
-        Private co As OLEPropertiesContainer
-        Private Property OLEProp As OLEProperty
+        Private co As OpenMcdf.Ole.OlePropertiesContainer
+        Private Property OLEProp As OpenMcdf.Ole.OleProperty
 
 
         Public Sub New(
-            _co As OLEPropertiesContainer,
-            _OLEProp As OLEProperty,
+            _co As OpenMcdf.Ole.OlePropertiesContainer,
+            _OLEProp As OpenMcdf.Ole.OleProperty,
             CorrectedName As String,
             _OpenReadWrite As Boolean)
 
@@ -1315,7 +1375,7 @@ Public Class HCStructuredStorageDoc
             Dim ChangeNeeded As Boolean = False
             Dim tmpName As String
             Dim tmpPropertyIdentifier As UInteger
-            Dim UDP As OLEPropertiesContainer
+            Dim UDP As OpenMcdf.Ole.OlePropertiesContainer
 
             If Success Then
                 If CStr(PropertyValue) = CInt(PropertyValue).ToString Then
@@ -1324,7 +1384,7 @@ Public Class HCStructuredStorageDoc
                     ToTypeName = "double"
                 End If
 
-                If (Me.VTType = VTPropertyType.VT_I4 And ToTypeName = "double") Or (Me.VTType = VTPropertyType.VT_R8 And ToTypeName = "int32") Then
+                If (Me.VTType = OpenMcdf.Ole.VTPropertyType.VT_I4 And ToTypeName = "double") Or (Me.VTType = OpenMcdf.Ole.VTPropertyType.VT_R8 And ToTypeName = "int32") Then
                     ChangeNeeded = True
                 End If
             End If
@@ -1338,16 +1398,16 @@ Public Class HCStructuredStorageDoc
 
                 Try
                     UDP.RemoveProperty(tmpPropertyIdentifier)
-                    UDP.PropertyNames(tmpPropertyIdentifier) = tmpName
+                    'UDP.PropertyNames(tmpPropertyIdentifier) = tmpName
 
                     Select Case ToTypeName
                         Case "int32"
-                            Me.OLEProp = UDP.NewProperty(VTPropertyType.VT_I4, tmpPropertyIdentifier)
+                            Me.OLEProp = UDP.CreateProperty(OpenMcdf.Ole.VTPropertyType.VT_I4, tmpPropertyIdentifier, tmpName)
                         Case "double"
-                            Me.OLEProp = UDP.NewProperty(VTPropertyType.VT_R8, tmpPropertyIdentifier)
+                            Me.OLEProp = UDP.CreateProperty(OpenMcdf.Ole.VTPropertyType.VT_R8, tmpPropertyIdentifier, tmpName)
                     End Select
 
-                    UDP.AddProperty(Me.OLEProp)
+                    UDP.Add(Me.OLEProp)
 
                     Me.VTType = Me.OLEProp.VTType
 
@@ -1369,9 +1429,9 @@ Public Class HCStructuredStorageDoc
 
             ' EditProperties currently always passes in the new value as a string
 
-            tf = Me.VTType = VTPropertyType.VT_I4
-            tf = tf Or Me.VTType = VTPropertyType.VT_R8
-            tf = tf And Me.co.HasUserDefinedProperties
+            tf = Me.VTType = OpenMcdf.Ole.VTPropertyType.VT_I4
+            tf = tf Or Me.VTType = OpenMcdf.Ole.VTPropertyType.VT_R8
+            tf = tf And SSTools.HasUserDefinedProperties(Me.co)
             If tf Then
                 Success = MaybeChangePropType(PropertyValue)
             End If
@@ -1379,35 +1439,35 @@ Public Class HCStructuredStorageDoc
             If Success Then
                 Select Case Me.OLEProp.VTType
 
-                    Case = VTPropertyType.VT_BOOL
+                    Case = OpenMcdf.Ole.VTPropertyType.VT_BOOL
                         Try
                             OLEProp.Value = CBool(PropertyValue)
                         Catch ex As Exception
                             Success = False
                         End Try
 
-                    Case = VTPropertyType.VT_I4
+                    Case = OpenMcdf.Ole.VTPropertyType.VT_I4
                         Try
                             OLEProp.Value = CInt(PropertyValue)
                         Catch ex As Exception
                             Success = False
                         End Try
 
-                    Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+                    Case = OpenMcdf.Ole.VTPropertyType.VT_LPSTR, OpenMcdf.Ole.VTPropertyType.VT_LPWSTR
                         Try
                             OLEProp.Value = PropertyValue.ToString
                         Catch ex As Exception
                             Success = False
                         End Try
 
-                    Case = VTPropertyType.VT_FILETIME
+                    Case = OpenMcdf.Ole.VTPropertyType.VT_FILETIME
                         Try
                             OLEProp.Value = CType(PropertyValue, DateTime)
                         Catch ex As Exception
                             Success = False
                         End Try
 
-                    Case = VTPropertyType.VT_R8
+                    Case = OpenMcdf.Ole.VTPropertyType.VT_R8
                         Try
                             OLEProp.Value = CDbl(PropertyValue)
                         Catch ex As Exception
@@ -1427,13 +1487,13 @@ Public Class HCStructuredStorageDoc
         Public Property Items As New List(Of String)
         Public Property BadLinks As New List(Of String)
 
-        Private Property cf As CompoundFile
+        Private Property cf As OpenMcdf.RootStorage
         Private Property IsFOA As Boolean
         Private Property LinkManagementOrder As List(Of String)
         Private Property ContainingFileFullName As String
 
 
-        Public Sub New(_cf As CompoundFile, _IsFOA As Boolean, _LinkManagementOrder As List(Of String), _ContainingFileFullName As String)
+        Public Sub New(_cf As OpenMcdf.RootStorage, _IsFOA As Boolean, _LinkManagementOrder As List(Of String), _ContainingFileFullName As String)
             Me.cf = _cf
             Me.IsFOA = _IsFOA
             Me.LinkManagementOrder = _LinkManagementOrder
@@ -1444,30 +1504,33 @@ Public Class HCStructuredStorageDoc
 
 
         Private Sub GetFullNames()
-            Dim RootStorages As New List(Of CFStorage)
+            Dim RootStorages As New List(Of OpenMcdf.Storage)
 
             If Me.IsFOA Then
-                Me.cf.RootStorage.VisitEntries(Sub(item) If item.IsStorage Then RootStorages.Add(CType(item, CFStorage)), recursive:=False)
+                'Me.cf.RootStorage.VisitEntries(Sub(item) If item.IsStorage Then RootStorages.Add(CType(item, CFStorage)), recursive:=False)
+                RootStorages = SSTools.GetStorages(Me.cf, "*")
             Else
-                RootStorages.Add(Me.cf.RootStorage)
+                RootStorages.Add(Me.cf)
             End If
 
-            For Each RootStorage As CFStorage In RootStorages
-                Dim tmpList = ProcessRootStorage(RootStorage)
-                For Each FullName As String In tmpList
-                    If Not Me.Items.Contains(FullName, StringComparer.OrdinalIgnoreCase) Then
-                        Me.Items.Add(FullName)
-                    End If
+            If RootStorages IsNot Nothing Then
+                For Each RootStorage As OpenMcdf.Storage In RootStorages
+                    Dim tmpList = ProcessRootStorage(RootStorage)
+                    For Each FullName As String In tmpList
+                        If Not Me.Items.Contains(FullName, StringComparer.OrdinalIgnoreCase) Then
+                            Me.Items.Add(FullName)
+                        End If
+                    Next
                 Next
-            Next
+            End If
 
 
         End Sub
 
-        Private Function ProcessRootStorage(RootStorage As CFStorage) As List(Of String)
+        Private Function ProcessRootStorage(RootStorage As OpenMcdf.Storage) As List(Of String)
             Dim FullNames As New List(Of String)
-            Dim AllStorages As New List(Of CFStorage)
-            Dim JSiteStorages As New List(Of CFStorage)
+            'Dim AllStorages As New List(Of OpenMcdf.Storage)
+            Dim JSiteStorages As New List(Of OpenMcdf.Storage)
 
             Dim DocType As String = IO.Path.GetExtension(Me.ContainingFileFullName).ToLower
 
@@ -1477,62 +1540,56 @@ Public Class HCStructuredStorageDoc
 
             Dim AttachmentNamesList As New List(Of String)
             If DocType = ".asm" Then
-                Dim AllStreams As New List(Of CFStream)
-                Dim Attachments As CFStream = Nothing
-                RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
-                For Each AllStream As CFStream In AllStreams
-                    If AllStream.Name = "Attachments" Then
-                        Attachments = AllStream
+
+                Dim Attachments As OpenMcdf.CfbStream = SSTools.GetStream(RootStorage, "Attachments")
+
+                If Attachments IsNot Nothing Then
+                    Dim AttachmentsData As Byte() = SSTools.GetData(Attachments)
+                    If AttachmentsData IsNot Nothing Then
+                        Dim AttachmentsDict As Dictionary(Of String, String) = ExtractFilenamesFromByteArray(AttachmentsData, IsAttachmentsStream:=True)
+                        AttachmentNamesList = AttachmentsDict.Keys.ToList
                     End If
-                Next
-                Dim AttachmentsDict As Dictionary(Of String, String) = ExtractFilenamesFromByteArray(Attachments.GetData, IsAttachmentsStream:=True)
-                For Each Key As String In AttachmentsDict.Keys
-                    AttachmentNamesList.Add(Key)
-                Next
+                End If
 
             End If
 
-            RootStorage.VisitEntries(Sub(item) If item.IsStorage Then AllStorages.Add(CType(item, CFStorage)), recursive:=False)
+            JSiteStorages = SSTools.GetStorages(RootStorage, "JSite*")
 
-            For Each AllStorage As CFStorage In AllStorages
-                If AllStorage.Name Like "JSite*" Then
-                    JSiteStorages.Add(AllStorage)
-                End If
-            Next
+            If JSiteStorages IsNot Nothing Then
+                For Each JSiteStorage As OpenMcdf.Storage In JSiteStorages
 
-            For Each JSiteStorage As CFStorage In JSiteStorages
-                Dim JSiteStreams As New List(Of CFStream)
-                Dim JSiteStreamNames As New List(Of String)
+                    Dim JSiteStreams As List(Of OpenMcdf.CfbStream) = SSTools.GetStreams(JSiteStorage, "*")
 
-                JSiteStorage.VisitEntries(Sub(item) If item.IsStream Then JSiteStreams.Add(CType(item, CFStream)), recursive:=False)
+                    If JSiteStreams IsNot Nothing Then
+                        Dim JSiteStreamNames As New List(Of String)
 
-                For Each JSiteStream As CFStream In JSiteStreams
-                    JSiteStreamNames.Add(JSiteStream.Name)
-                Next
+                        For Each JSiteStream As OpenMcdf.CfbStream In JSiteStreams
+                            JSiteStreamNames.Add(JSiteStream.EntryInfo.Name)
+                        Next
 
-                Dim OLEName = String.Format("{0}Ole", ChrW(1))
+                        Dim OLEName = String.Format("{0}Ole", ChrW(1))
 
-                If (JSiteStreamNames.Contains(OLEName)) And (JSiteStreamNames.Contains("JProperties")) Then
-                    If CheckJProperties(JSiteStorage.GetStream("JProperties")) Then
+                        If (JSiteStreamNames.Contains(OLEName)) And (JSiteStreamNames.Contains("JProperties")) Then
+                            If CheckJProperties(SSTools.GetStream(JSiteStorage, "JProperties")) Then
 
-                        Dim FullName As String = GetFullNameFromOLEStream(JSiteStorage.GetStream(OLEName), AttachmentNamesList, DocType)
+                                Dim FullName As String = GetFullNameFromOLEStream(SSTools.GetStream(JSiteStorage, OLEName), AttachmentNamesList, DocType)
 
-                        If FullName IsNot Nothing Then
-                            If Not FullNames.Contains(FullName, StringComparer.OrdinalIgnoreCase) Then
-                                FullNames.Add(FullName)
+                                If FullName IsNot Nothing Then
+                                    If Not FullNames.Contains(FullName, StringComparer.OrdinalIgnoreCase) Then
+                                        FullNames.Add(FullName)
+                                    End If
+                                End If
                             End If
                         End If
-
                     End If
-
-                End If
-            Next
+                Next
+            End If
 
             Return FullNames
         End Function
 
         Private Function GetFullNameFromOLEStream(
-            OLEStream As CFStream,
+            OLEStream As OpenMcdf.CfbStream,
             AttachmentNamesList As List(Of String),
             DocType As String
             ) As String
@@ -1567,7 +1624,8 @@ Public Class HCStructuredStorageDoc
             Dim RELATIVE As String = ""   ' THIRD FILENAME
             Dim CONTAINER As String = ""  ' Derived from ABSOLUTE.  Used to see if the link is in the container directory
 
-            Dim ByteArray As Byte() = OLEStream.GetData
+            'Dim ByteArray As Byte() = OLEStream.GetData
+            Dim ByteArray As Byte() = SSTools.GetData(OLEStream)
 
             Dim FilenamesDict = ExtractFilenamesFromByteArray(ByteArray, IsAttachmentsStream:=False)
 
@@ -1769,7 +1827,7 @@ Public Class HCStructuredStorageDoc
                             ByteList.Add(ByteArray(j))
                         Next
 
-                        Filename = Encoding.Default.GetString(ByteList.ToArray)
+                        Filename = Text.Encoding.Default.GetString(ByteList.ToArray)
 
                         ' Check for RELATIVE filename
                         If ByteArray(AsciiStartIdx - 7) = &H46 Then
@@ -1852,7 +1910,7 @@ Public Class HCStructuredStorageDoc
             FilenamesDict("ABSOLUTE") = ABSOLUTE
 
             Dim CONTAINER = String.Format(".\{0}", IO.Path.GetFileName(ABSOLUTE))
-            CONTAINER = Path.GetFullPath(Path.Combine(ContainerFileDirectory, CONTAINER))
+            CONTAINER = IO.Path.GetFullPath(IO.Path.Combine(ContainerFileDirectory, CONTAINER))
 
             FilenamesDict("CONTAINER") = CONTAINER
 
@@ -1895,7 +1953,7 @@ Public Class HCStructuredStorageDoc
 
                 Dim OLD = Filename
                 Try
-                    Filename = Path.GetFullPath(Path.Combine(ContainerFileDirectory, Filename))
+                    Filename = IO.Path.GetFullPath(IO.Path.Combine(ContainerFileDirectory, Filename))
                 Catch ex As Exception
                     Filename = Nothing
                 End Try
@@ -1939,7 +1997,7 @@ Public Class HCStructuredStorageDoc
             Return IndicatorIdx
         End Function
 
-        Private Function CheckJProperties(JPropertiesStream As CFStream) As Boolean
+        Private Function CheckJProperties(JPropertiesStream As OpenMcdf.CfbStream) As Boolean
 
             ' Checks if the JProperties stream contains the following byte array
             ' 4F 4C 45 53 40 00 01 00
@@ -1948,11 +2006,11 @@ Public Class HCStructuredStorageDoc
 
             Dim ValidStream As Boolean = True
 
-            Dim ByteArray As Byte() = JPropertiesStream.GetData()
+            Dim ByteArray As Byte() = SSTools.GetData(JPropertiesStream)
 
             Dim ValidArray As Byte() = {&H4F, &H4C, &H45, &H53, &H40, &H0, &H1, &H0}
 
-            If Not ByteArray.Count = ValidArray.Count Then
+            If ByteArray Is Nothing OrElse Not ByteArray.Count = ValidArray.Count Then
                 ValidStream = False
             End If
 
@@ -2025,10 +2083,10 @@ Public Class HCStructuredStorageDoc
         ' This is for material table files *.mtl only
 
 
-        Public Sub New(cf As CompoundFile)
+        Public Sub New(cf As OpenMcdf.RootStorage)
             Dim ByteArray As Byte()
-            Dim AllStreams As New List(Of CFStream)
-            Dim MaterialStream As CFStream = Nothing
+            Dim AllStreams As New List(Of OpenMcdf.CfbStream)
+            Dim MaterialStream As OpenMcdf.CfbStream = Nothing
             Dim RawMaterialTable As String
 
             Materials = New List(Of Material)
@@ -2036,23 +2094,21 @@ Public Class HCStructuredStorageDoc
             CustomMaterialProperties = New List(Of String)
             CustomMaterialPropertiesTypes = New List(Of String)
 
-            cf.RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
+            MaterialStream = SSTools.GetStream(cf, "MaterialDataEx")
 
-            For Each AllStream As CFStream In AllStreams
-                If AllStream.Name = "MaterialDataEx" Then
-                    MaterialStream = AllStream
+            If MaterialStream IsNot Nothing Then
+                ByteArray = SSTools.GetData(MaterialStream)
+
+                If ByteArray IsNot Nothing Then
+                    RawMaterialTable = System.Text.Encoding.Unicode.GetString(ByteArray)
+                    RawMaterialTable = RawMaterialTable.Substring(2, Len(RawMaterialTable) - 2)
+
+                    Dim XmlDoc As New Xml.XmlDocument
+                    XmlDoc.LoadXml(RawMaterialTable)
+
+                    TraverseNodes(XmlDoc)  'Populates Me.Materials and Me.Gages
                 End If
-            Next
-
-            ByteArray = MaterialStream.GetData
-
-            RawMaterialTable = System.Text.Encoding.Unicode.GetString(ByteArray)
-            RawMaterialTable = RawMaterialTable.Substring(2, Len(RawMaterialTable) - 2)
-
-            Dim XmlDoc As New XmlDocument
-            XmlDoc.LoadXml(RawMaterialTable)
-
-            TraverseNodes(XmlDoc)  'Populates Me.Materials and Me.Gages
+            End If
 
         End Sub
 
@@ -2177,17 +2233,17 @@ Public Class HCStructuredStorageDoc
 
         Private Sub TraverseNodes(RootNode As Xml.XmlNode)
 
-            For Each ChildNode As XmlElement In RootNode
+            For Each ChildNode As Xml.XmlElement In RootNode
                 If ChildNode.Name.ToLower = "material" Then
                     Dim Matl As New Material
                     If ChildNode.HasAttributes Then
                         Matl.Name = ChildNode.Attributes(0).Value
                     End If
-                    For Each PropertyNode As XmlElement In ChildNode.ChildNodes
+                    For Each PropertyNode As Xml.XmlElement In ChildNode.ChildNodes
                         If PropertyNode.HasAttributes Then
                             Dim Name As String = ""
                             Dim Value As String = ""
-                            For Each Attribute As XmlAttribute In PropertyNode.Attributes
+                            For Each Attribute As Xml.XmlAttribute In PropertyNode.Attributes
                                 If Attribute.Name = "Name" Then
                                     Name = Attribute.Value
                                 ElseIf Attribute.Name = "Value" Then
@@ -2220,12 +2276,12 @@ Public Class HCStructuredStorageDoc
                             End Select
                         Else
                             If PropertyNode.Name = "CustomPropsdata" And PropertyNode.HasChildNodes Then
-                                For Each ChildNode2 As XmlElement In PropertyNode
+                                For Each ChildNode2 As Xml.XmlElement In PropertyNode
                                     If ChildNode2.HasAttributes Then
                                         Dim Name As String = ""
                                         Dim UnitType As Integer = -1
                                         Dim AddedProp As Boolean = False
-                                        For Each Attribute2 As XmlAttribute In ChildNode2.Attributes
+                                        For Each Attribute2 As Xml.XmlAttribute In ChildNode2.Attributes
                                             If Attribute2.Name = "Name" Then
                                                 Name = Attribute2.Value
                                                 If Not CustomMaterialProperties.Contains(Name, StringComparer.OrdinalIgnoreCase) Then
@@ -2258,11 +2314,11 @@ Public Class HCStructuredStorageDoc
                     If ChildNode.HasAttributes Then
                         Gage.Name = ChildNode.Attributes(0).Value
                     End If
-                    For Each PropertyNode As XmlElement In ChildNode.ChildNodes
+                    For Each PropertyNode As Xml.XmlElement In ChildNode.ChildNodes
                         If PropertyNode.HasAttributes Then
                             Dim Name As String = ""
                             Dim Value As String = ""
-                            For Each Attribute As XmlAttribute In PropertyNode.Attributes
+                            For Each Attribute As Xml.XmlAttribute In PropertyNode.Attributes
                                 If Attribute.Name = "Name" Then
                                     Name = Attribute.Value
                                 ElseIf Attribute.Name = "Value" Then
@@ -2334,226 +2390,226 @@ Public Class HCStructuredStorageDoc
 
     End Class
 
-    Private Class BlockLibrary
-        Public Property Items As List(Of String)
-        Private Property FullName As String
+    'Private Class BlockLibrary
+    '    Public Property Items As List(Of String)
+    '    Private Property FullName As String
 
-        Public Sub New(cf As CompoundFile, _FullName As String)
-            Me.FullName = _FullName
+    '    Public Sub New(cf As CompoundFile, _FullName As String)
+    '        Me.FullName = _FullName
 
-            Dim ByteArray As Byte()
-            Dim AllStreams As New List(Of CFStream)
-            Dim BlockStream As CFStream = Nothing
-            'Dim RawMaterialTable As String
+    '        Dim ByteArray As Byte()
+    '        Dim AllStreams As New List(Of CFStream)
+    '        Dim BlockStream As CFStream = Nothing
+    '        'Dim RawMaterialTable As String
 
-            Me.Items = New List(Of String)
+    '        Me.Items = New List(Of String)
 
-            cf.RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
+    '        cf.RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
 
-            For Each AllStream As CFStream In AllStreams
-                If AllStream.Name = "JBlocks" Then
-                    BlockStream = AllStream
-                End If
-            Next
+    '        For Each AllStream As CFStream In AllStreams
+    '            If AllStream.Name = "JBlocks" Then
+    '                BlockStream = AllStream
+    '            End If
+    '        Next
 
-            ByteArray = BlockStream.GetData
+    '        ByteArray = BlockStream.GetData
 
-            'FormatByteString(ByteArray)
+    '        'FormatByteString(ByteArray)
 
-            Dim NamedBytes As List(Of List(Of Byte))
-            NamedBytes = GetNamesBytes(ByteArray)
+    '        Dim NamedBytes As List(Of List(Of Byte))
+    '        NamedBytes = GetNamesBytes(ByteArray)
 
-            If NamedBytes IsNot Nothing Then
-                For Each NamedByteList As List(Of Byte) In NamedBytes
-                    Dim s As String = System.Text.Encoding.Unicode.GetString(NamedByteList.ToArray)
-                    Items.Add(s)
-                Next
-            End If
+    '        If NamedBytes IsNot Nothing Then
+    '            For Each NamedByteList As List(Of Byte) In NamedBytes
+    '                Dim s As String = System.Text.Encoding.Unicode.GetString(NamedByteList.ToArray)
+    '                Items.Add(s)
+    '            Next
+    '        End If
 
-        End Sub
+    '    End Sub
 
-        Private Function GetNamesBytes(ByteArray As Byte()) As List(Of List(Of Byte))
+    '    Private Function GetNamesBytes(ByteArray As Byte()) As List(Of List(Of Byte))
 
-            'BYTE STREAM FORMAT
-            '
-            'Strings are null-terminated (&H00) 2-byte Unicode.  MSB can be anything, LSB must be non zero.
-            'The first letter of each string is aligned in the diagram to more easily see the pattern.
-            '
-            '                              \|/ Number of letters in string           \|/ Last letter offset = 2 * Number of letters + 4 + 1 
-            '          Offset --->    0  1  2  3  4     6     8    10    12    14    16 \|/ Null terminator
-            '           Value --->    Z  Z NZ  Z  Z  A NZ  A NZ  A NZ  A NZ  A NZ  A NZ  Z \|/ Number of block views
-            '48 05 00 00 00 7f 17 00 00 00 06 00 00 00 42 00 6c 00 6f 00 63 00 6b 00 31 00 01
-            ' H  .  .  .  .  .  .  .  .  .  .  .  .  .  B  .  l  .  o  .  c  .  k  .  1  .  .
-            '                                        x                                x    /|\ This value was copied from the next row for reference
-            '      01 00 00 00 7e 17 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
-            '       .  .  .  .  ~  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
-            '                                        x                          x    
-            '               88 15 00 00 00 03 00 00 00 43 00 4f 00 47 00       
-            '                ?  .  .  .  .  .  .  .  .  C  .  O  .  G  .       
-            '                                        x              x        
-            '      01 00 00 00 89 15 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
-            '       .  .  .  .  ?  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
-            '                                        x                          x    
-            '               a3 16 00 00 00 04 00 00 00 73 00 6c 00 6f 00 74 00     
-            '                ?  .  .  .  .  .  .  .  .  s  .  l  .  o  .  t  .     
-            '                                        x                    x      
-            ' Value legend
-            '    A Anything
-            '   NZ Non zero
-            '    Z Zero
+    '        'BYTE STREAM FORMAT
+    '        '
+    '        'Strings are null-terminated (&H00) 2-byte Unicode.  MSB can be anything, LSB must be non zero.
+    '        'The first letter of each string is aligned in the diagram to more easily see the pattern.
+    '        '
+    '        '                              \|/ Number of letters in string           \|/ Last letter offset = 2 * Number of letters + 4 + 1 
+    '        '          Offset --->    0  1  2  3  4     6     8    10    12    14    16 \|/ Null terminator
+    '        '           Value --->    Z  Z NZ  Z  Z  A NZ  A NZ  A NZ  A NZ  A NZ  A NZ  Z \|/ Number of block views
+    '        '48 05 00 00 00 7f 17 00 00 00 06 00 00 00 42 00 6c 00 6f 00 63 00 6b 00 31 00 01
+    '        ' H  .  .  .  .  .  .  .  .  .  .  .  .  .  B  .  l  .  o  .  c  .  k  .  1  .  .
+    '        '                                        x                                x    /|\ This value was copied from the next row for reference
+    '        '      01 00 00 00 7e 17 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
+    '        '       .  .  .  .  ~  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
+    '        '                                        x                          x    
+    '        '               88 15 00 00 00 03 00 00 00 43 00 4f 00 47 00       
+    '        '                ?  .  .  .  .  .  .  .  .  C  .  O  .  G  .       
+    '        '                                        x              x        
+    '        '      01 00 00 00 89 15 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
+    '        '       .  .  .  .  ?  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
+    '        '                                        x                          x    
+    '        '               a3 16 00 00 00 04 00 00 00 73 00 6c 00 6f 00 74 00     
+    '        '                ?  .  .  .  .  .  .  .  .  s  .  l  .  o  .  t  .     
+    '        '                                        x                    x      
+    '        ' Value legend
+    '        '    A Anything
+    '        '   NZ Non zero
+    '        '    Z Zero
 
-            Dim MaxNumChars As Integer = 30
-            Dim MaxNumBlockViews As Integer = 2
+    '        Dim MaxNumChars As Integer = 30
+    '        Dim MaxNumBlockViews As Integer = 2
 
-            Dim ByteLists As New List(Of List(Of Byte))
-            Dim C As Integer = ByteArray.Count
-            Dim NumBlockViews As Integer = 0
+    '        Dim ByteLists As New List(Of List(Of Byte))
+    '        Dim C As Integer = ByteArray.Count
+    '        Dim NumBlockViews As Integer = 0
 
-            Dim SearchStart As Integer = CInt(ByteArray.Count / 2)
+    '        Dim SearchStart As Integer = CInt(ByteArray.Count / 2)
 
-            For i = SearchStart To C - 1
+    '        For i = SearchStart To C - 1
 
-                Dim ByteList As New List(Of Byte)
+    '            Dim ByteList As New List(Of Byte)
 
-                ' Check for leading pattern Z Z NZ Z Z
-                If i + 0 < C AndAlso Not ByteArray(i) = &H0 Then Continue For
-                If i + 1 < C AndAlso Not ByteArray(i + 1) = &H0 Then Continue For
-                If i + 2 < C AndAlso ByteArray(i + 2) = &H0 Then Continue For
-                If i + 3 < C AndAlso Not ByteArray(i + 3) = &H0 Then Continue For
-                If i + 4 < C AndAlso Not ByteArray(i + 4) = &H0 Then Continue For
+    '            ' Check for leading pattern Z Z NZ Z Z
+    '            If i + 0 < C AndAlso Not ByteArray(i) = &H0 Then Continue For
+    '            If i + 1 < C AndAlso Not ByteArray(i + 1) = &H0 Then Continue For
+    '            If i + 2 < C AndAlso ByteArray(i + 2) = &H0 Then Continue For
+    '            If i + 3 < C AndAlso Not ByteArray(i + 3) = &H0 Then Continue For
+    '            If i + 4 < C AndAlso Not ByteArray(i + 4) = &H0 Then Continue For
 
-                ' Check for null terminator
-                If Not i + 2 < C Then Exit For
+    '            ' Check for null terminator
+    '            If Not i + 2 < C Then Exit For
 
-                Dim NumChars = CInt(ByteArray(i + 2))
-                If NumChars > MaxNumChars Then Continue For
-                Dim TerminatorIdx = i + 2 * NumChars + 4 + 1
-                If TerminatorIdx < C AndAlso Not ByteArray(TerminatorIdx) = &H0 Then Continue For
+    '            Dim NumChars = CInt(ByteArray(i + 2))
+    '            If NumChars > MaxNumChars Then Continue For
+    '            Dim TerminatorIdx = i + 2 * NumChars + 4 + 1
+    '            If TerminatorIdx < C AndAlso Not ByteArray(TerminatorIdx) = &H0 Then Continue For
 
-                ' Check Unicode
-                For j = i + 6 To i + 6 + 2 * (NumChars - 1) Step 2
-                    If j < C AndAlso ByteArray(j) = &H0 Then  ' There may be other invalid hex values
-                        Continue For
-                    Else
-                        ' These need to be in reverse order for the unicode translation to work properly
-                        ByteList.Add(ByteArray(j))
-                        ByteList.Add(ByteArray(j - 1))
-                    End If
-                Next
+    '            ' Check Unicode
+    '            For j = i + 6 To i + 6 + 2 * (NumChars - 1) Step 2
+    '                If j < C AndAlso ByteArray(j) = &H0 Then  ' There may be other invalid hex values
+    '                    Continue For
+    '                Else
+    '                    ' These need to be in reverse order for the unicode translation to work properly
+    '                    ByteList.Add(ByteArray(j))
+    '                    ByteList.Add(ByteArray(j - 1))
+    '                End If
+    '            Next
 
-                If NumBlockViews = 0 Then
-                    NumBlockViews = CInt(ByteArray(TerminatorIdx + 1))
-                    If Not NumBlockViews <= MaxNumBlockViews Then
-                        NumBlockViews = 0
-                        Continue For
-                    End If
+    '            If NumBlockViews = 0 Then
+    '                NumBlockViews = CInt(ByteArray(TerminatorIdx + 1))
+    '                If Not NumBlockViews <= MaxNumBlockViews Then
+    '                    NumBlockViews = 0
+    '                    Continue For
+    '                End If
 
-                    ByteLists.Add(ByteList)
-                Else
-                    NumBlockViews -= 1
-                End If
+    '                ByteLists.Add(ByteList)
+    '            Else
+    '                NumBlockViews -= 1
+    '            End If
 
-            Next
+    '        Next
 
-            'Dim View1ByteList As New List(Of Byte)
-            'View1ByteList.AddRange({&H0, &H56, &H0, &H69, &H0, &H65, &H0, &H77, &H0, &H31})
+    '        'Dim View1ByteList As New List(Of Byte)
+    '        'View1ByteList.AddRange({&H0, &H56, &H0, &H69, &H0, &H65, &H0, &H77, &H0, &H31})
 
-            'Dim View1StartIdxList As New List(Of Integer)
+    '        'Dim View1StartIdxList As New List(Of Integer)
 
-            'Dim IndicatorNameStart As New List(Of Byte)
-            'IndicatorNameStart.AddRange({&H1, &H0})  ' In reverse order
+    '        'Dim IndicatorNameStart As New List(Of Byte)
+    '        'IndicatorNameStart.AddRange({&H1, &H0})  ' In reverse order
 
-            'Dim IndicatorNameEnd As New List(Of Byte)
-            'IndicatorNameEnd.AddRange({&H0, &H0})  ' In reverse order, kinda
+    '        'Dim IndicatorNameEnd As New List(Of Byte)
+    '        'IndicatorNameEnd.AddRange({&H0, &H0})  ' In reverse order, kinda
 
-            '' Forward pass to find start idx of each "View1"
-            'For i = 0 To ByteArray.Count - View1ByteList.Count - 1
-            '    Dim Matched As Boolean = True
+    '        '' Forward pass to find start idx of each "View1"
+    '        'For i = 0 To ByteArray.Count - View1ByteList.Count - 1
+    '        '    Dim Matched As Boolean = True
 
-            '    For j = 0 To View1ByteList.Count - 1
-            '        If Not ByteArray(i + j) = View1ByteList(j) Then
+    '        '    For j = 0 To View1ByteList.Count - 1
+    '        '        If Not ByteArray(i + j) = View1ByteList(j) Then
 
-            '            If j = View1ByteList.Count - 1 Then
-            '                ' Found a View that is not View1
-            '                MsgBox("Cannot currently process blocks with more than 1 view.  Exiting...", vbOKOnly)
-            '                Return Nothing
-            '            End If
-            '            Matched = False
-            '            Exit For
-            '        End If
-            '    Next
+    '        '            If j = View1ByteList.Count - 1 Then
+    '        '                ' Found a View that is not View1
+    '        '                MsgBox("Cannot currently process blocks with more than 1 view.  Exiting...", vbOKOnly)
+    '        '                Return Nothing
+    '        '            End If
+    '        '            Matched = False
+    '        '            Exit For
+    '        '        End If
+    '        '    Next
 
-            '    If Matched Then View1StartIdxList.Add(i)
+    '        '    If Matched Then View1StartIdxList.Add(i)
 
-            'Next
+    '        'Next
 
-            'If View1StartIdxList.Count = 0 Then Return Nothing
+    '        'If View1StartIdxList.Count = 0 Then Return Nothing
 
 
-            'For i = View1StartIdxList.Count - 1 To 0 Step -1
-            '    Dim idx = View1StartIdxList(i)
+    '        'For i = View1StartIdxList.Count - 1 To 0 Step -1
+    '        '    Dim idx = View1StartIdxList(i)
 
-            '    idx -= 1
+    '        '    idx -= 1
 
-            '    Do Until ByteArray(idx) = IndicatorNameStart(0) And ByteArray(idx - 1) = IndicatorNameStart(1)
-            '        idx -= 1
+    '        '    Do Until ByteArray(idx) = IndicatorNameStart(0) And ByteArray(idx - 1) = IndicatorNameStart(1)
+    '        '        idx -= 1
 
-            '        If idx < 0 Then
-            '            Return Nothing
-            '        End If
-            '    Loop
+    '        '        If idx < 0 Then
+    '        '            Return Nothing
+    '        '        End If
+    '        '    Loop
 
-            '    idx -= 1
+    '        '    idx -= 1
 
-            '    Dim ReversedByteList As New List(Of Byte)
+    '        '    Dim ReversedByteList As New List(Of Byte)
 
-            '    Do Until ByteArray(idx) = IndicatorNameEnd(0) And ByteArray(idx - 1) = IndicatorNameEnd(1)
+    '        '    Do Until ByteArray(idx) = IndicatorNameEnd(0) And ByteArray(idx - 1) = IndicatorNameEnd(1)
 
-            '        ReversedByteList.Add(ByteArray(idx))
-            '        idx -= 1
+    '        '        ReversedByteList.Add(ByteArray(idx))
+    '        '        idx -= 1
 
-            '        If idx < 0 Then
-            '            Return Nothing
-            '        End If
-            '    Loop
+    '        '        If idx < 0 Then
+    '        '            Return Nothing
+    '        '        End If
+    '        '    Loop
 
-            '    Dim ByteList As New List(Of Byte)
+    '        '    Dim ByteList As New List(Of Byte)
 
-            '    For j = ReversedByteList.Count - 1 To 0 Step -1
-            '        ByteList.Add(ReversedByteList(j))
-            '    Next
+    '        '    For j = ReversedByteList.Count - 1 To 0 Step -1
+    '        '        ByteList.Add(ReversedByteList(j))
+    '        '    Next
 
-            '    ByteLists.Add(ByteList)
+    '        '    ByteLists.Add(ByteList)
 
-            'Next
+    '        'Next
 
-            Return ByteLists
+    '        Return ByteLists
 
-        End Function
+    '    End Function
 
-        Private Sub FormatByteString(ByteArray As Byte())
-            ' Utility for investigating format of ByteArray.  Not used in production.
+    '    Private Sub FormatByteString(ByteArray As Byte())
+    '        ' Utility for investigating format of ByteArray.  Not used in production.
 
-            Dim ByteList As New List(Of String)
-            Dim CharList As New List(Of String)
+    '        Dim ByteList As New List(Of String)
+    '        Dim CharList As New List(Of String)
 
-            For Each B As Byte In ByteArray
-                ByteList.Add($"{B:x2}")
+    '        For Each B As Byte In ByteArray
+    '            ByteList.Add($"{B:x2}")
 
-                If CInt(B) < 32 Then ' Non-printing
-                    CharList.Add(".")
-                ElseIf CInt(B) > 127 Then ' Extended ASCII
-                    CharList.Add("?")
-                ElseIf CInt(B) = 44 Then ' period character
-                    CharList.Add(";")
-                Else
-                    CharList.Add(System.Text.Encoding.ASCII.GetString({B}))
-                End If
-            Next
+    '            If CInt(B) < 32 Then ' Non-printing
+    '                CharList.Add(".")
+    '            ElseIf CInt(B) > 127 Then ' Extended ASCII
+    '                CharList.Add("?")
+    '            ElseIf CInt(B) = 44 Then ' period character
+    '                CharList.Add(";")
+    '            Else
+    '                CharList.Add(System.Text.Encoding.ASCII.GetString({B}))
+    '            End If
+    '        Next
 
-        End Sub
+    '    End Sub
 
-    End Class
+    'End Class
 
     Private Class Variables
         Public Property Items As List(Of SolidEdgeExplorerDLL.Variable)
@@ -2561,30 +2617,37 @@ Public Class HCStructuredStorageDoc
         Private Property FullName As String
         'Private Property PartsLiteData As SolidEdgeExplorerDLL.PartsLiteData
 
-        Public Sub New(cf As CompoundFile, _FullName As String)
+        Public Sub New(cf As OpenMcdf.RootStorage, _FullName As String)
 
+            Me.Items = New List(Of SolidEdgeExplorerDLL.Variable)
+            Me.ExposedVariablePropIDs = New List(Of UInteger)
             Me.FullName = _FullName
 
-            Dim stream As OpenMcdf.CFStream = cf.RootStorage.GetStream("PartsLiteData")
+            'Dim stream As OpenMcdf.CFStream = cf.RootStorage.GetStream("PartsLiteData")
+            Dim stream As OpenMcdf.CfbStream = SSTools.GetStream(cf, "PartsLiteData")
 
-            Dim PartsLiteData = New SolidEdgeExplorerDLL.PartsLiteData
-            PartsLiteData.FindData(stream)
+            If stream IsNot Nothing Then
+                Dim PartsLiteData = New SolidEdgeExplorerDLL.PartsLiteData
+                PartsLiteData.FindData(stream)
 
-            Me.Items = PartsLiteData.Variables
+                Me.Items = PartsLiteData.Variables
 
-            ' ####### Find exposed variables ######
+                ' ####### Find exposed variables ######
 
-            Dim tmpVariableInfos As New SolidEdgeExplorerDLL.CustomPropertyVariableInfo
-            stream = cf.RootStorage.GetStream("CustomPropertyVariableInfo")
-            tmpVariableInfos.FindData(stream)
+                Dim tmpVariableInfos As New SolidEdgeExplorerDLL.CustomPropertyVariableInfo
+                stream = SSTools.GetStream(cf, "CustomPropertyVariableInfo")
 
-            Me.ExposedVariablePropIDs = New List(Of UInteger)
+                If stream IsNot Nothing Then
+                    tmpVariableInfos.FindData(stream)
 
-            For Each V As SolidEdgeExplorerDLL.Variable In Me.Items
-                If tmpVariableInfos.VariableInfos.Exists(Function(x) x.Variable_ID = V.ID) Then
-                    ExposedVariablePropIDs.Add(tmpVariableInfos.VariableInfos.Find(Function(x) x.Variable_ID = V.ID).Property_ID)
+
+                    For Each V As SolidEdgeExplorerDLL.Variable In Me.Items
+                        If tmpVariableInfos.VariableInfos.Exists(Function(x) x.Variable_ID = V.ID) Then
+                            ExposedVariablePropIDs.Add(tmpVariableInfos.VariableInfos.Find(Function(x) x.Variable_ID = V.ID).Property_ID)
+                        End If
+                    Next
                 End If
-            Next
+            End If
 
         End Sub
 
@@ -2602,6 +2665,142 @@ Public Class HCStructuredStorageDoc
             Return tmpVariable
         End Function
 
+    End Class
+
+    Private Class SSTools
+
+        Public Shared Function GetStorage(
+            _cf As OpenMcdf.Storage,
+            StorageName As String
+            ) As OpenMcdf.Storage
+
+            Dim tmpStorage As OpenMcdf.Storage = Nothing
+            Dim tmpList As List(Of OpenMcdf.Storage) = GetStorages(_cf, StorageName)
+            If tmpList IsNot Nothing AndAlso tmpList.Count > 0 Then
+                tmpStorage = tmpList(0)
+            End If
+            Return tmpStorage
+        End Function
+
+        Public Shared Function GetStream(
+            _cf As OpenMcdf.Storage,
+            StreamName As String
+            ) As OpenMcdf.CfbStream
+
+            Dim tmpStream As OpenMcdf.CfbStream = Nothing
+            Dim tmpList As List(Of OpenMcdf.CfbStream) = GetStreams(_cf, StreamName)
+            If tmpList IsNot Nothing AndAlso tmpList.Count > 0 Then
+                tmpStream = tmpList(0)
+            End If
+            Return tmpStream
+        End Function
+
+        Public Shared Function GetStorages(
+            _cf As OpenMcdf.Storage,
+            NameWildcard As String
+            ) As List(Of OpenMcdf.Storage)
+
+            Dim StorageList As List(Of OpenMcdf.Storage) = Nothing
+            Dim tmpList As List(Of Object)
+            tmpList = VisitEntries(_cf, OpenMcdf.EntryType.Storage, NameWildcard)
+
+            If tmpList IsNot Nothing Then
+                StorageList = New List(Of OpenMcdf.Storage)
+                For Each Item As Object In tmpList
+                    StorageList.Add(CType(Item, OpenMcdf.Storage))
+                Next
+            End If
+
+            Return StorageList
+        End Function
+
+        Public Shared Function GetStreams(
+            _cf As OpenMcdf.Storage,
+            NameWildcard As String
+            ) As List(Of OpenMcdf.CfbStream)
+
+            Dim StreamList As List(Of OpenMcdf.CfbStream) = Nothing
+            Dim tmpList As List(Of Object)
+            tmpList = VisitEntries(_cf, OpenMcdf.EntryType.Stream, NameWildcard)
+
+            If tmpList IsNot Nothing Then
+                StreamList = New List(Of OpenMcdf.CfbStream)
+                For Each Item As Object In tmpList
+                    StreamList.Add(CType(Item, OpenMcdf.CfbStream))
+                Next
+            End If
+
+            Return StreamList
+        End Function
+
+        Private Shared Function VisitEntries(
+            _cf As OpenMcdf.Storage,
+            EntryType As OpenMcdf.EntryType,
+            NameWildcard As String
+            ) As List(Of Object)
+
+            Dim tmpList As List(Of Object) = Nothing
+
+            Dim entries As IEnumerable(Of OpenMcdf.EntryInfo) = _cf.EnumerateEntries
+            For Each EntryInfo As OpenMcdf.EntryInfo In entries
+                If EntryInfo.Type = EntryType Then
+                    If EntryInfo.Name Like NameWildcard Then
+                        If tmpList Is Nothing Then tmpList = New List(Of Object)  ' Initialize only when we have a first match.
+                        Select Case EntryType
+                            Case OpenMcdf.EntryType.Storage
+                                tmpList.Add(_cf.OpenStorage(EntryInfo.Name))
+                            Case OpenMcdf.EntryType.Stream
+                                tmpList.Add(_cf.OpenStream(EntryInfo.Name))
+                        End Select
+                    End If
+                End If
+            Next
+
+            Return tmpList
+        End Function
+
+        Public Shared Function GetData(
+            _cf As OpenMcdf.Storage,
+            StreamName As String
+            ) As Byte()
+
+            Dim tmpStream As OpenMcdf.CfbStream = GetStream(_cf, StreamName)
+
+            If tmpStream IsNot Nothing AndAlso tmpStream.Length > 0 Then
+                Dim Buffer(CInt(tmpStream.Length) - 1) As Byte
+                tmpStream.Read(Buffer, 0, CInt(tmpStream.Length))
+                Return Buffer
+            Else
+                Return Nothing
+            End If
+
+        End Function
+
+        Public Shared Function GetData(Stream As OpenMcdf.CfbStream) As Byte()
+
+            Dim tmpStream As OpenMcdf.CfbStream = Stream
+
+            If tmpStream IsNot Nothing AndAlso tmpStream.Length > 0 Then
+                Dim Buffer(CInt(tmpStream.Length) - 1) As Byte
+                tmpStream.Read(Buffer, 0, CInt(tmpStream.Length))
+                Return Buffer
+            Else
+                Return Nothing
+            End If
+
+        End Function
+
+        Public Shared Function ContainsStorage(_cf As OpenMcdf.Storage, StorageName As String) As Boolean
+            Return GetStorage(_cf, StorageName) IsNot Nothing
+        End Function
+
+        Public Shared Function ContainsStream(_cf As OpenMcdf.Storage, StreamName As String) As Boolean
+            Return GetStream(_cf, StreamName) IsNot Nothing
+        End Function
+
+        Public Shared Function HasUserDefinedProperties(co As OpenMcdf.Ole.OlePropertiesContainer) As Boolean
+            Return co.UserDefinedProperties IsNot Nothing AndAlso co.UserDefinedProperties.Properties.Count > 0
+        End Function
     End Class
 
 End Class

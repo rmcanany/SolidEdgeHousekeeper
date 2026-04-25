@@ -689,7 +689,7 @@ Public Class UtilsExecute
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         Try
-            SSDoc = New HCStructuredStorageDoc(Path)
+            SSDoc = New HCStructuredStorageDoc(Path, _OpenReadWrite:=True)
             SSDoc.ReadProperties(FMain.PropertiesData)
         Catch ex As Exception
             Proceed = False
@@ -726,7 +726,7 @@ Public Class UtilsExecute
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         Try
-            SSDoc = New HCStructuredStorageDoc(Path)
+            SSDoc = New HCStructuredStorageDoc(Path, _OpenReadWrite:=True)
             SSDoc.ReadProperties(FMain.PropertiesData)
         Catch ex As Exception
             Proceed = False

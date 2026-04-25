@@ -295,10 +295,10 @@ Public Class TaskCheckLinks
 
         Dim ShowException As Boolean = False
         If ShowException Then
-            SSDoc = New HCStructuredStorageDoc(FullName)
+            SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
         Else
             Try
-                SSDoc = New HCStructuredStorageDoc(FullName)
+                SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
             Catch ex As Exception
                 Proceed = False
                 TaskLogger.AddMessage(ex.Message)
@@ -320,13 +320,13 @@ Public Class TaskCheckLinks
             If Proceed Then
                 ' Build a list of misplaced links
                 For Each LinkName As String In LinkNames
-                    If BadLinkNames.Contains(LinkName) Then
+                    If BadLinkNames.Contains(LinkName, StringComparer.OrdinalIgnoreCase) Then
                         Continue For
                     End If
 
                     Dim tf As Boolean = False
                     For Each SourceDirectory In Me.SourceDirectories
-                        If LinkName.Contains(SourceDirectory) Then
+                        If LinkName.ToLower.Contains(SourceDirectory.ToLower) Then
                             tf = True
                             Exit For
                         End If

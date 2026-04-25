@@ -3767,7 +3767,7 @@ Public Class Form_Main
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         Try
-            SSDoc = New HCStructuredStorageDoc(FullName)
+            SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=True)
             SSDoc.ReadProperties(Me.PropertiesData)
             'SSDoc.ReadVariableNames()
         Catch ex As Exception

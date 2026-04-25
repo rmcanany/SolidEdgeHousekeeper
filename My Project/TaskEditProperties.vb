@@ -308,7 +308,7 @@ Public Class TaskEditProperties
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         Try
-            SSDoc = New HCStructuredStorageDoc(FullName)
+            SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=True)
         Catch ex As Exception
             If SSDoc IsNot Nothing Then SSDoc.Close()
             Proceed = False
@@ -354,7 +354,7 @@ Public Class TaskEditProperties
                 ' Not an error if AutoAdd = TRUE
 
                 If Proceed Then
-                    tf = (SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish)) Or (AutoAdd)
+                    tf = AutoAdd Or SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish)
                     If Not tf Then
                         Proceed = False
                         If PropertyName = PropertyNameEnglish Then

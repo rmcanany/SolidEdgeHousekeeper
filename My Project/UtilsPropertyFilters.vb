@@ -134,7 +134,7 @@ Public Class UtilsPropertyFilters
 
             If FMain.PropertyFilterIncludeDraftModel Then
                 Try
-                    SSDoc = New HCStructuredStorageDoc(FoundFile)
+                    SSDoc = New HCStructuredStorageDoc(FoundFile, _OpenReadWrite:=False)
                     SSDoc.ReadLinks(FMain.LinkManagementOrder)
 
                     For Each LinkFilename As String In SSDoc.GetLinkNames
@@ -181,7 +181,7 @@ Public Class UtilsPropertyFilters
         Dim UC As New UtilsCommon
 
         Try
-            SSDoc = New HCStructuredStorageDoc(FoundFile)
+            SSDoc = New HCStructuredStorageDoc(FoundFile, _OpenReadWrite:=False)
             SSDoc.ReadProperties(FMain.PropertiesData)
             SSDoc.ReadLinks(FMain.LinkManagementOrder)
         Catch ex As Exception

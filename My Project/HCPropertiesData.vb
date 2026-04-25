@@ -645,7 +645,7 @@ Public Class HCPropertiesData
 
             For Each filename As String In tmpFoundFiles
                 Try
-                    SSDoc = New HCStructuredStorageDoc(filename)
+                    SSDoc = New HCStructuredStorageDoc(filename, _OpenReadWrite:=False)
                     SSDoc.ReadProperties(Form_Main.PropertiesData)
                 Catch ex As Exception
                     Continue For

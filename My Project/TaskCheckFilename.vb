@@ -334,7 +334,7 @@ Public Class TaskCheckFilename
         Dim SSParentDoc As HCStructuredStorageDoc = Nothing
 
         Try
-            SSParentDoc = New HCStructuredStorageDoc(FullName)
+            SSParentDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
             SSParentDoc.ReadProperties(Me.PropertiesData)
             SSParentDoc.ReadLinks(Me.LinkManagementOrder)
 
@@ -423,7 +423,7 @@ Public Class TaskCheckFilename
                                 Dim SSChildDoc As HCStructuredStorageDoc = Nothing
 
                                 Try
-                                    SSChildDoc = New HCStructuredStorageDoc(ChildName)
+                                    SSChildDoc = New HCStructuredStorageDoc(ChildName, _OpenReadWrite:=False)
                                     SSChildDoc.ReadProperties(Me.PropertiesData)
 
                                     Formula = SSChildDoc.SubstitutePropertyFormulas(Me.PropertyFormula, TaskLogger)
