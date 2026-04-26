@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
-Imports System.Text.RegularExpressions
-Imports Newtonsoft.Json
+'Imports System.Text.RegularExpressions
+'Imports Newtonsoft.Json
 
 Public Class TaskEditProperties
     Inherits Task
@@ -219,7 +219,7 @@ Public Class TaskEditProperties
                 PropertiesToEditDict = EditPropertiesSavedSettingsDict(Key)
                 Dim i = 0
             Else
-                PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+                PropertiesToEditDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
 
             End If
 
@@ -299,7 +299,7 @@ Public Class TaskEditProperties
         PropertiesToEdit = Me.JSONString
 
         If Not PropertiesToEdit = "" Then
-            PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+            PropertiesToEditDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
         Else
             Proceed = False
             TaskLogger.AddMessage("No properties provided")
@@ -354,7 +354,7 @@ Public Class TaskEditProperties
                 ' Not an error if AutoAdd = TRUE
 
                 If Proceed Then
-                    tf = AutoAdd Or SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish)
+                    tf = AutoAdd Or FindSearchType = "X" Or SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish)
                     If Not tf Then
                         Proceed = False
                         If PropertyName = PropertyNameEnglish Then
@@ -414,16 +414,19 @@ Public Class TaskEditProperties
         AddProp = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
 
         If FindSearchType = "X" Then
-            tf = SSDoc.DeleteProp(PropertySetName, PropertyNameEnglish)
+            If SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish) Then ' Not an error if it's already not there.
+                tf = SSDoc.DeleteProp(PropertySetName, PropertyNameEnglish)
 
-            If Not tf Then
-                Proceed = False
-                If PropertyName = PropertyNameEnglish Then
-                    s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
-                Else
-                    s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                If Not tf Then
+                    Proceed = False
+                    If PropertyName = PropertyNameEnglish Then
+                        s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                    Else
+                        s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                    End If
+                    If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End If
-                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
             End If
 
         Else
@@ -462,7 +465,7 @@ Public Class TaskEditProperties
                         ' ReplaceString = Regex.Escape(ReplaceString)
                     End If
 
-                    PropertyValue = Regex.Replace(PropertyValue, FindString, ReplaceString, RegexOptions.IgnoreCase)
+                    PropertyValue = Text.RegularExpressions.Regex.Replace(PropertyValue, FindString, ReplaceString, Text.RegularExpressions.RegexOptions.IgnoreCase)
                     tf = SSDoc.SetPropValue(PropertySetName, PropertyNameEnglish, PropertyValue, AddProperty:=AddProp)
 
                 End If
@@ -590,9 +593,11 @@ Public Class TaskEditProperties
                 Try
                     Prop = UC.GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
                     If Prop Is Nothing Then
-                        Proceed = False
-                        s = String.Format("Property '{0}.{1}' not found.", PropertySetName, PropertyName)
-                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+                        If Not FindSearchType = "X" Then
+                            Proceed = False
+                            s = String.Format("Property '{0}.{1}' not found.", PropertySetName, PropertyName)
+                            If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+                        End If
                     End If
 
                 Catch ex As Exception
@@ -609,11 +614,9 @@ Public Class TaskEditProperties
 
                 If FindSearchType = "X" Then
                     Try
-
-                        If FindSearchType = "X" Then
+                        If Prop IsNot Nothing Then
                             Prop.Delete()
                         End If
-
                     Catch ex As Exception
                         Proceed = False
                         s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
@@ -642,7 +645,8 @@ Public Class TaskEditProperties
                                 ' ReplaceString = Regex.Escape(ReplaceString)
                             End If
 
-                            PropValue = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+                            PropValue = Text.RegularExpressions.Regex.Replace(
+                                CType(Prop.Value, String), FindString, ReplaceString, Text.RegularExpressions.RegexOptions.IgnoreCase)
                         End If
 
                         Select Case TypeName.ToLower

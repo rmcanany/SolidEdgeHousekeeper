@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports Newtonsoft.Json
+'Imports Newtonsoft.Json
 
 Public Class TaskEditVariables
     Inherits Task
@@ -139,7 +139,7 @@ Public Class TaskEditVariables
                 Dim Key = Me.JSONString.Split(":"c)(1)
                 tmpVariablesToEditDict = EditVariablesSavedSettingsDict(Key)
             Else
-                tmpVariablesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
+                tmpVariablesToEditDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
             End If
             ' Dictionary format
             '{

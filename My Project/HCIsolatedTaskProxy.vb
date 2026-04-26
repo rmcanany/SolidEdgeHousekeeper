@@ -4,8 +4,8 @@
 
 Option Strict On
 
-Imports System.Runtime.InteropServices
-Imports System.Runtime.Remoting
+'Imports System.Runtime.InteropServices
+'Imports System.Runtime.Remoting
 
 Public MustInherit Class HCIsolatedTaskProxy
     Inherits MarshalByRefObject
@@ -251,18 +251,18 @@ Public MustInherit Class HCIsolatedTaskProxy
     End Property
 
     Protected Function UnwrapRuntimeCallableWrapper(Of TInterface As Class)(ByVal rcw As Object) As TInterface
-        If RemotingServices.IsTransparentProxy(rcw) Then
+        If Runtime.Remoting.RemotingServices.IsTransparentProxy(rcw) Then
 
-            If Marshal.IsComObject(rcw) Then
-                Dim punk As IntPtr = Marshal.GetIUnknownForObject(rcw)
+            If Runtime.InteropServices.Marshal.IsComObject(rcw) Then
+                Dim punk As IntPtr = Runtime.InteropServices.Marshal.GetIUnknownForObject(rcw)
 
                 Try
-                    Return CType(Marshal.GetObjectForIUnknown(punk), TInterface)
+                    Return CType(Runtime.InteropServices.Marshal.GetObjectForIUnknown(punk), TInterface)
                 Finally
-                    Marshal.Release(punk)
+                    Runtime.InteropServices.Marshal.Release(punk)
                 End Try
             Else
-                Throw New InvalidComObjectException()
+                Throw New Runtime.InteropServices.InvalidComObjectException()
             End If
         End If
 

@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
-Imports System.Reflection
-Imports Newtonsoft.Json
+'Imports System.Reflection
+'Imports Newtonsoft.Json
 
 Public Class HCPresets
     Public Property Items As List(Of Preset)
@@ -19,7 +19,7 @@ Public Class HCPresets
         If Not Infile = "" Then
             JSONString = IO.File.ReadAllText(Infile)
 
-            Dim tmpList As List(Of String) = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+            Dim tmpList As List(Of String) = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
 
             For Each PresetJSONString As String In tmpList
                 Dim Item As New Preset
@@ -51,7 +51,7 @@ Public Class HCPresets
             tmpList.Add(Item.ToJSON)
         Next
 
-        Dim JSONString As String = JsonConvert.SerializeObject(tmpList)
+        Dim JSONString As String = Newtonsoft.Json.JsonConvert.SerializeObject(tmpList)
         IO.File.WriteAllText(Outfile, JSONString)
 
     End Sub
@@ -98,7 +98,7 @@ Public Class Preset
             MsgBox(String.Format("{0}: Extra or missing property names in JSON dictionary", Me.ToString))
             JSONString = ""
         Else
-            JSONString = JsonConvert.SerializeObject(tmpPresetDict)
+            JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpPresetDict)
         End If
 
         Return JSONString
@@ -109,7 +109,7 @@ Public Class Preset
         Try
             Dim tmpPresetDict As Dictionary(Of String, String)
 
-            tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+            tmpPresetDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
             If Not CheckJSONDict(tmpPresetDict) Then
                 Throw New Exception(String.Format("{0}: Extra or missing property names in JSON dictionary", Me.ToString))
@@ -129,10 +129,10 @@ Public Class Preset
     Private Function CheckJSONDict(JSONDict As Dictionary(Of String, String)) As Boolean
         Dim Proceed As Boolean = True
 
-        Dim PropInfos() As PropertyInfo = Me.GetType.GetProperties()
+        Dim PropInfos() As Reflection.PropertyInfo = Me.GetType.GetProperties()
 
         ' Check for missing info
-        For Each PropInfo As PropertyInfo In PropInfos
+        For Each PropInfo As Reflection.PropertyInfo In PropInfos
             If PropInfo.Name = "SavePropertyFilters" Then Continue For  ' Handle previous versions of Presets without this variable.
             If Not JSONDict.Keys.Contains(PropInfo.Name) Then
                 Proceed = False

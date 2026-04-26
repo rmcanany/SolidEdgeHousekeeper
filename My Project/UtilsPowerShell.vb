@@ -1,27 +1,27 @@
 ﻿Option Strict On
 
-Imports System.Collections.ObjectModel
-Imports System.Management.Automation
-Imports System.Management.Automation.Runspaces
+'Imports System.Collections.ObjectModel
+'Imports System.Management.Automation
+'Imports System.Management.Automation.Runspaces
 
 Public Class UtilsPowerShell
     ' https://www.codeproject.com/Articles/18229/How-to-run-PowerShell-scripts-from-C
 
     Public Function RunScript(ByVal scriptText As String) As String
-        Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
+        Dim runspace As Management.Automation.Runspaces.Runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
         runspace.Open()
 
-        Dim pipeline As Pipeline = runspace.CreatePipeline()
+        Dim pipeline As Management.Automation.Runspaces.Pipeline = runspace.CreatePipeline()
         pipeline.Commands.AddScript(scriptText)
         pipeline.Commands.Add("Out-String")
 
-        Dim results As Collection(Of PSObject) = pipeline.Invoke()
+        Dim results As Collections.ObjectModel.Collection(Of Management.Automation.PSObject) = pipeline.Invoke()
 
         runspace.Close()
 
         Dim stringBuilder As System.Text.StringBuilder = New System.Text.StringBuilder()
 
-        For Each obj As PSObject In results
+        For Each obj As Management.Automation.PSObject In results
             stringBuilder.AppendLine(obj.ToString())
         Next
 

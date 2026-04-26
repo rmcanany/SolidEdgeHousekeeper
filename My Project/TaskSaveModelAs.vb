@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports Microsoft.WindowsAPICodePack.Dialogs
+'Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class TaskSaveModelAs
 
@@ -1169,7 +1169,7 @@ Public Class TaskSaveModelAs
 
         Select Case Name
             Case ControlNames.BrowseNewDir.ToString
-                Dim tmpFolderDialog As New CommonOpenFileDialog
+                Dim tmpFolderDialog As New Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
                 tmpFolderDialog.IsFolderPicker = True
 
                 If IO.Directory.Exists(Me.NewDir) Then

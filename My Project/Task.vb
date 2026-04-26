@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
-Imports System.Reflection
-Imports Newtonsoft.Json
+'Imports System.Reflection
+'Imports Newtonsoft.Json
 
 Public MustInherit Class Task
     Inherits HCIsolatedTaskProxy
@@ -355,7 +355,7 @@ Public MustInherit Class Task
         Dim tmpJSONDict As New Dictionary(Of String, String)
 
         Dim TaskType As Type = Me.GetType()
-        Dim PropInfos = New List(Of PropertyInfo)(TaskType.GetProperties())
+        Dim PropInfos = New List(Of Reflection.PropertyInfo)(TaskType.GetProperties())
 
         Dim IgnoreProps As New List(Of String)
         IgnoreProps.AddRange({"Description", "HelpText", "RequiresSave", "AppliesToAssembly", "AppliesToPart", "AppliesToSheetmetal"})
@@ -371,7 +371,7 @@ Public MustInherit Class Task
 
         Dim s As String = ""
 
-        For Each PropInfo As PropertyInfo In PropInfos
+        For Each PropInfo As Reflection.PropertyInfo In PropInfos
 
             Dim PropInfoName As String = PropInfo.Name
 
@@ -392,7 +392,7 @@ Public MustInherit Class Task
                     tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
                 Case "List`1".ToLower
                     Dim Something = PropInfo.GetValue(Me, Nothing)
-                    tmpJSONDict(PropInfoName) = JsonConvert.SerializeObject(Something)
+                    tmpJSONDict(PropInfoName) = Newtonsoft.Json.JsonConvert.SerializeObject(Something)
                     Dim i = 0
 
                 Case "Image".ToLower  ' Nothing to do here and below
@@ -415,7 +415,7 @@ Public MustInherit Class Task
 
         tmpJSONDict("TaskName") = Me.Name
 
-        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpJSONDict)
 
         Return JSONString
     End Function
@@ -434,12 +434,12 @@ Public MustInherit Class Task
         '    "IsSelectedDraft":"False"
         '}
 
-        Dim tmpJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+        Dim tmpJSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
         Dim TaskType As Type = Me.GetType()
-        Dim PropInfos = New List(Of PropertyInfo)(TaskType.GetProperties())
+        Dim PropInfos = New List(Of Reflection.PropertyInfo)(TaskType.GetProperties())
 
-        For Each PropInfo As PropertyInfo In PropInfos
+        For Each PropInfo As Reflection.PropertyInfo In PropInfos
 
             Dim PropInfoName As String = PropInfo.Name
 
@@ -457,7 +457,7 @@ Public MustInherit Class Task
                         PropInfo.SetValue(Me, CBool(tmpJSONDict(PropInfoName)))
                     Case "List`1"
                         Dim Something = tmpJSONDict(PropInfoName)
-                        Dim tmpList = JsonConvert.DeserializeObject(Of List(Of String))(Something)
+                        Dim tmpList = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(Something)
                         PropInfo.SetValue(Me, tmpList)
                         Dim i = 0
                 End Select

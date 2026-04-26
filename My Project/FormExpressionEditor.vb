@@ -1,9 +1,9 @@
 ﻿Option Strict On
 
-Imports System.Text.RegularExpressions
-Imports FastColoredTextBoxNS
-Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports PanoramicData.NCalcExtensions
+'Imports System.Text.RegularExpressions
+'Imports FastColoredTextBoxNS
+'Imports Microsoft.WindowsAPICodePack.Dialogs
+'Imports PanoramicData.NCalcExtensions
 
 Public Class FormExpressionEditor
 
@@ -103,14 +103,14 @@ Public Class FormExpressionEditor
 
         popupMenu.SearchPattern = "[\w\.]"
 
-        Dim items = New List(Of AutocompleteItem)()
+        Dim items = New List(Of FastColoredTextBoxNS.AutocompleteItem)()
 
         For Each Item In SolidEdgeProperties
             items.Add(New MethodAutocompleteItem2(Item))
         Next
 
         For Each item In NCalcExtensionsWords
-            items.Add(New AutocompleteItem(item))
+            items.Add(New FastColoredTextBoxNS.AutocompleteItem(item))
         Next
 
         popupMenu.Items.SetAutocompleteItems(items)
@@ -456,10 +456,12 @@ Public Class FormExpressionEditor
             Dim calculation As String = TextEditorFormula.Text
 
             Dim Pattern As String = "%{[^}]*}"
-            Dim Matches As MatchCollection = Regex.Matches(calculation, Pattern)
+            Dim Matches As Text.RegularExpressions.MatchCollection
+            'Dim Matches As Text.RegularExpressions.MatchCollection
             Dim Parameters As New List(Of String)
 
-            For Each MatchString As Match In Matches
+            Matches = System.Text.RegularExpressions.Regex.Matches(calculation, Pattern)
+            For Each MatchString As Text.RegularExpressions.Match In Matches
                 If Not Parameters.Contains(MatchString.Value) Then Parameters.Add(MatchString.Value)
             Next
 
@@ -526,12 +528,12 @@ Public Class FormExpressionEditor
             Next
 
             Dim Success As Boolean = True
-            Dim nCalcExpression As ExtendedExpression = Nothing
+            Dim nCalcExpression As PanoramicData.NCalcExtensions.ExtendedExpression = Nothing
             Dim ExpressionResult As String = ""
 
             If TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL Then
                 Try
-                    nCalcExpression = New ExtendedExpression(calculation)
+                    nCalcExpression = New PanoramicData.NCalcExtensions.ExtendedExpression(calculation)
                     ExpressionResult = CStr(nCalcExpression.Evaluate())
                 Catch ex As Exception
                     Success = False
@@ -642,11 +644,11 @@ Public Class FormExpressionEditor
 
     End Sub
 
-    Private Sub TextEditorFormula_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextEditorFormula.TextChanged
+    Private Sub TextEditorFormula_TextChanged(sender As Object, e As FastColoredTextBoxNS.TextChangedEventArgs) Handles TextEditorFormula.TextChanged
         Try
 
-            e.ChangedRange.SetStyle(Me.CommentsStyle, "\\((.|\n)*)", RegexOptions.Multiline)
-            e.ChangedRange.ClearStyle(New Style() {Me.ParametersStyle})
+            e.ChangedRange.SetStyle(Me.CommentsStyle, "\\((.|\n)*)", System.Text.RegularExpressions.RegexOptions.Multiline)
+            e.ChangedRange.ClearStyle(New FastColoredTextBoxNS.Style() {Me.ParametersStyle})
             e.ChangedRange.SetStyle(Me.ParametersStyle, "'%{[^}']+}'")
             e.ChangedRange.SetStyle(Me.CommandsStyle, CommandsList)
 
@@ -774,12 +776,12 @@ Public Class FormExpressionEditor
             End If
         Else
             'MsgBox($"{OutputType}")
-            Dim tmpFileDialog As New CommonSaveFileDialog
+            Dim tmpFileDialog As New Microsoft.WindowsAPICodePack.Dialogs.CommonSaveFileDialog
 
             tmpFileDialog.Title = "Enter the file name for the new snippet file"
             tmpFileDialog.DefaultFileName = IO.Path.GetFileName(Me.SnippetFilename)
             tmpFileDialog.EnsureFileExists = False
-            tmpFileDialog.Filters.Add(New CommonFileDialogFilter("Solid Edge Files", "*.snp"))
+            tmpFileDialog.Filters.Add(New Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogFilter("Solid Edge Files", "*.snp"))
             If IO.File.Exists(Me.SnippetFilename) Then
                 tmpFileDialog.InitialDirectory = IO.Path.GetDirectoryName(Me.SnippetFilename)
             End If
@@ -854,7 +856,7 @@ Public Class FormExpressionEditor
 End Class
 
 Public Class MethodAutocompleteItem2
-    Inherits MethodAutocompleteItem
+    Inherits FastColoredTextBoxNS.MethodAutocompleteItem
 
     Private firstPart As String
     Private lastPart As String
@@ -871,20 +873,20 @@ Public Class MethodAutocompleteItem2
         End If
     End Sub
 
-    Public Overrides Function Compare(ByVal fragmentText As String) As CompareResult
+    Public Overrides Function Compare(ByVal fragmentText As String) As FastColoredTextBoxNS.CompareResult
         Dim i As Integer = fragmentText.LastIndexOf("."c)
 
         If i < 0 Then
-            If firstPart.StartsWith(fragmentText) AndAlso String.IsNullOrEmpty(lastPart) Then Return CompareResult.VisibleAndSelected
+            If firstPart.StartsWith(fragmentText) AndAlso String.IsNullOrEmpty(lastPart) Then Return FastColoredTextBoxNS.CompareResult.VisibleAndSelected
         Else
             Dim fragmentFirstPart = fragmentText.Substring(0, i)
             Dim fragmentLastPart = fragmentText.Substring(i + 1)
-            If firstPart <> fragmentFirstPart Then Return CompareResult.Hidden
-            If lastPart IsNot Nothing AndAlso lastPart.StartsWith(fragmentLastPart) Then Return CompareResult.VisibleAndSelected
-            If lastPart IsNot Nothing AndAlso lastPart.ToLower().Contains(fragmentLastPart.ToLower()) Then Return CompareResult.Visible
+            If firstPart <> fragmentFirstPart Then Return FastColoredTextBoxNS.CompareResult.Hidden
+            If lastPart IsNot Nothing AndAlso lastPart.StartsWith(fragmentLastPart) Then Return FastColoredTextBoxNS.CompareResult.VisibleAndSelected
+            If lastPart IsNot Nothing AndAlso lastPart.ToLower().Contains(fragmentLastPart.ToLower()) Then Return FastColoredTextBoxNS.CompareResult.Visible
         End If
 
-        Return CompareResult.Hidden
+        Return FastColoredTextBoxNS.CompareResult.Hidden
     End Function
 
     Public Overrides Function GetTextForReplace() As String

@@ -1,10 +1,10 @@
 ﻿Option Strict On
 
-Imports System.IO
-Imports System.Reflection
-Imports System.Text.RegularExpressions
-Imports ExcelDataReader
-Imports PanoramicData.NCalcExtensions
+'Imports System.IO
+'Imports System.Reflection
+'Imports System.Text.RegularExpressions
+'Imports ExcelDataReader
+'Imports PanoramicData.NCalcExtensions
 
 Public Class UtilsCommon
 
@@ -448,7 +448,7 @@ Public Class UtilsCommon
             End If
         Next
 
-        r = Regex.Escape(outstring)
+        r = Text.RegularExpressions.Regex.Escape(outstring)
 
         r = r.Replace("\*", ".*")
         r = r.Replace("\?", ".")
@@ -478,11 +478,11 @@ Public Class UtilsCommon
         Dim tmpList As String() = Nothing
         Dim i As Integer = 0
 
-        Using stream = System.IO.File.Open(FileName, FileMode.Open, FileAccess.Read)
+        Using stream = System.IO.File.Open(FileName, IO.FileMode.Open, IO.FileAccess.Read)
             ' Auto-detect format, supports:
             '  - Binary Excel files (2.0-2003 format; *.xls)
             '  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
-            Using reader = ExcelReaderFactory.CreateReader(stream)
+            Using reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream)
                 ' Choose one of either 1 or 2:
 
                 ' 1. Use the reader methods
@@ -889,8 +889,8 @@ Public Class UtilsCommon
         Dim Formulas As New List(Of String)
         Dim Formula As String
 
-        Dim Matches As MatchCollection
-        Dim MatchString As Match
+        Dim Matches As Text.RegularExpressions.MatchCollection
+        Dim MatchString As Text.RegularExpressions.Match
         Dim Pattern As String
 
         Dim ExpressionLanguage As String = ""
@@ -944,7 +944,7 @@ Public Class UtilsCommon
         FullName = GetFOAFilename(FullName)
 
         Pattern = "%{[^}]*}"  ' Any number of substrings that start with "%{" and end with the first encountered "}".
-        Matches = Regex.Matches(Instring, Pattern)
+        Matches = Text.RegularExpressions.Regex.Matches(Instring, Pattern)
         If Matches.Count = 0 Then
             Outstring = Instring
             Proceed = False
@@ -1031,7 +1031,7 @@ Public Class UtilsCommon
         If Proceed Then
             If IsExpression Then
                 If ExpressionLanguage = "" Or ExpressionLanguage = "NCalc" Then
-                    Dim nCalcExpression As New ExtendedExpression(Outstring)
+                    Dim nCalcExpression As New PanoramicData.NCalcExtensions.ExtendedExpression(Outstring)
                     Try
                         Dim A = nCalcExpression.Evaluate()
                         Outstring = A.ToString
@@ -1077,13 +1077,13 @@ Public Class UtilsCommon
 
         Dim Valid As Boolean = True
 
-        Dim Matches As MatchCollection
-        Dim MatchString As Match
+        Dim Matches As Text.RegularExpressions.MatchCollection
+        Dim MatchString As Text.RegularExpressions.Match
         Dim Pattern As String
         Dim tf As Boolean
 
         Pattern = "%{[^}]*}"
-        Matches = Regex.Matches(Instring, Pattern)
+        Matches = Text.RegularExpressions.Regex.Matches(Instring, Pattern)
         If Matches.Count > 0 Then
             For Each MatchString In Matches
                 tf = MatchString.Value.Contains("%{System.")
@@ -1104,11 +1104,11 @@ Public Class UtilsCommon
         Dim sourceType As Type = HCComObject.GetCOMObjectType(Source)
         Dim destType As Type = HCComObject.GetCOMObjectType(Destination)
 
-        Dim sourceProps() As PropertyInfo = sourceType.GetProperties()
-        Dim destProps() As PropertyInfo = destType.GetProperties()
+        Dim sourceProps() As Reflection.PropertyInfo = sourceType.GetProperties()
+        Dim destProps() As Reflection.PropertyInfo = destType.GetProperties()
 
-        For Each sourceProp As PropertyInfo In sourceProps
-            For Each destProp As PropertyInfo In destProps
+        For Each sourceProp As Reflection.PropertyInfo In sourceProps
+            For Each destProp As Reflection.PropertyInfo In destProps
                 If destProp.CanWrite Then
                     If destProp.Name <> "Parent" Then
                         If destProp.Name = sourceProp.Name Then
@@ -1143,8 +1143,8 @@ Public Class UtilsCommon
         ' '%{Custom.foo|bar.baz|R12}'  -> 'foo|bar.baz'
 
         Dim PropName As String
-        Dim Matches As MatchCollection
-        Dim Match As Match
+        Dim Matches As Text.RegularExpressions.MatchCollection
+        Dim Match As Text.RegularExpressions.Match
         Dim Pattern As String
 
         PropName = PropFormula
@@ -1156,11 +1156,11 @@ Public Class UtilsCommon
         If PropName.StartsWith("Query") Then PropName = "Query"
 
         Pattern = "^(.*)(\|R[0-9]+)$"
-        Matches = Regex.Matches(PropName, Pattern)
+        Matches = Text.RegularExpressions.Regex.Matches(PropName, Pattern)
 
         If Matches.Count > 0 Then
             Match = Matches(0)
-            PropName = Regex.Replace(Match.Value, Pattern, "$1")
+            PropName = Text.RegularExpressions.Regex.Replace(Match.Value, Pattern, "$1")
         End If
 
         Return PropName
@@ -1181,21 +1181,21 @@ Public Class UtilsCommon
         ' '%{System.Title}' -> 0
         ' '%{System.Title|R12}' -> 12
 
-        Dim Matches As MatchCollection
-        Dim Match As Match
+        Dim Matches As Text.RegularExpressions.MatchCollection
+        Dim Match As Text.RegularExpressions.Match
         Dim Pattern As String
 
         Dim ModelIdxString As String
         Dim ModelIdx As Integer
 
         Pattern = "^.*R([0-9]+)}$"
-        Matches = Regex.Matches(PropFormula, Pattern)
+        Matches = Text.RegularExpressions.Regex.Matches(PropFormula, Pattern)
 
         If Matches.Count = 0 Then
             ModelIdx = 0
         Else
             Match = Matches(Matches.Count - 1)
-            ModelIdxString = Regex.Replace(Match.Value, Pattern, "$1")
+            ModelIdxString = Text.RegularExpressions.Regex.Replace(Match.Value, Pattern, "$1")
             ModelIdx = CInt(ModelIdxString)
         End If
 

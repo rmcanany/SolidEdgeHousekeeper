@@ -1,8 +1,8 @@
 ﻿
-Imports System.Runtime.InteropServices
-    Imports System.Threading
+'Imports System.Runtime.InteropServices
+'Imports System.Threading
 
-    Public Class OleMessageFilter
+Public Class OleMessageFilter
         Implements IOleMessageFilter
 
         Public Shared Sub Register()
@@ -10,11 +10,11 @@ Imports System.Runtime.InteropServices
             Dim oldFilter As IOleMessageFilter = Nothing
             Dim iRetVal As Integer
 
-            If (Thread.CurrentThread.GetApartmentState() = ApartmentState.STA) Then
-                iRetVal = CoRegisterMessageFilter(newFilter, oldFilter)
-            Else
-                Throw New COMException("Unable to register message filter because the current thread apartment state is not STA.")
-            End If
+        If (Threading.Thread.CurrentThread.GetApartmentState() = Threading.ApartmentState.STA) Then
+            iRetVal = CoRegisterMessageFilter(newFilter, oldFilter)
+        Else
+            Throw New Runtime.InteropServices.COMException("Unable to register message filter because the current thread apartment state is not STA.")
+        End If
 
         End Sub
 
@@ -52,8 +52,8 @@ Imports System.Runtime.InteropServices
             Return PENDINGMSG.PENDINGMSG_WAITDEFPROCESS
         End Function
 
-        <DllImport("Ole32.dll")>
-        Private Shared Function CoRegisterMessageFilter(ByVal newFilter As IOleMessageFilter,
+    <Runtime.InteropServices.DllImport("Ole32.dll")>
+    Private Shared Function CoRegisterMessageFilter(ByVal newFilter As IOleMessageFilter,
                                                         ByRef oldFilter As IOleMessageFilter) _
                                                         As Integer
         End Function
@@ -71,25 +71,25 @@ Imports System.Runtime.InteropServices
         PENDINGMSG_WAITDEFPROCESS = 2
     End Enum
 
-    <ComImport(),
-    Guid("00000016-0000-0000-C000-000000000046"),
-    InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)>
-    Interface IOleMessageFilter
-        <PreserveSig()>
-        Function HandleInComingCall(ByVal dwCallType As Integer,
+<Runtime.InteropServices.ComImport(),
+    Runtime.InteropServices.Guid("00000016-0000-0000-C000-000000000046"),
+    Runtime.InteropServices.InterfaceTypeAttribute(Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown)>
+Interface IOleMessageFilter
+    <Runtime.InteropServices.PreserveSig()>
+    Function HandleInComingCall(ByVal dwCallType As Integer,
                                     ByVal hTaskCaller As IntPtr,
                                     ByVal dwTickCount As Integer,
                                     ByVal lpInterfaceInfo As IntPtr) _
                                     As Integer
 
-        <PreserveSig()>
-        Function RetryRejectedCall(ByVal hTaskCallee As IntPtr,
+    <Runtime.InteropServices.PreserveSig()>
+    Function RetryRejectedCall(ByVal hTaskCallee As IntPtr,
                                    ByVal dwTickCount As Integer,
                                    ByVal dwRejectType As Integer) _
                                    As Integer
 
-        <PreserveSig()>
-        Function MessagePending(ByVal hTaskCallee As IntPtr,
+    <Runtime.InteropServices.PreserveSig()>
+    Function MessagePending(ByVal hTaskCallee As IntPtr,
                                 ByVal dwTickCount As Integer,
                                 ByVal dwPendingType As Integer) _
                                 As Integer

@@ -1,9 +1,9 @@
 ﻿Option Strict On
 
-Imports System.IO
-Imports System.Text
-Imports SolidEdgeExplorerDLL
-Imports SolidEdgeFramework
+'Imports System.IO
+'Imports System.Text
+'Imports SolidEdgeExplorerDLL
+'Imports SolidEdgeFramework
 
 Public Class Form_SolidEdgeExplorer
 
@@ -11,7 +11,7 @@ Public Class Form_SolidEdgeExplorer
 
     Public Sub UpdateTree()
 
-        Dim ext As String = Path.GetExtension(FileName).ToLower()
+        Dim ext As String = IO.Path.GetExtension(FileName).ToLower()
 
         If ext = ".par" OrElse ext = ".psm" OrElse ext = ".asm" Then
 
@@ -69,7 +69,12 @@ Public Class Form_SolidEdgeExplorer
 
     End Sub
 
-    Private Sub PopulateTreeView(File As String, PartsLiteData As PartsLiteData, CustomPropertyVariableInfos As CustomPropertyVariableInfo, Properties As SolidEdgeExplorerDLL.Properties, PSMCluster0 As PSMCluster0)
+    Private Sub PopulateTreeView(
+        File As String,
+        PartsLiteData As SolidEdgeExplorerDLL.PartsLiteData,
+        CustomPropertyVariableInfos As SolidEdgeExplorerDLL.CustomPropertyVariableInfo,
+        Properties As SolidEdgeExplorerDLL.Properties,
+        PSMCluster0 As SolidEdgeExplorerDLL.PSMCluster0)
 
 
         TreeView1.BeginUpdate()
@@ -86,7 +91,7 @@ Public Class Form_SolidEdgeExplorer
             tmpDefaulNode.Nodes.Add("Unknown2: " & tmpDefaul.Unknown2.ToString)
             tmpDefaulNode.Nodes.Add("ValueType: " & tmpDefaul.ValueType.ToString)
             If tmpDefaul.Name.StartsWith("Default") Then
-                tmpDefaulNode.Nodes.Add("Value: " & tmpDefaul.Value.ToString & "   " & New Utilities.UnitOfMeasure(CInt(tmpDefaul.Value)).Description)
+                tmpDefaulNode.Nodes.Add("Value: " & tmpDefaul.Value.ToString & "   " & New SolidEdgeExplorerDLL.Utilities.UnitOfMeasure(CInt(tmpDefaul.Value)).Description)
             Else
                 tmpDefaulNode.Nodes.Add("Value: " & tmpDefaul.Value.ToString)
             End If
@@ -134,7 +139,7 @@ Public Class Form_SolidEdgeExplorer
 
 
             Dim featuresNode As New TreeNode("Features (" & PartsLiteData.Features.Count.ToString & "/" & PartsLiteData.ExpectedNumFeatures.ToString & ")")
-            For Each feature As Feature In PartsLiteData.Features
+            For Each feature As SolidEdgeExplorerDLL.Feature In PartsLiteData.Features
                 ' Nodo principale con il nome della feature
                 Dim featureNode As New TreeNode(feature.Name)
 
@@ -165,7 +170,7 @@ Public Class Form_SolidEdgeExplorer
 
                 ' Aggiungiamo le proprietà come sotto-nodi
                 variableNode.Nodes.Add("ID: " & variable.ID.ToString())
-                variableNode.Nodes.Add("Unit Type: " & variable.UnitType & "   " & New Utilities.UnitTypeConstant(CInt(variable.UnitType)).Description)
+                variableNode.Nodes.Add("Unit Type: " & variable.UnitType & "   " & New SolidEdgeExplorerDLL.Utilities.UnitTypeConstant(CInt(variable.UnitType)).Description)
                 variableNode.Nodes.Add("Database Value: " & variable.Value.ToString())
                 variableNode.Nodes.Add("User Value: " & V.ToString())
 

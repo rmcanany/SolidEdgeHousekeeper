@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports Newtonsoft.Json
+'Imports Newtonsoft.Json
 
 Public Class FormPropertyInputEditor
 
@@ -96,7 +96,7 @@ Public Class FormPropertyInputEditor
                     End If
                 End If
 
-                If Not UC.FindSearch = "WC" Then
+                If Not (UC.FindSearch = "WC" Or UC.FindSearch = "X") Then
                     If UC.FindString = "*" Then
                         w = String.Format("{0}{1}Usually a find string '{2}' is used with a 'WC' search{3}", w, indent, UC.FindString, vbCrLf)
                     End If
@@ -177,7 +177,7 @@ Public Class FormPropertyInputEditor
         Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
 
         If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
-            JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
+            JSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
         End If
 
         PopulateUCList(JSONDict)
@@ -371,7 +371,7 @@ Public Class FormPropertyInputEditor
         If Me.JSONString.Contains("SavedSetting:") Then  'eg, SavedSetting:ParamFix
             Dim Key As String = Me.JSONString.Replace("SavedSetting:", "")
             If Me.SavedSettingsDict.Keys.Contains(Key) Then
-                Me.JSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(Key))
+                Me.JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(Me.SavedSettingsDict(Key))
                 ComboBoxSavedSettings.Text = Key
             End If
         End If
@@ -414,11 +414,11 @@ Public Class FormPropertyInputEditor
 
             Dim SavedName As String = ComboBoxSavedSettings.Text.Trim
 
-            Dim tmpJSONString = JsonConvert.SerializeObject(JSONDict)
+            Dim tmpJSONString = Newtonsoft.Json.JsonConvert.SerializeObject(JSONDict)
             If SavedName = "" Then
                 Me.JSONString = tmpJSONString
             ElseIf Me.SavedSettingsDict.Keys.Contains(SavedName) Then
-                If tmpJSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(SavedName)) Then
+                If tmpJSONString = Newtonsoft.Json.JsonConvert.SerializeObject(Me.SavedSettingsDict(SavedName)) Then
                     Me.JSONString = $"SavedSetting:{SavedName}"
                 Else
                     MsgBox($"The current form does not match Saved settings '{SavedName}' on file.  Please save it before continuing.")

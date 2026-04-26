@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports Newtonsoft.Json
+'Imports Newtonsoft.Json
 
 Public Class UtilsPreferences
 
@@ -77,7 +77,7 @@ Public Class UtilsPreferences
                 Case "string", "double", "int32", "boolean"
                     Value = CStr(PropInfo.GetValue(FMain, Nothing))
                 Case "list`1"
-                    Value = JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
+                    Value = Newtonsoft.Json.JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
                     'MsgBox(String.Format("list`1 '{0}' detected", PropInfo.Name))
                 Case Else
                     MsgBox(String.Format("In UP.SaveFormMainSettings: PropInfo.Name '{0}' not recognized", PropInfo.Name.ToLower))
@@ -94,7 +94,7 @@ Public Class UtilsPreferences
                     Case "boolean"
                         Value = "False"
                     Case "list`1"
-                        Value = JsonConvert.SerializeObject(New List(Of String))
+                        Value = Newtonsoft.Json.JsonConvert.SerializeObject(New List(Of String))
                     Case Else
                         MsgBox(String.Format("In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
                         'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
@@ -105,7 +105,7 @@ Public Class UtilsPreferences
 
         Next
 
-        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpJSONDict)
 
         IO.File.WriteAllText(Outfile, JSONString)
 
@@ -134,7 +134,7 @@ Public Class UtilsPreferences
         If Not Infile = "" Then
             JSONString = IO.File.ReadAllText(Infile)
 
-            tmpJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+            tmpJSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
             For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
@@ -151,7 +151,7 @@ Public Class UtilsPreferences
                         Case "boolean"
                             PropInfo.SetValue(FMain, CBool(tmpJSONDict(PropInfo.Name)))
                         Case "list`1"
-                            Dim L = JsonConvert.DeserializeObject(Of List(Of String))(tmpJSONDict(PropInfo.Name))
+                            Dim L = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(tmpJSONDict(PropInfo.Name))
                             PropInfo.SetValue(FMain, L)
                     End Select
 
@@ -671,7 +671,7 @@ Public Class UtilsPreferences
         Dim JSONString As String
         Dim Filename = GetEditPropertiesSavedSettingsFilename(CheckExisting:=False)
 
-        JSONString = JsonConvert.SerializeObject(EditPropertiesSavedSettingsDict)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(EditPropertiesSavedSettingsDict)
         IO.File.WriteAllText(Filename, JSONString)
 
     End Sub
@@ -683,7 +683,7 @@ Public Class UtilsPreferences
 
         If Not Filename = "" Then
             JSONString = IO.File.ReadAllText(Filename)
-            EditPropertiesSavedSettingsDict = JsonConvert.DeserializeObject(
+            EditPropertiesSavedSettingsDict = Newtonsoft.Json.JsonConvert.DeserializeObject(
                 Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
         End If
 
@@ -753,7 +753,7 @@ Public Class UtilsPreferences
         Dim JSONString As String
         Dim Filename = GetEditVariablesSavedSettingsFilename(CheckExisting:=False)
 
-        JSONString = JsonConvert.SerializeObject(EditVariablesSavedSettingsDict)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(EditVariablesSavedSettingsDict)
         IO.File.WriteAllText(Filename, JSONString)
 
     End Sub
@@ -765,7 +765,7 @@ Public Class UtilsPreferences
 
         If Not Filename = "" Then
             JSONString = IO.File.ReadAllText(Filename)
-            EditVariablesSavedSettingsDict = JsonConvert.DeserializeObject(
+            EditVariablesSavedSettingsDict = Newtonsoft.Json.JsonConvert.DeserializeObject(
                 Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
         End If
 
@@ -802,7 +802,7 @@ Public Class UtilsPreferences
             tmpJSONDict(Task.Description) = Task.GetFormState()
         Next
 
-        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpJSONDict)
 
         IO.File.WriteAllText(Outfile, JSONString)
 
@@ -828,11 +828,11 @@ Public Class UtilsPreferences
         Else
             JSONString = IO.File.ReadAllText(Filename)
 
-            JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+            JSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
             For Each TaskDescription In JSONDict.Keys
                 JSONString = JSONDict(TaskDescription)
-                TaskJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+                TaskJSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
                 TaskName = TaskJSONDict("TaskName")
 
                 If Splash IsNot Nothing Then Splash.UpdateStatus(String.Format("Loading {0}", TaskName))

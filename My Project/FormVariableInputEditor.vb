@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports Newtonsoft.Json
+'Imports Newtonsoft.Json
 
 Public Class FormVariableInputEditor
     Public Property JSONString As String
@@ -105,7 +105,7 @@ Public Class FormVariableInputEditor
         Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
 
         If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
-            JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
+            JSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
         End If
 
         PopulateUCList(JSONDict)
@@ -260,7 +260,7 @@ Public Class FormVariableInputEditor
         If Me.JSONString.Contains("SavedSetting:") Then 'SavedSetting:FP
             Dim Key As String = Me.JSONString.Replace("SavedSetting:", "")
             If Me.SavedSettingsDict.Keys.Contains(Key) Then
-                Me.JSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(Key))
+                Me.JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(Me.SavedSettingsDict(Key))
                 ComboBoxSavedSettings.Text = Key
             End If
         End If
@@ -296,11 +296,11 @@ Public Class FormVariableInputEditor
 
             Dim SavedName As String = ComboBoxSavedSettings.Text.Trim
 
-            Dim tmpJSONString = JsonConvert.SerializeObject(JSONDict)
+            Dim tmpJSONString = Newtonsoft.Json.JsonConvert.SerializeObject(JSONDict)
             If SavedName = "" Then
                 Me.JSONString = tmpJSONString
             ElseIf Me.SavedSettingsDict.Keys.Contains(SavedName) Then
-                If tmpJSONString = JsonConvert.SerializeObject(Me.SavedSettingsDict(SavedName)) Then
+                If tmpJSONString = Newtonsoft.Json.JsonConvert.SerializeObject(Me.SavedSettingsDict(SavedName)) Then
                     Me.JSONString = $"SavedSetting:{SavedName}"
                 Else
                     MsgBox($"The current form does not match Saved settings '{SavedName}' on file.  Please save it before continuing.")

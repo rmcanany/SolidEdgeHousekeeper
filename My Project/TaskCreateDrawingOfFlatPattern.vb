@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports Microsoft.WindowsAPICodePack.Dialogs
+'Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class TaskCreateDrawingOfFlatPattern
     Inherits Task
@@ -824,7 +824,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                 End If
 
             Case ControlNames.BrowseNewDirDraft.ToString
-                Dim tmpFolderDialog As New CommonOpenFileDialog
+                Dim tmpFolderDialog As New Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
                 tmpFolderDialog.IsFolderPicker = True
 
                 If IO.Directory.Exists(Me.NewDirDraft) Then
@@ -843,7 +843,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                 End If
 
             Case ControlNames.BrowseNewDirPDF.ToString
-                Dim tmpFolderDialog As New CommonOpenFileDialog
+                Dim tmpFolderDialog As New Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
                 tmpFolderDialog.IsFolderPicker = True
 
                 If IO.Directory.Exists(Me.NewDirPDF) Then

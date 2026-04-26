@@ -1,10 +1,10 @@
 ﻿Option Strict On
 
-Imports System.Reflection
-Imports ListViewExtended
+'Imports System.Reflection
+'Imports ListViewExtended
 
 Public Class UtilsFileList
-    Public Property ListViewFiles As ListViewCollapsible
+    Public Property ListViewFiles As ListViewExtended.ListViewCollapsible
     Public Property ListViewSources As ListView
     Public Property FMain As Form_Main
     Public Property ErrorLogger As HCErrorLogger

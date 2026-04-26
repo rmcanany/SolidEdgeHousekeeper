@@ -1,6 +1,7 @@
 ﻿Option Strict On
-Imports System.Reflection
-Imports Newtonsoft.Json
+
+'Imports System.Reflection
+'Imports Newtonsoft.Json
 
 Public Class PropertyFilters
     Public Property Items As List(Of HCPropertyFilter)
@@ -86,7 +87,7 @@ Public Class PropertyFilters
             tmpItemsList.Add(Item.ToJSON)
         Next
 
-        JSONString = JsonConvert.SerializeObject(tmpItemsList)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpItemsList)
 
         Return JSONString
     End Function
@@ -94,7 +95,7 @@ Public Class PropertyFilters
     Public Sub FromJSON(JSONString As String)
         Dim tmpItemsList As List(Of String)
 
-        tmpItemsList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+        tmpItemsList = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
 
         If Me.Items Is Nothing Then
             Me.Items = New List(Of HCPropertyFilter)
@@ -144,7 +145,7 @@ Public Class HCPropertyFilter
             tmpConditionsList.Add(Condition.ToJSON)
         Next
 
-        tmpConditionsListJSON = JsonConvert.SerializeObject(tmpConditionsList)
+        tmpConditionsListJSON = Newtonsoft.Json.JsonConvert.SerializeObject(tmpConditionsList)
 
         tmpDict("Conditions") = tmpConditionsListJSON
 
@@ -152,7 +153,7 @@ Public Class HCPropertyFilter
             MsgBox(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
             JSONString = ""
         Else
-            JSONString = JsonConvert.SerializeObject(tmpDict)
+            JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpDict)
         End If
 
 
@@ -164,7 +165,7 @@ Public Class HCPropertyFilter
         Dim tmpConditionsListJSON As String
         Dim tmpDict As Dictionary(Of String, String)
 
-        tmpDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+        tmpDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
         If tmpDict.Keys.Contains("ConditionsListJSON") Then
             tmpDict("Conditions") = tmpDict("ConditionsListJSON")
@@ -179,7 +180,7 @@ Public Class HCPropertyFilter
         Me.IsActiveFilter = CBool(tmpDict("IsActiveFilter"))
 
         tmpConditionsListJSON = tmpDict("Conditions")
-        tmpConditionsList = JsonConvert.DeserializeObject(Of List(Of String))(tmpConditionsListJSON)
+        tmpConditionsList = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(tmpConditionsListJSON)
 
         Me.Conditions.Clear()
 
@@ -193,10 +194,10 @@ Public Class HCPropertyFilter
     Private Function CheckJSONDict(JSONDict As Dictionary(Of String, String)) As Boolean
         Dim Proceed As Boolean = True
 
-        Dim PropInfos() As PropertyInfo = Me.GetType.GetProperties()
+        Dim PropInfos() As Reflection.PropertyInfo = Me.GetType.GetProperties()
 
         ' Check for missing info
-        For Each PropInfo As PropertyInfo In PropInfos
+        For Each PropInfo As Reflection.PropertyInfo In PropInfos
             If Not JSONDict.Keys.Contains(PropInfo.Name) Then
                 Proceed = False
                 Exit For
@@ -262,7 +263,7 @@ Public Class PropertyFilterCondition
             MsgBox(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
             JSONString = ""
         Else
-            JSONString = JsonConvert.SerializeObject(tmpComparisonDict)
+            JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpComparisonDict)
         End If
 
         Return JSONString
@@ -271,7 +272,7 @@ Public Class PropertyFilterCondition
     Public Sub FromJSON(JSONString As String)
 
         Dim tmpComparisonDict As Dictionary(Of String, String)
-        tmpComparisonDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+        tmpComparisonDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
         If Not CheckJSONDict(tmpComparisonDict) Then
             Throw New Exception(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
@@ -290,10 +291,10 @@ Public Class PropertyFilterCondition
     Private Function CheckJSONDict(JSONDict As Dictionary(Of String, String)) As Boolean
         Dim Proceed As Boolean = True
 
-        Dim PropInfos() As PropertyInfo = Me.GetType.GetProperties()
+        Dim PropInfos() As Reflection.PropertyInfo = Me.GetType.GetProperties()
 
         ' Check for missing info
-        For Each PropInfo As PropertyInfo In PropInfos
+        For Each PropInfo As Reflection.PropertyInfo In PropInfos
             If Not JSONDict.Keys.Contains(PropInfo.Name) Then
                 Proceed = False
                 Exit For

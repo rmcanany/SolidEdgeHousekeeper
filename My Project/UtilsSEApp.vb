@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports System.Runtime.InteropServices
+'Imports System.Runtime.InteropServices
 
 Public Class UtilsSEApp
 
@@ -303,7 +303,7 @@ Public Class UtilsSEApp
             '******* Added because of .NET
             If Not (obj Is Nothing) Then
                 'Marshal.ReleaseComObject(obj)
-                Marshal.FinalReleaseComObject(obj)
+                Runtime.InteropServices.Marshal.FinalReleaseComObject(obj)
             End If
 
             GC.Collect(GC.MaxGeneration)

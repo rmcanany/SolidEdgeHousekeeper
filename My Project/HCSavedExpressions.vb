@@ -1,5 +1,6 @@
 ﻿Option Strict On
-Imports Newtonsoft.Json
+
+'Imports Newtonsoft.Json
 
 Public Class HCSavedExpressions
     Public Property Items As List(Of SavedExpression)
@@ -17,7 +18,7 @@ Public Class HCSavedExpressions
 
         If Not SavedExpressionsFilename = "" Then
             Dim JSONString As String = IO.File.ReadAllText(SavedExpressionsFilename)
-            Dim JSONList As List(Of String) = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+            Dim JSONList As List(Of String) = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
 
             Me.Items.Clear()
             For Each tmpJSONString As String In JSONList
@@ -242,7 +243,7 @@ Public Class HCSavedExpressions
             JSONList.Add(SE.ToJSON)
         Next
 
-        JSONString = JsonConvert.SerializeObject(JSONList)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(JSONList)
 
         Dim UP As New UtilsPreferences
 
@@ -295,12 +296,12 @@ Public Class SavedExpression
     End Sub
 
     Public Sub New(JSONString As String)
-        Dim JSONDict As Dictionary(Of String, String) = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+        Dim JSONDict As Dictionary(Of String, String) = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
         Me.Name = JSONDict("Name")
         Me.Language = JSONDict("Language")
-        Me.Comments = JsonConvert.DeserializeObject(Of List(Of String))(JSONDict("Comments"))
-        Me.Expression = JsonConvert.DeserializeObject(Of List(Of String))(JSONDict("Expression"))
+        Me.Comments = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(JSONDict("Comments"))
+        Me.Expression = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(JSONDict("Expression"))
 
     End Sub
 
@@ -314,10 +315,10 @@ Public Class SavedExpression
 
         JSONDict("Name") = Me.Name
         JSONDict("Language") = Me.Language
-        JSONDict("Comments") = JsonConvert.SerializeObject(Me.Comments)
-        JSONDict("Expression") = JsonConvert.SerializeObject(Me.Expression)
+        JSONDict("Comments") = Newtonsoft.Json.JsonConvert.SerializeObject(Me.Comments)
+        JSONDict("Expression") = Newtonsoft.Json.JsonConvert.SerializeObject(Me.Expression)
 
-        JSONString = JsonConvert.SerializeObject(JSONDict)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(JSONDict)
 
         Return JSONString
     End Function

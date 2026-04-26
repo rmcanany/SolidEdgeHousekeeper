@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports System.Text.RegularExpressions
+'Imports System.Text.RegularExpressions
 
 Public Class UtilsPropertyFilters
 
@@ -287,7 +287,7 @@ Public Class UtilsPropertyFilters
         ElseIf Comparison = "wildcard_match" Then
             tf = DocValue.ToLower Like Value.ToLower
         ElseIf Comparison = "regex_match" Then
-            tf = Regex.IsMatch(DocValue, Value, RegexOptions.IgnoreCase)
+            tf = Text.RegularExpressions.Regex.IsMatch(DocValue, Value, Text.RegularExpressions.RegexOptions.IgnoreCase)
         ElseIf Comparison = ">" Then
             Try
                 tf = TextToDouble(DocValue) > TextToDouble(Value)

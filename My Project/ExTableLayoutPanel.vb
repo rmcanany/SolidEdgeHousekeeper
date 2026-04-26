@@ -1,4 +1,4 @@
-﻿Imports System.Runtime.InteropServices
+﻿'Imports System.Runtime.InteropServices
 
 Public Class ExTableLayoutPanel
     ''''' https://www.vbforums.com/showthread.php?600989-Slow-resizing-of-a-TableLayoutPanel
@@ -55,7 +55,7 @@ End Class
 Module NativeMethods
     Public WM_SETREDRAW As Integer = &HB
     Public WS_EX_COMPOSITED As Integer = &H2000000
-    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+    <Runtime.InteropServices.DllImport("user32.dll", CharSet:=Runtime.InteropServices.CharSet.Auto)>
     Function SendMessage(ByVal hWnd As IntPtr, ByVal Msg As Integer, ByVal wParam As IntPtr, ByVal lParam As IntPtr) As IntPtr
 
     End Function
