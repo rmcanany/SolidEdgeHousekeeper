@@ -2242,47 +2242,35 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
+    'Private Sub BT_Update_DoubleClick(sender As Object, e As EventArgs) Handles BT_Update.DoubleClick
+
+    'End Sub
+
+    Private Sub BT_Update_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
+
+        If Me.ButtonCancel.Text = "Stop" Then Exit Sub
+
+        Me.Cursor = Cursors.WaitCursor
+
+        Dim ElapsedTime As Double
+        Dim ElapsedTimeText As String
+
+        Dim StartTime As DateTime = Now
+
+        Me.LabelTimeRemaining.Text = ""
+        System.Windows.Forms.Application.DoEvents()
+
+        Dim UFL As New UtilsFileList(Me)
+
+        Me.StopProcess = False
+        Me.ButtonCancel.Text = "Stop"
+
+        Me.Cursor = Cursors.WaitCursor
 
         If My.Computer.Keyboard.ShiftKeyDown Then
 
-#Region "TOBEMOVED"
-            Me.Cursor = Cursors.WaitCursor
-
-            Dim ElapsedTime As Double
-            Dim ElapsedTimeText As String
-
-            Dim StartTime As DateTime = Now
-
             Me.TextBoxStatus.Text = "Updating properties..."
-            Me.LabelTimeRemaining.Text = ""
-            System.Windows.Forms.Application.DoEvents()
-#End Region
-
-            ' Core function is here
-            Me.StopProcess = False
-            Me.ButtonCancel.Text = "Stop"
-
-            Dim UFL As New UtilsFileList(Me)
-            Me.Cursor = Cursors.WaitCursor
             UFL.UpdatePropertiesColumns()
-            Me.Cursor = Cursors.Default
-
-            Me.ButtonCancel.Text = "Cancel"
-            ' End of core function
-#Region "TOBEMOVED"
-            Me.Cursor = Cursors.Default
-
-            ElapsedTime = Now.Subtract(StartTime).TotalMinutes
-            If ElapsedTime < 60 Then
-                ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
-            Else
-                ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
-            End If
-
-            Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
-            Me.TextBoxStatus.Text = String.Format("Updated properties in {0} files in {1}", filecount, ElapsedTimeText)
-#End Region
 
         Else
 
@@ -2291,12 +2279,26 @@ Public Class Form_Main
                 If Result = MsgBoxResult.Cancel Then Exit Sub
             End If
 
+            Me.TextBoxStatus.Text = "Updating list..."
             ButtonProcess.Text = "Process"
 
-            Dim UFL As New UtilsFileList(Me)
             UFL.New_UpdateFileList()
 
         End If
+
+        Me.ButtonCancel.Text = "Cancel"
+
+        Me.Cursor = Cursors.Default
+
+        ElapsedTime = Now.Subtract(StartTime).TotalMinutes
+        If ElapsedTime < 60 Then
+            ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+        Else
+            ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
+        End If
+
+        Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
+        Me.TextBoxStatus.Text = String.Format("Updated properties in {0} files in {1}", filecount, ElapsedTimeText)
 
     End Sub
 
