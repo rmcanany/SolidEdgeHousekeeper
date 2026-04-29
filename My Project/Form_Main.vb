@@ -2242,63 +2242,48 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub BT_Update_DoubleClick(sender As Object, e As EventArgs) Handles BT_Update.DoubleClick
-
-    'End Sub
-
     Private Sub BT_Update_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
 
         If Me.ButtonCancel.Text = "Stop" Then Exit Sub
 
-        Me.Cursor = Cursors.WaitCursor
-
+        Dim UFL As New UtilsFileList(Me)
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
-
         Dim StartTime As DateTime = Now
 
+        Me.Cursor = Cursors.WaitCursor
         Me.LabelTimeRemaining.Text = ""
-        System.Windows.Forms.Application.DoEvents()
-
-        Dim UFL As New UtilsFileList(Me)
-
         Me.StopProcess = False
         Me.ButtonCancel.Text = "Stop"
-
-        Me.Cursor = Cursors.WaitCursor
+        System.Windows.Forms.Application.DoEvents()
 
         If My.Computer.Keyboard.ShiftKeyDown Then
-
             Me.TextBoxStatus.Text = "Updating properties..."
             UFL.UpdatePropertiesColumns()
-
         Else
-
+            Dim Proceed As Boolean = True
             If Me.SortRandomSample Then
                 Dim Result As MsgBoxResult = MsgBox("INFO: Sort Random Sample enabled.  Select Cancel to quit.", vbOKCancel)
-                If Result = MsgBoxResult.Cancel Then Exit Sub
+                If Result = MsgBoxResult.Cancel Then Proceed = False
             End If
 
-            Me.TextBoxStatus.Text = "Updating list..."
-            ButtonProcess.Text = "Process"
-
-            UFL.New_UpdateFileList()
-
+            If Proceed Then
+                Me.TextBoxStatus.Text = "Updating list..."
+                ButtonProcess.Text = "Process"
+                UFL.New_UpdateFileList()
+            End If
         End If
 
         Me.ButtonCancel.Text = "Cancel"
-
         Me.Cursor = Cursors.Default
 
         ElapsedTime = Now.Subtract(StartTime).TotalMinutes
         If ElapsedTime < 60 Then
-            ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+            ElapsedTimeText = $"{ElapsedTime:0.0} min."
         Else
-            ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
+            ElapsedTimeText = $"{(ElapsedTime / 60):0.0} hr."
         End If
-
-        Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
-        Me.TextBoxStatus.Text = String.Format("Updated properties in {0} files in {1}", filecount, ElapsedTimeText)
+        Me.TextBoxStatus.Text = $"Updated properties in {ListViewFiles.Items.Count} files in {ElapsedTimeText}"
 
     End Sub
 

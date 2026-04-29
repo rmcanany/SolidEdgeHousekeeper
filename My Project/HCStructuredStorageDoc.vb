@@ -45,25 +45,26 @@ Public Class HCStructuredStorageDoc
         Me.FullName = _FullName
         Me.OpenReadWrite = _OpenReadWrite
 
-        If Me.OpenReadWrite Then
-            Dim i = 0
-        End If
-        Try
-            If _OpenReadWrite Then
-                Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite)
-                'cf = OpenMcdf.RootStorage.Open(FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite)
-            Else
-                Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.Read)
-                'cf = OpenMcdf.RootStorage.OpenRead(FullName)
-            End If
-        Catch ex As Exception
-            Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
-        End Try
+        'Try
+        '    If _OpenReadWrite Then
+        '        Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite)
+        '    Else
+        '        Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.Read)
+        '    End If
+        'Catch ex As Exception
+        '    Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
+        'End Try
 
         Try
-            'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.LeaveOpen)
-            'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.None)
-            Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.Transacted)
+            If _OpenReadWrite Then
+                'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.Transacted)
+                'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.LeaveOpen)
+                Me.cf = OpenMcdf.RootStorage.Open(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite, OpenMcdf.StorageModeFlags.None)
+                'Me.cf = OpenMcdf.RootStorage.Open(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite, OpenMcdf.StorageModeFlags.Transacted)
+            Else
+                'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.None)
+                Me.cf = OpenMcdf.RootStorage.OpenRead(Me.FullName)
+            End If
         Catch ex As Exception
             If Me.fs IsNot Nothing Then Me.fs.Close()
             Me.fs = Nothing
@@ -85,16 +86,18 @@ Public Class HCStructuredStorageDoc
             Next
         End If
 
-        Try
-            Me.cf.Commit()
-        Catch ex As Exception
-        End Try
+        'Try
+        '    Me.cf.Commit()
+        'Catch ex As Exception
+        'End Try
+
+        cf.Flush()
 
     End Sub
 
     Public Sub Close()
         If Me.cf IsNot Nothing Then
-            'Me.cf.Dispose()
+            Me.cf.Dispose()
             Me.cf = Nothing
         End If
 
@@ -1290,8 +1293,10 @@ Public Class HCStructuredStorageDoc
             Dim Prop = GetItem(PropertyNameEnglish)
 
             If Prop IsNot Nothing Then
+                Dim PropID As UInteger = Prop.PropertyIdentifier
                 Try
-                    co.UserDefinedProperties.RemoveProperty(Prop.PropertyIdentifier)
+                    co.UserDefinedProperties.RemoveProperty(PropID)
+                    co.UserDefinedProperties.PropertyNames.Remove(PropID)
                 Catch ex As Exception
                     Success = False
                 End Try
