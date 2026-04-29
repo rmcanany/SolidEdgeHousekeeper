@@ -4296,6 +4296,7 @@ Public Class Form_Main
         If My.Computer.Keyboard.ShiftKeyDown Then
 
             fSEE = New Form_SolidEdgeExplorer()
+            fSEE.PropertiesData = Me.PropertiesData
 
             ButtonShowPreview.Checked = Not ButtonShowPreview.Checked
 

@@ -9,6 +9,8 @@ Public Class Form_SolidEdgeExplorer
 
     Public FileName As String
 
+    Public Property PropertiesData As HCPropertiesData
+
     Public Sub UpdateTree()
 
         Dim ext As String = IO.Path.GetExtension(FileName).ToLower()
@@ -103,8 +105,22 @@ Public Class Form_SolidEdgeExplorer
         For Each PropertySet In Properties.PropertySets
             Dim tmpPropertySetNode As New TreeNode(PropertySet.Name)
             For Each item In PropertySet.Items
-                Dim tmpItemNode As New TreeNode(item.OLEProp.PropertyName & " = " & item.Value.ToString)
-                tmpPropertySetNode.Nodes.Add(tmpItemNode)
+                Dim tmpItemNode As TreeNode = Nothing
+                Dim tmpPropertyData As PropertyData = Nothing
+
+                Try
+                    tmpPropertyData = Me.PropertiesData.GetPropertyData(PropertySet.Name, CInt(item.OLEProp.PropertyIdentifier))
+                Catch ex As Exception
+                End Try
+
+                If Me.PropertiesData Is Nothing Or tmpPropertyData Is Nothing Or PropertySet.Name.ToLower = "custom" Then
+                    'Dim tmpItemNode As New TreeNode(item.OLEProp.PropertyName & " = " & item.Value.ToString)
+                    tmpItemNode = New TreeNode(item.Name & " = " & item.Value.ToString)
+                Else
+                    tmpItemNode = New TreeNode(tmpPropertyData.Name & " = " & item.Value.ToString)
+                End If
+
+                If tmpItemNode IsNot Nothing Then tmpPropertySetNode.Nodes.Add(tmpItemNode)
             Next
             PropertiesNode.Nodes.Add(tmpPropertySetNode)
         Next
