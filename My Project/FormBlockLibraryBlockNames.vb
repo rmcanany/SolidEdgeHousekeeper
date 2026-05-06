@@ -126,15 +126,13 @@ Public Class FormBlockLibraryBlockNames
 
         Me.Cursor = Cursors.WaitCursor
 
+        OleMessageFilter.Register()
+
         Dim USEA As New UtilsSEApp(Form_Main)
         USEA.ErrorLogger = New Logger("Update block library", Nothing)
         LabelStatus.Text = "Starting Solid Edge..."
 
-        USEA.SEStart(
-            RunInBackground:=False,
-            UseCurrentSession:=True,
-            NoUpdateMRU:=False,
-            ProcessDraftsInactive:=False)
+        USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=False, ProcessDraftsInactive:=False)
 
         Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
 
@@ -153,7 +151,10 @@ Public Class FormBlockLibraryBlockNames
 
         SEDoc.Close(False)
 
-        USEA.SEStop(UseCurrentSession:=True)
+        'USEA.SEStop(UseCurrentSession:=True)
+        USEA.SEStop(UseCurrentSession:=Form_Main.UseCurrentSession)
+
+        OleMessageFilter.Revoke()
 
         LabelStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
 

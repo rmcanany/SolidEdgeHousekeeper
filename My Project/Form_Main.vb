@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class Form_Main
 
     Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
-    Public Property PreviewVersion As String = "10" ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "13" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -1140,20 +1140,6 @@ Public Class Form_Main
 
 
     Private Sub Startup(SavingPresets As Boolean)
-
-        '' Quick try
-        'Dim JunkFilename = "C:\data\CAD\7481\7481-00001 BUHRS LEAD IN GUIDE.psm"
-        'Dim SSDoc As New HCStructuredStorageDoc(JunkFilename)
-        'SSDoc.ReadProperties(Me.PropertiesData)
-        'Dim tf1 As Boolean = SSDoc.IsExposedVariable("ExposedVar")
-        'Dim tf2 As Boolean = SSDoc.IsExposedVariable("UnexposedVar")
-        'SSDoc.ReadVariables()
-        'Dim V As SolidEdgeExplorerDLL.Variable = SSDoc.GetVariable("MaterialThickness")
-        'Dim s As String = $"{V.Name}{vbCrLf}"
-        's = $"{s}{V.ID}{vbCrLf}"
-        's = $"{s}{V.Value}{vbCrLf}"
-        'MsgBox(s)
-
 
         RunningStartup = True
         Me.Cursor = Cursors.WaitCursor

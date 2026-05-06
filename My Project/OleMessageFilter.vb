@@ -1,14 +1,16 @@
-﻿
+﻿Option Strict On
+
 'Imports System.Runtime.InteropServices
 'Imports System.Threading
 
 Public Class OleMessageFilter
-        Implements IOleMessageFilter
+    Implements IOleMessageFilter
 
-        Public Shared Sub Register()
-            Dim newFilter As IOleMessageFilter = New OleMessageFilter()
-            Dim oldFilter As IOleMessageFilter = Nothing
-            Dim iRetVal As Integer
+    Public Shared Sub Register()
+
+        Dim newFilter As IOleMessageFilter = New OleMessageFilter()
+        Dim oldFilter As IOleMessageFilter = Nothing
+        Dim iRetVal As Integer
 
         If (Threading.Thread.CurrentThread.GetApartmentState() = Threading.ApartmentState.STA) Then
             iRetVal = CoRegisterMessageFilter(newFilter, oldFilter)
@@ -16,50 +18,54 @@ Public Class OleMessageFilter
             Throw New Runtime.InteropServices.COMException("Unable to register message filter because the current thread apartment state is not STA.")
         End If
 
-        End Sub
+    End Sub
 
-        Public Shared Sub Revoke()
-            Dim oldFilter As IOleMessageFilter = Nothing
-            CoRegisterMessageFilter(Nothing, oldFilter)
-        End Sub
+    Public Shared Sub Revoke()
+        Dim oldFilter As IOleMessageFilter = Nothing
+        CoRegisterMessageFilter(Nothing, oldFilter)
+    End Sub
 
-        Private Function HandleInComingCall(ByVal dwCallType As Integer,
-                                            ByVal hTaskCaller As System.IntPtr,
-                                            ByVal dwTickCount As Integer,
-                                            ByVal lpInterfaceInfo As System.IntPtr) _
-                                            As Integer Implements IOleMessageFilter.HandleInComingCall
+    Private Function HandleInComingCall(
+        ByVal dwCallType As Integer,
+        ByVal hTaskCaller As System.IntPtr,
+        ByVal dwTickCount As Integer,
+        ByVal lpInterfaceInfo As System.IntPtr
+        ) As Integer Implements IOleMessageFilter.HandleInComingCall
 
-            Return SERVERCALL.SERVERCALL_ISHANDLED
-        End Function
+        Return SERVERCALL.SERVERCALL_ISHANDLED
+    End Function
 
-        Private Function RetryRejectedCall(ByVal hTaskCallee As System.IntPtr,
-                                           ByVal dwTickCount As Integer,
-                                           ByVal dwRejectType As Integer) _
-                                           As Integer Implements IOleMessageFilter.RetryRejectedCall
+    Private Function RetryRejectedCall(
+        ByVal hTaskCallee As System.IntPtr,
+        ByVal dwTickCount As Integer,
+        ByVal dwRejectType As Integer
+        ) As Integer Implements IOleMessageFilter.RetryRejectedCall
 
-            If dwRejectType = SERVERCALL.SERVERCALL_RETRYLATER Then
-                Return 99
-            End If
+        If dwRejectType = SERVERCALL.SERVERCALL_RETRYLATER Then
+            Return 99
+        End If
 
-            Return -1
-        End Function
+        Return -1
+    End Function
 
-        Private Function MessagePending(ByVal hTaskCallee As System.IntPtr,
-                                        ByVal dwTickCount As Integer,
-                                        ByVal dwPendingType As Integer) _
-                                        As Integer Implements IOleMessageFilter.MessagePending
+    Private Function MessagePending(
+        ByVal hTaskCallee As System.IntPtr,
+        ByVal dwTickCount As Integer,
+        ByVal dwPendingType As Integer
+        ) As Integer Implements IOleMessageFilter.MessagePending
 
-            Return PENDINGMSG.PENDINGMSG_WAITDEFPROCESS
-        End Function
+        Return PENDINGMSG.PENDINGMSG_WAITDEFPROCESS
+    End Function
 
     <Runtime.InteropServices.DllImport("Ole32.dll")>
-    Private Shared Function CoRegisterMessageFilter(ByVal newFilter As IOleMessageFilter,
-                                                        ByRef oldFilter As IOleMessageFilter) _
-                                                        As Integer
-        End Function
-    End Class
+    Private Shared Function CoRegisterMessageFilter(
+        ByVal newFilter As IOleMessageFilter,
+        ByRef oldFilter As IOleMessageFilter
+        ) As Integer
+    End Function
+End Class
 
-    Enum SERVERCALL
+Enum SERVERCALL
         SERVERCALL_ISHANDLED = 0
         SERVERCALL_REJECTED = 1
         SERVERCALL_RETRYLATER = 2
@@ -76,22 +82,25 @@ Public Class OleMessageFilter
     Runtime.InteropServices.InterfaceTypeAttribute(Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown)>
 Interface IOleMessageFilter
     <Runtime.InteropServices.PreserveSig()>
-    Function HandleInComingCall(ByVal dwCallType As Integer,
-                                    ByVal hTaskCaller As IntPtr,
-                                    ByVal dwTickCount As Integer,
-                                    ByVal lpInterfaceInfo As IntPtr) _
-                                    As Integer
+    Function HandleInComingCall(
+        ByVal dwCallType As Integer,
+        ByVal hTaskCaller As IntPtr,
+        ByVal dwTickCount As Integer,
+        ByVal lpInterfaceInfo As IntPtr
+        ) As Integer
 
     <Runtime.InteropServices.PreserveSig()>
-    Function RetryRejectedCall(ByVal hTaskCallee As IntPtr,
-                                   ByVal dwTickCount As Integer,
-                                   ByVal dwRejectType As Integer) _
-                                   As Integer
+    Function RetryRejectedCall(
+        ByVal hTaskCallee As IntPtr,
+        ByVal dwTickCount As Integer,
+        ByVal dwRejectType As Integer
+        ) As Integer
 
     <Runtime.InteropServices.PreserveSig()>
-    Function MessagePending(ByVal hTaskCallee As IntPtr,
-                                ByVal dwTickCount As Integer,
-                                ByVal dwPendingType As Integer) _
-                                As Integer
-    End Interface
+    Function MessagePending(
+        ByVal hTaskCallee As IntPtr,
+        ByVal dwTickCount As Integer,
+        ByVal dwPendingType As Integer
+        ) As Integer
+End Interface
 

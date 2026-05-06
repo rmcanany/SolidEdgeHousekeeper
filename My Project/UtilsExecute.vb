@@ -51,8 +51,6 @@ Public Class UtilsExecute
 
         TotalAborts = 0
 
-        'Dim USEA = New UtilsSEApp(FMain)
-
         If FMain.SolidEdgeRequired > 0 Then
             Me.USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
             Me.SEApp = Me.USEA.SEApp
@@ -265,6 +263,17 @@ Public Class UtilsExecute
                                     StartLogger.AddMessage(String.Format("{0}: Template must be in TeamCenter cache folder", Task.Description))
                                 End If
                                 Exit For
+                            End If
+                        End If
+                    Next
+                End If
+
+                If TypeOf Task Is TaskUpdateBlocks Then
+                    Dim T As TaskUpdateBlocks = CType(Task, TaskUpdateBlocks)
+                    For Each tmpItem As ListViewItem In FMain.ListViewSources.Items
+                        If tmpItem.Tag.ToString = "TeamCenter" Then
+                            If Not T.BlockLibrary.Contains(FMain.TCCachePath) Then
+                                StartLogger.AddMessage($"{Task.Description}: Block library must be in TeamCenter cache folder")
                             End If
                         End If
                     Next

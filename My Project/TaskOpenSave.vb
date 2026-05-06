@@ -51,8 +51,12 @@ Public Class TaskOpenSave
         If SEDoc.ReadOnly Then
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else
-            SEDoc.Save()
-            SEApp.DoIdle()
+            Try
+                SEDoc.Save()
+                SEApp.DoIdle()
+            Catch ex As Exception
+                TaskLogger.AddMessage($"Unable to save file.  Reported error: {ex.Message}")
+            End Try
         End If
 
     End Sub

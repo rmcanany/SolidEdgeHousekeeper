@@ -113,8 +113,7 @@ Public Class Form_SolidEdgeExplorer
                 Catch ex As Exception
                 End Try
 
-                If Me.PropertiesData Is Nothing Or tmpPropertyData Is Nothing Or PropertySet.Name.ToLower = "custom" Then
-                    'Dim tmpItemNode As New TreeNode(item.OLEProp.PropertyName & " = " & item.Value.ToString)
+                If Me.PropertiesData Is Nothing Or tmpPropertyData Is Nothing Then
                     tmpItemNode = New TreeNode(item.Name & " = " & item.Value.ToString)
                 Else
                     tmpItemNode = New TreeNode(tmpPropertyData.Name & " = " & item.Value.ToString)

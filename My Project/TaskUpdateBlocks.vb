@@ -352,6 +352,8 @@ Public Class TaskUpdateBlocks
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim BlockLibraryDoc As SolidEdgeDraft.DraftDocument = Nothing
         Dim DocBlockName As String
         Dim LibraryBlockName As String
@@ -368,7 +370,7 @@ Public Class TaskUpdateBlocks
             Try
                 BlockLibraryDoc = CType(SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
             Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to open '{Me.BlockLibrary}'")
+                TaskLogger.AddMessage($"Unable to open block library '{Me.BlockLibrary}'.  Reported error was: {ex.Message}")
             End Try
         End If
 
@@ -376,12 +378,20 @@ Public Class TaskUpdateBlocks
         If Not TaskLogger.HasErrors Then
             ' Read all blocks in both the file and template
             ' Populate two dicts such that Dict(BlockName) = Block Object
-            For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
-                DocBlocksDict(DocBlock.Name) = DocBlock
-            Next
-            For Each LibraryBlock As SolidEdgeDraft.Block In BlockLibraryDoc.Blocks
-                LibraryBlocksDict(LibraryBlock.Name) = LibraryBlock
-            Next
+            Try
+                For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
+                    DocBlocksDict(DocBlock.Name) = DocBlock
+                Next
+            Catch ex As Exception
+                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+            End Try
+            Try
+                For Each LibraryBlock As SolidEdgeDraft.Block In BlockLibraryDoc.Blocks
+                    LibraryBlocksDict(LibraryBlock.Name) = LibraryBlock
+                Next
+            Catch ex As Exception
+                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(BlockLibrary)}'.  Reported error was: {ex.Message}")
+            End Try
 
         End If
 
@@ -404,7 +414,6 @@ Public Class TaskUpdateBlocks
                 If DocBlocksDict.Keys.Contains(DocBlockName) Then
                     If LibraryBlocksDict.Keys.Contains(LibraryBlockName) Then
 
-
                         If Not DocBlockName = LibraryBlockName Then
                             ' Blocks have different names.  Check if the document already has
                             ' a block with the same name as the library block.
@@ -416,7 +425,7 @@ Public Class TaskUpdateBlocks
                                         tmpSEDoc.Blocks.ReplaceBlock(LibraryBlocksDict(LibraryBlockName))
                                         ReplacedSameNameBlock = True
                                     Catch ex As Exception
-                                        Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  "
+                                        Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
                                         If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                                     End Try
                                 Else
@@ -426,7 +435,12 @@ Public Class TaskUpdateBlocks
                                     Continue For
                                 End If
                             Else
-                                DocBlocksDict(DocBlockName).Name = LibraryBlockName
+                                Try
+                                    DocBlocksDict(DocBlockName).Name = LibraryBlockName
+                                Catch ex As Exception
+                                    Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
+                                    If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                                End Try
                             End If
                         End If
 
@@ -460,7 +474,7 @@ Public Class TaskUpdateBlocks
                                 Next
                             End If
                         Catch ex As Exception
-                            Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  "
+                            Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
                             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                         End Try
 
@@ -482,7 +496,7 @@ Public Class TaskUpdateBlocks
                     Try
                         DocBlocksDict(DocBlockName).Delete()
                     Catch ex As Exception
-                        TaskLogger.AddMessage($"Unable to delete block '{DocBlockName}'")
+                        TaskLogger.AddMessage($"Unable to delete block '{DocBlockName}'.  Reported error was: {ex.Message}")
                     End Try
                 Else
                     ' Not an error
@@ -511,7 +525,7 @@ Public Class TaskUpdateBlocks
                             ' Add occurrences on SEDoc sheets at locations to match those in the library
                             AddBlockOccurrences(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
                         Catch ex As Exception
-                            TaskLogger.AddMessage($"Unable to add '{LibraryBlockName}'")
+                            TaskLogger.AddMessage($"Unable to add '{LibraryBlockName}'.  Reported error was: {ex.Message}")
                         End Try
 
                     Else
@@ -529,8 +543,7 @@ Public Class TaskUpdateBlocks
                             AddBlockOccurrences(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
 
                         Catch ex As Exception
-                            Dim s = $"Unable to replace '{tmpDocBlockName}' with '{LibraryBlockName}'.  "
-                            's = $"{s}A block with that name may already exist in the file."
+                            Dim s = $"Unable to replace '{tmpDocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
                             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                         End Try
 
@@ -540,20 +553,26 @@ Public Class TaskUpdateBlocks
                 End If
             Next
 
-
         End If
 
         If BlockLibraryDoc IsNot Nothing Then
-            BlockLibraryDoc.Close(False)
-            SEApp.DoIdle()
+            Try
+                BlockLibraryDoc.Close(False)
+                SEApp.DoIdle()
+            Catch ex As Exception
+                TaskLogger.AddMessage($"Unable to close block library.  Reported error was: {ex.Message}")
+            End Try
         End If
 
         If SEDoc.ReadOnly Then
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
         Else
-            SEDoc.Save()
-            SEApp.DoIdle()
+            Try
+                SEDoc.Save()
+                SEApp.DoIdle()
+            Catch ex As Exception
+                TaskLogger.AddMessage($"Unable to save file.  Reported error was: {ex.Message}")
+            End Try
         End If
 
     End Sub

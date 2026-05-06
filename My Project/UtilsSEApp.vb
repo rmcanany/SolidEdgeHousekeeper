@@ -70,6 +70,7 @@ Public Class UtilsSEApp
         If Me.SEApp Is Nothing Then
             ErrorLogger.AddMessage("Unable to connect to Solid Edge")
         Else
+            'Threading.Thread.Sleep(1000)
             ' Turn off popups.
             SEApp.DisplayAlerts = False
 
@@ -130,115 +131,6 @@ Public Class UtilsSEApp
             End If
             'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
         End If
-
-        'If Not SEIsRunning() Then
-        '    Dim P As New Diagnostics.Process
-        '    P.StartInfo.FileName = "edge.exe"
-        '    'P.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        '    Try
-        '        P.Start()
-
-        '    Catch ex As Exception
-        '        Dim k = 0
-        '    End Try
-
-        '    Dim Count As Integer = 0
-        '    SEApp = Nothing
-        '    Dim WaitTime As Integer = 1000
-        '    Dim MaxWaitTime As Integer = 60000
-        '    While SEApp Is Nothing
-        '        If Count >= MaxWaitTime Then Exit While
-        '        Try
-        '            SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
-        '        Catch ex As Exception
-        '            Count += WaitTime
-        '            Threading.Thread.Sleep(WaitTime)
-
-        '        End Try
-        '    End While
-        '    Try
-        '        SEApp.DoIdle()
-        '    Catch ex As Exception
-        '        Dim j = 0
-        '    End Try
-        '    P.StartInfo.WindowStyle = ProcessWindowStyle.Maximized
-        '    'P.Kill()
-        '    SEApp.Quit()
-        '    SEApp = Nothing
-        '    Dim i = 0
-        'End If
-
-        'Try
-
-        '    'If UseCurrentSession Then
-        '    '    Try
-        '    '        SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
-        '    '    Catch ex As Exception
-        '    '        SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-        '    '        FMain.ActiveFile = ""
-        '    '        FMain.ActiveFiles = New List(Of String)
-        '    '        NoCurrentSessionFound = True
-        '    '    End Try
-        '    'Else
-        '    '    SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-        '    'End If
-
-        '    Try
-        '        SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
-        '    Catch ex As Exception
-        '        SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-        '        FMain.ActiveFile = ""
-        '        FMain.ActiveFiles = New List(Of String)
-        '        NoCurrentSessionFound = True
-        '    End Try
-
-        '    ' Turn off popups.
-        '    SEApp.DisplayAlerts = False
-
-        '    ' Disable Most Recently Used list updating if option is set.
-        '    If NoUpdateMRU Then
-        '        SEApp.SuspendMRU()
-        '    End If
-
-        '    ' Set foreground/background processing options
-        '    If RunInBackground Then
-        '        SEApp.DelayCompute = True
-        '        SEApp.Interactive = False
-        '        SEApp.ScreenUpdating = False
-        '        SEApp.Visible = False
-        '        'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
-        '    Else
-        '        SEApp.DelayCompute = False
-        '        SEApp.Interactive = True
-        '        SEApp.ScreenUpdating = True
-        '        SEApp.Visible = True
-
-        '        If UseCurrentSession Then
-        '            If NoCurrentSessionFound Then
-        '                SEApp.WindowState = 2  'Maximizes Solid Edge
-        '            End If
-        '        Else
-        '            SEApp.WindowState = 2
-        '        End If
-
-        '        'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
-        '    End If
-
-        '    ' For ProcessDraftsInactive, need to remember the previous setting
-        '    Dim Param = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalSessionDraftOpenInactive
-        '    SEApp.GetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
-        '    SEApp.SetGlobalParameter(Param, ProcessDraftsInactive)
-
-        '    'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
-
-        'Catch ex As Exception
-        '    Dim s As String
-        '    s = String.Format("Could not start Solid Edge.  Exiting...{0}", vbCrLf)
-        '    s = String.Format("{0}Exception:{1}", s, vbCrLf)
-        '    s = String.Format("{0}{1}", s, ex.ToString)
-        '    MsgBox(s)
-        '    End
-        'End Try
 
     End Sub
 

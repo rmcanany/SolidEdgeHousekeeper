@@ -90,31 +90,51 @@ Public Class UtilsPowerShell
     End Function
 
     Public Function RunExpressionScript(PowerShellFilename As String) As String
-        Dim Result As String = ""
 
-        Dim P As New Diagnostics.Process
-        Dim PSError As String = ""
+        Dim NewWay As Boolean = False
 
-        P.StartInfo.FileName = "powershell.exe"
-        P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
-        P.StartInfo.RedirectStandardError = True
-        P.StartInfo.RedirectStandardOutput = True
-        P.StartInfo.UseShellExecute = False
-        P.StartInfo.CreateNoWindow = True
-        P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
+        If Not NewWay Then
+            Dim Result As String = ""
 
-        P.Start()
-        PSError = P.StandardError.ReadToEnd
-        Dim PSResult As String = P.StandardOutput.ReadToEnd
+            Dim P As New Diagnostics.Process
+            Dim PSError As String = ""
 
-        If Not PSError = "" Then
-            Throw New Exception(PSError)
+            P.StartInfo.FileName = "powershell.exe"
+            P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
+            P.StartInfo.RedirectStandardError = True
+            P.StartInfo.RedirectStandardOutput = True
+            P.StartInfo.UseShellExecute = False
+            P.StartInfo.CreateNoWindow = True
+            P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
+
+            P.Start()
+            PSError = P.StandardError.ReadToEnd
+            Dim PSResult As String = P.StandardOutput.ReadToEnd
+
+            If Not PSError = "" Then
+                Throw New Exception(PSError)
+            End If
+
+            P.WaitForExit()
+            Result = PSResult.Replace(vbCrLf, "")
+
+            Return Result
+
+        Else
+            Dim Result As String = ""
+
+            Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
+
+            Dim ScriptText As String = ""
+
+            For Each s As String In ScriptList
+                ScriptText = $"{ScriptText}{vbCrLf}{s}"
+            Next
+
+            Result = RunScript(ScriptText)
+
+            Return Result
         End If
-
-        P.WaitForExit()
-        Result = PSResult.Replace(vbCrLf, "")
-
-        Return Result
 
     End Function
 
