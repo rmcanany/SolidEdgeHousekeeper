@@ -120,9 +120,9 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 </details>
 
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folders_16.png"><img src="My%20Project/media/spacer.png">FILE SELECTION</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folders_16.png"><img src="My%20Project/media/spacer.png">FILE SELECTION</h2></summary>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folder_16.png"><img src="My%20Project/media/spacer.png">Selection</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folder_16.png"><img src="My%20Project/media/spacer.png">Selection</h3></summary>
 
 You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
@@ -266,7 +266,7 @@ You can limit the search to return only selected types of Solid Edge files. Refe
 
 </details>
 
-<details open><summary><h4 style="margin:0px; display:inline-block">File List Options</h4></summary>
+<details><summary><h4 style="margin:0px; display:inline-block">File List Options</h4></summary>
 
 You can show a file preview and/or customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 9. 
 
