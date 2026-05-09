@@ -172,6 +172,8 @@ Public Class TaskCheckDrawings
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
 
 

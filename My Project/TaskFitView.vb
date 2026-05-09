@@ -115,6 +115,8 @@ Public Class TaskFitView
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim UC As New UtilsCommon
         Dim DocType As String = UC.GetDocType(SEDoc)
 

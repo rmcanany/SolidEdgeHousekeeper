@@ -86,6 +86,8 @@ Public Class TaskCheckMissingDrawing
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim ModelFilename As String
         Dim DrawingFilename As String
 

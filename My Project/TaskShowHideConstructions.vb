@@ -451,6 +451,8 @@ Public Class TaskShowHideConstructions
         '     Show all: Assy 40224, Part 40224
         '     Hide all: Assy 40082, Part 40225
 
+        OleMessageFilter.Register()
+
         DoReferencePlanes(SEApp, SEDoc)
         DoCoordinateSystems(SEApp, SEDoc)
         DoSketches(SEApp, SEDoc)

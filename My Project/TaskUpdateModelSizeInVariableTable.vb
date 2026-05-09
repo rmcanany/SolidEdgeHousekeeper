@@ -194,6 +194,8 @@ Public Class TaskUpdateModelSizeInVariableTable
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim Range As New List(Of Double)
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
         Dim Variables As SolidEdgeFramework.Variables

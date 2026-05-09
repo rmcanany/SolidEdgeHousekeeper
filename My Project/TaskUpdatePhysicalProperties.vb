@@ -98,6 +98,8 @@ Public Class TaskUpdatePhysicalProperties
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim s As String
         Dim Proceed As Boolean
 

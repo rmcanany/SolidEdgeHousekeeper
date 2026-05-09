@@ -91,7 +91,7 @@ Public Class UtilsPowerShell
 
     Public Function RunExpressionScript(PowerShellFilename As String) As String
 
-        Dim NewWay As Boolean = False
+        Dim NewWay As Boolean = True
 
         If Not NewWay Then
             Dim Result As String = ""
@@ -126,7 +126,6 @@ Public Class UtilsPowerShell
             Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
 
             Dim ScriptText As String = ""
-
             For Each s As String In ScriptList
                 ScriptText = $"{ScriptText}{vbCrLf}{s}"
             Next
@@ -141,6 +140,8 @@ Public Class UtilsPowerShell
     Public Function BuildSnippetFile(SnippetFilename As String) As String
         ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/
 
+        Dim Directory As String = IO.Path.GetDirectoryName(SnippetFilename)
+
         Dim Toplist As New List(Of String)
         Dim Midlist As New List(Of String)
         Dim Botlist As New List(Of String)
@@ -154,7 +155,8 @@ Public Class UtilsPowerShell
 
         Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
 
-        Toplist.Add("$StartupPath = Split-Path $script:MyInvocation.MyCommand.Path")
+        'Toplist.Add("$StartupPath = Split-Path $script:MyInvocation.MyCommand.Path")
+        Toplist.Add($"$StartupPath = ""{Directory}""")
         Toplist.Add("")
         Toplist.Add("$DLLs = (")
         Toplist.Add($"    ""{DllPath}\Interop.SolidEdgeFramework.dll"",")

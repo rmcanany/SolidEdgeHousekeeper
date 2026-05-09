@@ -129,6 +129,8 @@ Public Class TaskUpdateDrawingViews
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
         Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
         Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing

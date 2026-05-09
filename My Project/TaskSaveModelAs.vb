@@ -305,6 +305,8 @@ Public Class TaskSaveModelAs
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim ImageExtensions As List(Of String) = {".bmp", ".jpg", ".png", ".tif"}.ToList
 
         Dim NewFilename As String = ""

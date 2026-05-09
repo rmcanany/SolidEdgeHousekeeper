@@ -238,6 +238,8 @@ Public Class TaskUpdateMaterialFromMaterialTable
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim PropertySetName As String
         Dim PropertyName As String
         Dim FinishName As String = Nothing

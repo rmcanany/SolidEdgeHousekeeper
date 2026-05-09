@@ -48,6 +48,8 @@ Public Class TaskOpenSave
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         If SEDoc.ReadOnly Then
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else

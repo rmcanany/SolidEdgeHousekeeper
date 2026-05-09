@@ -158,6 +158,8 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         If SEDoc.FullName = Me.DraftTemplate Then
             TaskLogger.AddMessage("Template file itself ineligible for processing")
             Exit Sub
@@ -228,6 +230,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End If
 
     End Sub
+
 
     Private Sub DoReplaceBorders(
         tmpSEDoc As SolidEdgeDraft.DraftDocument,
@@ -728,6 +731,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.MatchSheetSize.ToString, "If no matching name: Match by sheet size")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -737,6 +741,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.RenameSheet.ToString, "If matched by sheet size: Rename sheet")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

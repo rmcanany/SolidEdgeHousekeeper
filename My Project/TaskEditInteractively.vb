@@ -237,6 +237,8 @@ Public Class TaskEditInteractively
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         SEApp.DisplayAlerts = True
 
         Dim UC As New UtilsCommon

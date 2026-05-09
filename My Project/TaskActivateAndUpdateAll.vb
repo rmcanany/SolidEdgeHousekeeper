@@ -46,6 +46,8 @@ Public Class TaskActivateAndUpdateAll
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim UC As New UtilsCommon
 
         Select Case UC.GetDocType(SEDoc)

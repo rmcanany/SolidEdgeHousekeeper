@@ -139,14 +139,14 @@ Public Class TaskRunExternalProgram
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(Me.ExternalProgram)
-        Dim P As New Diagnostics.Process
+        Dim P As Diagnostics.Process = Nothing
         Dim ExitCode As Integer
         Dim ErrorMessageFilename As String
         Dim ErrorMessages As String()
         Dim Extension As String
-
-
 
         Dim UP As New UtilsPreferences
 
@@ -164,6 +164,7 @@ Public Class TaskRunExternalProgram
         Dim PSError As String = ""
 
         If Extension = ".ps1" Then
+            P = New Diagnostics.Process
             P.StartInfo.FileName = "powershell.exe"
             P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", Me.ExternalProgram.Replace(" ", "` "), Chr(34))
             P.StartInfo.RedirectStandardError = True
@@ -172,18 +173,36 @@ Public Class TaskRunExternalProgram
             P.Start()
             PSError = P.StandardError.ReadToEnd
         ElseIf Extension = ".snp" Then
-            P.StartInfo.FileName = "powershell.exe"
-            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", BuildSnippetFile(Me.ExternalProgram).Replace(" ", "` "), Chr(34))
-            P.StartInfo.RedirectStandardError = True
-            P.StartInfo.UseShellExecute = False
-            If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
-            P.Start()
-            PSError = P.StandardError.ReadToEnd
-        Else
-            'P = Diagnostics.Process.Start(Me.ExternalProgram)
 
+            Dim UPS As New UtilsPowerShell
+
+            Dim NewWay As Boolean = True
+
+            If Not NewWay Then
+                P = New Diagnostics.Process
+                P.StartInfo.FileName = "powershell.exe"
+                P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", UPS.BuildSnippetFile(Me.ExternalProgram).Replace(" ", "` "), Chr(34))
+                P.StartInfo.RedirectStandardError = True
+                P.StartInfo.UseShellExecute = False
+                If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
+                P.Start()
+                PSError = P.StandardError.ReadToEnd
+
+            Else
+
+                Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(UPS.BuildSnippetFile(Me.ExternalProgram)).ToList
+
+                Dim ScriptText As String = ""
+                For Each s As String In ScriptList
+                    ScriptText = $"{ScriptText}{vbCrLf}{s}"
+                Next
+
+                PSError = UPS.RunScript(ScriptText)
+
+            End If
+        Else
+            P = New Diagnostics.Process
             P.StartInfo.FileName = Me.ExternalProgram
-            'P.StartInfo.Arguments = String.Format("{1}{0}{1}", Me.ExternalProgram, Chr(34))
             If Me.HideConsoleWindow Then
                 P.StartInfo.RedirectStandardError = True
                 P.StartInfo.UseShellExecute = False
@@ -198,8 +217,10 @@ Public Class TaskRunExternalProgram
             TaskLogger.AddMessage(PSError)
         End If
 
-        P.WaitForExit()
-        ExitCode = P.ExitCode
+        If P IsNot Nothing Then
+            P.WaitForExit()
+            ExitCode = P.ExitCode
+        End If
 
         If IO.File.Exists(NewSettingsFilename) Then IO.File.Delete(NewSettingsFilename)
 
@@ -239,17 +260,17 @@ Public Class TaskRunExternalProgram
     End Sub
 
 
-    Private Function BuildSnippetFile(SnippetFilename As String) As String
-        ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/
+    'Private Function BuildSnippetFile(SnippetFilename As String) As String
+    '    ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/
 
-        Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
+    '    Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
 
-        Dim UPS As New UtilsPowerShell
-        PowerShellFilename = UPS.BuildSnippetFile(SnippetFilename)
+    '    Dim UPS As New UtilsPowerShell
+    '    PowerShellFilename = UPS.BuildSnippetFile(SnippetFilename)
 
-        Return PowerShellFilename
+    '    Return PowerShellFilename
 
-    End Function
+    'End Function
 
     Private Sub DevelopSnippetCode()
 

@@ -219,6 +219,8 @@ Public Class TaskPrint
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim DraftPrinter As SolidEdgeDraft.DraftPrintUtility = Nothing
 
         Dim Sheets As New List(Of SolidEdgeDraft.Sheet)

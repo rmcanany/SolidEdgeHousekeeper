@@ -49,6 +49,8 @@ Public Class TaskCheckPartCopies
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
         Dim CopiedParts As SolidEdgePart.CopiedParts

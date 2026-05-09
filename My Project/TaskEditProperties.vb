@@ -173,6 +173,8 @@ Public Class TaskEditProperties
         ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
         ' https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator
 
+        OleMessageFilter.Register()
+
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
         Dim Properties As SolidEdgeFramework.Properties = Nothing
         Dim Prop As SolidEdgeFramework.Property = Nothing

@@ -104,6 +104,8 @@ Public Class TaskEditVariables
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim tmpVariablesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim VariablesToEditDict As New Dictionary(Of Integer, Dictionary(Of String, String))
         Dim ColumnIndexString As String

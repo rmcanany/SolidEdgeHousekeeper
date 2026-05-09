@@ -267,6 +267,8 @@ Public Class TaskUpdateModelStylesFromTemplate
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim tf As Boolean
         tf = SEDoc.FullName = Me.AssemblyTemplate
         tf = tf Or SEDoc.FullName = Me.PartTemplate

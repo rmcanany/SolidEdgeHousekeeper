@@ -378,13 +378,13 @@ Public Class TaskUpdateBlocks
         If Not TaskLogger.HasErrors Then
             ' Read all blocks in both the file and template
             ' Populate two dicts such that Dict(BlockName) = Block Object
-            Try
-                For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
-                    DocBlocksDict(DocBlock.Name) = DocBlock
-                Next
-            Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
-            End Try
+            'Try
+            '    For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
+            '        DocBlocksDict(DocBlock.Name) = DocBlock
+            '    Next
+            'Catch ex As Exception
+            '    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+            'End Try
             Try
                 For Each LibraryBlock As SolidEdgeDraft.Block In BlockLibraryDoc.Blocks
                     LibraryBlocksDict(LibraryBlock.Name) = LibraryBlock
@@ -410,6 +410,17 @@ Public Class TaskUpdateBlocks
             Dim ReplacedSameNameBlock As Boolean = False
 
             For Each DocBlockName In ReplacementsDict.Keys
+
+                ' Clear and re-read the document block library every time, as it may have changed.
+                DocBlocksDict.Clear()
+                Try
+                    For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
+                        DocBlocksDict(DocBlock.Name) = DocBlock
+                    Next
+                Catch ex As Exception
+                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+                End Try
+
                 LibraryBlockName = ReplacementsDict(DocBlockName)
                 If DocBlocksDict.Keys.Contains(DocBlockName) Then
                     If LibraryBlocksDict.Keys.Contains(LibraryBlockName) Then
@@ -448,7 +459,10 @@ Public Class TaskUpdateBlocks
                             If Not ReplacedSameNameBlock Then
                                 tmpSEDoc.Blocks.ReplaceBlock(LibraryBlocksDict(LibraryBlockName))
                             Else
-                                ' Need to change the source block of each occurrence
+                                ' We get here if:
+                                '     - There was a block already in the file with the same name as the replacement.
+                                '     - The option to replace it was enabled.
+                                ' If so, change the source of each occurrence to the now-replaced block.
                                 tmpSEDoc.Save()
                                 SEApp.DoIdle()
 

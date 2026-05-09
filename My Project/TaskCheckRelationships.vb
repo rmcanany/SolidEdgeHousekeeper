@@ -113,6 +113,8 @@ Public Class TaskCheckRelationships
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim Sketches As SolidEdgePart.Sketchs = Nothing
         Dim Models As SolidEdgePart.Models = Nothing
         Dim ProfileSets As SolidEdgePart.ProfileSets = Nothing

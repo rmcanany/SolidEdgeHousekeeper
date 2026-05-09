@@ -50,6 +50,8 @@ Public Class TaskCheckDrawingPartsList
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
         Dim PartsLists As SolidEdgeDraft.PartsLists = tmpSEDoc.PartsLists

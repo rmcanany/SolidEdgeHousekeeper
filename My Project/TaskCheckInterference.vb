@@ -85,6 +85,8 @@ Public Class TaskCheckInterference
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
         Dim ComparisonMethod = SolidEdgeConstants.InterferenceComparisonConstants.seInterferenceComparisonSet1vsItself

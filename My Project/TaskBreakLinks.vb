@@ -171,6 +171,8 @@ Public Class TaskBreakLinks
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         If Me.BreakDesignCopies Or Me.BreakInterpartCopies Then
             DoBreakDesignCopies(SEDoc, SEApp)
         End If

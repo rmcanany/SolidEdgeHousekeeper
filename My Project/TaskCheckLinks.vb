@@ -120,6 +120,8 @@ Public Class TaskCheckLinks
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim LinkFilenames As New List(Of String)
 
         Dim Models As SolidEdgePart.Models = Nothing

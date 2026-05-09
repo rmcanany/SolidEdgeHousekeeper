@@ -165,6 +165,8 @@ Public Class TaskCheckFilename
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim Formula As String
         Dim FormulaFound As Boolean
         Dim Filename As String

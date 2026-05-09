@@ -287,6 +287,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim FlatPatternModels As SolidEdgePart.FlatPatternModels = Nothing
         Dim FlatPatternModel As SolidEdgePart.FlatPatternModel
         Dim FlatPattern As SolidEdgePart.FlatPattern

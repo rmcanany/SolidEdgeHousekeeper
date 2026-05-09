@@ -49,6 +49,8 @@ Public Class TaskCheckFlatPattern
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
 

@@ -49,6 +49,8 @@ Public Class TaskRemoveFaceStyleOverrides
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
+        OleMessageFilter.Register()
+
         Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
