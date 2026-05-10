@@ -250,10 +250,10 @@
     <Compile Include="My Project\FormTeamCenterSettings.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="My Project\Form_SolidEdgeExplorer.Designer.vb">
-      <DependentUpon>Form_SolidEdgeExplorer.vb</DependentUpon>
+    <Compile Include="My Project\FormSolidEdgeExplorer.Designer.vb">
+      <DependentUpon>FormSolidEdgeExplorer.vb</DependentUpon>
     </Compile>
-    <Compile Include="My Project\Form_SolidEdgeExplorer.vb">
+    <Compile Include="My Project\FormSolidEdgeExplorer.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\HCComObject.vb" />
@@ -515,8 +515,8 @@
       <DependentUpon>FormVariableInputEditor.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="My Project\Form_SolidEdgeExplorer.resx">
-      <DependentUpon>Form_SolidEdgeExplorer.vb</DependentUpon>
+    <EmbeddedResource Include="My Project\FormSolidEdgeExplorer.resx">
+      <DependentUpon>FormSolidEdgeExplorer.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

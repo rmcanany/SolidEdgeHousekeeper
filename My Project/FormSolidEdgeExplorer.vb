@@ -5,7 +5,7 @@
 'Imports SolidEdgeExplorerDLL
 'Imports SolidEdgeFramework
 
-Public Class Form_SolidEdgeExplorer
+Public Class FormSolidEdgeExplorer
 
     Public FileName As String
 

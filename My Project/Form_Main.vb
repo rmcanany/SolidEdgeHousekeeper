@@ -1044,7 +1044,7 @@ Public Class Form_Main
     Private Property RunningStartup As Boolean
 
 
-    Private fSEE As Form_SolidEdgeExplorer
+    Private fSEE As FormSolidEdgeExplorer
 
 
     'DESCRIPTION
@@ -4281,7 +4281,7 @@ Public Class Form_Main
 
         If My.Computer.Keyboard.ShiftKeyDown Then
 
-            fSEE = New Form_SolidEdgeExplorer()
+            fSEE = New FormSolidEdgeExplorer()
             fSEE.PropertiesData = Me.PropertiesData
 
             ButtonShowPreview.Checked = Not ButtonShowPreview.Checked

@@ -1164,14 +1164,24 @@ Public Class UtilsPreferences
         NewIdx = CInt(NewVersionList(1))
         ' ignore bugfix number
 
+        'Dim TryIt As Boolean = True
+        'If TryIt Then
+        '    NewYear = CurrentYear
+        '    NewIdx = CurrentIdx
+        'End If
+
         tf = NewYear > CurrentYear
         tf = tf Or (NewYear = CurrentYear) And (NewIdx > CurrentIdx)
+        tf = tf Or (NewYear = CurrentYear) And (NewIdx = CurrentIdx) And (Not Form_Main.PreviewVersion = "")
 
         If tf Then
+            If Not Form_Main.PreviewVersion = "" Then
+                CurrentVersion = $"{CurrentVersion} Preview {Form_Main.PreviewVersion}"
+            End If
+
             Dim FNVA As New FormNewVersionAvailable(CurrentVersion, NewVersion)
             FNVA.ShowDialog()
         End If
-
 
     End Sub
 
