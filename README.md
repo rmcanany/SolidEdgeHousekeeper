@@ -17,7 +17,7 @@ Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza, @mefrebo, @KGeetings, @tempod, @john.matthews3452, @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @Monostre, @TeeVar
 
 **Helpful feedback and bug reports**  
-@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN
+@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @Nick_Mokrytskyi​
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -897,7 +897,7 @@ Breaks external links to a file.  This is irreversible, so you know, think about
 
 The command options are explained below. 
 
-`Allow partial success` Disabling this option means the file will not be saved if any errors occur. The error will still be reported in the log file, alerting you to investiage manually. Since breaking links is irreversible, this is the safest option.  However, it can also be a nuisance.  That is why it is presented as an option. 
+`Allow partial success` Disabling this option means the file will not be saved if any errors occur. The error will still be reported in the log file, alerting you to investigate manually. Since breaking links is irreversible, this is the safest option.  However, it can also be a nuisance.  That is why it is presented as an option. 
 
 `Part copy design links` and `Part copy construction links` remove links created with the `Part Copy` command. The geometry remains intact.
 
@@ -1244,7 +1244,7 @@ This command turns a typical single-file macro into a batch routine, also enhanc
 
 Select the program with the `Browse` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
 
-For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft [<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) with some details.  If you're not an expert on such matters, you might want to run it by your IT department first.  
+For PowerShell programs, `*.ps1`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft [<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) with some details.  If you're not an expert on such matters, you might want to run it by your IT department first.  
 
 If you are writing your own program, be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
@@ -1254,7 +1254,7 @@ Unlike the other file types, a `*.snp` is a special file containing only a small
 
 The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, or more conveniently in the expression editor.  Click `Edit *.snp` to use the editor.  See the **Edit Properties** help topic for details on its use.  
 
-The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  
+The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  While it is a PowerShell script, it is not run in an OS shell.  Rather, it uses an internal dotnet library.  That makes it compatible with more user configurations.  
 
 The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test, and maintain a separate program to do it automatically. 
 

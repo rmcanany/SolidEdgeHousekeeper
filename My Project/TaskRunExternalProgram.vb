@@ -507,7 +507,7 @@ Public Class TaskRunExternalProgram
         HelpString += "Before you run it the first time, you can right-click the executable and select `Properties`.  "
         HelpString += "If it is blocked, there should be an option on the General Tab to `Unblock` it.  "
 
-        HelpString += vbCrLf + vbCrLf + "For PowerShell programs, `*.ps1` and `*.snp`, you may need to change your security settings.  "
+        HelpString += vbCrLf + vbCrLf + "For PowerShell programs, `*.ps1`, you may need to change your security settings.  "
         HelpString += "You can do so by opening a PowerShell command prompt.  "
         HelpString += "Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft "
         HelpString += "[<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) "
@@ -533,6 +533,8 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "The program inserts the snippet into a predefined PowerShell script.  "
         HelpString += "The script has two sections that take care of the task's set-up and wrap-up, respectively. "
         HelpString += "It has the same name and directory as the snippet file, except with a `.ps1` extension.  "
+        HelpString += "While it is a PowerShell script, it is not run in an OS shell.  "
+        HelpString += "Rather, it uses an internal dotnet library.  That makes it compatible with more user configurations.  "
 
         HelpString += vbCrLf + vbCrLf + "The intent is to address one-off automation chores, "
         HelpString += "where the time to do the job manually can't justify the time needed to "

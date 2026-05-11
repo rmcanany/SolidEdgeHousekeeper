@@ -656,7 +656,7 @@ Public Class TaskBreakLinks
 
         HelpString += vbCrLf + vbCrLf + "`Allow partial success` "
         HelpString += "Disabling this option means the file will not be saved if any errors occur. "
-        HelpString += "The error will still be reported in the log file, alerting you to investiage manually. "
+        HelpString += "The error will still be reported in the log file, alerting you to investigate manually. "
         HelpString += "Since breaking links is irreversible, this is the safest option.  "
         HelpString += "However, it can also be a nuisance.  That is why it is presented as an option. "
 

@@ -15,6 +15,12 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.2
 
+We'll get right to the updates, but first some exciting news -- Housekeeper has a new sponsor: **BemoRail BV!**  And wait until you see all the nice things they had to say...
+
+> *We are a company based in the Netherlands and use your program often to clean up our Solid Edge models.  Thank you for a well engineered piece of open source software, and keep up the good work.*
+
+Now, on to those updates...
+
 ### File Preview
 
 Contributed by **@[Francesco Arfilli]** suggested by **@TeeVar.**  Thank you!
@@ -50,12 +56,21 @@ For the option `Draft model links`, added the processing of Blocks for property 
 
 See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#break-links) for details.
 
+### Run External Program
+
+For code snippets, changed processing from PowerShell to an internal dotnet library.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library should be more compatible with different user system configurations.  Did the same for Expressions.
+
+See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
+
+
 ### Other
 
 - Fixed a regression in `Save As` where illegal file name characters were no longer being replaced.  (Thank you **@n0minus38!**)
 - Fixed an issue in the example code snippet `FitIso.snp` where the command ID for draft files was incorrect.
 - Fixed an issue in `Update Physical Properties` where a check of the mass in the variable table was not accounting for localized names.  (Thank you **@Stefano-VLN!**)
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
+- Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.
+- Fixed an issue where users running preview code were not notified when the finalized version was released.
 
 
 ## V2026.1
