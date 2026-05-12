@@ -528,7 +528,7 @@ Public Class TaskRunExternalProgram
 
         HelpString += vbCrLf + vbCrLf + "The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, "
         HelpString += "or more conveniently in the expression editor.  "
-        HelpString += "Click `Edit *.snp` to use the editor.  See the **Edit Properties** help topic for details on its use.  "
+        HelpString += "Click `Edit *.snp` to use the editor.  "
 
         HelpString += vbCrLf + vbCrLf + "The program inserts the snippet into a predefined PowerShell script.  "
         HelpString += "The script has two sections that take care of the task's set-up and wrap-up, respectively. "
@@ -568,13 +568,6 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + "- `ExitStatus` An integer.  0 = Success, 1 = Error."
         HelpString += vbCrLf + "- `ErrorMessageList` A list of error messages that Housekeeper reports."
         HelpString += vbCrLf + "- `DocType` The file extension of `SEDoc`."
-
-        HelpString += vbCrLf + vbCrLf + "It is possible to refer to a property "
-        HelpString += "that may not be present in every file. "
-        HelpString += "Normally in that situation, it would take the value of `Nothing` at run time. "
-        HelpString += "Currently code snippets do not support that.  "
-        HelpString += "Instead, missing properties are returned as a `String` with the value of `""<Nothing>""`.  "
-        HelpString += "You can check for that in your snippet when needed.  "
 
         Return HelpString
     End Function

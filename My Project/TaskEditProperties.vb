@@ -1151,6 +1151,13 @@ Public Class TaskEditProperties
         HelpString += "`throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, "
         HelpString += "`try()`, `tryParse()`, `typeOf()`, `where()`"
 
+        HelpString += vbCrLf + vbCrLf + "Oh wait, there is one thing to say about `VB`.  "
+        HelpString += "That is about when a property is not found in the file. "
+        HelpString += "Normally VB returns the null object `Nothing` when that happens.  "
+        HelpString += "Expressions can't deal with that at present.  "
+        HelpString += "So instead of `Nothing` it returns the `String` `""<Nothing>""`.  "
+        HelpString += "You can check for that in your code if needed. "
+
         HelpString += vbCrLf + vbCrLf + "**Run Task Without Solid Edge (Experimental)**"
 
         HelpString += vbCrLf + vbCrLf + "This option opens the file with Windows Structured Storage, instead of Solid Edge. "

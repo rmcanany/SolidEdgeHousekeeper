@@ -1252,7 +1252,7 @@ If you are writing your own program, be aware several interoperability rules app
 
 Unlike the other file types, a `*.snp` is a special file containing only a small section of code. The code snippet is the (often very short) part that does the actual task at hand. You can see a few examples [<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).
 
-The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, or more conveniently in the expression editor.  Click `Edit *.snp` to use the editor.  See the **Edit Properties** help topic for details on its use.  
+The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, or more conveniently in the expression editor.  Click `Edit *.snp` to use the editor.  
 
 The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  While it is a PowerShell script, it is not run in an OS shell.  Rather, it uses an internal dotnet library.  That makes it compatible with more user configurations.  
 
@@ -1281,8 +1281,6 @@ The program defines these variables, which you can use in your code.
 - `ExitStatus` An integer.  0 = Success, 1 = Error.
 - `ErrorMessageList` A list of error messages that Housekeeper reports.
 - `DocType` The file extension of `SEDoc`.
-
-It is possible to refer to a property that may not be present in every file. Normally in that situation, it would take the value of `Nothing` at run time. Currently code snippets do not support that.  Instead, missing properties are returned as a `String` with the value of `"<Nothing>"`.  You can check for that in your snippet when needed.  
 
 </details>
 
