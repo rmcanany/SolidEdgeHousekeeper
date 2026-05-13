@@ -378,13 +378,13 @@ Public Class TaskUpdateBlocks
         If Not TaskLogger.HasErrors Then
             ' Read all blocks in both the file and template
             ' Populate two dicts such that Dict(BlockName) = Block Object
-            'Try
-            '    For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
-            '        DocBlocksDict(DocBlock.Name) = DocBlock
-            '    Next
-            'Catch ex As Exception
-            '    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
-            'End Try
+            Try
+                For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
+                    DocBlocksDict(DocBlock.Name) = DocBlock
+                Next
+            Catch ex As Exception
+                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+            End Try
             Try
                 For Each LibraryBlock As SolidEdgeDraft.Block In BlockLibraryDoc.Blocks
                     LibraryBlocksDict(LibraryBlock.Name) = LibraryBlock
@@ -412,8 +412,8 @@ Public Class TaskUpdateBlocks
             For Each DocBlockName In ReplacementsDict.Keys
 
                 ' Clear and re-read the document block library every time, as it may have changed.
-                DocBlocksDict.Clear()
                 Try
+                    DocBlocksDict.Clear()
                     For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
                         DocBlocksDict(DocBlock.Name) = DocBlock
                     Next
@@ -506,6 +506,15 @@ Public Class TaskUpdateBlocks
 
             For Each DocBlockName In Me.DeleteBlocksList
 
+                Try
+                    DocBlocksDict.Clear()
+                    For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
+                        DocBlocksDict(DocBlock.Name) = DocBlock
+                    Next
+                Catch ex As Exception
+                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+                End Try
+
                 If DocBlocksDict.Keys.Contains(DocBlockName) Then
                     Try
                         DocBlocksDict(DocBlockName).Delete()
@@ -522,6 +531,15 @@ Public Class TaskUpdateBlocks
         If Not TaskLogger.HasErrors And Me.AddBlocks Then
 
             For Each LibraryBlockName In Me.AddBlocksList
+
+                Try
+                    DocBlocksDict.Clear()
+                    For Each DocBlock As SolidEdgeDraft.Block In tmpSEDoc.Blocks
+                        DocBlocksDict(DocBlock.Name) = DocBlock
+                    Next
+                Catch ex As Exception
+                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+                End Try
 
                 ' Check that SEDoc does not already have a block with this name
                 If Not DocBlocksDict.Keys.Contains(LibraryBlockName) Then
@@ -650,6 +668,7 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
+
     Public Sub UpdateDGVSize(DGV As DataGridView)
         DGV.Height = (DGV.Rows(0).Height + 1) * (DGV.Rows.Count + 2)
     End Sub
@@ -700,6 +719,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.ReplaceBlocksReplaceExisting.ToString, "Overwrite existing with replacement")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -714,6 +734,8 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"File block name", "Library block name"}.ToList
         ColumnType = "Combobox"
         DataGridView = FormatOptionsDataGridView(ControlNames.ReplaceBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
+        'DataGridView.Padding = New Padding(15, 0, 0, 0)
+        DataGridView.Margin = New Padding(15, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
@@ -740,6 +762,7 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"File block name"}.ToList
         ColumnType = "Combobox"
         DataGridView = FormatOptionsDataGridView(ControlNames.DeleteBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
+        DataGridView.Margin = New Padding(15, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
@@ -764,6 +787,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AddBlocksReplaceExisting.ToString, "Overwrite existing with added block")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -773,6 +797,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.ReportMissingSheet.ToString, "Report missing sheet in document")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -784,6 +809,7 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"Library block name"}.ToList
         ColumnType = "Combobox"
         DataGridView = FormatOptionsDataGridView(ControlNames.AddBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
+        DataGridView.Margin = New Padding(15, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError

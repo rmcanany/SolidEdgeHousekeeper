@@ -71,6 +71,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
+- Added indentation of task sub-options to better show to which main option they apply.
 
 
 ## V2026.1

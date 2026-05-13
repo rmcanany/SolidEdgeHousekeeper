@@ -369,6 +369,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
+        Button.Margin = New Padding(15, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -408,6 +409,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.UseFinishFaceStyle.ToString, "Finish property determines face style")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -417,6 +419,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.FinishPropertyFormulaLabel.ToString, "Finish property")
+        Label.Padding = New Padding(15, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         ControlsDict(Label.Name) = Label
@@ -425,6 +428,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.FinishPropertyFormula.ToString, "")
+        TextBox.Margin = New Padding(15, 0, 0, 0)
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
@@ -437,6 +441,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.ExcludedFinishesLabel.ToString, "Finishes that do not change material appearance")
+        Label.Padding = New Padding(15, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         ControlsDict(Label.Name) = Label
@@ -445,6 +450,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.ExcludedFinishes.ToString, "")
+        TextBox.Margin = New Padding(15, 0, 0, 0)
         AddHandler TextBox.LostFocus, AddressOf TextBoxOptions_Text_Changed
         TextBox.Multiline = True
         TextBox.ScrollBars = ScrollBars.Vertical
@@ -458,6 +464,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.OverrideBodyFaceStyle.ToString, "Override the Body face style")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -467,6 +474,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.OverrideMaterialFaceStyle.ToString, "Override the Material face style")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

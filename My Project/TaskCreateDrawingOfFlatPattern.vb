@@ -521,6 +521,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.Browse.ToString, "Dft Template")
+        Button.Margin = New Padding(15, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -565,6 +566,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.XOffset.ToString, "")
+        TextBox.Margin = New Padding(15, 0, 0, 0)
         TextBox.Width = 40
         TextBox.TextAlign = HorizontalAlignment.Right
         TextBox.Text = "0"
@@ -580,6 +582,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.YOffset.ToString, "")
+        TextBox.Margin = New Padding(15, 0, 0, 0)
         TextBox.Width = 40
         TextBox.TextAlign = HorizontalAlignment.Right
         TextBox.Text = "0"
@@ -611,6 +614,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectoryDraft.ToString, "Save in original directory")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -620,6 +624,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.BrowseNewDirDraft.ToString, "Directory")
+        Button.Margin = New Padding(15, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -643,6 +648,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectoryPDF.ToString, "Save in original directory")
+        CheckBox.Padding = New Padding(15, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -651,12 +657,14 @@ Public Class TaskCreateDrawingOfFlatPattern
 
         RowIndex += 1
         Button = FormatOptionsButton(ControlNames.BrowseNewDirPDF.ToString, "Directory")
+        Button.Margin = New Padding(15, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
         Button.Visible = False
 
         TextBox = FormatOptionsTextBox(ControlNames.NewDirPDF.ToString, "")
+        TextBox.Margin = New Padding(15, 0, 0, 0)
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)

@@ -710,6 +710,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.Browse.ToString, "Dft Template")
+        Button.Margin = New Padding(15, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button

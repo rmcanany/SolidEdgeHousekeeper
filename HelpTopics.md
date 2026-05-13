@@ -994,6 +994,8 @@ With `NCalc` you can perform string processing, create logical expressions, do a
 
 `concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
 
+Oh wait, there is one thing to say about `VB`.  That is about when a property is not found in the file. Normally VB returns the null object `Nothing` when that happens.  Expressions can't deal with that at present.  So instead of `Nothing` it returns the `String` `"<Nothing>"`.  You can check for that in your code if needed. 
+
 **Run Task Without Solid Edge (Experimental)**
 
 This option opens the file with Windows Structured Storage, instead of Solid Edge. It's *blazingly* fast -- 100x to 400x faster than Solid Edge. If you want to try this out, select the option `Run task without Solid Edge`. 
