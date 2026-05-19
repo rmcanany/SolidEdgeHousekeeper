@@ -3,6 +3,8 @@
 Public Class TaskUpdateBlocks
     Inherits Task
 
+    Private NewWay As Boolean = False
+
     Private _BlockLibrary As String
     Public Property BlockLibrary As String
         Get
@@ -269,6 +271,84 @@ Public Class TaskUpdateBlocks
         End Set
     End Property
 
+    Private _WSAddByName As Boolean
+    Public Property WSAddByName As Boolean
+        Get
+            Return _WSAddByName
+        End Get
+        Set(value As Boolean)
+            _WSAddByName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.WSAddByName.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _WSAddByOrder As Boolean
+    Public Property WSAddByOrder As Boolean
+        Get
+            Return _WSAddByOrder
+        End Get
+        Set(value As Boolean)
+            _WSAddByOrder = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.WSAddByOrder.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _WSAddToAll As Boolean
+    Public Property WSAddToAll As Boolean
+        Get
+            Return _WSAddToAll
+        End Get
+        Set(value As Boolean)
+            _WSAddToAll = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.WSAddToAll.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _BSAddByName As Boolean
+    Public Property BSAddByName As Boolean
+        Get
+            Return _BSAddByName
+        End Get
+        Set(value As Boolean)
+            _BSAddByName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BSAddByName.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _BSAddBySize As Boolean
+    Public Property BSAddBySize As Boolean
+        Get
+            Return _BSAddBySize
+        End Get
+        Set(value As Boolean)
+            _BSAddBySize = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BSAddBySize.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _BSRename As Boolean
+    Public Property BSRename As Boolean
+        Get
+            Return _BSRename
+        End Get
+        Set(value As Boolean)
+            _BSRename = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BSRename.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -296,6 +376,14 @@ Public Class TaskUpdateBlocks
         AddBlocksDGV
         AddBlocksReplaceExisting
         ReportMissingSheet
+        WorkingSheetLabel
+        WSAddByName
+        WSAddByOrder
+        WSAddToAll
+        BackgroundSheetLabel
+        BSAddByName
+        BSAddBySize
+        BSRename
         AutoHideOptions
     End Enum
 
@@ -482,7 +570,6 @@ Public Class TaskUpdateBlocks
                                             DocBlockOccurrence.GetOrigin(x, y)
                                             DocBlockOccurrence.Block = NewBlock
                                             DocBlockOccurrence.SetOrigin(x, y)
-                                            Dim i = 0
                                         End If
                                     Next
                                 Next
@@ -555,7 +642,11 @@ Public Class TaskUpdateBlocks
                             DocBlock = tmpSEDoc.Blocks.CopyBlock(LibraryBlock)
 
                             ' Add occurrences on SEDoc sheets at locations to match those in the library
-                            AddBlockOccurrences(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
+                            If Not Me.NewWay Then
+                                AddBlockOccurrences(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
+                            Else
+                                AddBlockOccurrences2(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
+                            End If
                         Catch ex As Exception
                             TaskLogger.AddMessage($"Unable to add '{LibraryBlockName}'.  Reported error was: {ex.Message}")
                         End Try
@@ -572,7 +663,11 @@ Public Class TaskUpdateBlocks
                             SEApp.DoIdle()
 
                             ' Add occurrences on SEDoc sheets at locations to match those in the library
-                            AddBlockOccurrences(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
+                            If Not Me.NewWay Then
+                                AddBlockOccurrences(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
+                            Else
+                                AddBlockOccurrences2(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
+                            End If
 
                         Catch ex As Exception
                             Dim s = $"Unable to replace '{tmpDocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
@@ -614,11 +709,296 @@ Public Class TaskUpdateBlocks
     End Sub
 
 
+    Private Sub AddBlockOccurrences2(
+        BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
+        LibraryBlock As SolidEdgeDraft.Block,
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        DocBlock As SolidEdgeDraft.Block)
+
+        ' WS = Working Sheet, BS = Background Sheet
+        Dim WSAddByName As Boolean = False
+        Dim WSAddByOrder As Boolean = False
+        Dim WSAddToAll As Boolean = True
+        Dim BSAddByName As Boolean = True  ' Always true for now
+        Dim BSAddBySize As Boolean = True  ' If no name match
+        Dim BSRename As Boolean = True     ' If added by size
+
+        If WSAddByName Then DoWSAddByName(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
+        If WSAddByOrder Then DoWSAddByOrder(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
+        If WSAddToAll Then DoWSAddToAll(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
+
+        If BSAddByName Then DoBSAddByName(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock, BSAddBySize, BSRename)
+
+    End Sub
+
+    Private Sub DoWSAddByName(
+        BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
+        LibraryBlock As SolidEdgeDraft.Block,
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        DocBlock As SolidEdgeDraft.Block)
+
+        ' Get library and document working sheets
+        Dim LibrarySheetDict = GetSheetDict(BlockLibraryDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+        Dim DocSheetDict = GetSheetDict(SEDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+
+        ' Iterate through the library sheets
+        For Each LibrarySheetName As String In LibrarySheetDict.Keys
+
+            ' Does the LibrarySheet contain any of the block occurrence we're looking for?
+            For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheetDict(LibrarySheetName).BlockOccurrences
+                If LibraryBlockOccurrence.Block Is LibraryBlock Then
+                    ' Found one.  Does SEDoc have a sheet with the same name?
+                    If DocSheetDict.Keys.Contains(LibrarySheetName) Then
+
+                        ' Set parameters from the library occurrence and add.
+                        Dim DocSheet As SolidEdgeDraft.Sheet = DocSheetDict(LibrarySheetName)
+
+                        PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
+                    Else
+                        If Me.ReportMissingSheet Then
+                            TaskLogger.AddMessage($"Library has '{LibraryBlock.Name}' on sheet '{LibrarySheetName}'.  Document does not have a sheet with that name.")
+                        End If
+                    End If
+
+                End If
+            Next
+        Next
+    End Sub
+
+    Private Sub DoWSAddByOrder(
+        BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
+        LibraryBlock As SolidEdgeDraft.Block,
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        DocBlock As SolidEdgeDraft.Block)
+
+        ' Get library and document working sheets
+        Dim LibrarySheetList = GetSheetList(BlockLibraryDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+        Dim DocSheetList = GetSheetList(SEDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+
+        ' Rearrange sheets in tab order, not the order they were added to the file.
+        LibrarySheetList = SheetListInTabOrder(LibrarySheetList)
+        DocSheetList = SheetListInTabOrder(DocSheetList)
+
+        If DocSheetList.Count > LibrarySheetList.Count Then
+            TaskLogger.AddMessage($"Cannot process {DocSheetList.Count} file sheets with {LibrarySheetList.Count} library sheets")
+            Exit Sub
+        End If
+
+        ' Iterate through the sheet pairs
+        For i As Integer = 0 To DocSheetList.Count - 1
+            Dim LibrarySheet As SolidEdgeDraft.Sheet = LibrarySheetList(i)
+            Dim DocSheet As SolidEdgeDraft.Sheet = DocSheetList(i)
+
+            For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheet.BlockOccurrences
+                If LibraryBlockOccurrence.Block Is LibraryBlock Then
+                    PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
+                End If
+            Next
+        Next
+
+    End Sub
+
+    Private Sub DoWSAddToAll(
+        BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
+        LibraryBlock As SolidEdgeDraft.Block,
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        DocBlock As SolidEdgeDraft.Block)
+
+        ' Get library and document working sheets
+        Dim LibrarySheetList = GetSheetList(BlockLibraryDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+        Dim DocSheetList = GetSheetList(SEDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+
+        If Not LibrarySheetList.Count = 1 Then
+            TaskLogger.AddMessage($"Library must have 1 working sheet, not {LibrarySheetList.Count}")
+            Exit Sub
+        End If
+
+        Dim LibrarySheet As SolidEdgeDraft.Sheet = LibrarySheetList(0)
+
+        For Each DocSheet As SolidEdgeDraft.Sheet In DocSheetList
+            For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheet.BlockOccurrences
+                If LibraryBlockOccurrence.Block Is LibraryBlock Then
+                    PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
+                End If
+            Next
+        Next
+
+    End Sub
+
+    Private Sub DoBSAddByName(
+        BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
+        LibraryBlock As SolidEdgeDraft.Block,
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        DocBlock As SolidEdgeDraft.Block,
+        BSAddBySize As Boolean,
+        BSRename As Boolean)
+
+        ' Gather up all library and document background sheets
+        Dim LibrarySheetDict = GetSheetDict(BlockLibraryDoc, SolidEdgeDraft.SheetSectionTypeConstants.igBackgroundSection)
+        Dim DocSheetDict = GetSheetDict(SEDoc, SolidEdgeDraft.SheetSectionTypeConstants.igBackgroundSection)
+
+        Dim DocSheetNamesProcessed As New List(Of String)
+
+        For Each LibrarySheetName As String In LibrarySheetDict.Keys
+
+            Dim LibrarySheetSize As SolidEdgeDraft.PaperSizeConstants = LibrarySheetDict(LibrarySheetName).SheetSetup.SheetSizeOption
+
+            ' Does the LibrarySheet contain any of the block occurrence we're looking for?
+            For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheetDict(LibrarySheetName).BlockOccurrences
+                If LibraryBlockOccurrence.Block Is LibraryBlock Then
+                    ' Found one.  Does SEDoc have a sheet with the same name?
+                    If DocSheetDict.Keys.Contains(LibrarySheetName) Then
+
+                        ' Set parameters from the library occurrence and add.
+                        Dim DocSheet As SolidEdgeDraft.Sheet = DocSheetDict(LibrarySheetName)
+
+                        PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
+
+                        If Not DocSheetNamesProcessed.Contains(DocSheet.Name) Then DocSheetNamesProcessed.Add(DocSheet.Name)
+                    ElseIf BSAddBySize Then
+                        ' Not sheet name match.  Try to match by size, if the option is set.
+                        Dim DocSheet As SolidEdgeDraft.Sheet = Nothing
+                        For Each DocSheetName As String In DocSheetDict.Keys
+                            If DocSheetDict(DocSheetName).SheetSetup.SheetSizeOption = LibrarySheetSize Then
+                                DocSheet = DocSheetDict(DocSheetName)
+                                Exit For
+                            End If
+                        Next
+                        If DocSheet IsNot Nothing Then
+                            If BSRename Then DocSheet.Name = LibrarySheetName
+                            PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
+                            If Not DocSheetNamesProcessed.Contains(DocSheet.Name) Then DocSheetNamesProcessed.Add(DocSheet.Name)
+                        End If
+                    Else
+
+                    End If
+
+                End If
+            Next
+        Next
+        If Me.ReportMissingSheet Then
+            Dim s As String = ""
+            For Each DocSheetName In DocSheetDict.Keys
+                If Not DocSheetNamesProcessed.Contains(DocSheetName) Then
+                    If s = "" Then
+                        s = DocSheetName
+                    Else
+                        s = $"{s}, {DocSheetName}"
+                    End If
+                End If
+            Next
+            If Not s = "" Then
+                s = $"The following sheets were not processed: {s}"
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            End If
+
+        End If
+    End Sub
+
+
+    Private Sub PlaceBlockOccurrence(
+        LibraryBlock As SolidEdgeDraft.Block,
+        DocBlock As SolidEdgeDraft.Block,
+        LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence,
+        DocSheet As SolidEdgeDraft.Sheet)
+
+        Try
+            Dim XOrigin As Double
+            Dim YOrigin As Double
+            LibraryBlockOccurrence.GetOrigin(XOrigin, YOrigin)
+            Dim BlockViewName As String = LibraryBlockOccurrence.BlockView.Name
+            Dim Scale As Double = LibraryBlockOccurrence.ScaleFactor
+            Dim Rotation As Double = LibraryBlockOccurrence.RotationAngle
+
+            ' Check for a duplicate block on the sheet
+            Dim HasDuplicate As Boolean = False
+            Dim DifferenceThreshold As Double = 0.0001
+            For Each tmpBO As SolidEdgeDraft.BlockOccurrence In DocSheet.BlockOccurrences
+                If Not tmpBO.Block.Name = LibraryBlockOccurrence.Block.Name Then Continue For
+                If Not BlockViewName = tmpBO.BlockView.Name Then Continue For
+                Dim tmpX As Double
+                Dim tmpY As Double
+                tmpBO.GetOrigin(tmpX, tmpY)
+                If Math.Abs(XOrigin - tmpX) > DifferenceThreshold Then Continue For
+                If Math.Abs(YOrigin - tmpY) > DifferenceThreshold Then Continue For
+                If Math.Abs(Scale - tmpBO.ScaleFactor) > DifferenceThreshold Then Continue For
+                If Math.Abs(Rotation - tmpBO.RotationAngle) > DifferenceThreshold Then Continue For
+                ' If we get this far, all variable differences are below the threshold -> a duplicate block
+                HasDuplicate = True
+                Exit For
+            Next
+
+            If Not HasDuplicate Then
+                DocSheet.BlockOccurrences.Add(DocBlock.Name, XOrigin, YOrigin, BlockViewName, Scale, Rotation)
+            Else
+                ' Not an error.  A duplicate would have been updated earlier in the AddBlocks process.
+                'Dim s As String = $"Duplicate of {LibraryBlock.Name} found on {DocSheet.Name}"
+                'If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            End If
+
+        Catch ex As Exception
+            Dim s As String = $"Unable to add {LibraryBlock.Name} to {DocSheet.Name}.  Error was {ex.Message}"
+            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+        End Try
+
+    End Sub
+
+    Private Function GetSheetDict(
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        SectionType As SolidEdgeDraft.SheetSectionTypeConstants
+        ) As Dictionary(Of String, SolidEdgeDraft.Sheet)
+
+        Dim SheetDict As New Dictionary(Of String, SolidEdgeDraft.Sheet)
+        For Each Sheet As SolidEdgeDraft.Sheet In SEDoc.Sheets
+            If Sheet.SectionType = SectionType Then
+                SheetDict(Sheet.Name) = Sheet
+            End If
+        Next
+
+        Return SheetDict
+    End Function
+
+    Private Function GetSheetList(
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        SectionType As SolidEdgeDraft.SheetSectionTypeConstants
+        ) As List(Of SolidEdgeDraft.Sheet)
+
+        Dim SheetList As New List(Of SolidEdgeDraft.Sheet)
+        For Each Sheet As SolidEdgeDraft.Sheet In SEDoc.Sheets
+            If Sheet.SectionType = SectionType Then
+                SheetList.Add(Sheet)
+            End If
+        Next
+
+        Return SheetList
+    End Function
+
+    Private Function SheetListInTabOrder(
+        SheetList As List(Of SolidEdgeDraft.Sheet)
+        ) As List(Of SolidEdgeDraft.Sheet)
+
+        If SheetList.Count = 1 Then Return SheetList
+
+        Dim OutList As New List(Of SolidEdgeDraft.Sheet)
+        Dim OutDict As New Dictionary(Of Integer, SolidEdgeDraft.Sheet)
+
+        For Each Sheet As SolidEdgeDraft.Sheet In SheetList
+            OutDict(Sheet.Number) = Sheet
+        Next
+
+        For i As Integer = 1 To OutDict.Count
+            OutList.Add(OutDict(i))
+        Next
+
+        Return OutList
+    End Function
+
+
     Private Sub AddBlockOccurrences(
-         BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
-         LibraryBlock As SolidEdgeDraft.Block,
-         SEDoc As SolidEdgeDraft.DraftDocument,
-         DocBlock As SolidEdgeDraft.Block)
+        BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
+        LibraryBlock As SolidEdgeDraft.Block,
+        SEDoc As SolidEdgeDraft.DraftDocument,
+        DocBlock As SolidEdgeDraft.Block)
 
         Dim LibrarySheetDict As New Dictionary(Of String, SolidEdgeDraft.Sheet)
         For Each LibrarySheet As SolidEdgeDraft.Sheet In BlockLibraryDoc.Sheets
@@ -635,10 +1015,7 @@ Public Class TaskUpdateBlocks
             ' Does the LibrarySheet contain any of the block occurrence we're looking for?
             For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheetDict(LibrarySheetName).BlockOccurrences
                 If LibraryBlockOccurrence.Block Is LibraryBlock Then
-
-                    ' Found a block occurrence in the library on this sheet.  
-
-                    ' Does SEDoc have a sheet with the same name?
+                    ' Found one.  Does SEDoc have a sheet with the same name?
                     If DocSheetDict.Keys.Contains(LibrarySheetName) Then
 
                         ' Set parameters from the library occurrence and add.
@@ -651,6 +1028,7 @@ Public Class TaskUpdateBlocks
                             Dim Scale As Object = LibraryBlockOccurrence.ScaleFactor
                             Dim Rotation As Object = LibraryBlockOccurrence.RotationAngle
 
+                            ' ###### TODO: Check for a duplicate block ######
                             DocSheet.BlockOccurrences.Add(DocBlock.Name, XOrigin, YOrigin, BlockViewName, Scale, Rotation)
 
                         Catch ex As Exception
@@ -681,6 +1059,7 @@ Public Class TaskUpdateBlocks
         Dim CheckBox As CheckBox
         Dim Button As Button
         Dim TextBox As TextBox
+        Dim Label As Label
         Dim DataGridView As DataGridView
         Dim ColumnHeaders As List(Of String)
         Dim ColumnType As String
@@ -804,6 +1183,91 @@ Public Class TaskUpdateBlocks
         ControlsDict(CheckBox.Name) = CheckBox
         CheckBox.Visible = False
 
+
+
+        RowIndex += 1
+
+        Label = FormatOptionsLabel(ControlNames.WorkingSheetLabel.ToString, "Working sheet options")
+        Label.Padding = New Padding(15, 0, 0, 0)
+        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(Label, 2)
+        ControlsDict(Label.Name) = Label
+        Label.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.WSAddByName.ToString, "Add by sheet name")
+        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.WSAddByOrder.ToString, "Add by sheet order")
+        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.WSAddToAll.ToString, "Add to all sheets")
+        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+
+        RowIndex += 1
+
+        Label = FormatOptionsLabel(ControlNames.BackgroundSheetLabel.ToString, "Background sheet options")
+        Label.Padding = New Padding(15, 0, 0, 0)
+        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(Label, 2)
+        ControlsDict(Label.Name) = Label
+        Label.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.BSAddByName.ToString, "Add by sheet name (always enabled)")
+        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+        CheckBox.Checked = True
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.BSAddBySize.ToString, "If no name match: Add by size")
+        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.BSRename.ToString, "If added by size: Rename sheet")
+        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+
+
+
         RowIndex += 1
 
         ColumnHeaders = {"Library block name"}.ToList
@@ -874,23 +1338,22 @@ Public Class TaskUpdateBlocks
             End If
 
             If Me.DeleteBlocks Then
-                If Me.DeleteBlocksList IsNot Nothing Then
-                    If Me.DeleteBlocksList.Count = 0 Then
-                        ErrorLogger.AddMessage("Enter at least one block to delete OR disable the option")
-                    End If
-                Else
+                If Me.DeleteBlocksList Is Nothing OrElse Me.DeleteBlocksList.Count = 0 Then
                     ErrorLogger.AddMessage("Enter at least one block to delete OR disable the option")
                 End If
             End If
 
             If Me.AddBlocks Then
-                If Me.AddBlocksList IsNot Nothing Then
-                    If Me.AddBlocksList.Count = 0 Then
-                        ErrorLogger.AddMessage("Enter at least one block to add OR disable the option")
-                    End If
-                Else
+                If Me.AddBlocksList Is Nothing OrElse Me.AddBlocksList.Count = 0 Then
                     ErrorLogger.AddMessage("Enter at least one block to add OR disable the option")
                 End If
+
+                If Not (Me.WSAddByName Or Me.WSAddByOrder Or Me.WSAddToAll) Then
+                    If NewWay Then
+                        ErrorLogger.AddMessage("Select a working sheet option")
+                    End If
+                End If
+
             End If
         End If
 
@@ -1169,6 +1632,16 @@ Public Class TaskUpdateBlocks
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
 
+        Dim ParticipatingWorkingSheetCheckBoxes As New List(Of CheckBox)
+        ParticipatingWorkingSheetCheckBoxes.Add(CType(ControlsDict(ControlNames.WSAddByName.ToString), CheckBox))
+        ParticipatingWorkingSheetCheckBoxes.Add(CType(ControlsDict(ControlNames.WSAddByOrder.ToString), CheckBox))
+        ParticipatingWorkingSheetCheckBoxes.Add(CType(ControlsDict(ControlNames.WSAddToAll.ToString), CheckBox))
+
+        'Dim ParticipatingBackgroundSheetCheckBoxes As New List(Of CheckBox)
+        'ParticipatingBackgroundSheetCheckBoxes.Add(CType(ControlsDict(ControlNames.BSAddByName.ToString), CheckBox))
+        'ParticipatingBackgroundSheetCheckBoxes.Add(CType(ControlsDict(ControlNames.BSAddBySize.ToString), CheckBox))
+        'ParticipatingBackgroundSheetCheckBoxes.Add(CType(ControlsDict(ControlNames.BSRename.ToString), CheckBox))
+
         Select Case Name
 
             Case ControlNames.ReplaceBlocks.ToString
@@ -1189,7 +1662,23 @@ Public Class TaskUpdateBlocks
                 Me.AddBlocks = Checkbox.Checked
                 CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView).Visible = Me.AddBlocks
                 CType(ControlsDict(ControlNames.AddBlocksReplaceExisting.ToString), CheckBox).Visible = Me.AddBlocks
+
                 CType(ControlsDict(ControlNames.ReportMissingSheet.ToString), CheckBox).Visible = Me.AddBlocks
+
+                If NewWay Then
+                    CType(ControlsDict(ControlNames.WorkingSheetLabel.ToString), Label).Visible = Me.AddBlocks
+                    CType(ControlsDict(ControlNames.WSAddByName.ToString), CheckBox).Visible = Me.AddBlocks
+                    CType(ControlsDict(ControlNames.WSAddByOrder.ToString), CheckBox).Visible = Me.AddBlocks
+                    CType(ControlsDict(ControlNames.WSAddToAll.ToString), CheckBox).Visible = Me.AddBlocks
+
+                    CType(ControlsDict(ControlNames.BackgroundSheetLabel.ToString), Label).Visible = Me.AddBlocks
+                    CType(ControlsDict(ControlNames.BSAddByName.ToString), CheckBox).Visible = Me.AddBlocks
+                    CType(ControlsDict(ControlNames.BSAddBySize.ToString), CheckBox).Visible = Me.AddBlocks
+                    CType(ControlsDict(ControlNames.BSRename.ToString), CheckBox).Visible = Me.AddBlocks
+
+                End If
+
+
                 CType(ControlsDict(ControlNames.AddBlocksDGV.ToString), DataGridView).Width = TaskOptionsTLP.Width - 5
 
             Case ControlNames.AddBlocksReplaceExisting.ToString
@@ -1197,6 +1686,33 @@ Public Class TaskUpdateBlocks
 
             Case ControlNames.ReportMissingSheet.ToString
                 Me.ReportMissingSheet = Checkbox.Checked
+
+            Case ControlNames.WSAddByName.ToString
+                Me.WSAddByName = Checkbox.Checked
+                If Me.WSAddByName Then
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingWorkingSheetCheckBoxes)
+                End If
+
+            Case ControlNames.WSAddByOrder.ToString
+                Me.WSAddByOrder = Checkbox.Checked
+                If Me.WSAddByOrder Then
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingWorkingSheetCheckBoxes)
+                End If
+
+            Case ControlNames.WSAddToAll.ToString
+                Me.WSAddToAll = Checkbox.Checked
+                If Me.WSAddToAll Then
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingWorkingSheetCheckBoxes)
+                End If
+
+            Case ControlNames.BSAddByName.ToString
+                Me.BSAddByName = True
+
+            Case ControlNames.BSAddBySize.ToString
+                Me.BSAddBySize = Checkbox.Checked
+
+            Case ControlNames.BSRename.ToString
+                Me.BSRename = Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked

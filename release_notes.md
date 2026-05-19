@@ -58,7 +58,7 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 ### Run External Program
 
-For code snippets, changed processing from PowerShell to an internal dotnet library.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library should be more compatible with different user system configurations.  Did the same for Expressions.
+For code snippets, changed processing from PowerShell to an internal dotnet library.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for Expressions.
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 
@@ -71,7 +71,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
-- Added indentation of task sub-options to better show to which main option they apply.
+- Added indentation of Task sub-options to better show to which main option they apply.
 
 
 ## V2026.1
