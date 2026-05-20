@@ -7,6 +7,17 @@
 Public Class UtilsPowerShell
     ' https://www.codeproject.com/Articles/18229/How-to-run-PowerShell-scripts-from-C
 
+    'https://stackoverflow.com/questions/67321963/exception-has-occurred-clr-system-management-automation-runspaces-pssnapinexcep
+    'Microsoft.PowerShell.SDK is a meta-package that pulls together all of the components of the PowerShell SDK into a
+    'single NuGet package. A self-contained .NET application can use Microsoft.PowerShell.SDK to run arbitrary PowerShell
+    'functionality without depending on any external PowerShell installations or libraries.
+    'https://stackoverflow.com/questions/69530907/c-sharp-powershell-script-not-working-with-executionpolicy
+    'If the current user's / machine's execution policy is controlled via GPOs (Group Policy Objects), you fundamentally
+    'cannot override it programmatically (except via GPO changes).
+    'Run Get-ExecutionPolicy -List to list policies defined for each available scope, in descending order of precedence.
+    'If either the MachinePolicy or the UserPolicy scope have a value other than Undefined, then a GPO policy is in effect
+    '(run Get-ExecutionPolicy without arguments to see the effective policy for the current session).
+
     Public Function RunScript(ByVal scriptText As String) As String
         Dim runspace As Management.Automation.Runspaces.Runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
         runspace.Open()
