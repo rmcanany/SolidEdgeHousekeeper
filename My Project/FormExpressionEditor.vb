@@ -26,12 +26,18 @@ Public Class FormExpressionEditor
                     BT_Delete.Visible = False
                     ButtonOpen.Visible = True
                     BT_Test.Visible = False
+                    SavedExpressionsLabel.Text = "Saved Snippets"
+                    Me.Text = "Snippet Editor"
+                    BT_InsertProp.Visible = False
                 Else
                     ComboBoxLanguage.Enabled = True
                     DD_SavedExpressions.Visible = True
                     BT_Delete.Visible = True
                     ButtonOpen.Visible = False
                     BT_Test.Visible = True
+                    SavedExpressionsLabel.Text = "Saved Expressions"
+                    Me.Text = "Expression Editor"
+                    BT_InsertProp.Visible = True
                 End If
             End If
         End Set
@@ -410,23 +416,42 @@ Public Class FormExpressionEditor
             Dim UPS As New UtilsPowerShell
             Dim PowershellFilename = UPS.BuildSnippetFile(Me.SnippetFilename)
 
-            Dim P As New Diagnostics.Process
             Dim ExitCode As Integer
-
             Dim PSError As String = ""
 
-            P.StartInfo.FileName = "powershell.exe"
-            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowershellFilename.Replace(" ", "` "), Chr(34))
-            P.StartInfo.RedirectStandardError = True
-            P.StartInfo.UseShellExecute = False
-            'If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
-            P.Start()
-            PSError = P.StandardError.ReadToEnd
+            Dim NewWay As Boolean = True
 
-            P.WaitForExit()
-            ExitCode = P.ExitCode
+            If Not NewWay Then
+                Dim P As New Diagnostics.Process
 
-            Dim ResultsMessage As String = $"Exit Code: {P.ExitCode}{vbCrLf}"
+                P.StartInfo.FileName = "powershell.exe"
+                P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowershellFilename.Replace(" ", "` "), Chr(34))
+                P.StartInfo.RedirectStandardError = True
+                P.StartInfo.UseShellExecute = False
+                'If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
+                P.Start()
+                PSError = P.StandardError.ReadToEnd
+
+                P.WaitForExit()
+                ExitCode = P.ExitCode
+            Else
+                Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowershellFilename).ToList
+
+                Dim ScriptText As String = ""
+                For Each s As String In ScriptList
+                    ScriptText = $"{ScriptText}{vbCrLf}{s}"
+                Next
+
+                Try
+                    PSError = UPS.RunScript(ScriptText)
+                Catch ex As Exception
+                    PSError = ex.Message
+                End Try
+
+            End If
+
+            'Dim ResultsMessage As String = $"Exit Code: {ExitCode}{vbCrLf}"
+            Dim ResultsMessage As String = ""
             If Not PSError = "" Then
                 ResultsMessage = $"{ResultsMessage}Errors reported{vbCrLf}"
                 ResultsMessage = $"{ResultsMessage}{PSError}"
@@ -436,17 +461,15 @@ Public Class FormExpressionEditor
 
             If IO.File.Exists(PowershellFilename) Then IO.File.Delete(PowershellFilename)
 
-            If ExitCode <> 0 Then
-                If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
-                    Dim ErrorMessages As List(Of String) = IO.File.ReadAllLines(ErrorMessageFilename).ToList
-                    If ErrorMessages.Count > 0 Then
-                        For Each ErrorMessageFromProgram As String In ErrorMessages
-                            ResultsMessage = $"{ResultsMessage}{vbCrLf}{ErrorMessageFromProgram}"
-                        Next
-                    End If
-
-                    IO.File.Delete(ErrorMessageFilename)
+            If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+                Dim ErrorMessages As List(Of String) = IO.File.ReadAllLines(ErrorMessageFilename).ToList
+                If ErrorMessages.Count > 0 Then
+                    For Each ErrorMessageFromProgram As String In ErrorMessages
+                        ResultsMessage = $"{ResultsMessage}{vbCrLf}{ErrorMessageFromProgram}"
+                    Next
                 End If
+
+                IO.File.Delete(ErrorMessageFilename)
             End If
 
             TextEditorResults.Text = ResultsMessage

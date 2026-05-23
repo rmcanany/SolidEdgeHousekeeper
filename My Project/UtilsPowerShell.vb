@@ -1,5 +1,7 @@
 ﻿Option Strict On
 
+'Imports System.Security.AccessControl
+'Imports Microsoft.PowerShell
 'Imports System.Collections.ObjectModel
 'Imports System.Management.Automation
 'Imports System.Management.Automation.Runspaces
@@ -19,16 +21,44 @@ Public Class UtilsPowerShell
     '(run Get-ExecutionPolicy without arguments to see the effective policy for the current session).
 
     Public Function RunScript(ByVal scriptText As String) As String
-        Dim runspace As Management.Automation.Runspaces.Runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
-        runspace.Open()
 
-        Dim pipeline As Management.Automation.Runspaces.Pipeline = runspace.CreatePipeline()
-        pipeline.Commands.AddScript(scriptText)
-        pipeline.Commands.Add("Out-String")
+        Dim tmpAuthorizationManager As Management.Automation.AuthorizationManager = Nothing
+        Dim AMChoice As Integer
+        Dim results As Collections.ObjectModel.Collection(Of Management.Automation.PSObject)
 
-        Dim results As Collections.ObjectModel.Collection(Of Management.Automation.PSObject) = pipeline.Invoke()
+        Dim NewWay As Boolean = True
 
-        runspace.Close()
+        If NewWay Then
+            ''https://stackoverflow.com/questions/13420799/enabling-execution-policy-for-powershell-from-c-sharp
+            Dim ISS As Management.Automation.Runspaces.InitialSessionState
+            ISS = Management.Automation.Runspaces.InitialSessionState.CreateDefault()
+            Select Case AMChoice
+                Case 1 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager("MyShellID") ' Might need the actual ShellID
+                Case 2 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager("Microsoft.PowerShell")
+                Case 3 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager("Microsoft.PowerShell.Host")
+                Case 4 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager(Nothing)
+            End Select
+            ISS.AuthorizationManager = tmpAuthorizationManager
+            Dim PS As Management.Automation.PowerShell
+            PS = Management.Automation.PowerShell.Create(ISS)
+            PS.AddScript(scriptText)
+            PS.AddCommand("Out-String")
+
+            results = PS.Invoke()
+            'Dim i = 0
+        Else
+            Dim runspace As Management.Automation.Runspaces.Runspace
+            runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
+
+            runspace.Open()
+
+            Dim pipeline As Management.Automation.Runspaces.Pipeline = runspace.CreatePipeline()
+            pipeline.Commands.AddScript(scriptText)
+            pipeline.Commands.Add("Out-String")
+
+            results = pipeline.Invoke()
+            runspace.Close()
+        End If
 
         Dim stringBuilder As System.Text.StringBuilder = New System.Text.StringBuilder()
 

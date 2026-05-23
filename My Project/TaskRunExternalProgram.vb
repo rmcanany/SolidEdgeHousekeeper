@@ -197,7 +197,11 @@ Public Class TaskRunExternalProgram
                     ScriptText = $"{ScriptText}{vbCrLf}{s}"
                 Next
 
-                PSError = UPS.RunScript(ScriptText)
+                Try
+                    PSError = UPS.RunScript(ScriptText)
+                Catch ex As Exception
+                    PSError = ex.Message
+                End Try
 
             End If
         Else
@@ -231,21 +235,19 @@ Public Class TaskRunExternalProgram
 
         ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
 
-        If ExitCode <> 0 Then
-            If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
-                ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
-                If ErrorMessages.Length > 0 Then
-                    For Each ErrorMessageFromProgram As String In ErrorMessages
-                        TaskLogger.AddMessage(ErrorMessageFromProgram)
-                    Next
-                Else
-                    TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
-                End If
-
-                IO.File.Delete(ErrorMessageFilename)
+        If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+            ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
+            If ErrorMessages.Length > 0 Then
+                For Each ErrorMessageFromProgram As String In ErrorMessages
+                    TaskLogger.AddMessage(ErrorMessageFromProgram)
+                Next
             Else
-                TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
+                If Not ExitCode = 0 Then TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
             End If
+
+            IO.File.Delete(ErrorMessageFilename)
+        Else
+            If Not ExitCode = 0 Then TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
         End If
 
         If Me.SaveAfterProcessing Then
