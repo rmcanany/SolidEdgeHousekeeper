@@ -33,7 +33,7 @@ Public Class UtilsPowerShell
             Dim ISS As Management.Automation.Runspaces.InitialSessionState
             ISS = Management.Automation.Runspaces.InitialSessionState.CreateDefault()
             Select Case AMChoice
-                Case 1 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager("MyShellID") ' Might need the actual ShellID
+                Case 1 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager("MyShellID") ' Probably need the actual ShellID
                 Case 2 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager("Microsoft.PowerShell")
                 Case 3 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager("Microsoft.PowerShell.Host")
                 Case 4 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager(Nothing)
@@ -45,19 +45,19 @@ Public Class UtilsPowerShell
             PS.AddCommand("Out-String")
 
             results = PS.Invoke()
-            'Dim i = 0
+            Dim i = 0
         Else
-            Dim runspace As Management.Automation.Runspaces.Runspace
-            runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
+            'Dim runspace As Management.Automation.Runspaces.Runspace
+            'runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
 
-            runspace.Open()
+            'runspace.Open()
 
-            Dim pipeline As Management.Automation.Runspaces.Pipeline = runspace.CreatePipeline()
-            pipeline.Commands.AddScript(scriptText)
-            pipeline.Commands.Add("Out-String")
+            'Dim pipeline As Management.Automation.Runspaces.Pipeline = runspace.CreatePipeline()
+            'pipeline.Commands.AddScript(scriptText)
+            'pipeline.Commands.Add("Out-String")
 
-            results = pipeline.Invoke()
-            runspace.Close()
+            'results = pipeline.Invoke()
+            'runspace.Close()
         End If
 
         Dim stringBuilder As System.Text.StringBuilder = New System.Text.StringBuilder()
@@ -135,31 +135,31 @@ Public Class UtilsPowerShell
         Dim NewWay As Boolean = True
 
         If Not NewWay Then
-            Dim Result As String = ""
+            'Dim Result As String = ""
 
-            Dim P As New Diagnostics.Process
-            Dim PSError As String = ""
+            'Dim P As New Diagnostics.Process
+            'Dim PSError As String = ""
 
-            P.StartInfo.FileName = "powershell.exe"
-            P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
-            P.StartInfo.RedirectStandardError = True
-            P.StartInfo.RedirectStandardOutput = True
-            P.StartInfo.UseShellExecute = False
-            P.StartInfo.CreateNoWindow = True
-            P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
+            'P.StartInfo.FileName = "powershell.exe"
+            'P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
+            'P.StartInfo.RedirectStandardError = True
+            'P.StartInfo.RedirectStandardOutput = True
+            'P.StartInfo.UseShellExecute = False
+            'P.StartInfo.CreateNoWindow = True
+            'P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
 
-            P.Start()
-            PSError = P.StandardError.ReadToEnd
-            Dim PSResult As String = P.StandardOutput.ReadToEnd
+            'P.Start()
+            'PSError = P.StandardError.ReadToEnd
+            'Dim PSResult As String = P.StandardOutput.ReadToEnd
 
-            If Not PSError = "" Then
-                Throw New Exception(PSError)
-            End If
+            'If Not PSError = "" Then
+            '    Throw New Exception(PSError)
+            'End If
 
-            P.WaitForExit()
-            Result = PSResult.Replace(vbCrLf, "")
+            'P.WaitForExit()
+            'Result = PSResult.Replace(vbCrLf, "")
 
-            Return Result
+            'Return Result
 
         Else
             Dim Result As String = ""

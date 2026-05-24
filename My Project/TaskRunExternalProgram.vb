@@ -179,14 +179,14 @@ Public Class TaskRunExternalProgram
             Dim NewWay As Boolean = True
 
             If Not NewWay Then
-                P = New Diagnostics.Process
-                P.StartInfo.FileName = "powershell.exe"
-                P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", UPS.BuildSnippetFile(Me.ExternalProgram).Replace(" ", "` "), Chr(34))
-                P.StartInfo.RedirectStandardError = True
-                P.StartInfo.UseShellExecute = False
-                If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
-                P.Start()
-                PSError = P.StandardError.ReadToEnd
+                'P = New Diagnostics.Process
+                'P.StartInfo.FileName = "powershell.exe"
+                'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", UPS.BuildSnippetFile(Me.ExternalProgram).Replace(" ", "` "), Chr(34))
+                'P.StartInfo.RedirectStandardError = True
+                'P.StartInfo.UseShellExecute = False
+                'If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
+                'P.Start()
+                'PSError = P.StandardError.ReadToEnd
 
             Else
 
