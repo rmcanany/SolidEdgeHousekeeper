@@ -262,18 +262,6 @@ Public Class TaskRunExternalProgram
     End Sub
 
 
-    'Private Function BuildSnippetFile(SnippetFilename As String) As String
-    '    ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/
-
-    '    Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
-
-    '    Dim UPS As New UtilsPowerShell
-    '    PowerShellFilename = UPS.BuildSnippetFile(SnippetFilename)
-
-    '    Return PowerShellFilename
-
-    'End Function
-
     Private Sub DevelopSnippetCode()
 
         ' Develop the snippet code here, then copy to the snippet file.
@@ -536,7 +524,7 @@ Public Class TaskRunExternalProgram
         HelpString += "The script has two sections that take care of the task's set-up and wrap-up, respectively. "
         HelpString += "It has the same name and directory as the snippet file, except with a `.ps1` extension.  "
         HelpString += "While it is a PowerShell script, it is not run in an OS shell.  "
-        HelpString += "Rather, it uses an internal dotnet library.  That makes it compatible with more user configurations.  "
+        HelpString += "Rather, it uses an internal dotnet library -- hopefully improving compatibility across varied system configurations.  "
 
         HelpString += vbCrLf + vbCrLf + "The intent is to address one-off automation chores, "
         HelpString += "where the time to do the job manually can't justify the time needed to "
@@ -549,18 +537,18 @@ Public Class TaskRunExternalProgram
         HelpString += "activate a document, trap errors, etc., etc.  "
         HelpString += "The code snippet functionality is meant for the *other stuff*. "
 
-        HelpString += vbCrLf + vbCrLf + "Here's an example snippet for enabling the Physical Properties `Update on Save` flag. "
+        HelpString += vbCrLf + vbCrLf + "Here's an example that enables the Physical Properties `Update on Save` flag. "
 
         HelpString += vbCrLf + vbCrLf + "```"
-        HelpString += vbCrLf + $"If DocType = "".asm"" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True"
-        HelpString += vbCrLf + $"If DocType = "".par"" Then SEDoc.UpdateOnFileSave = True"
-        HelpString += vbCrLf + $"If DocType = "".psm"" Then SEDoc.UpdateOnFileSave = True"
-        HelpString += vbCrLf + $"If DocType = "".dft"" ExitStatus = 1"
+        HelpString += vbCrLf + "If DocType = "".asm"" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True"
+        HelpString += vbCrLf + "If DocType = "".par"" Then SEDoc.UpdateOnFileSave = True"
+        HelpString += vbCrLf + "If DocType = "".psm"" Then SEDoc.UpdateOnFileSave = True"
+        HelpString += vbCrLf + "If DocType = "".dft"" Then ExitStatus = 1"
         HelpString += vbCrLf + "If ExitStatus = 0 Then"
         HelpString += vbCrLf + "    SEDoc.Save()"
         HelpString += vbCrLf + "    SEApp.DoIdle()"
         HelpString += vbCrLf + "Else"
-        HelpString += vbCrLf + $"    ErrorMessageList.Add(""An error occurred"")"
+        HelpString += vbCrLf + "    ErrorMessageList.Add(""An error occurred"")"
         HelpString += vbCrLf + "End If"
         HelpString += vbCrLf + "```"
 

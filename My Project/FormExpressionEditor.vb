@@ -540,7 +540,8 @@ Public Class FormExpressionEditor
         End If
 
         If Success Then
-            Dim p As String = vbCrLf & vbCrLf & "Parameters list" & vbCrLf & "---------------"
+            'Dim p As String = vbCrLf & vbCrLf & "Parameters list" & vbCrLf & "---------------"
+            Dim p As String = "Parameters list" & vbCrLf & "---------------"
 
             For Each tmpPar In Parameters
                 p += vbCrLf & tmpPar & ": " & SavedParameters(tmpPar)
@@ -584,11 +585,11 @@ Public Class FormExpressionEditor
 
             Dim tmpVal As String = ""
 
-            If SavedParameters.ContainsKey(Parameter) Then
-                tmpVal = SavedParameters.Item(Parameter)
-            End If
-
             If sender.Equals(BT_Test) Then
+                If SavedParameters.ContainsKey(Parameter) Then
+                    tmpVal = SavedParameters.Item(Parameter)
+                End If
+
                 tmpVal = InputBox("Insert value for parameter: " & Parameter,, tmpVal)
 
             Else

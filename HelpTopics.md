@@ -1256,19 +1256,19 @@ Unlike the other file types, a `*.snp` is a special file containing only a small
 
 The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, or more conveniently in the expression editor.  Click `Edit *.snp` to use the editor.  
 
-The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  While it is a PowerShell script, it is not run in an OS shell.  Rather, it uses an internal dotnet library.  That makes it compatible with more user configurations.  
+The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  While it is a PowerShell script, it is not run in an OS shell.  Rather, it uses an internal dotnet library -- hopefully improving compatibility across varied system configurations.  
 
 The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test, and maintain a separate program to do it automatically. 
 
 If you ask a programmer how to do **X**, you'll often get an answer.  But only for **X** itself, not all the *other stuff*. Things that may seem obvious to them but not to anyone else, like the need to connect to the application, activate a document, trap errors, etc., etc.  The code snippet functionality is meant for the *other stuff*. 
 
-Here's an example snippet for enabling the Physical Properties `Update on Save` flag. 
+Here's an example that enables the Physical Properties `Update on Save` flag. 
 
 ```
 If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
 If DocType = ".par" Then SEDoc.UpdateOnFileSave = True
 If DocType = ".psm" Then SEDoc.UpdateOnFileSave = True
-If DocType = ".dft" ExitStatus = 1
+If DocType = ".dft" Then ExitStatus = 1
 If ExitStatus = 0 Then
     SEDoc.Save()
     SEApp.DoIdle()

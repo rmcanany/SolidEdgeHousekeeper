@@ -1,4 +1,7 @@
 ﻿Option Strict On
+Imports System.Security.Cryptography
+
+
 
 'Imports System.Security.AccessControl
 'Imports Microsoft.PowerShell
@@ -24,7 +27,7 @@ Public Class UtilsPowerShell
 
         Dim tmpAuthorizationManager As Management.Automation.AuthorizationManager = Nothing
         Dim AMChoice As Integer
-        Dim results As Collections.ObjectModel.Collection(Of Management.Automation.PSObject)
+        Dim results As Collections.ObjectModel.Collection(Of Management.Automation.PSObject) = Nothing
 
         Dim NewWay As Boolean = True
 
@@ -62,11 +65,14 @@ Public Class UtilsPowerShell
 
         Dim stringBuilder As System.Text.StringBuilder = New System.Text.StringBuilder()
 
-        For Each obj As Management.Automation.PSObject In results
-            stringBuilder.AppendLine(obj.ToString())
-        Next
+        If results IsNot Nothing Then
+            For Each obj As Management.Automation.PSObject In results
+                stringBuilder.AppendLine(obj.ToString())
+            Next
+        End If
 
         Return stringBuilder.ToString()
+
     End Function
 
     Public Function BuildExpressionFile(Expression As List(Of String)) As List(Of String)
@@ -76,6 +82,11 @@ Public Class UtilsPowerShell
         Dim OutList As New List(Of String)
         Dim Indent As String = "        "
 
+        ' Workaround for not being able to redefine a PS Type in the same session.
+        ' Needed for serial runs of 'Test on edge' in the expression editor.
+        Static Generator As System.Random = New System.Random()
+        Dim RandomIdentifier As Integer = Generator.Next(10000, 99999)
+
         'TopList.Add("$OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding")
         TopList.Add("$InputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding")
 
@@ -84,7 +95,8 @@ Public Class UtilsPowerShell
         TopList.Add("Imports System")
         TopList.Add("Imports System.Collections.Generic")
         TopList.Add("")
-        TopList.Add("Public Class Expression")
+        'TopList.Add("Public Class Expression")
+        TopList.Add(String.Format("Public Class Expression{0}", RandomIdentifier))
         TopList.Add("")
         TopList.Add("    Public Shared Function RunExpression() As String")
         TopList.Add("")
@@ -98,12 +110,30 @@ Public Class UtilsPowerShell
         BotList.Add("""@")
         BotList.Add("")
 
+        '' https://stackoverflow.com/questions/3369662/can-you-remove-an-add-ed-type-in-powershell-again
+        ''BotList.Add("$init = {Add-Type -TypeDefinition $Source -Language VisualBasic}")
+        ''BotList.Add("$job = Start-Job -InitializationScript $init -ScriptBlock {")
+        'BotList.Add("$job = Start-Job -ScriptBlock {")
+        'BotList.Add("")
+        'BotList.Add("    Add-Type -TypeDefinition $using:Source -Language VisualBasic")
+        'BotList.Add("")
+        'BotList.Add("    $Result = [Expression]::RunExpression()")
+        'BotList.Add("    Write-Output ""Output""+$Result")
+        ''BotList.Add("    Write-Output ""Source""+$using:Source")
+        'BotList.Add("}")
+        'BotList.Add("Wait-Job $job")
+        'BotList.Add("$ResultCopy =  Receive-Job $job -Keep")
+        'BotList.Add("Write-Output $ResultCopy")
+        'BotList.Add("$job | Select *")
+
         BotList.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
 
         BotList.Add("")
-        BotList.Add("$Result = [Expression]::RunExpression()")
+        'BotList.Add("$Result = [Expression]::RunExpression()")
+        BotList.Add(String.Format("$Result = [Expression{0}]::RunExpression()", RandomIdentifier))
         BotList.Add("Write-Output $Result")
-        'BotList.Add("$Result | Out-File -FilePath 'C:\data\junk\HousekeeperExpressionResult.txt' -Encoding UTF8")
+
+        ''BotList.Add("$Result | Out-File -FilePath 'C:\data\junk\HousekeeperExpressionResult.txt' -Encoding UTF8")
 
         For Each L As List(Of String) In {TopList, MidList, BotList}
             For Each s In L
@@ -122,6 +152,7 @@ Public Class UtilsPowerShell
         Dim Success As Boolean = True
 
         Try
+            If IO.File.Exists(PowerShellFilename) Then IO.File.Delete(PowerShellFilename)
             IO.File.WriteAllLines(PowerShellFilename, PowerShellFileContents, System.Text.Encoding.Unicode)
         Catch ex As Exception
             Success = False
@@ -131,6 +162,8 @@ Public Class UtilsPowerShell
     End Function
 
     Public Function RunExpressionScript(PowerShellFilename As String) As String
+
+        Dim Result As String = ""
 
         Dim NewWay As Boolean = True
 
@@ -162,7 +195,6 @@ Public Class UtilsPowerShell
             'Return Result
 
         Else
-            Dim Result As String = ""
 
             Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
 
@@ -173,8 +205,9 @@ Public Class UtilsPowerShell
 
             Result = RunScript(ScriptText)
 
-            Return Result
         End If
+
+        Return Result
 
     End Function
 
@@ -189,6 +222,11 @@ Public Class UtilsPowerShell
         Dim Outlist As New List(Of String)
         Dim s As String
         Dim Indent As String = "                "
+
+        ' Workaround for not being able to redefine a PS Type in the same session.
+        ' Needed for serial runs of 'Test on edge' in the expression editor.
+        Static Generator As System.Random = New System.Random()
+        Dim RandomIdentifier As Integer = Generator.Next(10000, 99999)
 
         Dim UP As New UtilsPreferences
 
@@ -216,7 +254,8 @@ Public Class UtilsPowerShell
         Toplist.Add("Imports Microsoft.VisualBasic")
         Toplist.Add("Imports System.Linq")
         Toplist.Add("")
-        Toplist.Add("Public Class Snippet")
+        'Toplist.Add("Public Class Snippet")
+        Toplist.Add(String.Format("Public Class Snippet{0}", RandomIdentifier))
         Toplist.Add("")
         Toplist.Add("    Public Shared Function RunSnippet(StartupPath As String) As Integer")
         Toplist.Add("        Dim ExitStatus As Integer = 0")
@@ -251,6 +290,7 @@ Public Class UtilsPowerShell
         Botlist.Add("            End Try")
         Botlist.Add("        End If")
         Botlist.Add("")
+        Botlist.Add("        If ErrorMessageList.Count > 0 Then ExitStatus = 1")
         Botlist.Add("        If Not ExitStatus = 0 Then")
         Botlist.Add("            SaveErrorMessages(StartupPath, ErrorMessageList)")
         Botlist.Add("        End If")
@@ -278,9 +318,11 @@ Public Class UtilsPowerShell
         'Botlist.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
         Botlist.Add("Add-Type -TypeDefinition $Source -ReferencedAssemblies $DLLs -Language VisualBasic")
         Botlist.Add("")
-        Botlist.Add("[Snippet]::LoadLibrary($DLLs)")
+        'Botlist.Add("[Snippet]::LoadLibrary($DLLs)")
+        Botlist.Add(String.Format("[Snippet{0}]::LoadLibrary($DLLs)", RandomIdentifier))
         Botlist.Add("")
-        Botlist.Add("$ExitStatus = [Snippet]::RunSnippet($StartupPath)")
+        'Botlist.Add("$ExitStatus = [Snippet]::RunSnippet($StartupPath)")
+        Botlist.Add(String.Format("$ExitStatus = [Snippet{0}]::RunSnippet($StartupPath)", RandomIdentifier))
         Botlist.Add("")
         Botlist.Add("Function ExitWithCode($exitcode) {")
         Botlist.Add("  $host.SetShouldExit($exitcode)")
