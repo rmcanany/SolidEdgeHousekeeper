@@ -457,18 +457,13 @@ Public Class FormExpressionEditor
 
         End If
 
-        'Dim ResultsMessage As String = $"Exit Code: {ExitCode}{vbCrLf}"
-        Dim ResultsMessage As String = ""
-        If Not PSError = "" Then
-            ResultsMessage = $"{ResultsMessage}Errors reported{vbCrLf}"
-            ResultsMessage = $"{ResultsMessage}{PSError}"
-        End If
+        Dim ResultsMessage As String = PSError
 
         Dim ErrorMessageFilename = String.Format("{0}\error_messages.txt", IO.Path.GetDirectoryName(PowershellFilename))
 
         If IO.File.Exists(PowershellFilename) Then IO.File.Delete(PowershellFilename)
 
-        If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+        If IO.File.Exists(ErrorMessageFilename) Then
             Dim ErrorMessages As List(Of String) = IO.File.ReadAllLines(ErrorMessageFilename).ToList
             If ErrorMessages.Count > 0 Then
                 For Each ErrorMessageFromProgram As String In ErrorMessages
@@ -541,7 +536,7 @@ Public Class FormExpressionEditor
 
         If Success Then
             'Dim p As String = vbCrLf & vbCrLf & "Parameters list" & vbCrLf & "---------------"
-            Dim p As String = "Parameters list" & vbCrLf & "---------------"
+            Dim p As String = vbCrLf & "Parameters list" & vbCrLf & "---------------"
 
             For Each tmpPar In Parameters
                 p += vbCrLf & tmpPar & ": " & SavedParameters(tmpPar)

@@ -3,7 +3,7 @@
 Public Class TaskUpdateBlocks
     Inherits Task
 
-    Private NewWay As Boolean = False
+    Private NewWay As Boolean = True
 
     Private _BlockLibrary As String
     Public Property BlockLibrary As String

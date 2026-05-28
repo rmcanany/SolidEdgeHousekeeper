@@ -354,12 +354,14 @@ Public Class UtilsPropertyFilters
 
         Try
             Dim Result As String = UPS.RunScript(FormulaToPSSyntax(Formula))
+            Result = Result.Replace(vbCrLf, "").Trim
 
-            If Result.ToLower.Contains("true") Then
-                tf = True
-            Else
-                tf = False
-            End If
+            tf = Result.ToLower = "true"
+            'If Result.ToLower.Contains("true") Then
+            '    tf = True
+            'Else
+            '    tf = False
+            'End If
         Catch ex As Exception
             tf = False
         End Try

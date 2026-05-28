@@ -40,6 +40,18 @@ Added another option to display a lot of information about the selected file.  T
 See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#selection) for details.
 
 
+### Update Blocks
+
+Sponsored by **@john.matthews3452 (Hatch).**  Thank you!
+
+Added sheet processing options to the `Add Blocks` function.
+
+The change affects the second stage of the function, where it checks each sheet of the template and places a block occurrence on the corresponding sheet in the file.  The difference is how a corresponding sheet is defined.
+
+Previously it meant that the sheet names match.  Now, for working sheets, you can optionally add by sheet order, or add to all sheets.  For background sheets, it still checks the name first.  But now, if no matching name is found, you can optionally add by sheet size.
+
+See the [<ins>**Update Blocks Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-blocks) for details.
+
 ### Command Line
 
 Added the ability to run Housekeeper from the command line.  (Thank you **@robbin70** and **@Robin BIomberg!**)
@@ -71,7 +83,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
-- Added indentation of Task sub-options to better show to which main option they apply.
+- Changed the formatting of Task sub-options to better show to which main option they apply.
 
 
 ## V2026.1

@@ -1,13 +1,4 @@
 ﻿Option Strict On
-Imports System.Security.Cryptography
-
-
-
-'Imports System.Security.AccessControl
-'Imports Microsoft.PowerShell
-'Imports System.Collections.ObjectModel
-'Imports System.Management.Automation
-'Imports System.Management.Automation.Runspaces
 
 Public Class UtilsPowerShell
     ' https://www.codeproject.com/Articles/18229/How-to-run-PowerShell-scripts-from-C
@@ -42,13 +33,41 @@ Public Class UtilsPowerShell
                 Case 4 : tmpAuthorizationManager = New Management.Automation.AuthorizationManager(Nothing)
             End Select
             ISS.AuthorizationManager = tmpAuthorizationManager
+
             Dim PS As Management.Automation.PowerShell
             PS = Management.Automation.PowerShell.Create(ISS)
             PS.AddScript(scriptText)
             PS.AddCommand("Out-String")
 
             results = PS.Invoke()
-            Dim i = 0
+
+            If PS.HadErrors Then
+                Dim ErrorMessages As New List(Of String)
+                For Each E As Management.Automation.ErrorRecord In PS.Streams.Error
+                    If Not ErrorMessages.Contains(E.Exception.Message) Then ErrorMessages.Add(E.Exception.Message)
+                Next
+
+                ' Clean up exception message formatting
+                Dim s As String = ""
+                For Each tmpError As String In ErrorMessages
+                    tmpError = tmpError.Replace(vbCrLf, Chr(182)).Replace(vbLf, Chr(182)).Replace(vbCr, Chr(182))
+                    Dim tmpList As List(Of String) = tmpError.Split(Chr(182)).ToList
+                    For Each tmpS As String In tmpList
+                        tmpS = tmpS.Trim
+                        If Not tmpS = "" Then
+                            If s = "" Then
+                                s = $"    > {tmpS}"
+                            Else
+                                s = $"{s}{vbCrLf}    > {tmpS}"
+                            End If
+                        End If
+                    Next
+                Next
+                s = $"Script error{vbCrLf}{s}"
+
+                Throw New Exception(s)
+
+            End If
         Else
             'Dim runspace As Management.Automation.Runspaces.Runspace
             'runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
@@ -87,8 +106,7 @@ Public Class UtilsPowerShell
         Static Generator As System.Random = New System.Random()
         Dim RandomIdentifier As Integer = Generator.Next(10000, 99999)
 
-        'TopList.Add("$OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding")
-        TopList.Add("$InputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding")
+        'TopList.Add("$InputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding")
 
         TopList.Add("$Source = @""")
         TopList.Add("")
