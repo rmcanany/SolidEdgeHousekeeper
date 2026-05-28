@@ -55,9 +55,6 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
 > *Why did the Solid Edge Housekeeper get a promotion?*  
 > *She was the only one who could clean up the mess that Solid Edge users make.*
 
-> *How did Solid Edge Housekeeper break up with her partner?*  
-> *"It's not you, it's your `Interpart dependencies`".*
-
 *Download Tracker*
 
 <p align="center">
@@ -874,10 +871,16 @@ Known blocks are available in combo boxes on each list. To populate them, click 
 
 There are a couple of things to note about working with the block lists. First, you may find yourself clicking a drop down twice to choose an item. These combo boxes are picky -- you have to click the down arrow, not the text field, to open the drop down on the first click. Second, to remove a row's contents, select the `Row Header` (the gray box left of the text) and hit `Delete`. To clear the entire list, select the top-most `Row Header` and do the same.  
 
-This command has a few options.  They are described next.  
-- `Replace Blocks` `Overwrite existing with replacement`: This is confusing; the point of the command is to overwrite blocks, right? There is an ambiguity, however. Say you want to replace `Block1` in the file with `Block2` in the library. It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? This option tells the program how to proceed for that situation. 
+This command has several options.  They are described next.  
+- `Replace Blocks` `Overwrite existing with replacement`: This is confusing; the point of the command is to overwrite blocks, right? There is an ambiguity, however. Say you want to replace `Block1` in the file with `Block2` in the library. It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? This option tells the program how to proceed in that case. 
 - `Add Blocks` `Overwrite existing with added block`: Similar to above, this is for when you're adding `Block1` to the file, but it already has one with that name.  
 - `Add Blocks` `Report missing sheet in document`: The Solid Edge `Add Blocks` command updates the file's library, but does not add it to drawing sheets. Since you, of course, want it on drawings, the program checks each sheet of the library and places an occurrence on the corresponding sheet in the file, at the same location, scale, and rotation as the original.  If the file does not have a corresponding sheet, enable this option to have it reported in the log file.  
+- `Add Blocks` `Working sheets add by name`: This option, and those below, set how corresponding sheets (described above) are determined.  This one selects sheets with the same name in the template and the file.  
+- `Add Blocks` `Working sheets add by order`: Selects sheets in the same order in both files.  
+- `Add Blocks` `Working sheets add to all`: Selects all sheets in the file.  Only one working sheet is allowed in the template.  This is probably the most practical option.  It handles files with multiple working sheets.  
+- `Add Blocks` `Background sheets add by name`: Selects background sheets with the same name in both files.  This option cannot be disabled.  
+- `Add Blocks` `Background sheets add by size`: If no name match is found, match by sheet size.  
+- `Add Blocks` `Background sheets rename`: If a size match was used, rename the file's sheet to that of the template.  
 
 </details>
 

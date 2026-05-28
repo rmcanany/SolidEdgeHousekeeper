@@ -1825,14 +1825,14 @@ Public Class TaskUpdateBlocks
         HelpString += "select the `Row Header` (the gray box left of the text) and hit `Delete`. "
         HelpString += "To clear the entire list, select the top-most `Row Header` and do the same.  "
 
-        HelpString += vbCrLf + vbCrLf + "This command has a few options.  They are described next.  "
+        HelpString += vbCrLf + vbCrLf + "This command has several options.  They are described next.  "
 
         HelpString += vbCrLf + "- `Replace Blocks` `Overwrite existing with replacement`: "
         HelpString += "This is confusing; the point of the command is to overwrite blocks, right? "
         HelpString += "There is an ambiguity, however. "
         HelpString += "Say you want to replace `Block1` in the file with `Block2` in the library. "
         HelpString += "It's clear what will happen to `Block1`.  But what if there is already a `Block2` in the file? "
-        HelpString += "This option tells the program how to proceed for that situation. "
+        HelpString += "This option tells the program how to proceed in that case. "
 
         HelpString += vbCrLf + "- `Add Blocks` `Overwrite existing with added block`: "
         HelpString += "Similar to above, this is for when you're adding `Block1` to the file, but it already has one with that name.  "
@@ -1845,6 +1845,27 @@ Public Class TaskUpdateBlocks
         HelpString += "at the same location, scale, and rotation as the original.  "
         HelpString += "If the file does not have a corresponding sheet, enable this option "
         HelpString += "to have it reported in the log file.  "
+
+        HelpString += vbCrLf + "- `Add Blocks` `Working sheets add by name`: "
+        HelpString += "This option, and those below, set how corresponding sheets (described above) are determined.  "
+        HelpString += "This one selects sheets with the same name in the template and the file.  "
+
+        HelpString += vbCrLf + "- `Add Blocks` `Working sheets add by order`: "
+        HelpString += "Selects sheets in the same order in both files.  "
+
+        HelpString += vbCrLf + "- `Add Blocks` `Working sheets add to all`: "
+        HelpString += "Selects all sheets in the file.  Only one working sheet is allowed in the template.  "
+        HelpString += "This is probably the most practical option.  "
+        HelpString += "It handles files with multiple working sheets.  "
+
+        HelpString += vbCrLf + "- `Add Blocks` `Background sheets add by name`: "
+        HelpString += "Selects background sheets with the same name in both files.  This option cannot be disabled.  "
+
+        HelpString += vbCrLf + "- `Add Blocks` `Background sheets add by size`: "
+        HelpString += "If no name match is found, match by sheet size.  "
+
+        HelpString += vbCrLf + "- `Add Blocks` `Background sheets rename`: "
+        HelpString += "If a size match was used, rename the file's sheet to that of the template.  "
 
         Return HelpString
     End Function
