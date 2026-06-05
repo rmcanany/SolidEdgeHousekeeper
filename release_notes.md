@@ -31,7 +31,7 @@ Added an option to show the thumbnail of a selected file.  On the toolbar, click
   <img src="My%20Project/media/preview_window.png">
 </p>
 
-Added another option to display a lot of information about the selected file.  To view, hold down the shift key then click the eye icon.
+Added another option to display additional information about the selected file.  To view, hold down the shift key then click the eye icon.
 
 <p align="center">
   <img src="My%20Project/media/solid_edge_explorer.png">
@@ -46,9 +46,11 @@ Sponsored by **@john.matthews3452 (Hatch).**  Thank you!
 
 Added sheet processing options to the `Add Blocks` function.
 
-The change affects the second stage of the function, where it checks each sheet of the template and places a block occurrence on the corresponding sheet in the file.  The difference is how a corresponding sheet is defined.
+The change affects the second stage of the function, where it checks each sheet of the template and places a block occurrence on the corresponding sheet in the file.  What is new is how the "corresponding sheet" is determined.
 
-Previously it meant that the sheet names match.  Now, for working sheets, you can optionally add by sheet order, or add to all sheets.  For background sheets, it still checks the name first.  But now, if no matching name is found, you can optionally add by sheet size.
+Previously it meant that the sheet names match.  You can still do it that way, but now, for working sheets, you can optionally add by sheet order, or add to all sheets.  For background sheets, it always checks the name first.  If no matching name is found, you can optionally add by sheet size.
+
+In addition to the sheet processing options, an enhancement was made to avoid  duplicating blocks.  During placement, if a block with the same name, location, etc. is found, the new block is not added.
 
 See the [<ins>**Update Blocks Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-blocks) for details.
 
@@ -64,13 +66,13 @@ See the [<ins>**Command Line Help Topic**</ins>](https://github.com/rmcanany/Sol
 
 ### Break Links
 
-For the option `Draft model links`, added the processing of Blocks for property text replacement.  (Thank you **@john.matthews3452!**)
+For the option `Draft model links`, added the processing of Blocks for property text replacement.  (Thank you again **@john.matthews3452!**)
 
 See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#break-links) for details.
 
 ### Run External Program
 
-For code snippets, changed processing from PowerShell to an internal dotnet library.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for Expressions.
+For `code snippets`, changed processing from PowerShell to an internal dotnet library.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for `expressions` and `property filters`.
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 
@@ -81,7 +83,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue in the example code snippet `FitIso.snp` where the command ID for draft files was incorrect.
 - Fixed an issue in `Update Physical Properties` where a check of the mass in the variable table was not accounting for localized names.  (Thank you **@Stefano-VLN!**)
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
-- Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.
+- Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.  (Thank you **@PBurkeADS!**)
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
 - Changed the formatting of Task sub-options to better show to which main option they apply.
 

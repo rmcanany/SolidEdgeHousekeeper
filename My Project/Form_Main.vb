@@ -1,16 +1,16 @@
 ﻿Option Strict On
 
-Imports System.Data.OleDb
-Imports System.Data.SqlClient
-Imports System.Runtime.InteropServices
-Imports ListViewExtended
-Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports Newtonsoft.Json
+'Imports System.Data.SqlClient ' hijacks Windows.Forms.SortOrder in ListViewColumnSorter
+'Imports System.Data.OleDb
+'Imports System.Runtime.InteropServices
+'Imports ListViewExtended
+'Imports Microsoft.WindowsAPICodePack.Dialogs
+'Imports Newtonsoft.Json
 
 
 Public Class Form_Main
 
-    Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
+    Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.
     Public Property PreviewVersion As String = "15" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
@@ -1273,7 +1273,7 @@ Public Class Form_Main
 
         End If
 
-        ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
+        ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Collapsible)
 
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
@@ -1802,7 +1802,7 @@ Public Class Form_Main
 
     Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
 
-        Dim tmpFolderDialog As New CommonOpenFileDialog
+        Dim tmpFolderDialog As New Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
         tmpFolderDialog.IsFolderPicker = True
         tmpFolderDialog.Multiselect = True
         tmpFolderDialog.InitialDirectory = Me.WorkingFilesPath
@@ -1835,7 +1835,7 @@ Public Class Form_Main
 
     Private Sub BT_AddFolderSubfolders_Click(sender As Object, e As EventArgs) Handles BT_AddFolderSubfolders.Click
 
-        Dim tmpFolderDialog As New CommonOpenFileDialog
+        Dim tmpFolderDialog As New Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
         tmpFolderDialog.IsFolderPicker = True
         tmpFolderDialog.Multiselect = True
         tmpFolderDialog.InitialDirectory = Me.WorkingFilesPath
@@ -2047,7 +2047,7 @@ Public Class Form_Main
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             If CheckBoxTLAAutoIncludeTLF.Checked Then
-                Dim Folder As String = System.IO.Path.GetDirectoryName(tmpFileDialog.FileName)
+                Dim Folder As String = IO.Path.GetDirectoryName(tmpFileDialog.FileName)
 
                 Dim tmpItem2 As New ListViewItem
                 tmpItem2.Text = "Top level asm folder"
@@ -2072,7 +2072,7 @@ Public Class Form_Main
 
     Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
 
-        Dim tmpFolderDialog As New CommonOpenFileDialog
+        Dim tmpFolderDialog As New Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
         tmpFolderDialog.IsFolderPicker = True
         tmpFolderDialog.Multiselect = True
         tmpFolderDialog.InitialDirectory = Me.WorkingFilesPath
@@ -2241,7 +2241,7 @@ Public Class Form_Main
         Me.LabelTimeRemaining.Text = ""
         Me.StopProcess = False
         Me.ButtonCancel.Text = "Stop"
-        System.Windows.Forms.Application.DoEvents()
+        Windows.Forms.Application.DoEvents()
 
         If My.Computer.Keyboard.ShiftKeyDown Then
             Me.TextBoxStatus.Text = "Updating properties..."
@@ -2527,8 +2527,8 @@ Public Class Form_Main
             If Filename.StartsWith("/") Or Filename.StartsWith("\") Then
                 NonLocalFiles.Add(Filename)
             Else
-                Dim DriveLetter As String = System.IO.Path.GetPathRoot(Filename)
-                Dim DriveInfo As New System.IO.DriveInfo(DriveLetter)
+                Dim DriveLetter As String = IO.Path.GetPathRoot(Filename)
+                Dim DriveInfo As New IO.DriveInfo(DriveLetter)
                 If DriveInfo.DriveType = IO.DriveType.Network Then
                     NonLocalFiles.Add(Filename)
                 End If
@@ -3000,7 +3000,7 @@ Public Class Form_Main
 
         Dim HelpURL = UD.GenerateVersionURL(Tag)
 
-        System.Diagnostics.Process.Start(HelpURL)
+        Diagnostics.Process.Start(HelpURL)
 
     End Sub
 
@@ -3016,7 +3016,7 @@ Public Class Form_Main
 
     End Sub
 
-    <DllImport("user32.dll", SetLastError:=True)>
+    <Runtime.InteropServices.DllImport("user32.dll", SetLastError:=True)>
     Private Shared Function LockWindowUpdate(ByVal hWnd As IntPtr) As Boolean
     End Function
 
@@ -3032,7 +3032,7 @@ Public Class Form_Main
 
         Dim HelpURL = UD.GenerateVersionURL(Tag)
 
-        System.Diagnostics.Process.Start(HelpURL)
+        Diagnostics.Process.Start(HelpURL)
 
     End Sub
 
@@ -3183,7 +3183,7 @@ Public Class Form_Main
         Else
             Dim Tag As String = "readme"
             Dim HelpURL = UD.GenerateVersionURL(Tag)
-            System.Diagnostics.Process.Start(HelpURL)
+            Diagnostics.Process.Start(HelpURL)
         End If
 
     End Sub
@@ -4053,11 +4053,11 @@ Public Class Form_Main
             'OLEDB Connections lile ACCESS and EXCEL file
             If Form_Main.TextBoxServerConnectionString.Text.Contains("OLEDB") Then
 
-                Dim con As New System.Data.OleDb.OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
+                Dim con As New Data.OleDb.OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
                 con.Open()
 
-                Dim cmd As New System.Data.OleDb.OleDbCommand(Query, con) 'TBD <--- Convert the property formula into text
-                Dim reader As System.Data.OleDb.OleDbDataReader = cmd.ExecuteReader()
+                Dim cmd As New Data.OleDb.OleDbCommand(Query, con) 'TBD <--- Convert the property formula into text
+                Dim reader As Data.OleDb.OleDbDataReader = cmd.ExecuteReader()
 
                 If reader.HasRows Then
                     reader.Read()
@@ -4306,7 +4306,7 @@ Public Class PropertyColumn
 
         tmpList.AddRange({Name, CStr(Visible), Formula, CStr(Width)})
 
-        JSONString = JsonConvert.SerializeObject(tmpList)
+        JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpList)
 
         Return JSONString
     End Function
@@ -4314,7 +4314,7 @@ Public Class PropertyColumn
     Public Sub FromJSON(JSONString As String)
         Dim tmpList As New List(Of String)
 
-        tmpList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+        tmpList = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
 
         Name = tmpList(0)
         Visible = CBool(tmpList(1))
@@ -4325,7 +4325,7 @@ Public Class PropertyColumn
 End Class
 
 Public Class ListViewColumnSorter
-    Implements System.Collections.IComparer
+    Implements Collections.IComparer
 
     Private ColumnToSort As Integer
     Private OrderOfSort As SortOrder
@@ -4336,7 +4336,8 @@ Public Class ListViewColumnSorter
         ColumnToSort = 0
 
         ' Initialize the sort order to 'none'.
-        OrderOfSort = SortOrder.Unspecified
+        'OrderOfSort = SortOrder.Unspecified
+        OrderOfSort = SortOrder.None
 
         ' Initialize the CaseInsensitiveComparer object.
         ObjectCompare = New CaseInsensitiveComparer()
@@ -4406,52 +4407,52 @@ End Class
 
 ' ###### FILE/DIRECTORY EXISTS, CREATE, DELETE, COPY ######
 
-' tf = System.IO.File.Exists(Filename)
+' tf = IO.File.Exists(Filename)
 
-' tf = System.IO.Directory.Exists(Dirname)
+' tf = IO.Directory.Exists(Dirname)
 
-' If Not System.IO.Directory.Exists(Dirname) Then
-'     System.IO.Directory.CreateDirectory(Dirname)  ' Creates all parent directories if they do not exist.
+' If Not IO.Directory.Exists(Dirname) Then
+'     IO.Directory.CreateDirectory(Dirname)  ' Creates all parent directories if they do not exist.
 ' End If
 
-' Dim DI As New System.IO.DirectoryInfo(Dirname)
-' For Each File As System.IO.FileInfo In DI.GetFiles
+' Dim DI As New IO.DirectoryInfo(Dirname)
+' For Each File As IO.FileInfo In DI.GetFiles
 '     File.Delete()
 ' Next
 
-'System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
+'IO.File.Copy(SettingsFilename, NewSettingsFilename)
 
 
 ' ###### FILE FILENAME, EXTENSION, DIRECTORY, STARTUP PATH ######
 
-' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)  ' C:\project\part.par -> part.par
+' BaseFilename = IO.Path.GetFileName(SEDoc.FullName)  ' C:\project\part.par -> part.par
 
-' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)  ' C:\project\part.par -> part
+' BaseName = IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)  ' C:\project\part.par -> part
 
-' Extension = System.IO.Path.GetExtension(WhereUsedFile)  ' C:\project\part.par -> .par
+' Extension = IO.Path.GetExtension(WhereUsedFile)  ' C:\project\part.par -> .par
 
-' DirName = System.IO.Path.GetDirectoryName(SEDoc.FullName)  ' C:\project\part.par -> C:\project
+' DirName = IO.Path.GetDirectoryName(SEDoc.FullName)  ' C:\project\part.par -> C:\project
 
-' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
+' Dim DrawingFilename = IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
 
-' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()  ' eg C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Debug
+' Dim StartupPath As String = Windows.Forms.Application.StartupPath()  ' eg C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Debug
 
 
 ' ###### TEXT FILE IO ######
 
-' Dim Defaults As List(Of String) = System.IO.File.ReadAllLines(DefaultsFilename).ToList
+' Dim Defaults As List(Of String) = IO.File.ReadAllLines(DefaultsFilename).ToList
 
 ' Dim Defaults As New List(Of String)
-' System.IO.File.WriteAllLines(DefaultsFilename, Defaults)
+' IO.File.WriteAllLines(DefaultsFilename, Defaults)
 
 ' IO.File.WriteAllText(Filename, JSONString)
 
 
 ' ###### DOEVENTS, SLEEP ######
 
-' System.Windows.Forms.Application.DoEvents()
+' Windows.Forms.Application.DoEvents()
 
-' System.Threading.Thread.Sleep(100)
+' Threading.Thread.Sleep(100)
 
 
 ' ###### TYPES, ENUMS ######
@@ -4472,7 +4473,7 @@ End Class
 ' End Select
 
 ' Iterate through an Enum
-' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+' For Each PaperSizeConstant In Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
 
 
 ' ###### CURSOR AND WINDOW ######
@@ -4493,6 +4494,6 @@ End Class
 ' ###### ENVIRONMENT VARIABLES: USER NAME, DATETIME  ######
 
 ' Dim UserName As String = Environment.UserName
-''Dim UserName As String = System.Security.Principal.WindowsIdentity.GetCurrent().Name
+''Dim UserName As String = Security.Principal.WindowsIdentity.GetCurrent().Name
 ' Dim StatusChangeDate = DateTime.Now
 

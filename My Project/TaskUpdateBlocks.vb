@@ -715,19 +715,11 @@ Public Class TaskUpdateBlocks
         SEDoc As SolidEdgeDraft.DraftDocument,
         DocBlock As SolidEdgeDraft.Block)
 
-        ' WS = Working Sheet, BS = Background Sheet
-        Dim WSAddByName As Boolean = False
-        Dim WSAddByOrder As Boolean = False
-        Dim WSAddToAll As Boolean = True
-        Dim BSAddByName As Boolean = True  ' Always true for now
-        Dim BSAddBySize As Boolean = True  ' If no name match
-        Dim BSRename As Boolean = True     ' If added by size
+        If Me.WSAddByName Then DoWSAddByName(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
+        If Me.WSAddByOrder Then DoWSAddByOrder(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
+        If Me.WSAddToAll Then DoWSAddToAll(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
 
-        If WSAddByName Then DoWSAddByName(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
-        If WSAddByOrder Then DoWSAddByOrder(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
-        If WSAddToAll Then DoWSAddToAll(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
-
-        If BSAddByName Then DoBSAddByName(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock, BSAddBySize, BSRename)
+        If Me.BSAddByName Then DoBSAddByName(BlockLibraryDoc, LibraryBlock, SEDoc, DocBlock)
 
     End Sub
 
@@ -775,14 +767,14 @@ Public Class TaskUpdateBlocks
         Dim LibrarySheetList = GetSheetList(BlockLibraryDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
         Dim DocSheetList = GetSheetList(SEDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
 
-        ' Rearrange sheets in tab order, not the order they were added to the file.
-        LibrarySheetList = SheetListInTabOrder(LibrarySheetList)
-        DocSheetList = SheetListInTabOrder(DocSheetList)
-
         If DocSheetList.Count > LibrarySheetList.Count Then
             TaskLogger.AddMessage($"Cannot process {DocSheetList.Count} file sheets with {LibrarySheetList.Count} library sheets")
             Exit Sub
         End If
+
+        ' Rearrange sheets in tab order, not the order they were added to the file.
+        LibrarySheetList = SheetListInTabOrder(LibrarySheetList)
+        DocSheetList = SheetListInTabOrder(DocSheetList)
 
         ' Iterate through the sheet pairs
         For i As Integer = 0 To DocSheetList.Count - 1
@@ -809,18 +801,25 @@ Public Class TaskUpdateBlocks
         Dim DocSheetList = GetSheetList(SEDoc, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
 
         If Not LibrarySheetList.Count = 1 Then
-            TaskLogger.AddMessage($"Library must have 1 working sheet, not {LibrarySheetList.Count}")
+            TaskLogger.AddMessage($"Library must have exactly 1 working sheet, not {LibrarySheetList.Count}")
             Exit Sub
         End If
 
         Dim LibrarySheet As SolidEdgeDraft.Sheet = LibrarySheetList(0)
+        Dim LibrarySheetSize As SolidEdgeDraft.PaperSizeConstants = LibrarySheet.SheetSetup.SheetSizeOption
 
         For Each DocSheet As SolidEdgeDraft.Sheet In DocSheetList
-            For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheet.BlockOccurrences
-                If LibraryBlockOccurrence.Block Is LibraryBlock Then
-                    PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
-                End If
-            Next
+            Dim DocSheetSize As SolidEdgeDraft.PaperSizeConstants = DocSheet.SheetSetup.SheetSizeOption
+            If DocSheetSize = LibrarySheetSize Then
+                For Each LibraryBlockOccurrence As SolidEdgeDraft.BlockOccurrence In LibrarySheet.BlockOccurrences
+                    If LibraryBlockOccurrence.Block Is LibraryBlock Then
+                        PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
+                    End If
+                Next
+            Else
+                Dim s As String = $"File sheet '{DocSheet.Name}' not the same size as library sheet '{LibrarySheet.Name}'"
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            End If
         Next
 
     End Sub
@@ -829,15 +828,13 @@ Public Class TaskUpdateBlocks
         BlockLibraryDoc As SolidEdgeDraft.DraftDocument,
         LibraryBlock As SolidEdgeDraft.Block,
         SEDoc As SolidEdgeDraft.DraftDocument,
-        DocBlock As SolidEdgeDraft.Block,
-        BSAddBySize As Boolean,
-        BSRename As Boolean)
+        DocBlock As SolidEdgeDraft.Block)
 
         ' Gather up all library and document background sheets
         Dim LibrarySheetDict = GetSheetDict(BlockLibraryDoc, SolidEdgeDraft.SheetSectionTypeConstants.igBackgroundSection)
         Dim DocSheetDict = GetSheetDict(SEDoc, SolidEdgeDraft.SheetSectionTypeConstants.igBackgroundSection)
 
-        Dim DocSheetNamesProcessed As New List(Of String)
+        'Dim DocSheetNamesProcessed As New List(Of String)
 
         For Each LibrarySheetName As String In LibrarySheetDict.Keys
 
@@ -854,9 +851,10 @@ Public Class TaskUpdateBlocks
 
                         PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
 
-                        If Not DocSheetNamesProcessed.Contains(DocSheet.Name) Then DocSheetNamesProcessed.Add(DocSheet.Name)
+                        'If Not DocSheetNamesProcessed.Contains(DocSheet.Name) Then DocSheetNamesProcessed.Add(DocSheet.Name)
+
                     ElseIf BSAddBySize Then
-                        ' Not sheet name match.  Try to match by size, if the option is set.
+                        ' No sheet name match.  Try to match by size, if the option is set.
                         Dim DocSheet As SolidEdgeDraft.Sheet = Nothing
                         For Each DocSheetName As String In DocSheetDict.Keys
                             If DocSheetDict(DocSheetName).SheetSetup.SheetSizeOption = LibrarySheetSize Then
@@ -867,7 +865,7 @@ Public Class TaskUpdateBlocks
                         If DocSheet IsNot Nothing Then
                             If BSRename Then DocSheet.Name = LibrarySheetName
                             PlaceBlockOccurrence(LibraryBlock, DocBlock, LibraryBlockOccurrence, DocSheet)
-                            If Not DocSheetNamesProcessed.Contains(DocSheet.Name) Then DocSheetNamesProcessed.Add(DocSheet.Name)
+                            'If Not DocSheetNamesProcessed.Contains(DocSheet.Name) Then DocSheetNamesProcessed.Add(DocSheet.Name)
                         End If
                     Else
 
@@ -876,21 +874,26 @@ Public Class TaskUpdateBlocks
                 End If
             Next
         Next
+
         If Me.ReportMissingSheet Then
-            Dim s As String = ""
-            For Each DocSheetName In DocSheetDict.Keys
-                If Not DocSheetNamesProcessed.Contains(DocSheetName) Then
-                    If s = "" Then
-                        s = DocSheetName
-                    Else
-                        s = $"{s}, {DocSheetName}"
-                    End If
-                End If
-            Next
-            If Not s = "" Then
-                s = $"The following sheets were not processed: {s}"
-                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
-            End If
+            '' Need a definition of what, if anything, to report.
+            '' False alarm currently if a library sheet does not have the passed-in library block.
+            '' DocSheetDict is currently not updated when a sheet is renamed.
+
+            'Dim s As String = ""
+            'For Each DocSheetName In DocSheetDict.Keys
+            '    If Not DocSheetNamesProcessed.Contains(DocSheetName) Then
+            '        If s = "" Then
+            '            s = DocSheetName
+            '        Else
+            '            s = $"{s}, {DocSheetName}"
+            '        End If
+            '    End If
+            'Next
+            'If Not s = "" Then
+            '    s = $"The following sheets were not processed: {s}"
+            '    If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            'End If
 
         End If
     End Sub
