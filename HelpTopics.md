@@ -1247,7 +1247,7 @@ This command turns a typical single-file macro into a batch routine, also enhanc
 
 ![RunExternalProgram](My%20Project/media/task_run_external_program.png)
 
-Select the program with the `Browse` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
+Select the program with the `Program` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
 
 The file types `*.ps1` and `*.snp` are PowerShell scripts.  They are not normally run from an OS shell, but rather use an internal `dotnet` library.  The library is supposed to improve compatibility across varied system configurations.  
 
