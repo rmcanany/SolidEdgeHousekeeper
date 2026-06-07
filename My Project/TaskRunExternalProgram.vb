@@ -547,7 +547,7 @@ Public Class TaskRunExternalProgram
 
         HelpString += vbCrLf + vbCrLf + "![RunExternalProgram](My%20Project/media/task_run_external_program.png)"
 
-        HelpString += vbCrLf + vbCrLf + "Select the program with the `Browse` button on the Options panel. "
+        HelpString += vbCrLf + vbCrLf + "Select the program with the `Program` button on the Options panel. "
         HelpString += "Note, for downloaded programs, Windows sometimes sets a `Block` flag.  "
         HelpString += "Before you run it the first time, you can right-click the executable and select `Properties`.  "
         HelpString += "If it is blocked, there should be an option on the General Tab to `Unblock` it.  "

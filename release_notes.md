@@ -46,7 +46,7 @@ Sponsored by **@john.matthews3452 (Hatch).**  Thank you!
 
 Added sheet processing options to the `Add Blocks` function.
 
-The change affects the second stage of the function, where it checks each sheet of the template and places a block occurrence on the corresponding sheet in the file.  What is new is how the "corresponding sheet" is determined.
+The change applies to the second stage of the function, where it checks each sheet of the template and places a block occurrence on the corresponding sheet in the file.  What is new is how the "corresponding sheet" is determined.
 
 Previously it meant that the sheet names match.  You can still do it that way, but now, for working sheets, you can optionally add by sheet order, or add to all sheets.  For background sheets, it always checks the name first.  If no matching name is found, you can optionally add by sheet size.
 
@@ -72,7 +72,7 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 ### Run External Program
 
-For `code snippets`, changed processing from PowerShell to an internal dotnet library.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for `expressions` and `property filters`.
+For `code snippets`, added an option to use an internal dotnet library, rather than the locally-installed PowerShell.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for `expressions` and `property filters`.
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 
