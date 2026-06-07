@@ -1249,7 +1249,11 @@ This command turns a typical single-file macro into a batch routine, also enhanc
 
 Select the program with the `Browse` button on the Options panel. Note, for downloaded programs, Windows sometimes sets a `Block` flag.  Before you run it the first time, you can right-click the executable and select `Properties`.  If it is blocked, there should be an option on the General Tab to `Unblock` it.  
 
-For PowerShell programs, `*.ps1`, you may need to change your security settings.  You can do so by opening a PowerShell command prompt.  Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft [<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) with some details.  If you're not an expert on such matters, you might want to run it by your IT department first.  
+The file types `*.ps1` and `*.snp` are PowerShell scripts.  They are not normally run from an OS shell, but rather use an internal `dotnet` library.  The library is supposed to improve compatibility across varied system configurations.  
+
+To use the shell instead, enable `Use locally installed PowerShell` on the **Configuration Tab -- General Page**.  If that results in an error running the external program, you may need to change PowerShell's execution policy.  To do so, open a PowerShell command prompt, then issue the command:  
+`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  
+Here is a Microsoft [<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) with some details.  If you're not an expert on such matters, you might want to run it by your IT department first.  
 
 If you are writing your own program, be aware several interoperability rules apply.  See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms#readme) for details and examples. 
 
@@ -1259,7 +1263,7 @@ Unlike the other file types, a `*.snp` is a special file containing only a small
 
 The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, or more conveniently in the expression editor.  Click `Edit *.snp` to use the editor.  
 
-The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  While it is a PowerShell script, it is not run in an OS shell.  Rather, it uses an internal dotnet library -- hopefully improving compatibility across varied system configurations.  
+The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  
 
 The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test, and maintain a separate program to do it automatically. 
 

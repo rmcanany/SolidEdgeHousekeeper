@@ -360,7 +360,7 @@ Public Class TaskRunExternalProgram
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideConsoleWindow.ToString, "Hide the program console window")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SaveAfterProcessing.ToString, "Save file after processing")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -368,20 +368,12 @@ Public Class TaskRunExternalProgram
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.SaveAfterProcessing.ToString, "Save file after processing")
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideConsoleWindow.ToString, "Hide the program console window")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
-
-        'RowIndex += 1
-
-        'CheckBox = FormatOptionsCheckBox(ControlNames.UseLocalPowershell.ToString, "Use locally installed PowerShell")
-        'AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        'tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        'tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        'ControlsDict(CheckBox.Name) = CheckBox
-        'CheckBox.Visible = False
+        CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -524,19 +516,17 @@ Public Class TaskRunExternalProgram
                 Dim Extension As String = IO.Path.GetExtension(Me.ExternalProgram)
 
                 CType(ControlsDict(ControlNames.EditSnippet.ToString), Button).Visible = False
-                'CType(ControlsDict(ControlNames.UseLocalPowershell.ToString), CheckBox).Visible = False
                 CType(ControlsDict(ControlNames.DeleteTempFiles.ToString), CheckBox).Visible = False
+                CType(ControlsDict(ControlNames.HideConsoleWindow.ToString), CheckBox).Visible = False
 
                 Select Case Extension
                     Case ".exe", ".vbs"
+                        CType(ControlsDict(ControlNames.HideConsoleWindow.ToString), CheckBox).Visible = True
                     Case ".ps1"
-                        'CType(ControlsDict(ControlNames.UseLocalPowershell.ToString), CheckBox).Visible = True
                     Case ".snp"
                         CType(ControlsDict(ControlNames.EditSnippet.ToString), Button).Visible = True
-                        'CType(ControlsDict(ControlNames.UseLocalPowershell.ToString), CheckBox).Visible = True
                         CType(ControlsDict(ControlNames.DeleteTempFiles.ToString), CheckBox).Visible = True
                 End Select
-
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -562,9 +552,16 @@ Public Class TaskRunExternalProgram
         HelpString += "Before you run it the first time, you can right-click the executable and select `Properties`.  "
         HelpString += "If it is blocked, there should be an option on the General Tab to `Unblock` it.  "
 
-        HelpString += vbCrLf + vbCrLf + "For PowerShell programs, `*.ps1`, you may need to change your security settings.  "
-        HelpString += "You can do so by opening a PowerShell command prompt.  "
-        HelpString += "Then issue the command `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  Here is a Microsoft "
+        HelpString += vbCrLf + vbCrLf + "The file types `*.ps1` and `*.snp` are PowerShell scripts.  "
+        HelpString += "They are not normally run from an OS shell, but rather use an internal `dotnet` library.  "
+        HelpString += "The library is supposed to improve compatibility across varied system configurations.  "
+
+        HelpString += vbCrLf + vbCrLf + "To use the shell instead, enable `Use locally installed PowerShell` "
+        HelpString += "on the **Configuration Tab -- General Page**.  "
+        HelpString += "If that results in an error running the external program, you may need to change PowerShell's execution policy.  "
+        HelpString += "To do so, open a PowerShell command prompt, then issue the command:  "
+        HelpString += vbCrLf + "`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.  "
+        HelpString += vbCrLf + "Here is a Microsoft "
         HelpString += "[<ins>**link**</ins>](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5) "
         HelpString += "with some details.  "
         HelpString += "If you're not an expert on such matters, you might want to run it by your IT department first.  "
@@ -588,8 +585,8 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "The program inserts the snippet into a predefined PowerShell script.  "
         HelpString += "The script has two sections that take care of the task's set-up and wrap-up, respectively. "
         HelpString += "It has the same name and directory as the snippet file, except with a `.ps1` extension.  "
-        HelpString += "While it is a PowerShell script, it is not run in an OS shell.  "
-        HelpString += "Rather, it uses an internal dotnet library -- hopefully improving compatibility across varied system configurations.  "
+        'HelpString += "While it is a PowerShell script, it is not run in an OS shell.  "
+        'HelpString += "Rather, it uses an internal dotnet library -- hopefully improving compatibility across varied system configurations.  "
 
         HelpString += vbCrLf + vbCrLf + "The intent is to address one-off automation chores, "
         HelpString += "where the time to do the job manually can't justify the time needed to "
