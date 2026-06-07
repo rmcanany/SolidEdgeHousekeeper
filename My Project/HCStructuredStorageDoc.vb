@@ -578,7 +578,7 @@ Public Class HCStructuredStorageDoc
 
                     If tmpSuccess Then
                         Try
-                            OutString = UPS.RunExpressionScript(PowerShellFilename)
+                            OutString = UPS.RunPowerShellFile(PowerShellFilename)
                         Catch ex As Exception
                             ErrorLogger.AddMessage($"Unable to process expression '{OutString}'")
                             ErrorLogger.AddMessage("Exception was:")

@@ -141,6 +141,7 @@ Public Class FormExpressionEditor
         End If
         Return Language
     End Function
+
     Private Function GetExpressionComments(Expression As String) As String
         Dim Comments As String = ""
         'Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
@@ -149,6 +150,7 @@ Public Class FormExpressionEditor
         If ExpressionAndComments.Count > 1 Then Comments = ExpressionAndComments(1).Trim()
         Return Comments
     End Function
+
     Private Function GetExpressionExpression(Expression As String) As String
         Dim TrimmedExpression As String = ""
         'Dim ExpressionAndComments = Expression.Split(CType("\\", Char)).First
@@ -420,6 +422,13 @@ Public Class FormExpressionEditor
     End Sub
 
     Private Sub ProcessSnippet()
+
+        Dim USEA As New UtilsSEApp(Form_Main)
+        If Not USEA.SEIsRunning Then
+            MsgBox("A target file must be open in Solid Edge to test a code snippet", vbOKOnly)
+            Exit Sub
+        End If
+
         Dim UPS As New UtilsPowerShell
         Dim PowershellFilename = UPS.BuildSnippetFile(Me.SnippetFilename)
 
@@ -442,15 +451,21 @@ Public Class FormExpressionEditor
             'P.WaitForExit()
             'ExitCode = P.ExitCode
         Else
-            Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowershellFilename).ToList
+            'Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowershellFilename).ToList
 
-            Dim ScriptText As String = ""
-            For Each s As String In ScriptList
-                ScriptText = $"{ScriptText}{vbCrLf}{s}"
-            Next
+            'Dim ScriptText As String = ""
+            'For Each s As String In ScriptList
+            '    ScriptText = $"{ScriptText}{vbCrLf}{s}"
+            'Next
+
+            'Try
+            '    PSError = UPS.RunScript(ScriptText)
+            'Catch ex As Exception
+            '    PSError = ex.Message
+            'End Try
 
             Try
-                PSError = UPS.RunScript(ScriptText)
+                PSError = UPS.RunPowerShellFile(PowershellFilename)
             Catch ex As Exception
                 PSError = ex.Message
             End Try
@@ -478,6 +493,13 @@ Public Class FormExpressionEditor
     End Sub
 
     Private Sub ProcessExpression(sender As Object)
+
+        Dim USEA As New UtilsSEApp(Form_Main)
+        If Not USEA.SEIsRunning And Not sender.Equals(BT_Test) Then
+            MsgBox("A target file must be open in Solid Edge to test an expression", vbOKOnly)
+            Exit Sub
+        End If
+
         Dim calculation As String = TextEditorFormula.Text
 
         Dim Pattern As String = "%{[^}]*}"
@@ -521,7 +543,7 @@ Public Class FormExpressionEditor
 
             If tmpSuccess Then
                 Try
-                    ExpressionResult = UPS.RunExpressionScript(PowerShellFilename)
+                    ExpressionResult = UPS.RunPowerShellFile(PowerShellFilename)
                 Catch ex As Exception
                     Success = False
                     TextEditorResults.Clear()

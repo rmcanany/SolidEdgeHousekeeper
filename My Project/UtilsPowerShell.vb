@@ -14,15 +14,23 @@ Public Class UtilsPowerShell
     'If either the MachinePolicy or the UserPolicy scope have a value other than Undefined, then a GPO policy is in effect
     '(run Get-ExecutionPolicy without arguments to see the effective policy for the current session).
 
+
+    ' ###### CODE EXECUTION ######
+
     Public Function RunScript(ByVal scriptText As String) As String
 
-        Dim tmpAuthorizationManager As Management.Automation.AuthorizationManager = Nothing
-        Dim AMChoice As Integer
+        ' Each individual line in scriptText must be followed by vbCrLf.
+
         Dim results As Collections.ObjectModel.Collection(Of Management.Automation.PSObject) = Nothing
 
-        Dim NewWay As Boolean = True
+        'Dim NewWay As Boolean = True
 
-        If NewWay Then
+        'If NewWay Then
+        If Not Form_Main.UseLocalPowershell Then
+
+            Dim tmpAuthorizationManager As Management.Automation.AuthorizationManager = Nothing
+            Dim AMChoice As Integer
+
             ''https://stackoverflow.com/questions/13420799/enabling-execution-policy-for-powershell-from-c-sharp
             Dim ISS As Management.Automation.Runspaces.InitialSessionState
             ISS = Management.Automation.Runspaces.InitialSessionState.CreateDefault()
@@ -69,17 +77,44 @@ Public Class UtilsPowerShell
 
             End If
         Else
-            'Dim runspace As Management.Automation.Runspaces.Runspace
-            'runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
 
-            'runspace.Open()
+            '    'Dim Result As String = ""
 
-            'Dim pipeline As Management.Automation.Runspaces.Pipeline = runspace.CreatePipeline()
-            'pipeline.Commands.AddScript(scriptText)
-            'pipeline.Commands.Add("Out-String")
+            '    'Dim P As New Diagnostics.Process
+            '    'Dim PSError As String = ""
 
-            'results = pipeline.Invoke()
-            'runspace.Close()
+            '    'P.StartInfo.FileName = "powershell.exe"
+            '    'P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
+            '    'P.StartInfo.RedirectStandardError = True
+            '    'P.StartInfo.RedirectStandardOutput = True
+            '    'P.StartInfo.UseShellExecute = False
+            '    'P.StartInfo.CreateNoWindow = True
+            '    'P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
+
+            '    'P.Start()
+            '    'PSError = P.StandardError.ReadToEnd
+            '    'Dim PSResult As String = P.StandardOutput.ReadToEnd
+
+            '    'If Not PSError = "" Then
+            '    '    Throw New Exception(PSError)
+            '    'End If
+
+            '    'P.WaitForExit()
+            '    'Result = PSResult.Replace(vbCrLf, "")
+
+            '    'Return Result
+
+            Dim runspace As Management.Automation.Runspaces.Runspace
+            runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()
+
+            runspace.Open()
+
+            Dim pipeline As Management.Automation.Runspaces.Pipeline = runspace.CreatePipeline()
+            pipeline.Commands.AddScript(scriptText)
+            pipeline.Commands.Add("Out-String")
+
+            results = pipeline.Invoke()
+            runspace.Close()
         End If
 
         Dim stringBuilder As System.Text.StringBuilder = New System.Text.StringBuilder()
@@ -93,6 +128,69 @@ Public Class UtilsPowerShell
         Return stringBuilder.ToString()
 
     End Function
+
+    Public Function RunPowerShellFile(PowerShellFilename As String) As String
+
+        Dim Result As String = ""
+
+        'Dim NewWay As Boolean = True
+
+        'If Not NewWay Then
+        '    'Dim Result As String = ""
+
+        '    'Dim P As New Diagnostics.Process
+        '    'Dim PSError As String = ""
+
+        '    'P.StartInfo.FileName = "powershell.exe"
+        '    'P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
+        '    'P.StartInfo.RedirectStandardError = True
+        '    'P.StartInfo.RedirectStandardOutput = True
+        '    'P.StartInfo.UseShellExecute = False
+        '    'P.StartInfo.CreateNoWindow = True
+        '    'P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
+
+        '    'P.Start()
+        '    'PSError = P.StandardError.ReadToEnd
+        '    'Dim PSResult As String = P.StandardOutput.ReadToEnd
+
+        '    'If Not PSError = "" Then
+        '    '    Throw New Exception(PSError)
+        '    'End If
+
+        '    'P.WaitForExit()
+        '    'Result = PSResult.Replace(vbCrLf, "")
+
+        '    'Return Result
+
+        'Else
+
+        '    Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
+
+        '    Dim ScriptText As String = ""
+        '    For Each s As String In ScriptList
+        '        ScriptText = $"{ScriptText}{vbCrLf}{s}"
+        '    Next
+
+        '    Result = RunScript(ScriptText)
+
+        'End If
+
+        Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
+
+        Dim ScriptText As String = ""
+        For Each s As String In ScriptList
+            ScriptText = $"{ScriptText}{vbCrLf}{s}"
+        Next
+
+        ' No Try/Catch here -- propagating any exception to caller to provide context.
+        Result = RunScript(ScriptText)
+
+        Return Result
+
+    End Function
+
+
+    ' ###### EXPRESSIONS ######
 
     Public Function BuildExpressionFile(Expression As List(Of String)) As List(Of String)
         Dim TopList As New List(Of String)
@@ -179,55 +277,8 @@ Public Class UtilsPowerShell
         Return Success
     End Function
 
-    Public Function RunExpressionScript(PowerShellFilename As String) As String
 
-        Dim Result As String = ""
-
-        Dim NewWay As Boolean = True
-
-        If Not NewWay Then
-            'Dim Result As String = ""
-
-            'Dim P As New Diagnostics.Process
-            'Dim PSError As String = ""
-
-            'P.StartInfo.FileName = "powershell.exe"
-            'P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
-            'P.StartInfo.RedirectStandardError = True
-            'P.StartInfo.RedirectStandardOutput = True
-            'P.StartInfo.UseShellExecute = False
-            'P.StartInfo.CreateNoWindow = True
-            'P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
-
-            'P.Start()
-            'PSError = P.StandardError.ReadToEnd
-            'Dim PSResult As String = P.StandardOutput.ReadToEnd
-
-            'If Not PSError = "" Then
-            '    Throw New Exception(PSError)
-            'End If
-
-            'P.WaitForExit()
-            'Result = PSResult.Replace(vbCrLf, "")
-
-            'Return Result
-
-        Else
-
-            Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
-
-            Dim ScriptText As String = ""
-            For Each s As String In ScriptList
-                ScriptText = $"{ScriptText}{vbCrLf}{s}"
-            Next
-
-            Result = RunScript(ScriptText)
-
-        End If
-
-        Return Result
-
-    End Function
+    ' ###### SNIPPETS ######
 
     Public Function BuildSnippetFile(SnippetFilename As String) As String
         ' https://www.codestack.net/solidworks-pdm-api/permissions/set-folder-permissions/

@@ -66,6 +66,19 @@ Public Class TaskRunExternalProgram
         End Set
     End Property
 
+    'Private _UseLocalPowershell As Boolean
+    'Public Property UseLocalPowershell As Boolean
+    '    Get
+    '        Return _UseLocalPowershell
+    '    End Get
+    '    Set(value As Boolean)
+    '        _UseLocalPowershell = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.UseLocalPowershell.ToString), CheckBox).Checked = value
+    '        End If
+    '    End Set
+    'End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -87,6 +100,7 @@ Public Class TaskRunExternalProgram
         HideConsoleWindow
         DeleteTempFiles
         SaveAfterProcessing
+        'UseLocalPowershell
         AutoHideOptions
     End Enum
 
@@ -142,69 +156,92 @@ Public Class TaskRunExternalProgram
         OleMessageFilter.Register()
 
         Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(Me.ExternalProgram)
-        Dim P As Diagnostics.Process = Nothing
         Dim ExitCode As Integer
-        Dim ErrorMessageFilename As String
-        Dim ErrorMessages As String()
-        Dim Extension As String
 
         Dim UP As New UtilsPreferences
 
+        ' ###### Copy form_main_settings.json to the external program's local directory. ######
+        ' ###### Provides access to program settings if needed. ######
         Dim SettingsFilename = UP.GetFormMainSettingsFilename(CheckExisting:=True)
         Dim NewSettingsFilename As String = ""
         If Not SettingsFilename = "" Then
             NewSettingsFilename = System.IO.Path.GetFileName(SettingsFilename)
             NewSettingsFilename = String.Format("{0}\{1}", ExternalProgramDirectory, NewSettingsFilename)
             If IO.File.Exists(NewSettingsFilename) Then IO.File.Delete(NewSettingsFilename)
-            System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
+            IO.File.Copy(SettingsFilename, NewSettingsFilename)
         End If
 
+        Dim Extension As String
         Extension = IO.Path.GetExtension(Me.ExternalProgram)
 
         Dim PSError As String = ""
 
         If Extension = ".ps1" Then
-            P = New Diagnostics.Process
-            P.StartInfo.FileName = "powershell.exe"
-            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", Me.ExternalProgram.Replace(" ", "` "), Chr(34))
-            P.StartInfo.RedirectStandardError = True
-            P.StartInfo.UseShellExecute = False
-            If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
-            P.Start()
-            PSError = P.StandardError.ReadToEnd
+            'P = New Diagnostics.Process
+            'P.StartInfo.FileName = "powershell.exe"
+            'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", Me.ExternalProgram.Replace(" ", "` "), Chr(34))
+            'P.StartInfo.RedirectStandardError = True
+            'P.StartInfo.UseShellExecute = False
+            'If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
+            'P.Start()
+            'PSError = P.StandardError.ReadToEnd
+
+            Dim UPS As New UtilsPowerShell
+
+            Try
+                PSError = UPS.RunPowerShellFile(Me.ExternalProgram)
+            Catch ex As Exception
+                PSError = ex.Message
+            End Try
+
         ElseIf Extension = ".snp" Then
 
             Dim UPS As New UtilsPowerShell
 
-            Dim NewWay As Boolean = True
+            'Dim NewWay As Boolean = True
 
-            If Not NewWay Then
-                'P = New Diagnostics.Process
-                'P.StartInfo.FileName = "powershell.exe"
-                'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", UPS.BuildSnippetFile(Me.ExternalProgram).Replace(" ", "` "), Chr(34))
-                'P.StartInfo.RedirectStandardError = True
-                'P.StartInfo.UseShellExecute = False
-                'If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
-                'P.Start()
-                'PSError = P.StandardError.ReadToEnd
+            'If Not NewWay Then
+            '    'P = New Diagnostics.Process
+            '    'P.StartInfo.FileName = "powershell.exe"
+            '    'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", UPS.BuildSnippetFile(Me.ExternalProgram).Replace(" ", "` "), Chr(34))
+            '    'P.StartInfo.RedirectStandardError = True
+            '    'P.StartInfo.UseShellExecute = False
+            '    'If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
+            '    'P.Start()
+            '    'PSError = P.StandardError.ReadToEnd
 
-            Else
+            'Else
 
-                Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(UPS.BuildSnippetFile(Me.ExternalProgram)).ToList
+            '    'Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(UPS.BuildSnippetFile(Me.ExternalProgram)).ToList
 
-                Dim ScriptText As String = ""
-                For Each s As String In ScriptList
-                    ScriptText = $"{ScriptText}{vbCrLf}{s}"
-                Next
+            '    'Dim ScriptText As String = ""
+            '    'For Each s As String In ScriptList
+            '    '    ScriptText = $"{ScriptText}{vbCrLf}{s}"
+            '    'Next
 
-                Try
-                    PSError = UPS.RunScript(ScriptText)
-                Catch ex As Exception
-                    PSError = ex.Message
-                End Try
+            '    'Try
+            '    '    PSError = UPS.RunScript(ScriptText)
+            '    'Catch ex As Exception
+            '    '    PSError = ex.Message
+            '    'End Try
 
+            'End If
+
+            Try
+                PSError = UPS.RunPowerShellFile(UPS.BuildSnippetFile(Me.ExternalProgram))
+            Catch ex As Exception
+                PSError = ex.Message
+            End Try
+
+            If Me.DeleteTempFiles Then
+                Dim PowerShellFilename As String = IO.Path.ChangeExtension(Me.ExternalProgram, ".ps1")
+                If IO.File.Exists(PowerShellFilename) Then IO.File.Delete(PowerShellFilename)
             End If
-        Else
+
+        Else  ' *.exe or *.vbs
+
+            Dim P As Diagnostics.Process = Nothing
+
             P = New Diagnostics.Process
             P.StartInfo.FileName = Me.ExternalProgram
             If Me.HideConsoleWindow Then
@@ -214,6 +251,11 @@ Public Class TaskRunExternalProgram
             End If
             P.Start()
             If Me.HideConsoleWindow Then PSError = P.StandardError.ReadToEnd
+
+            If P IsNot Nothing Then
+                P.WaitForExit()
+                ExitCode = P.ExitCode
+            End If
         End If
 
         If Not PSError = "" Then
@@ -221,17 +263,10 @@ Public Class TaskRunExternalProgram
             TaskLogger.AddMessage(PSError)
         End If
 
-        If P IsNot Nothing Then
-            P.WaitForExit()
-            ExitCode = P.ExitCode
-        End If
-
         If IO.File.Exists(NewSettingsFilename) Then IO.File.Delete(NewSettingsFilename)
 
-        If Me.DeleteTempFiles And Extension = ".snp" Then
-            Dim PowerShellFilename As String = IO.Path.ChangeExtension(ExternalProgram, ".ps1")
-            If IO.File.Exists(PowerShellFilename) Then IO.File.Delete(PowerShellFilename)
-        End If
+        Dim ErrorMessageFilename As String
+        Dim ErrorMessages As String()
 
         ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
 
@@ -325,23 +360,7 @@ Public Class TaskRunExternalProgram
 
         RowIndex += 1
 
-        Button = FormatOptionsButton(ControlNames.EditSnippet.ToString, "Edit *.snp")
-        AddHandler Button.Click, AddressOf ButtonOptions_Click
-        tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
-        ControlsDict(Button.Name) = Button
-        'Button.Visible = False
-
-        RowIndex += 1
-
         CheckBox = FormatOptionsCheckBox(ControlNames.HideConsoleWindow.ToString, "Hide the program console window")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        ControlsDict(CheckBox.Name) = CheckBox
-
-        RowIndex += 1
-
-        CheckBox = FormatOptionsCheckBox(ControlNames.DeleteTempFiles.ToString, "Delete temp files after processing")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -354,6 +373,32 @@ Public Class TaskRunExternalProgram
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
+
+        'RowIndex += 1
+
+        'CheckBox = FormatOptionsCheckBox(ControlNames.UseLocalPowershell.ToString, "Use locally installed PowerShell")
+        'AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        'tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        'tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        'ControlsDict(CheckBox.Name) = CheckBox
+        'CheckBox.Visible = False
+
+        RowIndex += 1
+
+        Button = FormatOptionsButton(ControlNames.EditSnippet.ToString, "Edit *.snp")
+        AddHandler Button.Click, AddressOf ButtonOptions_Click
+        tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
+        ControlsDict(Button.Name) = Button
+        Button.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.DeleteTempFiles.ToString, "Delete temp files after processing")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -397,6 +442,9 @@ Public Class TaskRunExternalProgram
             Case ControlNames.SaveAfterProcessing.ToString
                 Me.SaveAfterProcessing = Checkbox.Checked
 
+            'Case ControlNames.UseLocalPowershell.ToString
+            '    Me.UseLocalPowershell = Checkbox.Checked
+
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
                 If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
@@ -416,6 +464,7 @@ Public Class TaskRunExternalProgram
 
         Select Case Name
             Case ControlNames.Browse.ToString
+
                 Dim tmpFileDialog As New OpenFileDialog
                 tmpFileDialog.Title = "Select a program file"
                 tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1;*.snp"
@@ -432,7 +481,6 @@ Public Class TaskRunExternalProgram
                     TextBox = CType(ControlsDict(ControlNames.ExternalProgram.ToString), TextBox)
                     TextBox.Text = Me.ExternalProgram
 
-                    'Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.ExternalProgram)
                 End If
 
             Case ControlNames.EditSnippet.ToString
@@ -472,6 +520,23 @@ Public Class TaskRunExternalProgram
 
             Case ControlNames.ExternalProgram.ToString
                 Me.ExternalProgram = TextBox.Text
+
+                Dim Extension As String = IO.Path.GetExtension(Me.ExternalProgram)
+
+                CType(ControlsDict(ControlNames.EditSnippet.ToString), Button).Visible = False
+                'CType(ControlsDict(ControlNames.UseLocalPowershell.ToString), CheckBox).Visible = False
+                CType(ControlsDict(ControlNames.DeleteTempFiles.ToString), CheckBox).Visible = False
+
+                Select Case Extension
+                    Case ".exe", ".vbs"
+                    Case ".ps1"
+                        'CType(ControlsDict(ControlNames.UseLocalPowershell.ToString), CheckBox).Visible = True
+                    Case ".snp"
+                        CType(ControlsDict(ControlNames.EditSnippet.ToString), Button).Visible = True
+                        'CType(ControlsDict(ControlNames.UseLocalPowershell.ToString), CheckBox).Visible = True
+                        CType(ControlsDict(ControlNames.DeleteTempFiles.ToString), CheckBox).Visible = True
+                End Select
+
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

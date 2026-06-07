@@ -11,7 +11,7 @@
 Public Class Form_Main
 
     Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.
-    Public Property PreviewVersion As String = "15" ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "16" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -786,6 +786,19 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _UseLocalPowershell As Boolean
+    Public Property UseLocalPowershell As Boolean
+        Get
+            Return _UseLocalPowershell
+        End Get
+        Set(value As Boolean)
+            _UseLocalPowershell = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxUseLocalPowershell.Checked = value
+            End If
+        End Set
+    End Property
+
     Public Property HCDebugLogger As HCErrorLogger
 
 
@@ -1313,6 +1326,7 @@ Public Class Form_Main
             End If
 
             Task.LinkManagementOrder = Me.LinkManagementOrder
+            'Task.UseLocalPowershell = Me.UseLocalPowershell
 
             If Task.RequiresPropertiesData Then
                 Task.PropertiesData = Me.PropertiesData
@@ -4291,6 +4305,11 @@ Public Class Form_Main
     Private Sub ListViewFiles_Invalidated(sender As Object, e As InvalidateEventArgs) Handles ListViewFiles.Invalidated
         UpdatePreview()
     End Sub
+
+    Private Sub CheckBoxUseLocalPowershell_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseLocalPowershell.CheckedChanged
+        Me.UseLocalPowershell = CheckBoxUseLocalPowershell.Checked
+    End Sub
+
 End Class
 
 
