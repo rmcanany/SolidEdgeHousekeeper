@@ -177,6 +177,7 @@ Public Class TaskRunExternalProgram
         Dim PSError As String = ""
 
         If Extension = ".ps1" Then
+
             'P = New Diagnostics.Process
             'P.StartInfo.FileName = "powershell.exe"
             'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", Me.ExternalProgram.Replace(" ", "` "), Chr(34))
@@ -195,8 +196,6 @@ Public Class TaskRunExternalProgram
             End Try
 
         ElseIf Extension = ".snp" Then
-
-            Dim UPS As New UtilsPowerShell
 
             'Dim NewWay As Boolean = True
 
@@ -226,6 +225,8 @@ Public Class TaskRunExternalProgram
             '    'End Try
 
             'End If
+
+            Dim UPS As New UtilsPowerShell
 
             Try
                 PSError = UPS.RunPowerShellFile(UPS.BuildSnippetFile(Me.ExternalProgram))

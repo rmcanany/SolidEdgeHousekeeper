@@ -25,7 +25,7 @@ Public Class HCStructuredStorageDoc
     Private Property PropertiesData As HCPropertiesData
     Private Property MatTable As MaterialTable
     Private Property DocType As String 'asm, dft, par, psm, mtl
-    'Private Property BlkLibrary As BlockLibrary
+    Private Property BlkLibrary As BlockLibrary
     Private Property Vars As Variables
     Private Property ExposedVariablePropIDs As List(Of UInteger)
 
@@ -130,15 +130,15 @@ Public Class HCStructuredStorageDoc
     End Sub
 
 
-    'Public Sub ReadBlockLibrary()
-    '    Dim Extension As String = IO.Path.GetExtension(Me.FullName)
+    Public Sub ReadBlockLibrary()
+        Dim Extension As String = IO.Path.GetExtension(Me.FullName)
 
-    '    If Not Extension = ".dft" Then
-    '        Throw New Exception(String.Format("Cannot process blocks for '{0}' file types", Extension))
-    '    End If
+        If Not Extension = ".dft" Then
+            Throw New Exception(String.Format("Cannot process blocks for '{0}' file types", Extension))
+        End If
 
-    '    Me.BlkLibrary = New BlockLibrary(Me.cf, Me.FullName)
-    'End Sub
+        Me.BlkLibrary = New BlockLibrary(Me.cf, Me.FullName)
+    End Sub
 
     Public Sub ReadVariables()
         Dim Extension As String = IO.Path.GetExtension(Me.FullName)
@@ -867,12 +867,12 @@ Public Class HCStructuredStorageDoc
         Return Me.MatTable.CustomMaterialPropertiesTypes
     End Function
 
-    'Public Function GetBlockLibraryBlockNames() As List(Of String)
-    '    If Me.BlkLibrary Is Nothing Then
-    '        Throw New Exception("Block library not initialized")
-    '    End If
-    '    Return Me.BlkLibrary.Items
-    'End Function
+    Public Function GetBlockLibraryBlockNames() As List(Of String)
+        If Me.BlkLibrary Is Nothing Then
+            Throw New Exception("Block library not initialized")
+        End If
+        Return Me.BlkLibrary.Items
+    End Function
 
     Private Class PropertySets
         Public Property Items As List(Of PropertySet)
@@ -2385,226 +2385,45 @@ Public Class HCStructuredStorageDoc
 
     End Class
 
-    'Private Class BlockLibrary
-    '    Public Property Items As List(Of String)
-    '    Private Property FullName As String
+    Private Class BlockLibrary
+        Public Property Items As List(Of String)
+        Private Property FullName As String
 
-    '    Public Sub New(cf As CompoundFile, _FullName As String)
-    '        Me.FullName = _FullName
+        Public Sub New(cf As OpenMcdf.RootStorage, _FullName As String)
+            Me.FullName = _FullName
 
-    '        Dim ByteArray As Byte()
-    '        Dim AllStreams As New List(Of CFStream)
-    '        Dim BlockStream As CFStream = Nothing
-    '        'Dim RawMaterialTable As String
+            Dim ByteArray As Byte()
+            Dim AllStreams As New List(Of OpenMcdf.CfbStream)
+            Dim BlockStream As OpenMcdf.CfbStream = Nothing
 
-    '        Me.Items = New List(Of String)
+            Me.Items = New List(Of String)
 
-    '        cf.RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
+            BlockStream = SSTools.GetStream(cf, "JBlocks")
 
-    '        For Each AllStream As CFStream In AllStreams
-    '            If AllStream.Name = "JBlocks" Then
-    '                BlockStream = AllStream
-    '            End If
-    '        Next
+            ByteArray = SSTools.GetData(BlockStream)
 
-    '        ByteArray = BlockStream.GetData
+            Dim NamedBytes As List(Of List(Of Byte))
+            NamedBytes = GetNamesBytes(ByteArray)
 
-    '        'FormatByteString(ByteArray)
+            If NamedBytes IsNot Nothing Then
+                For Each NamedByteList As List(Of Byte) In NamedBytes
+                    Dim s As String = System.Text.Encoding.Unicode.GetString(NamedByteList.ToArray)
+                    Items.Add(s)
+                Next
+            End If
 
-    '        Dim NamedBytes As List(Of List(Of Byte))
-    '        NamedBytes = GetNamesBytes(ByteArray)
+        End Sub
 
-    '        If NamedBytes IsNot Nothing Then
-    '            For Each NamedByteList As List(Of Byte) In NamedBytes
-    '                Dim s As String = System.Text.Encoding.Unicode.GetString(NamedByteList.ToArray)
-    '                Items.Add(s)
-    '            Next
-    '        End If
+        Private Function GetNamesBytes(ByteArray As Byte()) As List(Of List(Of Byte))
 
-    '    End Sub
-
-    '    Private Function GetNamesBytes(ByteArray As Byte()) As List(Of List(Of Byte))
-
-    '        'BYTE STREAM FORMAT
-    '        '
-    '        'Strings are null-terminated (&H00) 2-byte Unicode.  MSB can be anything, LSB must be non zero.
-    '        'The first letter of each string is aligned in the diagram to more easily see the pattern.
-    '        '
-    '        '                              \|/ Number of letters in string           \|/ Last letter offset = 2 * Number of letters + 4 + 1 
-    '        '          Offset --->    0  1  2  3  4     6     8    10    12    14    16 \|/ Null terminator
-    '        '           Value --->    Z  Z NZ  Z  Z  A NZ  A NZ  A NZ  A NZ  A NZ  A NZ  Z \|/ Number of block views
-    '        '48 05 00 00 00 7f 17 00 00 00 06 00 00 00 42 00 6c 00 6f 00 63 00 6b 00 31 00 01
-    '        ' H  .  .  .  .  .  .  .  .  .  .  .  .  .  B  .  l  .  o  .  c  .  k  .  1  .  .
-    '        '                                        x                                x    /|\ This value was copied from the next row for reference
-    '        '      01 00 00 00 7e 17 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
-    '        '       .  .  .  .  ~  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
-    '        '                                        x                          x    
-    '        '               88 15 00 00 00 03 00 00 00 43 00 4f 00 47 00       
-    '        '                ?  .  .  .  .  .  .  .  .  C  .  O  .  G  .       
-    '        '                                        x              x        
-    '        '      01 00 00 00 89 15 00 00 05 00 00 00 56 00 69 00 65 00 77 00 31 00   
-    '        '       .  .  .  .  ?  .  .  .  .  .  .  .  V  .  i  .  e  .  w  .  1  .   
-    '        '                                        x                          x    
-    '        '               a3 16 00 00 00 04 00 00 00 73 00 6c 00 6f 00 74 00     
-    '        '                ?  .  .  .  .  .  .  .  .  s  .  l  .  o  .  t  .     
-    '        '                                        x                    x      
-    '        ' Value legend
-    '        '    A Anything
-    '        '   NZ Non zero
-    '        '    Z Zero
-
-    '        Dim MaxNumChars As Integer = 30
-    '        Dim MaxNumBlockViews As Integer = 2
-
-    '        Dim ByteLists As New List(Of List(Of Byte))
-    '        Dim C As Integer = ByteArray.Count
-    '        Dim NumBlockViews As Integer = 0
-
-    '        Dim SearchStart As Integer = CInt(ByteArray.Count / 2)
-
-    '        For i = SearchStart To C - 1
-
-    '            Dim ByteList As New List(Of Byte)
-
-    '            ' Check for leading pattern Z Z NZ Z Z
-    '            If i + 0 < C AndAlso Not ByteArray(i) = &H0 Then Continue For
-    '            If i + 1 < C AndAlso Not ByteArray(i + 1) = &H0 Then Continue For
-    '            If i + 2 < C AndAlso ByteArray(i + 2) = &H0 Then Continue For
-    '            If i + 3 < C AndAlso Not ByteArray(i + 3) = &H0 Then Continue For
-    '            If i + 4 < C AndAlso Not ByteArray(i + 4) = &H0 Then Continue For
-
-    '            ' Check for null terminator
-    '            If Not i + 2 < C Then Exit For
-
-    '            Dim NumChars = CInt(ByteArray(i + 2))
-    '            If NumChars > MaxNumChars Then Continue For
-    '            Dim TerminatorIdx = i + 2 * NumChars + 4 + 1
-    '            If TerminatorIdx < C AndAlso Not ByteArray(TerminatorIdx) = &H0 Then Continue For
-
-    '            ' Check Unicode
-    '            For j = i + 6 To i + 6 + 2 * (NumChars - 1) Step 2
-    '                If j < C AndAlso ByteArray(j) = &H0 Then  ' There may be other invalid hex values
-    '                    Continue For
-    '                Else
-    '                    ' These need to be in reverse order for the unicode translation to work properly
-    '                    ByteList.Add(ByteArray(j))
-    '                    ByteList.Add(ByteArray(j - 1))
-    '                End If
-    '            Next
-
-    '            If NumBlockViews = 0 Then
-    '                NumBlockViews = CInt(ByteArray(TerminatorIdx + 1))
-    '                If Not NumBlockViews <= MaxNumBlockViews Then
-    '                    NumBlockViews = 0
-    '                    Continue For
-    '                End If
-
-    '                ByteLists.Add(ByteList)
-    '            Else
-    '                NumBlockViews -= 1
-    '            End If
-
-    '        Next
-
-    '        'Dim View1ByteList As New List(Of Byte)
-    '        'View1ByteList.AddRange({&H0, &H56, &H0, &H69, &H0, &H65, &H0, &H77, &H0, &H31})
-
-    '        'Dim View1StartIdxList As New List(Of Integer)
-
-    '        'Dim IndicatorNameStart As New List(Of Byte)
-    '        'IndicatorNameStart.AddRange({&H1, &H0})  ' In reverse order
-
-    '        'Dim IndicatorNameEnd As New List(Of Byte)
-    '        'IndicatorNameEnd.AddRange({&H0, &H0})  ' In reverse order, kinda
-
-    '        '' Forward pass to find start idx of each "View1"
-    '        'For i = 0 To ByteArray.Count - View1ByteList.Count - 1
-    '        '    Dim Matched As Boolean = True
-
-    '        '    For j = 0 To View1ByteList.Count - 1
-    '        '        If Not ByteArray(i + j) = View1ByteList(j) Then
-
-    '        '            If j = View1ByteList.Count - 1 Then
-    '        '                ' Found a View that is not View1
-    '        '                MsgBox("Cannot currently process blocks with more than 1 view.  Exiting...", vbOKOnly)
-    '        '                Return Nothing
-    '        '            End If
-    '        '            Matched = False
-    '        '            Exit For
-    '        '        End If
-    '        '    Next
-
-    '        '    If Matched Then View1StartIdxList.Add(i)
-
-    '        'Next
-
-    '        'If View1StartIdxList.Count = 0 Then Return Nothing
+            Dim ByteLists As New List(Of List(Of Byte))
 
 
-    '        'For i = View1StartIdxList.Count - 1 To 0 Step -1
-    '        '    Dim idx = View1StartIdxList(i)
+            Return ByteLists
 
-    '        '    idx -= 1
+        End Function
 
-    '        '    Do Until ByteArray(idx) = IndicatorNameStart(0) And ByteArray(idx - 1) = IndicatorNameStart(1)
-    '        '        idx -= 1
-
-    '        '        If idx < 0 Then
-    '        '            Return Nothing
-    '        '        End If
-    '        '    Loop
-
-    '        '    idx -= 1
-
-    '        '    Dim ReversedByteList As New List(Of Byte)
-
-    '        '    Do Until ByteArray(idx) = IndicatorNameEnd(0) And ByteArray(idx - 1) = IndicatorNameEnd(1)
-
-    '        '        ReversedByteList.Add(ByteArray(idx))
-    '        '        idx -= 1
-
-    '        '        If idx < 0 Then
-    '        '            Return Nothing
-    '        '        End If
-    '        '    Loop
-
-    '        '    Dim ByteList As New List(Of Byte)
-
-    '        '    For j = ReversedByteList.Count - 1 To 0 Step -1
-    '        '        ByteList.Add(ReversedByteList(j))
-    '        '    Next
-
-    '        '    ByteLists.Add(ByteList)
-
-    '        'Next
-
-    '        Return ByteLists
-
-    '    End Function
-
-    '    Private Sub FormatByteString(ByteArray As Byte())
-    '        ' Utility for investigating format of ByteArray.  Not used in production.
-
-    '        Dim ByteList As New List(Of String)
-    '        Dim CharList As New List(Of String)
-
-    '        For Each B As Byte In ByteArray
-    '            ByteList.Add($"{B:x2}")
-
-    '            If CInt(B) < 32 Then ' Non-printing
-    '                CharList.Add(".")
-    '            ElseIf CInt(B) > 127 Then ' Extended ASCII
-    '                CharList.Add("?")
-    '            ElseIf CInt(B) = 44 Then ' period character
-    '                CharList.Add(";")
-    '            Else
-    '                CharList.Add(System.Text.Encoding.ASCII.GetString({B}))
-    '            End If
-    '        Next
-
-    '    End Sub
-
-    'End Class
+    End Class
 
     Private Class Variables
         Public Property Items As List(Of SolidEdgeExplorerDLL.Variable)
