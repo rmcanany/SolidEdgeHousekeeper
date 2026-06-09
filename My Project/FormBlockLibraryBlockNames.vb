@@ -64,6 +64,7 @@ Public Class FormBlockLibraryBlockNames
 
     Public Property BlockLibrary As String
 
+    Public Property StructuredStorageEdit As Boolean
 
 
     Public Sub New()
@@ -126,35 +127,58 @@ Public Class FormBlockLibraryBlockNames
 
         Me.Cursor = Cursors.WaitCursor
 
-        OleMessageFilter.Register()
+        Dim NewWay As Boolean = True
 
-        Dim USEA As New UtilsSEApp(Form_Main)
-        USEA.ErrorLogger = New Logger("Update block library", Nothing)
-        LabelStatus.Text = "Starting Solid Edge..."
+        If Not Me.StructuredStorageEdit Then
+            OleMessageFilter.Register()
 
-        USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=False, ProcessDraftsInactive:=False)
+            Dim USEA As New UtilsSEApp(Form_Main)
+            USEA.ErrorLogger = New Logger("Update block library", Nothing)
+            LabelStatus.Text = "Starting Solid Edge..."
 
-        Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
+            USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=False, ProcessDraftsInactive:=False)
 
-        Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
+            Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
 
-        Dim tmpBlockLibraryBlockNames As New List(Of String)
-        tmpBlockLibraryBlockNames.Add("")
+            Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
 
-        If Blocks IsNot Nothing Then
-            For Each Block As SolidEdgeDraft.Block In Blocks
-                tmpBlockLibraryBlockNames.Add(Block.Name)
-            Next
+            Dim tmpBlockLibraryBlockNames As New List(Of String)
+            tmpBlockLibraryBlockNames.Add("")
+
+            If Blocks IsNot Nothing Then
+                For Each Block As SolidEdgeDraft.Block In Blocks
+                    tmpBlockLibraryBlockNames.Add(Block.Name)
+                Next
+            End If
+
+            tmpBlockLibraryBlockNames.Sort()
+            Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
+
+            SEDoc.Close(False)
+
+            'USEA.SEStop(UseCurrentSession:=True)
+            USEA.SEStop(UseCurrentSession:=Form_Main.UseCurrentSession)
+
+            OleMessageFilter.Revoke()
+        Else
+            Dim SSDoc As HCStructuredStorageDoc = Nothing
+            Try
+                SSDoc = New HCStructuredStorageDoc(Me.BlockLibrary, _OpenReadWrite:=False)
+                SSDoc.ReadBlockLibrary()
+
+                Dim tmpBlockLibraryBlockNames As List(Of String) = SSDoc.GetBlockLibraryBlockNames
+                tmpBlockLibraryBlockNames.Sort()
+                Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
+            Catch ex As Exception
+                If SSDoc IsNot Nothing Then SSDoc.Close()
+                'Me.BlockLibraryBlockNames.Clear()
+                Me.BlockLibraryBlockNames = New List(Of String) ' Triggers update of the form DGV
+
+                MsgBox($"Could not read blocks from {IO.Path.GetFileName(Me.BlockLibrary)}", vbOKOnly)
+            End Try
+
+            If SSDoc IsNot Nothing Then SSDoc.Close()
         End If
-
-        Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
-
-        SEDoc.Close(False)
-
-        'USEA.SEStop(UseCurrentSession:=True)
-        USEA.SEStop(UseCurrentSession:=Form_Main.UseCurrentSession)
-
-        OleMessageFilter.Revoke()
 
         LabelStatus.Text = $"Found {BlockLibraryBlockNames.Count - 1} blocks in the library"
 

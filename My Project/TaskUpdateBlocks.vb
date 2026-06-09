@@ -349,6 +349,19 @@ Public Class TaskUpdateBlocks
         End Set
     End Property
 
+    Private _StructuredStorageEdit As Boolean
+    Public Property StructuredStorageEdit As Boolean
+        Get
+            Return _StructuredStorageEdit
+        End Get
+        Set(value As Boolean)
+            _StructuredStorageEdit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -384,6 +397,7 @@ Public Class TaskUpdateBlocks
         BSAddByName
         BSAddBySize
         BSRename
+        StructuredStorageEdit
         AutoHideOptions
     End Enum
 
@@ -1092,6 +1106,14 @@ Public Class TaskUpdateBlocks
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Read blocks without Solid Edge")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.ReplaceBlocks.ToString, "Replace blocks")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -1647,6 +1669,9 @@ Public Class TaskUpdateBlocks
 
         Select Case Name
 
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+
             Case ControlNames.ReplaceBlocks.ToString
                 Me.ReplaceBlocks = Checkbox.Checked
                 CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView).Visible = Me.ReplaceBlocks
@@ -1752,11 +1777,72 @@ Public Class TaskUpdateBlocks
                     TextBox = CType(ControlsDict(ControlNames.BlockLibrary.ToString), TextBox)
                     TextBox.Text = Me.BlockLibrary
 
-                    'Dim SSDoc As New HCStructuredStorageDoc(Me.BlockLibrary)
-                    'SSDoc.ReadBlockLibrary()
+                    If Not Me.StructuredStorageEdit Then
 
-                    'Me.BlockLibraryBlockNames = SSDoc.GetBlockLibraryBlockNames
-                    'Me.BlockLibraryBlockNames.Sort()
+                        ' ###### Bypassing populating block names using SE.  Slow and unexpected. ######
+                        ' ###### User will need to Edit list > Update to populate the names. ######
+
+                        'Form_Main.Cursor = Cursors.WaitCursor
+
+                        'OleMessageFilter.Register()
+
+                        'Dim USEA As New UtilsSEApp(Form_Main)
+                        'USEA.ErrorLogger = New Logger("Update block library", Nothing)
+                        'Form_Main.TextBoxStatus.Text = "Starting Solid Edge..."
+
+                        'USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=False, ProcessDraftsInactive:=False)
+
+                        'Dim SEDoc As SolidEdgeDraft.DraftDocument = CType(USEA.SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
+
+                        'Dim Blocks As SolidEdgeDraft.Blocks = SEDoc.Blocks
+
+                        'Dim tmpBlockLibraryBlockNames As New List(Of String)
+                        'tmpBlockLibraryBlockNames.Add("")
+
+                        'If Blocks IsNot Nothing Then
+                        '    For Each Block As SolidEdgeDraft.Block In Blocks
+                        '        tmpBlockLibraryBlockNames.Add(Block.Name)
+                        '    Next
+                        'End If
+
+                        'tmpBlockLibraryBlockNames.Sort()
+                        'Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
+
+                        'SEDoc.Close(False)
+
+                        ''USEA.SEStop(UseCurrentSession:=True)
+                        'USEA.SEStop(UseCurrentSession:=Form_Main.UseCurrentSession)
+
+                        'OleMessageFilter.Revoke()
+
+                        'Form_Main.Cursor = Cursors.Default
+                    Else
+                        'Dim SSDoc As New HCStructuredStorageDoc(Me.BlockLibrary, _OpenReadWrite:=False)
+                        'SSDoc.ReadBlockLibrary()
+
+                        'Me.BlockLibraryBlockNames = SSDoc.GetBlockLibraryBlockNames
+                        'Me.BlockLibraryBlockNames.Sort()
+
+                        'If SSDoc IsNot Nothing Then SSDoc.Close()
+
+                        Dim SSDoc As HCStructuredStorageDoc = Nothing
+                        Try
+                            SSDoc = New HCStructuredStorageDoc(Me.BlockLibrary, _OpenReadWrite:=False)
+                            SSDoc.ReadBlockLibrary()
+
+                            Dim tmpBlockLibraryBlockNames As List(Of String) = SSDoc.GetBlockLibraryBlockNames
+                            tmpBlockLibraryBlockNames.Sort()
+                            Me.BlockLibraryBlockNames = tmpBlockLibraryBlockNames
+                        Catch ex As Exception
+                            If SSDoc IsNot Nothing Then SSDoc.Close()
+                            'Me.BlockLibraryBlockNames.Clear()
+                            Me.BlockLibraryBlockNames = New List(Of String) ' Triggers update of the form DGV
+
+                            MsgBox($"Could not read blocks from {IO.Path.GetFileName(Me.BlockLibrary)}", vbOKOnly)
+                        End Try
+
+                        If SSDoc IsNot Nothing Then SSDoc.Close()
+                    End If
 
                     'Form_Main.WorkingFilesPath = IO.Path.GetDirectoryName(Me.BlockLibrary)
                 End If
@@ -1767,6 +1853,7 @@ Public Class TaskUpdateBlocks
                 FBLBN.BlockLibraryBlockNames = Me.BlockLibraryBlockNames
                 FBLBN.ManuallyAddedBlockNames = Me.ManuallyAddedBlockNames
                 FBLBN.BlockLibrary = Me.BlockLibrary
+                FBLBN.StructuredStorageEdit = Me.StructuredStorageEdit
 
                 Dim Result As DialogResult = FBLBN.ShowDialog
 
@@ -1816,9 +1903,12 @@ Public Class TaskUpdateBlocks
         HelpString += vbCrLf + vbCrLf + "Known blocks are available in combo boxes on each list. "
         HelpString += "To populate them, click the `Edit list` button. "
         HelpString += "To get the library blocks, click `Update`. "
-        HelpString += "Note the program needs to start Solid Edge to do so. "
         HelpString += "If you have files with block names not found in the library, "
         HelpString += "enter them on the `File Blocks` list.  "
+
+        HelpString += vbCrLf + vbCrLf + "Note the program needs to start Solid Edge to do the update. "
+        HelpString += "Unless you enable the `Read blocks without SE` option, that is. "
+        HelpString += "In that case it uses the much faster Structured Storage functionality. "
 
         HelpString += vbCrLf + vbCrLf + "There are a couple of things to note about working with the block lists. "
         HelpString += "First, you may find yourself clicking a drop down twice to choose an item. "

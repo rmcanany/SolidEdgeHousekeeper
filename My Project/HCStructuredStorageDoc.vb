@@ -2415,9 +2415,68 @@ Public Class HCStructuredStorageDoc
         End Sub
 
         Private Function GetNamesBytes(ByteArray As Byte()) As List(Of List(Of Byte))
+            ' Co-authored-by: Claude <noreply@anthropic.com>
 
             Dim ByteLists As New List(Of List(Of Byte))
 
+            If ByteArray Is Nothing OrElse ByteArray.Length < 20 Then Return Nothing
+
+            ' Locate the block descriptor table. It starts with a uint32 block count
+            ' followed by a valid first block entry.
+            ' Note: bytes 4-7 of the stream hold the total view count, not the block
+            ' count, so we search for any small positive integer that fits.
+            ' First block entry layout: blockID (4) + extraCount (1, usually 0) +
+            '   extraIDs (extraCount * 4) + nameLen (4) + unicode name...
+            ' When extraCount = 0, pad byte = 0 and nameLen is the very next field.
+            Dim TableOffset As Integer = -1
+            For i As Integer = ByteArray.Length \ 2 To ByteArray.Length - 9
+                Dim Candidate As Integer = BitConverter.ToInt32(ByteArray, i)
+                If Candidate < 1 OrElse Candidate > 1000 Then Continue For
+                Dim p As Integer = i + 4
+                If p + 9 >= ByteArray.Length Then Continue For
+                If ByteArray(p + 4) <> 0 Then Continue For          ' extraCount = 0 for first entry
+                Dim NameLen As Integer = BitConverter.ToInt32(ByteArray, p + 5)
+                If NameLen < 1 OrElse NameLen > 100 Then Continue For
+                If p + 9 + NameLen * 2 > ByteArray.Length Then Continue For
+                If ByteArray(p + 10) <> 0 Then Continue For         ' high byte of first unicode char
+                Dim LowByte As Byte = ByteArray(p + 9)
+                If LowByte < 32 OrElse LowByte > 127 Then Continue For
+                TableOffset = i
+                Exit For
+            Next
+
+            If TableOffset < 0 Then Return Nothing
+
+            Dim BlockCount As Integer = BitConverter.ToInt32(ByteArray, TableOffset)
+            Dim Offset As Integer = TableOffset + 4  ' skip block count field
+
+            For i As Integer = 0 To BlockCount - 1
+                If Offset + 9 > ByteArray.Length Then Return ByteLists
+                Offset += 4  ' blockID
+                Dim ExtraCount As Integer = ByteArray(Offset)  ' usually 0; skip extra IDs if present
+                Offset += 1
+                Offset += ExtraCount * 4
+                If Offset + 4 > ByteArray.Length Then Return ByteLists
+                Dim NameLen As Integer = BitConverter.ToInt32(ByteArray, Offset)
+                Offset += 4
+                If Offset + NameLen * 2 > ByteArray.Length Then Return ByteLists
+                Dim NameBytes As New List(Of Byte)
+                For j As Integer = 0 To NameLen * 2 - 1
+                    NameBytes.Add(ByteArray(Offset + j))
+                Next
+                ByteLists.Add(NameBytes)
+                Offset += NameLen * 2
+                If Offset + 4 > ByteArray.Length Then Return ByteLists
+                Dim ViewCount As Integer = BitConverter.ToInt32(ByteArray, Offset)
+                Offset += 4
+                For v As Integer = 0 To ViewCount - 1
+                    If Offset + 8 > ByteArray.Length Then Return ByteLists
+                    Offset += 4  ' viewID
+                    Dim ViewNameLen As Integer = BitConverter.ToInt32(ByteArray, Offset)
+                    Offset += 4
+                    Offset += ViewNameLen * 2
+                Next
+            Next
 
             Return ByteLists
 

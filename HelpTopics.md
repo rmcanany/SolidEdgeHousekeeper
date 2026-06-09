@@ -17,7 +17,7 @@ Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza, @mefrebo, @KGeetings, @tempod, @john.matthews3452, @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @Monostre, @TeeVar
 
 **Helpful feedback and bug reports**  
-@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @Nick_Mokrytskyi​, @PBurkeADS
+@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @Nick_Mokrytskyi​, @PBurkeADS, @Lui10, @schumi1119
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -867,7 +867,9 @@ Adds, replaces and/or deletes blocks in a draft file.
 
 For adding and replacing, a draft file containing the new blocks is required.  In most cases it will simply be your draft template.  Click the `Block Library` button to select it. 
 
-Known blocks are available in combo boxes on each list. To populate them, click the `Edit list` button. To get the library blocks, click `Update`. Note the program needs to start Solid Edge to do so. If you have files with block names not found in the library, enter them on the `File Blocks` list.  
+Known blocks are available in combo boxes on each list. To populate them, click the `Edit list` button. To get the library blocks, click `Update`. If you have files with block names not found in the library, enter them on the `File Blocks` list.  
+
+Note the program needs to start Solid Edge to do the update. Unless you enable the `Read blocks without SE` option, that is. In that case it uses the much faster Structured Storage functionality. 
 
 There are a couple of things to note about working with the block lists. First, you may find yourself clicking a drop down twice to choose an item. These combo boxes are picky -- you have to click the down arrow, not the text field, to open the drop down on the first click. Second, to remove a row's contents, select the `Row Header` (the gray box left of the text) and hit `Delete`. To clear the entire list, select the top-most `Row Header` and do the same.  
 
