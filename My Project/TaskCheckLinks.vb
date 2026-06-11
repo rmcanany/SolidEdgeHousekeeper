@@ -87,7 +87,7 @@ Public Class TaskCheckLinks
 
 
     Private Property ContextMenuTest As ContextMenu
-    Private Property tmpText As String
+    'Private Property tmpText As String
     Private Property DGVRow As Integer
 
 
@@ -159,24 +159,24 @@ Public Class TaskCheckLinks
         Dim LinkFilenames As New List(Of String)
 
         Dim Models As SolidEdgePart.Models = Nothing
-        Dim Model As SolidEdgePart.Model
-        Dim CopiedParts As SolidEdgePart.CopiedParts
-        Dim CopiedPart As SolidEdgePart.CopiedPart
+        'Dim Model As SolidEdgePart.Model
+        'Dim CopiedParts As SolidEdgePart.CopiedParts
+        'Dim CopiedPart As SolidEdgePart.CopiedPart
 
-        Dim InputDirectories As New List(Of String)
-        Dim SearchDirectory As String
-        Dim tf As Boolean
-        Dim s As String
+        'Dim InputDirectories As New List(Of String)
+        'Dim SearchDirectory As String
+        'Dim tf As Boolean
+        'Dim s As String
 
-        Dim Path As String
-        Dim Filename As String
+        'Dim Path As String
+        'Dim Filename As String
 
-        Dim CheckedOcurrences As New List(Of String)
+        'Dim CheckedOcurrences As New List(Of String)
 
-        Dim ListIndex As Integer
+        'Dim ListIndex As Integer
 
         Dim CheckItems As List(Of String) = {"Missing links", "Misplaced links"}.ToList
-        Dim CheckItem As String
+        'Dim CheckItem As String
 
         Dim CheckOptions As List(Of Boolean) = {Me.CheckMissingLinks, Me.CheckMisplacedLinks}.ToList
 
@@ -186,13 +186,13 @@ Public Class TaskCheckLinks
 
         Dim tmpMissingLinks As New List(Of String)  ' Used to avoid reporting missing links as also misplaced
 
-        For ListIndex = 0 To CheckItems.Count - 1
+        For ListIndex As Integer = 0 To CheckItems.Count - 1
 
             If Not CheckOptions(ListIndex) Then
                 Continue For
             End If
 
-            CheckItem = CheckItems(ListIndex)
+            Dim CheckItem As String = CheckItems(ListIndex)
 
             Dim SubLogger As Logger = TaskLogger.AddLogger(CheckItem)
 
@@ -230,14 +230,15 @@ Public Class TaskCheckLinks
                     ModelLinks = tmpSEDoc.ModelLinks
 
                     For Each ModelLink In ModelLinks
+                        Dim tmpFilename As String
                         If ModelLink.IsAssemblyFamilyMember Then
-                            Filename = ModelLink.FileName.Split("!"c)(0)
+                            tmpFilename = ModelLink.FileName.Split("!"c)(0)
                         Else
-                            Filename = ModelLink.FileName
+                            tmpFilename = ModelLink.FileName
                         End If
 
-                        If Not LinkFilenames.Contains(Filename) Then
-                            LinkFilenames.Add(Filename)
+                        If Not LinkFilenames.Contains(tmpFilename) Then
+                            LinkFilenames.Add(tmpFilename)
                         End If
                     Next
 
@@ -249,12 +250,12 @@ Public Class TaskCheckLinks
 
             If (DocType = "par") Or (DocType = "psm") Then
                 If (Models.Count > 0) And (Models.Count < 300) Then
-                    For Each Model In Models
-                        CopiedParts = Model.CopiedParts
+                    For Each Model As SolidEdgePart.Model In Models
+                        Dim CopiedParts As SolidEdgePart.CopiedParts = Model.CopiedParts
                         If CopiedParts.Count > 0 Then
-                            For Each CopiedPart In CopiedParts
+                            For Each CopiedPart As SolidEdgePart.CopiedPart In CopiedParts
                                 ' Not all Part Copies have outside links
-                                If Not CopiedPart.FileName Is Nothing Then
+                                If CopiedPart.FileName IsNot Nothing Then
                                     If Not CopiedPart.FileName = "" Then
                                         If Not LinkFilenames.Contains(CopiedPart.FileName) Then
                                             LinkFilenames.Add(CopiedPart.FileName)
@@ -265,55 +266,46 @@ Public Class TaskCheckLinks
                         End If
                     Next
                 ElseIf Models.Count >= 300 Then
-                    s = String.Format("{0} models exceeds maximum to process", Models.Count.ToString)
-                    SubLogger.AddMessage(s)
+                    SubLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
                 End If
 
             End If
 
             ' Perform the checks
-            For Each s In LinkFilenames
+            For Each tmpLinkFilename As String In LinkFilenames
 
-                s = UC.GetFOAFilename(s)
+                tmpLinkFilename = UC.GetFOAFilename(tmpLinkFilename)
 
-                If CheckItem = "Missing links" Then
-                    If Not FileIO.FileSystem.FileExists(s) Then
-                        Path = System.IO.Path.GetDirectoryName(s)
-                        Filename = System.IO.Path.GetFileName(s)
-                        s = String.Format("{0} in {1}", Filename, Path)
+                If Not FileIO.FileSystem.FileExists(tmpLinkFilename) Then
 
-                        SubLogger.AddMessage(s)
+                    tmpMissingLinks.Add(tmpLinkFilename)
 
-                        tmpMissingLinks.Add(s)
+                    If CheckItem = "Missing links" Then
+                        Dim tmpPath = System.IO.Path.GetDirectoryName(tmpLinkFilename)
+                        Dim tmpFilename = System.IO.Path.GetFileName(tmpLinkFilename)
 
+                        SubLogger.AddMessage($"{tmpFilename} in {tmpPath}")
                     End If
                 End If
 
                 If CheckItem = "Misplaced links" Then
-                    tf = False
-                    'For Each SourceDirectory In Me.SourceDirectories
-                    '    If s.Contains(SourceDirectory) Then
-                    '        tf = True
-                    '        Exit For
-                    '    End If
-                    'Next
-                    For Each SearchDirectory In Me.SearchDirectories
+                    Dim tf As Boolean = False
+                    For Each SearchDirectory As String In Me.SearchDirectories
                         SearchDirectory = GetSearchDirName(SEDoc, SearchDirectory)
-                        If SearchDirectory IsNot Nothing AndAlso s.Contains(SearchDirectory) Then
+                        If SearchDirectory IsNot Nothing AndAlso tmpLinkFilename.ToLower.Contains(SearchDirectory.ToLower) Then
                             tf = True
                             Exit For
                         End If
                     Next
 
                     If Not tf Then
-                        Path = System.IO.Path.GetDirectoryName(s)
-                        Filename = System.IO.Path.GetFileName(s)
-                        s = String.Format("{0} in {1}", Filename, Path)
+                        Dim tmpPath = System.IO.Path.GetDirectoryName(tmpLinkFilename)
+                        Dim tmpFilename = System.IO.Path.GetFileName(tmpLinkFilename)
 
                         ' Don't add the file to the misplaced list if it is already listed as missing
 
-                        If Not tmpMissingLinks.Contains(s) Then
-                            SubLogger.AddMessage(s)
+                        If Not tmpMissingLinks.Contains(tmpLinkFilename) Then
+                            SubLogger.AddMessage($"{tmpFilename} in {tmpPath}")
                         End If
 
                     End If
@@ -330,28 +322,23 @@ Public Class TaskCheckLinks
         Dim LinkNames As List(Of String)
         Dim BadLinkNames As List(Of String)
         Dim MisplacedLinkNames As New List(Of String)
-        Dim Indent As String = "    "
-        Dim Directory As String
-        Dim Filename As String
+        'Dim Indent As String = "    "
+        'Dim Directory As String
+        'Dim Filename As String
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
-
-        Dim ShowException As Boolean = False
-        If ShowException Then
+        Try
             SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
-        Else
-            Try
-                SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
-            Catch ex As Exception
-                Proceed = False
-                TaskLogger.AddMessage(ex.Message)
-            End Try
-        End If
-
+            SSDoc.ReadProperties(Me.PropertiesData)
+            SSDoc.ReadLinks(Me.LinkManagementOrder)
+        Catch ex As Exception
+            If SSDoc IsNot Nothing Then SSDoc.Close()
+            Proceed = False
+            TaskLogger.AddMessage(ex.Message)
+        End Try
 
         If Proceed Then
 
-            SSDoc.ReadLinks(Me.LinkManagementOrder)
             LinkNames = SSDoc.GetLinkNames
             BadLinkNames = SSDoc.GetBadLinkNames
 
@@ -369,13 +356,6 @@ Public Class TaskCheckLinks
 
                     Dim tf As Boolean = False
 
-
-                    'For Each SourceDirectory In Me.SourceDirectories
-                    '    If LinkName.ToLower.Contains(SourceDirectory.ToLower) Then
-                    '        tf = True
-                    '        Exit For
-                    '    End If
-                    'Next
                     For Each SearchDirectory In Me.SearchDirectories
                         SearchDirectory = GetSearchDirName(SSDoc, SearchDirectory)
                         If SearchDirectory IsNot Nothing AndAlso LinkName.ToLower.Contains(SearchDirectory.ToLower) Then
@@ -383,8 +363,6 @@ Public Class TaskCheckLinks
                             Exit For
                         End If
                     Next
-
-
 
                     If Not tf Then
                         MisplacedLinkNames.Add(LinkName)
@@ -397,9 +375,9 @@ Public Class TaskCheckLinks
 
                     If BadLinkNames.Count > 0 Then
                         For Each BadLinkName As String In BadLinkNames
-                            Directory = IO.Path.GetDirectoryName(BadLinkName)
-                            Filename = IO.Path.GetFileName(BadLinkName)
-                            SubLogger.AddMessage(String.Format("{0} in {1}", Filename, Directory))
+                            Dim tmpDirectory = IO.Path.GetDirectoryName(BadLinkName)
+                            Dim tmpFilename = IO.Path.GetFileName(BadLinkName)
+                            SubLogger.AddMessage(String.Format("{0} in {1}", tmpFilename, tmpDirectory))
                         Next
                     End If
                 End If
@@ -410,9 +388,9 @@ Public Class TaskCheckLinks
 
                     If MisplacedLinkNames.Count > 0 Then
                         For Each MisplacedLinkName As String In MisplacedLinkNames
-                            Directory = IO.Path.GetDirectoryName(MisplacedLinkName)
-                            Filename = IO.Path.GetFileName(MisplacedLinkName)
-                            SubLogger.AddMessage(String.Format("{0} in {1}", Filename, Directory))
+                            Dim tmpDirectory = IO.Path.GetDirectoryName(MisplacedLinkName)
+                            Dim tmpFilename = IO.Path.GetFileName(MisplacedLinkName)
+                            SubLogger.AddMessage(String.Format("{0} in {1}", tmpFilename, tmpDirectory))
                         Next
                     End If
                 End If
@@ -437,6 +415,7 @@ Public Class TaskCheckLinks
 
         If SearchDirectory.StartsWith("EXPRESSION_") Or SearchDirectory.StartsWith("SavedSetting:") Then
             OutString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, SearchDirectory, Me.PropertiesData, TaskLogger, True)
+            OutString = OutString.Replace(vbCrLf, "")
 
             If OutString Is Nothing OrElse OutString.ToLower.Contains("<nothing>") Then
                 Success = False
@@ -444,21 +423,13 @@ Public Class TaskCheckLinks
             Else
                 Dim DoNotSubstituteChars As New List(Of String)
                 DoNotSubstituteChars.Add("\")
+                DoNotSubstituteChars.Add(":")
                 OutString = UFC.SubstituteIllegalCharacters(OutString, DoNotSubstituteChars)
             End If
 
         Else
             OutString = SearchDirectory
-            'NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger)
 
-            'If NewSubDirectoryName Is Nothing Then
-            '    Success = False
-            '    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
-            'Else
-            '    Dim DoNotSubstituteChars As New List(Of String)
-            '    DoNotSubstituteChars.Add("\")
-            '    NewSubDirectoryName = UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
-            'End If
         End If
 
         If Success Then
@@ -484,6 +455,7 @@ Public Class TaskCheckLinks
         If SearchDirectory.StartsWith("EXPRESSION_") Or SearchDirectory.StartsWith("SavedSetting:") Then
             'OutString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, SearchDirectory, Me.PropertiesData, TaskLogger, True)
             OutString = SSDoc.SubstitutePropertyFormulas(SearchDirectory, TaskLogger, IsExpression:=True)
+            OutString = OutString.Replace(vbCrLf, "")
 
             If OutString Is Nothing OrElse OutString.ToLower.Contains("<nothing>") Then
                 Success = False
@@ -491,21 +463,13 @@ Public Class TaskCheckLinks
             Else
                 Dim DoNotSubstituteChars As New List(Of String)
                 DoNotSubstituteChars.Add("\")
+                DoNotSubstituteChars.Add(":")
                 OutString = UFC.SubstituteIllegalCharacters(OutString, DoNotSubstituteChars)
             End If
 
         Else
             OutString = SearchDirectory
-            'NewSubDirectoryName = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.Formula, Me.PropertiesData, TaskLogger)
 
-            'If NewSubDirectoryName Is Nothing Then
-            '    Success = False
-            '    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
-            'Else
-            '    Dim DoNotSubstituteChars As New List(Of String)
-            '    DoNotSubstituteChars.Add("\")
-            '    NewSubDirectoryName = UFC.SubstituteIllegalCharacters(NewSubDirectoryName, DoNotSubstituteChars)
-            'End If
         End If
 
         If Success Then

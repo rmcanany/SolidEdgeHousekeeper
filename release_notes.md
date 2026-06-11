@@ -68,7 +68,7 @@ Changed how search directories are specified for `Misplaced links`.  (Thank you 
   <img src="My%20Project/media/task_check_links.png">
 </p>
 
-Added the ability to use an `expression` to generate a directory name.  This can be handy when the search path depends on the file being processed.  Any number of directory names and/or expressions, in any combination, can be used.
+Added the ability to use an `Expression` to generate a directory name.  This can be handy when the search path depends on the file being processed.  Any number of directory names and/or expressions, in any combination, can be used.
 
 See the [<ins>**Check Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-links) for details.
 
