@@ -1128,31 +1128,31 @@ Public Class UtilsFileList
 
     End Function
 
-    Public Function GetSourceDirectories() As List(Of String)
-        Dim SourceDirectories As New List(Of String)
-        Dim TagName As String
-        Dim s As String
+    'Public Function GetSourceDirectories() As List(Of String)
+    '    Dim SourceDirectories As New List(Of String)
+    '    Dim TagName As String
+    '    Dim s As String
 
-        For Each Item As ListViewItem In ListViewSources.Items
+    '    For Each Item As ListViewItem In ListViewSources.Items
 
-            If Item.Group.Name = "Sources" Then
+    '        If Item.Group.Name = "Sources" Then
 
-                TagName = CType(Item.Tag, String)
+    '            TagName = CType(Item.Tag, String)
 
-                If TagName.ToLower.Contains("folder") Then
-                    s = Item.Name
-                    If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
-                ElseIf TagName.ToLower = "asm" Then
-                    s = System.IO.Path.GetDirectoryName(Item.Name)
-                    If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
-                End If
+    '            If TagName.ToLower.Contains("folder") Then
+    '                s = Item.Name
+    '                If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
+    '            ElseIf TagName.ToLower = "asm" Then
+    '                s = System.IO.Path.GetDirectoryName(Item.Name)
+    '                If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
+    '            End If
 
-            End If
+    '        End If
 
-        Next
+    '    Next
 
-        Return SourceDirectories
-    End Function
+    '    Return SourceDirectories
+    'End Function
 
     Public Sub UpdatePropertiesColumns()
 

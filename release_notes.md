@@ -42,6 +42,8 @@ See the [<ins>**File Selection Help Topic**</ins>](https://github.com/rmcanany/S
 
 ### Update Blocks
 
+#### Add Blocks
+
 Sponsored by **@john.matthews3452 (Hatch).**  Thank you!
 
 Added sheet processing options to the `Add Blocks` function.
@@ -52,7 +54,23 @@ Previously it meant that the sheet names match.  You can still do it that way, b
 
 In addition to the sheet processing options, an enhancement was made to avoid  duplicating blocks.  During placement, if a block with the same name, location, etc. is found, the new block is not added.
 
+#### Read Blocks from Library
+
+Added an option to use Structured Storage instead of SE.  This is only for the task setup phase; the program still uses SE to perform the `replace`/`add`/`delete` functions.
+
 See the [<ins>**Update Blocks Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-blocks) for details.
+
+### Check Links
+
+Changed how search directories are specified for `Misplaced links`.  (Thank you **@schumi1119!**)  Previously they were implied from the file search list on the **Home Tab**.  Now they are specified explicitly in the command options.
+
+<p align="center">
+  <img src="My%20Project/media/task_check_links.png">
+</p>
+
+Added the ability to use an `expression` to generate a directory name.  This can be handy when the search path depends on the file being processed.  Any number of directory names and/or expressions, in any combination, can be used.
+
+See the [<ins>**Check Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-links) for details.
 
 ### Command Line
 

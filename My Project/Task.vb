@@ -7,6 +7,7 @@ Public MustInherit Class Task
     Inherits HCIsolatedTaskProxy
 
     Public Property Name As String
+
     Private _Description As String
     Public Property Description() As String
         Get
@@ -19,6 +20,7 @@ Public MustInherit Class Task
             End If
         End Set
     End Property
+
     Public Property HelpText As String
     Public Property RequiresSave As Boolean
     Public Property AppliesToAssembly As Boolean
@@ -98,8 +100,9 @@ Public MustInherit Class Task
     End Property
 
 
-    Public Property RequiresSourceDirectories As Boolean
-    Public Property SourceDirectories As List(Of String)
+    'Public Property RequiresSourceDirectories As Boolean
+    'Public Property SourceDirectories As List(Of String)
+
     Public Property ControlsDict As Dictionary(Of String, Control)
     Public Property ColorHue As String
     Public Property ColorSaturation As Double

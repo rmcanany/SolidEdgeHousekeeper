@@ -1154,7 +1154,23 @@ Checks linked files.
 
 ![CheckLinks](My%20Project/media/task_check_links.png)
 
-`Missing links` are files not found on disk.  `Misplaced links` are files not contained in the search directories specified on the **Home Tab**.  Only links directly contained in the file are checked.  Links to links are not.
+`Missing links` are files not found on disk.  `Misplaced links` are files not contained in the search directories.  Only links directly contained in the file are checked.  Links to links are not.
+
+To add a directory to the `Missing links` search, right-click in the `Search directories table` and select `Add directory`.  You have to have at least one.  
+
+There are cases when a directory may need to change based on the file being processed.  In that case, you can use one or more `expressions`.  (See the `Edit properties` help topic for details on their use).  The following example shows how to use VB to specify the parent directory of the file being processed.  
+
+```
+Dim FullName as string = "%{System.File Name (full path)}"
+Dim DirectoryName as string = IO.Path.GetDirectoryName(FullName)
+Return DirectoryName
+```
+
+There are a couple of things to know about working with the table.  
+
+First, if you click a cell, followed by a right-click, it brings up the wrong shortcut.  The cell has to be unselected to work properly.  You can click any other control on the form to clear the selection.  Then go back to the cell and right-click first.  
+
+Second, to remove a row's contents, select the `Row Header` (the gray box left of the text) and hit `Delete`. To clear the entire list, select the top-most `Row Header` and do the same.  
 
 </details>
 

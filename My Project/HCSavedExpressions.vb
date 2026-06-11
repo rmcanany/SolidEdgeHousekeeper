@@ -279,6 +279,7 @@ Public Class HCSavedExpressions
         Next
         Me.Items = tmpItems
     End Sub
+
 End Class
 
 Public Class SavedExpression

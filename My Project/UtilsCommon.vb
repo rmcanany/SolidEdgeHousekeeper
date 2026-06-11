@@ -916,15 +916,6 @@ Public Class UtilsCommon
 
             ElseIf Instring.StartsWith("SavedSetting:") Then  ' eg SavedSetting:StdNummer
 
-                'Dim SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String))
-                'SavedExpressionsDict = UP.GetSavedExpressionsDict()
-
-                'Dim SaveName As String = Instring.Replace("SavedSetting:", "")
-                'If SavedExpressionsDict.Keys.Contains(SaveName) Then
-                '    ExpressionLanguage = SavedExpressionsDict(SaveName)("Language")
-                '    Instring = SavedExpressionsDict(SaveName)("Expression")
-                'End If
-
                 Dim SavedExpressions As New HCSavedExpressions
 
                 Dim SaveName As String = Instring.Replace("SavedSetting:", "")

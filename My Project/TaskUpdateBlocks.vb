@@ -1862,11 +1862,7 @@ Public Class TaskUpdateBlocks
                     Me.ManuallyAddedBlockNames = FBLBN.ManuallyAddedBlockNames
 
                 End If
-                'EditBlockList()
 
-                'Case ControlNames.ReplaceBlocksDeleteSelectedRow.ToString
-                '    Dim tmpDGV As DataGridView = CType(ControlsDict(ControlNames.ReplaceBlocksDGV.ToString), DataGridView)
-                '    Dim i = 0
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select

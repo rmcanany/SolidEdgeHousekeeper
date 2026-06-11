@@ -236,10 +236,10 @@ Public Class UtilsExecute
             If Task.IsSelectedTask Then
                 SelectedTasksCount += 1
 
-                If Task.RequiresSourceDirectories Then
-                    Dim UFL As New UtilsFileList(FMain)
-                    Task.SourceDirectories = UFL.GetSourceDirectories()
-                End If
+                'If Task.RequiresSourceDirectories Then
+                '    Dim UFL As New UtilsFileList(FMain)
+                '    Task.SourceDirectories = UFL.GetSourceDirectories()
+                'End If
 
                 ' True returns -1 upon conversion
                 FMain.SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)

@@ -23,6 +23,10 @@ Partial Class UCTaskControl
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.InsertExpressionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExpressionEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TLP = New Housekeeper.ExTableLayoutPanel()
         Me.LBImage = New System.Windows.Forms.Label()
         Me.CBSheetmetal = New System.Windows.Forms.CheckBox()
@@ -33,13 +37,33 @@ Partial Class UCTaskControl
         Me.CBDraft = New System.Windows.Forms.CheckBox()
         Me.TaskName = New System.Windows.Forms.Label()
         Me.HelpButton = New System.Windows.Forms.Button()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ExpressionEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.InsertExpressionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TLP.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
+        Me.TLP.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem, Me.InsertExpressionToolStripMenuItem, Me.ExpressionEditorToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 92)
+        '
+        'InsertPropertyToolStripMenuItem
+        '
+        Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
+        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.InsertPropertyToolStripMenuItem.Text = "Insert property"
+        '
+        'InsertExpressionToolStripMenuItem
+        '
+        Me.InsertExpressionToolStripMenuItem.Name = "InsertExpressionToolStripMenuItem"
+        Me.InsertExpressionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.InsertExpressionToolStripMenuItem.Text = "Insert expression"
+        '
+        'ExpressionEditorToolStripMenuItem
+        '
+        Me.ExpressionEditorToolStripMenuItem.Name = "ExpressionEditorToolStripMenuItem"
+        Me.ExpressionEditorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExpressionEditorToolStripMenuItem.Text = "Expression editor"
         '
         'TLP
         '
@@ -215,30 +239,6 @@ Partial Class UCTaskControl
         Me.HelpButton.TabIndex = 13
         Me.HelpButton.UseVisualStyleBackColor = True
         '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem, Me.InsertExpressionToolStripMenuItem, Me.ExpressionEditorToolStripMenuItem})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(181, 92)
-        '
-        'InsertPropertyToolStripMenuItem
-        '
-        Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
-        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.InsertPropertyToolStripMenuItem.Text = "Insert property"
-        '
-        'ExpressionEditorToolStripMenuItem
-        '
-        Me.ExpressionEditorToolStripMenuItem.Name = "ExpressionEditorToolStripMenuItem"
-        Me.ExpressionEditorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.ExpressionEditorToolStripMenuItem.Text = "Expression editor"
-        '
-        'InsertExpressionToolStripMenuItem
-        '
-        Me.InsertExpressionToolStripMenuItem.Name = "InsertExpressionToolStripMenuItem"
-        Me.InsertExpressionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.InsertExpressionToolStripMenuItem.Text = "Insert expression"
-        '
         'UCTaskControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -251,9 +251,9 @@ Partial Class UCTaskControl
         Me.Margin = New System.Windows.Forms.Padding(0)
         Me.Name = "UCTaskControl"
         Me.Size = New System.Drawing.Size(325, 37)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.TLP.ResumeLayout(False)
         Me.TLP.PerformLayout()
-        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
