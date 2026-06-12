@@ -70,6 +70,8 @@ Changed how search directories are specified for `Misplaced links`.  (Thank you 
 
 Added the ability to use an `Expression` to generate a directory name.  This can be handy when the search path depends on the file being processed.  Any number of directory names and/or expressions, in any combination, can be used.
 
+Fixed an issue where missing links were reported as misplaced in certain situations.
+
 See the [<ins>**Check Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-links) for details.
 
 ### Command Line
@@ -84,7 +86,7 @@ See the [<ins>**Command Line Help Topic**</ins>](https://github.com/rmcanany/Sol
 
 ### Break Links
 
-For the option `Draft model links`, added the processing of Blocks for property text replacement.  (Thank you again **@john.matthews3452!**)
+For the option `Draft model links`, added the processing of Blocks for property text replacement.  (Thank you **@john.matthews3452!**)
 
 See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#break-links) for details.
 

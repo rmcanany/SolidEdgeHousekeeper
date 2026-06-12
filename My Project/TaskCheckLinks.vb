@@ -201,35 +201,21 @@ Public Class TaskCheckLinks
                 Case "asm"
                     Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
-                    Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
-                    Dim Occurrence As SolidEdgeAssembly.Occurrence
-                    Dim OccurrenceOutsideProjectError As Boolean = False
-
-                    For Each Occurrence In Occurrences
+                    For Each Occurrence As SolidEdgeAssembly.Occurrence In tmpSEDoc.Occurrences
                         If Not LinkFilenames.Contains(Occurrence.OccurrenceFileName) Then
                             LinkFilenames.Add(Occurrence.OccurrenceFileName)
                         End If
                     Next
-
                 Case = "par"
                     Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-
                     Models = tmpSEDoc.Models
-
                 Case = "psm"
                     Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-
                     Models = tmpSEDoc.Models
-
                 Case "dft"
                     Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
-                    Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
-                    Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
-
-                    ModelLinks = tmpSEDoc.ModelLinks
-
-                    For Each ModelLink In ModelLinks
+                    For Each ModelLink As SolidEdgeDraft.ModelLink In tmpSEDoc.ModelLinks
                         Dim tmpFilename As String
                         If ModelLink.IsAssemblyFamilyMember Then
                             tmpFilename = ModelLink.FileName.Split("!"c)(0)
@@ -289,16 +275,16 @@ Public Class TaskCheckLinks
                 End If
 
                 If CheckItem = "Misplaced links" Then
-                    Dim tf As Boolean = False
+                    Dim InSearchDirectory As Boolean = False
                     For Each SearchDirectory As String In Me.SearchDirectories
                         SearchDirectory = GetSearchDirName(SEDoc, SearchDirectory)
                         If SearchDirectory IsNot Nothing AndAlso tmpLinkFilename.ToLower.Contains(SearchDirectory.ToLower) Then
-                            tf = True
+                            InSearchDirectory = True
                             Exit For
                         End If
                     Next
 
-                    If Not tf Then
+                    If Not InSearchDirectory Then
                         Dim tmpPath = System.IO.Path.GetDirectoryName(tmpLinkFilename)
                         Dim tmpFilename = System.IO.Path.GetFileName(tmpLinkFilename)
 
