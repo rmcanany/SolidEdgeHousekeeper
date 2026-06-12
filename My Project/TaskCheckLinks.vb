@@ -203,44 +203,6 @@ Public Class TaskCheckLinks
 
     Private Function MaybeEvaluateExpression(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        SearchDirectory As String) As String
-
-        Dim OutString As String = ""
-
-        Dim Success As Boolean = True
-        Dim UC As New UtilsCommon
-        Dim UFC As New UtilsFilenameCharmap
-
-        If SearchDirectory.StartsWith("EXPRESSION_") Or SearchDirectory.StartsWith("SavedSetting:") Then
-            OutString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, SearchDirectory, Me.PropertiesData, TaskLogger, True)
-            OutString = OutString.Replace(vbCrLf, "")
-
-            If OutString Is Nothing OrElse OutString.ToLower.Contains("<nothing>") Then
-                Success = False
-                Me.TaskLogger.AddMessage(String.Format("Could not parse search directory expression '{0}'", SearchDirectory))
-            Else
-                Dim DoNotSubstituteChars As New List(Of String)
-                DoNotSubstituteChars.Add("\")
-                DoNotSubstituteChars.Add(":")
-                OutString = UFC.SubstituteIllegalCharacters(OutString, DoNotSubstituteChars)
-            End If
-
-        Else
-            OutString = SearchDirectory
-
-        End If
-
-        If Success Then
-            Return OutString
-        Else
-            Return Nothing
-        End If
-
-
-        Return OutString
-    End Function
-
-    Private Function MaybeEvaluateExpression(
         SSDoc As HCStructuredStorageDoc,
         SearchDirectory As String) As String
 
@@ -251,8 +213,11 @@ Public Class TaskCheckLinks
         Dim UFC As New UtilsFilenameCharmap
 
         If SearchDirectory.StartsWith("EXPRESSION_") Or SearchDirectory.StartsWith("SavedSetting:") Then
-            'OutString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, SearchDirectory, Me.PropertiesData, TaskLogger, True)
-            OutString = SSDoc.SubstitutePropertyFormulas(SearchDirectory, TaskLogger, IsExpression:=True)
+            If SEDoc IsNot Nothing Then
+                OutString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, SearchDirectory, Me.PropertiesData, TaskLogger, IsExpression:=True)
+            Else
+                OutString = SSDoc.SubstitutePropertyFormulas(SearchDirectory, TaskLogger, IsExpression:=True)
+            End If
             OutString = OutString.Replace(vbCrLf, "")
 
             If OutString Is Nothing OrElse OutString.ToLower.Contains("<nothing>") Then
@@ -279,6 +244,46 @@ Public Class TaskCheckLinks
 
         Return OutString
     End Function
+
+    'Private Function MaybeEvaluateExpression(
+    '    SSDoc As HCStructuredStorageDoc,
+    '    SearchDirectory As String) As String
+
+    '    Dim OutString As String = ""
+
+    '    Dim Success As Boolean = True
+    '    Dim UC As New UtilsCommon
+    '    Dim UFC As New UtilsFilenameCharmap
+
+    '    If SearchDirectory.StartsWith("EXPRESSION_") Or SearchDirectory.StartsWith("SavedSetting:") Then
+    '        'OutString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, SearchDirectory, Me.PropertiesData, TaskLogger, True)
+    '        OutString = SSDoc.SubstitutePropertyFormulas(SearchDirectory, TaskLogger, IsExpression:=True)
+    '        OutString = OutString.Replace(vbCrLf, "")
+
+    '        If OutString Is Nothing OrElse OutString.ToLower.Contains("<nothing>") Then
+    '            Success = False
+    '            Me.TaskLogger.AddMessage(String.Format("Could not parse search directory expression '{0}'", SearchDirectory))
+    '        Else
+    '            Dim DoNotSubstituteChars As New List(Of String)
+    '            DoNotSubstituteChars.Add("\")
+    '            DoNotSubstituteChars.Add(":")
+    '            OutString = UFC.SubstituteIllegalCharacters(OutString, DoNotSubstituteChars)
+    '        End If
+
+    '    Else
+    '        OutString = SearchDirectory
+
+    '    End If
+
+    '    If Success Then
+    '        Return OutString
+    '    Else
+    '        Return Nothing
+    '    End If
+
+
+    '    Return OutString
+    'End Function
 
     Private Function GetLinkFilenames(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As List(Of String)
         Dim LinkFilenames As New List(Of String)
@@ -369,11 +374,12 @@ Public Class TaskCheckLinks
                 If Me.CheckMisplacedLinks Then
                     Dim InSearchDirectory As Boolean = False
                     For Each SearchDirectory As String In Me.SearchDirectories
-                        If SEDoc IsNot Nothing Then
-                            SearchDirectory = MaybeEvaluateExpression(SEDoc, SearchDirectory)
-                        Else
-                            SearchDirectory = MaybeEvaluateExpression(SSDoc, SearchDirectory)
-                        End If
+                        'If SEDoc IsNot Nothing Then
+                        '    SearchDirectory = MaybeEvaluateExpression(SEDoc, SearchDirectory)
+                        'Else
+                        '    SearchDirectory = MaybeEvaluateExpression(SSDoc, SearchDirectory)
+                        'End If
+                        SearchDirectory = MaybeEvaluateExpression(SEDoc, SSDoc, SearchDirectory)
                         If SearchDirectory IsNot Nothing AndAlso LinkFilename.ToLower.Contains(SearchDirectory.ToLower) Then
                             InSearchDirectory = True
                             Exit For
