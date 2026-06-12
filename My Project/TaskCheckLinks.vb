@@ -156,161 +156,18 @@ Public Class TaskCheckLinks
 
         OleMessageFilter.Register()
 
-        Dim LinkFilenames As New List(Of String)
+        Dim LinkFilenames As List(Of String) = GetLinkFilenames(SEDoc)
 
-        Dim Models As SolidEdgePart.Models = Nothing
-        'Dim Model As SolidEdgePart.Model
-        'Dim CopiedParts As SolidEdgePart.CopiedParts
-        'Dim CopiedPart As SolidEdgePart.CopiedPart
+        Dim MissingLogger As Logger = TaskLogger.AddLogger("Missing links")
+        Dim MisplacedLogger As Logger = TaskLogger.AddLogger("Misplaced links")
 
-        'Dim InputDirectories As New List(Of String)
-        'Dim SearchDirectory As String
-        'Dim tf As Boolean
-        'Dim s As String
-
-        'Dim Path As String
-        'Dim Filename As String
-
-        'Dim CheckedOcurrences As New List(Of String)
-
-        'Dim ListIndex As Integer
-
-        Dim CheckItems As List(Of String) = {"Missing links", "Misplaced links"}.ToList
-        'Dim CheckItem As String
-
-        Dim CheckOptions As List(Of Boolean) = {Me.CheckMissingLinks, Me.CheckMisplacedLinks}.ToList
-
-
-        Dim UC As New UtilsCommon
-        Dim DocType As String = UC.GetDocType(SEDoc)
-
-        Dim tmpMissingLinks As New List(Of String)  ' Used to avoid reporting missing links as also misplaced
-
-        For ListIndex As Integer = 0 To CheckItems.Count - 1
-
-            If Not CheckOptions(ListIndex) Then
-                Continue For
-            End If
-
-            Dim CheckItem As String = CheckItems(ListIndex)
-
-            Dim SubLogger As Logger = TaskLogger.AddLogger(CheckItem)
-
-            ' The Select Case section simply builds a list of files to check.
-            Select Case DocType
-                Case "asm"
-                    Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-
-                    For Each Occurrence As SolidEdgeAssembly.Occurrence In tmpSEDoc.Occurrences
-                        If Not LinkFilenames.Contains(Occurrence.OccurrenceFileName) Then
-                            LinkFilenames.Add(Occurrence.OccurrenceFileName)
-                        End If
-                    Next
-                Case = "par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                    Models = tmpSEDoc.Models
-                Case = "psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                    Models = tmpSEDoc.Models
-                Case "dft"
-                    Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-
-                    For Each ModelLink As SolidEdgeDraft.ModelLink In tmpSEDoc.ModelLinks
-                        Dim tmpFilename As String
-                        If ModelLink.IsAssemblyFamilyMember Then
-                            tmpFilename = ModelLink.FileName.Split("!"c)(0)
-                        Else
-                            tmpFilename = ModelLink.FileName
-                        End If
-
-                        If Not LinkFilenames.Contains(tmpFilename) Then
-                            LinkFilenames.Add(tmpFilename)
-                        End If
-                    Next
-
-                Case Else
-                    MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
-            End Select
-
-            ' Build the list for par and psm files.
-
-            If (DocType = "par") Or (DocType = "psm") Then
-                If (Models.Count > 0) And (Models.Count < 300) Then
-                    For Each Model As SolidEdgePart.Model In Models
-                        Dim CopiedParts As SolidEdgePart.CopiedParts = Model.CopiedParts
-                        If CopiedParts.Count > 0 Then
-                            For Each CopiedPart As SolidEdgePart.CopiedPart In CopiedParts
-                                ' Not all Part Copies have outside links
-                                If CopiedPart.FileName IsNot Nothing Then
-                                    If Not CopiedPart.FileName = "" Then
-                                        If Not LinkFilenames.Contains(CopiedPart.FileName) Then
-                                            LinkFilenames.Add(CopiedPart.FileName)
-                                        End If
-                                    End If
-                                End If
-                            Next
-                        End If
-                    Next
-                ElseIf Models.Count >= 300 Then
-                    SubLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
-                End If
-
-            End If
-
-            ' Perform the checks
-            For Each tmpLinkFilename As String In LinkFilenames
-
-                tmpLinkFilename = UC.GetFOAFilename(tmpLinkFilename)
-
-                If Not FileIO.FileSystem.FileExists(tmpLinkFilename) Then
-
-                    tmpMissingLinks.Add(tmpLinkFilename)
-
-                    If CheckItem = "Missing links" Then
-                        Dim tmpPath = System.IO.Path.GetDirectoryName(tmpLinkFilename)
-                        Dim tmpFilename = System.IO.Path.GetFileName(tmpLinkFilename)
-
-                        SubLogger.AddMessage($"{tmpFilename} in {tmpPath}")
-                    End If
-                End If
-
-                If CheckItem = "Misplaced links" Then
-                    Dim InSearchDirectory As Boolean = False
-                    For Each SearchDirectory As String In Me.SearchDirectories
-                        SearchDirectory = GetSearchDirName(SEDoc, SearchDirectory)
-                        If SearchDirectory IsNot Nothing AndAlso tmpLinkFilename.ToLower.Contains(SearchDirectory.ToLower) Then
-                            InSearchDirectory = True
-                            Exit For
-                        End If
-                    Next
-
-                    If Not InSearchDirectory Then
-                        Dim tmpPath = System.IO.Path.GetDirectoryName(tmpLinkFilename)
-                        Dim tmpFilename = System.IO.Path.GetFileName(tmpLinkFilename)
-
-                        ' Don't add the file to the misplaced list if it is already listed as missing
-
-                        If Not tmpMissingLinks.Contains(tmpLinkFilename) Then
-                            SubLogger.AddMessage($"{tmpFilename} in {tmpPath}")
-                        End If
-
-                    End If
-
-                End If
-            Next
-        Next
+        CheckLinks(SEDoc, Nothing, LinkFilenames, MissingLogger, MisplacedLogger)
 
     End Sub
 
     Private Overloads Sub ProcessInternal(ByVal FullName As String)
 
         Dim Proceed As Boolean = True
-        Dim LinkNames As List(Of String)
-        Dim BadLinkNames As List(Of String)
-        Dim MisplacedLinkNames As New List(Of String)
-        'Dim Indent As String = "    "
-        'Dim Directory As String
-        'Dim Filename As String
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
         Try
@@ -325,63 +182,18 @@ Public Class TaskCheckLinks
 
         If Proceed Then
 
-            LinkNames = SSDoc.GetLinkNames
-            BadLinkNames = SSDoc.GetBadLinkNames
+            Dim LinkFilenames As List(Of String) = SSDoc.GetLinkNames
+            If SSDoc IsNot Nothing Then SSDoc.Close()
 
-            If (LinkNames Is Nothing) Or (BadLinkNames Is Nothing) Then
-                Proceed = False
+            If LinkFilenames IsNot Nothing Then
+                Dim MissingLogger As Logger = TaskLogger.AddLogger("Missing links")
+                Dim MisplacedLogger As Logger = TaskLogger.AddLogger("Misplaced links")
+
+                CheckLinks(Nothing, SSDoc, LinkFilenames, MissingLogger, MisplacedLogger)
+            Else
                 TaskLogger.AddMessage("Unable to read file links")
             End If
 
-            If Proceed Then
-                ' Build a list of misplaced links
-                For Each LinkName As String In LinkNames
-                    If BadLinkNames.Contains(LinkName, StringComparer.OrdinalIgnoreCase) Then
-                        Continue For
-                    End If
-
-                    Dim tf As Boolean = False
-
-                    For Each SearchDirectory In Me.SearchDirectories
-                        SearchDirectory = GetSearchDirName(SSDoc, SearchDirectory)
-                        If SearchDirectory IsNot Nothing AndAlso LinkName.ToLower.Contains(SearchDirectory.ToLower) Then
-                            tf = True
-                            Exit For
-                        End If
-                    Next
-
-                    If Not tf Then
-                        MisplacedLinkNames.Add(LinkName)
-                    End If
-                Next
-
-                If Me.CheckMissingLinks Then
-
-                    Dim SubLogger As Logger = TaskLogger.AddLogger("Missing links")
-
-                    If BadLinkNames.Count > 0 Then
-                        For Each BadLinkName As String In BadLinkNames
-                            Dim tmpDirectory = IO.Path.GetDirectoryName(BadLinkName)
-                            Dim tmpFilename = IO.Path.GetFileName(BadLinkName)
-                            SubLogger.AddMessage(String.Format("{0} in {1}", tmpFilename, tmpDirectory))
-                        Next
-                    End If
-                End If
-
-                If Me.CheckMisplacedLinks Then
-
-                    Dim SubLogger As Logger = TaskLogger.AddLogger("Misplaced links")
-
-                    If MisplacedLinkNames.Count > 0 Then
-                        For Each MisplacedLinkName As String In MisplacedLinkNames
-                            Dim tmpDirectory = IO.Path.GetDirectoryName(MisplacedLinkName)
-                            Dim tmpFilename = IO.Path.GetFileName(MisplacedLinkName)
-                            SubLogger.AddMessage(String.Format("{0} in {1}", tmpFilename, tmpDirectory))
-                        Next
-                    End If
-                End If
-
-            End If
         End If
 
         If SSDoc IsNot Nothing Then SSDoc.Close()
@@ -389,7 +201,7 @@ Public Class TaskCheckLinks
     End Sub
 
 
-    Private Function GetSearchDirName(
+    Private Function MaybeEvaluateExpression(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         SearchDirectory As String) As String
 
@@ -428,7 +240,7 @@ Public Class TaskCheckLinks
         Return OutString
     End Function
 
-    Private Function GetSearchDirName(
+    Private Function MaybeEvaluateExpression(
         SSDoc As HCStructuredStorageDoc,
         SearchDirectory As String) As String
 
@@ -467,6 +279,118 @@ Public Class TaskCheckLinks
 
         Return OutString
     End Function
+
+    Private Function GetLinkFilenames(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As List(Of String)
+        Dim LinkFilenames As New List(Of String)
+
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
+        Dim Models As SolidEdgePart.Models = Nothing
+
+
+        Select Case DocType
+            Case "asm"
+                Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+
+                For Each Occurrence As SolidEdgeAssembly.Occurrence In tmpSEDoc.Occurrences
+                    If Not LinkFilenames.Contains(Occurrence.OccurrenceFileName) Then
+                        LinkFilenames.Add(Occurrence.OccurrenceFileName)
+                    End If
+                Next
+            Case = "par"
+                Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                Models = tmpSEDoc.Models
+            Case = "psm"
+                Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                Models = tmpSEDoc.Models
+            Case "dft"
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+
+                For Each ModelLink As SolidEdgeDraft.ModelLink In tmpSEDoc.ModelLinks
+                    Dim tmpFilename As String
+                    If ModelLink.IsAssemblyFamilyMember Then
+                        tmpFilename = ModelLink.FileName.Split("!"c)(0)
+                    Else
+                        tmpFilename = ModelLink.FileName
+                    End If
+
+                    If Not LinkFilenames.Contains(tmpFilename) Then
+                        LinkFilenames.Add(tmpFilename)
+                    End If
+                Next
+
+            Case Else
+                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+        End Select
+
+        ' Build the list for par and psm files.
+
+        If (DocType = "par") Or (DocType = "psm") Then
+            If (Models.Count > 0) And (Models.Count < 300) Then
+                For Each Model As SolidEdgePart.Model In Models
+                    Dim CopiedParts As SolidEdgePart.CopiedParts = Model.CopiedParts
+                    If CopiedParts.Count > 0 Then
+                        For Each CopiedPart As SolidEdgePart.CopiedPart In CopiedParts
+                            ' Not all Part Copies have outside links
+                            If CopiedPart.FileName IsNot Nothing Then
+                                If Not CopiedPart.FileName = "" Then
+                                    If Not LinkFilenames.Contains(CopiedPart.FileName) Then
+                                        LinkFilenames.Add(CopiedPart.FileName)
+                                    End If
+                                End If
+                            End If
+                        Next
+                    End If
+                Next
+            ElseIf Models.Count >= 300 Then
+                TaskLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
+            End If
+        End If
+
+
+        Return LinkFilenames
+    End Function
+
+    Private Sub CheckLinks(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        SSDoc As HCStructuredStorageDoc,
+        LinkFilenames As List(Of String),
+        MissingLogger As Logger,
+        MisplacedLogger As Logger)
+
+        For Each LinkFilename As String In LinkFilenames
+            If Not IO.File.Exists(LinkFilename) Then
+                If Me.CheckMissingLinks Then
+                    Dim tmpDir = System.IO.Path.GetDirectoryName(LinkFilename)
+                    Dim tmpFilename = System.IO.Path.GetFileName(LinkFilename)
+                    MissingLogger.AddMessage($"{tmpFilename} in {tmpDir}")
+                End If
+            Else
+                If Me.CheckMisplacedLinks Then
+                    Dim InSearchDirectory As Boolean = False
+                    For Each SearchDirectory As String In Me.SearchDirectories
+                        If SEDoc IsNot Nothing Then
+                            SearchDirectory = MaybeEvaluateExpression(SEDoc, SearchDirectory)
+                        Else
+                            SearchDirectory = MaybeEvaluateExpression(SSDoc, SearchDirectory)
+                        End If
+                        If SearchDirectory IsNot Nothing AndAlso LinkFilename.ToLower.Contains(SearchDirectory.ToLower) Then
+                            InSearchDirectory = True
+                            Exit For
+                        End If
+                    Next
+                    If Not InSearchDirectory Then
+                        Dim tmpDir = System.IO.Path.GetDirectoryName(LinkFilename)
+                        Dim tmpFilename = System.IO.Path.GetFileName(LinkFilename)
+                        MisplacedLogger.AddMessage($"{tmpFilename} in {tmpDir}")
+                    End If
+
+                End If
+            End If
+        Next
+
+    End Sub
+
 
     Public Sub UpdateDGVSize(DGV As DataGridView)
         DGV.Height = (DGV.Rows(0).Height + 1) * (DGV.Rows.Count + 2)
