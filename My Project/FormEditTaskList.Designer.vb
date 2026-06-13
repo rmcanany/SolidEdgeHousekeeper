@@ -38,6 +38,7 @@ Partial Class FormEditTaskList
         Me.ButtonMoveUp = New System.Windows.Forms.Button()
         Me.DataGridViewSource = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTarget = New System.Windows.Forms.DataGridView()
+        Me.ButtonHelp = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.TaskListBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Form1BindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -50,7 +51,7 @@ Partial Class FormEditTaskList
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(370, 323)
+        Me.ButtonOK.Location = New System.Drawing.Point(268, 323)
         Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(88, 29)
@@ -61,7 +62,7 @@ Partial Class FormEditTaskList
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(475, 323)
+        Me.ButtonCancel.Location = New System.Drawing.Point(373, 323)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(88, 29)
@@ -210,11 +211,22 @@ Partial Class FormEditTaskList
         Me.DataGridViewTarget.Size = New System.Drawing.Size(212, 299)
         Me.DataGridViewTarget.TabIndex = 5
         '
+        'ButtonHelp
+        '
+        Me.ButtonHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonHelp.Location = New System.Drawing.Point(478, 323)
+        Me.ButtonHelp.Name = "ButtonHelp"
+        Me.ButtonHelp.Size = New System.Drawing.Size(88, 29)
+        Me.ButtonHelp.TabIndex = 8
+        Me.ButtonHelp.Text = "Help"
+        Me.ButtonHelp.UseVisualStyleBackColor = True
+        '
         'FormEditTaskList
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(584, 361)
+        Me.Controls.Add(Me.ButtonHelp)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
@@ -248,4 +260,5 @@ Partial Class FormEditTaskList
     Friend WithEvents ButtonAdd As Button
     Friend WithEvents ButtonRemove As Button
     Friend WithEvents DataGridViewTarget As DataGridView
+    Friend WithEvents ButtonHelp As Button
 End Class

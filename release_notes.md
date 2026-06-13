@@ -7,7 +7,7 @@
 
 # Release Notes
 
-Solid Edge Housekeeper is a batch utility for finding annoying little errors in your project.  It is free and open source and you can find it [<ins>**Here**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
+Solid Edge Housekeeper is a batch utility for finding annoying little errors in your project.  It is free and open source.  You can read about it [<ins>**Here**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
 Please note, the program has been tested on thousands of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
@@ -15,7 +15,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.2
 
-We'll get right to the updates, but first some exciting news -- Housekeeper has a new sponsor: **BemoRail BV!**  And wait until you see all the nice things they had to say...
+We'll get right to the updates, but first some exciting news -- Housekeeper has a new sponsor: **BemoRail BV!**  And wait until you see some of the nice things they had to say...
 
 > *We are a company based in the Netherlands and use your program often to clean up our Solid Edge models.  Thank you for a well engineered piece of open source software, and keep up the good work.*
 
@@ -92,7 +92,7 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 ### Run External Program
 
-For `code snippets`, added an option to use an internal dotnet library, rather than the locally-installed PowerShell.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for `expressions` and `property filters`.
+For `Code Snippets`, added an option to use an internal dotnet library, rather than the locally-installed PowerShell.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for `Expressions` and `Property Filters`.
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 
