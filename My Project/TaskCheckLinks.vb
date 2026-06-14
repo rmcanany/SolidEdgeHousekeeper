@@ -535,7 +535,12 @@ Public Class TaskCheckLinks
 
         Dim FEE As New FormExpressionEditor
 
-        FEE.InputText = DataGridView.Rows(DGVRow).Cells(0).Value.ToString
+        Dim tmpValue As Object = DataGridView.Rows(DGVRow).Cells(0).Value
+        If tmpValue IsNot Nothing Then
+            FEE.InputText = DataGridView.Rows(DGVRow).Cells(0).Value.ToString
+        Else
+            FEE.InputText = ""
+        End If
 
         Select Case Form_Main.ExpressionEditorLanguage
             Case "VB"

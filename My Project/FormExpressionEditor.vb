@@ -692,6 +692,8 @@ Public Class FormExpressionEditor
 
     Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click, ButtonHelp.Click
 
+        MsgBox("Opening the Edit Properties help topic.  Scroll down for information about the Expression Editor. ", vbOKOnly)
+
         Dim UD As New UtilsDocumentation
 
         Dim Tag As String = "edit-properties"

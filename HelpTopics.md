@@ -565,12 +565,14 @@ To access the properties you have set up, use the Property Selector.  It is disp
 
 Select the property from the right-hand drop down.  It will usually know its property set, unless a custom property name is a duplicate of a system property.  In that case you have to select it yourself.
 
-When you hit OK, the dialog formats the property in a way Housekeeper expects.  Two format options are provided.  The first is as a direct reference.  This means the property comes directly from the file.  The second is as an index reference.  This only applies to `*.dft` files, and indicates you want to get the property from a model file in the drawing.
+Normally the property name drop down only shows your favorites.  To show all available properties, enable the `Show All Props` checkbox.  To add a property to your Favorites, click `Add Prop` to bring up the Customize dialog.
+
+When you hit OK, the system formats the property in a way Housekeeper expects.  Two format options are provided.  The first is as a direct reference.  This means the property comes directly from the file.  The second is as an index reference.  This only applies to `*.dft` files, and indicates you want to get the property from a model file in the drawing.
+
+Set the desired format on the toolbar.
 
 - **%{~}:** Direct reference.
 - **%{~|R1}:** Index reference.
-
-Normally the property name drop down only shows your favorites.  To show all available properties, enable the `Show All Props` checkbox.  To add a property to your Favorites, click `Add Prop` to bring up the Customize dialog.
 
 </details>
 
