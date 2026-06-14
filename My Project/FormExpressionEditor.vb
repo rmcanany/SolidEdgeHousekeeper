@@ -690,10 +690,16 @@ Public Class FormExpressionEditor
         'End Select
     End Sub
 
-    Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click
+    Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click, ButtonHelp.Click
 
-        Dim webAddress As String = "https://github.com/panoramicdata/PanoramicData.NCalcExtensions"
-        Process.Start(webAddress)
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "edit-properties"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+
+        'Dim webAddress As String = "https://github.com/panoramicdata/PanoramicData.NCalcExtensions"
+        'Process.Start(webAddress)
 
     End Sub
 

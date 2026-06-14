@@ -33,6 +33,7 @@ Partial Class FormPropertyPicker
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
+        Me.ButtonHelp = New System.Windows.Forms.Button()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -108,7 +109,7 @@ Partial Class FormPropertyPicker
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(149, 64)
+        Me.ButtonOK.Location = New System.Drawing.Point(56, 69)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(85, 23)
         Me.ButtonOK.TabIndex = 2
@@ -118,7 +119,7 @@ Partial Class FormPropertyPicker
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(236, 64)
+        Me.ButtonCancel.Location = New System.Drawing.Point(146, 69)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(85, 23)
         Me.ButtonCancel.TabIndex = 3
@@ -135,11 +136,22 @@ Partial Class FormPropertyPicker
         Me.ComboBoxPropertySet.Size = New System.Drawing.Size(84, 23)
         Me.ComboBoxPropertySet.TabIndex = 4
         '
+        'ButtonHelp
+        '
+        Me.ButtonHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonHelp.Location = New System.Drawing.Point(236, 69)
+        Me.ButtonHelp.Name = "ButtonHelp"
+        Me.ButtonHelp.Size = New System.Drawing.Size(85, 23)
+        Me.ButtonHelp.TabIndex = 5
+        Me.ButtonHelp.Text = "Help"
+        Me.ButtonHelp.UseVisualStyleBackColor = True
+        '
         'FormPropertyPicker
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(333, 101)
+        Me.Controls.Add(Me.ButtonHelp)
         Me.Controls.Add(Me.ComboBoxPropertySet)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
@@ -168,4 +180,5 @@ Partial Class FormPropertyPicker
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents ComboBoxPropertySet As ComboBox
     Friend WithEvents ButtonAddProp As ToolStripButton
+    Friend WithEvents ButtonHelp As Button
 End Class

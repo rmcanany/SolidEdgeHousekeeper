@@ -4310,6 +4310,14 @@ Public Class Form_Main
         Me.UseLocalPowershell = CheckBoxUseLocalPowershell.Checked
     End Sub
 
+    Private Sub ButtonPresetHelp_Click(sender As Object, e As EventArgs) Handles ButtonPresetHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "presets"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+
+    End Sub
 End Class
 
 

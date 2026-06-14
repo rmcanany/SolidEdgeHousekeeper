@@ -44,17 +44,18 @@ Partial Class FormVariableInputEditor
         Me.Label12 = New System.Windows.Forms.Label()
         Me.ToolStripEditVariables = New System.Windows.Forms.ToolStrip()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.ComboBoxSavedSettings = New System.Windows.Forms.ToolStripComboBox()
         Me.ButtonSaveSetting = New System.Windows.Forms.ToolStripButton()
         Me.ButtonDeleteSetting = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.ButtonUp = New System.Windows.Forms.ToolStripButton()
         Me.ButtonDown = New System.Windows.Forms.ToolStripButton()
         Me.ButtonDeleteRow = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonHelp2 = New System.Windows.Forms.Button()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.PanelVariables.SuspendLayout()
@@ -66,7 +67,7 @@ Partial Class FormVariableInputEditor
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(573, 324)
+        Me.ButtonOK.Location = New System.Drawing.Point(505, 324)
         Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 25)
@@ -78,7 +79,7 @@ Partial Class FormVariableInputEditor
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(667, 324)
+        Me.ButtonCancel.Location = New System.Drawing.Point(590, 324)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 25)
@@ -290,6 +291,13 @@ Partial Class FormVariableInputEditor
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
         '
+        'ToolStripLabel1
+        '
+        Me.ToolStripLabel1.BackColor = System.Drawing.Color.Gainsboro
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
+        Me.ToolStripLabel1.Text = "Saved Settings"
+        '
         'ComboBoxSavedSettings
         '
         Me.ComboBoxSavedSettings.Name = "ComboBoxSavedSettings"
@@ -316,17 +324,17 @@ Partial Class FormVariableInputEditor
         Me.ButtonDeleteSetting.Text = "ToolStripButton1"
         Me.ButtonDeleteSetting.ToolTipText = "Delete setting"
         '
-        'ToolStripLabel1
-        '
-        Me.ToolStripLabel1.BackColor = System.Drawing.Color.Gainsboro
-        Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
-        Me.ToolStripLabel1.Text = "Saved Settings"
-        '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripLabel2
+        '
+        Me.ToolStripLabel2.BackColor = System.Drawing.Color.Gainsboro
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
+        Me.ToolStripLabel2.Text = "Row Tools"
         '
         'ButtonUp
         '
@@ -358,13 +366,6 @@ Partial Class FormVariableInputEditor
         Me.ButtonDeleteRow.Text = "ToolStripButton3"
         Me.ButtonDeleteRow.ToolTipText = "Delete row"
         '
-        'ToolStripLabel2
-        '
-        Me.ToolStripLabel2.BackColor = System.Drawing.Color.Gainsboro
-        Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
-        Me.ToolStripLabel2.Text = "Row Tools"
-        '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
@@ -381,11 +382,22 @@ Partial Class FormVariableInputEditor
         Me.ButtonHelp.Text = "ToolStripButton1"
         Me.ButtonHelp.ToolTipText = "Help"
         '
+        'ButtonHelp2
+        '
+        Me.ButtonHelp2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonHelp2.Location = New System.Drawing.Point(675, 324)
+        Me.ButtonHelp2.Name = "ButtonHelp2"
+        Me.ButtonHelp2.Size = New System.Drawing.Size(75, 25)
+        Me.ButtonHelp2.TabIndex = 9
+        Me.ButtonHelp2.Text = "Help"
+        Me.ButtonHelp2.UseVisualStyleBackColor = True
+        '
         'FormVariableInputEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(759, 361)
+        Me.Controls.Add(Me.ButtonHelp2)
         Me.Controls.Add(Me.ToolStripEditVariables)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.PanelVariables)
@@ -443,4 +455,5 @@ Partial Class FormVariableInputEditor
     Friend WithEvents ButtonHelp As ToolStripButton
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents ButtonHelp2 As Button
 End Class

@@ -26,15 +26,15 @@ Partial Class FormPropertyFilter
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.ComboBoxSavedSettings = New System.Windows.Forms.ToolStripComboBox()
         Me.ButtonSaveSettings = New System.Windows.Forms.ToolStripButton()
         Me.ButtonRemoveSetting = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.ButtonRowUp = New System.Windows.Forms.ToolStripButton()
         Me.ButtonRowDown = New System.Windows.Forms.ToolStripButton()
         Me.ButtonRowDelete = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonEditFormula = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel3 = New System.Windows.Forms.ToolStripLabel()
@@ -55,6 +55,7 @@ Partial Class FormPropertyFilter
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TextBoxFormula = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.ButtonHelp2 = New System.Windows.Forms.Button()
         Me.ToolStrip1.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
@@ -65,7 +66,7 @@ Partial Class FormPropertyFilter
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(597, 329)
+        Me.ButtonCancel.Location = New System.Drawing.Point(490, 329)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(88, 23)
@@ -76,7 +77,7 @@ Partial Class FormPropertyFilter
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(488, 329)
+        Me.ButtonOK.Location = New System.Drawing.Point(380, 329)
         Me.ButtonOK.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(88, 23)
@@ -93,6 +94,13 @@ Partial Class FormPropertyFilter
         Me.ToolStrip1.Size = New System.Drawing.Size(705, 25)
         Me.ToolStrip1.TabIndex = 24
         Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'ToolStripLabel1
+        '
+        Me.ToolStripLabel1.BackColor = System.Drawing.Color.Gainsboro
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
+        Me.ToolStripLabel1.Text = "Saved Settings"
         '
         'ComboBoxSavedSettings
         '
@@ -121,17 +129,17 @@ Partial Class FormPropertyFilter
         Me.ButtonRemoveSetting.Text = "ToolStripButton2"
         Me.ButtonRemoveSetting.ToolTipText = "Remove setting"
         '
-        'ToolStripLabel1
-        '
-        Me.ToolStripLabel1.BackColor = System.Drawing.Color.Gainsboro
-        Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
-        Me.ToolStripLabel1.Text = "Saved Settings"
-        '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripLabel2
+        '
+        Me.ToolStripLabel2.BackColor = System.Drawing.Color.Gainsboro
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
+        Me.ToolStripLabel2.Text = "Row Tools"
         '
         'ButtonRowUp
         '
@@ -162,13 +170,6 @@ Partial Class FormPropertyFilter
         Me.ButtonRowDelete.Size = New System.Drawing.Size(23, 22)
         Me.ButtonRowDelete.Text = "ToolStripButton3"
         Me.ButtonRowDelete.ToolTipText = "Delete row"
-        '
-        'ToolStripLabel2
-        '
-        Me.ToolStripLabel2.BackColor = System.Drawing.Color.Gainsboro
-        Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(61, 22)
-        Me.ToolStripLabel2.Text = "Row Tools"
         '
         'ToolStripSeparator2
         '
@@ -374,11 +375,22 @@ Partial Class FormPropertyFilter
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "*LEGEND         V: Variable"
         '
+        'ButtonHelp2
+        '
+        Me.ButtonHelp2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonHelp2.Location = New System.Drawing.Point(600, 329)
+        Me.ButtonHelp2.Name = "ButtonHelp2"
+        Me.ButtonHelp2.Size = New System.Drawing.Size(88, 23)
+        Me.ButtonHelp2.TabIndex = 28
+        Me.ButtonHelp2.Text = "Help"
+        Me.ButtonHelp2.UseVisualStyleBackColor = True
+        '
         'FormPropertyFilter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(705, 361)
+        Me.Controls.Add(Me.ButtonHelp2)
         Me.Controls.Add(Me.PanelFooter)
         Me.Controls.Add(Me.PanelFilters)
         Me.Controls.Add(Me.PanelHeader)
@@ -437,4 +449,5 @@ Partial Class FormPropertyFilter
     Friend WithEvents TextBoxFormula As TextBox
     Friend WithEvents ButtonShowAllProps As ToolStripButton
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents ButtonHelp2 As Button
 End Class

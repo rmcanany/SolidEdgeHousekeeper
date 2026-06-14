@@ -40,6 +40,7 @@ Partial Class FormPropertyListCustomize
         Me.DataGridViewSource = New System.Windows.Forms.DataGridView()
         Me.DataGridViewTarget = New System.Windows.Forms.DataGridView()
         Me.CheckBoxSortSourceList = New System.Windows.Forms.CheckBox()
+        Me.ButtonHelp = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.TaskListBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Form1BindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -52,7 +53,7 @@ Partial Class FormPropertyListCustomize
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(370, 323)
+        Me.ButtonOK.Location = New System.Drawing.Point(280, 325)
         Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(88, 29)
@@ -63,7 +64,7 @@ Partial Class FormPropertyListCustomize
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(475, 323)
+        Me.ButtonCancel.Location = New System.Drawing.Point(380, 325)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(88, 29)
@@ -238,11 +239,22 @@ Partial Class FormPropertyListCustomize
         Me.CheckBoxSortSourceList.Text = "Sort available properties alphabetically"
         Me.CheckBoxSortSourceList.UseVisualStyleBackColor = True
         '
+        'ButtonHelp
+        '
+        Me.ButtonHelp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonHelp.Location = New System.Drawing.Point(480, 325)
+        Me.ButtonHelp.Name = "ButtonHelp"
+        Me.ButtonHelp.Size = New System.Drawing.Size(88, 29)
+        Me.ButtonHelp.TabIndex = 9
+        Me.ButtonHelp.Text = "Help"
+        Me.ButtonHelp.UseVisualStyleBackColor = True
+        '
         'FormPropertyListCustomize
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(584, 361)
+        Me.Controls.Add(Me.ButtonHelp)
         Me.Controls.Add(Me.CheckBoxSortSourceList)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Controls.Add(Me.ButtonCancel)
@@ -280,4 +292,5 @@ Partial Class FormPropertyListCustomize
     Friend WithEvents DataGridViewTarget As DataGridView
     Friend WithEvents CheckBoxSortSourceList As CheckBox
     Friend WithEvents ButtonDeleteAvailable As Button
+    Friend WithEvents ButtonHelp As Button
 End Class

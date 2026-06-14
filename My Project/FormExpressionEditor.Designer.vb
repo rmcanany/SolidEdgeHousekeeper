@@ -46,6 +46,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
+        Me.ButtonHelp = New System.Windows.Forms.Button()
         Me.ToolStrip1.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -196,13 +197,15 @@ Partial Class FormExpressionEditor
         '
         'ExTableLayoutPanel1
         '
-        Me.ExTableLayoutPanel1.ColumnCount = 3
+        Me.ExTableLayoutPanel1.ColumnCount = 4
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
         Me.ExTableLayoutPanel1.Controls.Add(Me.SplitContainer1, 0, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonOK, 1, 1)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonHelp, 3, 1)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 25)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
@@ -215,7 +218,7 @@ Partial Class FormExpressionEditor
         '
         'SplitContainer1
         '
-        Me.ExTableLayoutPanel1.SetColumnSpan(Me.SplitContainer1, 3)
+        Me.ExTableLayoutPanel1.SetColumnSpan(Me.SplitContainer1, 4)
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SplitContainer1.Location = New System.Drawing.Point(3, 3)
         Me.SplitContainer1.Name = "SplitContainer1"
@@ -243,7 +246,6 @@ Partial Class FormExpressionEditor
         Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextEditorFormula.IsReplaceMode = False
         Me.TextEditorFormula.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -266,6 +268,7 @@ Partial Class FormExpressionEditor
         Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorResults.IsReplaceMode = False
         Me.TextEditorResults.Location = New System.Drawing.Point(0, 0)
         Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -279,7 +282,7 @@ Partial Class FormExpressionEditor
         '
         'ButtonOK
         '
-        Me.ButtonOK.Location = New System.Drawing.Point(813, 422)
+        Me.ButtonOK.Location = New System.Drawing.Point(732, 422)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
         Me.ButtonOK.TabIndex = 6
@@ -288,12 +291,21 @@ Partial Class FormExpressionEditor
         '
         'ButtonCancel
         '
-        Me.ButtonCancel.Location = New System.Drawing.Point(894, 422)
+        Me.ButtonCancel.Location = New System.Drawing.Point(813, 422)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
         Me.ButtonCancel.TabIndex = 7
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
+        '
+        'ButtonHelp
+        '
+        Me.ButtonHelp.Location = New System.Drawing.Point(894, 422)
+        Me.ButtonHelp.Name = "ButtonHelp"
+        Me.ButtonHelp.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonHelp.TabIndex = 8
+        Me.ButtonHelp.Text = "Help"
+        Me.ButtonHelp.UseVisualStyleBackColor = True
         '
         'FormExpressionEditor
         '
@@ -343,4 +355,5 @@ Partial Class FormExpressionEditor
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents ComboBoxLanguage As ToolStripComboBox
     Friend WithEvents ButtonOpen As ToolStripButton
+    Friend WithEvents ButtonHelp As Button
 End Class

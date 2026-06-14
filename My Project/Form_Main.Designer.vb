@@ -241,6 +241,7 @@ Partial Class Form_Main
         Me.ButtonPresetLoad = New System.Windows.Forms.ToolStripButton()
         Me.ButtonPresetSave = New System.Windows.Forms.ToolStripButton()
         Me.ButtonPresetDelete = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonPresetHelp = New System.Windows.Forms.ToolStripButton()
         Me.ButtonPresetsOptions = New System.Windows.Forms.ToolStripButton()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -2892,7 +2893,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.SetColumnSpan(Me.ToolStripPresets, 4)
         Me.ToolStripPresets.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripPresets.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete, Me.ButtonPresetsOptions})
+        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete, Me.ButtonPresetHelp, Me.ButtonPresetsOptions})
         Me.ToolStripPresets.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripPresets.Name = "ToolStripPresets"
         Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
@@ -2949,6 +2950,15 @@ Partial Class Form_Main
         Me.ButtonPresetDelete.Size = New System.Drawing.Size(23, 23)
         Me.ButtonPresetDelete.Text = "ToolStripButton2"
         Me.ButtonPresetDelete.ToolTipText = "Delete preset"
+        '
+        'ButtonPresetHelp
+        '
+        Me.ButtonPresetHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonPresetHelp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetHelp.Name = "ButtonPresetHelp"
+        Me.ButtonPresetHelp.Size = New System.Drawing.Size(23, 23)
+        Me.ButtonPresetHelp.Text = "ToolStripButton2"
         '
         'ButtonPresetsOptions
         '
@@ -3512,4 +3522,5 @@ Partial Class Form_Main
     Friend WithEvents PreviewBox As PictureBox
     Friend WithEvents ButtonShowPreview As ToolStripButton
     Friend WithEvents CheckBoxUseLocalPowershell As CheckBox
+    Friend WithEvents ButtonPresetHelp As ToolStripButton
 End Class

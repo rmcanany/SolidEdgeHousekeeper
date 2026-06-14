@@ -421,4 +421,12 @@ Public Class FormPropertyListCustomize
 
     End Sub
 
+    Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "templates-page"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+
+    End Sub
 End Class

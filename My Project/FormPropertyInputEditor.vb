@@ -438,7 +438,7 @@ Public Class FormPropertyInputEditor
         Me.DialogResult = DialogResult.Cancel
     End Sub
 
-    Private Sub ToolStripButtonHelp_Click(sender As Object, e As EventArgs) Handles ToolStripButtonHelp.Click
+    Private Sub ToolStripButtonHelp_Click(sender As Object, e As EventArgs) Handles ToolStripButtonHelp.Click, ButtonHelp.Click
         System.Diagnostics.Process.Start(Me.HelpURL)
     End Sub
 

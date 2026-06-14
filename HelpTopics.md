@@ -555,6 +555,25 @@ To save the changes, click `OK`, `Cancel` otherwise.  To start over with the tas
 
 Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
 
+<details open><summary><h4 style="margin:0px; display:inline-block">Accessing Customized Properties</h4></summary>
+
+To access the properties you have set up, use the Property Selector.  It is displayed by right-clicking any valid control and selecting `Insert property`.
+
+<p align="center">
+  <img src="My%20Project/media/property_selector.png">
+</p>
+
+Select the property from the right-hand drop down.  It will usually know its property set, unless a custom property name is a duplicate of a system property.  In that case you have to select it yourself.
+
+When you hit OK, the dialog formats the property in a way Housekeeper expects.  Two format options are provided.  The first is as a direct reference.  This means the property comes directly from the file.  The second is as an index reference.  This only applies to `*.dft` files, and indicates you want to get the property from a model file in the drawing.
+
+- **%{~}:** Direct reference.
+- **%{~|R1}:** Index reference.
+
+Normally the property name drop down only shows your favorites.  To show all available properties, enable the `Show All Props` checkbox.  To add a property to your Favorites, click `Add Prop` to bring up the Customize dialog.
+
+</details>
+
 </details>
 
 <details open><summary><h3 style="margin:0px; display:inline-block">Presets</h3></summary>
@@ -1450,4 +1469,8 @@ One way is through PayPal's Donate feature.
 Otherwise, for electronic funds transfer or other means, please email me at rmcanany@gmail.com.
 
 </details>
+
+[//]: # (###### NOTE ######)
+[//]: # (Compiling the program will delete any text added here.  )
+[//]: # (Add it to UtilsDocumentation.BuildReadmeFile instead.)
 

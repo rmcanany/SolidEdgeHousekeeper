@@ -491,7 +491,7 @@ Public Class FormPropertyFilter
         Me.DialogResult = DialogResult.Cancel
     End Sub
 
-    Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click
+    Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click, ButtonHelp2.Click
         System.Diagnostics.Process.Start(Me.HelpURL)
     End Sub
 

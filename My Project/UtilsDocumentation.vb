@@ -304,6 +304,11 @@ Public Class UtilsDocumentation
             ReadmeOut.Add("</details>")
             ReadmeOut.Add("")
 
+            ReadmeOut.Add("[//]: # (###### NOTE ######)")
+            ReadmeOut.Add("[//]: # (Compiling the program will delete any text added here.  )")
+            ReadmeOut.Add("[//]: # (Add it to UtilsDocumentation.BuildReadmeFile instead.)")
+            ReadmeOut.Add("")
+
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
 
             ' This is a copy of the README with all sections expanded.

@@ -106,6 +106,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.  (Thank you **@PBurkeADS!**)
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
 - Changed the formatting of Task sub-options to better show to which main option they apply.
+- Added missing help buttons to several dialogs and toolbars.
 
 
 ## V2026.1
