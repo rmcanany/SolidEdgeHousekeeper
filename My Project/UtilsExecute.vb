@@ -665,7 +665,7 @@ Public Class UtilsExecute
 
         Dim IsOK As Boolean = True
 
-        Dim Version = SEApp.Version
+        Dim Version = SEApp.Version  ' eg. SE2025: Version = "225.00.03.04"
         Dim InstalledMajorVersion As Integer = CInt(Version.Split(CChar("."))(0))
 
         Dim DType As SolidEdgeFramework.DocumentTypeConstants = Nothing

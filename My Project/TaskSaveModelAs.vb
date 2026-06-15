@@ -834,7 +834,11 @@ Public Class TaskSaveModelAs
         NewFileTypeNames.Add("JT Document (*.jt)")
         NewFileTypeNames.Add("SEV (*.sev)")
 
-        'NewFileTypeNames.Add("DSTV (*.nc)")  ' Need to add checks.  See https://community.sw.siemens.com/s/question/0D5Vb000014rtz2KAA/solid-edge-housekeeper-v20261-released
+        'Dim SEInstallData As New SEInstallDataLib.SEInstallData
+        'Dim InstalledMajorVersion As Integer = SEInstallData.GetMajorVersion  ' eg SE2025: InstalledMajorVersion = 225
+        'If InstalledMajorVersion >= 226 Then
+        '    NewFileTypeNames.Add("DSTV (*.nc)")  ' Need to add checks.  See https://community.sw.siemens.com/s/question/0D5Vb000014rtz2KAA/solid-edge-housekeeper-v20261-released
+        'End If
 
         NewFileTypeNames.Add("bmp (*.bmp)")
         NewFileTypeNames.Add("jpg (*.jpg)")
