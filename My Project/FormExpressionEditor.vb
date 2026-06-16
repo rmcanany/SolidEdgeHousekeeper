@@ -694,7 +694,7 @@ Public Class FormExpressionEditor
 
         Dim Tag As String = ""
         If Me.OutputType = "Snippet" Then
-            MsgBox("The browser will open the Run External Program help topic.  Scroll down that page to access information about the Expression Editor. ", vbOKOnly)
+            MsgBox("The browser will open the Run External Program help topic.  Scroll down that page to access information about code snippets. ", vbOKOnly)
             Tag = "run-external-program"
         Else
             MsgBox("The browser will open the Edit Properties help topic.  Scroll down that page to access information about the Expression Editor. ", vbOKOnly)
