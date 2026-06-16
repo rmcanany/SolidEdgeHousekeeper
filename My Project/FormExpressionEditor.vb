@@ -692,11 +692,17 @@ Public Class FormExpressionEditor
 
     Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click, ButtonHelp.Click
 
-        MsgBox("Opening the Edit Properties help topic.  Scroll down for information about the Expression Editor. ", vbOKOnly)
+        Dim Tag As String = ""
+        If Me.OutputType = "Snippet" Then
+            MsgBox("The browser will open the Run External Program help topic.  Scroll down that page to access information about the Expression Editor. ", vbOKOnly)
+            Tag = "run-external-program"
+        Else
+            MsgBox("The browser will open the Edit Properties help topic.  Scroll down that page to access information about the Expression Editor. ", vbOKOnly)
+            Tag = "edit-properties"
+        End If
 
         Dim UD As New UtilsDocumentation
 
-        Dim Tag As String = "edit-properties"
         Dim HelpURL = UD.GenerateVersionURL(Tag)
         Diagnostics.Process.Start(HelpURL)
 

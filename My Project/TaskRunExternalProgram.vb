@@ -582,6 +582,7 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad, "
         HelpString += "or more conveniently in the expression editor.  "
         HelpString += "Click `Edit *.snp` to use the editor.  "
+        HelpString += "See the **Edit Properties Help Topic** for details on using the editor.  "
 
         HelpString += vbCrLf + vbCrLf + "The program inserts the snippet into a predefined PowerShell script.  "
         HelpString += "The script has two sections that take care of the task's set-up and wrap-up, respectively. "
