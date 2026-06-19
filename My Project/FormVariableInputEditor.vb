@@ -30,13 +30,13 @@ Public Class FormVariableInputEditor
             ' Ignore any with no VariableName
             If Not UC.VariableName = "" Then
                 If UC.VariableName.Contains(" ") Then
-                    s = String.Format("{0}{1}Remove space characters from variable name '{2}'{3}", s, indent, UC.VariableName, vbCrLf)
+                    s = $"{s}{indent}Remove space characters from variable name '{UC.VariableName}'{vbCrLf}"
                 End If
                 If IsNumeric(UC.VariableName(0)) Then
-                    s = String.Format("{0}{1}Remove leading numbers from variable name '{2}'{3}", s, indent, UC.VariableName, vbCrLf)
+                    s = $"{s}{indent}Remove leading numbers from variable name '{UC.VariableName}'{vbCrLf}"
                 End If
                 If (UC.Formula = "") And (Not (UC.Expose Or UC.ChangeName)) Then
-                    s = String.Format("{0}{1}Enter a number/formula for '{2}'{3}", s, indent, UC.VariableName, vbCrLf)
+                    s = $"{s}{indent}Enter a number/formula for '{UC.VariableName}'{vbCrLf}"
                 End If
             End If
 
@@ -44,7 +44,7 @@ Public Class FormVariableInputEditor
 
         If Not s = "" Then
             InputsOK = False
-            s = String.Format("Please correct the following before continuing{0}{1}", vbCrLf, s)
+            s = $"Please correct the following before continuing{vbCrLf}{s}"
             MsgBox(s, vbOKOnly)
         End If
 
@@ -160,7 +160,7 @@ Public Class FormVariableInputEditor
         tf = Direction.ToLower = "up"
         tf = tf Or Direction.ToLower = "down"
         If Not tf Then
-            MsgBox(String.Format("Unrecognized direction '{0}'", Direction), vbOKOnly)
+            MsgBox($"Unrecognized direction '{Direction}'")
             Exit Sub
         End If
 
@@ -195,7 +195,8 @@ Public Class FormVariableInputEditor
                         End If
 
                     Case Else
-                        MsgBox(String.Format("Direction '{0}' not recognized", Direction))
+                        MsgBox($"Unrecognized direction '{Direction}'")
+
                 End Select
 
             Next
@@ -363,7 +364,7 @@ Public Class FormVariableInputEditor
         End If
 
         If Proceed And ComboBoxSavedSettings.Items.Contains(Name) Then
-            Dim Result = MsgBox(String.Format("Name '{0}' already exists.  Do you want to replace it?", Name), vbYesNo)
+            Dim Result = MsgBox($"Name '{Name}' already exists.  Do you want to replace it?", vbYesNo)
             If Result = vbNo Then
                 Proceed = False
             End If

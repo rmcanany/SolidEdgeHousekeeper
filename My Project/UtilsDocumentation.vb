@@ -26,7 +26,7 @@ Public Class UtilsDocumentation
         Dim Inlist As List(Of String) = IO.File.ReadAllLines(Filename).ToList
 
         Dim BaseURL As String = Inlist(0)
-        VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
+        VersionURL = $"{BaseURL}#{Tag.Replace("#", "")}"
 
         Return VersionURL
 
@@ -75,7 +75,7 @@ Public Class UtilsDocumentation
 
         ' ###### SAVE TO FILE ######
 
-        BaseURL = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/{0}/HelpTopics.md", CommitString)
+        BaseURL = $"https://github.com/rmcanany/SolidEdgeHousekeeper/blob/{CommitString}/HelpTopics.md"
         Outlist.Add(BaseURL)
 
         HelpfileBaseURLFilename = UP.GetHelpfileBaseURLFilename
@@ -96,13 +96,13 @@ Public Class UtilsDocumentation
             Exit Sub
         End If
 
-        Dim ReadmeFileName As String = String.Format("{0}\README.md", UP.GetHardCodedPath)
+        Dim ReadmeFileName As String = $"{UP.GetHardCodedPath}\README.md"
 
         Dim HelpTopicsFileName As String = ReadmeFileName.Replace("README", "HelpTopics")
 
         ' The readme file is not needed on the user's machine.  
         ' StartupPath is hard coded so this hopefully doesn't do anything on their machine.
-        Dim StartupPath As String = String.Format("{0}\bin\Release", UP.GetHardCodedPath)
+        Dim StartupPath As String = $"{UP.GetHardCodedPath}\bin\Release"
 
         Dim TaskListHeader As String = "<!-- Start -->"
         Dim Proceed As Boolean = True
@@ -116,7 +116,7 @@ Public Class UtilsDocumentation
             Try
                 ReadmeIn = IO.File.ReadAllLines(ReadmeFileName)
             Catch ex As Exception
-                MsgBox(String.Format("Error opening {0}", ReadmeFileName))
+                MsgBox($"Error opening {ReadmeFileName}.  Error was: {ex.Message}")
                 Proceed = False
             End Try
         Else

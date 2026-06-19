@@ -338,7 +338,7 @@ Public Class TaskEditProperties
                 Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
                 If tmpPropertyData Is Nothing Then
                     Proceed = False
-                    TaskLogger.AddMessage(String.Format("Property '{0}' not recognized", PropertyName))
+                    TaskLogger.AddMessage($"Property '{PropertyName}' not recognized")
                 End If
 
                 AutoAdd = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
@@ -360,9 +360,9 @@ Public Class TaskEditProperties
                     If Not tf Then
                         Proceed = False
                         If PropertyName = PropertyNameEnglish Then
-                            s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                            s = $"Property '{PropertyName}' not found or not recognized."
                         Else
-                            s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
+                            s = $"Property '{PropertyName}({PropertyNameEnglish})' not found or not recognized."
                         End If
                         If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                     End If
@@ -422,9 +422,9 @@ Public Class TaskEditProperties
                 If Not tf Then
                     Proceed = False
                     If PropertyName = PropertyNameEnglish Then
-                        s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                        s = $"Unable to delete property '{PropertyName}'.  This command only works on custom properties."
                     Else
-                        s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                        s = $"Unable to delete property '{PropertyName}({PropertyNameEnglish})'.  This command only works on custom properties."
                     End If
                     If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End If
@@ -445,9 +445,9 @@ Public Class TaskEditProperties
                 Else
                     Proceed = False
                     If PropertyName = PropertyNameEnglish Then
-                        s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                        s = $"Property '{PropertyName}' not found or not recognized."
                     Else
-                        s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
+                        s = $"Property '{PropertyName}({PropertyNameEnglish})' not found or not recognized."
                     End If
                     If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End If
@@ -475,9 +475,9 @@ Public Class TaskEditProperties
                 If Not tf Then
                     Proceed = False
                     If PropertyName = PropertyNameEnglish Then
-                        s = String.Format("Unable to replace property value '{0}'.", PropertyName)
+                        s = $"Unable to replace property value '{PropertyName}'."
                     Else
-                        s = String.Format("Unable to replace property value '{0}({1})'.", PropertyName, PropertyNameEnglish)
+                        s = $"Unable to replace property value '{PropertyName}({PropertyNameEnglish})'."
                     End If
                     If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End If
@@ -500,7 +500,7 @@ Public Class TaskEditProperties
 
         FindString = SSDoc.SubstitutePropertyFormulas(FindString, TaskLogger)
         If FindString Is Nothing Then
-            s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
+            s = $"Unable to process formula in Find text '{FindString}' for property '{PropertyName}'"
             If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
         End If
 
@@ -508,13 +508,13 @@ Public Class TaskEditProperties
             Dim OriginalReplaceString As String = ReplaceString  ' Just for error reporting.
             ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, True)
             If ReplaceString Is Nothing OrElse ReplaceString.ToLower.Contains("<nothing>") Then
-                s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
+                s = $"Unable to evaluate expression in Replace text '{OriginalReplaceString}' for property '{PropertyName}'"
                 If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
             End If
         Else
             ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger)
             If ReplaceString Is Nothing Then
-                s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+                s = $"Unable to process formula in Replace text '{ReplaceString}' for property '{PropertyName}'"
                 If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
             End If
         End If
@@ -567,7 +567,7 @@ Public Class TaskEditProperties
                 FindString = UC.SubstitutePropertyFormulas(SEDoc, FullName, FindString, Me.PropertiesData, TaskLogger)
                 If FindString Is Nothing Then
                     Proceed = False
-                    s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
+                    s = $"Unable to process formula in Find text '{FindString}' for property '{PropertyName}'"
                     If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End If
 
@@ -576,14 +576,14 @@ Public Class TaskEditProperties
                     ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, True)
                     If ReplaceString Is Nothing OrElse ReplaceString.ToLower.Contains("<nothing>") Then
                         Proceed = False
-                        s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
+                        s = $"Unable to evaluate expression in Replace text '{OriginalReplaceString}' for property '{PropertyName}'"
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                     End If
                 Else
                     ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger)
                     If ReplaceString Is Nothing Then
                         Proceed = False
-                        s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+                        s = $"Unable to process formula in Replace text '{ReplaceString}' for property '{PropertyName}'"
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                     End If
                 End If
@@ -597,14 +597,14 @@ Public Class TaskEditProperties
                     If Prop Is Nothing Then
                         If Not FindSearchType = "X" Then
                             Proceed = False
-                            s = String.Format("Property '{0}.{1}' not found.", PropertySetName, PropertyName)
+                            s = $"Property '{PropertySetName}.{PropertyName}' not found."
                             If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                         End If
                     End If
 
                 Catch ex As Exception
                     Proceed = False
-                    s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                    s = $"Property '{PropertySetName}.{PropertyName}' not found or not recognized.  Exception: {ex.Message}"
                     If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End Try
 
@@ -621,7 +621,7 @@ Public Class TaskEditProperties
                         End If
                     Catch ex As Exception
                         Proceed = False
-                        s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                        s = $"Unable to delete property '{PropertyName}'.  This command only works on custom properties.  Exception: {ex.Message}"
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                     End Try
 
@@ -660,7 +660,7 @@ Public Class TaskEditProperties
                                 SETypeName = "Number"
 
                                 Proceed = False
-                                s = String.Format("Property '{0}': Currently unable to process variable type '{1}'", PropertyName, SETypeName)
+                                s = $"Property '{PropertyName}': Currently unable to process variable type '{SETypeName}'"
                                 If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
 
                                 ' First try int, then double
@@ -681,7 +681,7 @@ Public Class TaskEditProperties
                                 SETypeName = "Number"
 
                                 Proceed = False
-                                s = String.Format("Property '{0}': Currently unable to process variable type '{1}'", PropertyName, SETypeName)
+                                s = $"Property '{PropertyName}': Currently unable to process variable type '{SETypeName}'"
                                 If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
 
                                 'Dim d As Double = CDbl(PropValue)
@@ -698,7 +698,7 @@ Public Class TaskEditProperties
 
                     Catch ex As Exception
                         Proceed = False
-                        s = String.Format("Unable to set '{0}' (variable type '{1}') to '{2}'.", PropertyName, SETypeName, PropValue)
+                        s = $"Unable to set '{PropertyName}' (variable type '{SETypeName}') to '{PropValue}'.  Exception: {ex.Message}"
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                     End Try
 
@@ -729,7 +729,7 @@ Public Class TaskEditProperties
 
                 Catch ex As Exception
                     Proceed = False
-                    s = "Problem accessing or saving Property."
+                    s = $"Problem accessing or saving Property.  Exception: {ex.Message}"
                     If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
                 End Try
             End If
@@ -925,7 +925,7 @@ Public Class TaskEditProperties
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 
@@ -993,7 +993,7 @@ Public Class TaskEditProperties
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1010,7 +1010,7 @@ Public Class TaskEditProperties
                 Me.MaterialTable = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

@@ -54,7 +54,7 @@ Public Class UtilsPropertyFilters
                 Using writer As New IO.StreamWriter(MissingFilesFileName, True)
                     writer.WriteLine("Information Only: These file's properties were not processed")
                     For Each Filename In MissingFilesList
-                        writer.WriteLine(String.Format(Filename))
+                        writer.WriteLine(Filename)
                     Next
                 End Using
 
@@ -268,8 +268,8 @@ Public Class UtilsPropertyFilters
         Result = Formula
 
         For Each Variable In VariableTruthValues.Keys
-            var = String.Format(" {0} ", Variable)
-            val = String.Format(" {0} ", VariableTruthValues(Variable))
+            var = Variable
+            val = VariableTruthValues(Variable)
             Result = Result.Replace(var, val)
         Next
 
@@ -340,7 +340,7 @@ Public Class UtilsPropertyFilters
         End Try
 
         DateTime = Convert.ToDateTime(Text, Globalization.CultureInfo.CurrentCulture)  ' Returns a FormatException if it doesn't work.
-        Text = String.Format("{0:0000}{1:00}{2:00}", DateTime.Year, DateTime.Month, DateTime.Day)
+        Text = $"{DateTime.Year:0000}{DateTime.Month:00}{DateTime.Day:00}"
         DoubleNumber = CDbl(Text)
 
         Return DoubleNumber
@@ -374,7 +374,7 @@ Public Class UtilsPropertyFilters
         Dim s As String = Formula.ToUpper.Trim
         Dim s1 As String = ""
 
-        s = String.Format(" {0}", s)
+        s = $" {s}"
         s = s.Replace("TRUE", "$TRUE")
         s = s.Replace("FALSE", "$FALSE")
 
@@ -383,10 +383,10 @@ Public Class UtilsPropertyFilters
         For i = 1 To Len(s) - 1
             If s(i - 1) = " " Then
                 If (Asc(s(i)) >= 65) And (Asc(s(i)) <= 90) Then
-                    s1 = String.Format("{0}-", s1)
+                    s1 = $"{s1}-"
                 End If
             End If
-            s1 = String.Format("{0}{1}", s1, s(i))
+            s1 = $"{s1}{s(i)}"
         Next
 
         Return s1.Trim

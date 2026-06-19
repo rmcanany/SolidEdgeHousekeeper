@@ -44,7 +44,7 @@ Public Class FormPropertyListCustomize
                     DataGridViewTarget.Columns.Add(Col2)
 
                 Case Else
-                    MsgBox(String.Format("Column type '{0}' not recognized", ColumnType), vbOKOnly)
+                    MsgBox($"Column type '{ColumnType}' not recognized", vbOKOnly)
             End Select
         Next
 
@@ -127,7 +127,7 @@ Public Class FormPropertyListCustomize
                             End If
 
                         Case Else
-                            MsgBox(String.Format("Direction '{0}' not recognized", Direction))
+                            MsgBox($"Direction '{Direction}' not recognized")
                     End Select
 
                 Next
@@ -182,10 +182,10 @@ Public Class FormPropertyListCustomize
             Me.DialogResult = DialogResult.OK
 
         Else
-            s = String.Format("Property names must be unique{0}", vbCrLf)
-            s = String.Format("{0}Please remove duplicates of the following:{1}", s, vbCrLf)
+            s = $"Property names must be unique{vbCrLf}"
+            s = $"{s}Please remove duplicates of the following:{vbCrLf}"
             For Each s2 In RepeatsList
-                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
+                s = $"{s}'{s2}'{vbCrLf}"
             Next
             MsgBox(s, vbOKOnly)
         End If
@@ -212,7 +212,7 @@ Public Class FormPropertyListCustomize
 
         If Not Proceed Then
             Dim s = "Template properties required for this command not found. "
-            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            s = $"{s}Populate them on the Configuration Tab -- Templates Page."
             MsgBox(s, vbOKOnly)
             Me.DialogResult = DialogResult.Cancel
         Else
@@ -261,7 +261,7 @@ Public Class FormPropertyListCustomize
                 DataGridViewTarget.Invalidate()
 
             Case Else
-                MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
+                MsgBox($"Column '{e.ColumnIndex}' not processed")
 
         End Select
     End Sub
@@ -311,8 +311,8 @@ Public Class FormPropertyListCustomize
         Dim i As Integer
 
         If DataGridViewTarget.SelectedRows.Count = 0 Then
-            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
-            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            s = $"{s}No rows are selected.  Click in the column to the left {vbCrLf}"
+            s = $"{s}of the task description to select a row.{vbCrLf}"
             MsgBox(s)
             Exit Sub
         End If
@@ -344,8 +344,8 @@ Public Class FormPropertyListCustomize
         Dim i As Integer
 
         If DataGridViewSource.SelectedRows.Count = 0 Then
-            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
-            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            s = $"{s}No rows are selected.  Click in the column to the left {vbCrLf}"
+            s = $"{s}of the task description to select a row.{vbCrLf}"
             MsgBox(s)
             Exit Sub
         End If
@@ -381,8 +381,8 @@ Public Class FormPropertyListCustomize
         Dim i As Integer
 
         If DataGridViewSource.SelectedRows.Count = 0 Then
-            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
-            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            s = $"{s}No rows are selected.  Click in the column to the left {vbCrLf}"
+            s = $"{s}of the task description to select a row.{vbCrLf}"
             MsgBox(s)
             Exit Sub
         End If

@@ -261,9 +261,6 @@ Public Class TaskUpdateBlocks
                                 Column.Items.Add(BlockName)
                             Next
                         End If
-                        Try
-                        Catch ex As Exception
-                        End Try
                     Next
                 Next
 
@@ -472,7 +469,7 @@ Public Class TaskUpdateBlocks
             Try
                 BlockLibraryDoc = CType(SEApp.Documents.Open(Me.BlockLibrary), SolidEdgeDraft.DraftDocument)
             Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to open block library '{Me.BlockLibrary}'.  Reported error was: {ex.Message}")
+                TaskLogger.AddMessage($"Unable to open block library '{Me.BlockLibrary}'.  Exception: {ex.Message}")
             End Try
         End If
 
@@ -485,14 +482,14 @@ Public Class TaskUpdateBlocks
                     DocBlocksDict(DocBlock.Name) = DocBlock
                 Next
             Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Exception: {ex.Message}")
             End Try
             Try
                 For Each LibraryBlock As SolidEdgeDraft.Block In BlockLibraryDoc.Blocks
                     LibraryBlocksDict(LibraryBlock.Name) = LibraryBlock
                 Next
             Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(BlockLibrary)}'.  Reported error was: {ex.Message}")
+                TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(BlockLibrary)}'.  Exception: {ex.Message}")
             End Try
 
         End If
@@ -520,7 +517,7 @@ Public Class TaskUpdateBlocks
                         DocBlocksDict(DocBlock.Name) = DocBlock
                     Next
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Exception: {ex.Message}")
                 End Try
 
                 LibraryBlockName = ReplacementsDict(DocBlockName)
@@ -538,7 +535,7 @@ Public Class TaskUpdateBlocks
                                         tmpSEDoc.Blocks.ReplaceBlock(LibraryBlocksDict(LibraryBlockName))
                                         ReplacedSameNameBlock = True
                                     Catch ex As Exception
-                                        Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
+                                        Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Exception: {ex.Message}"
                                         If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                                     End Try
                                 Else
@@ -551,7 +548,7 @@ Public Class TaskUpdateBlocks
                                 Try
                                     DocBlocksDict(DocBlockName).Name = LibraryBlockName
                                 Catch ex As Exception
-                                    Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
+                                    Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Exception: {ex.Message}"
                                     If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                                 End Try
                             End If
@@ -589,7 +586,7 @@ Public Class TaskUpdateBlocks
                                 Next
                             End If
                         Catch ex As Exception
-                            Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
+                            Dim s = $"Unable to replace '{DocBlockName}' with '{LibraryBlockName}'.  Exception: {ex.Message}"
                             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                         End Try
 
@@ -613,14 +610,14 @@ Public Class TaskUpdateBlocks
                         DocBlocksDict(DocBlock.Name) = DocBlock
                     Next
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Exception: {ex.Message}")
                 End Try
 
                 If DocBlocksDict.Keys.Contains(DocBlockName) Then
                     Try
                         DocBlocksDict(DocBlockName).Delete()
                     Catch ex As Exception
-                        TaskLogger.AddMessage($"Unable to delete block '{DocBlockName}'.  Reported error was: {ex.Message}")
+                        TaskLogger.AddMessage($"Unable to delete block '{DocBlockName}'.  Exception: {ex.Message}")
                     End Try
                 Else
                     ' Not an error
@@ -639,7 +636,7 @@ Public Class TaskUpdateBlocks
                         DocBlocksDict(DocBlock.Name) = DocBlock
                     Next
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Reported error was: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to process blocks in '{IO.Path.GetFileName(SEDoc.FullName)}'.  Exception: {ex.Message}")
                 End Try
 
                 ' Check that SEDoc does not already have a block with this name
@@ -662,7 +659,7 @@ Public Class TaskUpdateBlocks
                                 AddBlockOccurrences2(BlockLibraryDoc, LibraryBlock, tmpSEDoc, DocBlock)
                             End If
                         Catch ex As Exception
-                            TaskLogger.AddMessage($"Unable to add '{LibraryBlockName}'.  Reported error was: {ex.Message}")
+                            TaskLogger.AddMessage($"Unable to add '{LibraryBlockName}'.  Exception: {ex.Message}")
                         End Try
 
                     Else
@@ -684,7 +681,7 @@ Public Class TaskUpdateBlocks
                             End If
 
                         Catch ex As Exception
-                            Dim s = $"Unable to replace '{tmpDocBlockName}' with '{LibraryBlockName}'.  Reported error was: {ex.Message}"
+                            Dim s = $"Unable to replace '{tmpDocBlockName}' with '{LibraryBlockName}'.  Exception: {ex.Message}"
                             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                         End Try
 
@@ -701,7 +698,7 @@ Public Class TaskUpdateBlocks
                 BlockLibraryDoc.Close(False)
                 SEApp.DoIdle()
             Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to close block library.  Reported error was: {ex.Message}")
+                TaskLogger.AddMessage($"Unable to close block library.  Exception: {ex.Message}")
             End Try
         End If
 
@@ -712,7 +709,7 @@ Public Class TaskUpdateBlocks
                 SEDoc.Save()
                 SEApp.DoIdle()
             Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to save file.  Reported error was: {ex.Message}")
+                TaskLogger.AddMessage($"Unable to save file.  Exception: {ex.Message}")
             End Try
         End If
 
@@ -954,7 +951,7 @@ Public Class TaskUpdateBlocks
             End If
 
         Catch ex As Exception
-            Dim s As String = $"Unable to add {LibraryBlock.Name} to {DocSheet.Name}.  Error was {ex.Message}"
+            Dim s As String = $"Unable to add {LibraryBlock.Name} to {DocSheet.Name}.  Exception: {ex.Message}"
             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
         End Try
 
@@ -1049,7 +1046,7 @@ Public Class TaskUpdateBlocks
                             DocSheet.BlockOccurrences.Add(DocBlock.Name, XOrigin, YOrigin, BlockViewName, Scale, Rotation)
 
                         Catch ex As Exception
-                            TaskLogger.AddMessage($"Unable to add {LibraryBlock.Name} to {DocSheet.Name}.  Error was {ex.Message}")
+                            TaskLogger.AddMessage($"Unable to add {LibraryBlock.Name} to {DocSheet.Name}.  Exception: {ex.Message}")
                         End Try
                     Else
                         If Me.ReportMissingSheet Then
@@ -1509,7 +1506,7 @@ Public Class TaskUpdateBlocks
                 DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 1)
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1537,121 +1534,6 @@ Public Class TaskUpdateBlocks
 
     End Sub
 
-    'Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs)
-
-    '    Dim DataGridView = CType(sender, DataGridView)
-
-    '    If DataGridView.SelectedCells IsNot Nothing AndAlso DataGridView.SelectedCells.Count > 0 Then
-    '        Dim SelectedCell = DataGridView.SelectedCells(0)
-
-    '        If e.Control And e.KeyCode = Keys.V Then
-    '            SelectedCell.Value = Clipboard.GetText.Trim
-    '        ElseIf e.KeyCode = Keys.Delete Or e.KeyCode = Keys.Back Then
-    '            SelectedCell.Value = ""
-    '        End If
-
-    '    End If
-
-    'End Sub
-
-    ''Public Sub DataGridViewOptions_CellEnter(sender As System.Object, e As DataGridViewCellEventArgs)
-
-    ''    Dim DataGridView = CType(sender, DataGridView)
-    ''    Dim RowHeight As Integer = DataGridView.Rows(0).Height
-
-    ''    Dim Name = DataGridView.Name
-
-    ''    Select Case Name
-    ''        Case ControlNames.ReplaceBlocksDGV.ToString
-    ''            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
-
-    ''        Case ControlNames.DeleteBlocksDGV.ToString
-    ''            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
-
-    ''        Case ControlNames.AddBlocksDGV.ToString
-    ''            DataGridView.Height = (RowHeight + 1) * (DataGridView.Rows.Count + 1)
-
-    ''        Case Else
-    ''            MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-    ''    End Select
-    ''End Sub
-
-    'Public Sub DataGridViewOptions_UpdateSize(sender As System.Object, e As DataGridViewCellEventArgs)
-
-    '    Dim DataGridView = CType(sender, DataGridView)
-
-    '    UpdateDGVSize(DataGridView)
-    '    'Select Case DataGridView.Name
-    '    '    Case ControlNames.ReplaceBlocksDGV.ToString
-    '    '        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
-
-    '    '    Case ControlNames.DeleteBlocksDGV.ToString
-    '    '        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
-
-    '    '    Case ControlNames.AddBlocksDGV.ToString
-    '    '        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
-
-    '    '    Case Else
-    '    '        MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-    '    'End Select
-    'End Sub
-    'Private Sub DataGridViewOptions_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
-
-    '    Dim DGV As DataGridView = CType(sender, DataGridView)
-    '    Dim SelectedCell As DataGridViewComboBoxCell = CType(DGV.SelectedCells(0), DataGridViewComboBoxCell)
-    '    Dim CellColumn As DataGridViewComboBoxColumn = CType(DGV.Columns(e.ColumnIndex), DataGridViewComboBoxColumn)
-
-    '    If Not CellColumn.Name.ToLower.Contains("library") Then
-    '        Dim FTP As New FormTextPrompt
-    '        FTP.Text = "Enter Block Name"
-    '        If SelectedCell.Value IsNot Nothing Then FTP.TextBoxInput.Text = CStr(SelectedCell.Value)
-
-    '        FTP.LabelPrompt.Text = "Enter block name"
-    '        Dim Result = FTP.ShowDialog()
-
-    '        If Result = DialogResult.OK Then
-    '            Dim Name As String = FTP.TextBoxInput.Text
-
-    '            If Not CellColumn.Items.Contains(Name) Then
-    '                CellColumn.Items.Add(Name)
-    '            End If
-
-    '            SelectedCell.Value = Name
-
-    '            If Me.ManuallyAddedBlockNames Is Nothing Then Me.ManuallyAddedBlockNames = New List(Of String)
-
-    '            Dim tmpManuallyAddedBlockNames As List(Of String) = Me.ManuallyAddedBlockNames
-    '            If Not tmpManuallyAddedBlockNames.Contains(Name) And Not Me.BlockLibraryBlockNames.Contains(Name) Then
-    '                tmpManuallyAddedBlockNames.Add(Name)
-    '                Me.ManuallyAddedBlockNames = tmpManuallyAddedBlockNames
-    '            End If
-
-    '        End If
-    '    End If
-    'End Sub
-
-
-    'Private Sub DataGridView1_CellValidating(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellValidatingEventArgs)
-    '    Dim DGV As DataGridView = CType(sender, DataGridView)
-    '    Dim comboBoxColumn As DataGridViewComboBoxColumn = CType(DGV.Columns(e.ColumnIndex), DataGridViewComboBoxColumn)
-    '    If (Not comboBoxColumn.Items.Contains(e.FormattedValue)) Then
-    '        comboBoxColumn.Items.Add(e.FormattedValue)
-    '    End If
-    '    Dim comboBox As DataGridViewComboBoxCell = CType(DGV.CurrentCell, DataGridViewComboBoxCell)
-    '    Dim OwningColumn As DataGridViewComboBoxColumn = CType(comboBox.OwningColumn, DataGridViewComboBoxColumn)
-    '    comboBox.Value = OwningColumn.Items(comboBoxColumn.Items.Count - 1)
-    'End Sub
-
-
-    'Private Sub DataGridView1_EditingControlShowing(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewEditingControlShowingEventArgs)
-    '    If TypeOf e.Control Is ComboBox Then
-    '        Dim cb As ComboBox = TryCast(e.Control, ComboBox)
-    '        cb.DropDownStyle = ComboBoxStyle.DropDown
-    '        'cb.Items.Insert(cb.Items.Count - 1, cb.Text)
-    '        'cb.Items.Add(cb.Text)
-
-    '    End If
-    'End Sub
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
@@ -1749,7 +1631,7 @@ Public Class TaskUpdateBlocks
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1864,7 +1746,7 @@ Public Class TaskUpdateBlocks
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 
@@ -1879,7 +1761,7 @@ Public Class TaskUpdateBlocks
                 Me.BlockLibrary = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 

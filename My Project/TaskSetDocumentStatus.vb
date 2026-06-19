@@ -102,8 +102,7 @@ Public Class TaskSetDocumentStatus
             'SSDoc.ReadVariableNames()
         Catch ex As Exception
             Proceed = False
-            TaskLogger.AddMessage($"Unable to open file: {ex.Message}")
-
+            TaskLogger.AddMessage($"Unable to open file.  Exception: {ex.Message}")
         End Try
 
         If Proceed Then
@@ -111,7 +110,7 @@ Public Class TaskSetDocumentStatus
             Proceed = SSDoc.SetStatus(Me.NewStatus)
 
             If Not Proceed Then
-                TaskLogger.AddMessage(String.Format("Unable to change status to '{0}'", Me.NewStatus))
+                TaskLogger.AddMessage($"Unable to change status to '{Me.NewStatus}'")
 
             End If
 
@@ -200,7 +199,7 @@ Public Class TaskSetDocumentStatus
             Case ControlNames.NewStatus.ToString
                 Me.NewStatus = ComboBox.Text
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -220,7 +219,7 @@ Public Class TaskSetDocumentStatus
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

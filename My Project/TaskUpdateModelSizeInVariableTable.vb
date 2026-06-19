@@ -214,7 +214,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         Try
             Range = UC.GetDocRange(SEDoc)
         Catch ex As Exception
-            TaskLogger.AddMessage("Unable to obtain stock size")
+            TaskLogger.AddMessage($"Unable to obtain stock size.  Exception: {ex.Message}")
         End Try
 
         If Not TaskLogger.HasErrors Then
@@ -227,7 +227,7 @@ Public Class TaskUpdateModelSizeInVariableTable
 
                 i = 0
                 For Each VariableName In VariableNames
-                    Formula = String.Format("{0} m", Range(i))
+                    Formula = $"{Range(i)} m"
                     If Not UC.IsVariablePresent(SEDoc, VariableName) Then
                         ' Add it
                         Try
@@ -235,7 +235,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable = CType(Variables.Add(VariableName, Formula), SolidEdgeFramework.variable)
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+                            TaskLogger.AddMessage($"Unable to add and/or expose variable '{VariableName}'.  Exception: {ex.Message}")
                         End Try
                     Else
                         ' Update it
@@ -244,7 +244,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable.Formula = Formula
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
+                            TaskLogger.AddMessage($"Unable to change and/or expose variable '{VariableName}'.  Exception: {ex.Message}")
                         End Try
                     End If
                     i += 1
@@ -261,7 +261,7 @@ Public Class TaskUpdateModelSizeInVariableTable
 
                 i = 0
                 For Each VariableName In VariableNames
-                    Formula = String.Format("{0} m", Range(i))
+                    Formula = $"{Range(i)} m"
                     If Not UC.IsVariablePresent(SEDoc, VariableName) Then
                         ' Add it
                         Try
@@ -269,7 +269,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable = CType(Variables.Add(VariableName, Formula), SolidEdgeFramework.variable)
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+                            TaskLogger.AddMessage($"Unable to add and/or expose variable '{VariableName}'.  Exception: {ex.Message}")
                         End Try
                     Else
                         ' Update it
@@ -278,7 +278,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable.Formula = Formula
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
+                            TaskLogger.AddMessage($"Unable to change and/or expose variable '{VariableName}'.  Exception: {ex.Message}")
                         End Try
                     End If
                     i += 1
@@ -537,7 +537,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -562,7 +562,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                 Me.MaxVariableName = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 

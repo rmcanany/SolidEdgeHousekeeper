@@ -76,9 +76,9 @@ Public Class UtilsMaterials
 
             If Not CurrentMaterialNameInLibrary Then
                 If CurrentMaterialName = "" Then
-                    ErrorLogger.AddMessage(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
+                    ErrorLogger.AddMessage($"Material 'None' not in {ActiveMaterialLibrary}")
                 Else
-                    ErrorLogger.AddMessage(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+                    ErrorLogger.AddMessage($"Material '{CurrentMaterialName}' not in {ActiveMaterialLibrary}")
                 End If
             End If
         End If
@@ -186,7 +186,7 @@ Public Class UtilsMaterials
                 Try
                     MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
                 Catch ex As Exception
-                    ErrorLogger.AddMessage("Some face styles may not have been updated.  Please verify results.")
+                    ErrorLogger.AddMessage($"Some face styles may not have been updated.  Please verify results.  Exception: {ex.Message}")
                 End Try
             Else
                 For Each MismatchProp As SolidEdgeFramework.MatTablePropIndex In Mismatches
@@ -233,7 +233,7 @@ Public Class UtilsMaterials
                                             LibPropDouble = Factor * LibPropDouble
                                             DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
                                         Else
-                                            ErrorLogger.AddMessage(String.Format("Could not update density with '{0}' units", UnitOfMeasure.Units))
+                                            ErrorLogger.AddMessage($"Could not update density with '{UnitOfMeasure.Units}' units")
                                         End If
                                     End If
                                 Next
@@ -481,7 +481,7 @@ Public Class UtilsMaterials
                             End If
 
                         Catch ex As Exception
-                            Dim s As String = "Could not process model faces"
+                            Dim s As String = $"Could not process model faces.  Exception: {ex.Message}"
                             If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                             Exit Sub
                         End Try
@@ -502,7 +502,7 @@ Public Class UtilsMaterials
                             If FinishFaceStyle IsNot Nothing Then
                                 Body.Style = FinishFaceStyle
                             Else
-                                Dim s As String = String.Format("Finish face style '{0}' not found", FinishName)
+                                Dim s As String = $"Finish face style '{FinishName}' not found"
                                 If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                             End If
                         End If
@@ -529,18 +529,18 @@ Public Class UtilsMaterials
                         FaceOverrides.Clear()  ' Get ready for the next Model
 
                     ElseIf FaceOverrides.Count > MaxFacesToProcess Then
-                        Dim s As String = String.Format("Number of faces '{0}' exceeds maximum '{1}'", FaceOverrides.Count, MaxFacesToProcess)
+                        Dim s As String = $"Number of faces '{FaceOverrides.Count}' exceeds maximum '{MaxFacesToProcess}'"
                         If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                     End If
 
                 Catch ex As Exception
-                    Dim s As String = "Could not process model"
+                    Dim s As String = $"Could not process model.  Exception: {ex.Message}"
                     If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                 End Try
             Next
 
         ElseIf Models.Count >= 300 Then
-            Dim s As String = String.Format("Number of models '{0}' exceeds maximum '{1}'", Models.Count, 300)
+            Dim s As String = $"Number of models '{Models.Count}' exceeds maximum '300'"
             If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
         End If
 
@@ -1206,15 +1206,15 @@ Public Class UtilsMaterials
         End If
 
         If Models.Count > MaxModelCount Then
-            ErrorLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+            ErrorLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
             Exit Sub
         End If
 
         If Not CurrentMaterialNameInLibrary(CurrentMaterialName, MaterialList) Then
             If CurrentMaterialName = "" Then
-                ErrorLogger.AddMessage(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
+                ErrorLogger.AddMessage($"Material 'None' not in {ActiveMaterialLibrary}")
             Else
-                ErrorLogger.AddMessage(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+                ErrorLogger.AddMessage($"Material '{CurrentMaterialName}' not in {ActiveMaterialLibrary}")
             End If
         End If
 

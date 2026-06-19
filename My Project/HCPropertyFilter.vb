@@ -19,8 +19,8 @@ Public Class PropertyFilters
             Catch ex As Exception
                 Me.Items = New List(Of HCPropertyFilter)
 
-                Dim s As String = String.Format("Unable to load saved Property Filters.{0}", vbCrLf)
-                s = String.Format("{0}{1}{2}Reported error: {3}.", vbCrLf, s, vbCrLf, ex.Message)
+                Dim s As String = $"Unable to load saved Property Filters.{vbCrLf}"
+                s = $"{vbCrLf}{s}{vbCrLf}Reported error: {ex.Message}."
                 MsgBox(s)
 
                 Exit Sub
@@ -150,7 +150,7 @@ Public Class HCPropertyFilter
         tmpDict("Conditions") = tmpConditionsListJSON
 
         If Not CheckJSONDict(tmpDict) Then
-            MsgBox(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            MsgBox($"{Me.ToString}: Missing property names in JSON dictionary")
             JSONString = ""
         Else
             JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpDict)
@@ -172,7 +172,7 @@ Public Class HCPropertyFilter
         End If
 
         If Not CheckJSONDict(tmpDict) Then
-            Throw New Exception(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            Throw New Exception($"{Me.ToString}: Missing property names in JSON dictionary")
         End If
 
         Me.Name = tmpDict("Name")
@@ -260,7 +260,7 @@ Public Class PropertyFilterCondition
         tmpComparisonDict("Value") = Me.Value
 
         If Not CheckJSONDict(tmpComparisonDict) Then
-            MsgBox(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            MsgBox($"{Me.ToString}: Missing property names in JSON dictionary")
             JSONString = ""
         Else
             JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpComparisonDict)
@@ -275,7 +275,7 @@ Public Class PropertyFilterCondition
         tmpComparisonDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
         If Not CheckJSONDict(tmpComparisonDict) Then
-            Throw New Exception(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            Throw New Exception($"{Me.ToString}: Missing property names in JSON dictionary")
         End If
 
         Me.VariableName = tmpComparisonDict("VariableName")

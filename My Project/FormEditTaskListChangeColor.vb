@@ -75,22 +75,21 @@ Public Class FormEditTaskListChangeColor
             Me.ColorSaturation = CDbl(NumericUpDownSaturation.Value)
             If (Me.ColorSaturation < 0) Or (Me.ColorSaturation > 1) Then
                 Proceed = False
-                s = String.Format("{0}{1}{2}", s, "Saturation must be a number between 0 and 1", vbCrLf)
+                s = $"{s}Saturation must be a number between 0 and 1{vbCrLf}"
             End If
         Catch ex As Exception
             Proceed = False
-            s = String.Format("{0}{1}{2}", s, "Saturation must be a number between 0 and 1", vbCrLf)
+            s = $"{s}Saturation must be a number between 0 and 1{vbCrLf}"
         End Try
 
         Try
             Me.ColorBrightness = CDbl(NumericUpDownBrightness.Value)
             If (Me.ColorBrightness < 0) Or (Me.ColorBrightness > 1) Then
                 Proceed = False
-                s = String.Format("{0}{1}{2}", s, "Brightness must be a number between 0 and 1", vbCrLf)
+                s = $"{s}Brightness must be a number between 0 and 1{vbCrLf}"
             End If
         Catch ex As Exception
             Proceed = False
-            s = String.Format("{0}{1}{2}", s, "Brightness must be a number between 0 and 1", vbCrLf)
         End Try
 
         If Proceed Then

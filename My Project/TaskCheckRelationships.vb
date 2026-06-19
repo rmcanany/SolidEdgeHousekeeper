@@ -189,7 +189,7 @@ Public Class TaskCheckRelationships
                         Next
 
                     Catch ex As Exception
-                        s = "Unable to process sketches"
+                        s = $"Unable to process sketches.  Exception: {ex.Message}"
                         If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                     End Try
 
@@ -245,7 +245,7 @@ Public Class TaskCheckRelationships
                     ProfileSets = tmpSEDoc.ProfileSets
 
                 Case Else
-                    MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                    MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
             End Select
 
             If (DocType = "par") Or (DocType = "psm") Then
@@ -283,7 +283,7 @@ Public Class TaskCheckRelationships
         If (Models IsNot Nothing) Then
 
             If Models.Count > 300 Then
-                SubLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+                SubLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
             End If
 
             If (Models.Count > 0) And (Models.Count <= 300) Then
@@ -296,7 +296,7 @@ Public Class TaskCheckRelationships
                             If FeatureTypeConstant = Nothing Then
                                 Continue For
                             End If
-                            s = String.Format("SolidEdgePart.{0}", Name)
+                            s = $"SolidEdgePart.{Name}"
 
                             'https://stackoverflow.com/questions/15252266/ctype-in-vb-net-with-dynamic-second-parameter-type
                             Dim FeatureType As Type = UF.GetTypeFromFeature(Feature)
@@ -497,7 +497,7 @@ Public Class TaskCheckRelationships
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

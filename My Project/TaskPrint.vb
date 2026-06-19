@@ -279,7 +279,7 @@ Public Class TaskPrint
                 'If PaperSizeConstant.ToString.ToLower.Contains("custom") Then
                 '    TaskLogger.AddMessage($"PaperSizeConstant '{PaperSizeConstant.ToString}', X '{}', Y '{}'")
                 'End If
-                TaskLogger.AddMessage(String.Format("Print drawing sheet {0} did not succeed", Sheet.Name))
+                TaskLogger.AddMessage($"Print drawing sheet {Sheet.Name} did not succeed.  Exception: {ex.Message}")
             End Try
         Next
 
@@ -317,7 +317,7 @@ Public Class TaskPrint
     Public Function DisplayNameToConstantName(DisplayName As String) As String
         Dim ConstantName As String
 
-        ConstantName = String.Format("ig{0}", DisplayName.Replace(" ", ""))
+        ConstantName = $"ig{DisplayName.Replace(" ", "")}"
 
         Return ConstantName
     End Function
@@ -507,7 +507,7 @@ Public Class TaskPrint
                         If s = "" Then ' First item
                             s = SheetSize
                         Else
-                            s = String.Format("{0} {1}", s, SheetSize)
+                            s = $"{s} {SheetSize}"
                         End If
                     Next
                     TextBox = CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox)
@@ -516,7 +516,7 @@ Public Class TaskPrint
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
 
         End Select
 
@@ -556,8 +556,7 @@ Public Class TaskPrint
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -571,8 +570,7 @@ Public Class TaskPrint
                 Me.PrinterName = ComboBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -597,8 +595,7 @@ Public Class TaskPrint
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 

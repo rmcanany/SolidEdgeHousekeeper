@@ -300,7 +300,7 @@ Public Class TaskSaveDrawingAs
             NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid text (*.xt)" -> ".xt)"
             NewExtension = NewExtension.Split(")"c)(0)  ' "Parasolid text (*.xt)" -> ".xt"
         Else
-            NewExtension = String.Format(".{0}", DocType)
+            NewExtension = $".{DocType}"
         End If
 
         NewFileFormat = Me.NewFileTypeName
@@ -324,7 +324,7 @@ Public Class TaskSaveDrawingAs
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
     End Sub
@@ -366,11 +366,11 @@ Public Class TaskSaveDrawingAs
 
         ' ###### ROOT DIRECTORY ######
         If Me.SaveInOriginalDirectory Then
-            NewDirectoryName = String.Format("{0}\", OldDirectoryName)
+            NewDirectoryName = $"{OldDirectoryName}\"
         Else
             NewDirectoryName = Me.NewDir
             If Not NewDirectoryName(Len(NewDirectoryName) - 1) = "\" Then
-                NewDirectoryName = String.Format("{0}\", NewDirectoryName)
+                NewDirectoryName = $"{NewDirectoryName}\"
             End If
         End If
 
@@ -384,7 +384,7 @@ Public Class TaskSaveDrawingAs
 
                 If NewSubDirectoryName Is Nothing OrElse NewSubDirectoryName.ToLower.Contains("<nothing>") Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+                    Me.TaskLogger.AddMessage($"Could not parse subdirectory formula '{Me.Formula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -396,7 +396,7 @@ Public Class TaskSaveDrawingAs
 
                 If NewSubDirectoryName Is Nothing Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+                    Me.TaskLogger.AddMessage($"Could not parse subdirectory formula '{Me.Formula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -406,7 +406,7 @@ Public Class TaskSaveDrawingAs
 
             If Success Then
                 If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
-                    NewSubDirectoryName = String.Format("{0}\", NewSubDirectoryName)
+                    NewSubDirectoryName = $"{NewSubDirectoryName}\"
                 End If
             End If
         End If
@@ -421,7 +421,7 @@ Public Class TaskSaveDrawingAs
 
                 If NewFilenameWOExt Is Nothing OrElse NewFilenameWOExt.ToLower.Contains("<nothing>") Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                    Me.TaskLogger.AddMessage($"Could not parse filename formula '{Me.FilenameFormula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -433,7 +433,7 @@ Public Class TaskSaveDrawingAs
 
                 If NewFilenameWOExt Is Nothing Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                    Me.TaskLogger.AddMessage($"Could not parse filename formula '{Me.FilenameFormula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -448,13 +448,13 @@ Public Class TaskSaveDrawingAs
         If Suffix = "" Then
             NewSuffix = Suffix
         Else
-            NewSuffix = String.Format("-{0}", Suffix)
+            NewSuffix = $"-{Suffix}"
         End If
 
 
         ' ###### FULL FILENAME ######
         If Success Then
-            NewFullFilename = String.Format("{0}{1}{2}{3}{4}", NewDirectoryName, NewSubDirectoryName, NewFilenameWOExt, NewSuffix, NewExtension)
+            NewFullFilename = $"{NewDirectoryName}{NewSubDirectoryName}{NewFilenameWOExt}{NewSuffix}{NewExtension}"
         Else
             NewFullFilename = ""
         End If
@@ -503,8 +503,7 @@ Public Class TaskSaveDrawingAs
 
                 SEApp.DoIdle()
             Catch ex As Exception
-                Me.TaskLogger.AddMessage(String.Format("Unable to add watermark to sheet '{0}'", Sheet.Name))
-
+                Me.TaskLogger.AddMessage($"Unable to add watermark to sheet '{Sheet.Name}'.  Exception: {ex.Message}")
             End Try
         Next
 
@@ -558,7 +557,7 @@ Public Class TaskSaveDrawingAs
                     For Each Sheet In SheetList
                         Sheet.Activate()
 
-                        SheetName = String.Format("-{0}", Sheet.Name)
+                        SheetName = $"-{Sheet.Name}"
                         SheetName = UFC.SubstituteIllegalCharacters(SheetName, New List(Of String))
                         If Me.PDFPerSheetSuppressSheetname Then
                             If SheetList.Count = 1 Then
@@ -568,7 +567,7 @@ Public Class TaskSaveDrawingAs
                         End If
 
                         NewFilename = tmpNewFilename.Substring(0, tmpNewFilename.Count - 4)
-                        NewFilename = String.Format("{0}{1}.pdf", NewFilename, SheetName)
+                        NewFilename = $"{NewFilename}{SheetName}.pdf"
                         SEDoc.SaveAs(NewFilename)
                         SEApp.DoIdle()
 
@@ -582,14 +581,13 @@ Public Class TaskSaveDrawingAs
                     SEDoc.SaveAs(NewFilename)
                     SEApp.DoIdle()
                 Catch ex As Exception
-                    Me.TaskLogger.AddMessage(String.Format("Could not save '{0}'", NewFilename))
+                    Me.TaskLogger.AddMessage($"Could not save '{NewFilename}'.  Exception: {ex.Message}")
                 End Try
 
             End If
 
         Catch ex As Exception
-            Me.TaskLogger.AddMessage(String.Format("Error saving file {0}", NewFilename))
-
+            Me.TaskLogger.AddMessage($"Error saving file {NewFilename}.  Exception: {ex.Message}")
         End Try
 
     End Sub
@@ -916,7 +914,7 @@ Public Class TaskSaveDrawingAs
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 
@@ -965,7 +963,7 @@ Public Class TaskSaveDrawingAs
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -986,7 +984,7 @@ Public Class TaskSaveDrawingAs
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1035,7 +1033,7 @@ Public Class TaskSaveDrawingAs
                 End Try
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 

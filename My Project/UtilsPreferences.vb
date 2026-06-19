@@ -15,7 +15,7 @@ Public Class UtilsPreferences
     '###### FORM MAIN ######
     Public Function GetFormMainSettingsFilename(CheckExisting As Boolean) As String
         Dim Filename = "form_main_settings.json"
-        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+        Filename = $"{GetPreferencesDirectory()}\{Filename}"
 
         If CheckExisting Then
             If FileIO.FileSystem.FileExists(Filename) Then
@@ -80,7 +80,7 @@ Public Class UtilsPreferences
                     Value = Newtonsoft.Json.JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
                     'MsgBox(String.Format("list`1 '{0}' detected", PropInfo.Name))
                 Case Else
-                    MsgBox(String.Format("In UP.SaveFormMainSettings: PropInfo.Name '{0}' not recognized", PropInfo.Name.ToLower))
+                    MsgBox($"In UP.SaveFormMainSettings: PropInfo.Name '{PropInfo.Name.ToLower}' not recognized")
                     'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
             End Select
 
@@ -96,7 +96,7 @@ Public Class UtilsPreferences
                     Case "list`1"
                         Value = Newtonsoft.Json.JsonConvert.SerializeObject(New List(Of String))
                     Case Else
-                        MsgBox(String.Format("In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
+                        MsgBox($"In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{PropInfo.PropertyType.Name}' not recognized")
                         'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
                 End Select
             End If
@@ -196,7 +196,7 @@ Public Class UtilsPreferences
     Public Function GetPreferencesDirectory() As String
         Dim StartupPath As String = GetStartupDirectory()
         Dim PreferencesDirectory = "Preferences"
-        Return String.Format("{0}\{1}", StartupPath, PreferencesDirectory)
+        Return $"{StartupPath}\{PreferencesDirectory}"
     End Function
 
     Public Sub CreatePreferencesDirectory()
@@ -205,8 +205,8 @@ Public Class UtilsPreferences
             Try
                 FileIO.FileSystem.CreateDirectory(PreferencesDirectory)
             Catch ex As Exception
-                Dim s As String = String.Format("Unable to create Preferences directory '{0}'.  ", PreferencesDirectory)
-                s = String.Format("{0}You may not have the correct permissions.", s)
+                Dim s As String = $"Unable to create Preferences directory '{PreferencesDirectory}'.  "
+                s = $"{s}You may not have the correct permissions."
                 MsgBox(s, vbOKOnly)
             End Try
         End If
@@ -306,7 +306,7 @@ Public Class UtilsPreferences
     '###### HELP FILE BASE URL ######
 
     Public Function GetHelpfileBaseURLFilename() As String
-        Return String.Format("{0}\HelpfileBaseURL.txt", GetStartupDirectory)
+        Return $"{GetStartupDirectory()}\HelpfileBaseURL.txt"
     End Function
 
 
@@ -434,125 +434,10 @@ Public Class UtilsPreferences
         End If
     End Sub
 
-    'Public Function GetSavedExpressionsDict() As Dictionary(Of String, Dictionary(Of String, String))
-
-    '    Dim SavedExpressionsDict As New Dictionary(Of String, Dictionary(Of String, String))
-    '    'Format
-    '    '{"Hi_Mom":
-    '    '    {"Language": "VB",
-    '    '     "Comments": "Simple test" + Chr(182) + "to try it out."
-    '    '     "Expression": "Return "Hi Mom!""
-    '    '    },
-    '    ' "Example VB ToUpper":
-    '    '    {"Language": "VB",
-    '    '     "Comments": "Converts text to upper case"
-    '    '     "Expression": "Return "%{System.Title}".ToUpper()"
-    '    '    }
-    '    '}
-
-    '    Dim SavedExpressionsFilename As String = GetSavedExpressionsFilename(CheckExisting:=True) ' saved_expressions.json
-
-    '    If Not SavedExpressionsFilename = "" Then
-    '        Dim JSONString As String = IO.File.ReadAllText(SavedExpressionsFilename)
-    '        SavedExpressionsDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
-
-    '    Else
-    '        SavedExpressionsFilename = IO.Path.ChangeExtension(GetSavedExpressionsFilename(CheckExisting:=False), ".txt")
-    '        If Not IO.File.Exists(SavedExpressionsFilename) Then Return Nothing
-
-    '        Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
-    '        Dim SavedExpressions = SR.ReadToEnd
-
-    '        SR.Close()
-
-    '        '[EXP]
-    '        'Example toUpper()
-    '        '[EXP_TEXT]
-    '        'toUpper('%{System.Title}')
-    '        '\\Any text will be converted in UPPERCASE
-    '        '[EXP]
-    '        'Example VB ToUpper
-    '        '[EXP_TEXT]
-    '        'Return "%{System.Title}".ToUpper()
-    '        '\\Any text will be converted in UPPERCASE
-    '        '...
-
-    '        Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
-
-    '        For Each Expression In Expressions
-
-    '            Dim ExpressionItems = Expression.Split(New String() {"[EXP_TEXT]"}, StringSplitOptions.RemoveEmptyEntries)
-
-    '            If ExpressionItems.Length = 2 Then
-
-    '                Dim SaveName As String = ExpressionItems(0).Replace(vbCrLf, "")
-    '                'Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char)).First
-    '                Dim ExpressionAndComments = ExpressionItems(1).Split(CType("\\", Char))
-    '                Dim SaveExpression As String = TrimCR(ExpressionAndComments(0))
-    '                Dim SaveComments As String = ""
-    '                If ExpressionAndComments.Count > 1 Then
-    '                    For i As Integer = 1 To ExpressionAndComments.Count - 1
-    '                        SaveComments = $"{SaveComments}{ExpressionAndComments(i)}{vbCrLf}"
-    '                    Next
-    '                End If
-    '                SaveComments = TrimCR(SaveComments)
-    '                Dim SaveLanguage As String = ""
-    '                If SaveExpression.ToLower.Contains("return") Then
-    '                    SaveLanguage = "VB"
-    '                Else
-    '                    SaveLanguage = "NCalc"
-    '                End If
-
-    '                SavedExpressionsDict(SaveName) = New Dictionary(Of String, String)
-    '                SavedExpressionsDict(SaveName)("Language") = SaveLanguage
-    '                SavedExpressionsDict(SaveName)("Comments") = SaveComments
-    '                SavedExpressionsDict(SaveName)("Expression") = SaveExpression
-    '            End If
-    '        Next
-
-    '        SaveSavedExpressionsDict(SavedExpressionsDict)
-    '    End If
-
-
-    '    Return SavedExpressionsDict
-    'End Function
-
-    'Public Sub SaveSavedExpressionsDict(
-    '    SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String)))
-
-    '    Dim Filename = GetSavedExpressionsFilename(CheckExisting:=False)
-
-    '    Dim JSONString As String = JsonConvert.SerializeObject(SavedExpressionsDict)
-    '    IO.File.WriteAllText(Filename, JSONString)
-
-    'End Sub
-
-    'Public Function TrimCR(InString As String) As String
-
-    '    If InString.Count > 2 Then
-    '        'Leading carriage returns
-    '        While InString(0) = vbCrLf Or InString(0) = vbCr Or InString(0) = vbLf
-    '            InString = InString.Substring(1)
-    '        End While
-
-    '        'Trailing carriage returns
-    '        While InString(InString.Count - 1) = vbCrLf Or InString(InString.Count - 1) = vbCr Or InString(InString.Count - 1) = vbLf
-    '            InString = InString.Substring(0, InString.Count - 1)
-    '        End While
-
-    '        'Add one trailing carriage return
-    '        InString = $"{InString}{vbCrLf}"
-
-    '    End If
-
-    '    Return InString
-    'End Function
-
-
 
     '###### INTERACTIVE EDIT COMMANDS ######
     Public Function GetInteractiveEditCommandsFilename() As String
-        Dim InteractiveEditCommandsFilename = String.Format("{0}\interactive_edit_commands.txt", GetPreferencesDirectory)
+        Dim InteractiveEditCommandsFilename = $"{GetPreferencesDirectory()}\interactive_edit_commands.txt"
         Return InteractiveEditCommandsFilename
     End Function
 
@@ -651,7 +536,7 @@ Public Class UtilsPreferences
 
     '###### EDIT PROPERTIES ######
     Public Function GetEditPropertiesSavedSettingsFilename(CheckExisting As Boolean) As String
-        Dim Filename = String.Format("{0}\edit_properties_saved_settings.json", GetPreferencesDirectory)
+        Dim Filename = $"{GetPreferencesDirectory()}\edit_properties_saved_settings.json"
 
         If CheckExisting Then
             If FileIO.FileSystem.FileExists(Filename) Then
@@ -715,7 +600,7 @@ Public Class UtilsPreferences
 
     Public Function GetPropertyFiltersFilename(CheckExisting As Boolean) As String
 
-        Dim Filename = String.Format("{0}\property_filters.json", GetPreferencesDirectory)
+        Dim Filename = $"{GetPreferencesDirectory()}\property_filters.json"
 
         If CheckExisting Then
             If FileIO.FileSystem.FileExists(Filename) Then
@@ -733,7 +618,7 @@ Public Class UtilsPreferences
 
     '###### EDIT VARIABLES ######
     Public Function GetEditVariablesSavedSettingsFilename(CheckExisting As Boolean) As String
-        Dim Filename = String.Format("{0}\edit_variables_saved_settings.json", GetPreferencesDirectory)
+        Dim Filename = $"{GetPreferencesDirectory()}\edit_variables_saved_settings.json"
 
         If CheckExisting Then
             If FileIO.FileSystem.FileExists(Filename) Then
@@ -777,7 +662,7 @@ Public Class UtilsPreferences
     '###### TASK LIST SETTINGS ######
     Public Function GetTaskListFilename(CheckExisting As Boolean) As String
         Dim Filename = "tasklist.json"
-        Dim TaskListFilename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+        Dim TaskListFilename = $"{GetPreferencesDirectory()}\{Filename}"
 
         If CheckExisting Then
             If FileIO.FileSystem.FileExists(TaskListFilename) Then
@@ -835,7 +720,7 @@ Public Class UtilsPreferences
                 TaskJSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
                 TaskName = TaskJSONDict("TaskName")
 
-                If Splash IsNot Nothing Then Splash.UpdateStatus(String.Format("Loading {0}", TaskName))
+                If Splash IsNot Nothing Then Splash.UpdateStatus($"Loading {TaskName}")
 
                 Task = GetNewTaskInstance(AvailableTasks, TaskName, TaskDescription)
 
@@ -993,14 +878,14 @@ Public Class UtilsPreferences
             Exit Sub
         End If
 
-        Dim HardcodedPath = String.Format("{0}\My Project", GetHardCodedPath)
+        Dim HardcodedPath = $"{GetHardCodedPath()}\My Project"
         Dim Filenames As List(Of String)
         Dim Filename As String
 
         Dim UnknownTasks As New List(Of String)
 
         Dim tf As Boolean
-        Dim s As String = String.Format("Unknown Tasks{0}", vbCrLf)
+        Dim s As String = $"Unknown Tasks{vbCrLf}"
 
         If FileIO.FileSystem.DirectoryExists(HardcodedPath) Then
             Filenames = IO.Directory.GetFiles(HardcodedPath).ToList
@@ -1020,7 +905,7 @@ Public Class UtilsPreferences
 
             If UnknownTasks.Count > 0 Then
                 For Each UnknownTask As String In UnknownTasks
-                    s = String.Format("{0}{1}{2}", s, UnknownTask, vbCrLf)
+                    s = $"{s}{UnknownTask}{vbCrLf}"
                 Next
                 MsgBox(s)
             End If
@@ -1033,7 +918,7 @@ Public Class UtilsPreferences
     '###### PRESETS ######
     Public Function GetPresetsFilename(CheckExisting As Boolean) As String
         Dim Filename = "presets.json"
-        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+        Filename = $"{GetPreferencesDirectory()}\{Filename}"
 
         If CheckExisting Then
             If FileIO.FileSystem.FileExists(Filename) Then
@@ -1052,7 +937,7 @@ Public Class UtilsPreferences
     '###### PROPERTIES DATA ######
     Public Function GetPropertiesDataFilename(CheckExisting As Boolean) As String
         Dim Filename = "properties_data.json"
-        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+        Filename = $"{GetPreferencesDirectory()}\{Filename}"
 
         If CheckExisting Then
             If FileIO.FileSystem.FileExists(Filename) Then
@@ -1194,7 +1079,7 @@ Public Class UtilsPreferences
             If CurrentVersionList.Count = 3 Then
                 ' OK
             Else
-                s = String.Format("{0}Version incorrect format.  Should be 'YYYY.N', not '{1}'{2}", s, Version, vbCrLf)
+                s = $"{s}Version incorrect format.  Should be 'YYYY.N', not '{Version}'{vbCrLf}"
             End If
         Else
             Try
@@ -1202,7 +1087,7 @@ Public Class UtilsPreferences
                 i = CInt(CurrentVersionList(0))
                 i = CInt(CurrentVersionList(1))
             Catch ex As Exception
-                s = String.Format("{0}Version incorrect format.  '{1}' contains at least one non-integer{2}", s, Version, vbCrLf)
+                s = $"{s}Version incorrect format.  '{Version}' contains at least one non-integer{vbCrLf}"
             End Try
         End If
         If Not s = "" Then

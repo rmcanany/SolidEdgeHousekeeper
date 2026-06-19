@@ -30,10 +30,10 @@ Public Class HCPropertiesData
                 Catch ex As Exception
                     Items.Clear()
 
-                    Dim s As String = String.Format("Unable to load saved Property information.{0}", vbCrLf)
-                    s = String.Format("{0}Reported error: {1}{2}", s, ex.Message, vbCrLf)
-                    s = String.Format("{0}Please rerun Update on the Configuration Tab -- Templates Page", s)
-                    MsgBox(ex.Message)
+                    Dim s As String = $"Unable to load saved Property information.{vbCrLf}"
+                    s = $"{s}Reported error: {ex.Message}{vbCrLf}"
+                    s = $"{s}Please rerun Update on the Configuration Tab -- Templates Page"
+                    MsgBox(s)
                     Exit Sub
 
                 End Try
@@ -195,7 +195,7 @@ Public Class HCPropertiesData
             Try
                 PropertySets.Open(TemplateName, OpenReadOnly)
             Catch ex As Exception
-                MsgBox(String.Format("Could not open template '{0}'", TemplateName), vbOKOnly)
+                MsgBox($"Could not open template '{TemplateName}'", vbOKOnly)
                 Return Nothing
             End Try
 
@@ -228,7 +228,7 @@ Public Class HCPropertiesData
 
                     Catch ex As Exception
                         Dim s = "Error building PropertiesData: "
-                        s = String.Format("{0} PropertySetName '{1}', Item Number '{2}', PropName '{3}'", s, PropertySetActualName, PropID, PropName)
+                        s = $"{s} PropertySetName '{PropertySetActualName}', Item Number '{PropID}', PropName '{PropName}'"
                         MsgBox(s, vbOKOnly)
                     End Try
 
@@ -298,7 +298,7 @@ Public Class HCPropertiesData
                                 Case "DateTime"
                                     tmpPropertyData.TypeName = PropertyData.TypeNameConstants._DateTime
                                 Case Else
-                                    Dim s As String = String.Format("In PropertiesDataPopulate, PropTypeName '{0}' not recognized", PropTypeName)
+                                    Dim s As String = $"In PropertiesDataPopulate, PropTypeName '{PropTypeName}' not recognized"
                                     MsgBox(s, vbOKOnly)
                             End Select
 
@@ -584,8 +584,8 @@ Public Class HCPropertiesData
         Else
             OriginalPropertySet = tmpPropertyData.PropertySetName
             If Not PropertySet = OriginalPropertySet Then
-                s = String.Format("The list already contains '{0}' in the '{1}' property set. ", PropertyName, OriginalPropertySet)
-                s = String.Format("{0}Do you want to add the new property set '{1}'?", s, PropertySet)
+                s = $"The list already contains '{PropertyName}' in the '{OriginalPropertySet}' property set. "
+                s = $"{s}Do you want to add the new property set '{PropertySet}'?"
                 Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
                 If Result = vbYes Then
                     tmpPropertyData.IsDuplicate = True
@@ -594,8 +594,8 @@ Public Class HCPropertiesData
                     tmpPropertyData.FavoritesListIdx = FavoritesListIdx
                 End If
             Else
-                s = String.Format("The list already contains '{0}' in the '{1}' property set. ", PropertyName, OriginalPropertySet)
-                s = String.Format("{0}Adding that one instead.", s)
+                s = $"The list already contains '{PropertyName}' in the '{OriginalPropertySet}' property set. "
+                s = $"{s}Adding that one instead."
                 MsgBox(s, vbOKOnly)
             End If
         End If
@@ -688,7 +688,7 @@ Public Class HCPropertiesData
                                 Prop = CType(PropertySet.Item(i), SolidEdgeFileProperties.Property)
                                 PropName = Prop.Name
                                 Dim ID = Prop.ID
-                                Dim s As String = String.Format("{0},{1},{2}", PropertySet.Name, ID, PropName)
+                                Dim s As String = $"{PropertySet.Name},{ID},{PropName}"
                                 If Not tmpEnglishNames.Contains(s) Then tmpEnglishNames.Add(s)
                             Next
                             For Each s As String In tmpEnglishNames
@@ -1163,7 +1163,7 @@ Public Class PropertyData
                 ' Nothing to do here
 
             Case Else
-                MsgBox(String.Format("In HCPropertiesData.New PropertyData: PropertySetActualName '{0}' not recognized", Me.PropertySetActualName))
+                MsgBox($"In HCPropertiesData.New PropertyData: PropertySetActualName '{Me.PropertySetActualName}' not recognized")
 
         End Select
 
@@ -1187,7 +1187,7 @@ Public Class PropertyData
         tmpDict("IsDuplicate") = CStr(Me.IsDuplicate)
 
         If Not CheckJSONDict(tmpDict) Then
-            MsgBox(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            MsgBox($"{Me.ToString}: Missing property names in JSON dictionary")
             JSONString = ""
         Else
             JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpDict)
@@ -1203,7 +1203,7 @@ Public Class PropertyData
         tmpDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
         If Not CheckJSONDict(tmpDict) Then
-            Throw New Exception(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            Throw New Exception($"{Me.ToString}: Missing property names in JSON dictionary")
         End If
 
         Try

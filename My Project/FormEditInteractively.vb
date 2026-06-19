@@ -80,7 +80,7 @@ Public Class FormEditInteractively
         tf = Not Me.FormX = Me.NewFormX
         tf = tf Or Not Me.FormY = Me.NewFormY
         If tf Then
-            Me.Label2.Text = String.Format("New position: X {0}, Y {1}", Me.Left, Me.Top)
+            Me.Label2.Text = $"New position: X {Me.Left}, Y {Me.Top}"
         End If
 
 

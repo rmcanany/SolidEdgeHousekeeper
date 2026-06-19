@@ -222,7 +222,7 @@ Public Class TaskCheckLinks
 
             If OutString Is Nothing OrElse OutString.ToLower.Contains("<nothing>") Then
                 Success = False
-                Me.TaskLogger.AddMessage(String.Format("Could not parse search directory expression '{0}'", SearchDirectory))
+                Me.TaskLogger.AddMessage($"Could not parse search directory expression '{SearchDirectory}'")
             Else
                 Dim DoNotSubstituteChars As New List(Of String)
                 DoNotSubstituteChars.Add("\")
@@ -285,7 +285,7 @@ Public Class TaskCheckLinks
                 Next
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
         ' Build the list for par and psm files.
@@ -464,20 +464,22 @@ Public Class TaskCheckLinks
         Dim DataGridView = CType(sender, DataGridView)
 
         If e.Button = MouseButtons.Right Then
-            'Dim m As ContextMenu = New ContextMenu()
-            'Dim m As ContextMenuStrip = Me.TaskControl.ContextMenuStripTaskCheckLinks
-            Dim m As ContextMenu = Me.ContextMenuTest
-            'm.MenuItems.Add(New MenuItem("Cut"))
-            'm.MenuItems.Add(New MenuItem("Copy"))
-            'm.MenuItems.Add(New MenuItem("Paste"))
-            'Dim currentMouseOverRow As Integer = DataGridView.HitTest(e.X, e.Y).RowIndex
+            ''Dim m As ContextMenu = New ContextMenu()
+            ''Dim m As ContextMenuStrip = Me.TaskControl.ContextMenuStripTaskCheckLinks
+            'Dim m As ContextMenu = Me.ContextMenuTest
+            ''m.MenuItems.Add(New MenuItem("Cut"))
+            ''m.MenuItems.Add(New MenuItem("Copy"))
+            ''m.MenuItems.Add(New MenuItem("Paste"))
+            ''Dim currentMouseOverRow As Integer = DataGridView.HitTest(e.X, e.Y).RowIndex
+
             DGVRow = DataGridView.HitTest(e.X, e.Y).RowIndex
 
             If DGVRow >= 0 Then
                 'm.MenuItems.Add(New MenuItem(String.Format("Do something to row {0}", currentMouseOverRow.ToString())))
+                'm.Show(DataGridView, New Point(e.X, e.Y))
+                Me.ContextMenuTest.Show(DataGridView, New Point(e.X, e.Y))
             End If
 
-            m.Show(DataGridView, New Point(e.X, e.Y))
         End If
     End Sub
 
@@ -622,7 +624,7 @@ Public Class TaskCheckLinks
                 UpdateDGVSize(DataGridView)
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -675,7 +677,7 @@ Public Class TaskCheckLinks
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

@@ -87,7 +87,7 @@ Public Class UtilsCommon
                 Models = tmpPsm.Models
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", DocType))
+                MsgBox($"UtilsCommon DocType '{DocType}' not recognized")
         End Select
 
         If (DocType = "par") Or (DocType = "psm") Then
@@ -183,7 +183,8 @@ Public Class UtilsCommon
                     DocType = "dft"
 
                 Case Else
-                    MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", SEDoc.Type.ToString))
+                    'MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", SEDoc.Type.ToString))
+                    MsgBox($"UtilsCommon DocType '{DocType}' not recognized")
             End Select
         End If
 
@@ -205,18 +206,18 @@ Public Class UtilsCommon
             If MaxErrorsToShow <= 0 Then MaxErrorsToShow = 1
 
             For i As Integer = 0 To ErrorList.Count - 1
-                s = String.Format("{0}{1}{2}{3}", s, Indent, ErrorList(i), vbCrLf)
+                s = $"{s}{Indent}{ErrorList(i)}{vbCrLf}"
                 If i = MaxErrorsToShow - 1 Then Exit For
             Next
 
             If ErrorList.Count > MaxErrorsToShow Then
-                ErrorMessage = String.Format("{0}{1}", Title, vbCrLf)
-                ErrorMessage = String.Format("{0}{1}(Showing {2} of {3}){4}", ErrorMessage, Indent, MaxErrorsToShow, ErrorList.Count, vbCrLf)
+                ErrorMessage = $"{Title}{vbCrLf}"
+                ErrorMessage = $"{ErrorMessage}{Indent}(Showing {MaxErrorsToShow} of {ErrorList.Count}){vbCrLf}"
             Else
-                ErrorMessage = String.Format("{0}{1}", Title, vbCrLf)
+                ErrorMessage = $"{Title}{vbCrLf}"
             End If
 
-            ErrorMessage = String.Format("{0}{1}", ErrorMessage, s)
+            ErrorMessage = $"{ErrorMessage}{s}"
         End If
 
         Return ErrorMessage
@@ -378,7 +379,7 @@ Public Class UtilsCommon
             Section = Doc.Sections.WorkingSection
             SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
         Else
-            MsgBox(String.Format("SectionType '{0}' not recognized.  Quitting...", SectionType))
+            MsgBox($"SectionType '{SectionType}' not recognized.  Quitting...")
         End If
 
         SectionSheets = Section.Sheets
@@ -526,11 +527,11 @@ Public Class UtilsCommon
                 IO.File.Delete(TempFilename)
 
             Catch ex As Exception
-                ErrorLogger.AddMessage(String.Format("Unable to save '{0}'.  ", NewFilename))
+                ErrorLogger.AddMessage($"Unable to save '{NewFilename}'.  Exception: {ex.Message}")
             End Try
 
         Catch ex As Exception
-            ErrorLogger.AddMessage(String.Format("Unable to save '{0}'.  ", TempFilename))
+            ErrorLogger.AddMessage($"Unable to save '{TempFilename}'.  Exception: {ex.Message}")
         End Try
 
     End Sub
@@ -1027,9 +1028,7 @@ Public Class UtilsCommon
                         Dim A = nCalcExpression.Evaluate()
                         Outstring = A.ToString
                     Catch ex As Exception
-                        ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
-                        ErrorLogger.AddMessage("Exception was:")
-                        ErrorLogger.AddMessage(ex.Message)
+                        ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'.  Exception: {ex.Message}")
                         Outstring = Nothing
                     End Try
 
@@ -1045,9 +1044,7 @@ Public Class UtilsCommon
                         Try
                             Outstring = UPS.RunPowerShellFile(PowerShellFilename)
                         Catch ex As Exception
-                            ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'")
-                            ErrorLogger.AddMessage("Exception was:")
-                            ErrorLogger.AddMessage(ex.Message)
+                            ErrorLogger.AddMessage($"Unable to process expression '{Outstring}'.  Exception: {ex.Message}")
                             Outstring = Nothing
                         End Try
                     Else

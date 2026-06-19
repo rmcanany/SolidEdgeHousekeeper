@@ -19,6 +19,8 @@ We'll get right to the updates, but first some exciting news -- Housekeeper has 
 
 > *We are a company based in the Netherlands and use your program often to clean up our Solid Edge models.  Thank you for a well engineered piece of open source software, and keep up the good work.*
 
+One more bit of news.  We have a new contributor: our very own **@Alex_H!**  He added the ability to save models in the new DSTV format.  Can't wait for you to try it out!
+
 Now, on to those updates...
 
 ### File Preview
@@ -52,13 +54,27 @@ The change applies to the second stage of the function, where it checks each she
 
 Previously it meant that the sheet names match.  You can still do it that way, but now, for working sheets, you can optionally add by sheet order, or add to all sheets.  For background sheets, it always checks the name first.  If no matching name is found, you can optionally add by sheet size.
 
-In addition to the sheet processing options, an enhancement was made to avoid  duplicating blocks.  During placement, if a block with the same name, location, etc. is found, the new block is not added.
+In addition to the sheet processing options, an enhancement was made to avoid  duplicating blocks.  During placement, if a block occurrence with the same name, location, etc. is found, the new occurrence is not added.
 
 #### Read Blocks from Library
 
 Added an option to use Structured Storage instead of SE.  This is only for the task setup phase; the program still uses SE to perform the `replace`/`add`/`delete` functions.
 
 See the [<ins>**Update Blocks Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-blocks) for details.
+
+### Save Model As
+
+Contributed by **@Alex_H.**  Thank you!
+
+Added the ability to save models in the new DSTV format.  
+
+<p align="center">
+  <img src="My%20Project/media/task_save_model_as_dstv_format.png">
+</p>
+
+The option is presented only if the installed version of Solid Edge supports it.  The program logs an error if a sufficient number of tokens is not available.
+
+See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#save-model-as) for details.
 
 ### Check Links
 
@@ -92,10 +108,13 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 ### Run External Program
 
-For `Code Snippets`, added an option to use an internal dotnet library, rather than the locally-installed PowerShell.  (Thank you **@sven-11111** and **@Monostre!**)  The internal library is supposed to be more compatible with different user system configurations.  Did the same for `Expressions` and `Property Filters`.
+For `Code Snippets`, added an option to use an internal dotnet library, rather than the locally-installed PowerShell.  (Thank you **@sven-11111** and **@Monostre!**)  
+
+The internal library is supposed to be compatible with more system configurations.  It is now the default; disable it on the **Configuration Tab -- General Page**.  
+
+The option also applies to `Expressions` and `Property Filters`.
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
-
 
 ### Other
 
@@ -107,6 +126,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
 - Changed the formatting of Task sub-options to better show to which main option they apply.
 - Added missing help buttons to several dialogs and toolbars.
+- Added logging of system error messages where applicable.
 
 
 ## V2026.1

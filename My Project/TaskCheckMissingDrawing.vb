@@ -98,7 +98,7 @@ Public Class TaskCheckMissingDrawing
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
-            TaskLogger.AddMessage(String.Format("Drawing {0} not found", DrawingFilename))
+            TaskLogger.AddMessage($"Drawing {DrawingFilename} not found")
         End If
 
     End Sub
@@ -115,7 +115,7 @@ Public Class TaskCheckMissingDrawing
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
-            TaskLogger.AddMessage(String.Format("Drawing {0} not found", DrawingFilename))
+            TaskLogger.AddMessage($"Drawing {DrawingFilename} not found")
         End If
 
     End Sub
@@ -176,7 +176,7 @@ Public Class TaskCheckMissingDrawing
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

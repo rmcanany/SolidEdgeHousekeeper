@@ -106,17 +106,17 @@ Public Class HCErrorLogger
         If Level = 0 Then  ' It's the filename when executing tasks.  In that case a logger file will exist.
             If Outlist.Count > 0 Then Outlist.Add("")
             If FileIO.FileSystem.FileExists(_Logger.Name) Then
-                Outlist.Add(String.Format("{0} in {1}", IO.Path.GetFileName(_Logger.Name), IO.Path.GetDirectoryName(_Logger.Name)))
+                Outlist.Add($"{IO.Path.GetFileName(_Logger.Name)} in {IO.Path.GetDirectoryName(_Logger.Name)}")
             Else  ' It is being used for another purpose than executing tasks.
                 Outlist.Add(_Logger.Name)
             End If
         Else
-            Outlist.Add(String.Format("{0}{1}", Indent, _Logger.Name))
+            Outlist.Add($"{Indent}{_Logger.Name}")
             Indent = StrDup(4 * (Level + 1), " ")
         End If
 
         For Each Message As String In _Logger.GetMessages
-            Outlist.Add(String.Format("{0}{1}", Indent, Message))
+            Outlist.Add($"{Indent}{Message}")
         Next
         For Each tmpLogger As Logger In _Logger.Loggers
             If tmpLogger.HasErrors Then

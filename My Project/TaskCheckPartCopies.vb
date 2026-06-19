@@ -69,7 +69,7 @@ Public Class TaskCheckPartCopies
                 Models = tmpSEDoc.Models
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType), vbOKOnly)
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized", vbOKOnly)
         End Select
 
         If Not Models Is Nothing Then
@@ -80,10 +80,10 @@ Public Class TaskCheckPartCopies
                         For Each CopiedPart In CopiedParts
                             If Not CopiedPart.FileName = "" Then  ' Empty filename implies no link to outside file
                                 If Not FileIO.FileSystem.FileExists(CopiedPart.FileName) Then
-                                    TaskLogger.AddMessage(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
+                                    TaskLogger.AddMessage($"Part copy file not found: '{CopiedPart.FileName}'")
                                 Else
                                     If Not CopiedPart.IsUpToDate Then
-                                        TaskLogger.AddMessage(String.Format("Part copy out of date: '{0}'", CopiedPart.Name))
+                                        TaskLogger.AddMessage($"Part copy out of date: '{CopiedPart.Name}'")
                                     End If
                                 End If
                             End If
@@ -91,7 +91,7 @@ Public Class TaskCheckPartCopies
                     End If
                 Next
             ElseIf Models.Count >= 300 Then
-                TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+                TaskLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
             End If
 
         End If

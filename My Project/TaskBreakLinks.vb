@@ -264,7 +264,7 @@ Public Class TaskBreakLinks
                     End If
                 Next
             ElseIf Models.Count >= 300 Then
-                Me.TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+                Me.TaskLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
             End If
         End If
 
@@ -308,7 +308,7 @@ Public Class TaskBreakLinks
                     End If
                 Next
             ElseIf CopyConstructions.Count >= 300 Then
-                Me.TaskLogger.AddMessage(String.Format("{0} construction copies exceeds maximum to process", CopyConstructions.Count.ToString))
+                Me.TaskLogger.AddMessage($"{CopyConstructions.Count.ToString} construction copies exceeds maximum to process")
             End If
         End If
 
@@ -412,7 +412,7 @@ Public Class TaskBreakLinks
                 Try
                     Balloon.BalloonText = Balloon.BalloonDisplayedText
                 Catch ex2 As Exception
-                    Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'")
+                    Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'.  Exception: {ex2.Message}")
                 End Try
             Next
 
@@ -424,7 +424,7 @@ Public Class TaskBreakLinks
                     Try
                         Balloon.BalloonText = Balloon.BalloonDisplayedText
                     Catch ex2 As Exception
-                        Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'")
+                        Me.TaskLogger.AddMessage($"Unable to process balloon '{Balloon.Name}'.  Exception: {ex2.Message}")
                     End Try
                 Next
 
@@ -433,7 +433,7 @@ Public Class TaskBreakLinks
                     Try
                         BlockLabelOccurrence.value = BlockLabelOccurrence.DisplayedText
                     Catch ex As Exception
-                        Me.TaskLogger.AddMessage($"Unable to process block label '{BlockLabelOccurrence.Name}'")
+                        Me.TaskLogger.AddMessage($"Unable to process block label '{BlockLabelOccurrence.Name}'.  Exception: {ex.Message}")
                     End Try
                 Next
             Next
@@ -495,7 +495,7 @@ Public Class TaskBreakLinks
                                         Me.TaskLogger.AddMessage($"    Linked file not found '{SourceFilename}'")
                                     End If
                                 Catch ex As Exception
-                                    Me.TaskLogger.AddMessage($"Unable to process symbol '{Symbol2d.Name}' on sheet '{Sheet.Name}'")
+                                    Me.TaskLogger.AddMessage($"Unable to process symbol '{Symbol2d.Name}' on sheet '{Sheet.Name}'.  Exception: {ex.Message}")
                                 End Try
                             Next
                         End If
@@ -640,7 +640,7 @@ Public Class TaskBreakLinks
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

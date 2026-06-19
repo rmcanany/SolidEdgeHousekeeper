@@ -54,9 +54,9 @@ Public Class FormTeamCenterAdd
                     Dim revision As String = If(row.Cells("rev").Value IsNot Nothing, row.Cells("rev").Value.ToString().Trim(), String.Empty)
 
                     If Not revision = "" Then
-                        LabelStatus.Text = String.Format("Item ID {0}, Revision {1}", itemID, revision)
+                        LabelStatus.Text = $"Item ID {itemID}, Revision {revision}"
                     Else
-                        LabelStatus.Text = String.Format("Item ID {0}, Revision (not specified)", itemID)
+                        LabelStatus.Text = $"Item ID {itemID}, Revision (not specified)"
                     End If
 
                     ' Validate item ID
@@ -110,7 +110,7 @@ Public Class FormTeamCenterAdd
                     End If
 
                     ' Validate if revision exists
-                    LabelStatus.Text = "Validating revision for " + itemID
+                    LabelStatus.Text = $"Validating revision for {itemID}"
                     Dim MFKAttributes2(0, 1) As Object
                     Dim RevIdAndUIDs2 As Object = Nothing
 
@@ -172,7 +172,7 @@ Public Class FormTeamCenterAdd
                 Dim revision As String = fileTuple.Item3
                 Dim extension As String = System.IO.Path.GetExtension(fileName).ToLower()
 
-                LabelStatus.Text = String.Format("Adding {0}", fileName)
+                LabelStatus.Text = $"Adding {fileName}"
 
                 ' Determine the file type
                 Dim fileType As String = String.Empty
@@ -209,7 +209,7 @@ Public Class FormTeamCenterAdd
             If numOfFiles = 0 Then
                 LabelStatus.Text = "No files found."
             Else
-                LabelStatus.Text = numOfFiles.ToString + " files found, filtered down to " + ListViewTeamCenterItems.Items.Count.ToString
+                LabelStatus.Text = $"{numOfFiles} files found, filtered down to {ListViewTeamCenterItems.Items.Count}"
             End If
 
         Catch ex As ApplicationException
@@ -243,7 +243,7 @@ Public Class FormTeamCenterAdd
                 Dim fileItemID As String = item.SubItems(1).Text
                 Dim fileItemRevID As String = item.SubItems(2).Text
 
-                LabelStatus.Text = String.Format("Adding {0} to cache...", fileName)
+                LabelStatus.Text = $"Adding {fileName} to cache..."
 
                 ' Check if the item is already in ListViewDownloadedFiles
                 Dim alreadyDownloaded As Boolean = False

@@ -67,7 +67,7 @@ Public Class FormPropertyFilter
 
         If tf Then
             Dim s = "Template properties required for this command not found. "
-            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            s = $"{s}Populate them on the Configuration Tab -- Templates Page."
             MsgBox(s, vbOKOnly)
             Exit Sub
         End If
@@ -88,16 +88,16 @@ Public Class FormPropertyFilter
             If Not UC.PropertyName = "" Then
 
                 If UC.PropertySet = "" Then
-                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                    s = $"{s}{indent}Select a PropertySet for '{UC.PropertyName}'{vbCrLf}"
                 End If
 
                 If UC.Comparison = "" Then
-                    s = String.Format("{0}{1}Set a Comparison for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                    s = $"{s}{indent}Set a Comparison for '{UC.PropertyName}'{vbCrLf}"
                 End If
 
                 If Not UC.Value = "" Then
                     If Not UtilsCommon.CheckValidPropertyFormulas(UC.Value) Then
-                        s = String.Format("{0}{1}Property formula '{2}' missing 'System.' or 'Custom.'{3}", s, indent, UC.Value, vbCrLf)
+                        s = $"{s}{indent}Property formula '{UC.Value}' missing 'System.' or 'Custom.'{vbCrLf}"
                     End If
                 End If
 
@@ -107,7 +107,7 @@ Public Class FormPropertyFilter
 
         If Not s = "" Then
             InputsOK = False
-            s = String.Format("Please correct the following before continuing{0}{1}", vbCrLf, s)
+            s = $"Please correct the following before continuing{vbCrLf}{s}"
             MsgBox(s, vbOKOnly)
         End If
 
@@ -242,7 +242,7 @@ Public Class FormPropertyFilter
         s = s.Replace(")", " ) ")
         s = s.Replace("  ", " ")
         s = s.Trim()
-        s = String.Format(" {0} ", s)
+        s = $" {s} "
 
         Me.Formula = s
         TextBoxFormula.Text = Me.Formula
@@ -265,13 +265,13 @@ Public Class FormPropertyFilter
                 If tmpFormula = "" Then
                     tmpFormula = Chr(Ascii)
                 Else
-                    tmpFormula = String.Format("{0} AND {1}", tmpFormula, Chr(Ascii))
+                    tmpFormula = $"{tmpFormula} AND {Chr(Ascii)}"
                 End If
             End If
             Ascii += 1
         Next
 
-        tmpFormula = String.Format(" {0} ", tmpFormula)
+        tmpFormula = $" {tmpFormula} "
 
         Me.Formula = tmpFormula
         TextBoxFormula.Text = Me.Formula
@@ -346,7 +346,7 @@ Public Class FormPropertyFilter
         tf = Direction.ToLower = "up"
         tf = tf Or Direction.ToLower = "down"
         If Not tf Then
-            MsgBox(String.Format("Unrecognized direction '{0}'", Direction), vbOKOnly)
+            MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
             Exit Sub
         End If
 
@@ -381,7 +381,7 @@ Public Class FormPropertyFilter
                         End If
 
                     Case Else
-                        MsgBox(String.Format("Direction '{0}' not recognized", Direction))
+                        MsgBox($"Direction '{Direction}' not recognized")
                 End Select
 
             Next
@@ -533,7 +533,7 @@ Public Class FormPropertyFilter
         End If
 
         If Proceed And ComboBoxSavedSettings.Items.Contains(Name) Then
-            Dim Result = MsgBox(String.Format("Name '{0}' already exists.  Do you want to replace it?", Name), vbYesNo)
+            Dim Result = MsgBox($"Name '{Name}' already exists.  Do you want to replace it?", vbYesNo)
             If Result = vbNo Then
                 Proceed = False
             End If

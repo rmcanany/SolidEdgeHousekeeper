@@ -474,7 +474,7 @@ Public Class FormExpressionEditor
 
         Dim ResultsMessage As String = PSError
 
-        Dim ErrorMessageFilename = String.Format("{0}\error_messages.txt", IO.Path.GetDirectoryName(PowershellFilename))
+        Dim ErrorMessageFilename = $"{IO.Path.GetDirectoryName(PowershellFilename)}\error_messages.txt"
 
         If IO.File.Exists(PowershellFilename) Then IO.File.Delete(PowershellFilename)
 
@@ -693,6 +693,7 @@ Public Class FormExpressionEditor
     Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click, ButtonHelp.Click
 
         Dim Tag As String = ""
+
         If Me.OutputType = "Snippet" Then
             MsgBox("The browser will open the Run External Program help topic.  Scroll down that page to access information about code snippets. ", vbOKOnly)
             Tag = "run-external-program"

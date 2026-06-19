@@ -110,7 +110,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 Dim s1 As String = ""
                 For Each s2 As String In _ExcludedFinishesList
                     If Not s2.Trim = "" Then
-                        s1 = String.Format("{0}{1}{2}", s1, s2, vbCrLf)
+                        s1 = $"{s1}{s2}{vbCrLf}"
                     End If
                 Next
                 If Not s1 = "" Then s1 = s1.Substring(0, s1.Length - 1) ' Remove trailing vbcrlf
@@ -256,7 +256,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                         SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp:=False))
 
                     If FinishName Is Nothing Then
-                        TaskLogger.AddMessage(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
+                        TaskLogger.AddMessage($"Property '{Me.FinishPropertyFormula}' not found")
                     End If
                 End If
 
@@ -270,7 +270,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
         If SEDoc.ReadOnly Then
@@ -509,7 +509,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 Dim UC As New UtilsCommon
 
                 If Not UC.CheckValidPropertyFormulas(Me.FinishPropertyFormula) Then
-                    ErrorLogger.AddMessage(String.Format("Could not parse property formula '{0}'", Me.FinishPropertyFormula))
+                    ErrorLogger.AddMessage($"Could not parse property formula '{Me.FinishPropertyFormula}'")
                 End If
 
                 If Not ((Me.OverrideBodyFaceStyle) Or (Me.OverrideMaterialFaceStyle)) Then
@@ -625,7 +625,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -661,7 +661,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 '    ComboBox.Items.Remove(ComboBox.SelectedItem)
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 
@@ -689,7 +689,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 Me.ExcludedFinishesList = tmpList
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 

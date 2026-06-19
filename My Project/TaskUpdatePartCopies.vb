@@ -134,7 +134,7 @@ Public Class TaskUpdatePartCopies
                                 TF = FileIO.FileSystem.FileExists(CopiedPart.FileName)
                                 TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
                                 If Not TF Then
-                                    TaskLogger.AddMessage(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
+                                    TaskLogger.AddMessage($"Part copy file not found: '{CopiedPart.FileName}'")
                                 Else
                                     If Me.UpdateParents Then
                                         ' Try a recursion
@@ -164,7 +164,7 @@ Public Class TaskUpdatePartCopies
                     End If
                 Next
             ElseIf Models.Count >= 300 Then
-                TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+                TaskLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
 
             End If
 
@@ -235,7 +235,7 @@ Public Class TaskUpdatePartCopies
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

@@ -47,7 +47,7 @@ Public Class FormEditTaskList
                     DataGridViewTarget.Columns.Add(Col2)
 
                 Case Else
-                    MsgBox(String.Format("Column type '{0}' not recognized", ColumnType), vbOKOnly)
+                    MsgBox($"Column type '{ColumnType}' not recognized", vbOKOnly)
             End Select
         Next
 
@@ -123,7 +123,7 @@ Public Class FormEditTaskList
                             End If
 
                         Case Else
-                            MsgBox(String.Format("Direction '{0}' not recognized", Direction))
+                            MsgBox($"Direction '{Direction}' not recognized")
                     End Select
 
                 Next
@@ -156,7 +156,7 @@ Public Class FormEditTaskList
 
         i = 2
         While DescriptionList.Contains(Description)
-            Description = String.Format("{0} [{1}]", ProposedDescription, CStr(i))
+            Description = $"{ProposedDescription} [{CStr(i)}]"
             i += 1
         End While
 
@@ -191,10 +191,10 @@ Public Class FormEditTaskList
         If RepeatsList.Count = 0 Then
             Me.DialogResult = DialogResult.OK
         Else
-            s = String.Format("Task names must be unique{0}", vbCrLf)
-            s = String.Format("{0}Please rename the following:{1}", s, vbCrLf)
+            s = $"Task names must be unique{vbCrLf}"
+            s = $"{s}Please rename the following:{vbCrLf}"
             For Each s2 In RepeatsList
-                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
+                s = $"{s}'{s2}'{vbCrLf}"
             Next
             MsgBox(s, vbOKOnly)
         End If
@@ -271,7 +271,7 @@ Public Class FormEditTaskList
                 DataGridViewTarget.Invalidate()
 
             Case Else
-                MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
+                MsgBox($"Column '{e.ColumnIndex}' not processed")
 
         End Select
     End Sub
@@ -290,8 +290,8 @@ Public Class FormEditTaskList
         Dim i As Integer
 
         If DataGridViewTarget.SelectedRows.Count = 0 Then
-            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
-            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            s = $"{s}No rows are selected.  Click in the column to the left{vbCrLf}"
+            s = $"{s}of the task description to select a row.{vbCrLf}"
             MsgBox(s)
             Exit Sub
         End If
@@ -325,8 +325,8 @@ Public Class FormEditTaskList
         Dim i As Integer
 
         If DataGridViewTarget.SelectedRows.Count = 0 Then
-            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
-            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            s = $"{s}No rows are selected.  Click in the column to the left{vbCrLf}"
+            s = $"{s}of the task description to select a row.{vbCrLf}"
             MsgBox(s)
             Exit Sub
         End If
@@ -359,8 +359,8 @@ Public Class FormEditTaskList
         Dim UP As New UtilsPreferences
 
         If DataGridViewSource.SelectedRows.Count = 0 Then
-            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
-            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            s = $"{s}No rows are selected.  Click in the column to the left{vbCrLf}"
+            s = $"{s}of the task description to select a row.{vbCrLf}"
             MsgBox(s)
             Exit Sub
         End If

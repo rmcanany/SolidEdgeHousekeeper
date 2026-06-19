@@ -57,7 +57,7 @@ Public Class TaskOpenSave
                 SEDoc.Save()
                 SEApp.DoIdle()
             Catch ex As Exception
-                TaskLogger.AddMessage($"Unable to save file.  Reported error: {ex.Message}")
+                TaskLogger.AddMessage($"Unable to save file.  Exception: {ex.Message}")
             End Try
         End If
 

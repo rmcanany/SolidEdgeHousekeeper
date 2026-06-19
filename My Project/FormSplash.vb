@@ -26,7 +26,7 @@
     End Sub
 
     Public Sub UpdateStatus(Message As String)
-        LabelStatus.Text = String.Format(" {0}", Message)
+        LabelStatus.Text = $" {Message}"
         Application.DoEvents()
     End Sub
 

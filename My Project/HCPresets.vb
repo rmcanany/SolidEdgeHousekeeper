@@ -29,9 +29,9 @@ Public Class HCPresets
                 Catch ex As Exception
                     Me.Items.Clear()
 
-                    Dim s As String = String.Format("Unable to load saved Presets.{0}", vbCrLf)
-                    s = String.Format("{0}Reported error: '{1}'.", s, ex.Message)
-                    MsgBox(ex.Message)
+                    Dim s As String = $"Unable to load saved Presets.{vbCrLf}"
+                    s = $"{s}Reported error: '{ex.Message}'."
+                    MsgBox(s)
 
                     Exit Sub
                 End Try
@@ -95,7 +95,7 @@ Public Class Preset
         tmpPresetDict("SavePropertyFilters") = CStr(Me.SavePropertyFilters)
 
         If Not CheckJSONDict(tmpPresetDict) Then
-            MsgBox(String.Format("{0}: Extra or missing property names in JSON dictionary", Me.ToString))
+            MsgBox($"{Me.ToString}: Extra or missing property names in JSON dictionary")
             JSONString = ""
         Else
             JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(tmpPresetDict)
@@ -112,7 +112,7 @@ Public Class Preset
             tmpPresetDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
             If Not CheckJSONDict(tmpPresetDict) Then
-                Throw New Exception(String.Format("{0}: Extra or missing property names in JSON dictionary", Me.ToString))
+                Throw New Exception($"{Me.ToString}: Extra or missing property names in JSON dictionary")
             End If
 
             Me.Name = tmpPresetDict("Name")

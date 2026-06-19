@@ -36,9 +36,9 @@ Public Class Form_Main
                     BT_Update.BackColor = Color.Orange
 
                     If Me.RemindFilelistUpdate Then
-                        Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-                        s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-                        s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                        Dim s As String = $"The file list is out of date.{vbCrLf}"
+                        s = $"{s}When you are done with setup, press the orange Update button to populate the list.{vbCrLf}{vbCrLf}"
+                        s = $"{s}(Disable this message on the Configuration Tab -- General Page){vbCrLf}"
                         MsgBox(s, vbOKOnly)
                     End If
 
@@ -1277,7 +1277,7 @@ Public Class Form_Main
             GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
 
             For i As Integer = 0 To GroupHeaderNames.Count - 1
-                If ShowSplash Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i)))
+                If ShowSplash Then Splash.UpdateStatus($"Initializing {GroupHeaderNames(i)}")
 
                 Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
                 LVGroup.Name = GroupNames(i)
@@ -1289,7 +1289,7 @@ Public Class Form_Main
         ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Collapsible)
 
         ' Form title
-        Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
+        Me.Text = $"Solid Edge Housekeeper {Me.Version}"
         If Not Me.PreviewVersion = "" Then Me.Text = $"{Me.Text} Preview {Me.PreviewVersion}"
 
         '###### INITIALIZE TASK LIST ######
@@ -1301,7 +1301,7 @@ Public Class Form_Main
         Dim tmpTaskPanel As Panel = Nothing
 
         For Each c As Control In TabPageTasks.Controls
-            If ShowSplash Then Splash.UpdateStatus(String.Format("{0}", c.Name))
+            If ShowSplash Then Splash.UpdateStatus($"{c.Name}")
 
             If c.Name = "TaskPanel" Then
                 tmpTaskPanel = CType(c, Panel)
@@ -1315,7 +1315,7 @@ Public Class Form_Main
 
             Dim Task = TaskList(i)
 
-            If ShowSplash Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name))
+            If ShowSplash Then Splash.UpdateStatus($"Configuring {Task.Name}")
 
             If Not Me.RememberTasks Then
                 Task.IsSelectedTask = False
@@ -1483,7 +1483,7 @@ Public Class Form_Main
                         T.AssemblyTemplate = Me.AssemblyTemplate
                     End If
                 Else
-                    s = String.Format("{0}RequiresAssemblyTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                    s = $"{s}RequiresAssemblyTemplate {TaskType.ToString}{vbCrLf}"
                 End If
             End If
             If Task.RequiresPartTemplate Then
@@ -1493,7 +1493,7 @@ Public Class Form_Main
                         T.PartTemplate = Me.PartTemplate
                     End If
                 Else
-                    s = String.Format("{0}RequiresPartTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                    s = $"{s}RequiresPartTemplate {TaskType.ToString}{vbCrLf}"
                 End If
             End If
             If Task.RequiresSheetmetalTemplate Then
@@ -1503,7 +1503,7 @@ Public Class Form_Main
                         T.SheetmetalTemplate = Me.SheetmetalTemplate
                     End If
                 Else
-                    s = String.Format("{0}RequiresSheetmetalTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                    s = $"{s}RequiresSheetmetalTemplate {TaskType.ToString}{vbCrLf}"
                 End If
             End If
             If Task.RequiresDraftTemplate Then
@@ -1518,7 +1518,7 @@ Public Class Form_Main
                         T.DraftTemplate = Me.DraftTemplate
                     End If
                 Else
-                    s = String.Format("{0}RequiresDraftTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                    s = $"{s}RequiresDraftTemplate {TaskType.ToString}{vbCrLf}"
                 End If
             End If
             If Task.RequiresMaterialTable Then
@@ -1538,7 +1538,7 @@ Public Class Form_Main
                         T.MaterialTable = Me.MaterialTable
                     End If
                 Else
-                    s = String.Format("{0}RequiresMaterial {1}{2}", s, TaskType.ToString, vbCrLf)
+                    s = $"{s}RequiresMaterial {TaskType.ToString}{vbCrLf}"
                 End If
             End If
 
@@ -1640,7 +1640,7 @@ Public Class Form_Main
             End If
         Else
             Dim s = "Template properties required for this command not found. "
-            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            s = $"{s}Populate them on the Configuration Tab -- Templates Page."
             MsgBox(s, vbOKOnly)
             Exit Sub
         End If
@@ -1965,7 +1965,7 @@ Public Class Form_Main
                         tmpItem.ImageKey = "excel"
                         tmpItem.Tag = "excel"
                     Case Else
-                        MsgBox(String.Format("{0}: Extension {1} not recognized", Me.ToString, IO.Path.GetExtension(tmpFileName).ToLower))
+                        MsgBox($"{Me.ToString}: Extension {IO.Path.GetExtension(tmpFileName).ToLower} not recognized")
                 End Select
 
                 tmpItem.SubItems.Add(tmpFileName)
@@ -1981,65 +1981,6 @@ Public Class Form_Main
 
             Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFilenameList(0))
         End If
-
-
-        'Dim tmpFileDialog As New OpenFileDialog
-        'tmpFileDialog.Title = "Select list of files"
-        'tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
-        'tmpFileDialog.Multiselect = True
-        'tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
-
-        'If tmpFileDialog.ShowDialog() = DialogResult.OK Then
-
-        '    For Each tmpFileName As String In tmpFileDialog.FileNames
-
-        '        Dim tmpItem As New ListViewItem
-
-        '        Select Case IO.Path.GetExtension(tmpFileName).ToLower
-
-        '            Case Is = ".tsv"
-        '                tmpItem.Text = "TSV list"
-        '                tmpItem.ImageKey = "csv" ' Not a typo.  Reusing 'csv'
-        '                tmpItem.Tag = "tsv"
-        '            Case Is = ".txt"
-        '                tmpItem.Text = "TXT list"
-        '                tmpItem.ImageKey = "txt"
-        '                tmpItem.Tag = "txt"
-        '            Case Is = ".csv"
-        '                tmpItem.Text = "CSV list"
-        '                tmpItem.ImageKey = "csv"
-        '                tmpItem.Tag = "csv"
-        '            Case Is = ".xls", ".xlsx", ".xlsm"
-        '                tmpItem.Text = "Excel list"
-        '                tmpItem.ImageKey = "excel"
-        '                tmpItem.Tag = "excel"
-        '            Case Else
-        '                MsgBox(String.Format("{0}: Extension {1} not recognized", Me.ToString, IO.Path.GetExtension(tmpFileName).ToLower))
-        '        End Select
-
-        '        tmpItem.SubItems.Add(tmpFileName)
-        '        tmpItem.Group = ListViewSources.Groups.Item("Sources")
-
-        '        tmpItem.Name = tmpFileName
-        '        If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
-        '            ListViewSources.Items.Add(tmpItem)
-        '            ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-        '        End If
-
-        '    Next
-
-        '    ListViewFilesOutOfDate = True
-
-        '    'If Me.RemindFilelistUpdate Then
-        '    '    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
-        '    '    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
-        '    '    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
-        '    '    MsgBox(s, vbOKOnly)
-        '    'End If
-
-        '    Me.WorkingFilesPath = IO.Path.GetDirectoryName(tmpFileDialog.FileNames(0))
-        'End If
-
 
     End Sub
 
@@ -2575,8 +2516,8 @@ Public Class Form_Main
                 My.Computer.FileSystem.DeleteFile(Filename, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
                 tmpItem.Remove()
             Catch ex As Exception
-                Dim s As String = String.Format("Could not move {0} to the recycle bin.", IO.Path.GetFileName(Filename))
-                s = String.Format("{0}  Click OK to keep processing, Cancel to quit.", s)
+                Dim s As String = $"Could not move {IO.Path.GetFileName(Filename)} to the recycle bin."
+                s = $"{s}  Click OK to keep processing, Cancel to quit."
                 Dim Result As MsgBoxResult = MsgBox(s)
                 If Result = MsgBoxResult.Cancel Then Exit For
             End Try
@@ -2739,11 +2680,11 @@ Public Class Form_Main
         Try
             Fraction = CDbl(TextBoxSortRandomSampleFraction.Text)
             If Fraction < 0 Or Fraction > 1 Then
-                MsgBox(String.Format("Number '{0}' is not between 0.0 and 1.0", Fraction))
+                MsgBox($"Number '{Fraction}' is not between 0.0 and 1.0")
                 TextBoxSortRandomSampleFraction.Text = "0.1"
             End If
         Catch ex As Exception
-            MsgBox(String.Format("Cannot convert '{0}' to a decimal number", TextBoxSortRandomSampleFraction.Text))
+            MsgBox($"Cannot convert '{TextBoxSortRandomSampleFraction.Text}' to a decimal number")
             TextBoxSortRandomSampleFraction.Text = "0.1"
         End Try
     End Sub
@@ -3744,7 +3685,7 @@ Public Class Form_Main
 
             PropertyNameEnglish = tmpPropertyData.EnglishName
         Else
-            MsgBox(String.Format("In editbox_LostFocus, PropertyData {0} not found", PropertyName))
+            MsgBox($"In editbox_LostFocus, PropertyData {PropertyName} not found")
             PropertySet = "Custom"
             PropertyNameEnglish = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
         End If
@@ -3981,7 +3922,7 @@ Public Class Form_Main
 
             For Each tmpPreset In Me.Presets.Items
                 If tmpPreset.Name = Name Then
-                    Dim Result As MsgBoxResult = MsgBox(String.Format("The preset '{0}' already exists.  Do you want to overwrite it?", Name), vbYesNo)
+                    Dim Result As MsgBoxResult = MsgBox($"The preset '{Name}' already exists.  Do you want to overwrite it?", vbYesNo)
                     If Result = MsgBoxResult.No Then
                         Exit Sub
                     Else
@@ -4473,6 +4414,16 @@ End Class
 ' IO.File.WriteAllLines(DefaultsFilename, Defaults)
 
 ' IO.File.WriteAllText(Filename, JSONString)
+
+
+' ###### LIST JOIN ######
+
+'Dim lines As String() = {
+'    "Line 1",
+'    "Line 2",
+'    "Line 3"
+'  }
+'Dim s As String = Join(lines, vbCrLf)
 
 
 ' ###### DOEVENTS, SLEEP ######

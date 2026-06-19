@@ -176,7 +176,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             SETemplateDoc = CType(SEApp.Documents.Open(Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
             SEApp.DoIdle()
         Catch ex As Exception
-            TaskLogger.AddMessage(String.Format("Could not open template '{0}'", Me.DraftTemplate))
+            TaskLogger.AddMessage($"Could not open template '{Me.DraftTemplate}'.  Exception: {ex.Message}")
         End Try
 
         SEDoc.Activate()
@@ -291,15 +291,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             End If
         Next
 
-        'For Each Sheet In UC.GetSheets(tmpSEDoc, "Background")
-        '    If TemplateSheetNames.Contains(Sheet.Name) Then
-        '        Sheet.ReplaceBackground(DraftTemplate, Sheet.Name)
-        '        SEApp.DoIdle()
-        '    Else
-        '        TaskLogger.AddMessage(String.Format("Template has no background named '{0}'", Sheet.Name))
-        '    End If
-        'Next
-
     End Sub
 
     Private Function DocStyleNotInTemplate(
@@ -309,7 +300,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim Names As String = ""
         For Each s As String In DocStyleNameList
             If Not TemplateStyleNameList.Contains(s) Then
-                Names = String.Format("{0} {1},", Names, s)
+                Names = $"{Names} {s},"
             End If
         Next
 
@@ -369,7 +360,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         DocDimensionStyle.HoleCalloutCounterdrill = TemplateDimensionStyle.HoleCalloutCounterdrill
                         DocDimensionStyle.HoleCalloutCounterdrillThreaded = TemplateDimensionStyle.HoleCalloutCounterdrillThreaded
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+                        TaskLogger.AddMessage($"Error applying DimensionStyle '{TemplateDimensionStyle.Name}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -382,7 +373,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     tmpDocDimensionStyle.HoleCalloutCounterdrill = TemplateDimensionStyle.HoleCalloutCounterdrill
                     tmpDocDimensionStyle.HoleCalloutCounterdrillThreaded = TemplateDimensionStyle.HoleCalloutCounterdrillThreaded
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error adding DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+                    TaskLogger.AddMessage($"Error adding DimensionStyle '{TemplateDimensionStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
         Next
@@ -393,7 +384,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         'End If
         MissingStyles = DocStyleNotInTemplate(DocStyleNamesInUse, TemplateStyleNames)
         If Len(MissingStyles) > 0 Then
-            TaskLogger.AddMessage(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
+            TaskLogger.AddMessage($"Dimension styles in Draft but not in Template: {MissingStyles}")
         End If
 
     End Sub
@@ -429,7 +420,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateDrawingViewStyle, DocDrawingViewStyle, TaskLogger.AddLogger($"Drawing view style {TemplateDrawingViewStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
+                        TaskLogger.AddMessage($"Error applying DrawingViewStyle '{TemplateDrawingViewStyle.Name}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -439,7 +430,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     tmpDocDrawingViewStyle = DocDrawingViewStyles.Add(TemplateDrawingViewStyle.Name, "")
                     UC.CopyProperties(TemplateDrawingViewStyle, tmpDocDrawingViewStyle, TaskLogger.AddLogger($"Drawing view style {TemplateDrawingViewStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error adding DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
+                    TaskLogger.AddMessage($"Error adding DrawingViewStyle '{TemplateDrawingViewStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
         Next
@@ -483,7 +474,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateLinearStyle, DocLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+                        TaskLogger.AddMessage($"Error applying LinearStyle '{TemplateLinearStyle.Name}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -493,14 +484,14 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     tmpDocLinearStyle = DocLinearStyles.Add(TemplateLinearStyle.Name, "")
                     UC.CopyProperties(TemplateLinearStyle, tmpDocLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error adding LinearStyle '{0}'", TemplateLinearStyle.Name))
+                    TaskLogger.AddMessage($"Error adding LinearStyle '{TemplateLinearStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
         Next
 
         MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
         If Len(MissingStyles) > 0 Then
-            TaskLogger.AddMessage(String.Format("Linear styles in Draft but not in Template: {0}", MissingStyles))
+            TaskLogger.AddMessage($"Linear styles in Draft but not in Template: {MissingStyles}")
         End If
 
     End Sub
@@ -549,7 +540,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         'DocTableStyle.HeaderTextStyle = TemplateTableStyle.HeaderTextStyle
                         'DocTableStyle.DataTextStyle = TemplateTableStyle.DataTextStyle
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying TableStyle '{0}'", TemplateTableStyle.Name))
+                        TaskLogger.AddMessage($"Error applying TableStyle '{TemplateTableStyle.Name}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -570,14 +561,14 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     'tmpDocTableStyle.HeaderTextStyle = TemplateTableStyle.HeaderTextStyle
                     'tmpDocTableStyle.DataTextStyle = TemplateTableStyle.DataTextStyle
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error adding TableStyle '{0}'", TemplateTableStyle.Name))
+                    TaskLogger.AddMessage($"Error adding TableStyle '{TemplateTableStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
         Next
 
         MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
         If Len(MissingStyles) > 0 Then
-            TaskLogger.AddMessage(String.Format("Table styles in Draft but not in Template: {0}", MissingStyles))
+            TaskLogger.AddMessage($"Table styles in Draft but not in Template: {MissingStyles}")
         End If
     End Sub
 
@@ -613,7 +604,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                        TaskLogger.AddMessage($"Error applying TextCharStyle '{TemplateTextCharStyle.Name}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -623,14 +614,14 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     tmpDocTextCharStyle = DocTextCharStyles.Add(TemplateTextCharStyle.Name, "")
                     UC.CopyProperties(TemplateTextCharStyle, tmpDocTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error adding TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                    TaskLogger.AddMessage($"Error adding TextCharStyle '{TemplateTextCharStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
         Next
 
         MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
         If Len(MissingStyles) > 0 Then
-            TaskLogger.AddMessage(String.Format("Text Char styles in Draft but not in Template: {0}", MissingStyles))
+            TaskLogger.AddMessage($"Text Char styles in Draft but not in Template: {MissingStyles}")
         End If
     End Sub
 
@@ -666,7 +657,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateTextStyle, DocTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+                        TaskLogger.AddMessage($"Error applying TextStyle '{TemplateTextStyle.Name}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -676,14 +667,14 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     tmpDocTextStyle = DocTextStyles.Add(TemplateTextStyle.Name, "")
                     UC.CopyProperties(TemplateTextStyle, tmpDocTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error adding TextStyle '{0}'", TemplateTextStyle.Name))
+                    TaskLogger.AddMessage($"Error adding TextStyle '{TemplateTextStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
         Next
 
         MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
         If Len(MissingStyles) > 0 Then
-            TaskLogger.AddMessage(String.Format("Text styles in Draft but not in Template: {0}", MissingStyles))
+            TaskLogger.AddMessage($"Text styles in Draft but not in Template: {MissingStyles}")
         End If
     End Sub
 
@@ -816,8 +807,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -864,7 +854,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -879,7 +869,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 Me.DraftTemplate = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

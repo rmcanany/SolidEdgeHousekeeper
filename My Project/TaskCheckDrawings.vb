@@ -227,7 +227,7 @@ Public Class TaskCheckDrawings
             DrawingViews = Sheet.DrawingViews
             For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                 If Not DrawingView.IsUpToDate Then
-                    s = String.Format("Drawing views out of date on sheet '{0}'", Sheet.Name)
+                    s = $"Drawing views out of date on sheet '{Sheet.Name}'"
                     If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                     Exit For
                 End If
@@ -236,7 +236,7 @@ Public Class TaskCheckDrawings
                     If DrawingView.ModelLink IsNot Nothing Then
                         ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
                         If ModelLink.ModelOutOfDate Then
-                            s = String.Format("Model out of date on sheet '{0}'", Sheet.Name)
+                            s = $"Model out of date on sheet '{Sheet.Name}'"
                             If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                             Exit For
                         End If
@@ -271,7 +271,7 @@ Public Class TaskCheckDrawings
                 Try
                     If Balloon.Leader Then
                         If Not Balloon.IsTerminatorAttachedToEntity Then
-                            s = String.Format("Detached annotation on sheet '{0}'.  Displayed text is '{1}'", Sheet.Name, Balloon.BalloonDisplayedText)
+                            s = $"Detached annotation on sheet '{Sheet.Name}'.  Displayed text is '{Balloon.BalloonDisplayedText}'"
                             TaskLogger.AddMessage(s)
                         End If
                     End If
@@ -297,7 +297,7 @@ Public Class TaskCheckDrawings
                     ParentSheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
                     Dim DimValue As Double
                     Dimension.GetValueEx(DimValue, SolidEdgeFramework.seUnitsTypeConstants.seUnitsType_Document)
-                    s = String.Format("Detached dimension on sheet '{0}'.  Displayed value is '{1}'", ParentSheet.Name, DimValue)
+                    s = $"Detached dimension on sheet '{ParentSheet.Name}'.  Displayed value is '{DimValue}'"
                     TaskLogger.AddMessage(s)
                 End If
 
@@ -313,7 +313,7 @@ Public Class TaskCheckDrawings
         Dim BackgroundSheet As SolidEdgeDraft.Sheet
         For Each BackgroundSheet In UC.GetSheets(tmpSEDoc, "Background")
             If BackgroundSheet.DrawingViews.Count > 0 Then
-                s = String.Format("Drawing view on background sheet '{0}'", BackgroundSheet.Name)
+                s = $"Drawing view on background sheet '{BackgroundSheet.Name}'"
                 If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
             End If
@@ -349,7 +349,7 @@ Public Class TaskCheckDrawings
                     If DVSheet.Points2d IsNot Nothing Then Count += DVSheet.Points2d.Count
 
                     If Count > 0 Then
-                        s = String.Format("Draw-In-View graphics on sheet '{0}'", Sheet.Name)
+                        s = $"Draw-In-View graphics on sheet '{Sheet.Name}'"
                         If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
                         Exit For
                     End If
@@ -386,25 +386,25 @@ Public Class TaskCheckDrawings
                     If Not tf Then
 
                         If Dimension.OverrideString IsNot Nothing AndAlso Not Dimension.OverrideString = "" Then
-                            s = String.Format("Not-To-Scale dimensions on sheet '{0}'.  Displayed text is '{1}'", Sheet.Name, Dimension.OverrideString)
+                            s = $"Not-To-Scale dimensions on sheet '{Sheet.Name}'.  Displayed text is '{Dimension.OverrideString}'"
                             If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
                         End If
 
                         If Dimension.DisplayType = SolidEdgeFrameworkSupport.DimDispTypeConstants.igDimDisplayTypeBlank Then
-                            s = String.Format("Hidden dimension values on sheet '{0}'.  Displayed text is '", Sheet.Name)
+                            s = $"Hidden dimension values on sheet '{Sheet.Name}'.  Displayed text is '"
                             Dim TextList As New List(Of String)
                             TextList.AddRange({Dimension.PrefixString, Dimension.SuperfixString, Dimension.SubfixString, Dimension.SubfixString2, Dimension.SuffixString})
                             Dim s1 As String = ""
                             For Each s2 As String In TextList
                                 If Not s2 = "" Then
                                     If s1 = "" Then
-                                        s = String.Format("{0}{1}", s, s2)
+                                        s = $"{s}{s2}"
                                     Else
-                                        s = String.Format("{0} {1}", s, s2)
+                                        s = $"{s} {s2}"
                                     End If
                                 End If
                             Next
-                            s = String.Format("{0}'", s)
+                            s = $"{s}'"
                             If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
                         End If
 
@@ -615,7 +615,7 @@ Public Class TaskCheckDrawings
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

@@ -985,8 +985,7 @@ Public Class TaskShowHideConstructions
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

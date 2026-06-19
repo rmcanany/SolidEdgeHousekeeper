@@ -98,12 +98,12 @@ Public Class UtilsExecute
         Else
             ElapsedTime = Now.Subtract(StartTime).TotalMinutes
             If ElapsedTime < 60 Then
-                ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+                ElapsedTimeText = $"in {ElapsedTime.ToString("0.0")} min."
             Else
-                ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
+                ElapsedTimeText = $"in {(ElapsedTime / 60).ToString("0.0")} hr."
             End If
 
-            FMain.TextBoxStatus.Text = "Finished processing " + FilesToProcessTotal.ToString + " files " + ElapsedTimeText
+            FMain.TextBoxStatus.Text = $"Finished processing {FilesToProcessTotal} files {ElapsedTimeText}"
         End If
 
         FMain.LabelTimeRemaining.Text = ""
@@ -171,7 +171,7 @@ Public Class UtilsExecute
             For Each Filename As ListViewItem In FMain.ListViewFiles.Items
 
                 '########## can be unified in a sub
-                FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
+                FMain.TextBoxStatus.Text = $"Checking file integrity: {IO.Path.GetFileName(Filename.Name)}"
                 Application.DoEvents()
 
                 If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
@@ -194,7 +194,8 @@ Public Class UtilsExecute
             For Each Filename As ListViewItem In FMain.ListViewFiles.SelectedItems
 
                 '########## can be unified in a sub
-                FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
+                'FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
+                FMain.TextBoxStatus.Text = $"Checking file integrity: {IO.Path.GetFileName(Filename.Name)}"
                 Application.DoEvents()
 
                 If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
@@ -254,13 +255,14 @@ Public Class UtilsExecute
                             If TypeOf Task Is TaskCreateDrawingOfFlatPattern Then
                                 Dim T As TaskCreateDrawingOfFlatPattern = CType(Task, TaskCreateDrawingOfFlatPattern)
                                 If Not T.DraftTemplate.Contains(FMain.TCCachePath) Then
-                                    StartLogger.AddMessage(String.Format("{0}: Template must be in TeamCenter cache folder", Task.Description))
+                                    StartLogger.AddMessage($"{Task.Description}: Template must be in TeamCenter cache folder")
                                 End If
                                 Exit For
                             ElseIf TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
                                 Dim T As TaskUpdateDrawingStylesFromTemplate = CType(Task, TaskUpdateDrawingStylesFromTemplate)
                                 If Not T.DraftTemplate.Contains(FMain.TCCachePath) Then
-                                    StartLogger.AddMessage(String.Format("{0}: Template must be in TeamCenter cache folder", Task.Description))
+                                    'StartLogger.AddMessage(String.Format("{0}: Template must be in TeamCenter cache folder", Task.Description))
+                                    StartLogger.AddMessage($"{Task.Description}: Template must be in TeamCenter cache folder")
                                 End If
                                 Exit For
                             End If
@@ -316,7 +318,7 @@ Public Class UtilsExecute
 
         If (IncompatibleTaskNamesList.Count > 0) And (Not SelectedTasksCount = 1) Then
             For Each s As String In IncompatibleTaskNamesList
-                StartLogger.AddMessage(String.Format("{0} cannot be run with other tasks enabled", s))
+                StartLogger.AddMessage($"{s} cannot be run with other tasks enabled")
             Next
         End If
 
@@ -373,21 +375,21 @@ Public Class UtilsExecute
             RemainingTime = TotalEstimatedTime - ElapsedTime
 
             If ElapsedTime < 60 Then
-                ElapsedTimeString = String.Format("{0} m", ElapsedTime.ToString("0.0"))
+                ElapsedTimeString = $"{ElapsedTime.ToString("0.0")} m"
             Else
-                ElapsedTimeString = String.Format("{0} h", (ElapsedTime / 60).ToString("0.0"))
+                ElapsedTimeString = $"{(ElapsedTime / 60).ToString("0.0")} h"
             End If
 
             If RemainingTime < 60 Then
-                RemainingTimeString = String.Format("{0} m", RemainingTime.ToString("0.0"))
+                RemainingTimeString = $"{RemainingTime.ToString("0.0")} m"
             Else
-                RemainingTimeString = String.Format("{0} h", (RemainingTime / 60).ToString("0.0"))
+                RemainingTimeString = $"{(RemainingTime / 60).ToString("0.0")} h"
             End If
 
             If RemainingTime < 0.1 Then
                 FMain.LabelTimeRemaining.Text = ""
             Else
-                FMain.LabelTimeRemaining.Text = String.Format("Elapsed {0}, Remaining {1}", ElapsedTimeString, RemainingTimeString)
+                FMain.LabelTimeRemaining.Text = $"Elapsed {ElapsedTimeString}, Remaining {RemainingTimeString}"
             End If
 
 
@@ -413,7 +415,7 @@ Public Class UtilsExecute
         ElseIf Filetype = "All" Then
             FilesToProcess = UFL.GetFileNames("*.*")
         Else
-            MsgBox("In ProcessFiles(), Filetype not recognized: " + Filetype + ".  Exiting...")
+            MsgBox($"In ProcessFiles(), Filetype not recognized: {Filetype}.  Exiting...")
             SEApp.Quit()
             End
         End If
@@ -442,7 +444,7 @@ Public Class UtilsExecute
                 Exit Sub
             End If
 
-            msg = String.Format("{0}/{1} {2}", FilesToProcessCompleted + 1, FilesToProcessTotal, System.IO.Path.GetFileName(FileToProcess))
+            msg = $"{FilesToProcessCompleted + 1}/{FilesToProcessTotal} {System.IO.Path.GetFileName(FileToProcess)}"
             FMain.TextBoxStatus.Text = msg
 
             Dim tmpFiletype As String = ""
@@ -467,7 +469,7 @@ Public Class UtilsExecute
             If Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
                 Dim tmpPath As String = System.IO.Path.GetDirectoryName(FileToProcess)
                 Dim tmpFilename As String = System.IO.Path.GetFileName(FileToProcess)
-                Dim s As String = String.Format("{0} in {1}", tmpFilename, tmpPath)
+                Dim s As String = $"{tmpFilename} in {tmpPath}"
 
                 LVItemReverseLUT(idx).ImageKey = "Error"
             Else
@@ -630,7 +632,7 @@ Public Class UtilsExecute
             TotalAborts += 1
             If TotalAborts >= TotalAbortsMaximum Then
                 FMain.StopProcess = True
-                AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
+                AbortList.Add($"Total aborts exceed maximum of {TotalAbortsMaximum}.  Exiting...")
             Else
                 If FMain.SolidEdgeRequired > 0 Then
                     'Dim USEA = New UtilsSEApp(FMain)
@@ -647,7 +649,7 @@ Public Class UtilsExecute
             If ex.ToString.Contains("SolidEdgeFramework.Documents.Open") Then
                 FileLogger.AddMessage("Error opening file")
             Else
-                FileLogger.AddMessage(String.Format("Error processing file"))
+                FileLogger.AddMessage("Error processing file")
                 For Each s In AbortList
                     FileLogger.AddMessage(s)
                 Next
@@ -746,7 +748,7 @@ Public Class UtilsExecute
                 If Not OldStatus.ToLower = "Available".ToLower Then
                     Proceed = SSDoc.SetStatus(OldStatus)
                     If Not Proceed Then
-                        ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus)
+                        ErrorMessage = $"Change status to '{OldStatus}' did not succeed"
                     End If
                 End If
 
@@ -755,7 +757,7 @@ Public Class UtilsExecute
                 If Not NewStatus.ToLower = "Available".ToLower Then
                     Proceed = SSDoc.SetStatus(NewStatus)
                     If Not Proceed Then
-                        ErrorMessage = String.Format("Change status to '{0}' did not succeed", NewStatus)
+                        ErrorMessage = $"Change status to '{NewStatus}' did not succeed"
                     End If
                 End If
             End If

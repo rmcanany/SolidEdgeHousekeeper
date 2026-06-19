@@ -109,7 +109,7 @@ Public Class TaskCheckInterference
         NumOccurrences = UO.AllOccurrences.Count + UO.AllSubOccurrences.Count
 
         If NumOccurrences > Me.NumOccurrencesLimit Then
-            Dim s = String.Format("Number of occurrences {0} exceeds limit {1}.", NumOccurrences, Me.NumOccurrencesLimit)
+            Dim s = $"Number of occurrences {NumOccurrences} exceeds limit {Me.NumOccurrencesLimit}."
             TaskLogger.AddMessage(s)
         End If
 
@@ -125,7 +125,7 @@ Public Class TaskCheckInterference
                 IgnoreSameNominalDiaConstant:=IgnoreD,
                 IgnoreNonThreadVsThreadConstant:=IgnoreT)
             Catch ex As Exception
-                TaskLogger.AddMessage("Error running interference check")
+                TaskLogger.AddMessage($"Error running interference check.  Exception: {ex.Message}")
             End Try
         End If
 
@@ -207,7 +207,7 @@ Public Class TaskCheckInterference
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -226,7 +226,7 @@ Public Class TaskCheckInterference
                 End Try
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 

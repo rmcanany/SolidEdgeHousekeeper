@@ -212,7 +212,7 @@ Public Class UtilsPowerShell
         TopList.Add("Imports System.Collections.Generic")
         TopList.Add("")
         'TopList.Add("Public Class Expression")
-        TopList.Add(String.Format("Public Class Expression{0}", RandomIdentifier))
+        TopList.Add($"Public Class Expression{RandomIdentifier}")
         TopList.Add("")
         TopList.Add("    Public Shared Function RunExpression() As String")
         TopList.Add("")
@@ -246,7 +246,7 @@ Public Class UtilsPowerShell
 
         BotList.Add("")
         'BotList.Add("$Result = [Expression]::RunExpression()")
-        BotList.Add(String.Format("$Result = [Expression{0}]::RunExpression()", RandomIdentifier))
+        BotList.Add($"$Result = [Expression{RandomIdentifier}]::RunExpression()")
         BotList.Add("Write-Output $Result")
 
         ''BotList.Add("$Result | Out-File -FilePath 'C:\data\junk\HousekeeperExpressionResult.txt' -Encoding UTF8")
@@ -324,7 +324,7 @@ Public Class UtilsPowerShell
         Toplist.Add("Imports System.Linq")
         Toplist.Add("")
         'Toplist.Add("Public Class Snippet")
-        Toplist.Add(String.Format("Public Class Snippet{0}", RandomIdentifier))
+        Toplist.Add($"Public Class Snippet{RandomIdentifier}")
         Toplist.Add("")
         Toplist.Add("    Public Shared Function RunSnippet(StartupPath As String) As Integer")
         Toplist.Add("        Dim ExitStatus As Integer = 0")
@@ -336,7 +336,10 @@ Public Class UtilsPowerShell
         Toplist.Add("        Try")
         Toplist.Add("            SEApp = CType(Runtime.InteropServices.Marshal.GetActiveObject(""SolidEdge.Application""), SolidEdgeFramework.Application)")
         Toplist.Add("            SEDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)")
+
+        ' ###### Can't replace 'String.Format' with '$'.  The PowerShell interpreter doesn't understand it. ######
         Toplist.Add("            Console.WriteLine(String.Format(""Processing {0}"", SEDoc.Name))")
+
         Toplist.Add("        Catch ex As Exception")
         Toplist.Add("            ExitStatus = 1")
         Toplist.Add("            ErrorMessageList.Add(""Unable to connect to Solid Edge, or no file is open"")")
@@ -350,12 +353,14 @@ Public Class UtilsPowerShell
 
         Dim tmpMidlist = IO.File.ReadAllLines(SnippetFilename).ToList
         For Each s In tmpMidlist
-            Midlist.Add(String.Format("{0}{1}", Indent, s))
+            Midlist.Add($"{Indent}{s}")
         Next
 
         Botlist.Add("            Catch ex As Exception")
         Botlist.Add("                ExitStatus = 1")
+
         Botlist.Add("                ErrorMessageList.Add(String.Format(""{0}"", ex.Message))")
+
         Botlist.Add("            End Try")
         Botlist.Add("        End If")
         Botlist.Add("")
@@ -377,7 +382,9 @@ Public Class UtilsPowerShell
         Botlist.Add("")
         Botlist.Add("    Private Shared Sub SaveErrorMessages(StartupPath As String, ErrorMessageList As List(Of String))")
         Botlist.Add("        Dim ErrorFilename As String")
+
         Botlist.Add("        ErrorFilename = String.Format(""{0}\error_messages.txt"", StartupPath)")
+
         Botlist.Add("        IO.File.WriteAllLines(ErrorFilename, ErrorMessageList)")
         Botlist.Add("    End Sub")
         Botlist.Add("")
@@ -388,10 +395,10 @@ Public Class UtilsPowerShell
         Botlist.Add("Add-Type -TypeDefinition $Source -ReferencedAssemblies $DLLs -Language VisualBasic")
         Botlist.Add("")
         'Botlist.Add("[Snippet]::LoadLibrary($DLLs)")
-        Botlist.Add(String.Format("[Snippet{0}]::LoadLibrary($DLLs)", RandomIdentifier))
+        Botlist.Add($"[Snippet{RandomIdentifier}]::LoadLibrary($DLLs)")
         Botlist.Add("")
         'Botlist.Add("$ExitStatus = [Snippet]::RunSnippet($StartupPath)")
-        Botlist.Add(String.Format("$ExitStatus = [Snippet{0}]::RunSnippet($StartupPath)", RandomIdentifier))
+        Botlist.Add($"$ExitStatus = [Snippet{RandomIdentifier}]::RunSnippet($StartupPath)")
         Botlist.Add("")
         Botlist.Add("Function ExitWithCode($exitcode) {")
         Botlist.Add("  $host.SetShouldExit($exitcode)")

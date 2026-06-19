@@ -38,7 +38,7 @@ Public Class UtilsFilenameCharmap
         Dim Key As String
         Dim Value As String
 
-        Dim CharmapFilename As String = String.Format("{0}\Preferences\filename_charmap.txt", StartupPath)
+        Dim CharmapFilename As String = $"{StartupPath}\Preferences\filename_charmap.txt"
 
         CreateCharmapFile()
 
@@ -77,7 +77,8 @@ Public Class UtilsFilenameCharmap
         Dim Charmap As String() = Nothing
         Dim CharmapList As New List(Of String)
 
-        Dim CharmapFilename As String = String.Format("{0}\Preferences\filename_charmap.txt", StartupPath)
+        'Dim CharmapFilename As String = String.Format("{0}\Preferences\filename_charmap.txt", StartupPath)
+        Dim CharmapFilename As String = $"{StartupPath}\Preferences\filename_charmap.txt"
 
         Try
             Charmap = IO.File.ReadAllLines(CharmapFilename)
@@ -137,7 +138,7 @@ Public Class UtilsFilenameCharmap
             CharmapList.Add("' ~")
 
             'CharmapList.Add("".doublequote.")
-            CharmapList.Add(String.Format("{0} {1}", Chr(34), "~"))
+            CharmapList.Add($"{Chr(34)} ~")
 
             CharmapList.Add(": ~")
             CharmapList.Add("@ ~")

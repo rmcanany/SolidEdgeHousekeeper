@@ -166,7 +166,7 @@ Public Class TaskRunExternalProgram
         Dim NewSettingsFilename As String = ""
         If Not SettingsFilename = "" Then
             NewSettingsFilename = System.IO.Path.GetFileName(SettingsFilename)
-            NewSettingsFilename = String.Format("{0}\{1}", ExternalProgramDirectory, NewSettingsFilename)
+            NewSettingsFilename = $"{ExternalProgramDirectory}\{NewSettingsFilename}"
             If IO.File.Exists(NewSettingsFilename) Then IO.File.Delete(NewSettingsFilename)
             IO.File.Copy(SettingsFilename, NewSettingsFilename)
         End If
@@ -269,7 +269,7 @@ Public Class TaskRunExternalProgram
         Dim ErrorMessageFilename As String
         Dim ErrorMessages As String()
 
-        ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
+        ErrorMessageFilename = $"{ExternalProgramDirectory}\error_messages.txt"
 
         If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
             ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
@@ -278,12 +278,12 @@ Public Class TaskRunExternalProgram
                     TaskLogger.AddMessage(ErrorMessageFromProgram)
                 Next
             Else
-                If Not ExitCode = 0 Then TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
+                If Not ExitCode = 0 Then TaskLogger.AddMessage($"Program terminated with exit code {ExitCode}")
             End If
 
             IO.File.Delete(ErrorMessageFilename)
         Else
-            If Not ExitCode = 0 Then TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
+            If Not ExitCode = 0 Then TaskLogger.AddMessage($"Program terminated with exit code {ExitCode}")
         End If
 
         If Me.SaveAfterProcessing Then
@@ -445,7 +445,7 @@ Public Class TaskRunExternalProgram
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -499,7 +499,7 @@ Public Class TaskRunExternalProgram
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 
@@ -530,8 +530,7 @@ Public Class TaskRunExternalProgram
                 End Select
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
 

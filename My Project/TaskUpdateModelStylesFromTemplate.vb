@@ -553,7 +553,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                         UC.CopyProperties(TemplateViewStyle, DocViewStyle, TaskLogger.AddLogger($"View style {TemplateViewStyle.StyleName}"))
 
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error updating ViewStyle '{0}'", TemplateViewStyle.StyleName))
+                        TaskLogger.AddMessage($"Error updating ViewStyle '{TemplateViewStyle.StyleName}'.  Exception: {ex.Message}")
                     End Try
 
                     'Update skybox
@@ -567,7 +567,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                                 s = TemplateViewStyle.GetSkyboxSideFilename(i)
                                 DocViewStyle.SetSkyboxSideFilename(i, s)
                             Catch ex As Exception
-                                TaskLogger.AddMessage(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+                                TaskLogger.AddMessage($"ViewStyle '{TemplateViewStyle.StyleName}' SkyBox image '{s}' not found.  Exception: {ex.Message}")
                             End Try
                         Next
 
@@ -584,7 +584,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateViewStyle, NewViewStyle, TaskLogger.AddLogger($"View style {TemplateViewStyle.StyleName}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
+                    TaskLogger.AddMessage($"Error configuring ViewStyle '{TemplateViewStyle.StyleName}'.  Exception: {ex.Message}")
                 End Try
 
                 'Update skybox
@@ -598,7 +598,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                             s = TemplateViewStyle.GetSkyboxSideFilename(i)
                             NewViewStyle.SetSkyboxSideFilename(i, s)
                         Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+                            TaskLogger.AddMessage($"ViewStyle '{TemplateViewStyle.StyleName}' SkyBox image '{s}' not found.  Exception: {ex.Message}")
                         End Try
                     Next
 
@@ -618,7 +618,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocViewStyle.Delete()
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Unable to remove ViewStyle '{0}'", s))
+                        TaskLogger.AddMessage($"Unable to remove ViewStyle '{s}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -654,7 +654,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateTextStyle, DocTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+                        TaskLogger.AddMessage($"Error applying TextStyle '{TemplateTextStyle.Name}'.  Exception: {ex.Message}")
                     End Try
 
                     Exit For
@@ -667,7 +667,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateTextStyle, NewTextStyle, TaskLogger.AddLogger($"Text style {TemplateTextStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
+                    TaskLogger.AddMessage($"Error configuring TextStyle '{TemplateTextStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
 
@@ -684,7 +684,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocTextStyles.Remove(DocTextStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Unable to remove TextStyle '{0}'", s))
+                        TaskLogger.AddMessage($"Unable to remove TextStyle '{s}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -720,7 +720,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                        TaskLogger.AddMessage($"Error applying TextCharStyle '{TemplateTextCharStyle.Name}'.  Exception: {ex.Message}")
                     End Try
 
                     Exit For
@@ -734,7 +734,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle, TaskLogger.AddLogger($"Text char style {TemplateTextCharStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                    TaskLogger.AddMessage($"Error configuring TextCharStyle '{TemplateTextCharStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
 
@@ -751,7 +751,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocTextCharStyles.Remove(DocTextCharStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Unable to remove TextCharStyle '{0}'", s))
+                        TaskLogger.AddMessage($"Unable to remove TextCharStyle '{s}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -787,7 +787,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateLinearStyle, DocLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+                        TaskLogger.AddMessage($"Error applying LinearStyle '{TemplateLinearStyle.Name}'.  Exception: {ex.Message}")
                     End Try
 
                     Exit For
@@ -800,7 +800,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateLinearStyle, NewLinearStyle, TaskLogger.AddLogger($"Linear style {TemplateLinearStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
+                    TaskLogger.AddMessage($"Error configuring LinearStyle '{TemplateLinearStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
 
@@ -817,7 +817,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocLinearStyles.Remove(DocLinearStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Unable to remove LinearStyle '{0}'", s))
+                        TaskLogger.AddMessage($"Unable to remove LinearStyle '{s}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -853,8 +853,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
-
+                        TaskLogger.AddMessage($"Error applying DimensionStyle '{TemplateDimensionStyle.Name}'.  Exception: {ex.Message}")
                     End Try
 
                     Exit For
@@ -867,7 +866,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle, TaskLogger.AddLogger($"Dimension style {TemplateDimensionStyle.Name}"))
                 Catch ex As Exception
-                    TaskLogger.AddMessage(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+                    TaskLogger.AddMessage($"Error configuring DimensionStyle '{TemplateDimensionStyle.Name}'.  Exception: {ex.Message}")
                 End Try
             End If
 
@@ -884,7 +883,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocDimensionStyles.Remove(DocDimensionStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Unable to remove DimensionStyle '{0}'", s))
+                        TaskLogger.AddMessage($"Unable to remove DimensionStyle '{s}'.  Exception: {ex.Message}")
                     End Try
                 End If
             Next
@@ -998,7 +997,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
         Return BaseStyles
@@ -1100,7 +1099,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Next
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
     End Sub
@@ -1340,8 +1339,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1444,7 +1442,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1465,7 +1463,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Me.SheetmetalTemplate = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

@@ -46,8 +46,7 @@ Public Class UtilsSEApp
             Try
                 EdgeProcess.Start()
             Catch ex As Exception
-                ErrorLogger.AddMessage($"Unable to start process '{Me.EdgeProcess.StartInfo.FileName}'")
-                ErrorLogger.AddMessage($"Error was: '{ex.Message}'")
+                ErrorLogger.AddMessage($"Unable to start process '{Me.EdgeProcess.StartInfo.FileName}'.  Exception: {ex.Message}")
             End Try
         End If
 

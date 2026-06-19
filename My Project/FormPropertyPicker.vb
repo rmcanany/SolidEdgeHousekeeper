@@ -24,17 +24,17 @@ Public Class FormPropertyPicker
         Dim s As String = ""
         Dim indent As String = "    "
         If ComboBoxPropertySet.Text = "" Then
-            s = String.Format("{0}{1}Select a Property Set{2}", s, indent, vbCrLf)
+            s = $"{s}{indent}Select a Property Set{vbCrLf}"
         End If
         If ComboBoxPropertyName.Text = "" Then
-            s = String.Format("{0}{1}Select a Property{2}", s, indent, vbCrLf)
+            s = $"{s}{indent}Select a Property{vbCrLf}"
         End If
 
         If s = "" Then
             If Me.PropertyOnly Then
-                Me.PropertyString = String.Format("%{{{0}.{1}}}", ComboBoxPropertySet.Text, ComboBoxPropertyName.Text)
+                Me.PropertyString = $"%{{{ComboBoxPropertySet.Text}.{ComboBoxPropertyName.Text}}}"
             Else
-                Me.PropertyString = String.Format("%{{{0}.{1}|R1}}", ComboBoxPropertySet.Text, ComboBoxPropertyName.Text)
+                Me.PropertyString = $"%{{{ComboBoxPropertySet.Text}.{ComboBoxPropertyName.Text}|R1}}"
             End If
             Me.DialogResult = DialogResult.OK
         Else
@@ -111,7 +111,7 @@ Public Class FormPropertyPicker
 
         If Form_Main.PropertiesData Is Nothing OrElse Form_Main.PropertiesData.Items.Count = 0 Then
             Dim s = "Template properties required for this command not found. "
-            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            s = $"{s}Populate them on the Configuration Tab -- Templates Page."
             MsgBox(s, vbOKOnly)
             ButtonCancel.PerformClick()
             'Exit Sub

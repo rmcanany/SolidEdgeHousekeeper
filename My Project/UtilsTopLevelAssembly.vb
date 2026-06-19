@@ -50,12 +50,12 @@ Public Class UtilsTopLevelAssembly
 
         '###### Check for unprocessed files ######
         If FileLinksContainer.UnprocessedFilenames.Count > 0 Then
-            Dim Title As String = String.Format("The following files, and any links they contain, could not be processed.  This can happen if{0}", vbCrLf)
-            Title = String.Format("{0}-- The file name (including path) has > 260 characters.{1}", Title, vbCrLf)
-            Title = String.Format("{0}-- The file is already open in another process.{1}", Title, vbCrLf)
-            Title = String.Format("{0}-- The file is not a Solid Edge file, or is somehow corrupt.{1}", Title, vbCrLf)
-            Title = String.Format("{0}-- An unknown error occurred.{1}{1}", Title, vbCrLf)
-            Title = String.Format("{0}Processing will continue.  Please verify results.", Title)
+            Dim Title As String = $"The following files, and any links they contain, could not be processed.  This can happen if{vbCrLf}"
+            Title = $"{Title}-- The file name (including path) has > 260 characters.{vbCrLf}"
+            Title = $"{Title}-- The file is already open in another process.{vbCrLf}"
+            Title = $"{Title}-- The file is not a Solid Edge file, or is somehow corrupt.{vbCrLf}"
+            Title = $"{Title}-- An unknown error occurred.{vbCrLf}{vbCrLf}"
+            Title = $"{Title}Processing will continue.  Please verify results."
 
             Dim UC As New UtilsCommon
             Dim s As String = UC.FormatMsgBoxText(FileLinksContainer.UnprocessedFilenames, Title)
@@ -90,7 +90,7 @@ Public Class UtilsTopLevelAssembly
 
             For Each tmpFilename As String In tmpAllFilenames
 
-                FMain.TextBoxStatus.Text = String.Format("Getting files {0}", IO.Path.GetFileName(tmpFilename))
+                FMain.TextBoxStatus.Text = $"Getting files {IO.Path.GetFileName(tmpFilename)}"
 
                 If Not AllFilenames.Contains(tmpFilename, StringComparer.OrdinalIgnoreCase) Then
                     AllFilenames.Add(tmpFilename)
@@ -109,7 +109,7 @@ Public Class UtilsTopLevelAssembly
         Dim LinkNames As List(Of String)
 
         For Each Filename As String In AllFilenames
-            FMain.TextBoxStatus.Text = String.Format("Getting links {0}", IO.Path.GetFileName(Filename))
+            FMain.TextBoxStatus.Text = $"Getting links {IO.Path.GetFileName(Filename)}"
 
             Try
                 Dim FileLinks As New FileLinks(Filename)
@@ -179,7 +179,7 @@ Public Class UtilsTopLevelAssembly
     Private Function GetContainedBy(FileLinksContainer As FileLinksContainer) As FileLinksContainer
 
         For Each FileLinks As FileLinks In FileLinksContainer.GetItems
-            FMain.TextBoxStatus.Text = String.Format("Contained by {0}", IO.Path.GetFileName(FileLinks.Name))
+            FMain.TextBoxStatus.Text = $"Contained by {IO.Path.GetFileName(FileLinks.Name)}"
 
             For Each ContainsFilename In FileLinks.Contains
                 Dim tmpFileLinks As FileLinks = FileLinksContainer.GetItem(ContainsFilename)
@@ -201,7 +201,7 @@ Public Class UtilsTopLevelAssembly
         Dim ContainedByFilename As String
         Dim Extension As String
 
-        FMain.TextBoxStatus.Text = String.Format("Visit links {0}", IO.Path.GetFileName(Filename))
+        FMain.TextBoxStatus.Text = $"Visit links {IO.Path.GetFileName(Filename)}"
 
         FileLinks = FileLinksContainer.GetItem(Filename)
         If FileLinks IsNot Nothing Then
@@ -260,7 +260,7 @@ Public Class UtilsTopLevelAssembly
                     writer.WriteLine("UNRELATED FILES")
                     writer.WriteLine("")
                     For Each Filename In UnrelatedFiles
-                        writer.WriteLine(String.Format(Filename))
+                        writer.WriteLine(Filename)
                     Next
                 End Using
 
@@ -327,7 +327,7 @@ Public Class UtilsTopLevelAssembly
                     writer.WriteLine("UNRELATED FILES")
                     writer.WriteLine("")
                     For Each Filename In UnrelatedFiles
-                        writer.WriteLine(String.Format(Filename))
+                        writer.WriteLine(Filename)
                     Next
                 End Using
 
@@ -381,7 +381,7 @@ Public Class UtilsTopLevelAssembly
 
         FMain.Activate()
 
-        FMain.TextBoxStatus.Text = String.Format("Opening {0}", System.IO.Path.GetFileName(TopLevelAssembly))
+        FMain.TextBoxStatus.Text = $"Opening {System.IO.Path.GetFileName(TopLevelAssembly)}"
 
         TopLevelFolders = RemoveNestedFolders(TopLevelFolders)
 
@@ -705,7 +705,7 @@ Public Class UtilsTopLevelAssembly
         Dim msg As String
 
         msg = System.IO.Path.GetFileName(Filename)
-        msg = String.Format("{0} {1}", Description, msg)
+        msg = $"{Description} {msg}"
 
         FMain.TextBoxStatus.Text = msg
     End Sub
@@ -735,7 +735,7 @@ Public Class UtilsTopLevelAssembly
         Try
             SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
         Catch ex As Exception
-            msg = String.Format("Fast search scope file '{0}' (on Configuration Tab) not found.{1}", SearchScopeFilename, vbCrLf)
+            msg = $"Fast search scope file '{SearchScopeFilename}' (on Configuration Tab) not found.{vbCrLf}"
             MsgBox(msg)
         End Try
 

@@ -203,7 +203,7 @@ Public Class TaskEditVariables
 
                 Formula = UC.SubstitutePropertyFormulas(SEDoc, FullName, Formula, Me.PropertiesData, TaskLogger)
                 If Formula Is Nothing Then
-                    TaskLogger.AddMessage(String.Format("Could not process formula '{0}', property not found", tmpFormula))
+                    TaskLogger.AddMessage($"Could not process formula '{tmpFormula}', property not found")
                     Continue For
                 End If
 
@@ -219,7 +219,7 @@ Public Class TaskEditVariables
                 If Not tf Then  ' Add it.
                     If Me.AutoAddMissingVariable Then
                         If Formula = "" Then  ' Can't add a variable without a formula
-                            TaskLogger.AddMessage(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
+                            TaskLogger.AddMessage($"Unable to add variable named '{VariableName}'.  No value or formula supplied.")
                             Continue For
                         End If
 
@@ -233,11 +233,11 @@ Public Class TaskEditVariables
                                 End If
                             End If
                         Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+                            TaskLogger.AddMessage($"Unable to add and/or expose variable '{VariableName}'.  Exception: {ex.Message}")
                         End Try
 
                     Else
-                        TaskLogger.AddMessage(String.Format("Variable '{0}' not found", VariableName))
+                        TaskLogger.AddMessage($"Variable '{VariableName}' not found")
                     End If
 
                 Else  ' Edit and/or Expose.
@@ -276,7 +276,7 @@ Public Class TaskEditVariables
 
                         End If
                     Catch ex As Exception
-                        TaskLogger.AddMessage(String.Format("Unable to change variable '{0}'", VariableName))
+                        TaskLogger.AddMessage($"Unable to change variable '{VariableName}'.  Exception: {ex.Message}")
                     End Try
 
                 End If
@@ -383,7 +383,7 @@ Public Class TaskEditVariables
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -403,7 +403,7 @@ Public Class TaskEditVariables
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -416,7 +416,7 @@ Public Class TaskEditVariables
             Case ControlNames.JSONString.ToString
                 Me.JSONString = TextBox.Text
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

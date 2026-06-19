@@ -8,7 +8,7 @@ Public Class FormNewVersionAvailable
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Dim s = String.Format("Version {0} is available.  You have version {1}.", NewVersion, CurrentVersion)
+        Dim s = $"Version {NewVersion} is available.  You have version {CurrentVersion}."
         LabelNewVersionAvailable.Text = s
 
     End Sub

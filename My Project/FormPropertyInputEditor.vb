@@ -60,27 +60,27 @@ Public Class FormPropertyInputEditor
                 ' Blank FindString or ReplaceString is not an error.
 
                 If UC.PropertySet = "" Then
-                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                    s = $"{s}{indent}Select a PropertySet for '{UC.PropertyName}'{vbCrLf}"
                 End If
 
                 If UC.FindSearch = "" Then
-                    s = String.Format("{0}{1}Select a Find Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                    s = $"{s}{indent}Select a Find Search Type for '{UC.PropertyName}'{vbCrLf}"
                 End If
 
                 If Not UC.FindString = "" Then
                     If Not UtilsCommon.CheckValidPropertyFormulas(UC.FindString) Then
-                        s = String.Format("{0}{1}Property formula '{2}' missing 'System.' or 'Custom.'{3}", s, indent, UC.FindString, vbCrLf)
+                        s = $"{s}{indent}Property formula '{UC.FindString}' missing 'System.' or 'Custom.'{vbCrLf}"
                     End If
                 End If
 
                 If Not UC.FindSearch = "X" Then
                     If UC.ReplaceSearch = "" Then
-                        s = String.Format("{0}{1}Select a Replace Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                        s = $"{s}{indent}Select a Replace Search Type for '{UC.PropertyName}'{vbCrLf}"
                     End If
 
                     If Not UC.ReplaceString = "" Then
                         If Not UtilsCommon.CheckValidPropertyFormulas(UC.ReplaceString) Then
-                            s = String.Format("{0}{1}Property formula '{2}' missing 'System.' or 'Custom.'{3}", s, indent, UC.ReplaceString, vbCrLf)
+                            s = $"{s}{indent}Property formula '{UC.ReplaceString}' missing 'System.' or 'Custom.'{vbCrLf}"
                         End If
                     End If
 
@@ -88,17 +88,17 @@ Public Class FormPropertyInputEditor
 
                 If UC.ReplaceSearch = "EX" Then
                     If Not (UC.ReplaceString.StartsWith("EXPRESSION_") Or UC.ReplaceString.StartsWith("SavedSetting:")) Then
-                        s = String.Format("{0}{1}'{2}' is not valid Expression syntax{3}", s, indent, UC.ReplaceString, vbCrLf)
+                        s = $"{s}{indent}'{UC.ReplaceString}' is not valid Expression syntax{vbCrLf}"
                     End If
                 Else
                     If (UC.ReplaceString.StartsWith("EXPRESSION_") Or UC.ReplaceString.StartsWith("SavedSetting:")) Then
-                        w = String.Format("{0}{1}Usually a '{2}' search does not use Expression syntax '{3}'{4}", w, indent, UC.ReplaceSearch, UC.ReplaceString, vbCrLf)
+                        w = $"{w}{indent}Usually a '{UC.ReplaceSearch}' search does not use Expression syntax '{UC.ReplaceString}'{vbCrLf}"
                     End If
                 End If
 
                 If Not (UC.FindSearch = "WC" Or UC.FindSearch = "X") Then
                     If UC.FindString = "*" Then
-                        w = String.Format("{0}{1}Usually a find string '{2}' is used with a 'WC' search{3}", w, indent, UC.FindString, vbCrLf)
+                        w = $"{w}{indent}Usually a find string '{UC.FindString}' is used with a 'WC' search{vbCrLf}"
                     End If
                 End If
 
@@ -107,7 +107,7 @@ Public Class FormPropertyInputEditor
         Next
 
         If Not w = "" Then
-            w = String.Format("Warning{0}{1}{2}Do you wish to continue?", vbCrLf, w, vbCrLf)
+            w = $"Warning{vbCrLf}{w}{vbCrLf}Do you wish to continue?"
             Dim Result = MsgBox(w, vbYesNo)
             If Result = MsgBoxResult.No Then
                 InputsOK = False
@@ -116,7 +116,7 @@ Public Class FormPropertyInputEditor
 
         If Not s = "" Then
             InputsOK = False
-            s = String.Format("Please correct the following before continuing{0}{1}", vbCrLf, s)
+            s = $"Please correct the following before continuing{vbCrLf}{s}"
             MsgBox(s, vbOKOnly)
         End If
 
@@ -232,7 +232,7 @@ Public Class FormPropertyInputEditor
         tf = Direction.ToLower = "up"
         tf = tf Or Direction.ToLower = "down"
         If Not tf Then
-            MsgBox(String.Format("Unrecognized direction '{0}'", Direction), vbOKOnly)
+            MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
             Exit Sub
         End If
 
@@ -267,7 +267,7 @@ Public Class FormPropertyInputEditor
                         End If
 
                     Case Else
-                        MsgBox(String.Format("Direction '{0}' not recognized", Direction))
+                        MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
                 End Select
 
             Next
@@ -389,7 +389,7 @@ Public Class FormPropertyInputEditor
 
         If tf Then
             Dim s = "Template properties required for this command not found. "
-            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            s = $"{s}Populate them on the Configuration Tab -- Templates Page."
             MsgBox(s, vbOKOnly)
             Me.DialogResult = DialogResult.Cancel
         End If
@@ -522,7 +522,7 @@ Public Class FormPropertyInputEditor
         End If
 
         If Proceed And ComboBoxSavedSettings.Items.Contains(Name) Then
-            Dim Result = MsgBox(String.Format("Name '{0}' already exists.  Do you want to replace it?", Name), vbYesNo)
+            Dim Result = MsgBox($"Name '{Name}' already exists.  Do you want to replace it?", vbYesNo)
             If Result = vbNo Then
                 Proceed = False
             End If

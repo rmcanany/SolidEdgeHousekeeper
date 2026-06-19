@@ -66,7 +66,7 @@ Public Class TaskUpdateFlatPattern
                 FlatpatternModels = tmpSEDoc.FlatPatternModels
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{0}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
         If Not SEApp.Visible Then

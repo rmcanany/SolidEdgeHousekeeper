@@ -164,10 +164,10 @@ Public Class TaskUpdateDrawingViews
             'End If
 
             If Not FileIO.FileSystem.FileExists(Filename) Then
-                TaskLogger.AddMessage(String.Format("Model file '{0}' not found", Filename))
+                TaskLogger.AddMessage($"Model file '{Filename}' not found")
 
             ElseIf ModelLink.ModelOutOfDate Then
-                s = String.Format("Model link out of date '{0}'", Filename)
+                s = $"Model link out of date '{Filename}'"
                 If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
             End If
         Next
@@ -341,7 +341,7 @@ Public Class TaskUpdateDrawingViews
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

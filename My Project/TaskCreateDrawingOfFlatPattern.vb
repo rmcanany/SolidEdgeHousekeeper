@@ -330,7 +330,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                 'DraftDoc.SaveAs(tmpFilename)
                 'SEApp.DoIdle()
             Catch ex As Exception
-                TaskLogger.AddMessage(String.Format("Could not create draft document with template '{0}'", Me.DraftTemplate))
+                TaskLogger.AddMessage($"Could not create draft document with template '{Me.DraftTemplate}'.  Exception: {ex.Message}")
                 Exit Sub
             End Try
 
@@ -356,7 +356,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             If Me.SaveDraft Then
                 Extension = ".dft"
                 If Me.SaveInOriginalDirectoryDraft Then
-                    DrawingFilename = String.Format("{0}\{1}{2}", OldDir, BaseName, Extension)
+                    DrawingFilename = $"{OldDir}\{BaseName}{Extension}"
                     If Me.OverwriteExisting Then
                         DraftDoc.SaveAs(DrawingFilename)
                     Else
@@ -366,7 +366,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                     End If
 
                 Else
-                    DrawingFilename = String.Format("{0}\{1}{2}", Me.NewDirDraft, BaseName, Extension)
+                    DrawingFilename = $"{Me.NewDirDraft}\{BaseName}{Extension}"
                     If Me.OverwriteExisting Then
                         DraftDoc.SaveAs(DrawingFilename)
                     Else
@@ -381,7 +381,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             If Me.SavePDF Then
                 Extension = ".pdf"
                 If Me.SaveInOriginalDirectoryPDF Then
-                    DrawingFilename = String.Format("{0}\{1}{2}", OldDir, BaseName, Extension)
+                    DrawingFilename = $"{OldDir}\{BaseName}{Extension}"
                     If Me.OverwriteExisting Then
                         DraftDoc.SaveAs(DrawingFilename)
                     Else
@@ -391,7 +391,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                     End If
 
                 Else
-                    DrawingFilename = String.Format("{0}\{1}{2}", Me.NewDirPDF, BaseName, Extension)
+                    DrawingFilename = $"{Me.NewDirPDF}\{BaseName}{Extension}"
                     If Me.OverwriteExisting Then
                         DraftDoc.SaveAs(DrawingFilename)
                     Else
@@ -801,7 +801,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -872,7 +872,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
 
         End Select
 
@@ -903,7 +903,7 @@ Public Class TaskCreateDrawingOfFlatPattern
                 Me.NewDirPDF = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

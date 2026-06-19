@@ -232,13 +232,13 @@ Public Class UtilsFileList
 
         ElapsedTime = Now.Subtract(StartTime).TotalMinutes
         If ElapsedTime < 60 Then
-            ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+            ElapsedTimeText = $"in {ElapsedTime.ToString("0.0")} min."
         Else
-            ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
+            ElapsedTimeText = $"in {(ElapsedTime / 60).ToString("0.0")} hr."
         End If
 
         Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
-        FMain.TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)
+        FMain.TextBoxStatus.Text = $"{filecount} files found in {ElapsedTimeText}"
 
 
     End Sub
@@ -289,7 +289,7 @@ Public Class UtilsFileList
                     FoundFiles = tmpFoundFiles
 
                 Case = "Folder"
-                    FMain.TextBoxStatus.Text = String.Format("Processing folder '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    FMain.TextBoxStatus.Text = $"Processing folder '{System.IO.Path.GetFileName(Source.Name)}'"
                     System.Windows.Forms.Application.DoEvents()
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
@@ -298,13 +298,13 @@ Public Class UtilsFileList
                                      FileIO.SearchOption.SearchTopLevelOnly,
                                      ActiveFileExtensionsList.ToArray)
                         Catch ex As Exception
-                            SubLogger.AddMessage($"Could not process {Source.Name}: {ex.Message}")
+                            SubLogger.AddMessage($"Could not process {Source.Name}.  Exception: {ex.Message}")
                             FoundFiles = Nothing
                         End Try
                     End If
 
                 Case = "Folders"
-                    FMain.TextBoxStatus.Text = String.Format("Processing folders '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    FMain.TextBoxStatus.Text = $"Processing folders '{System.IO.Path.GetFileName(Source.Name)}'"
                     System.Windows.Forms.Application.DoEvents()
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
@@ -321,14 +321,14 @@ Public Class UtilsFileList
                                 FileIO.SearchOption.SearchTopLevelOnly,
                                 ActiveFileExtensionsList.ToArray))
                             Catch ex As Exception
-                                s = String.Format("{0}{1}{2}", s, tmpFolder, vbCrLf)
+                                s = $"{s}{tmpFolder}{vbCrLf}"
                             End Try
                         Next
 
                         FoundFiles = tmpFoundFiles
 
                         If Not s = "" Then
-                            s = String.Format("Could not process the following folder(s) in {Source.Name}{0}{1}", vbCrLf, s)
+                            s = $"Could not process the following folder(s) in {Source.Name}{vbCrLf}{s}"
                             SubLogger.AddMessage(s)
                         End If
 
@@ -338,7 +338,7 @@ Public Class UtilsFileList
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'
 
                 Case = "asm"
-                    FMain.TextBoxStatus.Text = String.Format("Processing top level assy '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    FMain.TextBoxStatus.Text = $"Processing top level assy '{System.IO.Path.GetFileName(Source.Name)}'"
                     System.Windows.Forms.Application.DoEvents()
 
                     FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
@@ -385,7 +385,7 @@ Public Class UtilsFileList
                     FoundFiles = tmpFoundFiles
 
                 Case = "csv", "txt"
-                    FMain.TextBoxStatus.Text = String.Format("Processing list '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    FMain.TextBoxStatus.Text = $"Processing list '{System.IO.Path.GetFileName(Source.Name)}'"
 
                     If FileIO.FileSystem.FileExists(Source.Name) Then
 
@@ -400,7 +400,8 @@ Public Class UtilsFileList
                     End If
 
                 Case = "tsv"
-                    FMain.TextBoxStatus.Text = String.Format("Processing list '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    'FMain.TextBoxStatus.Text = String.Format("Processing list '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    FMain.TextBoxStatus.Text = $"Processing list '{System.IO.Path.GetFileName(Source.Name)}'"
 
                     If FileIO.FileSystem.FileExists(Source.Name) Then
 
@@ -415,7 +416,8 @@ Public Class UtilsFileList
                     End If
 
                 Case = "excel"
-                    FMain.TextBoxStatus.Text = String.Format("Processing excel '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    'FMain.TextBoxStatus.Text = String.Format("Processing excel '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    FMain.TextBoxStatus.Text = $"Processing excel '{System.IO.Path.GetFileName(Source.Name)}'"
 
                     If FileIO.FileSystem.FileExists(Source.Name) Then
                         FoundFiles = UC.ReadExcel(Source.Name)
@@ -486,8 +488,8 @@ Public Class UtilsFileList
 
         ' ###### User input for displaying file properties for a large number of files.
         If (FMain.ListOfColumns.Count > 2) And (FoundFiles.Count > 1000) Then
-            Dim s As String = String.Format("Getting file properties on {0} files can take some time.  ", FoundFiles.Count)
-            s = String.Format("{0}Do you want to have them displayed anyway?", s)
+            Dim s As String = $"Getting file properties on {FoundFiles.Count} files can take some time.  "
+            s = $"{s}Do you want to have them displayed anyway?"
             Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
             If Result = MsgBoxResult.No Then
                 PopulatePropertyColumns = False
@@ -498,7 +500,7 @@ Public Class UtilsFileList
 
         For Each FoundFile In FoundFiles
 
-            FMain.TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
+            FMain.TextBoxStatus.Text = $"Updating List {System.IO.Path.GetFileName(FoundFile)}"
 
             If NumProcessed Mod 100 = 0 Then
                 System.Windows.Forms.Application.DoEvents()
@@ -688,7 +690,7 @@ Public Class UtilsFileList
 
         For Each FilePath In FoundFiles
             Filename = System.IO.Path.GetFileName(FilePath)
-            FMain.TextBoxStatus.Text = String.Format("Wildcard Search {0}", Filename)
+            FMain.TextBoxStatus.Text = $"Wildcard Search {Filename}"
             If Filename Like WildcardString Then
                 tmpFoundFiles.Add(FilePath)
             End If
@@ -1113,7 +1115,7 @@ Public Class UtilsFileList
 
         For Each FoundFile In FoundFiles
             Filename = IO.Path.GetFileName(FoundFile)
-            s = String.Format("{0}*{1}", Filename, FoundFile)
+            s = $"{Filename}*{FoundFile}"
             Outlist.Add(s)
         Next
 
@@ -1187,7 +1189,7 @@ Public Class UtilsFileList
 
                 Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
 
-                FMain.TextBoxStatus.Text = String.Format("Getting properties {0}", System.IO.Path.GetFileName(FullName))
+                FMain.TextBoxStatus.Text = $"Getting properties {System.IO.Path.GetFileName(FullName)}"
                 If NumProcessed Mod 100 = 0 Then
                     System.Windows.Forms.Application.DoEvents()
                     If FMain.StopProcess Then

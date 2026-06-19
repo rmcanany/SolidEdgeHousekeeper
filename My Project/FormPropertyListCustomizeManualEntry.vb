@@ -29,16 +29,16 @@ Public Class FormPropertyListCustomizeManualEntry
         Dim indent As String = "    "
 
         If Me.PropertySet = "" Then
-            s = String.Format("{0}Select a Property Set{1}{2}", s, indent, vbCrLf)
+            s = $"{s}{indent}Select a Property Set{vbCrLf}"
         End If
 
         If Me.PropertyName = "" Then
-            s = String.Format("{0}Enter a Property Name{1}{2}", s, indent, vbCrLf)
+            s = $"{s}{indent}Enter a Property Name{vbCrLf}"
         End If
 
         If Not s = "" Then
             InputsOK = False
-            s = String.Format("Please correct the following before continuing{0}{1}", vbCrLf, s)
+            s = $"Please correct the following before continuing{vbCrLf}{s}"
             MsgBox(s, vbOKOnly)
         End If
 

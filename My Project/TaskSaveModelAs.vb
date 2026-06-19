@@ -331,7 +331,7 @@ Public Class TaskSaveModelAs
             NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid text (*.xt)" -> ".xt)"
             NewExtension = NewExtension.Split(")"c)(0)  ' ".xt)" -> ".xt"
         Else
-            NewExtension = String.Format(".{0}", DocType)
+            NewExtension = $".{DocType}"
         End If
 
         NewFileFormat = Me.NewFileTypeName
@@ -362,7 +362,7 @@ Public Class TaskSaveModelAs
                                     SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                                 End If
                             Catch ex As Exception
-                                TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+                                TaskLogger.AddMessage($"Error saving {NewFilename}.  Exception: {ex.Message}")
                             End Try
                         Else
                             TaskLogger.AddMessage($"Cannot save '{DocType}' file as '{NewExtension}'")
@@ -389,7 +389,7 @@ Public Class TaskSaveModelAs
                                         SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                                     End If
                                 Catch ex As Exception
-                                    TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+                                    TaskLogger.AddMessage($"Error saving {NewFilename}.  Exception: {ex.Message}")
                                 End Try
                             Else
                                 TaskLogger.AddMessage($"Cannot save '{DocType}' file as '{NewExtension}'")
@@ -400,26 +400,6 @@ Public Class TaskSaveModelAs
 
                     Next
                 End If
-
-
-            'Case = "par"
-            '    NewFilename = GenerateNewFilename(SEDoc, NewExtension)
-
-            '    If Not TaskLogger.HasErrors Then
-            '        FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
-
-            '        Try
-            '            If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-            '                SaveAsModel(SEDoc, NewFilename, SEApp)
-            '            Else  ' Saving as image
-            '                SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
-            '            End If
-            '        Catch ex As Exception
-            '            TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
-            '        End Try
-
-            '    End If
-
 
             Case = "par", "psm"
                 'Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
@@ -445,7 +425,7 @@ Public Class TaskSaveModelAs
                                 ElseIf NewExtension = ".pdf" Then
                                     DraftFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
                                     If Not FileIO.FileSystem.FileExists(DraftFilename) Then
-                                        TaskLogger.AddMessage(String.Format("Draft document not found '{0}'", DraftFilename))
+                                        TaskLogger.AddMessage($"Draft document not found '{DraftFilename}'")
                                     Else
                                         SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
                                         SEApp.DoIdle()
@@ -462,7 +442,7 @@ Public Class TaskSaveModelAs
                                 SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                             End If
                         Catch ex As Exception
-                            TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+                            TaskLogger.AddMessage($"Error saving {NewFilename}.  Exception: {ex.Message}")
                         End Try
 
                         Try
@@ -477,8 +457,7 @@ Public Class TaskSaveModelAs
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
-
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
     End Sub
@@ -519,11 +498,11 @@ Public Class TaskSaveModelAs
 
         ' ###### ROOT DIRECTORY ######
         If Me.SaveInOriginalDirectory Then
-            NewDirectoryName = String.Format("{0}\", OldDirectoryName)
+            NewDirectoryName = $"{OldDirectoryName}\"
         Else
             NewDirectoryName = Me.NewDir
             If Not NewDirectoryName(Len(NewDirectoryName) - 1) = "\" Then
-                NewDirectoryName = String.Format("{0}\", NewDirectoryName)
+                NewDirectoryName = $"{NewDirectoryName}\"
             End If
         End If
 
@@ -537,7 +516,7 @@ Public Class TaskSaveModelAs
 
                 If NewSubDirectoryName Is Nothing OrElse NewSubDirectoryName.ToLower.Contains("<nothing>") Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+                    Me.TaskLogger.AddMessage($"Could not parse subdirectory formula '{Me.Formula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -549,7 +528,7 @@ Public Class TaskSaveModelAs
 
                 If NewSubDirectoryName Is Nothing Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+                    Me.TaskLogger.AddMessage($"Could not parse subdirectory formula '{Me.Formula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -559,7 +538,7 @@ Public Class TaskSaveModelAs
 
             If Success Then
                 If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
-                    NewSubDirectoryName = String.Format("{0}\", NewSubDirectoryName)
+                    NewSubDirectoryName = $"{NewSubDirectoryName}\"
                 End If
             End If
         End If
@@ -574,7 +553,7 @@ Public Class TaskSaveModelAs
 
                 If NewFilenameWOExt Is Nothing OrElse NewFilenameWOExt.ToLower.Contains("<nothing>") Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                    Me.TaskLogger.AddMessage($"Could not parse filename formula '{Me.FilenameFormula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -586,7 +565,7 @@ Public Class TaskSaveModelAs
 
                 If NewFilenameWOExt Is Nothing Then
                     Success = False
-                    Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+                    Me.TaskLogger.AddMessage($"Could not parse filename formula '{Me.FilenameFormula}'")
                 Else
                     Dim DoNotSubstituteChars As New List(Of String)
                     DoNotSubstituteChars.Add("\")
@@ -601,13 +580,13 @@ Public Class TaskSaveModelAs
         If Suffix = "" Then
             NewSuffix = Suffix
         Else
-            NewSuffix = String.Format("-{0}", Suffix)
+            NewSuffix = $"-{Suffix}"
         End If
 
 
         ' ###### FULL FILENAME ######
         If Success Then
-            NewFullFilename = String.Format("{0}{1}{2}{3}{4}", NewDirectoryName, NewSubDirectoryName, NewFilenameWOExt, NewSuffix, NewExtension)
+            NewFullFilename = $"{NewDirectoryName}{NewSubDirectoryName}{NewFilenameWOExt}{NewSuffix}{NewExtension}"
         Else
             NewFullFilename = ""
         End If
@@ -642,7 +621,7 @@ Public Class TaskSaveModelAs
             End If
 
         Catch ex As Exception
-            Me.TaskLogger.AddMessage(String.Format("Error saving file {0}", NewFilename))
+            Me.TaskLogger.AddMessage($"Error saving file {NewFilename}.  Exception: {ex.Message}")
         End Try
 
     End Sub
@@ -692,8 +671,7 @@ Public Class TaskSaveModelAs
                                     Me.TaskLogger.AddMessage("No model detected")
                                 End If
                             Catch ex As Exception
-                                Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.", NewFilename))
-                                Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
+                                Me.TaskLogger.AddMessage($"Error saving '{NewFilename}'.  Exception: {ex.Message}")
                             End Try
                         Else
                             Me.TaskLogger.AddMessage("Flat pattern reported out of date")
@@ -706,9 +684,7 @@ Public Class TaskSaveModelAs
                 Me.TaskLogger.AddMessage("No flat pattern detected")
             End If
         Catch ex As Exception
-            Me.TaskLogger.AddMessage("Error accessing a flat pattern model.")
-            Me.TaskLogger.AddMessage($"Error was: {ex.Message}.")
-
+            Me.TaskLogger.AddMessage($"Error accessing a flat pattern model.  Exception: {ex.Message}")
         End Try
 
     End Sub
@@ -723,7 +699,7 @@ Public Class TaskSaveModelAs
             SEDoc.SaveAs(NewFilename)
             SEApp.DoIdle()
         Catch ex As Exception
-            Me.TaskLogger.AddMessage(String.Format("Could not save '{0}'", NewFilename))
+            Me.TaskLogger.AddMessage($"Could not save '{NewFilename}'.  Exception: {ex.Message}")
         End Try
 
     End Sub
@@ -804,8 +780,7 @@ Public Class TaskSaveModelAs
                 SEApp.DoIdle()
 
             Catch ex As Exception
-                Me.TaskLogger.AddMessage(String.Format("Error changing to view style '{0}'", ViewStyleName))
-
+                Me.TaskLogger.AddMessage($"Error changing to view style '{ViewStyleName}'.  Exception: {ex.Message}")
             End Try
         End If
 
@@ -834,11 +809,11 @@ Public Class TaskSaveModelAs
         NewFileTypeNames.Add("JT Document (*.jt)")
         NewFileTypeNames.Add("SEV (*.sev)")
 
-        'Dim SEInstallData As New SEInstallDataLib.SEInstallData
-        'Dim InstalledMajorVersion As Integer = SEInstallData.GetMajorVersion  ' eg SE2025: InstalledMajorVersion = 225
-        'If InstalledMajorVersion >= 226 Then
-        '    NewFileTypeNames.Add("DSTV (*.nc)")  ' Need to add checks.  See https://community.sw.siemens.com/s/question/0D5Vb000014rtz2KAA/solid-edge-housekeeper-v20261-released
-        'End If
+        Dim SEInstallData As New SEInstallDataLib.SEInstallData
+        Dim InstalledMajorVersion As Integer = SEInstallData.GetMajorVersion  ' eg SE2025: InstalledMajorVersion = 225
+        If InstalledMajorVersion >= 226 Then
+            NewFileTypeNames.Add("DSTV (*.nc)")
+        End If
 
         NewFileTypeNames.Add("bmp (*.bmp)")
         NewFileTypeNames.Add("jpg (*.jpg)")
@@ -906,7 +881,7 @@ Public Class TaskSaveModelAs
             CropW = CInt(Math.Round(WindowH / ImageAspectRatio))
         End If
 
-        TempFilename = NewFilename.Replace(NewExtension, String.Format("-Housekeeper{0}", NewExtension))
+        TempFilename = NewFilename.Replace(NewExtension, $"-Housekeeper{NewExtension}")
 
         Dim LocX = (WindowW - CropW) / 2
         Dim LocY = (WindowH - CropH) / 2
@@ -926,11 +901,11 @@ Public Class TaskSaveModelAs
                 System.IO.File.Delete(NewFilename)
                 FileSystem.Rename(TempFilename, NewFilename)
             Catch ex As Exception
-                Me.TaskLogger.AddMessage(String.Format("Unable to save cropped image '{0}'", NewFilename))
+                Me.TaskLogger.AddMessage($"Unable to save cropped image '{NewFilename}'.  Exception: {ex.Message}")
             End Try
 
         Catch ex As Exception
-            Me.TaskLogger.AddMessage(String.Format("Unable to save cropped image '{0}'", TempFilename))
+            Me.TaskLogger.AddMessage($"Unable to save cropped image '{TempFilename}'.  Exception: {ex.Message}")
         End Try
 
     End Sub
@@ -1201,8 +1176,7 @@ Public Class TaskSaveModelAs
                     'Form_Main.WorkingFilesPath = Me.NewDir
                 End If
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1278,7 +1252,7 @@ Public Class TaskSaveModelAs
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1322,8 +1296,7 @@ Public Class TaskSaveModelAs
                 Label.Visible = ImageFileTypeNames.Contains(Me.NewFileTypeName) And Me.ChangeViewStyle
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -1346,7 +1319,7 @@ Public Class TaskSaveModelAs
                 Me.ViewStyleName = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

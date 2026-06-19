@@ -128,7 +128,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 Dim UM As New UtilsMaterials
                 UM.MaterialNotInMaterialTable(SEApp, SEDoc, Me.MaterialTable, TaskLogger)
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
     End Sub
@@ -279,7 +279,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
 
         End Select
 
@@ -316,7 +316,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub
@@ -331,7 +331,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 Me.MaterialTable = TextBox.Text
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

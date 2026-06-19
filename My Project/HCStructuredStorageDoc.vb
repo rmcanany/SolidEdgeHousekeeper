@@ -123,7 +123,7 @@ Public Class HCStructuredStorageDoc
         Dim Extension As String = IO.Path.GetExtension(Me.FullName)
 
         If Not Extension = ".mtl" Then
-            Throw New Exception(String.Format("'{0}' is not a material table file", IO.Path.GetFileName(Me.FullName)))
+            Throw New Exception($"'{IO.Path.GetFileName(Me.FullName)}' is not a material table file")
         End If
 
         Me.MatTable = New MaterialTable(Me.cf)
@@ -134,7 +134,7 @@ Public Class HCStructuredStorageDoc
         Dim Extension As String = IO.Path.GetExtension(Me.FullName)
 
         If Not Extension = ".dft" Then
-            Throw New Exception(String.Format("Cannot process blocks for '{0}' file types", Extension))
+            Throw New Exception($"Cannot process blocks for '{Extension}' file types")
         End If
 
         Me.BlkLibrary = New BlockLibrary(Me.cf, Me.FullName)
@@ -144,7 +144,7 @@ Public Class HCStructuredStorageDoc
         Dim Extension As String = IO.Path.GetExtension(Me.FullName)
 
         If Extension = ".dft" Then
-            Throw New Exception(String.Format("Cannot get variable names for '{0}' file types", Extension))
+            Throw New Exception($"Cannot get variable names for '{Extension}' file types")
         End If
 
         Me.Vars = New Variables(Me.cf, Me.FullName)
@@ -230,7 +230,7 @@ Public Class HCStructuredStorageDoc
                     TypeName = "Double"
                 Case Else
                     Dim s = GetType(HCStructuredStorageDoc).FullName
-                    MsgBox(String.Format("In {0}: Property type {1} not recognized", s, VTType.ToString))
+                    MsgBox($"In {s}: Property type {VTType.ToString} not recognized")
             End Select
         End If
 
@@ -395,7 +395,9 @@ Public Class HCStructuredStorageDoc
         For Each _PropSet As PropertySet In Me.PropSets.Items
             If Not _PropSet.Name = "Custom" Then
                 For Each _Prop As Prop In _PropSet.Items
-                    If Not PropNames.Contains(_Prop.Name) Then PropNames.Add(String.Format("{0}, {1}, {2}", _PropSet.Name, CStr(_Prop.PropertyIdentifier), _Prop.Name))
+                    If Not PropNames.Contains(_Prop.Name) Then
+                        PropNames.Add($"{_PropSet.Name}, {CStr(_Prop.PropertyIdentifier)}, {_Prop.Name}")
+                    End If
                 Next
             End If
         Next
@@ -562,9 +564,7 @@ Public Class HCStructuredStorageDoc
                         Dim A = nCalcExpression.Evaluate()
                         OutString = A.ToString
                     Catch ex As Exception
-                        ErrorLogger.AddMessage($"Could not process expression '{OutString}'")
-                        ErrorLogger.AddMessage("Exception was:")
-                        ErrorLogger.AddMessage(ex.Message)
+                        ErrorLogger.AddMessage($"Could not process expression '{OutString}'.  Exception: {ex.Message}")
                         OutString = Nothing
                     End Try
 
@@ -580,9 +580,7 @@ Public Class HCStructuredStorageDoc
                         Try
                             OutString = UPS.RunPowerShellFile(PowerShellFilename)
                         Catch ex As Exception
-                            ErrorLogger.AddMessage($"Unable to process expression '{OutString}'")
-                            ErrorLogger.AddMessage("Exception was:")
-                            ErrorLogger.AddMessage(ex.Message)
+                            ErrorLogger.AddMessage($"Unable to process expression '{OutString}'.  Exception: {ex.Message}")
                             OutString = Nothing
                         End Try
                     Else
@@ -1562,7 +1560,7 @@ Public Class HCStructuredStorageDoc
                             JSiteStreamNames.Add(JSiteStream.EntryInfo.Name)
                         Next
 
-                        Dim OLEName = String.Format("{0}Ole", ChrW(1))
+                        Dim OLEName = $"{ChrW(1)}Ole"
 
                         If (JSiteStreamNames.Contains(OLEName)) And (JSiteStreamNames.Contains("JProperties")) Then
                             If CheckJProperties(SSTools.GetStream(JSiteStorage, "JProperties")) Then
@@ -1904,7 +1902,7 @@ Public Class HCStructuredStorageDoc
 
             FilenamesDict("ABSOLUTE") = ABSOLUTE
 
-            Dim CONTAINER = String.Format(".\{0}", IO.Path.GetFileName(ABSOLUTE))
+            Dim CONTAINER = $".\{IO.Path.GetFileName(ABSOLUTE)}"
             CONTAINER = IO.Path.GetFullPath(IO.Path.Combine(ContainerFileDirectory, CONTAINER))
 
             FilenamesDict("CONTAINER") = CONTAINER
@@ -1937,11 +1935,11 @@ Public Class HCStructuredStorageDoc
                     Prefix = ".\"
                 Else
                     For j = 0 To RelativeMotion - 2
-                        Prefix = String.Format("{0}..\", Prefix)
+                        Prefix = $"{Prefix}..\"
                     Next
                 End If
 
-                Filename = String.Format("{0}{1}", Prefix, Filename)
+                Filename = $"{Prefix}{Filename}"
 
                 'Create full path from relative path
                 Dim ContainerFileDirectory = IO.Path.GetDirectoryName(Me.ContainingFileFullName)
@@ -2047,7 +2045,7 @@ Public Class HCStructuredStorageDoc
 
             For Each B As Byte In ByteArray
                 If Not AsChr Then
-                    s = String.Format("{0},{1:x2}", s, B)
+                    s = $"{s},{B:x2}"
                 Else
                     If CInt(B) < 32 Then ' Non-printing
                         _s = "."
@@ -2058,7 +2056,7 @@ Public Class HCStructuredStorageDoc
                     Else
                         _s = System.Text.Encoding.ASCII.GetString({B})
                     End If
-                    s = String.Format("{0},{1}", s, _s)
+                    s = $"{s},{_s}"
                 End If
             Next
 
@@ -2116,7 +2114,7 @@ Public Class HCStructuredStorageDoc
             Dim tf As Boolean
 
             If SSDoc.PropSets Is Nothing Then
-                Throw New Exception(String.Format("Properties not initialized in '{0}'", IO.Path.GetFileName(SSDoc.FullName)))
+                Throw New Exception($"Properties not initialized in '{IO.Path.GetFileName(SSDoc.FullName)}'")
             End If
 
             If MaterialUpToDate(SSDoc) Then
@@ -2171,7 +2169,7 @@ Public Class HCStructuredStorageDoc
             Dim Threshold As Double = 0.001
 
             If SSDoc.PropSets Is Nothing Then
-                Throw New Exception(String.Format("Properties not initialized in '{0}'", IO.Path.GetFileName(SSDoc.FullName)))
+                Throw New Exception($"Properties not initialized in '{IO.Path.GetFileName(SSDoc.FullName)}'")
             End If
 
             Matl = CStr(SSDoc.GetPropValue("System", "Material"))

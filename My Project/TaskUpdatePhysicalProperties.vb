@@ -166,8 +166,8 @@ Public Class TaskUpdatePhysicalProperties
 
                         If Not ParFileNamesWithoutDensity Is Nothing Then
                             If ParFileNamesWithoutDensity.Count > 0 Then
-                                s = String.Format("Found {0} models with no density assigned.", ParFileNamesWithoutDensity.Count)
-                                s = String.Format("{0}  Please verify results.", s)
+                                s = $"Found {ParFileNamesWithoutDensity.Count} models with no density assigned."
+                                s = $"{s}  Please verify results."
                                 TaskLogger.AddMessage(s)
 
                             End If
@@ -189,7 +189,7 @@ Public Class TaskUpdatePhysicalProperties
 
                     End If
                 Catch ex As Exception
-                    TaskLogger.AddMessage("Unable to update physical properties.")
+                    TaskLogger.AddMessage($"Unable to update physical properties.  Exception: {ex.Message}")
                 End Try
 
             Case "par"
@@ -209,7 +209,7 @@ Public Class TaskUpdatePhysicalProperties
                 Density = CDbl(PropValue)
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
         If (DocType = "par") Or (DocType = "psm") Then
@@ -233,7 +233,7 @@ Public Class TaskUpdatePhysicalProperties
             If Proceed Then
                 If Density <= 0 Then
                     Proceed = False
-                    TaskLogger.AddMessage(String.Format("Density set to {0}", Density))
+                    TaskLogger.AddMessage($"Density set to {Density}")
                 End If
 
             End If
@@ -247,7 +247,7 @@ Public Class TaskUpdatePhysicalProperties
                             Model.DisplayPrincipalAxes = False
                             Model.DisplayCenterOfVolume = False
                         Catch ex As Exception
-                            TaskLogger.AddMessage("Issue reported when hiding symbols.  Please verify results.")
+                            TaskLogger.AddMessage($"Issue reported when hiding symbols.  Please verify results.  Exception: {ex.Message}")
                         End Try
                     End If
                     If Me.ShowSymbols Then
@@ -256,7 +256,7 @@ Public Class TaskUpdatePhysicalProperties
                             Model.DisplayPrincipalAxes = True
                             Model.DisplayCenterOfVolume = True
                         Catch ex As Exception
-                            TaskLogger.AddMessage("Issue reported showing symbols.  Please verify results.")
+                            TaskLogger.AddMessage($"Issue reported showing symbols.  Please verify results.  Exception: {ex.Message}")
                         End Try
                     End If
 
@@ -348,7 +348,7 @@ Public Class TaskUpdatePhysicalProperties
                 End If
 
             Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+                MsgBox($"{Me.Name} Name '{Name}' not recognized")
         End Select
 
     End Sub

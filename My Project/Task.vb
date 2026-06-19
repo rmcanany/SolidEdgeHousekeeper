@@ -166,7 +166,7 @@ Public MustInherit Class Task
 
         For Each Control As Control In Me.TaskControl.Controls
             If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+                MsgBox($"ControlsDict already has Key '{Control.Name}'")
             End If
             ControlsDict(Control.Name) = Control
         Next
@@ -198,7 +198,7 @@ Public MustInherit Class Task
             Case "output"
                 Task.ColorHue = "Purple"
             Case Else
-                MsgBox(String.Format("Task '{0}' category '{1}' not recognized", Task.Name, Task.Category.ToLower))
+                MsgBox($"Task '{Task.Name}' category '{Task.Category.ToLower}' not recognized")
         End Select
 
         SetRBGFromHSB(Task)
@@ -282,10 +282,10 @@ Public MustInherit Class Task
         For Each c As Char In InString
             If (Asc(c) >= 65) And (Asc(c) <= 90) Then  ' It's a capital letter
                 ' Upper case.  Add a space and change the character to lower case.
-                OutString = String.Format("{0} {1}", OutString, CStr(c).ToLower)
+                OutString = $"{OutString} {CStr(c).ToLower}"
             Else
                 ' Lower case.  Add the character as is.
-                OutString = String.Format("{0}{1}", OutString, CStr(c))
+                OutString = $"{OutString}{CStr(c)}"
             End If
         Next
 
@@ -307,10 +307,10 @@ Public MustInherit Class Task
         For Each c As Char In InString
             If (Asc(c) >= 65) And (Asc(c) <= 90) Then  ' It's a capital letter
                 ' Upper case.  Add a space and change the character to lower case.
-                OutString = String.Format("{0} {1}", OutString, CStr(c).ToLower)
+                OutString = $"{OutString} {CStr(c).ToLower}"
             Else
                 ' Lower case.  Add the character as is.
-                OutString = String.Format("{0}{1}", OutString, CStr(c))
+                OutString = $"{OutString}{CStr(c)}"
             End If
         Next
 
@@ -409,13 +409,13 @@ Public MustInherit Class Task
                 Case "Int16".ToLower
 
                 Case Else
-                    s = String.Format("{0}{1}{2}", s, PropTypestring, vbCrLf)
+                    s = $"{s}{PropTypestring}{vbCrLf}"
             End Select
 
         Next
 
         If Not s = "" Then
-            MsgBox(String.Format("In Task.GetFormState(), {2} PropTypestrings not recognized{0}{1}", vbCrLf, s, Me.Name))
+            MsgBox($"In Task.GetFormState(), {Me.Name} PropTypestrings not recognized{vbCrLf}{s}")
         End If
 
         tmpJSONDict("TaskName") = Me.Name
@@ -594,7 +594,7 @@ Public MustInherit Class Task
             Case "DropDownList"
                 ComboBox.DropDownStyle = ComboBoxStyle.DropDownList
             Case Else
-                MsgBox(String.Format("{0} DropDownStyleName '{1}' not recognized", Me.ToString, DropDownStyleName))
+                MsgBox($"{Me.ToString} DropDownStyleName '{DropDownStyleName}' not recognized")
 
         End Select
 

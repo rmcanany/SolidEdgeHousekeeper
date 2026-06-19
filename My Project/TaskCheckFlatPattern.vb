@@ -67,7 +67,7 @@ Public Class TaskCheckFlatPattern
                 FlatpatternModels = tmpSEDoc.FlatPatternModels
 
             Case Else
-                MsgBox(String.Format("{0} DocType '{0}' not recognized", Me.Name, DocType))
+                MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
         '' Active flat environment to regenerate flat model then save part if no errors
