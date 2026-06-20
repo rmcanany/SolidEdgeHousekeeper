@@ -78,7 +78,6 @@ Public Class UtilsPreferences
                     Value = CStr(PropInfo.GetValue(FMain, Nothing))
                 Case "list`1"
                     Value = Newtonsoft.Json.JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
-                    'MsgBox(String.Format("list`1 '{0}' detected", PropInfo.Name))
                 Case Else
                     MsgBox($"In UP.SaveFormMainSettings: PropInfo.Name '{PropInfo.Name.ToLower}' not recognized")
                     'If PropInfo.Module.ToString.ToLower.Contains("housekeeper") Then tmpUnhandledPropTypes.Add(PropType)
@@ -338,97 +337,193 @@ Public Class UtilsPreferences
         If Not FileIO.FileSystem.FileExists(SavedExpressionsFilename) Then
             Dim Outlist As New List(Of String)
 
-            Outlist.Add("[EXP]")
-            Outlist.Add("Example 1")
-            Outlist.Add("[EXP_TEXT]")
-            Outlist.Add("")
+            'Outlist.Add("[EXP]")
+            'Outlist.Add("Example 1")
+            'Outlist.Add("[EXP_TEXT]")
+            'Outlist.Add("")
 
-            'Outlist.Add("'%{System.Title}' + '-' + toString(cast(substring('%{System.Subject}', lastIndexOf('%{System.Subject}', 'L=')+2, lastIndexOf('%{System.Subject}', ' ')-lastIndexOf('%{System.Subject}', 'L=')-2),'System.Int32'),'D4') + '-' + substring('%{System.Subject}', lastIndexOf('%{System.Subject}', ' ')+1)")
+            ''Outlist.Add("'%{System.Title}' + '-' + toString(cast(substring('%{System.Subject}', lastIndexOf('%{System.Subject}', 'L=')+2, lastIndexOf('%{System.Subject}', ' ')-lastIndexOf('%{System.Subject}', 'L=')-2),'System.Int32'),'D4') + '-' + substring('%{System.Subject}', lastIndexOf('%{System.Subject}', ' ')+1)")
 
-            Outlist.Add("'%{System.Title}' ")
-            Outlist.Add("+ '-' ")
-            Outlist.Add("+ toString( ")
-            Outlist.Add("    cast( ")
-            Outlist.Add("      substring( ")
-            Outlist.Add("        '%{System.Subject}', ")
-            Outlist.Add("        lastIndexOf( ")
-            Outlist.Add("          '%{System.Subject}', ")
-            Outlist.Add("          'L=')+2, ")
-            Outlist.Add("        lastIndexOf( ")
-            Outlist.Add("          '%{System.Subject}', ")
-            Outlist.Add("          ' ')-lastIndexOf( ")
-            Outlist.Add("                 '%{System.Subject}', ")
-            Outlist.Add("                 'L=')-2), ")
-            Outlist.Add("    'System.Int32'), ")
-            Outlist.Add(" 'D4') ")
-            Outlist.Add("+ '-' ")
-            Outlist.Add("+ substring( ")
-            Outlist.Add("    '%{System.Subject}', ")
-            Outlist.Add("    lastIndexOf( ")
-            Outlist.Add("      '%{System.Subject}', ")
-            Outlist.Add("      ' ')+1) ")
+            'Outlist.Add("'%{System.Title}' ")
+            'Outlist.Add("+ '-' ")
+            'Outlist.Add("+ toString( ")
+            'Outlist.Add("    cast( ")
+            'Outlist.Add("      substring( ")
+            'Outlist.Add("        '%{System.Subject}', ")
+            'Outlist.Add("        lastIndexOf( ")
+            'Outlist.Add("          '%{System.Subject}', ")
+            'Outlist.Add("          'L=')+2, ")
+            'Outlist.Add("        lastIndexOf( ")
+            'Outlist.Add("          '%{System.Subject}', ")
+            'Outlist.Add("          ' ')-lastIndexOf( ")
+            'Outlist.Add("                 '%{System.Subject}', ")
+            'Outlist.Add("                 'L=')-2), ")
+            'Outlist.Add("    'System.Int32'), ")
+            'Outlist.Add(" 'D4') ")
+            'Outlist.Add("+ '-' ")
+            'Outlist.Add("+ substring( ")
+            'Outlist.Add("    '%{System.Subject}', ")
+            'Outlist.Add("    lastIndexOf( ")
+            'Outlist.Add("      '%{System.Subject}', ")
+            'Outlist.Add("      ' ')+1) ")
 
 
-            Outlist.Add("")
-            Outlist.Add("\\ Example of text manipulation And number formatting")
-            Outlist.Add("\\ System.Title <-- any string")
-            Outlist.Add("\\ System.Subject <-- need to end with this format L=xxx YY")
-            Outlist.Add("\\ xxx can be any number from 0 to 9999 And YY any two letters")
-            Outlist.Add("\\ xxx will be transformed in D4 syntax (example 65 will became 0065)")
-            Outlist.Add("")
+            'Outlist.Add("")
+            'Outlist.Add("\\ Example of text manipulation And number formatting")
+            'Outlist.Add("\\ System.Title <-- any string")
+            'Outlist.Add("\\ System.Subject <-- need to end with this format L=xxx YY")
+            'Outlist.Add("\\ xxx can be any number from 0 to 9999 And YY any two letters")
+            'Outlist.Add("\\ xxx will be transformed in D4 syntax (example 65 will became 0065)")
+            'Outlist.Add("")
 
-            Outlist.Add("[EXP]")
-            Outlist.Add("Example If()")
-            Outlist.Add("[EXP_TEXT]")
-            Outlist.Add("if ('%{System.Category}' == 'LASER','SSM',")
-            Outlist.Add("if('%{System.Category}' == 'WATERJET','Kastle',")
-            Outlist.Add("if('%{System.Category}' == 'FAB','Internal','')))")
-            Outlist.Add("")
-            Outlist.Add("\\Example of the usage of if() statement, valid inputs LASER, WATERJET, FAB, ??")
-            Outlist.Add("")
+            'Outlist.Add("[EXP]")
+            'Outlist.Add("Example If()")
+            'Outlist.Add("[EXP_TEXT]")
+            'Outlist.Add("if ('%{System.Category}' == 'LASER','SSM',")
+            'Outlist.Add("if('%{System.Category}' == 'WATERJET','Kastle',")
+            'Outlist.Add("if('%{System.Category}' == 'FAB','Internal','')))")
+            'Outlist.Add("")
+            'Outlist.Add("\\Example of the usage of if() statement, valid inputs LASER, WATERJET, FAB, ??")
+            'Outlist.Add("")
 
-            Outlist.Add("[EXP]")
-            Outlist.Add("Example Replace()")
-            Outlist.Add("[EXP_TEXT]")
-            Outlist.Add("")
-            Outlist.Add("replace('%{System.Subject}','L=','L:')")
-            Outlist.Add("")
-            Outlist.Add("\\ %{System.Subject} must contains 'L='")
-            Outlist.Add("")
+            'Outlist.Add("[EXP]")
+            'Outlist.Add("Example Replace()")
+            'Outlist.Add("[EXP_TEXT]")
+            'Outlist.Add("")
+            'Outlist.Add("replace('%{System.Subject}','L=','L:')")
+            'Outlist.Add("")
+            'Outlist.Add("\\ %{System.Subject} must contains 'L='")
+            'Outlist.Add("")
 
-            Outlist.Add("[EXP]")
-            Outlist.Add("Example toUpper()")
-            Outlist.Add("[EXP_TEXT]")
-            Outlist.Add("")
-            Outlist.Add("toUpper('%{System.Title}')")
-            Outlist.Add("")
-            Outlist.Add("\\Any text will be converted in UPPERCASE")
+            'Outlist.Add("[EXP]")
+            'Outlist.Add("Example toUpper()")
+            'Outlist.Add("[EXP_TEXT]")
+            'Outlist.Add("")
+            'Outlist.Add("toUpper('%{System.Title}')")
+            'Outlist.Add("")
+            'Outlist.Add("\\Any text will be converted in UPPERCASE")
 
-            Outlist.Add("[EXP]")
-            Outlist.Add("Example VB ToUpper")
-            Outlist.Add("[EXP_TEXT]")
-            Outlist.Add("")
-            Outlist.Add("Return ""%{System.Title}"".ToUpper()")
-            Outlist.Add("")
-            Outlist.Add("\\Any text will be converted in UPPERCASE")
+            'Outlist.Add("[EXP]")
+            'Outlist.Add("Example VB ToUpper")
+            'Outlist.Add("[EXP_TEXT]")
+            'Outlist.Add("")
+            'Outlist.Add("Return ""%{System.Title}"".ToUpper()")
+            'Outlist.Add("")
+            'Outlist.Add("\\Any text will be converted in UPPERCASE")
 
-            Outlist.Add("[EXP]")
-            Outlist.Add("Example VB Select Case")
-            Outlist.Add("[EXP_TEXT]")
-            Outlist.Add("")
-            Outlist.Add("Dim SubDirectory as String = """"")
-            Outlist.Add("Select Case ""%{System.Category}"".ToUpper()")
-            Outlist.Add("    Case ""WATERJET""")
-            Outlist.Add("        SubDirectory = ""Kastle""")
-            Outlist.Add("    Case ""LASER"", ""WELDMENT""")
-            Outlist.Add("        SubDirectory = ""SSM""")
-            Outlist.Add("    Case Else")
-            Outlist.Add("        SubDirectory = ""Internal""")
-            Outlist.Add("End Select")
-            Outlist.Add("Return SubDirectory")
-            Outlist.Add("")
-            Outlist.Add("\\Create output that depends on category")
+            'Outlist.Add("[EXP]")
+            'Outlist.Add("Example VB Select Case")
+            'Outlist.Add("[EXP_TEXT]")
+            'Outlist.Add("")
+            'Outlist.Add("Dim SubDirectory as String = """"")
+            'Outlist.Add("Select Case ""%{System.Category}"".ToUpper()")
+            'Outlist.Add("    Case ""WATERJET""")
+            'Outlist.Add("        SubDirectory = ""Kastle""")
+            'Outlist.Add("    Case ""LASER"", ""WELDMENT""")
+            'Outlist.Add("        SubDirectory = ""SSM""")
+            'Outlist.Add("    Case Else")
+            'Outlist.Add("        SubDirectory = ""Internal""")
+            'Outlist.Add("End Select")
+            'Outlist.Add("Return SubDirectory")
+            'Outlist.Add("")
+            'Outlist.Add("\\Create output that depends on category")
 
+
+            Outlist.AddRange(
+                {
+                "[EXP]",
+                "Example 1",
+                "[EXP_TEXT]",
+                "",
+                "'%{System.Title}' ",
+                "+ '-' ",
+                "+ toString( ",
+                "    cast( ",
+                "      substring( ",
+                "        '%{System.Subject}', ",
+                "        lastIndexOf( ",
+                "          '%{System.Subject}', ",
+                "          'L=')+2, ",
+                "        lastIndexOf( ",
+                "          '%{System.Subject}', ",
+                "          ' ')-lastIndexOf( ",
+                "                 '%{System.Subject}', ",
+                "                 'L=')-2), ",
+                "    'System.Int32'), ",
+                " 'D4') ",
+                "+ '-' ",
+                "+ substring( ",
+                "    '%{System.Subject}', ",
+                "    lastIndexOf( ",
+                "      '%{System.Subject}', ",
+                "      ' ')+1) ",
+                "",
+                "\\ Example of text manipulation And number formatting",
+                "\\ System.Title <-- any string",
+                "\\ System.Subject <-- need to end with this format L=xxx YY",
+                "\\ xxx can be any number from 0 to 9999 And YY any two letters",
+                "\\ xxx will be transformed in D4 syntax (example 65 will became 0065)",
+                "",
+                "",
+                "",
+                "[EXP]",
+                "Example If()",
+                "[EXP_TEXT]",
+                "if ('%{System.Category}' == 'LASER','SSM',",
+                "if('%{System.Category}' == 'WATERJET','Kastle',",
+                "if('%{System.Category}' == 'FAB','Internal','')))",
+                "",
+                "\\Example of the usage of if() statement, valid inputs LASER, WATERJET, FAB, ??",
+                "",
+                "",
+                "",
+                "[EXP]",
+                "Example Replace()",
+                "[EXP_TEXT]",
+                "",
+                "replace('%{System.Subject}','L=','L:')",
+                "",
+                "\\ %{System.Subject} must contains 'L='",
+                "",
+                "",
+                "",
+                "[EXP]",
+                "Example toUpper()",
+                "[EXP_TEXT]",
+                "",
+                "toUpper('%{System.Title}')",
+                "",
+                "\\Any text will be converted in UPPERCASE",
+                "",
+                "",
+                "",
+                "[EXP]",
+                "Example VB ToUpper",
+                "[EXP_TEXT]",
+                "",
+                "Return ""%{System.Title}"".ToUpper()",
+                "",
+                "\\Any text will be converted in UPPERCASE",
+                "",
+                "",
+                "",
+                "[EXP]",
+                "Example VB Select Case",
+                "[EXP_TEXT]",
+                "",
+                "Dim SubDirectory as String = """"",
+                "Select Case ""%{System.Category}"".ToUpper()",
+                "    Case ""WATERJET""",
+                "        SubDirectory = ""Kastle""",
+                "    Case ""LASER"", ""WELDMENT""",
+                "        SubDirectory = ""SSM""",
+                "    Case Else",
+                "        SubDirectory = ""Internal""",
+                "End Select",
+                "Return SubDirectory",
+                "",
+                "\\Create output that depends on category"
+                })
 
             IO.File.WriteAllLines(SavedExpressionsFilename, Outlist)
         End If
@@ -467,64 +562,128 @@ Public Class UtilsPreferences
             Dim Outlist As New List(Of String)
 
 
-            Outlist.Add("'This file stores command IDs for the Edit Interactively task.")
-            Outlist.Add("'")
-            Outlist.Add("'The format is: Description, Assembly ID, Part ID, Sheetmetal ID, Draft ID")
-            Outlist.Add("'Where 'ID' above means the command ID number found in the API documentation.")
-            Outlist.Add("'")
-            Outlist.Add("'You can add/remove items from the list.  The description is just text for the")
-            Outlist.Add("'user.  You can change it to your preference.")
-            Outlist.Add("'")
-            Outlist.Add("'To find what commands are available, consult the API documentation.  For SE2024,")
-            Outlist.Add("'here are the locations:")
-            Outlist.Add("'")
-            Outlist.Add("'ApplicationCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ApplicationCommandConstants.html")
-            Outlist.Add("'AssemblyCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~AssemblyCommandConstants.html")
-            Outlist.Add("'CommandUserInterfaceConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~CommandUserInterfaceConstants.html")
-            Outlist.Add("'CuttingPlaneLineCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~CuttingPlaneLineCommandConstants.html")
-            Outlist.Add("'DetailCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~DetailCommandConstants.html")
-            Outlist.Add("'DrawingViewEditCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~DrawingViewEditCommandConstants.html")
-            Outlist.Add("'ExplodeCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ExplodeCommandConstants.html")
-            Outlist.Add("'LayoutCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~LayoutCommandConstants.html")
-            Outlist.Add("'LayoutInPartCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~LayoutInPartCommandConstants.html")
-            Outlist.Add("'MotionCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~MotionCommandConstants.html")
-            Outlist.Add("'PartCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~PartCommandConstants.html")
-            Outlist.Add("'ProfileCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfileCommandConstants.html")
-            Outlist.Add("'ProfileHoleCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfileHoleCommandConstants.html")
-            Outlist.Add("'ProfilePatternCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfilePatternCommandConstants.html")
-            Outlist.Add("'ProfileRevolvedCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfileRevolvedCommandConstants.html")
-            Outlist.Add("'SheetMetalCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~SheetMetalCommandConstants.html")
-            Outlist.Add("'SimplifyCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~SimplifyCommandConstants.html")
-            Outlist.Add("'SolidEdgeCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~SolidEdgeCommandConstants.html")
-            Outlist.Add("'StudioCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~StudioCommandConstants.html")
-            Outlist.Add("'TubingCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~TubingCommandConstants.html")
-            Outlist.Add("'WeldmentCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~WeldmentCommandConstants.html")
-            Outlist.Add("'")
-            Outlist.Add("'If a command is not available for a given file type, or you do not want to show it,")
-            Outlist.Add("'enter zero in that field.")
-            Outlist.Add("'")
-            Outlist.Add("'You can add comments to this file if desired.  Just begin the line with the")
-            Outlist.Add("'single-quote (') character.")
-            Outlist.Add("'")
-            Outlist.Add("'If you mess up the file in some way, you can delete it.  It will be regenerated next time")
-            Outlist.Add("'the program starts.")
-            Outlist.Add("'")
-            Outlist.Add("Manual entry, 0, 0, 0, 0")
-            Outlist.Add("Display cfgs, 32826, 0, 0, 0")
-            Outlist.Add("Edit links, 57857, 0, 0, 57857")
-            Outlist.Add("Edit variables, 25036, 25036, 25036, 10504")
-            Outlist.Add("File options, 25042, 25042, 25042, 10508")
-            Outlist.Add("File properties, 40001, 40001, 40001, 40001")
-            Outlist.Add("Flat pattern, 0, 0, 45066, 0")
-            Outlist.Add("Format style, 33058, 25030, 25030, 0")
-            Outlist.Add("Inquire element, 25072, 25072, 25072, 0")
-            Outlist.Add("Interpart manager, 40277, 40277, 40277, 0")
-            Outlist.Add("Part painter, 0, 40314, 40314, 0")
-            Outlist.Add("Physical properties, 25038, 25038, 25038, 0")
-            Outlist.Add("Property manager, 50005, 50005, 50005, 0")
-            Outlist.Add("Replace part, 32808, 0, 0, 0")
-            Outlist.Add("Sheet setup, 0, 0, 0, 10002")
-            Outlist.Add("View backgrounds, 0, 0, 0, 10211")
+            'Outlist.Add("'This file stores command IDs for the Edit Interactively task.")
+            'Outlist.Add("'")
+            'Outlist.Add("'The format is: Description, Assembly ID, Part ID, Sheetmetal ID, Draft ID")
+            'Outlist.Add("'Where 'ID' above means the command ID number found in the API documentation.")
+            'Outlist.Add("'")
+            'Outlist.Add("'You can add/remove items from the list.  The description is just text for the")
+            'Outlist.Add("'user.  You can change it to your preference.")
+            'Outlist.Add("'")
+            'Outlist.Add("'To find what commands are available, consult the API documentation.  For SE2024,")
+            'Outlist.Add("'here are the locations:")
+            'Outlist.Add("'")
+            'Outlist.Add("'ApplicationCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ApplicationCommandConstants.html")
+            'Outlist.Add("'AssemblyCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~AssemblyCommandConstants.html")
+            'Outlist.Add("'CommandUserInterfaceConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~CommandUserInterfaceConstants.html")
+            'Outlist.Add("'CuttingPlaneLineCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~CuttingPlaneLineCommandConstants.html")
+            'Outlist.Add("'DetailCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~DetailCommandConstants.html")
+            'Outlist.Add("'DrawingViewEditCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~DrawingViewEditCommandConstants.html")
+            'Outlist.Add("'ExplodeCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ExplodeCommandConstants.html")
+            'Outlist.Add("'LayoutCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~LayoutCommandConstants.html")
+            'Outlist.Add("'LayoutInPartCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~LayoutInPartCommandConstants.html")
+            'Outlist.Add("'MotionCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~MotionCommandConstants.html")
+            'Outlist.Add("'PartCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~PartCommandConstants.html")
+            'Outlist.Add("'ProfileCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfileCommandConstants.html")
+            'Outlist.Add("'ProfileHoleCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfileHoleCommandConstants.html")
+            'Outlist.Add("'ProfilePatternCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfilePatternCommandConstants.html")
+            'Outlist.Add("'ProfileRevolvedCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~ProfileRevolvedCommandConstants.html")
+            'Outlist.Add("'SheetMetalCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~SheetMetalCommandConstants.html")
+            'Outlist.Add("'SimplifyCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~SimplifyCommandConstants.html")
+            'Outlist.Add("'SolidEdgeCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~SolidEdgeCommandConstants.html")
+            'Outlist.Add("'StudioCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~StudioCommandConstants.html")
+            'Outlist.Add("'TubingCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~TubingCommandConstants.html")
+            'Outlist.Add("'WeldmentCommandConstants: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~WeldmentCommandConstants.html")
+            'Outlist.Add("'")
+            'Outlist.Add("'If a command is not available for a given file type, or you do not want to show it,")
+            'Outlist.Add("'enter zero in that field.")
+            'Outlist.Add("'")
+            'Outlist.Add("'You can add comments to this file if desired.  Just begin the line with the")
+            'Outlist.Add("'single-quote (') character.")
+            'Outlist.Add("'")
+            'Outlist.Add("'If you mess up the file in some way, you can delete it.  It will be regenerated next time")
+            'Outlist.Add("'the program starts.")
+            'Outlist.Add("'")
+            'Outlist.Add("Manual entry, 0, 0, 0, 0")
+            'Outlist.Add("Display cfgs, 32826, 0, 0, 0")
+            'Outlist.Add("Edit links, 57857, 0, 0, 57857")
+            'Outlist.Add("Edit variables, 25036, 25036, 25036, 10504")
+            'Outlist.Add("File options, 25042, 25042, 25042, 10508")
+            'Outlist.Add("File properties, 40001, 40001, 40001, 40001")
+            'Outlist.Add("Flat pattern, 0, 0, 45066, 0")
+            'Outlist.Add("Format style, 33058, 25030, 25030, 0")
+            'Outlist.Add("Inquire element, 25072, 25072, 25072, 0")
+            'Outlist.Add("Interpart manager, 40277, 40277, 40277, 0")
+            'Outlist.Add("Part painter, 0, 40314, 40314, 0")
+            'Outlist.Add("Physical properties, 25038, 25038, 25038, 0")
+            'Outlist.Add("Property manager, 50005, 50005, 50005, 0")
+            'Outlist.Add("Replace part, 32808, 0, 0, 0")
+            'Outlist.Add("Sheet setup, 0, 0, 0, 10002")
+            'Outlist.Add("View backgrounds, 0, 0, 0, 10211")
+
+            Dim BaseURL As String = "https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/"
+
+            Outlist.AddRange(
+                {
+                "'This file stores command IDs for the Edit Interactively task.",
+                "'",
+                "'The format is: Description, Assembly ID, Part ID, Sheetmetal ID, Draft ID",
+                "'Where 'ID' above means the command ID number found in the API documentation.",
+                "'",
+                "'You can add/remove items from the list.  The description is just text for the",
+                "'user.  You can change it to your preference.",
+                "'",
+                "'To find what commands are available, consult the API documentation.  For SE2024,",
+                "'here are the locations:",
+                "'",
+                $"'ApplicationCommandConstants: {BaseURL}SolidEdgeConstants~ApplicationCommandConstants.html",
+                $"'AssemblyCommandConstants: {BaseURL}SolidEdgeConstants~AssemblyCommandConstants.html",
+                $"'CommandUserInterfaceConstants: {BaseURL}SolidEdgeConstants~CommandUserInterfaceConstants.html",
+                $"'CuttingPlaneLineCommandConstants: {BaseURL}SolidEdgeConstants~CuttingPlaneLineCommandConstants.html",
+                $"'DetailCommandConstants: {BaseURL}SolidEdgeConstants~DetailCommandConstants.html",
+                $"'DrawingViewEditCommandConstants: {BaseURL}SolidEdgeConstants~DrawingViewEditCommandConstants.html",
+                $"'ExplodeCommandConstants: {BaseURL}SolidEdgeConstants~ExplodeCommandConstants.html",
+                $"'LayoutCommandConstants: {BaseURL}SolidEdgeConstants~LayoutCommandConstants.html",
+                $"'LayoutInPartCommandConstants: {BaseURL}SolidEdgeConstants~LayoutInPartCommandConstants.html",
+                $"'MotionCommandConstants: {BaseURL}SolidEdgeConstants~MotionCommandConstants.html",
+                $"'PartCommandConstants: {BaseURL}SolidEdgeConstants~PartCommandConstants.html",
+                $"'ProfileCommandConstants: {BaseURL}SolidEdgeConstants~ProfileCommandConstants.html",
+                $"'ProfileHoleCommandConstants: {BaseURL}SolidEdgeConstants~ProfileHoleCommandConstants.html",
+                $"'ProfilePatternCommandConstants: {BaseURL}SolidEdgeConstants~ProfilePatternCommandConstants.html",
+                $"'ProfileRevolvedCommandConstants: {BaseURL}SolidEdgeConstants~ProfileRevolvedCommandConstants.html",
+                $"'SheetMetalCommandConstants: {BaseURL}SolidEdgeConstants~SheetMetalCommandConstants.html",
+                $"'SimplifyCommandConstants: {BaseURL}SolidEdgeConstants~SimplifyCommandConstants.html",
+                $"'SolidEdgeCommandConstants: {BaseURL}SolidEdgeConstants~SolidEdgeCommandConstants.html",
+                $"'StudioCommandConstants: {BaseURL}SolidEdgeConstants~StudioCommandConstants.html",
+                $"'TubingCommandConstants: {BaseURL}SolidEdgeConstants~TubingCommandConstants.html",
+                $"'WeldmentCommandConstants: {BaseURL}SolidEdgeConstants~WeldmentCommandConstants.html",
+                "'",
+                "'If a command is not available for a given file type, or you do not want to show it,",
+                "'enter zero in that field.",
+                "'",
+                "'You can add comments to this file if desired.  Just begin the line with the",
+                "'single-quote (') character.",
+                "'",
+                "'If you mess up the file in some way, you can delete it.  It will be regenerated next time",
+                "'the program starts.",
+                "'",
+                "Manual entry, 0, 0, 0, 0",
+                "Display cfgs, 32826, 0, 0, 0",
+                "Edit links, 57857, 0, 0, 57857",
+                "Edit variables, 25036, 25036, 25036, 10504",
+                "File options, 25042, 25042, 25042, 10508",
+                "File properties, 40001, 40001, 40001, 40001",
+                "Flat pattern, 0, 0, 45066, 0",
+                "Format style, 33058, 25030, 25030, 0",
+                "Inquire element, 25072, 25072, 25072, 0",
+                "Interpart manager, 40277, 40277, 40277, 0",
+                "Part painter, 0, 40314, 40314, 0",
+                "Physical properties, 25038, 25038, 25038, 0",
+                "Property manager, 50005, 50005, 50005, 0",
+                "Replace part, 32808, 0, 0, 0",
+                "Sheet setup, 0, 0, 0, 10002",
+                "View backgrounds, 0, 0, 0, 10211"
+             })
 
             IO.File.WriteAllLines(InteractiveEditCommandsFilename, Outlist)
         End If
@@ -970,23 +1129,17 @@ Public Class UtilsPreferences
         Try
             Contents = IO.File.ReadAllLines(LinkManagementFilename)
         Catch ex As Exception
-            'msg = String.Format("LinkMgmt.txt file '{0}' (on Configuration Tab) not found.{1}", LinkManagementFilename, vbCrLf)
+            'msg = $"LinkMgmt.txt file '{LinkManagementFilename}' not found"
             'MsgBox(msg)
         End Try
 
         If Contents IsNot Nothing Then
-            If Contents.Count > 0 Then
-                For Each item As String In Contents
-                    Line = item.Trim.ToUpper
-                    If ValidOrders.Contains(Line) Then
-                        LinkManagementOrder.Add(Line)
-                    End If
-                Next
-            Else
-                'msg = String.Format("LinkMgmt.txt file '{0}' is empty.{1}", LinkManagementFilename, vbCrLf)
-                'MsgBox(msg)
-            End If
-
+            For Each item As String In Contents
+                Line = item.Trim.ToUpper
+                If ValidOrders.Contains(Line) Then
+                    LinkManagementOrder.Add(Line)
+                End If
+            Next
         End If
 
         For Each s As String In ValidOrders

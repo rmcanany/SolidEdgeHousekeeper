@@ -74,7 +74,6 @@ Public Class HCErrorLogger
 
                 Dim Outstring As String = ""
                 For Each s As String In Outlist
-                    'Outstring = String.Format("{0}{1}{2}", Outstring, s, vbCrLf)
                     Outstring = $"{Outstring}{s}{vbCrLf}"
                 Next
 

@@ -42,7 +42,6 @@ Public Class Form_Main
                         MsgBox(s, vbOKOnly)
                     End If
 
-
                 Else
                     BT_Update.BackColor = Color.FromName("Control")
                 End If

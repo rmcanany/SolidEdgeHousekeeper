@@ -194,7 +194,6 @@ Public Class UtilsExecute
             For Each Filename As ListViewItem In FMain.ListViewFiles.SelectedItems
 
                 '########## can be unified in a sub
-                'FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
                 FMain.TextBoxStatus.Text = $"Checking file integrity: {IO.Path.GetFileName(Filename.Name)}"
                 Application.DoEvents()
 
@@ -261,7 +260,6 @@ Public Class UtilsExecute
                             ElseIf TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
                                 Dim T As TaskUpdateDrawingStylesFromTemplate = CType(Task, TaskUpdateDrawingStylesFromTemplate)
                                 If Not T.DraftTemplate.Contains(FMain.TCCachePath) Then
-                                    'StartLogger.AddMessage(String.Format("{0}: Template must be in TeamCenter cache folder", Task.Description))
                                     StartLogger.AddMessage($"{Task.Description}: Template must be in TeamCenter cache folder")
                                 End If
                                 Exit For

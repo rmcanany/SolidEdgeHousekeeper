@@ -118,7 +118,6 @@ Public Class TaskUpdatePartCopies
                 Models = tmpSEDoc.Models
 
             Case Else
-                'MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
                 Me.TaskLogger.AddMessage($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 

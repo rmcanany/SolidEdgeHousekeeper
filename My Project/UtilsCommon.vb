@@ -183,7 +183,6 @@ Public Class UtilsCommon
                     DocType = "dft"
 
                 Case Else
-                    'MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", SEDoc.Type.ToString))
                     MsgBox($"UtilsCommon DocType '{DocType}' not recognized")
             End Select
         End If

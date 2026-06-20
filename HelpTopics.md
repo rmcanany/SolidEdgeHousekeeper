@@ -1411,6 +1411,12 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 
 </details>
 
+<!-- End -->
+
+
+
+
+
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_help_16.png"><img src="My%20Project/media/spacer.png">KNOWN ISSUES</h2></summary>
 
@@ -1471,8 +1477,4 @@ One way is through PayPal's Donate feature.
 Otherwise, for electronic funds transfer or other means, please email me at rmcanany@gmail.com.
 
 </details>
-
-[//]: # (###### NOTE ######)
-[//]: # (Compiling the program will delete any text added here.  )
-[//]: # (Add it to UtilsDocumentation.BuildReadmeFile instead.)
 

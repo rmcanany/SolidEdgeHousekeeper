@@ -19,7 +19,7 @@ We'll get right to the updates, but first some exciting news -- Housekeeper has 
 
 > *We are a company based in the Netherlands and use your program often to clean up our Solid Edge models.  Thank you for a well engineered piece of open source software, and keep up the good work.*
 
-One more bit of news.  We have a new contributor: our very own **@Alex_H!**  He added the ability to save models in the new DSTV format.  Can't wait for you to try it out!
+And there's more...  Our very own **@Alex_H** is Housekeeper's latest contributor!  He added the ability to save models in the new DSTV format.  Can't wait for you to check it out!
 
 Now, on to those updates...
 

@@ -378,10 +378,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             End If
         Next
 
-        'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-        'If Len(MissingStyles) > 0 Then
-        '    TaskLogger.AddMessage(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
-        'End If
         MissingStyles = DocStyleNotInTemplate(DocStyleNamesInUse, TemplateStyleNames)
         If Len(MissingStyles) > 0 Then
             TaskLogger.AddMessage($"Dimension styles in Draft but not in Template: {MissingStyles}")
@@ -434,11 +430,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 End Try
             End If
         Next
-
-        'MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
-        'If Len(MissingStyles) > 0 Then
-        '    TaskLogger.AddMessage(String.Format("Drawing View styles in Draft but not in Template: {0}", MissingStyles))
-        'End If
 
     End Sub
 

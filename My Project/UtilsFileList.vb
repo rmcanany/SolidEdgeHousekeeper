@@ -400,7 +400,6 @@ Public Class UtilsFileList
                     End If
 
                 Case = "tsv"
-                    'FMain.TextBoxStatus.Text = String.Format("Processing list '{0}'", System.IO.Path.GetFileName(Source.Name))
                     FMain.TextBoxStatus.Text = $"Processing list '{System.IO.Path.GetFileName(Source.Name)}'"
 
                     If FileIO.FileSystem.FileExists(Source.Name) Then
@@ -416,7 +415,6 @@ Public Class UtilsFileList
                     End If
 
                 Case = "excel"
-                    'FMain.TextBoxStatus.Text = String.Format("Processing excel '{0}'", System.IO.Path.GetFileName(Source.Name))
                     FMain.TextBoxStatus.Text = $"Processing excel '{System.IO.Path.GetFileName(Source.Name)}'"
 
                     If FileIO.FileSystem.FileExists(Source.Name) Then
@@ -827,37 +825,6 @@ Public Class UtilsFileList
 
         If Proceed Then
             OutList = SortByDependency(DependencyDict)
-
-            'If MissingFilesList.Count > 0 Then
-            '    Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-
-            '    Dim MissingFilesFileName As String
-            '    MissingFilesFileName = $"{UP.GetTempDirectory}\{Timestamp}_Missing_Files.log"
-
-            '    Try
-            '        Using writer As New IO.StreamWriter(MissingFilesFileName, True)
-            '            writer.WriteLine("Information Only: These linked files were not found")
-            '            For Each Filename In MissingFilesList
-            '                writer.WriteLine(String.Format(Filename))
-            '            Next
-            '        End Using
-
-            '        Try
-            '            ' Try to use the default application to open the file.
-            '            Process.Start(MissingFilesFileName)
-            '        Catch ex As Exception
-            '            ' If none, open with notepad.exe
-            '            Process.Start("notepad.exe", MissingFilesFileName)
-            '        End Try
-
-
-            '    Catch ex As Exception
-            '    End Try
-
-            'End If
-            'For Each MissingFile As String In MissingFilesList
-            '        SubLogger.AddMessage($"Not found: {MissingFile}")
-            '    Next
 
         End If
 

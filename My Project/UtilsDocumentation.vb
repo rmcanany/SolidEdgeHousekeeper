@@ -90,6 +90,9 @@ Public Class UtilsDocumentation
     End Sub
 
     Public Sub BuildReadmeFile()
+        ' Reads all of Readme.md, except the TASK DETAILS section.
+        ' Those are generated in this file and added to the output.
+
         Dim UP As New UtilsPreferences
 
         If Not UP.RunningDevCode Then
@@ -105,6 +108,7 @@ Public Class UtilsDocumentation
         Dim StartupPath As String = $"{UP.GetHardCodedPath}\bin\Release"
 
         Dim TaskListHeader As String = "<!-- Start -->"
+        Dim TaskListTrailer As String = "<!-- End -->"
         Dim Proceed As Boolean = True
         Dim i As Integer
         Dim msg As String
@@ -124,190 +128,240 @@ Public Class UtilsDocumentation
         End If
 
         If Proceed Then
-            For i = 0 To ReadmeIn.Count - 1
-                If Not ReadmeIn(i).Contains(TaskListHeader) Then
-                    ReadmeOut.Add(ReadmeIn(i))
-                Else
-                    Exit For
-                End If
-            Next
 
-            ReadmeOut.Add(TaskListHeader)
-            ReadmeOut.Add("")
+            Dim NewWay As Boolean = True
 
-            Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
+            If NewWay Then
+                Dim VerbatimMode As Boolean = True
 
-            ' html for collapsible sections
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}Resources/SE_asm.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}TASK DETAILS</h2></summary>", Chr(34), msg)
+                For i = 0 To ReadmeIn.Count - 1
+                    If VerbatimMode Then
+                        If Not ReadmeIn(i).Contains(TaskListHeader) Then
+                            ReadmeOut.Add(ReadmeIn(i))
+                        Else
+                            VerbatimMode = False
+                            ReadmeOut.Add(TaskListHeader)
+                            ReadmeOut.Add("")
 
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                            Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
 
-            For Each Task As Task In tmpTaskList
-                Dim ImageName As String = Task.Name
-                msg = String.Format("<details><summary><h3 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+                            ReadmeOut.Add(BuildSectionHTMLString("TASK DETAILS", 2, "SE_asm.png"))
+                            ReadmeOut.Add("")
+
+                            For Each Task As Task In tmpTaskList
+                                Dim ImageName As String = $"{Task.Name}.png"
+
+                                ReadmeOut.Add(BuildSectionHTMLString(Task.Description, 3, ImageName))
+                                ReadmeOut.Add("")
+
+                                ReadmeOut.Add(Task.HelpText)
+                                ReadmeOut.Add("")
+
+                                ReadmeOut.Add("</details>") ' Close collapsible section
+                                ReadmeOut.Add("")
+                            Next
+
+                            ReadmeOut.Add("</details>") ' Close collapsible section
+                            ReadmeOut.Add("")
+
+                            ReadmeOut.Add(TaskListTrailer)
+                            ReadmeOut.Add("")
+                        End If
+                    Else
+                        If ReadmeIn(i).Contains(TaskListTrailer) Then
+                            VerbatimMode = True
+
+                        End If
+                    End If
+                Next
+
+            Else
+                For i = 0 To ReadmeIn.Count - 1
+                    If Not ReadmeIn(i).Contains(TaskListHeader) Then
+                        ReadmeOut.Add(ReadmeIn(i))
+                    Else
+                        Exit For
+                    End If
+                Next
+
+                ReadmeOut.Add(TaskListHeader)
+                ReadmeOut.Add("")
+
+                Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
+
+                ' html for collapsible sections
+                msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
                 msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-                msg = String.Format("{1}<img src={0}Resources/{2}.png{0}>", Chr(34), msg, ImageName)
+                msg = String.Format("{1}<img src={0}Resources/SE_asm.png{0}>", Chr(34), msg)
                 msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-                msg = String.Format("{1}{2}</h3></summary>", Chr(34), msg, Task.Description)
+                msg = String.Format("{1}TASK DETAILS</h2></summary>", Chr(34), msg)
 
                 ReadmeOut.Add(msg)
                 ReadmeOut.Add("")
 
-                ReadmeOut.Add(Task.HelpText)
-                ReadmeOut.Add("")
+                For Each Task As Task In tmpTaskList
+                    Dim ImageName As String = Task.Name
+                    msg = String.Format("<details><summary><h3 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+                    msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                    msg = String.Format("{1}<img src={0}Resources/{2}.png{0}>", Chr(34), msg, ImageName)
+                    msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                    msg = String.Format("{1}{2}</h3></summary>", Chr(34), msg, Task.Description)
+
+                    ReadmeOut.Add(msg)
+                    ReadmeOut.Add("")
+
+                    ReadmeOut.Add(Task.HelpText)
+                    ReadmeOut.Add("")
+
+                    ReadmeOut.Add("</details>") ' Close collapsible section
+                    ReadmeOut.Add("")
+                Next
 
                 ReadmeOut.Add("</details>") ' Close collapsible section
                 ReadmeOut.Add("")
-            Next
 
-            ReadmeOut.Add("</details>") ' Close collapsible section
-            ReadmeOut.Add("")
+                ReadmeOut.Add("")
+                msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}Resources/icons8_help_16.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}KNOWN ISSUES</h2></summary>", Chr(34), msg)
 
-            ReadmeOut.Add("")
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}Resources/icons8_help_16.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}KNOWN ISSUES</h2></summary>", Chr(34), msg)
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "**The program is not perfect**"
+                ReadmeOut.Add(msg)
+                msg = "- *Cause*: The programmer is not perfect."
+                ReadmeOut.Add(msg)
+                msg = "- *Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  So, you know, back up any files before using it.  "
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "**The program is not perfect**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: The programmer is not perfect."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  So, you know, back up any files before using it.  "
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "**Does not support managed files**"
+                ReadmeOut.Add(msg)
+                msg = "- *Cause*: Unknown."
+                ReadmeOut.Add(msg)
+                msg = "- *Possible workaround*: Process the files in an unmanaged workspace."
+                ReadmeOut.Add(msg)
+                msg = "- *Update 10/10/2021* Some users have reported success with BiDM managed files."
+                ReadmeOut.Add(msg)
+                msg = "- *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files."
+                ReadmeOut.Add(msg)
+                msg = "- *Update 4/18/2025* Now supports Teamcenter cached files, including the ability to download from the database."
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "**Does not support managed files**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Unknown."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Process the files in an unmanaged workspace."
-            ReadmeOut.Add(msg)
-            msg = "- *Update 10/10/2021* Some users have reported success with BiDM managed files."
-            ReadmeOut.Add(msg)
-            msg = "- *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files."
-            ReadmeOut.Add(msg)
-            msg = "- *Update 4/18/2025* Now supports Teamcenter cached files, including the ability to download from the database."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "**Some tasks cannot run on older Solid Edge versions**"
+                ReadmeOut.Add(msg)
+                msg = "- *Cause*: Probably an API call not available in previous versions."
+                ReadmeOut.Add(msg)
+                msg = "- *Possible workaround*: Use the latest version, or avoid use of the task causing problems."
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "**Some tasks cannot run on older Solid Edge versions**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Probably an API call not available in previous versions."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Use the latest version, or avoid use of the task causing problems."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "**May not support multiple installed Solid Edge versions**"
+                ReadmeOut.Add(msg)
+                msg = "- *Cause*: Unknown."
+                ReadmeOut.Add(msg)
+                msg = "- *Possible workaround*: Use the version that was 'silently' installed."
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "**May not support multiple installed Solid Edge versions**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Unknown."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Use the version that was 'silently' installed."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "**Pathfinder sometimes blank during Interactive Edit**"
+                ReadmeOut.Add(msg)
+                msg = "- *Cause*: Unknown."
+                ReadmeOut.Add(msg)
+                msg = "- *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window."
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "**Pathfinder sometimes blank during Interactive Edit**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Unknown."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                ReadmeOut.Add("</details>")
+                ReadmeOut.Add("")
 
-            ReadmeOut.Add("</details>")
-            ReadmeOut.Add("")
+                ReadmeOut.Add("")
+                msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}Resources/TaskRunExternalProgram.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}OPEN SOURCE PACKAGES</h2></summary>", Chr(34), msg)
 
-            ReadmeOut.Add("")
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}Resources/TaskRunExternalProgram.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}OPEN SOURCE PACKAGES</h2></summary>", Chr(34), msg)
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "This project uses these awesome open source packages."
+                ReadmeOut.Add(msg)
+                msg = "- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)"
+                ReadmeOut.Add(msg)
+                msg = "- Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)"
+                ReadmeOut.Add(msg)
+                msg = "- Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)"
+                ReadmeOut.Add(msg)
+                msg = "- Expression editor [<ins>**FastColoredTextBox**</ins>](https://github.com/PavelTorgashov/FastColoredTextBox)"
+                ReadmeOut.Add(msg)
+                msg = "- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)"
+                ReadmeOut.Add(msg)
+                msg = "- Icons [<ins>**Icons8**</ins>](https://icons8.com)"
+                ReadmeOut.Add(msg)
 
-            msg = "This project uses these awesome open source packages."
-            ReadmeOut.Add(msg)
-            msg = "- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)"
-            ReadmeOut.Add(msg)
-            msg = "- Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)"
-            ReadmeOut.Add(msg)
-            msg = "- Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)"
-            ReadmeOut.Add(msg)
-            msg = "- Expression editor [<ins>**FastColoredTextBox**</ins>](https://github.com/PavelTorgashov/FastColoredTextBox)"
-            ReadmeOut.Add(msg)
-            msg = "- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)"
-            ReadmeOut.Add(msg)
-            msg = "- Icons [<ins>**Icons8**</ins>](https://icons8.com)"
-            ReadmeOut.Add(msg)
+                ReadmeOut.Add("</details>")
+                ReadmeOut.Add("")
 
-            ReadmeOut.Add("</details>")
-            ReadmeOut.Add("")
+                msg = ""
+                ReadmeOut.Add("")
+                msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}Resources/Info-16.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}CODE ORGANIZATION</h2></summary>", Chr(34), msg)
 
-            msg = ""
-            ReadmeOut.Add("")
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}Resources/Info-16.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}CODE ORGANIZATION</h2></summary>", Chr(34), msg)
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
+                msg = "Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there."
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-            msg = "Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-            ReadmeOut.Add("</details>")
-            ReadmeOut.Add("")
+                ReadmeOut.Add("</details>")
+                ReadmeOut.Add("")
 
 
-            ReadmeOut.Add("")
+                ReadmeOut.Add("")
 
-            msg = ""
-            ReadmeOut.Add("")
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}Resources/icons8-gold-star-16.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
-            msg = String.Format("{1}BECOME A SPONSOR</h2></summary>", Chr(34), msg)
+                msg = ""
+                ReadmeOut.Add("")
+                msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}Resources/icons8-gold-star-16.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}BECOME A SPONSOR</h2></summary>", Chr(34), msg)
 
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-            msg = "If Housekeeper is saving you lots of time and money, we'd love to have you as a sponsor!"
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
+                msg = "If Housekeeper is saving you lots of time and money, we'd love to have you as a sponsor!"
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "One way is through PayPal's Donate feature."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "One way is through PayPal's Donate feature."
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/rmcanany)"
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/rmcanany)"
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            msg = "Otherwise, for electronic funds transfer or other means, please email me at rmcanany@gmail.com."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
+                msg = "Otherwise, for electronic funds transfer or other means, please email me at rmcanany@gmail.com."
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            ReadmeOut.Add("</details>")
-            ReadmeOut.Add("")
+                ReadmeOut.Add("</details>")
+                ReadmeOut.Add("")
 
-            ReadmeOut.Add("[//]: # (###### NOTE ######)")
-            ReadmeOut.Add("[//]: # (Compiling the program will delete any text added here.  )")
-            ReadmeOut.Add("[//]: # (Add it to UtilsDocumentation.BuildReadmeFile instead.)")
-            ReadmeOut.Add("")
+                ReadmeOut.Add("[//]: # (###### NOTE ######)")
+                ReadmeOut.Add("[//]: # (Compiling the program will delete any text added here.  )")
+                ReadmeOut.Add("[//]: # (Add it to UtilsDocumentation.BuildReadmeFile instead.)")
+                ReadmeOut.Add("")
+
+            End If
 
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
 
@@ -327,5 +381,35 @@ Public Class UtilsDocumentation
 
     End Sub
 
+    Private Function BuildSectionHTMLString(
+        Title As String,
+        HeadingLevel As Integer,
+        ImageName As String
+        ) As String
+
+        Dim msg As String = ""
+
+        'msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+        'msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+        'msg = String.Format("{1}<img src={0}Resources/SE_asm.png{0}>", Chr(34), msg)
+        'msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+        'msg = String.Format("{1}TASK DETAILS</h2></summary>", Chr(34), msg)
+
+        'Dim ImageName As String = Task.Name
+        'msg = String.Format("<details><summary><h3 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+        'msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+        'msg = String.Format("{1}<img src={0}Resources/{2}.png{0}>", Chr(34), msg, ImageName)
+        'msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+        'msg = String.Format("{1}{2}</h3></summary>", Chr(34), msg, Task.Description)
+
+        msg = $"<details><summary><h{HeadingLevel} style=""margin:0px; display:inline-block"">"
+        msg = $"{msg}<img src=""My%20Project/media/spacer.png"">"
+        msg = $"{msg}<img src=""Resources/{ImageName}"">"
+        msg = $"{msg}<img src=""My%20Project/media/spacer.png"">"
+        msg = $"{msg}{Title}</h{HeadingLevel}></summary>"
+
+        Return msg
+
+    End Function
 
 End Class
