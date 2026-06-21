@@ -703,7 +703,10 @@ This is to tell the user that the file list is not automatically populated when 
 This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once processing is complete.  However, in case of a program malfunction, it may not be able to do so.  You can manually reset the option by starting Solid Edge manually, then clicking the `Browse` button.  The checkbox is located toward the bottom of the form.  You have to select a draft file to make the checkbox active.
 - `Debug mode`  
 Debug mode is meant to help with troubleshooting user's site-specific issues.  It is currently limited, but will be expanded as needed in the future.
- 
+- `Use locally installed PowerShell`  
+`Property filters`, `Expressions` and `Code snippets` all create text files that must be executed in a `VB.Net` interpreter.  Previously Housekeeper used PowerShell for that.  An internal `dotnet` library is now used by default.  This option switches execution back to the previous method.
+- `Solid Edge fast launch (experimental)`  
+If Solid Edge is not running when file processing begins, Housekeeper starts it.  There are two ways of doing so.  One is simple for the programmer, but more work for the OS; the other is the opposite.  This option enables the latter.  It is presented as an option so you can toggle back to Housekeeper's original behavior in case it doesn't work for you.
 </details>
 
 </details>
@@ -1412,11 +1415,6 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 <!-- End -->
-
-
-
-
-
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_help_16.png"><img src="My%20Project/media/spacer.png">KNOWN ISSUES</h2></summary>
 

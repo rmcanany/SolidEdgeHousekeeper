@@ -165,7 +165,7 @@ Public Class UtilsDocumentation
                             ReadmeOut.Add("")
 
                             ReadmeOut.Add(TaskListTrailer)
-                            ReadmeOut.Add("")
+                            'ReadmeOut.Add("")
                         End If
                     Else
                         If ReadmeIn(i).Contains(TaskListTrailer) Then

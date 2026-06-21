@@ -409,7 +409,18 @@ Public Class TaskCreateDrawingOfFlatPattern
                 DraftDoc = Nothing
             End If
 
+            Runtime.InteropServices.Marshal.ReleaseComObject(DrawingView)
+            Runtime.InteropServices.Marshal.ReleaseComObject(DrawingViews)
+            Runtime.InteropServices.Marshal.ReleaseComObject(Sheet)
+            Runtime.InteropServices.Marshal.ReleaseComObject(ModelLink)
+            Runtime.InteropServices.Marshal.ReleaseComObject(ModelLinks)
+            Runtime.InteropServices.Marshal.ReleaseComObject(FlatPattern)
+            Runtime.InteropServices.Marshal.ReleaseComObject(FlatPatternModel)
+            Runtime.InteropServices.Marshal.ReleaseComObject(FlatPatternModels)
+
         End If
+
+        OleMessageFilter.Revoke()
 
     End Sub
 

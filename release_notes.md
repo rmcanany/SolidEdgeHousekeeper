@@ -123,10 +123,11 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue in `Update Physical Properties` where a check of the mass in the variable table was not accounting for localized names.  (Thank you **@Stefano-VLN!**)
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.  (Thank you **@PBurkeADS!**)
+- Added an option, `Solid Edge fast launch`, that uses a new technique to start SE when file processing begins.  It is quite a bit faster than the previous method and worth a try, but still considered experimental for now.  Enable it on the **Configuration Tab -- General Page.**
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
 - Changed the formatting of Task sub-options to better show to which main option they apply.
 - Added missing help buttons to several dialogs and toolbars.
-- Added logging of system error messages where applicable.
+- To aid in troubleshooting, added logging of system-generated error messages where applicable.
 
 
 ## V2026.1

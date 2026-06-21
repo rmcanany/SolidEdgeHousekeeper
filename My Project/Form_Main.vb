@@ -11,7 +11,7 @@
 Public Class Form_Main
 
     Public Property Version As String = "2026.2"  ' Two fields, both integers: Year.ReleaseNumber.
-    Public Property PreviewVersion As String = "17" ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "18" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -794,6 +794,19 @@ Public Class Form_Main
             _UseLocalPowershell = value
             If Me.TabControl1 IsNot Nothing Then
                 CheckBoxUseLocalPowershell.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SEFastLaunch As Boolean
+    Public Property SEFastLaunch As Boolean
+        Get
+            Return _SEFastLaunch
+        End Get
+        Set(value As Boolean)
+            _SEFastLaunch = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxSEFastLaunch.Checked = value
             End If
         End Set
     End Property
@@ -4258,6 +4271,10 @@ Public Class Form_Main
         Diagnostics.Process.Start(HelpURL)
 
     End Sub
+
+    Private Sub CheckBoxSEFastLaunch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSEFastLaunch.CheckedChanged
+        Me.SEFastLaunch = CheckBoxSEFastLaunch.Checked
+    End Sub
 End Class
 
 
@@ -4430,6 +4447,9 @@ End Class
 ' Windows.Forms.Application.DoEvents()
 
 ' Threading.Thread.Sleep(100)
+
+' Me.FMain.TopMost = True
+' Me.FMain.Activate()
 
 
 ' ###### TYPES, ENUMS ######

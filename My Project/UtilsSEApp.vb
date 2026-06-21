@@ -41,8 +41,18 @@ Public Class UtilsSEApp
             End If
         Else
             NoCurrentSessionFound = True
-            Me.EdgeProcess.StartInfo.FileName = "edge.exe"
-            Me.EdgeProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+
+            If FMain.SEFastLaunch Then
+                Dim SEInstallData As New SEInstallDataLib.SEInstallData
+                Dim InstalledPath As String = SEInstallData.GetInstalledPath  ' eg 'C:\Program Files\Siemens\Solid Edge 2025\Program'
+                Me.EdgeProcess.StartInfo.FileName = $"{InstalledPath}\edge.exe"
+                Me.EdgeProcess.StartInfo.UseShellExecute = False
+                Me.EdgeProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            Else
+                Me.EdgeProcess.StartInfo.FileName = "edge.exe"
+                Me.EdgeProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            End If
+
             Try
                 EdgeProcess.Start()
             Catch ex As Exception
@@ -69,6 +79,10 @@ Public Class UtilsSEApp
         If Me.SEApp Is Nothing Then
             ErrorLogger.AddMessage("Unable to connect to Solid Edge")
         Else
+            'Me.FMain.TopMost = True
+            Me.FMain.Activate()
+            Windows.Forms.Application.DoEvents()
+
             'Threading.Thread.Sleep(1000)
             ' Turn off popups.
             SEApp.DisplayAlerts = False
@@ -189,6 +203,7 @@ Public Class UtilsSEApp
             SEApp.DoIdle()
         End If
     End Sub
+
     Private Sub SEGarbageCollect(ByVal obj As Object)
         Try
             '******* Added because of .NET

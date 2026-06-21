@@ -234,6 +234,7 @@ Partial Class Form_Main
         Me.LabelExpressionEditorLanguage = New System.Windows.Forms.Label()
         Me.CheckBoxDebugMode = New System.Windows.Forms.CheckBox()
         Me.CheckBoxUseLocalPowershell = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxSEFastLaunch = New System.Windows.Forms.CheckBox()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -1078,6 +1079,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel4
         '
+        Me.ExTableLayoutPanel4.AutoScroll = True
         Me.ExTableLayoutPanel4.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel4.ColumnCount = 1
         Me.ExTableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -1311,6 +1313,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel6
         '
+        Me.ExTableLayoutPanel6.AutoScroll = True
         Me.ExTableLayoutPanel6.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel6.ColumnCount = 1
         Me.ExTableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2123,6 +2126,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel7
         '
+        Me.ExTableLayoutPanel7.AutoScroll = True
         Me.ExTableLayoutPanel7.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel7.ColumnCount = 1
         Me.ExTableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2279,8 +2283,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel1
         '
-        Me.ExTableLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ExTableLayoutPanel1.AutoScroll = True
         Me.ExTableLayoutPanel1.ColumnCount = 2
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2298,7 +2301,8 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizePropertiesData, 0, 6)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUpdatePropertiesData, 0, 5)
         Me.ExTableLayoutPanel1.Controls.Add(Me.LabelUpdateProperties, 1, 5)
-        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(6, 6)
+        Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
         Me.ExTableLayoutPanel1.RowCount = 8
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2310,7 +2314,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(579, 256)
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(611, 579)
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
@@ -2329,7 +2333,7 @@ Partial Class Form_Main
         Me.TextBoxAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxAssemblyTemplate.Location = New System.Drawing.Point(103, 3)
         Me.TextBoxAssemblyTemplate.Name = "TextBoxAssemblyTemplate"
-        Me.TextBoxAssemblyTemplate.Size = New System.Drawing.Size(473, 23)
+        Me.TextBoxAssemblyTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxAssemblyTemplate.TabIndex = 1
         '
         'ButtonPartTemplate
@@ -2347,7 +2351,7 @@ Partial Class Form_Main
         Me.TextBoxPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxPartTemplate.Location = New System.Drawing.Point(103, 33)
         Me.TextBoxPartTemplate.Name = "TextBoxPartTemplate"
-        Me.TextBoxPartTemplate.Size = New System.Drawing.Size(473, 23)
+        Me.TextBoxPartTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxPartTemplate.TabIndex = 3
         '
         'ButtonSheetmetalTemplate
@@ -2365,7 +2369,7 @@ Partial Class Form_Main
         Me.TextBoxSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxSheetmetalTemplate.Location = New System.Drawing.Point(103, 63)
         Me.TextBoxSheetmetalTemplate.Name = "TextBoxSheetmetalTemplate"
-        Me.TextBoxSheetmetalTemplate.Size = New System.Drawing.Size(473, 23)
+        Me.TextBoxSheetmetalTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxSheetmetalTemplate.TabIndex = 5
         '
         'ButtonDraftTemplate
@@ -2383,7 +2387,7 @@ Partial Class Form_Main
         Me.TextBoxDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxDraftTemplate.Location = New System.Drawing.Point(103, 93)
         Me.TextBoxDraftTemplate.Name = "TextBoxDraftTemplate"
-        Me.TextBoxDraftTemplate.Size = New System.Drawing.Size(473, 23)
+        Me.TextBoxDraftTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxDraftTemplate.TabIndex = 7
         '
         'ButtonMaterialTable
@@ -2401,7 +2405,7 @@ Partial Class Form_Main
         Me.TextBoxMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxMaterialTable.Location = New System.Drawing.Point(103, 123)
         Me.TextBoxMaterialTable.Name = "TextBoxMaterialTable"
-        Me.TextBoxMaterialTable.Size = New System.Drawing.Size(473, 23)
+        Me.TextBoxMaterialTable.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxMaterialTable.TabIndex = 10
         '
         'LabelCustomizeTemplatePropertyDict
@@ -2459,6 +2463,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel9
         '
+        Me.ExTableLayoutPanel9.AutoScroll = True
         Me.ExTableLayoutPanel9.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel9.ColumnCount = 1
         Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2513,7 +2518,7 @@ Partial Class Form_Main
         '
         Me.FastColoredServerQuery.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
         Me.FastColoredServerQuery.AutoIndentCharsPatterns = ""
-        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(2, 14)
+        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(27, 14)
         Me.FastColoredServerQuery.BackBrush = Nothing
         Me.FastColoredServerQuery.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.FastColoredServerQuery.CharHeight = 14
@@ -2562,6 +2567,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel2
         '
+        Me.ExTableLayoutPanel2.AutoScroll = True
         Me.ExTableLayoutPanel2.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel2.ColumnCount = 1
         Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2581,10 +2587,11 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel12, 0, 13)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 14)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseLocalPowershell, 0, 15)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxSEFastLaunch, 0, 16)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 17
+        Me.ExTableLayoutPanel2.RowCount = 18
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2599,6 +2606,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
@@ -2878,14 +2886,27 @@ Partial Class Form_Main
         '
         'CheckBoxUseLocalPowershell
         '
+        Me.CheckBoxUseLocalPowershell.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxUseLocalPowershell.AutoSize = True
-        Me.CheckBoxUseLocalPowershell.Location = New System.Drawing.Point(3, 453)
+        Me.CheckBoxUseLocalPowershell.Location = New System.Drawing.Point(3, 455)
         Me.CheckBoxUseLocalPowershell.Name = "CheckBoxUseLocalPowershell"
         Me.CheckBoxUseLocalPowershell.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxUseLocalPowershell.Size = New System.Drawing.Size(195, 19)
         Me.CheckBoxUseLocalPowershell.TabIndex = 81
         Me.CheckBoxUseLocalPowershell.Text = "Use locally installed PowerShell"
         Me.CheckBoxUseLocalPowershell.UseVisualStyleBackColor = True
+        '
+        'CheckBoxSEFastLaunch
+        '
+        Me.CheckBoxSEFastLaunch.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxSEFastLaunch.AutoSize = True
+        Me.CheckBoxSEFastLaunch.Location = New System.Drawing.Point(3, 485)
+        Me.CheckBoxSEFastLaunch.Name = "CheckBoxSEFastLaunch"
+        Me.CheckBoxSEFastLaunch.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxSEFastLaunch.Size = New System.Drawing.Size(226, 19)
+        Me.CheckBoxSEFastLaunch.TabIndex = 82
+        Me.CheckBoxSEFastLaunch.Text = "Solid Edge fast launch (experimental)"
+        Me.CheckBoxSEFastLaunch.UseVisualStyleBackColor = True
         '
         'ToolStripPresets
         '
@@ -3523,4 +3544,5 @@ Partial Class Form_Main
     Friend WithEvents ButtonShowPreview As ToolStripButton
     Friend WithEvents CheckBoxUseLocalPowershell As CheckBox
     Friend WithEvents ButtonPresetHelp As ToolStripButton
+    Friend WithEvents CheckBoxSEFastLaunch As CheckBox
 End Class

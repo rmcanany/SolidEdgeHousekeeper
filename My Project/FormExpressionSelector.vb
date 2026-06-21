@@ -1,8 +1,7 @@
 ﻿Option Strict On
 
 Public Class FormExpressionSelector
-    'Public Property SavedExpressionsItems As Dictionary(Of String, String)
-    'Dim SavedExpressionsDict As Dictionary(Of String, Dictionary(Of String, String))
+
     Dim SavedExpressions As HCSavedExpressions
     Public Property SavedExpressionName As String
     Public Property SavedExpresssionLanguage As String
