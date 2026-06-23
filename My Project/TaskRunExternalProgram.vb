@@ -323,10 +323,19 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            Dim something = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalUseDimensionStyleElementMapLinDim
-            Dim avalue As Object = Nothing
-            SEApp.GetGlobalParameter(something, avalue)
-            Dim i = 0
+            Dim UOM As SolidEdgeFramework.UnitOfMeasure
+            Dim DistanceType = SolidEdgeConstants.UnitTypeConstants.igUnitDistance
+            Dim MMUnit = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter
+
+            For Each UOM In SEDoc.UnitsOfMeasure
+                If UOM.Type = DistanceType Then
+                    UOM.Units = MMUnit
+                End If
+            Next
+
+            SEDoc.Save()
+            SEApp.DoIdle()
+
             ' ############## SNIPPET CODE END ##############
 
         Catch ex As Exception

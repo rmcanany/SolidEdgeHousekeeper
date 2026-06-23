@@ -406,7 +406,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             If DraftDoc IsNot Nothing Then
                 DraftDoc.Close(False)
                 SEApp.DoIdle()
-                DraftDoc = Nothing
+                'DraftDoc = Nothing
             End If
 
             Runtime.InteropServices.Marshal.ReleaseComObject(DrawingView)
@@ -417,6 +417,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             Runtime.InteropServices.Marshal.ReleaseComObject(FlatPattern)
             Runtime.InteropServices.Marshal.ReleaseComObject(FlatPatternModel)
             Runtime.InteropServices.Marshal.ReleaseComObject(FlatPatternModels)
+            Runtime.InteropServices.Marshal.ReleaseComObject(DraftDoc)
 
         End If
 

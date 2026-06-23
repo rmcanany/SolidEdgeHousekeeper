@@ -33,7 +33,7 @@ Added an option to show the thumbnail of a selected file.  On the toolbar, click
   <img src="My%20Project/media/preview_window.png">
 </p>
 
-Added another option to display additional information about the selected file.  To view, hold down the shift key then click the eye icon.
+Added another option to display additional information about the selected file.  To view, hold down the shift key then click the eye icon.  (In case you're wondering, items shown with a dark background are exposed variables.)
 
 <p align="center">
   <img src="My%20Project/media/solid_edge_explorer.png">
@@ -50,11 +50,15 @@ Sponsored by **@john.matthews3452 (Hatch).**  Thank you!
 
 Added sheet processing options to the `Add Blocks` function.
 
+<p align="center">
+  <img src="My%20Project/media/task_update_blocks_add_blocks_detail.png">
+</p>
+
 The change applies to the second stage of the function, where it checks each sheet of the template and places a block occurrence on the corresponding sheet in the file.  What is new is how the "corresponding sheet" is determined.
 
 Previously it meant that the sheet names match.  You can still do it that way, but now, for working sheets, you can optionally add by sheet order, or add to all sheets.  For background sheets, it always checks the name first.  If no matching name is found, you can optionally add by sheet size.
 
-In addition to the sheet processing options, an enhancement was made to avoid  duplicating blocks.  During placement, if a block occurrence with the same name, location, etc. is found, the new occurrence is not added.
+In addition to the sheet processing options, an enhancement was made to avoid  duplicating blocks.  During placement, if a block occurrence with the same name, location, etc. is found, a new occurrence is not added.
 
 #### Read Blocks from Library
 
@@ -94,6 +98,11 @@ See the [<ins>**Check Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 Added the ability to run Housekeeper from the command line.  (Thank you **@robbin70** and **@Robin BIomberg!**)
 
+<p align="center">
+  <img src="My%20Project/media/command_line.png">
+</p>
+
+
 Created a separate executable, `HousekeeperCLI.exe`, which takes two arguments.  One is a Preset, which configures Housekeeper.  The other is a text file holding the names of files to process.
 
 If any errors are reported, the log file names are passed back to the calling program via `stdout`.
@@ -110,7 +119,7 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 For `Code Snippets`, added an option to use an internal dotnet library, rather than the locally-installed PowerShell.  (Thank you **@sven-11111** and **@Monostre!**)  
 
-The internal library is supposed to be compatible with more system configurations.  It is now the default; disable it on the **Configuration Tab -- General Page**.  
+The internal library is supposed to be compatible with more system configurations.  It is now the default; to use the local PowerShell, enable it on the **Configuration Tab -- General Page**.  
 
 The option also applies to `Expressions` and `Property Filters`.
 
@@ -127,7 +136,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
 - Changed the formatting of Task sub-options to better show to which main option they apply.
 - Added missing help buttons to several dialogs and toolbars.
-- To aid in troubleshooting, added logging of system-generated error messages where applicable.
+- Added logging of system-generated error messages where applicable.  It is meant to aid in troubleshooting.
 
 
 ## V2026.1
