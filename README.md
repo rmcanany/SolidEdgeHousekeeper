@@ -14,7 +14,7 @@ Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github), @ih0nza (github), @artem1t (github), @Alex_H
 
 **Beta Testing, Bug Reports, and Helpful Feedback**  
-@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @Cimarian_RMP, @xenia.turon, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @Nick_Mokrytskyi​, @PBurkeADS, @Lui10, @schumi1119
+@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @Cimarian_RMP, @xenia.turon, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @PBurkeADS, @Lui10, @schumi1119
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -688,9 +688,11 @@ This controls the file list update frequency.  Setting it to `1` means update th
 - `File list font size`  
 This allows you to change size of the text on the file list.
 - `Group files by type`  
-This setting affects the file list.  When enabled (the default) the list groups assemblies, parts, etc. into their own collapsible sections.  Note, this does not affect processing order, which is currently fixed.  The program first processes Part files, then Sheetmetal, Assembly, and finally Draft.  There are some options for sorting the list.  See the Sorting section above for details.
+This setting affects the file list.  When enabled (the default) the list groups assemblies, parts, etc. into their own collapsible sections.  Note, this does not affect processing order, which is currently fixed.  The program usually first processes Part files, then Sheetmetal, Assembly, and finally Draft.  The one exception is when using `Dependency Sort`.  In that case, the files are processed in strict dependency order.  There are other  options for sorting the list.  See the Sorting section above for details.
 - `Remember selected tasks between sessions`  
 When you close out of Housekeeper, it records the state of all settings, such as template locations, etc.  Normally that's what you want, but not necessarily for task selection.  This lets you decide how to handle that.
+- `Process tasks in background (no graphics)`  
+Launches Solid Edge without displaying its user interface.  It is meant to speed up processing.  Not all commands are compatible.  They trigger an error if this option is enabled.
 - `Property Filter -- Include Draft file model in search`  
 For details, see the [<ins>**Property Filter**</ins>](#property-filter) section
 - `Property Filter -- Include the Draft file itself in search`  
@@ -702,7 +704,7 @@ This is to tell the user that the file list is not automatically populated when 
 - `Process drawing files as inactive`  
 This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once processing is complete.  However, in case of a program malfunction, it may not be able to do so.  You can manually reset the option by starting Solid Edge manually, then clicking the `Browse` button.  The checkbox is located toward the bottom of the form.  You have to select a draft file to make the checkbox active.
 - `Debug mode`  
-Debug mode is meant to help with troubleshooting user's site-specific issues.  It is currently limited, but will be expanded as needed in the future.
+Debug mode is meant to help with troubleshooting user's site-specific issues.  It is currently limited, but may be expanded as needed in the future.
 - `Use locally installed PowerShell`  
 `Property filters`, `Expressions` and `Code snippets` all create text files that must be executed in a `VB.Net` interpreter.  Previously Housekeeper used PowerShell for that.  An internal `dotnet` library is now used by default.  This option switches execution back to the previous method.
 - `Solid Edge fast launch (experimental)`  

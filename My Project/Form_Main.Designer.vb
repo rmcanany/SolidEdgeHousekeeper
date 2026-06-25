@@ -25,8 +25,8 @@ Partial Class Form_Main
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
@@ -114,6 +114,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel10 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonLinkManagementFilename = New System.Windows.Forms.Button()
         Me.TextBoxLinkManagementFilename = New System.Windows.Forms.TextBox()
+        Me.ButtonConfigTLAHelp = New System.Windows.Forms.Button()
         Me.TabPageStatus = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel6 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxProcessAsAvailable = New System.Windows.Forms.CheckBox()
@@ -176,6 +177,7 @@ Partial Class Form_Main
         Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
         Me.RadioButtonProcessAsAvailableRevert = New System.Windows.Forms.RadioButton()
         Me.RadioButtonProcessAsAvailableChange = New System.Windows.Forms.RadioButton()
+        Me.ButtonConfigStatusHelp = New System.Windows.Forms.Button()
         Me.TabPageSorting = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel7 = New Housekeeper.ExTableLayoutPanel()
         Me.RadioButtonSortNone = New System.Windows.Forms.RadioButton()
@@ -187,6 +189,7 @@ Partial Class Form_Main
         Me.RadioButtonSortDependency = New System.Windows.Forms.RadioButton()
         Me.RadioButtonSortAlphabetical = New System.Windows.Forms.RadioButton()
         Me.CheckBoxKeepUnsortedDuplicates = New System.Windows.Forms.CheckBox()
+        Me.ButtonConfigSortingHelp = New System.Windows.Forms.Button()
         Me.TabPageTemplates = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonAssemblyTemplate = New System.Windows.Forms.Button()
@@ -203,6 +206,7 @@ Partial Class Form_Main
         Me.ButtonCustomizePropertiesData = New System.Windows.Forms.Button()
         Me.ButtonUpdatePropertiesData = New System.Windows.Forms.Button()
         Me.LabelUpdateProperties = New System.Windows.Forms.Label()
+        Me.ButtonConfigTemplatesHelp = New System.Windows.Forms.Button()
         Me.TabPageServerQuery = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel9 = New Housekeeper.ExTableLayoutPanel()
         Me.TextBoxServerConnectionString = New System.Windows.Forms.TextBox()
@@ -210,6 +214,7 @@ Partial Class Form_Main
         Me.LabelServerQuery = New System.Windows.Forms.Label()
         Me.FastColoredServerQuery = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.ButtonConfigServerQueryHelp = New System.Windows.Forms.Button()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
@@ -235,6 +240,7 @@ Partial Class Form_Main
         Me.CheckBoxDebugMode = New System.Windows.Forms.CheckBox()
         Me.CheckBoxUseLocalPowershell = New System.Windows.Forms.CheckBox()
         Me.CheckBoxSEFastLaunch = New System.Windows.Forms.CheckBox()
+        Me.ButtonConfigGeneralHelp = New System.Windows.Forms.Button()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -445,9 +451,9 @@ Partial Class Form_Main
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewSources.FullRowSelect = True
-        ListViewGroup1.Header = "File sources"
-        ListViewGroup1.Name = "Sources"
-        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1})
+        ListViewGroup2.Header = "File sources"
+        ListViewGroup2.Name = "Sources"
+        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup2})
         Me.ListViewSources.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewSources.HideSelection = False
         Me.ListViewSources.Location = New System.Drawing.Point(0, 0)
@@ -1083,21 +1089,23 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel4.ColumnCount = 1
         Me.ExTableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLAListOptions, 0, 0)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAAutoIncludeTLF, 0, 1)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxDraftAndModelSameName, 0, 8)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAIncludePartCopies, 0, 3)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxWarnBareTLA, 0, 2)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles, 0, 4)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLASearchOptions, 0, 5)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLABottomUp, 0, 7)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLATopDown, 0, 6)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.ExTableLayoutPanel5, 0, 9)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.ExTableLayoutPanel10, 0, 10)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLAListOptions, 0, 1)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAAutoIncludeTLF, 0, 2)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxDraftAndModelSameName, 0, 9)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAIncludePartCopies, 0, 4)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxWarnBareTLA, 0, 3)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles, 0, 5)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLASearchOptions, 0, 6)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLABottomUp, 0, 8)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLATopDown, 0, 7)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.ExTableLayoutPanel5, 0, 10)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.ExTableLayoutPanel10, 0, 11)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.ButtonConfigTLAHelp, 0, 0)
         Me.ExTableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel4.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel4.Name = "ExTableLayoutPanel4"
-        Me.ExTableLayoutPanel4.RowCount = 12
+        Me.ExTableLayoutPanel4.RowCount = 13
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -1118,7 +1126,7 @@ Partial Class Form_Main
         '
         Me.LabelTLAListOptions.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelTLAListOptions.AutoSize = True
-        Me.LabelTLAListOptions.Location = New System.Drawing.Point(3, 12)
+        Me.LabelTLAListOptions.Location = New System.Drawing.Point(3, 42)
         Me.LabelTLAListOptions.Name = "LabelTLAListOptions"
         Me.LabelTLAListOptions.Size = New System.Drawing.Size(82, 15)
         Me.LabelTLAListOptions.TabIndex = 0
@@ -1130,7 +1138,7 @@ Partial Class Form_Main
         Me.CheckBoxTLAAutoIncludeTLF.AutoSize = True
         Me.CheckBoxTLAAutoIncludeTLF.Checked = True
         Me.CheckBoxTLAAutoIncludeTLF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(3, 45)
+        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(3, 75)
         Me.CheckBoxTLAAutoIncludeTLF.Name = "CheckBoxTLAAutoIncludeTLF"
         Me.CheckBoxTLAAutoIncludeTLF.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxTLAAutoIncludeTLF.Size = New System.Drawing.Size(374, 19)
@@ -1144,7 +1152,7 @@ Partial Class Form_Main
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
         Me.CheckBoxDraftAndModelSameName.Checked = True
         Me.CheckBoxDraftAndModelSameName.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(3, 265)
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(3, 295)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(329, 19)
@@ -1156,7 +1164,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxTLAIncludePartCopies.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxTLAIncludePartCopies.AutoSize = True
-        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(3, 105)
+        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(3, 135)
         Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
         Me.CheckBoxTLAIncludePartCopies.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(502, 19)
@@ -1171,7 +1179,7 @@ Partial Class Form_Main
         Me.CheckBoxWarnBareTLA.AutoSize = True
         Me.CheckBoxWarnBareTLA.Checked = True
         Me.CheckBoxWarnBareTLA.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(3, 75)
+        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(3, 105)
         Me.CheckBoxWarnBareTLA.Name = "CheckBoxWarnBareTLA"
         Me.CheckBoxWarnBareTLA.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxWarnBareTLA.Size = New System.Drawing.Size(420, 19)
@@ -1183,7 +1191,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxTLAReportUnrelatedFiles.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(3, 135)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(3, 165)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
         Me.CheckBoxTLAReportUnrelatedFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(257, 19)
@@ -1195,7 +1203,7 @@ Partial Class Form_Main
         '
         Me.LabelTLASearchOptions.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelTLASearchOptions.AutoSize = True
-        Me.LabelTLASearchOptions.Location = New System.Drawing.Point(3, 172)
+        Me.LabelTLASearchOptions.Location = New System.Drawing.Point(3, 202)
         Me.LabelTLASearchOptions.Name = "LabelTLASearchOptions"
         Me.LabelTLASearchOptions.Size = New System.Drawing.Size(104, 15)
         Me.LabelTLASearchOptions.TabIndex = 21
@@ -1205,7 +1213,7 @@ Partial Class Form_Main
         '
         Me.RadioButtonTLABottomUp.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonTLABottomUp.AutoSize = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(3, 235)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(3, 265)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(328, 19)
@@ -1218,7 +1226,7 @@ Partial Class Form_Main
         Me.RadioButtonTLATopDown.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonTLATopDown.AutoSize = True
         Me.RadioButtonTLATopDown.Checked = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(3, 205)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(3, 235)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(355, 19)
@@ -1235,7 +1243,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel5.Controls.Add(Me.ButtonFastSearchScopeFilename, 0, 0)
         Me.ExTableLayoutPanel5.Controls.Add(Me.TextBoxFastSearchScopeFilename, 1, 0)
         Me.ExTableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel5.Location = New System.Drawing.Point(3, 293)
+        Me.ExTableLayoutPanel5.Location = New System.Drawing.Point(3, 323)
         Me.ExTableLayoutPanel5.Name = "ExTableLayoutPanel5"
         Me.ExTableLayoutPanel5.RowCount = 1
         Me.ExTableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -1271,7 +1279,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel10.Controls.Add(Me.ButtonLinkManagementFilename, 0, 0)
         Me.ExTableLayoutPanel10.Controls.Add(Me.TextBoxLinkManagementFilename, 1, 0)
         Me.ExTableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel10.Location = New System.Drawing.Point(3, 333)
+        Me.ExTableLayoutPanel10.Location = New System.Drawing.Point(3, 363)
         Me.ExTableLayoutPanel10.Name = "ExTableLayoutPanel10"
         Me.ExTableLayoutPanel10.RowCount = 1
         Me.ExTableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -1298,6 +1306,16 @@ Partial Class Form_Main
         Me.TextBoxLinkManagementFilename.Size = New System.Drawing.Size(447, 23)
         Me.TextBoxLinkManagementFilename.TabIndex = 1
         '
+        'ButtonConfigTLAHelp
+        '
+        Me.ButtonConfigTLAHelp.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ButtonConfigTLAHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonConfigTLAHelp.Location = New System.Drawing.Point(581, 3)
+        Me.ButtonConfigTLAHelp.Name = "ButtonConfigTLAHelp"
+        Me.ButtonConfigTLAHelp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonConfigTLAHelp.TabIndex = 24
+        Me.ButtonConfigTLAHelp.UseVisualStyleBackColor = True
+        '
         'TabPageStatus
         '
         Me.TabPageStatus.Controls.Add(Me.ExTableLayoutPanel6)
@@ -1317,20 +1335,21 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel6.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel6.ColumnCount = 1
         Me.ExTableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel6.Controls.Add(Me.CheckBoxProcessAsAvailable, 0, 0)
-        Me.ExTableLayoutPanel6.Controls.Add(Me.Panel1, 0, 3)
-        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableRevert, 0, 1)
-        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableChange, 0, 2)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.CheckBoxProcessAsAvailable, 0, 1)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.Panel1, 0, 4)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableRevert, 0, 2)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableChange, 0, 3)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.ButtonConfigStatusHelp, 0, 0)
         Me.ExTableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel6.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel6.Name = "ExTableLayoutPanel6"
-        Me.ExTableLayoutPanel6.RowCount = 5
+        Me.ExTableLayoutPanel6.RowCount = 6
+        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(609, 579)
         Me.ExTableLayoutPanel6.TabIndex = 97
         Me.ExTableLayoutPanel6.Task = Nothing
@@ -1339,7 +1358,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxProcessAsAvailable.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxProcessAsAvailable.AutoSize = True
-        Me.CheckBoxProcessAsAvailable.Location = New System.Drawing.Point(3, 5)
+        Me.CheckBoxProcessAsAvailable.Location = New System.Drawing.Point(3, 35)
         Me.CheckBoxProcessAsAvailable.Name = "CheckBoxProcessAsAvailable"
         Me.CheckBoxProcessAsAvailable.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxProcessAsAvailable.Size = New System.Drawing.Size(323, 19)
@@ -1369,7 +1388,7 @@ Partial Class Form_Main
         Me.Panel1.Controls.Add(Me.GroupBoxStatusInR)
         Me.Panel1.Controls.Add(Me.GroupBoxStatusInIW)
         Me.Panel1.Controls.Add(Me.GroupBoxStatusInO)
-        Me.Panel1.Location = New System.Drawing.Point(3, 83)
+        Me.Panel1.Location = New System.Drawing.Point(3, 113)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(307, 275)
         Me.Panel1.TabIndex = 96
@@ -2089,7 +2108,7 @@ Partial Class Form_Main
         Me.RadioButtonProcessAsAvailableRevert.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonProcessAsAvailableRevert.AutoSize = True
         Me.RadioButtonProcessAsAvailableRevert.Checked = True
-        Me.RadioButtonProcessAsAvailableRevert.Location = New System.Drawing.Point(3, 33)
+        Me.RadioButtonProcessAsAvailableRevert.Location = New System.Drawing.Point(3, 63)
         Me.RadioButtonProcessAsAvailableRevert.Name = "RadioButtonProcessAsAvailableRevert"
         Me.RadioButtonProcessAsAvailableRevert.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonProcessAsAvailableRevert.Size = New System.Drawing.Size(246, 19)
@@ -2102,7 +2121,7 @@ Partial Class Form_Main
         '
         Me.RadioButtonProcessAsAvailableChange.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonProcessAsAvailableChange.AutoSize = True
-        Me.RadioButtonProcessAsAvailableChange.Location = New System.Drawing.Point(3, 58)
+        Me.RadioButtonProcessAsAvailableChange.Location = New System.Drawing.Point(3, 88)
         Me.RadioButtonProcessAsAvailableChange.Name = "RadioButtonProcessAsAvailableChange"
         Me.RadioButtonProcessAsAvailableChange.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonProcessAsAvailableChange.Size = New System.Drawing.Size(192, 19)
@@ -2110,6 +2129,16 @@ Partial Class Form_Main
         Me.RadioButtonProcessAsAvailableChange.TabStop = True
         Me.RadioButtonProcessAsAvailableChange.Text = "Change status after processing"
         Me.RadioButtonProcessAsAvailableChange.UseVisualStyleBackColor = True
+        '
+        'ButtonConfigStatusHelp
+        '
+        Me.ButtonConfigStatusHelp.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ButtonConfigStatusHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonConfigStatusHelp.Location = New System.Drawing.Point(581, 3)
+        Me.ButtonConfigStatusHelp.Name = "ButtonConfigStatusHelp"
+        Me.ButtonConfigStatusHelp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonConfigStatusHelp.TabIndex = 97
+        Me.ButtonConfigStatusHelp.UseVisualStyleBackColor = True
         '
         'TabPageSorting
         '
@@ -2130,17 +2159,19 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel7.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel7.ColumnCount = 1
         Me.ExTableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortNone, 0, 0)
-        Me.ExTableLayoutPanel7.Controls.Add(Me.ExTableLayoutPanel8, 0, 6)
-        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortRandomSample, 0, 5)
-        Me.ExTableLayoutPanel7.Controls.Add(Me.CheckBoxSortIncludeNoDependencies, 0, 4)
-        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortDependency, 0, 3)
-        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortAlphabetical, 0, 2)
-        Me.ExTableLayoutPanel7.Controls.Add(Me.CheckBoxKeepUnsortedDuplicates, 0, 1)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortNone, 0, 1)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.ExTableLayoutPanel8, 0, 7)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortRandomSample, 0, 6)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.CheckBoxSortIncludeNoDependencies, 0, 5)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortDependency, 0, 4)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortAlphabetical, 0, 3)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.CheckBoxKeepUnsortedDuplicates, 0, 2)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.ButtonConfigSortingHelp, 0, 0)
         Me.ExTableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel7.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel7.Name = "ExTableLayoutPanel7"
-        Me.ExTableLayoutPanel7.RowCount = 8
+        Me.ExTableLayoutPanel7.RowCount = 9
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2157,7 +2188,7 @@ Partial Class Form_Main
         '
         Me.RadioButtonSortNone.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonSortNone.AutoSize = True
-        Me.RadioButtonSortNone.Location = New System.Drawing.Point(3, 5)
+        Me.RadioButtonSortNone.Location = New System.Drawing.Point(3, 35)
         Me.RadioButtonSortNone.Name = "RadioButtonSortNone"
         Me.RadioButtonSortNone.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonSortNone.Size = New System.Drawing.Size(78, 19)
@@ -2173,7 +2204,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel8.Controls.Add(Me.TextBoxSortRandomSampleFraction, 0, 0)
         Me.ExTableLayoutPanel8.Controls.Add(Me.LabelSortRandomSampleFraction, 1, 0)
         Me.ExTableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel8.Location = New System.Drawing.Point(3, 173)
+        Me.ExTableLayoutPanel8.Location = New System.Drawing.Point(3, 203)
         Me.ExTableLayoutPanel8.Name = "ExTableLayoutPanel8"
         Me.ExTableLayoutPanel8.RowCount = 1
         Me.ExTableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle())
@@ -2208,7 +2239,7 @@ Partial Class Form_Main
         '
         Me.RadioButtonSortRandomSample.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonSortRandomSample.AutoSize = True
-        Me.RadioButtonSortRandomSample.Location = New System.Drawing.Point(3, 145)
+        Me.RadioButtonSortRandomSample.Location = New System.Drawing.Point(3, 175)
         Me.RadioButtonSortRandomSample.Name = "RadioButtonSortRandomSample"
         Me.RadioButtonSortRandomSample.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonSortRandomSample.Size = New System.Drawing.Size(116, 19)
@@ -2221,7 +2252,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxSortIncludeNoDependencies.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxSortIncludeNoDependencies.AutoSize = True
-        Me.CheckBoxSortIncludeNoDependencies.Location = New System.Drawing.Point(3, 118)
+        Me.CheckBoxSortIncludeNoDependencies.Location = New System.Drawing.Point(3, 148)
         Me.CheckBoxSortIncludeNoDependencies.Name = "CheckBoxSortIncludeNoDependencies"
         Me.CheckBoxSortIncludeNoDependencies.Padding = New System.Windows.Forms.Padding(15, 0, 0, 0)
         Me.CheckBoxSortIncludeNoDependencies.Size = New System.Drawing.Size(365, 19)
@@ -2234,7 +2265,7 @@ Partial Class Form_Main
         '
         Me.RadioButtonSortDependency.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonSortDependency.AutoSize = True
-        Me.RadioButtonSortDependency.Location = New System.Drawing.Point(3, 90)
+        Me.RadioButtonSortDependency.Location = New System.Drawing.Point(3, 120)
         Me.RadioButtonSortDependency.Name = "RadioButtonSortDependency"
         Me.RadioButtonSortDependency.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonSortDependency.Size = New System.Drawing.Size(176, 19)
@@ -2247,7 +2278,7 @@ Partial Class Form_Main
         Me.RadioButtonSortAlphabetical.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonSortAlphabetical.AutoSize = True
         Me.RadioButtonSortAlphabetical.Checked = True
-        Me.RadioButtonSortAlphabetical.Location = New System.Drawing.Point(3, 60)
+        Me.RadioButtonSortAlphabetical.Location = New System.Drawing.Point(3, 90)
         Me.RadioButtonSortAlphabetical.Name = "RadioButtonSortAlphabetical"
         Me.RadioButtonSortAlphabetical.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonSortAlphabetical.Size = New System.Drawing.Size(175, 19)
@@ -2260,7 +2291,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxKeepUnsortedDuplicates.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxKeepUnsortedDuplicates.AutoSize = True
-        Me.CheckBoxKeepUnsortedDuplicates.Location = New System.Drawing.Point(3, 33)
+        Me.CheckBoxKeepUnsortedDuplicates.Location = New System.Drawing.Point(3, 63)
         Me.CheckBoxKeepUnsortedDuplicates.Name = "CheckBoxKeepUnsortedDuplicates"
         Me.CheckBoxKeepUnsortedDuplicates.Padding = New System.Windows.Forms.Padding(15, 0, 0, 0)
         Me.CheckBoxKeepUnsortedDuplicates.Size = New System.Drawing.Size(124, 19)
@@ -2268,6 +2299,16 @@ Partial Class Form_Main
         Me.CheckBoxKeepUnsortedDuplicates.Text = "Keep duplicates"
         Me.CheckBoxKeepUnsortedDuplicates.UseVisualStyleBackColor = True
         Me.CheckBoxKeepUnsortedDuplicates.Visible = False
+        '
+        'ButtonConfigSortingHelp
+        '
+        Me.ButtonConfigSortingHelp.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ButtonConfigSortingHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonConfigSortingHelp.Location = New System.Drawing.Point(581, 3)
+        Me.ButtonConfigSortingHelp.Name = "ButtonConfigSortingHelp"
+        Me.ButtonConfigSortingHelp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonConfigSortingHelp.TabIndex = 56
+        Me.ButtonConfigSortingHelp.UseVisualStyleBackColor = True
         '
         'TabPageTemplates
         '
@@ -2287,24 +2328,25 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.ColumnCount = 2
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonAssemblyTemplate, 0, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxAssemblyTemplate, 1, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonPartTemplate, 0, 1)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxPartTemplate, 1, 1)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonSheetmetalTemplate, 0, 2)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxSheetmetalTemplate, 1, 2)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonDraftTemplate, 0, 3)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxDraftTemplate, 1, 3)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonMaterialTable, 0, 4)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxMaterialTable, 1, 4)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCustomizeTemplatePropertyDict, 1, 6)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizePropertiesData, 0, 6)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUpdatePropertiesData, 0, 5)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelUpdateProperties, 1, 5)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonAssemblyTemplate, 0, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxAssemblyTemplate, 1, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonPartTemplate, 0, 2)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxPartTemplate, 1, 2)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonSheetmetalTemplate, 0, 3)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxSheetmetalTemplate, 1, 3)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonDraftTemplate, 0, 4)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxDraftTemplate, 1, 4)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonMaterialTable, 0, 5)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxMaterialTable, 1, 5)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCustomizeTemplatePropertyDict, 1, 7)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizePropertiesData, 0, 7)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUpdatePropertiesData, 0, 6)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelUpdateProperties, 1, 6)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonConfigTemplatesHelp, 1, 0)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
-        Me.ExTableLayoutPanel1.RowCount = 8
+        Me.ExTableLayoutPanel1.RowCount = 9
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2313,7 +2355,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(611, 579)
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
@@ -2321,7 +2363,7 @@ Partial Class Form_Main
         'ButtonAssemblyTemplate
         '
         Me.ButtonAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonAssemblyTemplate.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonAssemblyTemplate.Location = New System.Drawing.Point(3, 33)
         Me.ButtonAssemblyTemplate.Name = "ButtonAssemblyTemplate"
         Me.ButtonAssemblyTemplate.Size = New System.Drawing.Size(94, 24)
         Me.ButtonAssemblyTemplate.TabIndex = 0
@@ -2331,7 +2373,7 @@ Partial Class Form_Main
         'TextBoxAssemblyTemplate
         '
         Me.TextBoxAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxAssemblyTemplate.Location = New System.Drawing.Point(103, 3)
+        Me.TextBoxAssemblyTemplate.Location = New System.Drawing.Point(103, 33)
         Me.TextBoxAssemblyTemplate.Name = "TextBoxAssemblyTemplate"
         Me.TextBoxAssemblyTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxAssemblyTemplate.TabIndex = 1
@@ -2339,7 +2381,7 @@ Partial Class Form_Main
         'ButtonPartTemplate
         '
         Me.ButtonPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonPartTemplate.Location = New System.Drawing.Point(3, 33)
+        Me.ButtonPartTemplate.Location = New System.Drawing.Point(3, 63)
         Me.ButtonPartTemplate.Name = "ButtonPartTemplate"
         Me.ButtonPartTemplate.Size = New System.Drawing.Size(94, 24)
         Me.ButtonPartTemplate.TabIndex = 2
@@ -2349,7 +2391,7 @@ Partial Class Form_Main
         'TextBoxPartTemplate
         '
         Me.TextBoxPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxPartTemplate.Location = New System.Drawing.Point(103, 33)
+        Me.TextBoxPartTemplate.Location = New System.Drawing.Point(103, 63)
         Me.TextBoxPartTemplate.Name = "TextBoxPartTemplate"
         Me.TextBoxPartTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxPartTemplate.TabIndex = 3
@@ -2357,7 +2399,7 @@ Partial Class Form_Main
         'ButtonSheetmetalTemplate
         '
         Me.ButtonSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonSheetmetalTemplate.Location = New System.Drawing.Point(3, 63)
+        Me.ButtonSheetmetalTemplate.Location = New System.Drawing.Point(3, 93)
         Me.ButtonSheetmetalTemplate.Name = "ButtonSheetmetalTemplate"
         Me.ButtonSheetmetalTemplate.Size = New System.Drawing.Size(94, 24)
         Me.ButtonSheetmetalTemplate.TabIndex = 4
@@ -2367,7 +2409,7 @@ Partial Class Form_Main
         'TextBoxSheetmetalTemplate
         '
         Me.TextBoxSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxSheetmetalTemplate.Location = New System.Drawing.Point(103, 63)
+        Me.TextBoxSheetmetalTemplate.Location = New System.Drawing.Point(103, 93)
         Me.TextBoxSheetmetalTemplate.Name = "TextBoxSheetmetalTemplate"
         Me.TextBoxSheetmetalTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxSheetmetalTemplate.TabIndex = 5
@@ -2375,7 +2417,7 @@ Partial Class Form_Main
         'ButtonDraftTemplate
         '
         Me.ButtonDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonDraftTemplate.Location = New System.Drawing.Point(3, 93)
+        Me.ButtonDraftTemplate.Location = New System.Drawing.Point(3, 123)
         Me.ButtonDraftTemplate.Name = "ButtonDraftTemplate"
         Me.ButtonDraftTemplate.Size = New System.Drawing.Size(94, 24)
         Me.ButtonDraftTemplate.TabIndex = 6
@@ -2385,7 +2427,7 @@ Partial Class Form_Main
         'TextBoxDraftTemplate
         '
         Me.TextBoxDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxDraftTemplate.Location = New System.Drawing.Point(103, 93)
+        Me.TextBoxDraftTemplate.Location = New System.Drawing.Point(103, 123)
         Me.TextBoxDraftTemplate.Name = "TextBoxDraftTemplate"
         Me.TextBoxDraftTemplate.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxDraftTemplate.TabIndex = 7
@@ -2393,7 +2435,7 @@ Partial Class Form_Main
         'ButtonMaterialTable
         '
         Me.ButtonMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonMaterialTable.Location = New System.Drawing.Point(3, 123)
+        Me.ButtonMaterialTable.Location = New System.Drawing.Point(3, 153)
         Me.ButtonMaterialTable.Name = "ButtonMaterialTable"
         Me.ButtonMaterialTable.Size = New System.Drawing.Size(94, 24)
         Me.ButtonMaterialTable.TabIndex = 9
@@ -2403,7 +2445,7 @@ Partial Class Form_Main
         'TextBoxMaterialTable
         '
         Me.TextBoxMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxMaterialTable.Location = New System.Drawing.Point(103, 123)
+        Me.TextBoxMaterialTable.Location = New System.Drawing.Point(103, 153)
         Me.TextBoxMaterialTable.Name = "TextBoxMaterialTable"
         Me.TextBoxMaterialTable.Size = New System.Drawing.Size(505, 23)
         Me.TextBoxMaterialTable.TabIndex = 10
@@ -2412,7 +2454,7 @@ Partial Class Form_Main
         '
         Me.LabelCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelCustomizeTemplatePropertyDict.AutoSize = True
-        Me.LabelCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(103, 187)
+        Me.LabelCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(103, 217)
         Me.LabelCustomizeTemplatePropertyDict.Name = "LabelCustomizeTemplatePropertyDict"
         Me.LabelCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(287, 15)
         Me.LabelCustomizeTemplatePropertyDict.TabIndex = 12
@@ -2421,7 +2463,7 @@ Partial Class Form_Main
         'ButtonCustomizePropertiesData
         '
         Me.ButtonCustomizePropertiesData.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonCustomizePropertiesData.Location = New System.Drawing.Point(3, 183)
+        Me.ButtonCustomizePropertiesData.Location = New System.Drawing.Point(3, 213)
         Me.ButtonCustomizePropertiesData.Name = "ButtonCustomizePropertiesData"
         Me.ButtonCustomizePropertiesData.Size = New System.Drawing.Size(94, 24)
         Me.ButtonCustomizePropertiesData.TabIndex = 11
@@ -2431,7 +2473,7 @@ Partial Class Form_Main
         'ButtonUpdatePropertiesData
         '
         Me.ButtonUpdatePropertiesData.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonUpdatePropertiesData.Location = New System.Drawing.Point(3, 153)
+        Me.ButtonUpdatePropertiesData.Location = New System.Drawing.Point(3, 183)
         Me.ButtonUpdatePropertiesData.Name = "ButtonUpdatePropertiesData"
         Me.ButtonUpdatePropertiesData.Size = New System.Drawing.Size(94, 24)
         Me.ButtonUpdatePropertiesData.TabIndex = 15
@@ -2442,11 +2484,21 @@ Partial Class Form_Main
         '
         Me.LabelUpdateProperties.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelUpdateProperties.AutoSize = True
-        Me.LabelUpdateProperties.Location = New System.Drawing.Point(103, 157)
+        Me.LabelUpdateProperties.Location = New System.Drawing.Point(103, 187)
         Me.LabelUpdateProperties.Name = "LabelUpdateProperties"
         Me.LabelUpdateProperties.Size = New System.Drawing.Size(292, 15)
         Me.LabelUpdateProperties.TabIndex = 16
         Me.LabelUpdateProperties.Text = "Update template properties for use in property dialogs"
+        '
+        'ButtonConfigTemplatesHelp
+        '
+        Me.ButtonConfigTemplatesHelp.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ButtonConfigTemplatesHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonConfigTemplatesHelp.Location = New System.Drawing.Point(583, 3)
+        Me.ButtonConfigTemplatesHelp.Name = "ButtonConfigTemplatesHelp"
+        Me.ButtonConfigTemplatesHelp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonConfigTemplatesHelp.TabIndex = 17
+        Me.ButtonConfigTemplatesHelp.UseVisualStyleBackColor = True
         '
         'TabPageServerQuery
         '
@@ -2467,16 +2519,18 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel9.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel9.ColumnCount = 1
         Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerConnectionString, 0, 1)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerConnectionString, 0, 0)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerQuery, 0, 2)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.FastColoredServerQuery, 0, 3)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.Label1, 0, 4)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerConnectionString, 0, 2)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerConnectionString, 0, 1)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerQuery, 0, 3)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.FastColoredServerQuery, 0, 4)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.Label1, 0, 5)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.ButtonConfigServerQueryHelp, 0, 0)
         Me.ExTableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel9.Location = New System.Drawing.Point(3, 3)
         Me.ExTableLayoutPanel9.Margin = New System.Windows.Forms.Padding(0)
         Me.ExTableLayoutPanel9.Name = "ExTableLayoutPanel9"
-        Me.ExTableLayoutPanel9.RowCount = 5
+        Me.ExTableLayoutPanel9.RowCount = 6
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2489,7 +2543,7 @@ Partial Class Form_Main
         'TextBoxServerConnectionString
         '
         Me.TextBoxServerConnectionString.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxServerConnectionString.Location = New System.Drawing.Point(3, 33)
+        Me.TextBoxServerConnectionString.Location = New System.Drawing.Point(3, 63)
         Me.TextBoxServerConnectionString.Name = "TextBoxServerConnectionString"
         Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(605, 23)
         Me.TextBoxServerConnectionString.TabIndex = 0
@@ -2498,7 +2552,7 @@ Partial Class Form_Main
         '
         Me.LabelServerConnectionString.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelServerConnectionString.AutoSize = True
-        Me.LabelServerConnectionString.Location = New System.Drawing.Point(3, 7)
+        Me.LabelServerConnectionString.Location = New System.Drawing.Point(3, 37)
         Me.LabelServerConnectionString.Name = "LabelServerConnectionString"
         Me.LabelServerConnectionString.Size = New System.Drawing.Size(135, 15)
         Me.LabelServerConnectionString.TabIndex = 2
@@ -2508,7 +2562,7 @@ Partial Class Form_Main
         '
         Me.LabelServerQuery.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelServerQuery.AutoSize = True
-        Me.LabelServerQuery.Location = New System.Drawing.Point(3, 67)
+        Me.LabelServerQuery.Location = New System.Drawing.Point(3, 97)
         Me.LabelServerQuery.Name = "LabelServerQuery"
         Me.LabelServerQuery.Size = New System.Drawing.Size(39, 15)
         Me.LabelServerQuery.TabIndex = 3
@@ -2527,11 +2581,10 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
-        Me.FastColoredServerQuery.Location = New System.Drawing.Point(3, 93)
+        Me.FastColoredServerQuery.Location = New System.Drawing.Point(3, 123)
         Me.FastColoredServerQuery.Name = "FastColoredServerQuery"
         Me.FastColoredServerQuery.Paddings = New System.Windows.Forms.Padding(0)
         Me.FastColoredServerQuery.RightBracket = Global.Microsoft.VisualBasic.ChrW(41)
@@ -2544,12 +2597,22 @@ Partial Class Form_Main
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 200)
+        Me.Label1.Location = New System.Drawing.Point(3, 230)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 10, 3, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(386, 105)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = resources.GetString("Label1.Text")
+        '
+        'ButtonConfigServerQueryHelp
+        '
+        Me.ButtonConfigServerQueryHelp.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ButtonConfigServerQueryHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonConfigServerQueryHelp.Location = New System.Drawing.Point(583, 3)
+        Me.ButtonConfigServerQueryHelp.Name = "ButtonConfigServerQueryHelp"
+        Me.ButtonConfigServerQueryHelp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonConfigServerQueryHelp.TabIndex = 8
+        Me.ButtonConfigServerQueryHelp.UseVisualStyleBackColor = True
         '
         'TabPageGeneral
         '
@@ -2571,27 +2634,30 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel2.ColumnCount = 1
         Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseCurrentSession, 0, 0)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftItself, 0, 9)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxWarnSave, 0, 1)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftModel, 0, 8)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 2)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 7)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 4)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 6)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 10)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 5)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 3)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 11)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxProcessDraftsInactive, 0, 12)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel12, 0, 13)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 14)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseLocalPowershell, 0, 15)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxSEFastLaunch, 0, 16)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseCurrentSession, 0, 1)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftItself, 0, 10)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxWarnSave, 0, 2)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftModel, 0, 9)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 3)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 8)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 5)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 7)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 11)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 6)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 4)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 12)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxProcessDraftsInactive, 0, 13)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel12, 0, 14)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 15)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseLocalPowershell, 0, 16)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxSEFastLaunch, 0, 17)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonConfigGeneralHelp, 0, 0)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
+        Me.ExTableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 18
+        Me.ExTableLayoutPanel2.RowCount = 19
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2618,7 +2684,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxUseCurrentSession.AutoSize = True
         Me.CheckBoxUseCurrentSession.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(3, 3)
+        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(3, 33)
         Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
         Me.CheckBoxUseCurrentSession.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(603, 24)
@@ -2630,7 +2696,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxPropertyFilterIncludeDraftItself.AutoSize = True
         Me.CheckBoxPropertyFilterIncludeDraftItself.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxPropertyFilterIncludeDraftItself.Location = New System.Drawing.Point(3, 273)
+        Me.CheckBoxPropertyFilterIncludeDraftItself.Location = New System.Drawing.Point(3, 303)
         Me.CheckBoxPropertyFilterIncludeDraftItself.Name = "CheckBoxPropertyFilterIncludeDraftItself"
         Me.CheckBoxPropertyFilterIncludeDraftItself.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxPropertyFilterIncludeDraftItself.Size = New System.Drawing.Size(603, 24)
@@ -2644,7 +2710,7 @@ Partial Class Form_Main
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxWarnSave.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(3, 33)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(3, 63)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxWarnSave.Size = New System.Drawing.Size(603, 24)
@@ -2658,7 +2724,7 @@ Partial Class Form_Main
         Me.CheckBoxPropertyFilterIncludeDraftModel.Checked = True
         Me.CheckBoxPropertyFilterIncludeDraftModel.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxPropertyFilterIncludeDraftModel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxPropertyFilterIncludeDraftModel.Location = New System.Drawing.Point(3, 243)
+        Me.CheckBoxPropertyFilterIncludeDraftModel.Location = New System.Drawing.Point(3, 273)
         Me.CheckBoxPropertyFilterIncludeDraftModel.Name = "CheckBoxPropertyFilterIncludeDraftModel"
         Me.CheckBoxPropertyFilterIncludeDraftModel.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxPropertyFilterIncludeDraftModel.Size = New System.Drawing.Size(603, 24)
@@ -2670,7 +2736,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxNoUpdateMRU.AutoSize = True
         Me.CheckBoxNoUpdateMRU.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 63)
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 93)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(603, 24)
@@ -2682,7 +2748,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxRunInBackground.AutoSize = True
         Me.CheckBoxRunInBackground.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 213)
+        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 243)
         Me.CheckBoxRunInBackground.Name = "CheckBoxRunInBackground"
         Me.CheckBoxRunInBackground.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRunInBackground.Size = New System.Drawing.Size(603, 24)
@@ -2698,7 +2764,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel3.Controls.Add(Me.TextBoxFileListFontSize, 0, 0)
         Me.ExTableLayoutPanel3.Controls.Add(Me.LabelFontSize, 1, 0)
         Me.ExTableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 123)
+        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 153)
         Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2733,7 +2799,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 183)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 213)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(603, 24)
@@ -2747,7 +2813,7 @@ Partial Class Form_Main
         Me.CheckBoxCheckForNewerVersion.Checked = True
         Me.CheckBoxCheckForNewerVersion.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxCheckForNewerVersion.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 303)
+        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 333)
         Me.CheckBoxCheckForNewerVersion.Name = "CheckBoxCheckForNewerVersion"
         Me.CheckBoxCheckForNewerVersion.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(603, 24)
@@ -2761,7 +2827,7 @@ Partial Class Form_Main
         Me.CheckBoxGroupFiles.Checked = True
         Me.CheckBoxGroupFiles.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxGroupFiles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 153)
+        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 183)
         Me.CheckBoxGroupFiles.Name = "CheckBoxGroupFiles"
         Me.CheckBoxGroupFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(603, 24)
@@ -2777,7 +2843,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel11.Controls.Add(Me.TextBoxListViewUpdateFrequency, 0, 0)
         Me.ExTableLayoutPanel11.Controls.Add(Me.LabelListViewUpdateFrequency, 1, 0)
         Me.ExTableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel11.Location = New System.Drawing.Point(3, 93)
+        Me.ExTableLayoutPanel11.Location = New System.Drawing.Point(3, 123)
         Me.ExTableLayoutPanel11.Name = "ExTableLayoutPanel11"
         Me.ExTableLayoutPanel11.RowCount = 1
         Me.ExTableLayoutPanel11.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2812,7 +2878,7 @@ Partial Class Form_Main
         Me.CheckBoxRemindFilelistUpdate.Checked = True
         Me.CheckBoxRemindFilelistUpdate.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxRemindFilelistUpdate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxRemindFilelistUpdate.Location = New System.Drawing.Point(3, 333)
+        Me.CheckBoxRemindFilelistUpdate.Location = New System.Drawing.Point(3, 363)
         Me.CheckBoxRemindFilelistUpdate.Name = "CheckBoxRemindFilelistUpdate"
         Me.CheckBoxRemindFilelistUpdate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRemindFilelistUpdate.Size = New System.Drawing.Size(603, 24)
@@ -2824,7 +2890,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxProcessDraftsInactive.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxProcessDraftsInactive.AutoSize = True
-        Me.CheckBoxProcessDraftsInactive.Location = New System.Drawing.Point(3, 365)
+        Me.CheckBoxProcessDraftsInactive.Location = New System.Drawing.Point(3, 395)
         Me.CheckBoxProcessDraftsInactive.Name = "CheckBoxProcessDraftsInactive"
         Me.CheckBoxProcessDraftsInactive.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxProcessDraftsInactive.Size = New System.Drawing.Size(181, 19)
@@ -2840,7 +2906,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel12.Controls.Add(Me.ComboBoxExpressionEditorLanguage, 0, 0)
         Me.ExTableLayoutPanel12.Controls.Add(Me.LabelExpressionEditorLanguage, 1, 0)
         Me.ExTableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel12.Location = New System.Drawing.Point(3, 393)
+        Me.ExTableLayoutPanel12.Location = New System.Drawing.Point(3, 423)
         Me.ExTableLayoutPanel12.Name = "ExTableLayoutPanel12"
         Me.ExTableLayoutPanel12.RowCount = 1
         Me.ExTableLayoutPanel12.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2876,7 +2942,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxDebugMode.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxDebugMode.AutoSize = True
-        Me.CheckBoxDebugMode.Location = New System.Drawing.Point(3, 425)
+        Me.CheckBoxDebugMode.Location = New System.Drawing.Point(3, 455)
         Me.CheckBoxDebugMode.Name = "CheckBoxDebugMode"
         Me.CheckBoxDebugMode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxDebugMode.Size = New System.Drawing.Size(100, 19)
@@ -2888,7 +2954,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxUseLocalPowershell.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxUseLocalPowershell.AutoSize = True
-        Me.CheckBoxUseLocalPowershell.Location = New System.Drawing.Point(3, 455)
+        Me.CheckBoxUseLocalPowershell.Location = New System.Drawing.Point(3, 485)
         Me.CheckBoxUseLocalPowershell.Name = "CheckBoxUseLocalPowershell"
         Me.CheckBoxUseLocalPowershell.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxUseLocalPowershell.Size = New System.Drawing.Size(195, 19)
@@ -2900,13 +2966,23 @@ Partial Class Form_Main
         '
         Me.CheckBoxSEFastLaunch.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxSEFastLaunch.AutoSize = True
-        Me.CheckBoxSEFastLaunch.Location = New System.Drawing.Point(3, 485)
+        Me.CheckBoxSEFastLaunch.Location = New System.Drawing.Point(3, 515)
         Me.CheckBoxSEFastLaunch.Name = "CheckBoxSEFastLaunch"
         Me.CheckBoxSEFastLaunch.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxSEFastLaunch.Size = New System.Drawing.Size(226, 19)
         Me.CheckBoxSEFastLaunch.TabIndex = 82
         Me.CheckBoxSEFastLaunch.Text = "Solid Edge fast launch (experimental)"
         Me.CheckBoxSEFastLaunch.UseVisualStyleBackColor = True
+        '
+        'ButtonConfigGeneralHelp
+        '
+        Me.ButtonConfigGeneralHelp.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ButtonConfigGeneralHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonConfigGeneralHelp.Location = New System.Drawing.Point(581, 3)
+        Me.ButtonConfigGeneralHelp.Name = "ButtonConfigGeneralHelp"
+        Me.ButtonConfigGeneralHelp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonConfigGeneralHelp.TabIndex = 83
+        Me.ButtonConfigGeneralHelp.UseVisualStyleBackColor = True
         '
         'ToolStripPresets
         '
@@ -3545,4 +3621,10 @@ Partial Class Form_Main
     Friend WithEvents CheckBoxUseLocalPowershell As CheckBox
     Friend WithEvents ButtonPresetHelp As ToolStripButton
     Friend WithEvents CheckBoxSEFastLaunch As CheckBox
+    Friend WithEvents ButtonConfigGeneralHelp As Button
+    Friend WithEvents ButtonConfigTLAHelp As Button
+    Friend WithEvents ButtonConfigStatusHelp As Button
+    Friend WithEvents ButtonConfigSortingHelp As Button
+    Friend WithEvents ButtonConfigTemplatesHelp As Button
+    Friend WithEvents ButtonConfigServerQueryHelp As Button
 End Class

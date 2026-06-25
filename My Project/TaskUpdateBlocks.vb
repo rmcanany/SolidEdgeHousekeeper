@@ -1120,7 +1120,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.ReplaceBlocksReplaceExisting.ToString, "Overwrite existing with replacement")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1135,8 +1135,8 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"File block name", "Library block name"}.ToList
         ColumnType = "Combobox"
         DataGridView = FormatOptionsDataGridView(ControlNames.ReplaceBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
-        'DataGridView.Padding = New Padding(15, 0, 0, 0)
-        DataGridView.Margin = New Padding(15, 0, 0, 0)
+        'DataGridView.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
+        DataGridView.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
@@ -1163,7 +1163,7 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"File block name"}.ToList
         ColumnType = "Combobox"
         DataGridView = FormatOptionsDataGridView(ControlNames.DeleteBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
-        DataGridView.Margin = New Padding(15, 0, 0, 0)
+        DataGridView.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
@@ -1188,7 +1188,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.AddBlocksReplaceExisting.ToString, "Overwrite existing with added block")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1198,7 +1198,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.ReportMissingSheet.ToString, "Report missing sheet in document")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1210,7 +1210,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.WorkingSheetLabel.ToString, "Working sheet options")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         ControlsDict(Label.Name) = Label
@@ -1219,7 +1219,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.WSAddByName.ToString, "Add by sheet name")
-        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        CheckBox.Padding = New Padding(2 * Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1229,7 +1229,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.WSAddByOrder.ToString, "Add by sheet order")
-        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        CheckBox.Padding = New Padding(2 * Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1239,7 +1239,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.WSAddToAll.ToString, "Add to all sheets")
-        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        CheckBox.Padding = New Padding(2 * Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1250,7 +1250,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.BackgroundSheetLabel.ToString, "Background sheet options")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         ControlsDict(Label.Name) = Label
@@ -1259,7 +1259,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.BSAddByName.ToString, "Add by sheet name (always enabled)")
-        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        CheckBox.Padding = New Padding(2 * Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1270,7 +1270,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.BSAddBySize.ToString, "If no name match: Add by size")
-        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        CheckBox.Padding = New Padding(2 * Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1280,7 +1280,7 @@ Public Class TaskUpdateBlocks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.BSRename.ToString, "If added by size: Rename sheet")
-        CheckBox.Padding = New Padding(30, 0, 0, 0)
+        CheckBox.Padding = New Padding(2 * Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1295,7 +1295,7 @@ Public Class TaskUpdateBlocks
         ColumnHeaders = {"Library block name"}.ToList
         ColumnType = "Combobox"
         DataGridView = FormatOptionsDataGridView(ControlNames.AddBlocksDGV.ToString, ColumnHeaders, ColumnType, Me.BlockLibraryBlockNames)
-        DataGridView.Margin = New Padding(15, 0, 0, 0)
+        DataGridView.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError

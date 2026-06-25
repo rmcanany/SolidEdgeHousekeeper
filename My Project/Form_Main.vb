@@ -1368,11 +1368,11 @@ Public Class Form_Main
         If Me.TCRevisionRx Is Nothing OrElse Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
         If Me.TCItemIDName Is Nothing OrElse Me.TCItemIDName.Trim = "" Then TCItemIDName = "MFK9Item1"
 
-        If ShowSplash Then Splash.UpdateStatus("Wrapping up")
 
         UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.
 
         If Me.CheckForNewerVersion Then
+            If ShowSplash Then Splash.UpdateStatus("Checking for newer version")
             UP.CheckForNewerVersion(Me.Version)
         End If
 
@@ -4275,6 +4275,55 @@ Public Class Form_Main
     Private Sub CheckBoxSEFastLaunch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSEFastLaunch.CheckedChanged
         Me.SEFastLaunch = CheckBoxSEFastLaunch.Checked
     End Sub
+
+    Private Sub ButtonConfigTLAHelp_Click(sender As Object, e As EventArgs) Handles ButtonConfigTLAHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "select-by-top-level-assembly"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub ButtonConfigStatusHelp_Click(sender As Object, e As EventArgs) Handles ButtonConfigStatusHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "document-status-options"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub ButtonConfigSortingHelp_Click(sender As Object, e As EventArgs) Handles ButtonConfigSortingHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "sorting"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub ButtonConfigTemplatesHelp_Click(sender As Object, e As EventArgs) Handles ButtonConfigTemplatesHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "templates-page"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub ButtonConfigServerQueryHelp_Click(sender As Object, e As EventArgs) Handles ButtonConfigServerQueryHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "server-query-page"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub ButtonConfigGeneralHelp_Click(sender As Object, e As EventArgs) Handles ButtonConfigGeneralHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "general-page"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+    End Sub
+
 End Class
 
 

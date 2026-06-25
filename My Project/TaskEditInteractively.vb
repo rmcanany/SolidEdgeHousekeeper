@@ -394,7 +394,7 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.PauseTime.ToString, "0")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -410,7 +410,7 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.SaveAfterTimeout.ToString, "Save file after timeout")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -428,7 +428,7 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         ComboBox = FormatOptionsComboBox(ControlNames.SelectedCommand.ToString, ComboBoxItems, "DropDownList")
-        ComboBox.Margin = New Padding(15, 0, 0, 0)
+        ComboBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         ComboBox.Width = ControlWidth
         AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
         tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
@@ -443,7 +443,7 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.CommandIDAssembly.ToString, "0")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -459,7 +459,7 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.CommandIDPart.ToString, "0")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -475,7 +475,7 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.CommandIDSheetmetal.ToString, "0")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -491,7 +491,7 @@ Public Class TaskEditInteractively
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.CommandIDDraft.ToString, "0")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus

@@ -692,7 +692,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.Browse.ToString, "Dft Template")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -714,7 +714,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.MatchSheetSize.ToString, "If no matching name: Match by sheet size")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -724,7 +724,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.RenameSheet.ToString, "If matched by sheet size: Rename sheet")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

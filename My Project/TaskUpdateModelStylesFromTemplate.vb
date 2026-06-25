@@ -1126,7 +1126,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.BrowseAssembly.ToString, "Asm Template")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -1140,7 +1140,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.BrowsePart.ToString, "Par Template")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -1154,7 +1154,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.BrowseSheetmetal.ToString, "Psm Template")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button

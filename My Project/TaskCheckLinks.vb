@@ -400,7 +400,7 @@ Public Class TaskCheckLinks
         ColumnType = "Textbox"
         DataGridView = FormatOptionsDataGridView(ControlNames.SearchDirectoriesDGV.ToString, ColumnHeaders, ColumnType, Me.SearchDirectories)
         'DataGridView.ContextMenuStrip = Me.TaskControl.ContextMenuStripTaskCheckLinks
-        DataGridView.Margin = New Padding(15, 0, 0, 0)
+        DataGridView.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
         AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError

@@ -128,7 +128,7 @@ Public MustInherit Class Task
     Public Property CompatibleWithInactiveDraft As Boolean = False
     Public Property RequiresForegroundProcessing As Boolean = False
 
-    'Public Property UseLocalPowershell As Boolean = False
+    Public Property ControlIndent As Integer = 20
 
 
     Public Enum BaseControlNames

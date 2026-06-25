@@ -442,7 +442,7 @@ Public Class TaskPrint
             CtrlText = GenerateCtrlText(s)
 
             CheckBox = FormatOptionsCheckBox(CtrlName, CtrlText)
-            CheckBox.Padding = New Padding(15, 0, 0, 0)
+            CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
             AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
             tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
             tmpTLPOptions.SetColumnSpan(CheckBox, 3)

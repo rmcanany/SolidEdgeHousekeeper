@@ -813,7 +813,7 @@ Public Class TaskEditProperties
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.UseConfigurationPageTemplates.ToString, "Use configuration page material table")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -823,7 +823,7 @@ Public Class TaskEditProperties
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button

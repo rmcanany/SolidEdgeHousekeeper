@@ -354,7 +354,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.XVariableLabel.ToString, "X")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
@@ -369,7 +369,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.YVariableLabel.ToString, "Y")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
@@ -384,7 +384,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.ZVariableLabel.ToString, "Z")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
@@ -409,7 +409,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.MinVariableLabel.ToString, "Min")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
@@ -424,7 +424,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.MidVariableLabel.ToString, "Mid")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
@@ -439,7 +439,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.MaxVariableLabel.ToString, "Max")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label

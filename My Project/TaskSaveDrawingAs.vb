@@ -659,7 +659,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.FilenameFormula.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -679,7 +679,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -702,7 +702,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -722,7 +722,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.BrowseWatermarkFilename.ToString, "File")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         Button.Visible = False
@@ -739,7 +739,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.WatermarkScale.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Text = "1.0"
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
@@ -757,7 +757,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.WatermarkPositionX.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Text = "0.5"
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
@@ -775,7 +775,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.WatermarkPositionY.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.Text = "0.5"
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged

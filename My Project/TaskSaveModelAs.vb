@@ -950,7 +950,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.FilenameFormula.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -970,7 +970,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         Button = FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
-        Button.Margin = New Padding(15, 0, 0, 0)
+        Button.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
@@ -993,7 +993,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -1032,7 +1032,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.Isometric.ToString, "Isometric")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -1042,7 +1042,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.Dimetric.ToString, "Dimetric")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -1052,7 +1052,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.Trimetric.ToString, "Trimetric")
-        CheckBox.Padding = New Padding(15, 0, 0, 0)
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -1072,13 +1072,13 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         Label = FormatOptionsLabel(ControlNames.ViewStyleNameLabel.ToString, "Style name")
-        Label.Padding = New Padding(15, 0, 0, 0)
+        Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
 
         TextBox = FormatOptionsTextBox(ControlNames.ViewStyleName.ToString, "")
-        TextBox.Margin = New Padding(15, 0, 0, 0)
+        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
