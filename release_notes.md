@@ -131,6 +131,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue in the example code snippet `FitIso.snp` where the command ID for draft files was incorrect.
 - Fixed an issue in `Update Physical Properties` where a check of the mass in the variable table was not accounting for localized names.  (Thank you **@Stefano-VLN!**)
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
+- Fixed an issue when populating file list properties.  Previously the file was opened separately for each property.  Now it processes all in one go. 
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.  (Thank you **@PBurkeADS!**)
 - Added an option, `Solid Edge fast launch`, that uses a new technique to start SE when file processing begins.  It is quite a bit faster than the previous method and worth a try, but still considered experimental for now.  Enable it on the **Configuration Tab -- General Page.**
 - Fixed an issue where users running preview code were not notified when the finalized version was released.

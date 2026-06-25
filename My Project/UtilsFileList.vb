@@ -1216,69 +1216,103 @@ Public Class UtilsFileList
         'Dim z = FMain.ListViewFiles.ClientRectangle
 
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
-            Dim UC As New UtilsCommon
-            Try
-                'Adding extra properties data if needed
-                For Each PropColumn In FMain.ListOfColumns
-                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
 
-                        Dim PropValue As String = Nothing
-                        Dim tmpColor As Color = LVItem.BackColor 'Color.White ####### Changed to reflect the file read-only backcolor
+            Dim HasColumnsToProcess As Boolean = False
+            For Each PropColumn In Me.FMain.ListOfColumns
+                If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+                    If PropColumn.Visible Then
+                        HasColumnsToProcess = True
+                        Exit For
+                    End If
+                End If
+            Next
 
-                        If PropColumn.Visible Then '###### Only a visible column need a value. F.Arfilli
+            If HasColumnsToProcess Then
+                Dim Proceed As Boolean = True
+                Dim UC As New UtilsCommon
 
-                            Try
-                                Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, _OpenReadWrite:=False)
-                                SSDoc.ReadProperties(FMain.PropertiesData)
+                Dim SSDoc As HCStructuredStorageDoc = Nothing
+                Try
+                    SSDoc = New HCStructuredStorageDoc(LVItem.Name, _OpenReadWrite:=False)
+                    SSDoc.ReadProperties(FMain.PropertiesData)
+                Catch ex As Exception
+                    Proceed = False
+                End Try
 
-                                Dim PropName = UC.PropNameFromFormula(PropColumn.Formula)
-                                If Not IsReadOnly Then
-                                    If Not LVItem.Group.Name = ".dft" Then  ' Draft files do not have a PartsLiteData stream
-                                        ' Unable to parse PartsLiteData stream in some files.
-                                        Try
-                                            IsReadOnly = SSDoc.IsExposedVariable(PropName)
-                                        Catch ex As Exception
-                                        End Try
+                If Not Proceed Then
+                    For Each PropColumn In FMain.ListOfColumns
+                        LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
+                    Next
+                Else
+
+                    Try
+                        'Adding extra properties data if needed
+                        For Each PropColumn In FMain.ListOfColumns
+                            If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+
+                                Dim PropValue As String = Nothing
+                                Dim tmpColor As Color = LVItem.BackColor 'Color.White ####### Changed to reflect the file read-only backcolor
+
+                                If PropColumn.Visible Then '###### Only a visible column need a value. F.Arfilli
+
+                                    Try
+                                        'Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, _OpenReadWrite:=False)
+                                        'SSDoc.ReadProperties(FMain.PropertiesData)
+
+                                        Dim PropName = UC.PropNameFromFormula(PropColumn.Formula)
+                                        If Not IsReadOnly Then
+                                            If Not LVItem.Group.Name = ".dft" Then  ' Draft files do not have a PartsLiteData stream
+                                                ' Unable to parse PartsLiteData stream in some files.
+                                                Try
+                                                    IsReadOnly = SSDoc.IsExposedVariable(PropName)
+                                                Catch ex As Exception
+                                                End Try
+                                            End If
+                                        End If
+
+                                        Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
+                                        PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, tmpErrorLogger)
+
+                                        'SSDoc.Close()
+
+                                    Catch ex As Exception
+                                        'I think this quit working because:
+                                        ' -- The SSDoc New() call no longer throws an exception on read-only files.
+                                        ' -- If PropColumn.Formula is not found in SSDoc, there is no exception.  It returns Nothing.
+                                        'PropValue = ""
+                                        'tmpColor = Color.Gainsboro '<--- Properties not present ######## for some reason this doesn't work anymore
+                                        Dim i = 0
+                                    End Try
+
+                                    If IsNothing(PropValue) Then
+                                        PropValue = ""
+                                        tmpColor = Color.Gainsboro '<---------- Properties not present
                                     End If
+
+                                    If IsReadOnly Then tmpColor = Color.LightGray
+
                                 End If
 
-                                Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
-                                PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, tmpErrorLogger)
+                                LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
 
-                                SSDoc.Close()
-
-                            Catch ex As Exception
-                                'I think this quit working because:
-                                ' -- The SSDoc New() call no longer throws an exception on read-only files.
-                                ' -- If PropColumn.Formula is not found in SSDoc, there is no exception.  It returns Nothing.
-                                'PropValue = ""
-                                'tmpColor = Color.Gainsboro '<--- Properties not present ######## for some reason this doesn't work anymore
-                                Dim i = 0
-                            End Try
-
-                            If IsNothing(PropValue) Then
-                                PropValue = ""
-                                tmpColor = Color.Gainsboro '<---------- Properties not present
                             End If
 
-                            If IsReadOnly Then tmpColor = Color.LightGray
+                        Next
+                        Application.DoEvents()
 
-                        End If
+                    Catch ex As Exception
 
-                        LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
+                        For Each PropColumn In FMain.ListOfColumns
+                            LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
+                        Next
 
-                    End If
+                    End Try
 
-                Next
-                Application.DoEvents()
+                End If
 
-            Catch ex As Exception
+                If SSDoc IsNot Nothing Then SSDoc.Close()
 
-                For Each PropColumn In FMain.ListOfColumns
-                    LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
-                Next
-
-            End Try
+            End If
 
         Else
             'Eventually insert code to personalize Sources group
