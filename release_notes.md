@@ -33,7 +33,7 @@ Added an option to show the thumbnail of a selected file.  On the toolbar, click
   <img src="My%20Project/media/preview_window.png">
 </p>
 
-Added another option to display additional information about the selected file.  To view, hold down the shift key then click the eye icon.  (In case you're wondering, items shown with a dark background are exposed variables.)
+Added another option to display additional information about the selected file.  To view, hold down the shift key then click the eye icon.  (In case you're wondering, items with a dark background are exposed variables.)
 
 <p align="center">
   <img src="My%20Project/media/solid_edge_explorer.png">

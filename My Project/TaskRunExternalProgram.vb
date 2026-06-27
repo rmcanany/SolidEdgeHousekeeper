@@ -323,15 +323,50 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            Dim UOM As SolidEdgeFramework.UnitOfMeasure
-
-            For Each UOM In SEDoc.UnitsOfMeasure
+            For Each UOM As SolidEdgeFramework.UnitOfMeasure In SEDoc.UnitsOfMeasure
                 Select Case UOM.Type
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitAngle
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureAngleReadoutConstants.seAngleDegree
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitAngularAcceleration
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureAngularAccelerationReadoutConstants.sedegpersecondsq
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitAngularVelocity
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureAngularVelocityReadoutConstants.seDegreePerSecond
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitArea
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureAreaReadoutConstants.seAreaInchSquared
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitDensity
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureDensityReadoutConstants.seDensityPoundMassPerInchCubed
                     Case SolidEdgeFramework.UnitTypeConstants.igUnitDistance
-                        UOM.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthInch
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitEnergy
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureEnergyReadoutConstants.seEnergyinchespoundforce
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitEnergyDensity
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureEnergyDensityReadoutConstants.seinchespoundforceperinchcu
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitForce
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureForceReadoutConstants.seForcePoundForce
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitForcePerArea
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureForcePerAreaReadoutConstants.seForcePerAreaPoundForcePerSqInch
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitFrequency
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureFrequencyReadoutConstants.seFrequencyHertz
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitLinearAcceleration
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureLinearAccelerationReadoutConstants.seinchespersecondsq
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitLinearVelocity
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureLinearVelocityReadoutConstants.seInchPerSecond
                     Case SolidEdgeFramework.UnitTypeConstants.igUnitMass
-                        UOM.Units = SolidEdgeConstants.UnitOfMeasureMassReadoutConstants.seMassKilogram
-                        ' ...
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureMassReadoutConstants.seMassPoundMass
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitPower
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasurePowerReadoutConstants.seWatt
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitPressure
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasurePressureReadoutConstants.sePressurePoundForcePerSqInch
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitTemperature
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureTemperatureReadoutConstants.seFahrenheit
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitTemperatureGradient
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureTemperatureGradientReadoutConstants.seFahrenheitPerInch
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitThermalConductivity
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureThermalConductivityReadoutConstants.seBTUPerHourFootFahrenheit
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitTorque
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureTorqueReadoutConstants.seInchesPoundForce
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitVolume
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureVolumeReadoutConstants.seVolumeInchCubed
                 End Select
             Next
 

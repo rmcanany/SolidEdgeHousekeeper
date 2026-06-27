@@ -485,12 +485,26 @@ Public Class UtilsFileList
         Dim PopulatePropertyColumns As Boolean = True
 
         ' ###### User input for displaying file properties for a large number of files.
+
         If (FMain.ListOfColumns.Count > 2) And (FoundFiles.Count > 1000) Then
-            Dim s As String = $"Getting file properties on {FoundFiles.Count} files can take some time.  "
-            s = $"{s}Do you want to have them displayed anyway?"
-            Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
-            If Result = MsgBoxResult.No Then
-                PopulatePropertyColumns = False
+
+            Dim HasColumnsToProcess As Boolean = False
+            For Each PropColumn In Me.FMain.ListOfColumns
+                If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+                    If PropColumn.Visible Then
+                        HasColumnsToProcess = True
+                        Exit For
+                    End If
+                End If
+            Next
+
+            If HasColumnsToProcess Then
+                Dim s As String = $"Getting file properties on {FoundFiles.Count} files can take some time.  "
+                s = $"{s}Do you want to have them displayed anyway?"
+                Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
+                If Result = MsgBoxResult.No Then
+                    PopulatePropertyColumns = False
+                End If
             End If
         End If
 

@@ -679,36 +679,31 @@ Description of tab controls:
 
 - `Use current Solid Edge session (if any)`  
 Normally Housekeeper will not start if Solid Edge is open.  This is to protect you in case opening a file causes an exception in Solid Edge.  This can happen with a corrupted file and other situations.  If it does, the program closes and reopens Solid Edge, causing any unsaved changes to be lost.  Enabling this option bypasses that check.
-- `Warn me if file save is required`  
-This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It is enabled by default.  It's very annoying and you'll want to turn it off.  Just don't forget, I told you to make backups!
-- `Do not show processed files in Most Recently Used List`  
-This keeps from clogging up Solid Edge's file list with those processed in batch mode.
-- `Update list after this many files`  
-This controls the file list update frequency.  Setting it to `1` means update the list after each file is processed.  This is normally what you want.  However, you may want to increase it for Structured Storage mode, where updating the list is sometimes the most time-consuming part.
-- `File list font size`  
-This allows you to change size of the text on the file list.
-- `Group files by type`  
-This setting affects the file list.  When enabled (the default) the list groups assemblies, parts, etc. into their own collapsible sections.  Note, this does not affect processing order, which is currently fixed.  The program usually first processes Part files, then Sheetmetal, Assembly, and finally Draft.  The one exception is when using `Dependency Sort`.  In that case, the files are processed in strict dependency order.  There are other  options for sorting the list.  See the Sorting section above for details.
+- `Solid Edge fast launch (experimental)`  
+If Solid Edge is not running when file processing begins, Housekeeper starts it.  There are two ways of doing so.  One is simple for the programmer, but more work for the OS; the other is the opposite.  This option enables the latter.  It is presented as an option so you can toggle back to Housekeeper's original behavior in case it doesn't work for you.
+- `Check for newer version at startup`  
+Uses GitHub's API to get the most recent version and compare it to the running version.  Not everyone wants programs to access outside resources like that.  Feel free to disable it if desired; it won't hurt anything.
+- `Use locally installed PowerShell`  
+`Property filters`, `Expressions` and `Code snippets` all create text files that must be executed in a `VB.Net` interpreter.  Previously Housekeeper used PowerShell for that.  An internal `dotnet` library is now used by default.  This option switches execution back to the previous method.
+<br></br>
 - `Remember selected tasks between sessions`  
 When you close out of Housekeeper, it records the state of all settings, such as template locations, etc.  Normally that's what you want, but not necessarily for task selection.  This lets you decide how to handle that.
 - `Process tasks in background (no graphics)`  
 Launches Solid Edge without displaying its user interface.  It is meant to speed up processing.  Not all commands are compatible.  They trigger an error if this option is enabled.
-- `Property Filter -- Include Draft file model in search`  
-For details, see the [<ins>**Property Filter**</ins>](#property-filter) section
-- `Property Filter -- Include the Draft file itself in search`  
-For details, see the [<ins>**Property Filter**</ins>](#property-filter) section
-- `Check for newer version at startup`  
-Uses GitHub's API to get the most recent version and compare it to the running version.  Not everyone wants programs to access outside resources like that.  Feel free to disable it if desired; it won't hurt anything.
-- `Remind me if I need to update the file list`  
-This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
 - `Process drawing files as inactive`  
 This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once processing is complete.  However, in case of a program malfunction, it may not be able to do so.  You can manually reset the option by starting Solid Edge manually, then clicking the `Browse` button.  The checkbox is located toward the bottom of the form.  You have to select a draft file to make the checkbox active.
+<br></br>
+- `Remind me if I need to update the file list`  
+This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
+- `Group files by type`  
+This setting affects the file list.  When enabled (the default) the list groups assemblies, parts, etc. into their own collapsible sections.  Note, this does not affect processing order, which is currently fixed.  The program usually first processes Part files, then Sheetmetal, Assembly, and finally Draft.  The one exception is when using `Dependency Sort`.  In that case, the files are processed in strict dependency order.  There are other  options for sorting the list.  See the Sorting section above for details.
+- `Do not show processed files in Most Recently Used List`  
+This keeps from clogging up Solid Edge's file list with those processed in batch mode.
+- `Update list after this many files`  
+This controls the file list update frequency.  Setting it to `1` means update the list after each file is processed.  This is normally what you want.  However, you may want to increase it for Structured Storage mode, where updating the list is sometimes the most time-consuming part.
+<br></br>
 - `Debug mode`  
 Debug mode is meant to help with troubleshooting user's site-specific issues.  It is currently limited, but may be expanded as needed in the future.
-- `Use locally installed PowerShell`  
-`Property filters`, `Expressions` and `Code snippets` all create text files that must be executed in a `VB.Net` interpreter.  Previously Housekeeper used PowerShell for that.  An internal `dotnet` library is now used by default.  This option switches execution back to the previous method.
-- `Solid Edge fast launch (experimental)`  
-If Solid Edge is not running when file processing begins, Housekeeper starts it.  There are two ways of doing so.  One is simple for the programmer, but more work for the OS; the other is the opposite.  This option enables the latter.  It is presented as an option so you can toggle back to Housekeeper's original behavior in case it doesn't work for you.
 </details>
 
 </details>
