@@ -324,13 +324,15 @@ Public Class TaskRunExternalProgram
             ' ############## SNIPPET CODE START ##############
 
             Dim UOM As SolidEdgeFramework.UnitOfMeasure
-            Dim DistanceType = SolidEdgeConstants.UnitTypeConstants.igUnitDistance
-            Dim MMUnit = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter
 
             For Each UOM In SEDoc.UnitsOfMeasure
-                If UOM.Type = DistanceType Then
-                    UOM.Units = MMUnit
-                End If
+                Select Case UOM.Type
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitDistance
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter
+                    Case SolidEdgeFramework.UnitTypeConstants.igUnitMass
+                        UOM.Units = SolidEdgeConstants.UnitOfMeasureMassReadoutConstants.seMassKilogram
+                        ' ...
+                End Select
             Next
 
             SEDoc.Save()

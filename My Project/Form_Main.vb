@@ -31,7 +31,8 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ListViewFilesOutOfDate = value
-            If Me.TabControl1 IsNot Nothing And Not RunningStartup Then
+            If Me.IsHandleCreated And Not RunningStartup Then
+
                 If ListViewFilesOutOfDate Then
                     BT_Update.BackColor = Color.Orange
 
@@ -61,7 +62,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _TLAAutoIncludeTLF = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxTLAAutoIncludeTLF.Checked = value
             End If
         End Set
@@ -74,7 +75,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _WarnBareTLA = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxWarnBareTLA.Checked = value
             End If
         End Set
@@ -87,7 +88,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _TLAIncludePartCopies = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxTLAIncludePartCopies.Checked = value
             End If
         End Set
@@ -100,7 +101,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _TLAReportUnrelatedFiles = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxTLAReportUnrelatedFiles.Checked = value
             End If
         End Set
@@ -113,7 +114,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _TLATopDown = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonTLATopDown.Checked = value
             End If
         End Set
@@ -126,7 +127,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _TLABottomUp = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonTLABottomUp.Checked = value
             End If
         End Set
@@ -139,7 +140,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _DraftAndModelSameName = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxDraftAndModelSameName.Checked = value
             End If
         End Set
@@ -152,7 +153,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _FastSearchScopeFilename = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxFastSearchScopeFilename.Text = value
             End If
         End Set
@@ -168,7 +169,7 @@ Public Class Form_Main
 
             Dim UP As New UtilsPreferences
             Me.LinkManagementOrder = UP.GetLinkManagementOrder() ' Defaluts to {"CONTAINER", "RELATIVE", "ABSOLUTE"}
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxLinkManagementFilename.Text = value
             End If
         End Set
@@ -184,7 +185,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ProcessAsAvailable = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxProcessAsAvailable.Checked = value
 
                 Dim StatusChangeRadioButtons As New List(Of RadioButton)
@@ -210,7 +211,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ProcessAsAvailableRevert = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonProcessAsAvailableRevert.Checked = value
             End If
         End Set
@@ -223,7 +224,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ProcessAsAvailableChange = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonProcessAsAvailableChange.Checked = value
             End If
         End Set
@@ -236,7 +237,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _StatusAtoX = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Select Case value
                     Case "Available"
                         RadioButtonStatusAtoA.Checked = True
@@ -262,7 +263,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _StatusBtoX = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Select Case value
                     Case "Available"
                         RadioButtonStatusBtoA.Checked = True
@@ -288,7 +289,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _StatusIRtoX = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Select Case value
                     Case "Available"
                         RadioButtonStatusIRtoA.Checked = True
@@ -314,7 +315,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _StatusIWtoX = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Select Case value
                     Case "Available"
                         RadioButtonStatusIWtoA.Checked = True
@@ -340,7 +341,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _StatusOtoX = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Select Case value
                     Case "Available"
                         RadioButtonStatusOtoA.Checked = True
@@ -366,7 +367,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _StatusRtoX = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Select Case value
                     Case "Available"
                         RadioButtonStatusRtoA.Checked = True
@@ -395,7 +396,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _SortNone = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonSortNone.Checked = value
             End If
         End Set
@@ -408,7 +409,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _KeepUnsortedDuplicates = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxKeepUnsortedDuplicates.Checked = value
             End If
         End Set
@@ -421,7 +422,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _SortAlphabetical = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonSortAlphabetical.Checked = value
             End If
         End Set
@@ -434,7 +435,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _SortDependency = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonSortDependency.Checked = value
                 CheckBoxSortIncludeNoDependencies.Enabled = value
             End If
@@ -448,7 +449,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _SortIncludeNoDependencies = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxSortIncludeNoDependencies.Checked = value
             End If
         End Set
@@ -461,7 +462,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _SortRandomSample = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 RadioButtonSortRandomSample.Checked = value
                 TextBoxSortRandomSampleFraction.Enabled = value
                 LabelSortRandomSampleFraction.Enabled = value
@@ -476,7 +477,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _SortRandomSampleFraction = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxSortRandomSampleFraction.Text = value
             End If
         End Set
@@ -492,7 +493,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _AssemblyTemplate = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxAssemblyTemplate.Text = value
             End If
         End Set
@@ -505,7 +506,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _PartTemplate = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxPartTemplate.Text = value
             End If
         End Set
@@ -518,7 +519,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _SheetmetalTemplate = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxSheetmetalTemplate.Text = value
             End If
         End Set
@@ -531,7 +532,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _DraftTemplate = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxDraftTemplate.Text = value
             End If
         End Set
@@ -544,7 +545,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _MaterialTable = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxMaterialTable.Text = value
             End If
         End Set
@@ -562,7 +563,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _ServerConnectionString = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 TextBoxServerConnectionString.Text = value
             End If
         End Set
@@ -575,7 +576,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _ServerQuery = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 If FastColoredServerQuery.Text <> value Then FastColoredServerQuery.Text = value  '<---- This may throw an exception due to a weird initialization of the component in Form_Main.Designer.vb
             End If
         End Set
@@ -592,24 +593,24 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _UseCurrentSession = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxUseCurrentSession.Checked = value
             End If
         End Set
     End Property
 
-    Private _WarnSave As Boolean
-    Public Property WarnSave As Boolean
-        Get
-            Return _WarnSave
-        End Get
-        Set(value As Boolean)
-            _WarnSave = value
-            If Me.TabControl1 IsNot Nothing Then
-                CheckBoxWarnSave.Checked = value
-            End If
-        End Set
-    End Property
+    'Private _WarnSave As Boolean
+    'Public Property WarnSave As Boolean
+    '    Get
+    '        Return _WarnSave
+    '    End Get
+    '    Set(value As Boolean)
+    '        _WarnSave = value
+    '        If Me.IsHandleCreated Then
+    '            CheckBoxWarnSave.Checked = value
+    '        End If
+    '    End Set
+    'End Property
 
     Private _NoUpdateMRU As Boolean
     Public Property NoUpdateMRU As Boolean
@@ -618,7 +619,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _NoUpdateMRU = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxNoUpdateMRU.Checked = value
             End If
         End Set
@@ -631,7 +632,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _ListViewUpdateFrequency = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Try
                     Dim i = CInt(value)
                     TextBoxListViewUpdateFrequency.Text = value
@@ -642,18 +643,18 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _FileListFontSize As String
-    Public Property FileListFontSize As String
-        Get
-            Return _FileListFontSize
-        End Get
-        Set(value As String)
-            _FileListFontSize = value
-            If Me.TabControl1 IsNot Nothing Then
-                TextBoxFileListFontSize.Text = value
-            End If
-        End Set
-    End Property
+    'Private _FileListFontSize As String
+    'Public Property FileListFontSize As String
+    '    Get
+    '        Return _FileListFontSize
+    '    End Get
+    '    Set(value As String)
+    '        _FileListFontSize = value
+    '        If Me.IsHandleCreated Then
+    '            TextBoxFileListFontSize.Text = value
+    '        End If
+    '    End Set
+    'End Property
 
     Private _GroupFiles As Boolean
     Public Property GroupFiles As Boolean
@@ -662,7 +663,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _GroupFiles = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxGroupFiles.Checked = value
             End If
         End Set
@@ -675,7 +676,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _RememberTasks = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxRememberTasks.Checked = value
             End If
         End Set
@@ -688,37 +689,39 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _RunInBackground = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxRunInBackground.Checked = value
             End If
         End Set
     End Property
 
-    Private _PropertyFilterIncludeDraftModel As Boolean
+    'Private _PropertyFilterIncludeDraftModel As Boolean
+    'Public Property PropertyFilterIncludeDraftModel As Boolean
+    '    Get
+    '        Return _PropertyFilterIncludeDraftModel
+    '    End Get
+    '    Set(value As Boolean)
+    '        _PropertyFilterIncludeDraftModel = value
+    '        If Me.IsHandleCreated Then
+    '            CheckBoxPropertyFilterIncludeDraftModel.Checked = value
+    '        End If
+    '    End Set
+    'End Property
     Public Property PropertyFilterIncludeDraftModel As Boolean
-        Get
-            Return _PropertyFilterIncludeDraftModel
-        End Get
-        Set(value As Boolean)
-            _PropertyFilterIncludeDraftModel = value
-            If Me.TabControl1 IsNot Nothing Then
-                CheckBoxPropertyFilterIncludeDraftModel.Checked = value
-            End If
-        End Set
-    End Property
 
-    Private _PropertyFilterIncludeDraftItself As Boolean
+    'Private _PropertyFilterIncludeDraftItself As Boolean
+    'Public Property PropertyFilterIncludeDraftItself As Boolean
+    '    Get
+    '        Return _PropertyFilterIncludeDraftItself
+    '    End Get
+    '    Set(value As Boolean)
+    '        _PropertyFilterIncludeDraftItself = value
+    '        If Me.IsHandleCreated Then
+    '            CheckBoxPropertyFilterIncludeDraftItself.Checked = value
+    '        End If
+    '    End Set
+    'End Property
     Public Property PropertyFilterIncludeDraftItself As Boolean
-        Get
-            Return _PropertyFilterIncludeDraftItself
-        End Get
-        Set(value As Boolean)
-            _PropertyFilterIncludeDraftItself = value
-            If Me.TabControl1 IsNot Nothing Then
-                CheckBoxPropertyFilterIncludeDraftItself.Checked = value
-            End If
-        End Set
-    End Property
 
     Private _CheckForNewerVersion As Boolean
     Public Property CheckForNewerVersion As Boolean
@@ -727,7 +730,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _CheckForNewerVersion = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxCheckForNewerVersion.Checked = value
             End If
         End Set
@@ -740,7 +743,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _RemindFilelistUpdate = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxRemindFilelistUpdate.Checked = value
             End If
         End Set
@@ -753,24 +756,25 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ProcessDraftsInactive = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxProcessDraftsInactive.Checked = value
             End If
         End Set
     End Property
 
-    Private _ExpressionEditorLanguage As String
+    'Private _ExpressionEditorLanguage As String
+    'Public Property ExpressionEditorLanguage As String
+    '    Get
+    '        Return _ExpressionEditorLanguage
+    '    End Get
+    '    Set(value As String)
+    '        _ExpressionEditorLanguage = value
+    '        If Me.IsHandleCreated Then
+    '            ComboBoxExpressionEditorLanguage.Text = value
+    '        End If
+    '    End Set
+    'End Property
     Public Property ExpressionEditorLanguage As String
-        Get
-            Return _ExpressionEditorLanguage
-        End Get
-        Set(value As String)
-            _ExpressionEditorLanguage = value
-            If Me.TabControl1 IsNot Nothing Then
-                ComboBoxExpressionEditorLanguage.Text = value
-            End If
-        End Set
-    End Property
 
     Private _DebugMode As Boolean
     Public Property DebugMode As Boolean
@@ -779,7 +783,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _DebugMode = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxDebugMode.Checked = value
             End If
         End Set
@@ -792,7 +796,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _UseLocalPowershell = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxUseLocalPowershell.Checked = value
             End If
         End Set
@@ -805,7 +809,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _SEFastLaunch = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxSEFastLaunch.Checked = value
             End If
         End Set
@@ -823,7 +827,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _EnablePropertyFilter = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxEnablePropertyFilter.Checked = value
                 new_ButtonPropertyFilter.Enabled = value
             End If
@@ -837,7 +841,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _EnableFileWildcard = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 CheckBoxEnableFileWildcard.Checked = value
                 ComboBoxFileWildcard.Enabled = value
             End If
@@ -851,7 +855,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _FileWildcard = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 ComboBoxFileWildcard.Text = value
             End If
         End Set
@@ -864,7 +868,7 @@ Public Class Form_Main
         End Get
         Set(value As List(Of String))
             _FileWildcardList = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 For Each s As String In _FileWildcardList
                     If Not ComboBoxFileWildcard.Items.Contains(s) Then
                         ComboBoxFileWildcard.Items.Add(s)
@@ -881,7 +885,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _FilterAsm = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 new_CheckBoxFilterAsm.Checked = value
             End If
         End Set
@@ -894,7 +898,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _FilterPar = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 new_CheckBoxFilterPar.Checked = value
             End If
         End Set
@@ -907,7 +911,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _FilterPsm = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 new_CheckBoxFilterPsm.Checked = value
             End If
         End Set
@@ -920,7 +924,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _FilterDft = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 new_CheckBoxFilterDft.Checked = value
             End If
         End Set
@@ -939,7 +943,7 @@ Public Class Form_Main
         End Get
         Set(value As List(Of PropertyColumn))
             _ListOfColumns = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 For Each PropColumn As PropertyColumn In _ListOfColumns
                     If Not CLB_Properties.Items.Contains(PropColumn.Name) Then
                         CLB_Properties.Items.Add(PropColumn.Name)
@@ -973,7 +977,7 @@ Public Class Form_Main
         End Get
         Set(value As List(Of String))
             _ListOfColumnsJSON = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 Dim tmpListOfColumns As New List(Of PropertyColumn)
                 For Each s As String In _ListOfColumnsJSON
                     Dim tmpPropertyColumn As New PropertyColumn
@@ -996,7 +1000,7 @@ Public Class Form_Main
         End Get
         Set(value As HCPresets)
             _Presets = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
 
                 Dim TextOld = ComboBoxPresetName.Text
 
@@ -1020,7 +1024,7 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _ActivePreset = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 ComboBoxPresetName.Text = value
             End If
         End Set
@@ -1054,7 +1058,7 @@ Public Class Form_Main
         End Get
         Set(value As Boolean)
             _ShowPreview = value
-            If Me.TabControl1 IsNot Nothing Then
+            If Me.IsHandleCreated Then
                 ButtonShowPreview.Checked = _ShowPreview
                 PreviewBox.Visible = _ShowPreview
                 If _ShowPreview Then UpdatePreview()
@@ -1644,10 +1648,14 @@ Public Class Form_Main
             Dim FPF As New FormPropertyFilter
 
             FPF.PropertyFilters = Me.PropertyFilters
+            FPF.PropertyFilterIncludeDraftModel = Me.PropertyFilterIncludeDraftModel
+            FPF.PropertyFilterIncludeDraftItself = Me.PropertyFilterIncludeDraftItself
             FPF.ShowDialog()
 
             If FPF.DialogResult = DialogResult.OK Then
                 Me.PropertyFilters = FPF.PropertyFilters
+                Me.PropertyFilterIncludeDraftModel = FPF.PropertyFilterIncludeDraftModel
+                Me.PropertyFilterIncludeDraftItself = FPF.PropertyFilterIncludeDraftItself
                 ListViewFilesOutOfDate = True
             End If
         Else
@@ -2555,7 +2563,7 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFileListFontSize.KeyDown
+    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
             Me.ActiveControl = Nothing
@@ -2565,13 +2573,13 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFileListFontSize.Leave
+    'Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs)
 
-        If Not IsNumeric(TextBoxFileListFontSize.Text) Then TextBoxFileListFontSize.Text = "9"
-        If TextBoxFileListFontSize.Text = "0" Then TextBoxFileListFontSize.Text = "9"
-        ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFileListFontSize.Text), FontStyle.Regular)
+    '    If Not IsNumeric(TextBoxFileListFontSize.Text) Then TextBoxFileListFontSize.Text = "9"
+    '    If TextBoxFileListFontSize.Text = "0" Then TextBoxFileListFontSize.Text = "9"
+    '    ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFileListFontSize.Text), FontStyle.Regular)
 
-    End Sub
+    'End Sub
 
 
     Private Sub BT_ProcessSelected_Click(sender As Object, e As EventArgs) Handles BT_ProcessSelected.Click
@@ -3468,23 +3476,23 @@ Public Class Form_Main
         Me.SortRandomSampleFraction = TextBoxSortRandomSampleFraction.Text
     End Sub
 
-    Private Sub CheckBoxWarnSave_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnSave.CheckedChanged
-        Me.WarnSave = CheckBoxWarnSave.Checked
+    'Private Sub CheckBoxWarnSave_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnSave.CheckedChanged
+    '    Me.WarnSave = CheckBoxWarnSave.Checked
 
-    End Sub
+    'End Sub
 
-    Private Sub TextBoxFileListFontSize_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFileListFontSize.TextChanged
-        Me.FileListFontSize = TextBoxFileListFontSize.Text
-    End Sub
+    'Private Sub TextBoxFileListFontSize_TextChanged(sender As Object, e As EventArgs)
+    '    Me.FileListFontSize = TextBoxFileListFontSize.Text
+    'End Sub
 
-    Private Sub CheckBoxPropertyFilterIncludeDraftModel_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPropertyFilterIncludeDraftModel.CheckedChanged
-        Me.PropertyFilterIncludeDraftModel = CheckBoxPropertyFilterIncludeDraftModel.Checked
+    'Private Sub CheckBoxPropertyFilterIncludeDraftModel_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPropertyFilterIncludeDraftModel.CheckedChanged
+    '    Me.PropertyFilterIncludeDraftModel = CheckBoxPropertyFilterIncludeDraftModel.Checked
 
-    End Sub
+    'End Sub
 
-    Private Sub CheckBoxPropertyFilterIncludeDraftItself_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPropertyFilterIncludeDraftItself.CheckedChanged
-        Me.PropertyFilterIncludeDraftItself = CheckBoxPropertyFilterIncludeDraftItself.Checked
-    End Sub
+    'Private Sub CheckBoxPropertyFilterIncludeDraftItself_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPropertyFilterIncludeDraftItself.CheckedChanged
+    '    Me.PropertyFilterIncludeDraftItself = CheckBoxPropertyFilterIncludeDraftItself.Checked
+    'End Sub
 
     Private Sub ComboBoxFileWildcard_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.LostFocus
         Me.FileWildcard = ComboBoxFileWildcard.Text
@@ -4168,9 +4176,9 @@ Public Class Form_Main
         Me.ProcessDraftsInactive = CheckBoxProcessDraftsInactive.Checked
     End Sub
 
-    Private Sub ComboBoxExpressionEditorLanguage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxExpressionEditorLanguage.SelectedIndexChanged
-        Me.ExpressionEditorLanguage = ComboBoxExpressionEditorLanguage.Text
-    End Sub
+    'Private Sub ComboBoxExpressionEditorLanguage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxExpressionEditorLanguage.SelectedIndexChanged
+    '    Me.ExpressionEditorLanguage = ComboBoxExpressionEditorLanguage.Text
+    'End Sub
 
     Private Sub BT_Copy_Click(sender As Object, e As EventArgs) Handles BT_Copy.Click
 

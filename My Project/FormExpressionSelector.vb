@@ -16,6 +16,8 @@ Public Class FormExpressionSelector
         Next
         ComboBoxExpressionNames.Text = ComboBoxExpressionNames.Items(0).ToString
 
+        ComboBoxExpressionNames.DroppedDown = True
+
     End Sub
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click

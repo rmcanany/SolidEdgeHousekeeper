@@ -33,6 +33,9 @@ Public Class FormPropertyFilter
         End Set
     End Property
 
+    Public Property PropertyFilterIncludeDraftModel As Boolean
+    Public Property PropertyFilterIncludeDraftItself As Boolean
+
 
     Public Sub New()
 
@@ -81,6 +84,10 @@ Public Class FormPropertyFilter
         Dim s As String = ""
         Dim indent As String = "    "
         Dim UtilsCommon = New UtilsCommon
+
+        If Not (Me.PropertyFilterIncludeDraftModel Or Me.PropertyFilterIncludeDraftItself) Then
+            s = $"{s}{indent}Select how to search Draft files (on the Options dialog){vbCrLf}"
+        End If
 
         For Each UC As UCPropertyFilter In UCList
 
@@ -661,4 +668,17 @@ Public Class FormPropertyFilter
 
     End Sub
 
+    Private Sub ButtonOptions_Click(sender As Object, e As EventArgs) Handles ButtonOptions.Click
+        Dim FPFO As New FormPropertyFilterOptions
+
+        FPFO.PropertyFilterIncludeDraftModel = Me.PropertyFilterIncludeDraftModel
+        FPFO.PropertyFilterIncludeDraftItself = Me.PropertyFilterIncludeDraftItself
+
+        FPFO.ShowDialog()
+
+        If FPFO.DialogResult = DialogResult.OK Then
+            Me.PropertyFilterIncludeDraftModel = FPFO.PropertyFilterIncludeDraftModel
+            Me.PropertyFilterIncludeDraftItself = FPFO.PropertyFilterIncludeDraftItself
+        End If
+    End Sub
 End Class

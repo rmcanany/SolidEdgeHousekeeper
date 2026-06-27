@@ -42,7 +42,8 @@ Public Class UtilsPreferences
         Dim PropType As String
 
         Dim SkipProps As New List(Of String)
-        SkipProps.AddRange({"version", "previewversion", "stopprocess", "listviewfilesoutofdate", "tasklist", "linkmanagementorder"})
+        SkipProps.AddRange({"version", "previewversion", "stopprocess", "tasklist", "linkmanagementorder"})
+        SkipProps.AddRange({"listviewfilesoutofdate"})
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
         SkipProps.AddRange({"cliactive", "clipresetname", "clifilelistname"})
         SkipProps.AddRange({"hcdebuglogger", "savedexpressions", "usea"})

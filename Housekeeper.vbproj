@@ -292,6 +292,12 @@
     <Compile Include="My Project\HCPresets.vb" />
     <Compile Include="My Project\IDispatch.vb" />
     <Compile Include="My Project\OleMessageFilter.vb" />
+    <Compile Include="My Project\FormPropertyFilterOptions.Designer.vb">
+      <DependentUpon>FormPropertyFilterOptions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormPropertyFilterOptions.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\TaskCheckFilename.vb" />
     <Compile Include="My Project\TaskSetDocumentStatus.vb" />
     <Compile Include="My Project\TaskUpdateBlocks.vb" />
@@ -517,6 +523,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormSolidEdgeExplorer.resx">
       <DependentUpon>FormSolidEdgeExplorer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormPropertyFilterOptions.resx">
+      <DependentUpon>FormPropertyFilterOptions.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

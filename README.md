@@ -370,9 +370,9 @@ Filters are a way to refine the list of files to process.  You can filter on fil
 
 The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page) section of this Readme.
 
-To configure a property filter, click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
+To configure a property filter, on the **Home Tab** click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
 
-The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models the drawing contains for the specified properties. Set the option on the [<ins>**Configuration Tab -- General Page**</ins>](#general-page). One situation where you might want to disable this option is when searching for file Status. See [<ins>**Document Status Options**</ins>](#document-status-options) below.
+The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models the drawing contains for the specified properties. Click the Options button (![Configure](Resources/Support_16.png)) on the toolbar shown below to set the Draft file search options.  One situation where you might want to disable this option is when searching for file Status. See [<ins>**Document Status Options**</ins>](#document-status-options) below.
 
 This is a powerful tool with a lot of options. These are detailed below.
 

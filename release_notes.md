@@ -137,6 +137,7 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
 - Changed the formatting of Task sub-options to better show to which main option they apply.
 - Added missing help buttons to several dialogs and toolbars.
+- Rearranged the **Configuration Tab -- General Page.**  Moved Property Filter options to its dialog toolbar.
 - Added logging of system-generated error messages where applicable.  It is meant to aid in troubleshooting.
 
 

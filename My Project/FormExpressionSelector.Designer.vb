@@ -41,11 +41,12 @@ Partial Class FormExpressionSelector
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.ExTableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
         Me.ExTableLayoutPanel1.RowCount = 2
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(301, 155)
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(338, 179)
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
@@ -56,35 +57,40 @@ Partial Class FormExpressionSelector
         Me.ExTableLayoutPanel1.SetColumnSpan(Me.ComboBoxExpressionNames, 3)
         Me.ComboBoxExpressionNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxExpressionNames.FormattingEnabled = True
-        Me.ComboBoxExpressionNames.Location = New System.Drawing.Point(3, 3)
+        Me.ComboBoxExpressionNames.Location = New System.Drawing.Point(4, 3)
+        Me.ComboBoxExpressionNames.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ComboBoxExpressionNames.Name = "ComboBoxExpressionNames"
-        Me.ComboBoxExpressionNames.Size = New System.Drawing.Size(295, 21)
+        Me.ComboBoxExpressionNames.Size = New System.Drawing.Size(330, 23)
         Me.ComboBoxExpressionNames.TabIndex = 0
         '
         'ButtonOK
         '
-        Me.ButtonOK.Location = New System.Drawing.Point(142, 129)
+        Me.ButtonOK.Location = New System.Drawing.Point(150, 149)
+        Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonOK.Name = "ButtonOK"
-        Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonOK.Size = New System.Drawing.Size(88, 27)
         Me.ButtonOK.TabIndex = 1
         Me.ButtonOK.Text = "OK"
         Me.ButtonOK.UseVisualStyleBackColor = True
         '
         'ButtonCancel
         '
-        Me.ButtonCancel.Location = New System.Drawing.Point(223, 129)
+        Me.ButtonCancel.Location = New System.Drawing.Point(246, 149)
+        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonCancel.Size = New System.Drawing.Size(88, 27)
         Me.ButtonCancel.TabIndex = 2
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
         '
         'FormExpressionSelector
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(301, 155)
+        Me.ClientSize = New System.Drawing.Size(338, 179)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormExpressionSelector"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Expression Selector"

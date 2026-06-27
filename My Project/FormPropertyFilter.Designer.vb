@@ -56,6 +56,7 @@ Partial Class FormPropertyFilter
         Me.TextBoxFormula = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.ButtonHelp2 = New System.Windows.Forms.Button()
+        Me.ButtonOptions = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
@@ -87,7 +88,7 @@ Partial Class FormPropertyFilter
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel1, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripSeparator1, Me.ToolStripLabel2, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ButtonHelp})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel1, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripSeparator1, Me.ToolStripLabel2, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ButtonOptions, Me.ButtonHelp})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -385,6 +386,16 @@ Partial Class FormPropertyFilter
         Me.ButtonHelp2.Text = "Help"
         Me.ButtonHelp2.UseVisualStyleBackColor = True
         '
+        'ButtonOptions
+        '
+        Me.ButtonOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonOptions.Image = Global.Housekeeper.My.Resources.Resources.config
+        Me.ButtonOptions.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonOptions.Name = "ButtonOptions"
+        Me.ButtonOptions.Size = New System.Drawing.Size(23, 22)
+        Me.ButtonOptions.Text = "ToolStripButton1"
+        Me.ButtonOptions.ToolTipText = "Options"
+        '
         'FormPropertyFilter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -450,4 +461,5 @@ Partial Class FormPropertyFilter
     Friend WithEvents ButtonShowAllProps As ToolStripButton
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents ButtonHelp2 As Button
+    Friend WithEvents ButtonOptions As ToolStripButton
 End Class
