@@ -886,7 +886,8 @@ Public Class Form_Main
         Set(value As Boolean)
             _FilterAsm = value
             If Me.IsHandleCreated Then
-                new_CheckBoxFilterAsm.Checked = value
+                'new_CheckBoxFilterAsm.Checked = value
+                CheckboxFilterAsm.Checked = value
             End If
         End Set
     End Property
@@ -899,7 +900,8 @@ Public Class Form_Main
         Set(value As Boolean)
             _FilterPar = value
             If Me.IsHandleCreated Then
-                new_CheckBoxFilterPar.Checked = value
+                'new_CheckBoxFilterPar.Checked = value
+                CheckboxFilterPar.Checked = value
             End If
         End Set
     End Property
@@ -912,7 +914,8 @@ Public Class Form_Main
         Set(value As Boolean)
             _FilterPsm = value
             If Me.IsHandleCreated Then
-                new_CheckBoxFilterPsm.Checked = value
+                'new_CheckBoxFilterPsm.Checked = value
+                CheckboxFilterPsm.Checked = value
             End If
         End Set
     End Property
@@ -925,7 +928,8 @@ Public Class Form_Main
         Set(value As Boolean)
             _FilterDft = value
             If Me.IsHandleCreated Then
-                new_CheckBoxFilterDft.Checked = value
+                'new_CheckBoxFilterDft.Checked = value
+                CheckboxFilterDft.Checked = value
             End If
         End Set
     End Property
@@ -1715,23 +1719,23 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
-        Me.FilterAsm = new_CheckBoxFilterAsm.Checked
+    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckboxFilterAsm.CheckedChanged
+        Me.FilterAsm = CheckboxFilterAsm.Checked
         ListViewFilesOutOfDate = True
     End Sub
 
-    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
-        Me.FilterPar = new_CheckBoxFilterPar.Checked
+    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles CheckboxFilterPar.CheckedChanged
+        Me.FilterPar = CheckboxFilterPar.Checked
         ListViewFilesOutOfDate = True
     End Sub
 
-    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
-        Me.FilterPsm = new_CheckBoxFilterPsm.Checked
+    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckboxFilterPsm.CheckedChanged
+        Me.FilterPsm = CheckboxFilterPsm.Checked
         ListViewFilesOutOfDate = True
     End Sub
 
-    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
-        Me.FilterDft = new_CheckBoxFilterDft.Checked
+    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckboxFilterDft.CheckedChanged
+        Me.FilterDft = CheckboxFilterDft.Checked
         ListViewFilesOutOfDate = True
     End Sub
 
@@ -2244,7 +2248,8 @@ Public Class Form_Main
         Else
             ElapsedTimeText = $"{(ElapsedTime / 60):0.0} hr."
         End If
-        Me.TextBoxStatus.Text = $"Updated properties in {ListViewFiles.Items.Count} files in {ElapsedTimeText}"
+        'Me.TextBoxStatus.Text = $"Updated properties in {ListViewFiles.Items.Count} files in {ElapsedTimeText}"
+        Me.TextBoxStatus.Text = $"Found {ListViewFiles.Items.Count} files in {ElapsedTimeText}"
 
     End Sub
 
@@ -4332,6 +4337,13 @@ Public Class Form_Main
         Diagnostics.Process.Start(HelpURL)
     End Sub
 
+    Private Sub ButtonFilterHelp_Click(sender As Object, e As EventArgs) Handles ButtonFilterHelp.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "filtering"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        Diagnostics.Process.Start(HelpURL)
+    End Sub
 End Class
 
 
