@@ -352,13 +352,12 @@ If you don't need to worry about document Status for your current task, it's not
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-filter-16.png"><img src="My%20Project/media/spacer.png">FILTERING</h2></summary>
 
-Filters are a way to refine the list of files to process.  You can filter on file properties, or filenames (with a wildcard search). They can be used alone or in combination.
+Filters are a way to refine the list of files to process.  You can filter on file types, properties, or names (with a wildcard search). They can be used alone or in combination.
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">File Type Filter</h3></summary>
 
-You can filter by file type.
 - Click ![Assembly](Resources/ST9%20-%20asm.png) to toggle assembly file selection
 - Click ![Part](Resources/ST9%20-%20par.png)  to toggle part file selection
 - Click ![Sheet Metal](Resources/ST9%20-%20psm.png)  to toggle sheet metal file selection
