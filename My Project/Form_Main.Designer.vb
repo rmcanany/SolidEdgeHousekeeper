@@ -133,6 +133,10 @@ Partial Class Form_Main
         Me.BT_RemoveFromList = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator16 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator17 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExTableLayoutPanel3 = New Housekeeper.ExTableLayoutPanel()
         Me.ListViewSources = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -267,7 +271,6 @@ Partial Class Form_Main
         Me.TextBoxListViewUpdateFrequency = New System.Windows.Forms.TextBox()
         Me.LabelListViewUpdateFrequency = New System.Windows.Forms.Label()
         Me.CheckBoxDebugMode = New System.Windows.Forms.CheckBox()
-        Me.ToolStripSeparator16 = New System.Windows.Forms.ToolStripSeparator()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -487,7 +490,7 @@ Partial Class Form_Main
         Me.ToolStrip_Filter.BackColor = System.Drawing.Color.White
         Me.ToolStrip_Filter.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ToolStrip_Filter.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip_Filter.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel2, Me.CheckboxFilterAsm, Me.CheckboxFilterPar, Me.CheckboxFilterPsm, Me.CheckboxFilterDft, Me.ToolStripSeparator7, Me.CheckBoxEnablePropertyFilter, Me.new_ButtonPropertyFilter, Me.ToolStripSeparator6, Me.CheckBoxEnableFileWildcard, Me.ComboBoxFileWildcard, Me.new_ButtonFileSearchDelete, Me.ButtonFilterHelp})
+        Me.ToolStrip_Filter.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel2, Me.CheckboxFilterAsm, Me.CheckboxFilterPar, Me.CheckboxFilterPsm, Me.CheckboxFilterDft, Me.ToolStripSeparator7, Me.CheckBoxEnablePropertyFilter, Me.new_ButtonPropertyFilter, Me.ToolStripSeparator6, Me.CheckBoxEnableFileWildcard, Me.ComboBoxFileWildcard, Me.new_ButtonFileSearchDelete, Me.ToolStripSeparator19, Me.ButtonFilterHelp})
         Me.ToolStrip_Filter.Location = New System.Drawing.Point(2, 594)
         Me.ToolStrip_Filter.Name = "ToolStrip_Filter"
         Me.ToolStrip_Filter.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -498,8 +501,8 @@ Partial Class Form_Main
         'ToolStripLabel2
         '
         Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(56, 22)
-        Me.ToolStripLabel2.Text = "File Type:"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(51, 22)
+        Me.ToolStripLabel2.Text = "File type"
         '
         'CheckboxFilterAsm
         '
@@ -510,6 +513,7 @@ Partial Class Form_Main
         Me.CheckboxFilterAsm.Name = "CheckboxFilterAsm"
         Me.CheckboxFilterAsm.Size = New System.Drawing.Size(23, 22)
         Me.CheckboxFilterAsm.Text = "ToolStripButton2"
+        Me.CheckboxFilterAsm.ToolTipText = "    Assembly"
         '
         'CheckboxFilterPar
         '
@@ -520,6 +524,7 @@ Partial Class Form_Main
         Me.CheckboxFilterPar.Name = "CheckboxFilterPar"
         Me.CheckboxFilterPar.Size = New System.Drawing.Size(23, 22)
         Me.CheckboxFilterPar.Text = "ToolStripButton3"
+        Me.CheckboxFilterPar.ToolTipText = "    Part"
         '
         'CheckboxFilterPsm
         '
@@ -530,6 +535,7 @@ Partial Class Form_Main
         Me.CheckboxFilterPsm.Name = "CheckboxFilterPsm"
         Me.CheckboxFilterPsm.Size = New System.Drawing.Size(23, 22)
         Me.CheckboxFilterPsm.Text = "ToolStripButton4"
+        Me.CheckboxFilterPsm.ToolTipText = "    Sheetmetal"
         '
         'CheckboxFilterDft
         '
@@ -540,6 +546,7 @@ Partial Class Form_Main
         Me.CheckboxFilterDft.Name = "CheckboxFilterDft"
         Me.CheckboxFilterDft.Size = New System.Drawing.Size(23, 22)
         Me.CheckboxFilterDft.Text = "ToolStripButton5"
+        Me.CheckboxFilterDft.ToolTipText = "    Draft"
         '
         'ToolStripSeparator7
         '
@@ -563,6 +570,7 @@ Partial Class Form_Main
         Me.new_ButtonPropertyFilter.Name = "new_ButtonPropertyFilter"
         Me.new_ButtonPropertyFilter.Size = New System.Drawing.Size(23, 22)
         Me.new_ButtonPropertyFilter.Text = "Configure"
+        Me.new_ButtonPropertyFilter.ToolTipText = "    Configure property filter"
         '
         'ToolStripSeparator6
         '
@@ -592,6 +600,7 @@ Partial Class Form_Main
         Me.new_ButtonFileSearchDelete.Name = "new_ButtonFileSearchDelete"
         Me.new_ButtonFileSearchDelete.Size = New System.Drawing.Size(23, 22)
         Me.new_ButtonFileSearchDelete.Text = "Clear"
+        Me.new_ButtonFileSearchDelete.ToolTipText = "    Clear"
         '
         'ButtonFilterHelp
         '
@@ -602,6 +611,7 @@ Partial Class Form_Main
         Me.ButtonFilterHelp.Name = "ButtonFilterHelp"
         Me.ButtonFilterHelp.Size = New System.Drawing.Size(23, 22)
         Me.ButtonFilterHelp.Text = "ToolStripButton6"
+        Me.ButtonFilterHelp.ToolTipText = "    Help"
         '
         'ToolStrip_List
         '
@@ -1104,7 +1114,7 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.SetColumnSpan(Me.ToolStripPresets, 4)
         Me.ToolStripPresets.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ToolStripPresets.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete, Me.ButtonPresetHelp, Me.ButtonPresetsOptions})
+        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete, Me.ToolStripSeparator17, Me.ButtonPresetsOptions, Me.ToolStripSeparator18, Me.ButtonPresetHelp})
         Me.ToolStripPresets.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripPresets.Name = "ToolStripPresets"
         Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
@@ -1164,6 +1174,7 @@ Partial Class Form_Main
         '
         'ButtonPresetHelp
         '
+        Me.ButtonPresetHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ButtonPresetHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ButtonPresetHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.ButtonPresetHelp.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -1173,7 +1184,6 @@ Partial Class Form_Main
         '
         'ButtonPresetsOptions
         '
-        Me.ButtonPresetsOptions.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ButtonPresetsOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ButtonPresetsOptions.Image = Global.Housekeeper.My.Resources.Resources.config
         Me.ButtonPresetsOptions.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -1386,6 +1396,27 @@ Partial Class Form_Main
         Me.BT_MoveToRecycleBin.Name = "BT_MoveToRecycleBin"
         Me.BT_MoveToRecycleBin.Size = New System.Drawing.Size(205, 22)
         Me.BT_MoveToRecycleBin.Text = "Move files to Recycle Bin"
+        '
+        'ToolStripSeparator16
+        '
+        Me.ToolStripSeparator16.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
+        Me.ToolStripSeparator16.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripSeparator17
+        '
+        Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
+        Me.ToolStripSeparator17.Size = New System.Drawing.Size(6, 26)
+        '
+        'ToolStripSeparator18
+        '
+        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(6, 26)
+        '
+        'ToolStripSeparator19
+        '
+        Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
+        Me.ToolStripSeparator19.Size = New System.Drawing.Size(6, 25)
         '
         'ExTableLayoutPanel3
         '
@@ -1699,7 +1730,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(609, 580)
+        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(609, 581)
         Me.ExTableLayoutPanel6.TabIndex = 97
         Me.ExTableLayoutPanel6.Task = Nothing
         '
@@ -2516,7 +2547,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(609, 580)
+        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(609, 581)
         Me.ExTableLayoutPanel7.TabIndex = 56
         Me.ExTableLayoutPanel7.Task = Nothing
         '
@@ -2680,7 +2711,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(611, 580)
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(611, 581)
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
@@ -2847,7 +2878,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(611, 580)
+        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(611, 581)
         Me.ExTableLayoutPanel9.TabIndex = 0
         Me.ExTableLayoutPanel9.Task = Nothing
         '
@@ -2968,7 +2999,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(609, 580)
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(609, 581)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
         '
@@ -3156,12 +3187,6 @@ Partial Class Form_Main
         Me.CheckBoxDebugMode.TabIndex = 80
         Me.CheckBoxDebugMode.Text = "Debug mode"
         Me.CheckBoxDebugMode.UseVisualStyleBackColor = True
-        '
-        'ToolStripSeparator16
-        '
-        Me.ToolStripSeparator16.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
-        Me.ToolStripSeparator16.Size = New System.Drawing.Size(6, 25)
         '
         'Form_Main
         '
@@ -3492,4 +3517,7 @@ Partial Class Form_Main
     Friend WithEvents ToolStripSeparator15 As ToolStripSeparator
     Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
     Friend WithEvents ToolStripSeparator16 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator19 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator17 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator18 As ToolStripSeparator
 End Class
