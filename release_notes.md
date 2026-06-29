@@ -135,8 +135,8 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.  (Thank you **@PBurkeADS!**)
 - Added an option, `Solid Edge fast launch`, that uses a new technique to start SE when file processing begins.  It is quite a bit faster than the previous method and worth a try, but still considered experimental for now.  Enable it on the **Configuration Tab -- General Page.**
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
-- Changed the formatting of Task sub-options to better show to which main option they apply.  Added missing help buttons to several dialogs and toolbars.  Moved file type filters from the selection toolbar to the filters toolbar.  Rearranged the **Configuration Tab -- General Page;**  moved Property Filter options to its dialog toolbar.
-- Added logging of system-generated error messages where applicable.  It is meant to aid in troubleshooting.
+- Changed the formatting of Task sub-options to better show to which main option they apply.  Added missing help buttons to several dialogs and toolbars.  Moved file type filters from the selection toolbar to the filters toolbar.  Rearranged the **Configuration Tab -- General Page**, moving relevant options to the Property Filter dialog, and grouping the others in a hopefully more logical manner.
+- Added logging of system-generated error messages where applicable, with the goal of aiding troubleshooting.
 
 
 ## V2026.1
