@@ -283,7 +283,7 @@ Public Class TaskUpdateDrawingViews
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.SheetScale.ToString, "If sheet scale unlinked to a drawing view, link to the first one placed")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SheetScale.ToString, "If unlinked, link sheet scale to first drawing view")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)

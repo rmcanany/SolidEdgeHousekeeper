@@ -1074,17 +1074,18 @@ Public Class TaskSaveModelAs
         Label = FormatOptionsLabel(ControlNames.ViewStyleNameLabel.ToString, "Style name")
         Label.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
-        Label.Visible = False
         ControlsDict(Label.Name) = Label
+        Label.Visible = False
 
         TextBox = FormatOptionsTextBox(ControlNames.ViewStyleName.ToString, "")
-        TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
+        'TextBox.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
+        'TextBox.Margin = New Padding(0, 0, 0, 0)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         tmpTLPOptions.SetColumnSpan(TextBox, 2)
-        TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
+        TextBox.Visible = False
 
         RowIndex += 1
 
@@ -1190,6 +1191,21 @@ Public Class TaskSaveModelAs
         ParticipatingCheckBoxes.Add(CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox))
         ParticipatingCheckBoxes.Add(CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox))
 
+        Dim ShowImageControls As Boolean = Not Me.NewFileTypeName = ""
+        ShowImageControls = ShowImageControls And ImageFileTypeNames.Contains(Me.NewFileTypeName)
+
+        If Not ShowImageControls Then
+            CType(ControlsDict(ControlNames.CropImage.ToString), CheckBox).Visible = False
+            CType(ControlsDict(ControlNames.HideConstructions.ToString), CheckBox).Visible = False
+            CType(ControlsDict(ControlNames.FitView.ToString), CheckBox).Visible = False
+            CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Visible = False
+            CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox).Visible = False
+            CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox).Visible = False
+            CType(ControlsDict(ControlNames.ChangeViewStyle.ToString), CheckBox).Visible = False
+            CType(ControlsDict(ControlNames.ViewStyleName.ToString), TextBox).Visible = False
+            CType(ControlsDict(ControlNames.ViewStyleNameLabel.ToString), Label).Visible = False
+        End If
+
         Select Case Name
 
             Case ControlNames.ChangeFilename.ToString
@@ -1217,9 +1233,9 @@ Public Class TaskSaveModelAs
             Case ControlNames.FitView.ToString
                 Me.FitView = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Visible = Me.FitView And Checkbox.Visible
-                CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox).Visible = Me.FitView And Checkbox.Visible
-                CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox).Visible = Me.FitView And Checkbox.Visible
+                CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Visible = Me.FitView And ShowImageControls
+                CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox).Visible = Me.FitView And ShowImageControls
+                CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox).Visible = Me.FitView And ShowImageControls
 
             Case ControlNames.Isometric.ToString
                 Me.Isometric = Checkbox.Checked
@@ -1242,8 +1258,8 @@ Public Class TaskSaveModelAs
             Case ControlNames.ChangeViewStyle.ToString
                 Me.ChangeViewStyle = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.ViewStyleName.ToString), TextBox).Visible = Me.ChangeViewStyle
-                CType(ControlsDict(ControlNames.ViewStyleNameLabel.ToString), Label).Visible = Me.ChangeViewStyle
+                CType(ControlsDict(ControlNames.ViewStyleName.ToString), TextBox).Visible = Me.ChangeViewStyle And ShowImageControls
+                CType(ControlsDict(ControlNames.ViewStyleNameLabel.ToString), Label).Visible = Me.ChangeViewStyle And ShowImageControls
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
