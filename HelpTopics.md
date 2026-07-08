@@ -14,7 +14,7 @@ Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github), @ih0nza (github), @artem1t (github), @Alex_H
 
 **Beta Testing, Bug Reports, and Helpful Feedback**  
-@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @Cimarian_RMP, @xenia.turon, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @PBurkeADS, @Lui10, @schumi1119
+@SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @Cimarian_RMP, @xenia.turon, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @PBurkeADS, @Lui10, @schumi1119, @Dirkels
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -118,7 +118,7 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folder_16.png"><img src="My%20Project/media/spacer.png">Selection</h3></summary>
 
-You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
+You can select files individually, or by folder, subfolder, top-level assembly, or list. There can be any number of each, in any combination.  
 
 Another option is to drag and drop files from Windows File Explorer. You can use drag and drop and the toolbar in combination.
 
@@ -323,11 +323,9 @@ The `Unsorted` option is primarily intended to preserve the order of imported li
 
 The `Dependency` option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings.  
 
-Note this setting changes the file processing order.  By default the order is by file type beginning with `*.par` then `*.psm`, `*.asm` and finally `*.dft`.  With this option, files are processed in strict dependency order.
+Note `Dependency` sort changes the file processing order.  Normally the order is by file type beginning with `*.par` then `*.psm`, `*.asm` and finally `*.dft`.  With this option, files are processed in strict dependency order.  This sorting option is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running `Update part copy` twice in a row.
 
-Dependency ordering is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running `Update part copy` twice in a row.
-
-The `Random sample` option randomly selects and shuffles  a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`. This option is primarily intended for software testing, but can be used for any purpose.
+The `Random sample` option randomly selects and shuffles a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`. This option is primarily intended for software testing, but can be used for any purpose.
 
 </details>
 
