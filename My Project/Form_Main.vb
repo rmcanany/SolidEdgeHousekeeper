@@ -3725,7 +3725,7 @@ Public Class Form_Main
             'SSDoc.ReadVariableNames()
         Catch ex As Exception
             ' Couldn't open read-write.  Nothing to do here.
-            MsgBox("The property cannot be changed.  The file may be read-only or already open elsewhere.", vbOKOnly)
+            MsgBox("The property cannot be changed.  The file may be read-only or already open elsewhere.  Exception: {ex.Message}", vbOKOnly)
             Exit Sub
         End Try
 

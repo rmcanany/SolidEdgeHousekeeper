@@ -120,7 +120,7 @@ Public Class UtilsDocumentation
             Try
                 ReadmeIn = IO.File.ReadAllLines(ReadmeFileName)
             Catch ex As Exception
-                MsgBox($"Error opening {ReadmeFileName}.  Error was: {ex.Message}")
+                MsgBox($"Error opening {ReadmeFileName}.  Exception: {ex.Message}")
                 Proceed = False
             End Try
         Else

@@ -31,7 +31,7 @@ Public Class HCPropertiesData
                     Items.Clear()
 
                     Dim s As String = $"Unable to load saved Property information.{vbCrLf}"
-                    s = $"{s}Reported error: {ex.Message}{vbCrLf}"
+                    s = $"{s}Exception: {ex.Message}{vbCrLf}"
                     s = $"{s}Please rerun Update on the Configuration Tab -- Templates Page"
                     MsgBox(s)
                     Exit Sub
@@ -195,7 +195,7 @@ Public Class HCPropertiesData
             Try
                 PropertySets.Open(TemplateName, OpenReadOnly)
             Catch ex As Exception
-                MsgBox($"Could not open template '{TemplateName}'", vbOKOnly)
+                MsgBox($"Could not open template '{TemplateName}'.  Exception: {ex.Message}", vbOKOnly)
                 Return Nothing
             End Try
 
@@ -228,7 +228,7 @@ Public Class HCPropertiesData
 
                     Catch ex As Exception
                         Dim s = "Error building PropertiesData: "
-                        s = $"{s} PropertySetName '{PropertySetActualName}', Item Number '{PropID}', PropName '{PropName}'"
+                        s = $"{s} PropertySetName '{PropertySetActualName}', Item Number '{PropID}', PropName '{PropName}'.  Exception: {ex.Message}"
                         MsgBox(s, vbOKOnly)
                     End Try
 

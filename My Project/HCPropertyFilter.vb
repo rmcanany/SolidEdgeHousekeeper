@@ -20,7 +20,7 @@ Public Class PropertyFilters
                 Me.Items = New List(Of HCPropertyFilter)
 
                 Dim s As String = $"Unable to load saved Property Filters.{vbCrLf}"
-                s = $"{vbCrLf}{s}{vbCrLf}Reported error: {ex.Message}."
+                s = $"{vbCrLf}{s}{vbCrLf}Exception: {ex.Message}."
                 MsgBox(s)
 
                 Exit Sub

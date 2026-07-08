@@ -68,7 +68,7 @@ Public Class HCStructuredStorageDoc
         Catch ex As Exception
             If Me.fs IsNot Nothing Then Me.fs.Close()
             Me.fs = Nothing
-            Throw New Exception($"Unable to open {IO.Path.GetFileName(Me.FullName)}.  {ex.Message}")
+            Throw New Exception($"Unable to open {IO.Path.GetFileName(Me.FullName)}.  Exception: {ex.Message}")
         End Try
 
         Me.DocType = IO.Path.GetExtension(FullName).ToLower.Replace(".", "")
@@ -772,7 +772,7 @@ Public Class HCStructuredStorageDoc
             Try
                 OutList = IO.File.ReadAllLines(Outfile).ToList
             Catch ex As Exception
-                MsgBox("Error reading Outfile")
+                MsgBox($"Error reading {Outfile}.  Exception: {ex.Message}")
             End Try
         End If
 
@@ -781,7 +781,7 @@ Public Class HCStructuredStorageDoc
         Try
             IO.File.WriteAllLines(Outfile, OutList)
         Catch ex As Exception
-            MsgBox("Error saving Outfile")
+            MsgBox($"Error saving {Outfile}.  Exception: {ex.Message}")
         End Try
 
 

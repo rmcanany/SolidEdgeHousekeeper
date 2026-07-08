@@ -735,7 +735,7 @@ Public Class UtilsTopLevelAssembly
         Try
             SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
         Catch ex As Exception
-            msg = $"Fast search scope file '{SearchScopeFilename}' (on Configuration Tab) not found.{vbCrLf}"
+            msg = $"Fast search scope file '{SearchScopeFilename}' (on Configuration Tab) not found.{vbCrLf}Exception: {ex.Message}"
             MsgBox(msg)
         End Try
 

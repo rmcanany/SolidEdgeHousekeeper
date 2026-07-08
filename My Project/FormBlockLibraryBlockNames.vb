@@ -174,7 +174,7 @@ Public Class FormBlockLibraryBlockNames
                 'Me.BlockLibraryBlockNames.Clear()
                 Me.BlockLibraryBlockNames = New List(Of String) ' Triggers update of the form DGV
 
-                MsgBox($"Could not read blocks from {IO.Path.GetFileName(Me.BlockLibrary)}", vbOKOnly)
+                MsgBox($"Could not read blocks from {IO.Path.GetFileName(Me.BlockLibrary)}.  Exception: {ex.Message}", vbOKOnly)
             End Try
 
             If SSDoc IsNot Nothing Then SSDoc.Close()

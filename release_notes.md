@@ -128,15 +128,15 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 ### Other
 
 - Fixed a regression in `Save As` where illegal file name characters were no longer being replaced.  (Thank you **@n0minus38!**)
-- Fixed an issue in the example code snippet `FitIso.snp` where the command ID for draft files was incorrect.
 - Fixed an issue in `Update Physical Properties` where a check of the mass in the variable table was not accounting for localized names.  (Thank you **@Stefano-VLN!**)
 - Fixed an issue with top-level assembly search where non-existent draft files were being added to the list.  (Thank you **@Nick_Mokrytskyi​!**)
-- Fixed an issue when populating file list properties.  Previously the file was opened separately for each property.  Now it processes all in one go. 
+- Fixed an issue when populating file list properties.  Previously the file was opened/closed for each property.  Now it processes all in one go. 
 - Fixed a regression where `OLEMessageFilter` was no longer being activated at Task launch.  (Thank you **@PBurkeADS!**)
 - Added an option, `Solid Edge fast launch`, that uses a new technique to start SE when file processing begins.  It is quite a bit faster than the previous method and worth a try, but still considered experimental for now.  Enable it on the **Configuration Tab -- General Page.**
 - Fixed an issue where users running preview code were not notified when the finalized version was released.
 - Changed the formatting of Task sub-options to better show to which main option they apply.  Added missing help buttons to several dialogs and toolbars.  Moved file type filters from the selection toolbar to the filters toolbar.  Rearranged the **Configuration Tab -- General Page**, moving relevant options to the Property Filter dialog, and grouping the others in a hopefully more logical manner.
-- Added logging of system-generated error messages where applicable, with the goal of aiding troubleshooting.
+- Added logging of system-generated error messages where applicable, with the goal to aid troubleshooting.
+- Added `UnitsToANSI.snp` and `UnitsToISO.snp` to the [<ins>**code snippet library**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).  (Thank you **@Dirkels!**)  Fixed an issue in `FitIso.snp` where the command ID for draft files was incorrect.
 
 
 ## V2026.1

@@ -30,7 +30,7 @@ Public Class HCPresets
                     Me.Items.Clear()
 
                     Dim s As String = $"Unable to load saved Presets.{vbCrLf}"
-                    s = $"{s}Reported error: '{ex.Message}'."
+                    s = $"{s}Exception: {ex.Message}."
                     MsgBox(s)
 
                     Exit Sub

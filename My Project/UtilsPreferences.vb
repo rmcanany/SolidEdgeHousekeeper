@@ -206,7 +206,7 @@ Public Class UtilsPreferences
                 FileIO.FileSystem.CreateDirectory(PreferencesDirectory)
             Catch ex As Exception
                 Dim s As String = $"Unable to create Preferences directory '{PreferencesDirectory}'.  "
-                s = $"{s}You may not have the correct permissions."
+                s = $"{s}You may not have the correct permissions.  Exception: {ex.Message}"
                 MsgBox(s, vbOKOnly)
             End Try
         End If
