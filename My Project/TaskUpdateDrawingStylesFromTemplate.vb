@@ -95,6 +95,8 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End Set
     End Property
 
+    Private Property ContextMenuTemplate As ContextMenu
+
 
     Enum ControlNames
         UseConfigurationPageTemplates
@@ -160,7 +162,10 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         OleMessageFilter.Register()
 
-        If SEDoc.FullName = Me.DraftTemplate Then
+        'Me.DraftTemplate = MaybeEvaluateExpression(SEDoc, Me.DraftTemplate)
+        Dim tmpDraftTemplate = MaybeEvaluateExpression(SEDoc, Me.DraftTemplate)
+
+        If SEDoc.FullName = tmpDraftTemplate Then
             TaskLogger.AddMessage("Template file itself ineligible for processing")
             Exit Sub
         End If
@@ -173,10 +178,10 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         'Open template
         Try
-            SETemplateDoc = CType(SEApp.Documents.Open(Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
+            SETemplateDoc = CType(SEApp.Documents.Open(tmpDraftTemplate), SolidEdgeDraft.DraftDocument)
             SEApp.DoIdle()
         Catch ex As Exception
-            TaskLogger.AddMessage($"Could not open template '{Me.DraftTemplate}'.  Exception: {ex.Message}")
+            TaskLogger.AddMessage($"Could not open template '{tmpDraftTemplate}'.  Exception: {ex.Message}")
         End Try
 
         SEDoc.Activate()
@@ -670,6 +675,45 @@ Public Class TaskUpdateDrawingStylesFromTemplate
     End Sub
 
 
+    Private Function MaybeEvaluateExpression(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        tmpDraftTemplate As String) As String
+
+        Dim OutString As String = ""
+
+        Dim Success As Boolean = True
+        Dim UC As New UtilsCommon
+        Dim UFC As New UtilsFilenameCharmap
+
+        If tmpDraftTemplate.StartsWith("EXPRESSION_") Or tmpDraftTemplate.StartsWith("SavedSetting:") Then
+            OutString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, tmpDraftTemplate, Me.PropertiesData, TaskLogger, IsExpression:=True)
+            OutString = OutString.Replace(vbCrLf, "")
+
+            If OutString Is Nothing OrElse OutString.ToLower.Contains("<nothing>") Then
+                Success = False
+                Me.TaskLogger.AddMessage($"Could not parse search directory expression '{tmpDraftTemplate}'")
+            Else
+                Dim DoNotSubstituteChars As New List(Of String)
+                DoNotSubstituteChars.Add("\")
+                DoNotSubstituteChars.Add(":")
+                OutString = UFC.SubstituteIllegalCharacters(OutString, DoNotSubstituteChars)
+            End If
+
+        Else
+            OutString = tmpDraftTemplate
+
+        End If
+
+        If Success Then
+            Return OutString
+        Else
+            Return Nothing
+        End If
+
+
+        Return OutString
+    End Function
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -680,6 +724,11 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim Button As Button
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+
+        Me.ContextMenuTemplate = New ContextMenu
+        Me.ContextMenuTemplate.MenuItems.Add("Insert expression", New EventHandler(AddressOf InsertExpression))
+        Me.ContextMenuTemplate.MenuItems.Add("Edit expression", New EventHandler(AddressOf EditExpression))
+
 
         RowIndex = 0
 
@@ -699,6 +748,8 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         TextBox = FormatOptionsTextBox(ControlNames.DraftTemplate.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
+        'AddHandler TextBox.MouseClick, AddressOf TextBoxOptions_MouseClick
+        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
@@ -757,7 +808,10 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
-            If Not FileIO.FileSystem.FileExists(Me.DraftTemplate) Then
+            Dim tf As Boolean = FileIO.FileSystem.FileExists(Me.DraftTemplate)
+            tf = tf Or Me.DraftTemplate.Contains("EXPRESSION_")
+            tf = tf Or Me.DraftTemplate.Contains("SavedSetting:")
+            If Not tf Then
                 ErrorLogger.AddMessage("Select a valid drawing template")
             End If
 
@@ -769,6 +823,105 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     End Sub
 
+
+    Private Sub TextBoxOptions_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs)
+
+        'Dim DataGridView = CType(sender, DataGridView)
+
+        Dim TextBox As TextBox = CType(sender, TextBox)
+
+        If e.Button = MouseButtons.Right Then
+            'DGVRow = DataGridView.HitTest(e.X, e.Y).RowIndex
+
+            'If DGVRow >= 0 Then
+            '    'm.MenuItems.Add(New MenuItem(String.Format("Do something to row {0}", currentMouseOverRow.ToString())))
+            '    'm.Show(DataGridView, New Point(e.X, e.Y))
+            '    Me.ContextMenuTest.Show(DataGridView, New Point(e.X, e.Y))
+            'End If
+
+            Me.ContextMenuTemplate.Show(TextBox, New Point(e.X, e.Y))
+
+        End If
+
+        Me.ContextMenuTemplate.Show(TextBox, New Point(e.X, e.Y))
+
+    End Sub
+
+    Private Sub InsertExpression(ByVal sender As Object, ByVal e As EventArgs)
+
+        Dim FES As New FormExpressionSelector
+
+        If FES.ShowDialog() = DialogResult.OK Then
+            Form_Main.ExpressionEditorLanguage = FES.SavedExpresssionLanguage
+
+            Dim ExpressionText As String = FES.OutputText
+
+            'Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
+            'DataGridView.CurrentCell = DataGridView.Rows(DGVRow).Cells(0)
+            'DataGridView.BeginEdit(True)
+            'Dim TextBox As TextBox = CType(DataGridView.EditingControl, TextBox)
+            'TextBox.Text = ExpressionText
+            'DataGridView.EndEdit()
+
+            'UpdateDGVSize(DataGridView)
+
+            Dim TextBox As TextBox = TryCast(Me.ContextMenuTemplate.SourceControl, TextBox)
+            If TextBox IsNot Nothing Then TextBox.Text = ExpressionText
+        End If
+
+    End Sub
+
+    Private Sub EditExpression(ByVal sender As Object, ByVal e As EventArgs)
+
+        'Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
+        'DataGridView.CurrentCell = DataGridView.Rows(DGVRow).Cells(0)
+
+        'Dim FEE As New FormExpressionEditor
+
+        'Dim tmpValue As Object = DataGridView.Rows(DGVRow).Cells(0).Value
+        'If tmpValue IsNot Nothing Then
+        '    FEE.InputText = DataGridView.Rows(DGVRow).Cells(0).Value.ToString
+        'Else
+        '    FEE.InputText = ""
+        'End If
+
+        'Select Case Form_Main.ExpressionEditorLanguage
+        '    Case "VB"
+        '        FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
+        '    Case "NCalc"
+        '        FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        '    Case Else
+        '        MsgBox($"UCTaskControl: Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
+        '        Exit Sub
+        'End Select
+
+        'If FEE.ShowDialog() = DialogResult.OK Then
+        '    If Not FEE.OutputText = "" Then
+
+        '        Select Case FEE.TextEditorFormula.Language
+        '            Case FastColoredTextBoxNS.Language.VB
+        '                Form_Main.ExpressionEditorLanguage = "VB"
+        '            Case FastColoredTextBoxNS.Language.SQL
+        '                Form_Main.ExpressionEditorLanguage = "NCalc"
+        '        End Select
+
+        '        Dim ExpressionText As String = FEE.OutputText
+
+        '        'Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
+        '        DataGridView.CurrentCell = DataGridView.Rows(DGVRow).Cells(0)
+        '        DataGridView.BeginEdit(True)
+        '        Dim TextBox As TextBox = CType(DataGridView.EditingControl, TextBox)
+        '        TextBox.Text = ExpressionText
+        '        DataGridView.EndEdit()
+
+        '        UpdateDGVSize(DataGridView)
+        '    End If
+
+        'End If
+
+        'DataGridView.CurrentCell = Nothing
+
+    End Sub
 
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
@@ -876,7 +1029,11 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         HelpString += vbCrLf + "- **Dft Template:** Drawing that contains the desired styles and background sheets. "
         HelpString += "To use the draft template defined on the **Configuration Tab -- Templates Page**, "
-        HelpString += "enable the option `Use configuration page templates.`"
+        HelpString += "enable the option `Use configuration page templates.`  "
+
+        HelpString += vbCrLf + "Another way to specify a draft template is to use an Expression.  "
+        HelpString += "Right-click the textbox and choose insert/edit expression.  "
+        HelpString += "See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details on using them.  "
 
         HelpString += vbCrLf + "- **Update Drawing Border:** Replace the drawing border in the file with one of the same name in the template. "
         HelpString += vbCrLf + "  - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. "

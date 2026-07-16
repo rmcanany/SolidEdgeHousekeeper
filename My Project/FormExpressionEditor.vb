@@ -202,7 +202,8 @@ Public Class FormExpressionEditor
 
         Dim tmpLanguage = GetExpressionLanguage(TextEditorFormula.Text)
         Dim tmpComments = SavedExpressions.StringToListOfString(GetExpressionComments(TextEditorFormula.Text))
-        Dim tmpExpression = SavedExpressions.StringToListOfString(GetExpressionExpression(TextEditorFormula.Text))
+        'Dim tmpExpression = SavedExpressions.StringToListOfString(GetExpressionExpression(TextEditorFormula.Text))
+        Dim tmpExpression = SavedExpressions.StringToListOfString(TextEditorFormula.Text)
 
         If Overwrite Then
             If SE Is Nothing Then

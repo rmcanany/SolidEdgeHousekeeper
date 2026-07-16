@@ -165,6 +165,13 @@ Public Class UCTaskControl
 
     Private Sub InsertPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
 
+        Dim TaskType As Type = Me.Task.GetType
+
+        If TaskType.Name = "TaskUpdateDrawingStylesFromTemplate" Then
+            MsgBox($"Property substitution not implemented for {Me.Task.Description}")
+            Exit Sub
+        End If
+
         Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
         Dim CaretPosition = TextBox.Text.Length
 
@@ -180,6 +187,15 @@ Public Class UCTaskControl
     End Sub
 
     Private Sub InsertExpressionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertExpressionToolStripMenuItem.Click
+
+        Dim TaskType As Type = Me.Task.GetType
+        Dim tf As Boolean = TaskType.Name = "TaskSaveDrawingAs"
+        tf = tf Or TaskType.Name = "TaskSaveModelAs"
+        tf = tf Or TaskType.Name = "TaskUpdateDrawingStylesFromTemplate"
+        If Not tf Then
+            MsgBox($"Expressions not implemented for {Me.Task.Description}")
+            Exit Sub
+        End If
 
         Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
         Dim CaretPosition = TextBox.Text.Length
@@ -199,17 +215,19 @@ Public Class UCTaskControl
     Private Sub ExpressionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpressionEditorToolStripMenuItem.Click
         'MsgBox("In UCTaskControl.vb got a ExpressionEditorToolStripMenuItem.Click event")
 
+        Dim TaskType As Type = Me.Task.GetType
+        Dim tf As Boolean = TaskType.Name = "TaskSaveDrawingAs"
+        tf = tf Or TaskType.Name = "TaskSaveModelAs"
+        tf = tf Or TaskType.Name = "TaskUpdateDrawingStylesFromTemplate"
+        If Not tf Then
+            MsgBox($"Expressions not implemented for {Me.Task.Description}")
+            Exit Sub
+        End If
+
         Dim TextBox = TryCast(ContextMenuStrip1.SourceControl, TextBox)
         If TextBox Is Nothing Then Exit Sub
 
         Dim CaretPosition = TextBox.Text.Length
-
-        Dim TaskType As Type = Me.Task.GetType
-
-        If Not (TaskType.Name = "TaskSaveDrawingAs" Or TaskType.Name = "TaskSaveModelAs") Then
-            MsgBox($"Expression editing not implemented for {Me.Task.Description}")
-            Exit Sub
-        End If
 
         t.Interval = 1500
         AddHandler t.Tick, AddressOf HandleTimerTick

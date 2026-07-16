@@ -1119,7 +1119,8 @@ Updates styles and/or background sheets from a template you specify.
 ![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template.png)
 
 **Options**
-- **Dft Template:** Drawing that contains the desired styles and background sheets. To use the draft template defined on the **Configuration Tab -- Templates Page**, enable the option `Use configuration page templates.`
+- **Dft Template:** Drawing that contains the desired styles and background sheets. To use the draft template defined on the **Configuration Tab -- Templates Page**, enable the option `Use configuration page templates.`  
+Another way to specify a draft template is to use an Expression.  Right-click the textbox and choose insert/edit expression.  See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details on using them.  
 - **Update Drawing Border:** Replace the drawing border in the file with one of the same name in the template. 
   - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. If a match is found, that border is used as the replacement. 
   - **If matched by sheet size: Rename sheet:** If a size match is found, this option renames the background to match the template. 
@@ -1410,6 +1411,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 <!-- End -->
+
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_help_16.png"><img src="My%20Project/media/spacer.png">KNOWN ISSUES</h2></summary>
 
