@@ -137,6 +137,8 @@ See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmca
 - Changed the formatting of Task sub-options to better show to which main option they apply.  Added missing help buttons to several dialogs and toolbars.  Moved file type filters from the selection toolbar to the filters toolbar.  Rearranged the **Configuration Tab -- General Page**, moving relevant options to the Property Filter dialog, and grouping the others in a hopefully more logical manner.
 - Added logging of system-generated error messages where applicable, with the goal to aid troubleshooting.
 - Added `UnitsToANSI.snp` and `UnitsToISO.snp` to the [<ins>**code snippet library**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).  (Thank you **@Dirkels!**)  Fixed an issue in `FitIso.snp` where the command ID for draft files was incorrect.
+- Added the ability to use an expression to specify the draft template in `Update Drawing Styles from Template`.  (Thank you **sven-11111!**)
+- Fixed an issue with the backslash character (\\) when saving an expression.
 
 
 ## V2026.1

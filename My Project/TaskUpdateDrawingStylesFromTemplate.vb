@@ -95,7 +95,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End Set
     End Property
 
-    Private Property ContextMenuTemplate As ContextMenu
 
 
     Enum ControlNames
@@ -725,11 +724,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
-        Me.ContextMenuTemplate = New ContextMenu
-        Me.ContextMenuTemplate.MenuItems.Add("Insert expression", New EventHandler(AddressOf InsertExpression))
-        Me.ContextMenuTemplate.MenuItems.Add("Edit expression", New EventHandler(AddressOf EditExpression))
-
-
         RowIndex = 0
 
         CheckBox = FormatOptionsCheckBox(ControlNames.UseConfigurationPageTemplates.ToString, "Use configuration page templates")
@@ -748,7 +742,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         TextBox = FormatOptionsTextBox(ControlNames.DraftTemplate.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        'AddHandler TextBox.MouseClick, AddressOf TextBoxOptions_MouseClick
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -823,105 +816,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     End Sub
 
-
-    Private Sub TextBoxOptions_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs)
-
-        'Dim DataGridView = CType(sender, DataGridView)
-
-        Dim TextBox As TextBox = CType(sender, TextBox)
-
-        If e.Button = MouseButtons.Right Then
-            'DGVRow = DataGridView.HitTest(e.X, e.Y).RowIndex
-
-            'If DGVRow >= 0 Then
-            '    'm.MenuItems.Add(New MenuItem(String.Format("Do something to row {0}", currentMouseOverRow.ToString())))
-            '    'm.Show(DataGridView, New Point(e.X, e.Y))
-            '    Me.ContextMenuTest.Show(DataGridView, New Point(e.X, e.Y))
-            'End If
-
-            Me.ContextMenuTemplate.Show(TextBox, New Point(e.X, e.Y))
-
-        End If
-
-        Me.ContextMenuTemplate.Show(TextBox, New Point(e.X, e.Y))
-
-    End Sub
-
-    Private Sub InsertExpression(ByVal sender As Object, ByVal e As EventArgs)
-
-        Dim FES As New FormExpressionSelector
-
-        If FES.ShowDialog() = DialogResult.OK Then
-            Form_Main.ExpressionEditorLanguage = FES.SavedExpresssionLanguage
-
-            Dim ExpressionText As String = FES.OutputText
-
-            'Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
-            'DataGridView.CurrentCell = DataGridView.Rows(DGVRow).Cells(0)
-            'DataGridView.BeginEdit(True)
-            'Dim TextBox As TextBox = CType(DataGridView.EditingControl, TextBox)
-            'TextBox.Text = ExpressionText
-            'DataGridView.EndEdit()
-
-            'UpdateDGVSize(DataGridView)
-
-            Dim TextBox As TextBox = TryCast(Me.ContextMenuTemplate.SourceControl, TextBox)
-            If TextBox IsNot Nothing Then TextBox.Text = ExpressionText
-        End If
-
-    End Sub
-
-    Private Sub EditExpression(ByVal sender As Object, ByVal e As EventArgs)
-
-        'Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
-        'DataGridView.CurrentCell = DataGridView.Rows(DGVRow).Cells(0)
-
-        'Dim FEE As New FormExpressionEditor
-
-        'Dim tmpValue As Object = DataGridView.Rows(DGVRow).Cells(0).Value
-        'If tmpValue IsNot Nothing Then
-        '    FEE.InputText = DataGridView.Rows(DGVRow).Cells(0).Value.ToString
-        'Else
-        '    FEE.InputText = ""
-        'End If
-
-        'Select Case Form_Main.ExpressionEditorLanguage
-        '    Case "VB"
-        '        FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.VB
-        '    Case "NCalc"
-        '        FEE.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
-        '    Case Else
-        '        MsgBox($"UCTaskControl: Unrecognized expression editor language '{Form_Main.ExpressionEditorLanguage}'", vbOKOnly)
-        '        Exit Sub
-        'End Select
-
-        'If FEE.ShowDialog() = DialogResult.OK Then
-        '    If Not FEE.OutputText = "" Then
-
-        '        Select Case FEE.TextEditorFormula.Language
-        '            Case FastColoredTextBoxNS.Language.VB
-        '                Form_Main.ExpressionEditorLanguage = "VB"
-        '            Case FastColoredTextBoxNS.Language.SQL
-        '                Form_Main.ExpressionEditorLanguage = "NCalc"
-        '        End Select
-
-        '        Dim ExpressionText As String = FEE.OutputText
-
-        '        'Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
-        '        DataGridView.CurrentCell = DataGridView.Rows(DGVRow).Cells(0)
-        '        DataGridView.BeginEdit(True)
-        '        Dim TextBox As TextBox = CType(DataGridView.EditingControl, TextBox)
-        '        TextBox.Text = ExpressionText
-        '        DataGridView.EndEdit()
-
-        '        UpdateDGVSize(DataGridView)
-        '    End If
-
-        'End If
-
-        'DataGridView.CurrentCell = Nothing
-
-    End Sub
 
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
