@@ -278,11 +278,19 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             Dim tmpSEDocSheetSizeOption As SolidEdgeDraft.PaperSizeConstants = tmpSEDocSheetSizeOptions(i)
 
             If TemplateSheetNames.Contains(tmpSEDocSheetName) Then
-                tmpSEDocSheet.ReplaceBackground(DraftTemplate, tmpSEDocSheetName)
+                Try
+                    tmpSEDocSheet.ReplaceBackground(SETemplateDoc.FullName, tmpSEDocSheetName)
+                Catch ex As Exception
+                    TaskLogger.AddMessage($"Exception on replace background on sheet '{tmpSEDocSheetName}'.  Exception was '{ex.Message}'")
+                End Try
                 SEApp.DoIdle()
             ElseIf Me.MatchSheetSize And TemplateSheetSizeOptions.Contains(tmpSEDocSheetSizeOption) Then
                 Dim j As Integer = TemplateSheetSizeOptions.IndexOf(tmpSEDocSheetSizeOption)
-                tmpSEDocSheet.ReplaceBackground(DraftTemplate, TemplateSheetNames(j))
+                Try
+                    tmpSEDocSheet.ReplaceBackground(SETemplateDoc.FullName, TemplateSheetNames(j))
+                Catch ex As Exception
+                    TaskLogger.AddMessage($"Exception on replace background on sheet '{tmpSEDocSheetName}'.  Exception was '{ex.Message}'")
+                End Try
                 SEApp.DoIdle()
                 If Me.RenameSheet Then
                     tmpSEDocSheet.Name = TemplateSheetNames(j)
@@ -301,6 +309,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
        DocStyleNameList As List(Of String),
        TemplateStyleNameList As List(Of String)
        ) As String
+
         Dim Names As String = ""
         For Each s As String In DocStyleNameList
             If Not TemplateStyleNameList.Contains(s) Then
