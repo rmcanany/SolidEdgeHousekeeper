@@ -873,7 +873,7 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingViews.png"><img src="My%20Project/media/spacer.png">Update drawing views</h3></summary>
 
-Updates draft files.  Presents options to process drawing views, property text, parts lists, and sheet scale.  If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  
+Updates draft files.  Presents options to process drawing views, property text, parts lists, hole tables, bend tables, block tables, connector tables, user tables, and sheet scale.  The drawing view sub-option can force an update even when Solid Edge reports the view as current.  If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  
 
 </details>
 
@@ -1269,6 +1269,7 @@ Checks draft files for various problems.
 
 The options are: 
 - `Drawing views out of date`: Checks if any drawing views, and associated models, are not up to date. 
+- `Out of date drawing tables`: Checks Parts Lists, Block Tables, and Connector Tables for an out-of-date status. Hole Tables, Bend Tables, and User Tables can be updated by `Update drawing views`, but the Solid Edge API does not expose an equivalent out-of-date status for those table types. 
 - `Detached dimensions or annotations`: Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing. 
 - `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
 - `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. 
