@@ -1080,6 +1080,8 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         HelpString += "- **Copy/update library blocks from template:** "
         HelpString += "Copies block definitions that are missing from the file and replaces same-name block definitions with those from the template. "
         HelpString += "Existing block occurrences remain in place. "
+        HelpString += "Note, for more fine-grained control, such as replacing differently names blocks, "
+        HelpString += "take a look at the `Update Blocks` command.  "
 
         HelpString += vbCrLf + vbCrLf
         HelpString += "- **Update Styles:** Updates styles from template.  These styles are processed: "

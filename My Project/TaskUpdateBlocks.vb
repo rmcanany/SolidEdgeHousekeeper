@@ -1771,6 +1771,9 @@ Public Class TaskUpdateBlocks
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Adds, replaces and/or deletes blocks in a draft file. "
+        HelpString += "Note, for simple add/replace jobs, "
+        HelpString += "the command `Update Drawing Styles from Template` "
+        HelpString += "is a straight-forward option to consider.  "
 
         HelpString += vbCrLf + vbCrLf + "![UpdateBlocks](My%20Project/media/task_update_blocks.png)"
 

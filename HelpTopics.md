@@ -49,6 +49,8 @@ If this is your first time here, you may want to check out the [<ins>**Quick Sta
 
 > *My daily work involves managing large numbers Solid Edge files.  I have tried many tools to help.  Housekeeper is the best application for my workflow that I have ever used. It is extremely valuable for anyone who needs to process, verify, update, or standardize Solid Edge documents efficiently.*
 
+> *Housekeeper to the rescue!*
+
 Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*, Google's Bard said:
 
 > *Why did the Solid Edge Housekeeper get a promotion?*  
@@ -879,7 +881,7 @@ Updates draft files.  Presents options to process drawing views, property text, 
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateBlocks.png"><img src="My%20Project/media/spacer.png">Update blocks</h3></summary>
 
-Adds, replaces and/or deletes blocks in a draft file. 
+Adds, replaces and/or deletes blocks in a draft file. Note, for simple add/replace jobs, the command `Update Drawing Styles from Template` is a straight-forward option to consider.  
 
 ![UpdateBlocks](My%20Project/media/task_update_blocks.png)
 
@@ -1116,7 +1118,7 @@ The active view style of the file is changed to match the one active in the temp
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingStylesFromTemplate.png"><img src="My%20Project/media/spacer.png">Update drawing styles from template</h3></summary>
 
-Updates styles and/or background sheets from a template you specify. 
+Updates styles, background sheets, and/or library blocks from a template you specify. 
 
 ![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template.png)
 
@@ -1127,6 +1129,8 @@ Another way to specify a draft template is to use an Expression.  Right-click th
   - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. If a match is found, that border is used as the replacement. 
   - **If matched by sheet size: Rename sheet:** If a size match is found, this option renames the background to match the template. 
   - **Add missing drawing borders from template:** Add background sheets that exist in the template but are missing from the file. 
+
+- **Copy/update library blocks from template:** Copies block definitions that are missing from the file and replaces same-name block definitions with those from the template. Existing block occurrences remain in place. Note, for more fine-grained control, such as replacing differently names blocks, take a look at the `Update Blocks` command.  
 
 - **Update Styles:** Updates styles from template.  These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. If you need one or more of those styles updated, please ask on the Forum. 
 
