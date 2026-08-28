@@ -48,9 +48,9 @@ Public Class UtilsDocumentation
         Dim HelpfileBaseURLFilename As String
         Dim Outlist As New List(Of String)
 
-        If Not UP.RunningDevCode Then
-            Exit Sub
-        End If
+        'If Not UP.RunningDevCode Then
+        '    Exit Sub
+        'End If
 
         ' Format example (in testing, this was line 1 from the api results)
         '"{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29"""
