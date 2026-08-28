@@ -732,7 +732,7 @@ Public Class UtilsExecute
         If Proceed Then
             OldStatus = SSDoc.GetStatus()
 
-            If (Not OldStatus = Nothing) AndAlso (Not OldStatus.ToLower = "Available".ToLower) Then
+            If (OldStatus IsNot Nothing) AndAlso (Not OldStatus.ToLower = "Available".ToLower) Then
                 Proceed = SSDoc.SetStatus("Available")
             End If
         End If
@@ -759,12 +759,19 @@ Public Class UtilsExecute
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
-        Try
-            SSDoc = New HCStructuredStorageDoc(Path, _OpenReadWrite:=True)
-            SSDoc.ReadProperties(FMain.PropertiesData)
-        Catch ex As Exception
+        If OldStatus Is Nothing OrElse OldStatus = "" Then
             Proceed = False
-        End Try
+            ErrorMessage = $"Unable to reset status.  Previous status unknown"
+        End If
+
+        If Proceed Then
+            Try
+                SSDoc = New HCStructuredStorageDoc(Path, _OpenReadWrite:=True)
+                SSDoc.ReadProperties(FMain.PropertiesData)
+            Catch ex As Exception
+                Proceed = False
+            End Try
+        End If
 
         If Proceed Then
             If FMain.ProcessAsAvailableRevert Then

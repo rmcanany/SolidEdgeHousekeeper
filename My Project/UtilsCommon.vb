@@ -21,6 +21,23 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Sub GetOccurrenceDocs(
+        SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByRef DocList As List(Of SolidEdgeFramework.SolidEdgeDocument))
+
+        ' ###### See UtilsOccurrences for more options
+
+        For Each Occurrence As SolidEdgeAssembly.Occurrence In SEDoc.Occurrences
+            Dim OccDoc As SolidEdgeFramework.SolidEdgeDocument = CType(Occurrence.OccurrenceDocument, SolidEdgeFramework.SolidEdgeDocument)
+
+            If Not DocList.Contains(OccDoc) Then DocList.Add(OccDoc)
+
+            Dim Filename = GetFOAFilename(OccDoc.FullName)
+            If IO.File.Exists(Filename) And IO.Path.GetExtension(Filename) = ".asm" Then
+                GetOccurrenceDocs(CType(OccDoc, SolidEdgeAssembly.AssemblyDocument), DocList)
+            End If
+        Next
+    End Sub
 
     Public Sub FindLinked(DMDoc As RevisionManager.Document)
 

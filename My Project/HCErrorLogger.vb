@@ -157,7 +157,8 @@ Public Class Logger
         Me.HasErrors = True
 
         If Not Me.TimestampMessages Then
-            Me.Messages.Add(Message.Replace(vbCrLf, Chr(182)))
+            'Me.Messages.Add(Message.Replace(vbCrLf, Chr(182)))
+            Me.Messages.Add(Message)
         Else
             Me.Messages.Add($"{DateTime.Now.ToString("hh:mm:ss.fff tt")}: {Message.Replace(vbCrLf, Chr(182))}")
         End If

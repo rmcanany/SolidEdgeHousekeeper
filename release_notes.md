@@ -13,6 +13,24 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
+## V2026.3
+
+### Update Drawings
+
+Contributed by **@JBen79.**  Thank you!
+
+Added the updating of all tables including holes, bends, user tables and more.  Added the same functionality to `Check Drawings`.
+
+### Update Drawing Styles from Templates
+
+Contributed by **@JBen79.**  Thank you!
+
+Added the updating of blocks.  This is a straight-forward synchronization between the template and the file.  For more fine-grained actions, like renaming and deleting blocks, the `Update Blocks` command can be used.
+
+### Other
+
+- Cleaned up handling of multi-line exception messages.
+
 ## V2026.2
 
 We'll get right to the updates, but first some exciting news -- Housekeeper has a new sponsor: **BemoRail BV!**  And wait until you see some of the nice things they had to say...

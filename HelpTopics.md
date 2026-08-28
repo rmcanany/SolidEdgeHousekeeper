@@ -11,7 +11,7 @@
 Hatch Industries (hatch.com), Breit Ideas (breitideas.com), Pelican Industries (pelican.com), TECHTORY Automation GmbH (techtory.de), BemoRail BV (bemorail.com)
 
 **Contributors**  
-@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github), @ih0nza (github), @artem1t (github), @Alex_H, Juri Bendoni -- Italy
+@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (github @AalianKhan), @KGeetings (github), @ih0nza (github), @artem1t (github), @Alex_H, Juri Bendoni -- Italy (github @JBen79)
 
 **Beta Testing, Bug Reports, and Helpful Feedback**  
 @SatyenB, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @Cimarian_RMP, @xenia.turon, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @john.matthews3452, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings, @stephan.morin2873, @Nick_Mokrytskyi, @willhfr, @DieCola85, @[Nataniel Tasev], @Brendan.Lee (github @Bogob22), @sven-11111, @robbin70, @collands, @WoutM25, @Monostre, @Stefano-VLN, @MWinter_Deev, @PBurkeADS, @Lui10, @schumi1119, @Dirkels
@@ -1472,6 +1472,8 @@ Processing starts in Form_Main.vb.  A short description of the code's so-called 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-gold-star-16.png"><img src="My%20Project/media/spacer.png">BECOME A SPONSOR</h2></summary>
 
 If Housekeeper is saving you lots of time and money, we'd love to have you as a sponsor!
+
+
 
 One way is through PayPal's Donate feature.
 
