@@ -133,48 +133,6 @@ Public Class UtilsPowerShell
 
         Dim Result As String = ""
 
-        'Dim NewWay As Boolean = True
-
-        'If Not NewWay Then
-        '    'Dim Result As String = ""
-
-        '    'Dim P As New Diagnostics.Process
-        '    'Dim PSError As String = ""
-
-        '    'P.StartInfo.FileName = "powershell.exe"
-        '    'P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
-        '    'P.StartInfo.RedirectStandardError = True
-        '    'P.StartInfo.RedirectStandardOutput = True
-        '    'P.StartInfo.UseShellExecute = False
-        '    'P.StartInfo.CreateNoWindow = True
-        '    'P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
-
-        '    'P.Start()
-        '    'PSError = P.StandardError.ReadToEnd
-        '    'Dim PSResult As String = P.StandardOutput.ReadToEnd
-
-        '    'If Not PSError = "" Then
-        '    '    Throw New Exception(PSError)
-        '    'End If
-
-        '    'P.WaitForExit()
-        '    'Result = PSResult.Replace(vbCrLf, "")
-
-        '    'Return Result
-
-        'Else
-
-        '    Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
-
-        '    Dim ScriptText As String = ""
-        '    For Each s As String In ScriptList
-        '        ScriptText = $"{ScriptText}{vbCrLf}{s}"
-        '    Next
-
-        '    Result = RunScript(ScriptText)
-
-        'End If
-
         Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowerShellFilename).ToList
 
         Dim ScriptText As String = ""
@@ -185,7 +143,7 @@ Public Class UtilsPowerShell
         ' No Try/Catch here -- propagating any exception to caller to provide context.
         Result = RunScript(ScriptText)
 
-        Return Result
+        Return Result.Trim
 
     End Function
 

@@ -433,45 +433,13 @@ Public Class FormExpressionEditor
         Dim UPS As New UtilsPowerShell
         Dim PowershellFilename = UPS.BuildSnippetFile(Me.SnippetFilename)
 
-        'Dim ExitCode As Integer
         Dim PSError As String = ""
 
-        Dim NewWay As Boolean = True
-
-        If Not NewWay Then
-            'Dim P As New Diagnostics.Process
-
-            'P.StartInfo.FileName = "powershell.exe"
-            'P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", PowershellFilename.Replace(" ", "` "), Chr(34))
-            'P.StartInfo.RedirectStandardError = True
-            'P.StartInfo.UseShellExecute = False
-            ''If Me.HideConsoleWindow Then P.StartInfo.CreateNoWindow = True
-            'P.Start()
-            'PSError = P.StandardError.ReadToEnd
-
-            'P.WaitForExit()
-            'ExitCode = P.ExitCode
-        Else
-            'Dim ScriptList As List(Of String) = System.IO.File.ReadAllLines(PowershellFilename).ToList
-
-            'Dim ScriptText As String = ""
-            'For Each s As String In ScriptList
-            '    ScriptText = $"{ScriptText}{vbCrLf}{s}"
-            'Next
-
-            'Try
-            '    PSError = UPS.RunScript(ScriptText)
-            'Catch ex As Exception
-            '    PSError = ex.Message
-            'End Try
-
-            Try
-                PSError = UPS.RunPowerShellFile(PowershellFilename)
-            Catch ex As Exception
-                PSError = ex.Message
-            End Try
-
-        End If
+        Try
+            PSError = UPS.RunPowerShellFile(PowershellFilename)
+        Catch ex As Exception
+            PSError = ex.Message
+        End Try
 
         Dim ResultsMessage As String = PSError
 
@@ -617,7 +585,13 @@ Public Class FormExpressionEditor
 
                 Dim tmpObj = UC.GetPropValue(SEDoc, PropertySetName, PropertyName, ModelIdx, AddProp:=False)
                 If tmpObj IsNot Nothing Then
-                    tmpVal = tmpObj.ToString
+
+
+                    ' ####### 20260831 Dealing with an expression that returns a property conaining trailing vbCrLf characters.
+                    'tmpVal = tmpObj.ToString
+                    tmpVal = tmpObj.ToString.Trim
+
+
                 Else
                     'tmpVal = "Property not found."
                     tmpVal = "<Nothing>"

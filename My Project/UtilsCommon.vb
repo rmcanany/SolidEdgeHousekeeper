@@ -998,7 +998,15 @@ Public Class UtilsCommon
                 Else
                     FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
                     If FoundProp IsNot Nothing Then
-                        tmpValue = FoundProp.Value.ToString
+
+
+
+                        ' ####### 20260831 Dealing with an expression that returns a property conaining trailing vbCrLf characters.
+                        'tmpValue = FoundProp.Value.ToString
+                        tmpValue = FoundProp.Value.ToString.Trim
+
+
+
                     Else
                         If Not IsExpression Then
                             ErrorLogger.AddMessage($"Unable to process property '{PropertySet}.{PropertyName}' in formula '{Formula}'")

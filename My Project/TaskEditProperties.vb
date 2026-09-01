@@ -573,11 +573,20 @@ Public Class TaskEditProperties
 
                 If ReplaceSearchType = "EX" Then
                     Dim OriginalReplaceString As String = ReplaceString
+
+
+                    ' ####### 20260831 Dealing with an expression that returns a property conaining trailing vbCrLf characters.
                     ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, True)
+                    'ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, True).Trim
+
+
+
                     If ReplaceString Is Nothing OrElse ReplaceString.ToLower.Contains("<nothing>") Then
                         Proceed = False
                         s = $"Unable to evaluate expression in Replace text '{OriginalReplaceString}' for property '{PropertyName}'"
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+                        'Else
+                        '    ReplaceString = ReplaceString.Trim
                     End If
                 Else
                     ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger)
@@ -633,18 +642,14 @@ Public Class TaskEditProperties
                     Try
                         Dim TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value) ' Integer, String, Double, Date, Boolean
 
-                        If ReplaceSearchType = "EX" Then
-
-                        End If
-
                         If FindSearchType = "PT" Then
                             PropValue = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+
+                            'ElseIf FindSearchType = "WC" Then
+
                         Else
                             If FindSearchType = "WC" Then
                                 FindString = UC.GlobToRegex(FindString)
-                            End If
-                            If ReplaceSearchType = "PT" Then
-                                ' ReplaceString = Regex.Escape(ReplaceString)
                             End If
 
                             PropValue = Text.RegularExpressions.Regex.Replace(
@@ -654,7 +659,8 @@ Public Class TaskEditProperties
                         Select Case TypeName.ToLower
                             Case "string"
                                 SETypeName = "Text"
-                                Prop.Value = PropValue
+                                'Prop.Value = PropValue
+                                Prop.Value = PropValue.Trim
 
                             Case "integer"
                                 SETypeName = "Number"

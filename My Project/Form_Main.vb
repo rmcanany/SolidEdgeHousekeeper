@@ -2111,6 +2111,8 @@ Public Class Form_Main
         tmpItem.Name = "ActiveFile"
         If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
+        ListViewFilesOutOfDate = True
+
     End Sub
 
     Private Sub BT_ActiveFiles_Click(sender As Object, e As EventArgs) Handles BT_ActiveFiles.Click
@@ -2121,6 +2123,9 @@ Public Class Form_Main
         tmpItem.Tag = "ActiveFiles"
         tmpItem.Name = "ActiveFiles"
         If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
+        ListViewFilesOutOfDate = True
+
     End Sub
 
     Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
@@ -2206,6 +2211,8 @@ Public Class Form_Main
             Next
 
             ListViewFiles.EndUpdate()
+
+            ListViewFilesOutOfDate = True
 
         End If
 
