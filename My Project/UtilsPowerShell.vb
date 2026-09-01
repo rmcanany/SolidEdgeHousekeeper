@@ -23,9 +23,6 @@ Public Class UtilsPowerShell
 
         Dim results As Collections.ObjectModel.Collection(Of Management.Automation.PSObject) = Nothing
 
-        'Dim NewWay As Boolean = True
-
-        'If NewWay Then
         If Not Form_Main.UseLocalPowershell Then
 
             Dim tmpAuthorizationManager As Management.Automation.AuthorizationManager = Nothing
@@ -77,32 +74,6 @@ Public Class UtilsPowerShell
 
             End If
         Else
-
-            '    'Dim Result As String = ""
-
-            '    'Dim P As New Diagnostics.Process
-            '    'Dim PSError As String = ""
-
-            '    'P.StartInfo.FileName = "powershell.exe"
-            '    'P.StartInfo.Arguments = $"-command ""{PowerShellFilename.Replace(" ", "` ")}"""
-            '    'P.StartInfo.RedirectStandardError = True
-            '    'P.StartInfo.RedirectStandardOutput = True
-            '    'P.StartInfo.UseShellExecute = False
-            '    'P.StartInfo.CreateNoWindow = True
-            '    'P.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8
-
-            '    'P.Start()
-            '    'PSError = P.StandardError.ReadToEnd
-            '    'Dim PSResult As String = P.StandardOutput.ReadToEnd
-
-            '    'If Not PSError = "" Then
-            '    '    Throw New Exception(PSError)
-            '    'End If
-
-            '    'P.WaitForExit()
-            '    'Result = PSResult.Replace(vbCrLf, "")
-
-            '    'Return Result
 
             Dim runspace As Management.Automation.Runspaces.Runspace
             runspace = Management.Automation.Runspaces.RunspaceFactory.CreateRunspace()

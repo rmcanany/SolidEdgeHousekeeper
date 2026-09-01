@@ -643,9 +643,11 @@ Public Class TaskEditProperties
                         Dim TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value) ' Integer, String, Double, Date, Boolean
 
                         If FindSearchType = "PT" Then
-                            PropValue = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-
-                            'ElseIf FindSearchType = "WC" Then
+                            If Not FindString.Trim = "" Then
+                                PropValue = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                            Else
+                                PropValue = ReplaceString
+                            End If
 
                         Else
                             If FindSearchType = "WC" Then
@@ -660,7 +662,11 @@ Public Class TaskEditProperties
                             Case "string"
                                 SETypeName = "Text"
                                 'Prop.Value = PropValue
-                                Prop.Value = PropValue.Trim
+                                If Not PropValue.Trim = "" Then
+                                    Prop.Value = PropValue.Trim
+                                Else
+                                    Prop.Value = " "  ' Cannot set Prop.Value = "" with API.  Works in UI.
+                                End If
 
                             Case "integer"
                                 SETypeName = "Number"

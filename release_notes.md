@@ -30,6 +30,8 @@ Added the updating of blocks.  This is a straight-forward synchronization betwee
 ### Other
 
 - Cleaned up handling of multi-line exception messages.
+- Fixed an issue where Expression results included trailing carriage returns (Thank you **@robbin70!**)
+- Fixed an issue in `Edit Properties` where the `Find` or `Replace` text could not be blank (Thank you again **@robbin70!**)
 
 ## V2026.2
 
