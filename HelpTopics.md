@@ -994,6 +994,8 @@ An `expression` is basically a program. It enables more complex manipulations of
 
 There are two programming languages available, `NCalc` and `VB`. Choose which one to use on the toolbar. `VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  `NCalc` is more like a formula in Excel. Some of its features are detailed below. 
 
+Oh wait, there is one thing to say about `VB`.  That is about when a property is not found in the file. Normally VB returns the null object `Nothing` when that happens.  Expressions can't deal with that at present.  So instead of `Nothing` it returns the `String` `"<Nothing>"`.  You can check for that in your code if needed. 
+
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
 The toolbar has two sections, `Editor` and `Saved Expressions`. 
@@ -1018,8 +1020,6 @@ With `NCalc` you can perform string processing, create logical expressions, do a
 `NCalc` functions
 
 `concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
-
-Oh wait, there is one thing to say about `VB`.  That is about when a property is not found in the file. Normally VB returns the null object `Nothing` when that happens.  Expressions can't deal with that at present.  So instead of `Nothing` it returns the `String` `"<Nothing>"`.  You can check for that in your code if needed. 
 
 **Run Task Without Solid Edge (Experimental)**
 

@@ -1639,6 +1639,13 @@ Public Class TaskEditProperties
         HelpString += "`VB` is a full-featured programming language.  Explaining its use is beyond the scope of this Help Topic.  "
         HelpString += "`NCalc` is more like a formula in Excel. Some of its features are detailed below. "
 
+        HelpString += vbCrLf + vbCrLf + "Oh wait, there is one thing to say about `VB`.  "
+        HelpString += "That is about when a property is not found in the file. "
+        HelpString += "Normally VB returns the null object `Nothing` when that happens.  "
+        HelpString += "Expressions can't deal with that at present.  "
+        HelpString += "So instead of `Nothing` it returns the `String` `""<Nothing>""`.  "
+        HelpString += "You can check for that in your code if needed. "
+
         HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
 
         HelpString += vbCrLf + vbCrLf + "The toolbar has two sections, `Editor` and `Saved Expressions`. "
@@ -1678,13 +1685,6 @@ Public Class TaskEditProperties
         HelpString += "`startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, "
         HelpString += "`throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, "
         HelpString += "`try()`, `tryParse()`, `typeOf()`, `where()`"
-
-        HelpString += vbCrLf + vbCrLf + "Oh wait, there is one thing to say about `VB`.  "
-        HelpString += "That is about when a property is not found in the file. "
-        HelpString += "Normally VB returns the null object `Nothing` when that happens.  "
-        HelpString += "Expressions can't deal with that at present.  "
-        HelpString += "So instead of `Nothing` it returns the `String` `""<Nothing>""`.  "
-        HelpString += "You can check for that in your code if needed. "
 
         HelpString += vbCrLf + vbCrLf + "**Run Task Without Solid Edge (Experimental)**"
 
