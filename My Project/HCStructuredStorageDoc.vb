@@ -283,7 +283,7 @@ Public Class HCStructuredStorageDoc
     End Function
 
     Public Function DeleteProp(PropSetName As String, PropNameEnglish As String) As Boolean
-        Dim Success As Boolean = False
+        Dim Success As Boolean = True
 
         If Me.PropSets Is Nothing Then
             Throw New Exception("Properties not initialized")
@@ -297,6 +297,8 @@ Public Class HCStructuredStorageDoc
             Dim Prop = GetProp(PropSetName, PropNameEnglish)
             If Prop IsNot Nothing Then
                 Success = PropSet.DeleteProp(PropNameEnglish)
+            Else
+                ' Not an error to not delete a non-existent property
             End If
         End If
 

@@ -11,7 +11,7 @@
 Public Class Form_Main
 
     Public Property Version As String = "2026.3"  ' Two fields, both integers: Year.ReleaseNumber.
-    Public Property PreviewVersion As String = "02" ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "03" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
@@ -1977,7 +1977,13 @@ Public Class Form_Main
         Else
             Dim tmpFileDialog As New OpenFileDialog
             tmpFileDialog.Title = "Select list of files"
-            tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+            'tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+            tmpFileDialog.Filter = "|*.txt;*.tsv;*.csv;*.xls;*.xlsx;*.xlsm"
+            '"Solid Edge files (*.par;*.psm;*.asm;*.dft)|*.par;*.psm;*.asm;*.dft|" +
+            '"Assembly (*.asm)|*.asm|" +
+            '"Part (*.par)|*.par|" +
+            '"Sheet Metal (*.psm)|*.psm|" +
+            '"Draft (*.dft)|*.dft"
             tmpFileDialog.Multiselect = True
             tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
 

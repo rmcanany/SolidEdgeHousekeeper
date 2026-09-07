@@ -98,6 +98,35 @@ Public Class HCPropertiesData
     End Function
 
     Public Function GetPropertyData(
+        PropertySetName As String,
+        PropertyName As String
+        ) As PropertyData
+
+        If Not (PropertySetName.ToLower = "system" Or PropertySetName.ToLower = "custom") Then
+            Return Nothing
+        End If
+
+        Dim PropertySetNameConstant As PropertyData.PropertySetNameConstants
+        Select Case PropertySetName.ToLower
+            Case "system"
+                PropertySetNameConstant = PropertyData.PropertySetNameConstants.System
+            Case "custom"
+                PropertySetNameConstant = PropertyData.PropertySetNameConstants.Custom
+        End Select
+
+        Dim tmpProperty As PropertyData = Nothing
+
+        For Each Item As PropertyData In Me.Items
+            If Item.PropertySetName = PropertySetNameConstant And Item.Name.ToLower = PropertyName.ToLower Then
+                tmpProperty = Item
+                Exit For
+            End If
+        Next
+
+        Return tmpProperty
+    End Function
+
+    Public Function GetPropertyData(
         Name As String,
         Optional tmpItems As List(Of PropertyData) = Nothing
         ) As PropertyData

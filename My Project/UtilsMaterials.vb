@@ -240,21 +240,21 @@ Public Class UtilsMaterials
                             End If
 
                         Case SolidEdgeFramework.MatTablePropIndex.seCoefOfThermalExpansion
-                            UC.SetPropValue(SEDoc, "System", "Coef. of Thermal Exp", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Coef. of Thermal Exp", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                         Case SolidEdgeFramework.MatTablePropIndex.seThermalConductivity
-                            UC.SetPropValue(SEDoc, "System", "Thermal Conductivity", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Thermal Conductivity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                         Case SolidEdgeFramework.MatTablePropIndex.seSpecificHeat
-                            UC.SetPropValue(SEDoc, "System", "Specific Heat", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Specific Heat", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                         Case SolidEdgeFramework.MatTablePropIndex.seModulusElasticity
-                            UC.SetPropValue(SEDoc, "System", "Modulus of Elasticity", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Modulus of Elasticity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                         Case SolidEdgeFramework.MatTablePropIndex.sePoissonRatio
-                            UC.SetPropValue(SEDoc, "System", "Poisson's Ratio", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Poisson's Ratio", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                         Case SolidEdgeFramework.MatTablePropIndex.seYieldStress
-                            UC.SetPropValue(SEDoc, "System", "Yield Stress", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Yield Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                         Case SolidEdgeFramework.MatTablePropIndex.seUltimateStress
-                            UC.SetPropValue(SEDoc, "System", "Ultimate Stress", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Ultimate Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                         Case SolidEdgeFramework.MatTablePropIndex.seElongation
-                            UC.SetPropValue(SEDoc, "System", "Elongation", ModelIdx, AutoAdd, CDbl(LibPropValue))
+                            UC.SetPropValue(SEDoc, "System", "Elongation", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
                     End Select
 
                 Next

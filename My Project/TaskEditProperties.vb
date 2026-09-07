@@ -168,71 +168,288 @@ Public Class TaskEditProperties
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
-        ' Convert glob to regex 
-        ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
-        ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
-        ' https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator
-
         OleMessageFilter.Register()
 
-        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
-        Dim Properties As SolidEdgeFramework.Properties = Nothing
-        Dim Prop As SolidEdgeFramework.Property = Nothing
+        Dim NewWay As Boolean = True
 
-        Dim PropertySetName As String = ""
-        Dim PropertyName As String = ""
-        Dim FindString As String = ""
-        Dim ReplaceString As String = ""
-        Dim FindSearchType As String = ""
-        Dim ReplaceSearchType As String = ""
+        If NewWay Then
 
-        Dim PropertyFound As Boolean = False
+            Dim Proceed As Boolean = True
 
-        Dim Proceed As Boolean = True
+            Proceed = InitiateEdit2(SEApp, SEDoc, Nothing)
 
-        Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
-        Dim PropertiesToEdit As String = ""
-
-        Dim UC As New UtilsCommon
-
-        PropertiesToEdit = Me.JSONString
-
-        Dim DocType As String = UC.GetDocType(SEDoc)
-
-        Dim tmpAsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
-
-        If Not PropertiesToEdit = "" Then
-
-            '{"0":
-            '    {"PropertySet":"Custom",
-            '     "PropertyName":"hmk_Part_Number",
-            '     "FindSearch":"PT",
-            '     "FindString":"a",
-            '     "ReplaceSearch":"PT",
-            '     "ReplaceString":"b"},
-            ' "1":
-            '...
-            '}
-
-            If PropertiesToEdit.StartsWith("SavedSetting") Then
-                Dim UP As New UtilsPreferences
-                Dim EditPropertiesSavedSettingsDict = UP.GetEditPropertiesSavedSettings
-                Dim Key As String = Me.JSONString.Split(":"c)(1)
-                PropertiesToEditDict = EditPropertiesSavedSettingsDict(Key)
-                Dim i = 0
+            If Proceed Then
+                If SEDoc.ReadOnly Then
+                    TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+                Else
+                    'SEApp.DisplayAlerts = True
+                    'SEApp.DoIdle()
+                    SEDoc.Save()
+                    'SEApp.DisplayAlerts = False
+                    SEApp.DoIdle()
+                End If
             Else
-                PropertiesToEditDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+                Dim s As String = "Errors encountered.  No changes made."
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            End If
+
+        Else
+            ' Convert glob to regex 
+            ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
+            ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
+            ' https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator
+
+
+            Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
+            Dim Properties As SolidEdgeFramework.Properties = Nothing
+            Dim Prop As SolidEdgeFramework.Property = Nothing
+
+            Dim PropertySetName As String = ""
+            Dim PropertyName As String = ""
+            Dim FindString As String = ""
+            Dim ReplaceString As String = ""
+            Dim FindSearchType As String = ""
+            Dim ReplaceSearchType As String = ""
+
+            Dim PropertyFound As Boolean = False
+
+            Dim Proceed As Boolean = True
+
+            Dim UC As New UtilsCommon
+
+            Dim DocType As String = UC.GetDocType(SEDoc)
+
+            Dim tmpAsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
+
+            Dim PropertiesToEditDict As Dictionary(Of String, Dictionary(Of String, String))
+            PropertiesToEditDict = GetPropertiesToEditDict()
+            If PropertiesToEditDict Is Nothing Then Proceed = False
+
+            If Not TaskLogger.HasErrors Then
+
+                Dim IsFOA As Boolean = False
+                If DocType = "asm" Then
+                    tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                    IsFOA = tmpAsmDoc.IsFileFamilyByDocument
+                End If
+
+                If (DocType = "asm") And (IsFOA) Then
+                    Dim Members As SolidEdgeAssembly.AssemblyFamilyMembers = tmpAsmDoc.AssemblyFamilyMembers
+                    If Not Members.GlobalEditMode Then
+                        TaskLogger.AddMessage("Cannot process FOA with 'Apply edits to all members' disabled")
+                    Else
+                        For Each Member As SolidEdgeAssembly.AssemblyFamilyMember In Members
+                            Members.ActivateMember(Member.MemberName)
+                            SEApp.DoIdle()
+                            DoFindReplace(SEApp, CType(tmpAsmDoc, SolidEdgeFramework.SolidEdgeDocument), PropertiesToEditDict)
+                        Next
+                    End If
+                Else
+                    DoFindReplace(SEApp, SEDoc, PropertiesToEditDict)
+                End If
 
             End If
 
+            If Not TaskLogger.HasErrors Then
+                If SEDoc.ReadOnly Then
+                    TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+                Else
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+                End If
+            Else
+                Dim s As String = "Errors encountered.  No changes made."
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
-        Else
-            TaskLogger.AddMessage("No properties provided")
+            End If
         End If
 
-        If Not TaskLogger.HasErrors Then
+    End Sub
 
+    Private Overloads Sub ProcessInternal(ByVal FullName As String)
+
+        ' Structured Storage
+        ' https://github.com/ironfede/openmcdf
+
+        Dim NewWay As Boolean = True
+
+        If NewWay Then
+
+            Dim Proceed As Boolean = True
+
+            Dim SSDoc As HCStructuredStorageDoc = Nothing
+
+            Try
+                SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=True)
+                SSDoc.ReadProperties(Me.PropertiesData)
+                SSDoc.ReadLinks(Me.LinkManagementOrder)
+            Catch ex As Exception
+                If SSDoc IsNot Nothing Then SSDoc.Close()
+                Proceed = False
+                TaskLogger.AddMessage(ex.Message)
+            End Try
+
+            If Proceed And SSDoc.IsFOA Then
+                Proceed = False
+                TaskLogger.AddMessage("FOA processing outside of SE not currently implemented")
+            End If
+
+            If Proceed Then
+                Proceed = InitiateEdit2(Nothing, Nothing, SSDoc)
+            End If
+
+            If Proceed Then
+                If SSDoc IsNot Nothing Then
+                    SSDoc.Save()
+                End If
+            Else
+                Dim s As String = "Errors encountered.  No changes made."
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            End If
+
+            If SSDoc IsNot Nothing Then SSDoc.Close()
+
+        Else
+            Dim PropertySetName As String = ""
+            Dim PropertyName As String = ""
+            Dim FindString As String = ""
+            Dim ReplaceString As String = ""
+            Dim FindSearchType As String = ""
+            Dim ReplaceSearchType As String = ""
+
+            Dim PropertyNameEnglish As String
+
+            Dim AutoAdd As Boolean
+
+            Dim PropertyFound As Boolean = False
+
+            Dim Proceed As Boolean = True
+            Dim s As String
+            Dim tf As Boolean
+
+            Dim RowIndexString As String
+
+            Dim UC As New UtilsCommon
+
+            Dim PropertiesToEditDict As Dictionary(Of String, Dictionary(Of String, String))
+            PropertiesToEditDict = GetPropertiesToEditDict()
+            If PropertiesToEditDict Is Nothing Then Proceed = False
+
+            Dim SSDoc As HCStructuredStorageDoc = Nothing
+
+            Try
+                SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=True)
+            Catch ex As Exception
+                If SSDoc IsNot Nothing Then SSDoc.Close()
+                Proceed = False
+                TaskLogger.AddMessage(ex.Message)
+            End Try
+
+            If Proceed And SSDoc.IsFOA Then
+                Proceed = False
+                TaskLogger.AddMessage("FOA processing outside of SE not currently implemented")
+            End If
+
+            If Proceed Then
+                SSDoc.ReadProperties(Me.PropertiesData)
+                SSDoc.ReadLinks(Me.LinkManagementOrder)
+
+                For Each RowIndexString In PropertiesToEditDict.Keys
+
+                    ' The loop continues even in case of error.
+                    ' The resulting error message is more complete that way.
+
+                    ' ####################### Get parameters #######################
+
+                    PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+                    PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+                    FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
+                    FindString = PropertiesToEditDict(RowIndexString)("FindString")
+                    ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
+                    ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
+
+                    Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
+                    If tmpPropertyData Is Nothing Then
+                        Proceed = False
+                        TaskLogger.AddMessage($"Property '{PropertyName}' not recognized")
+                    End If
+
+                    AutoAdd = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
+
+                    ' ####################### Do formula substitution #######################
+
+                    If Proceed Then
+                        DoFormulaSubstitution(SSDoc, PropertyName, ReplaceSearchType, FindString, ReplaceString)
+                        If TaskLogger.HasErrors Then Proceed = False
+                    End If
+
+                    PropertyNameEnglish = tmpPropertyData.EnglishName
+
+                    ' ####################### Check for existence of property #######################
+                    ' Not an error if AutoAdd = TRUE
+
+                    If Proceed Then
+                        tf = AutoAdd Or FindSearchType = "X" Or SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish)
+                        If Not tf Then
+                            Proceed = False
+                            If PropertyName = PropertyNameEnglish Then
+                                s = $"Property '{PropertyName}' not found or not recognized."
+                            Else
+                                s = $"Property '{PropertyName}({PropertyNameEnglish})' not found or not recognized."
+                            End If
+                            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                        End If
+
+                    End If
+
+                    ' ####################### Delete or do the replacement #######################
+
+                    If Proceed Then
+                        DoReplacement(SSDoc, PropertySetName, PropertyName, PropertyNameEnglish,
+                        FindSearchType, FindString, ReplaceSearchType, ReplaceString)
+
+                        If TaskLogger.HasErrors Then Proceed = False
+
+                    End If
+                Next
+
+            End If
+
+            If Not TaskLogger.HasErrors Then
+                If SSDoc IsNot Nothing Then
+                    SSDoc.Save()
+                    SSDoc.Close()
+                End If
+            Else
+                s = "Errors encountered.  No changes made."
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            End If
+
+        End If
+    End Sub
+
+
+    Private Function InitiateEdit2(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        SSDoc As HCStructuredStorageDoc
+        ) As Boolean
+
+        Dim Proceed As Boolean = True
+
+        Dim PropertiesToEditDict As Dictionary(Of String, Dictionary(Of String, String))
+        PropertiesToEditDict = GetPropertiesToEditDict()  ' Function populates TaskLogger if needed
+
+        If PropertiesToEditDict Is Nothing Then Proceed = False
+        If Not Proceed Then Return False
+
+        If SEDoc IsNot Nothing Then
+            Dim UC As New UtilsCommon
+
+            Dim DocType As String = UC.GetDocType(SEDoc)
+            Dim tmpAsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
             Dim IsFOA As Boolean = False
+
             If DocType = "asm" Then
                 tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
                 IsFOA = tmpAsmDoc.IsFileFamilyByDocument
@@ -246,153 +463,417 @@ Public Class TaskEditProperties
                     For Each Member As SolidEdgeAssembly.AssemblyFamilyMember In Members
                         Members.ActivateMember(Member.MemberName)
                         SEApp.DoIdle()
-                        DoFindReplace(SEApp, CType(tmpAsmDoc, SolidEdgeFramework.SolidEdgeDocument), PropertiesToEditDict)
+                        DoFindReplace2(SEApp, SEDoc, Nothing, PropertiesToEditDict)
                     Next
                 End If
             Else
-                DoFindReplace(SEApp, SEDoc, PropertiesToEditDict)
+                DoFindReplace2(SEApp, SEDoc, Nothing, PropertiesToEditDict)
             End If
 
-        End If
+            If Me.TaskLogger.HasErrors Then Proceed = False
 
-        If Not TaskLogger.HasErrors Then
-            If SEDoc.ReadOnly Then
-                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
         Else
-            Dim s = "Errors encountered.  No changes made."
-            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+            DoFindReplace2(Nothing, Nothing, SSDoc, PropertiesToEditDict)
+
+            If Me.TaskLogger.HasErrors Then Proceed = False
 
         End If
+
+        Return Proceed
+    End Function
+
+    Private Sub DoFindReplace2(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        SSDoc As HCStructuredStorageDoc,
+        PropertiesToEditDict As Dictionary(Of String, Dictionary(Of String, String))
+        )
+
+        'Dim Proceed As Boolean = True
+
+        For Each EditStepIdx As String In PropertiesToEditDict.Keys
+
+            Dim Proceed As Boolean = True  ' Resetting to True at each step, for a more complete error message.
+
+            Dim StepLogger As Logger = TaskLogger.AddLogger($"Edit Step {CInt(EditStepIdx) + 1}")
+
+
+            ' ####################### Get parameters #######################
+
+            Dim PropertyName As String = PropertiesToEditDict(EditStepIdx)("PropertyName")
+            Dim PropertySetName As String = PropertiesToEditDict(EditStepIdx)("PropertySet")
+            Dim FindSearchType As String = PropertiesToEditDict(EditStepIdx)("FindSearch")
+            Dim FindString As String = PropertiesToEditDict(EditStepIdx)("FindString")
+            Dim ReplaceSearchType As String = PropertiesToEditDict(EditStepIdx)("ReplaceSearch")
+            Dim ReplaceString As String = PropertiesToEditDict(EditStepIdx)("ReplaceString")
+
+
+            ' ####################### Get property data #######################
+
+            Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertySetName, PropertyName)
+            Dim PropertyNameEnglish As String = ""
+            If tmpPropertyData Is Nothing Then
+                Proceed = False
+                StepLogger.AddMessage($"Property '{PropertySetName}.{PropertyName}' not recognized")
+            Else
+                PropertyNameEnglish = tmpPropertyData.EnglishName
+            End If
+
+
+            ' ####################### Formula substitution #######################
+
+            If Proceed Then
+                Proceed = DoFormulaSubstitution2(SEDoc, SSDoc, PropertyName, ReplaceSearchType, FindString, ReplaceString, StepLogger)
+                'If StepLogger.HasErrors Then Proceed = False
+            End If
+
+
+            ' ####################### Replacement #######################
+
+            If Proceed Then
+                Proceed = DoReplacement2(SEDoc, SSDoc, PropertySetName, PropertyName, PropertyNameEnglish,
+                                         FindSearchType, FindString, ReplaceSearchType, ReplaceString, StepLogger)
+                'If StepLogger.HasErrors Then Proceed = False
+            End If
+
+
+            ' ####################### Update SEDoc material #######################
+
+            If Proceed And SEDoc IsNot Nothing Then
+                Proceed = UpdateMaterial2(SEApp, SEDoc, PropertySetName, PropertyName, PropertyNameEnglish, StepLogger)
+            End If
+
+
+            ' ####################### Save SEDoc properties #######################
+
+            If Proceed And SEDoc IsNot Nothing Then
+                Proceed = SaveProperties2(SEApp, SEDoc, StepLogger)
+            End If
+
+        Next
 
     End Sub
 
-    Private Overloads Sub ProcessInternal(ByVal FullName As String)
-
-        ' Structured Storage
-        ' https://github.com/ironfede/openmcdf
-
-        Dim PropertySetName As String = ""
-        Dim PropertyName As String = ""
-        Dim FindString As String = ""
-        Dim ReplaceString As String = ""
-        Dim FindSearchType As String = ""
-        Dim ReplaceSearchType As String = ""
-
-        Dim PropertyNameEnglish As String
-
-        Dim AutoAdd As Boolean
-
-        Dim PropertyFound As Boolean = False
+    Private Function DoFormulaSubstitution2(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        SSDoc As HCStructuredStorageDoc,
+        PropertyName As String,
+        ReplaceSearchType As String,
+        ByRef FindString As String,
+        ByRef ReplaceString As String,
+        ErrorLogger As Logger
+        ) As Boolean
 
         Dim Proceed As Boolean = True
-        Dim s As String
-        Dim tf As Boolean
 
-        Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
-        Dim PropertiesToEdit As String = ""
-        Dim RowIndexString As String
+        Dim UC As New UtilsCommon
+        Dim s As String
+
+
+        ' ###### FIND STRING ######
+
+        Dim OriginalFindString As String = FindString
+
+        If SEDoc IsNot Nothing Then
+            FindString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, FindString, Me.PropertiesData, Me.TaskLogger, IsExpression:=False)
+        Else
+            FindString = SSDoc.SubstitutePropertyFormulas(FindString, TaskLogger, IsExpression:=False)
+        End If
+
+        If FindString Is Nothing Then
+            Proceed = False
+            s = $"Unable to process formula in Find text '{OriginalFindString}' for property '{PropertyName}'"
+            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+        End If
+
+
+        ' ###### REPLACE STRING ######
+
+        Dim OriginalReplaceString As String = ReplaceString  ' Just for error reporting.
+
+        If ReplaceSearchType = "EX" Then
+            If SEDoc IsNot Nothing Then
+                ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, ReplaceString, Me.PropertiesData, Me.TaskLogger, IsExpression:=True)
+            Else
+                ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, IsExpression:=True)
+            End If
+
+            If ReplaceString Is Nothing OrElse ReplaceString.ToLower.Contains("<nothing>") Then
+                Proceed = False
+                s = $"Unable to evaluate expression in Replace text '{OriginalReplaceString}' for property '{PropertyName}'"
+                If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+            End If
+
+        Else
+            If SEDoc IsNot Nothing Then
+                ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, ReplaceString, Me.PropertiesData, Me.TaskLogger, IsExpression:=False)
+            Else
+                ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, TaskLogger, IsExpression:=False)
+            End If
+
+            If ReplaceString Is Nothing Then
+                Proceed = False
+                s = $"Unable to process formula in Replace text '{ReplaceString}' for property '{PropertyName}'"
+                If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+            End If
+        End If
+
+        Return Proceed
+    End Function
+
+    Private Function DoReplacement2(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        SSDoc As HCStructuredStorageDoc,
+        PropertySetName As String,
+        PropertyName As String,
+        PropertyNameEnglish As String,
+        FindSearchType As String,
+        FindString As String,
+        ReplaceSearchType As String,
+        ReplaceString As String,
+        ErrorLogger As Logger
+        ) As Boolean
 
         Dim UC As New UtilsCommon
 
-        PropertiesToEdit = Me.JSONString
+        Dim Proceed As Boolean = True
 
-        If Not PropertiesToEdit = "" Then
-            PropertiesToEditDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+        If FindSearchType = "X" Then
+            Proceed = DeleteProp2(SEDoc, SSDoc, PropertySetName, PropertyName, PropertyNameEnglish, ErrorLogger)
+
         Else
-            Proceed = False
-            TaskLogger.AddMessage("No properties provided")
-        End If
+            Dim AddProp As Boolean = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
 
-        Dim SSDoc As HCStructuredStorageDoc = Nothing
+            Dim PropertyValue As String = Nothing
+            Proceed = GetPropValue2(SEDoc, SSDoc, PropertySetName, PropertyName, PropertyNameEnglish, AddProp, PropertyValue, ErrorLogger)
 
-        Try
-            SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=True)
-        Catch ex As Exception
-            If SSDoc IsNot Nothing Then SSDoc.Close()
-            Proceed = False
-            TaskLogger.AddMessage(ex.Message)
-        End Try
+            If Proceed Then
+                ' Remove trailing carriage return characters
+                PropertyValue = PropertyValue.Trim
 
-        If Proceed Then
-            SSDoc.ReadProperties(Me.PropertiesData)
-            SSDoc.ReadLinks(Me.LinkManagementOrder)
-
-            For Each RowIndexString In PropertiesToEditDict.Keys
-
-                ' The loop continues even in case of error.
-                ' The resulting error message is more complete that way.
-
-                ' ####################### Get parameters #######################
-
-                PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
-                PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
-                FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
-                FindString = PropertiesToEditDict(RowIndexString)("FindString")
-                ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
-                ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
-
-                Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
-                If tmpPropertyData Is Nothing Then
-                    Proceed = False
-                    TaskLogger.AddMessage($"Property '{PropertyName}' not recognized")
-                End If
-
-                AutoAdd = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
-
-                ' ####################### Do formula substitution #######################
-
-                If Proceed Then
-                    DoFormulaSubstitution(SSDoc, PropertyName, ReplaceSearchType, FindString, ReplaceString)
-                    If TaskLogger.HasErrors Then Proceed = False
-                End If
-
-                PropertyNameEnglish = tmpPropertyData.EnglishName
-
-                ' ####################### Check for existence of property #######################
-                ' Not an error if AutoAdd = TRUE
-
-                If Proceed Then
-                    tf = AutoAdd Or FindSearchType = "X" Or SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish)
-                    If Not tf Then
-                        Proceed = False
-                        If PropertyName = PropertyNameEnglish Then
-                            s = $"Property '{PropertyName}' not found or not recognized."
-                        Else
-                            s = $"Property '{PropertyName}({PropertyNameEnglish})' not found or not recognized."
-                        End If
-                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                If FindSearchType = "PT" Then
+                    ' FindString can be blank.  The Replace method can't handle that.  It can handle a blank ReplaceString.
+                    If Not FindString = "" Then
+                        PropertyValue = PropertyValue.Replace(FindString, ReplaceString)
+                    Else
+                        PropertyValue = ReplaceString
                     End If
 
+                Else
+                    If FindSearchType = "WC" Then
+                        FindString = UC.GlobToRegex(FindString)
+                    End If
+
+                    PropertyValue = Text.RegularExpressions.Regex.Replace(
+                        PropertyValue, FindString, ReplaceString, Text.RegularExpressions.RegexOptions.IgnoreCase)
+
                 End If
 
-                ' ####################### Delete or do the replacement #######################
+                Dim tf As Boolean
+
+                If SEDoc IsNot Nothing Then
+                    tf = UC.SetPropValue(SEDoc, PropertySetName, PropertyName, 0, AddProp, PropertyValue, ErrorLogger)
+                Else
+                    tf = SSDoc.SetPropValue(PropertySetName, PropertyNameEnglish, PropertyValue, AddProperty:=AddProp)
+                End If
+
+                If Not tf Then
+                    Proceed = False
+
+                    Dim s As String
+                    If PropertyName = PropertyNameEnglish Then
+                        s = $"Unable to replace property value '{PropertyName}'."
+                    Else
+                        s = $"Unable to replace property value '{PropertyName}({PropertyNameEnglish})'."
+                    End If
+                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+                End If
+
+            End If
+
+        End If
+
+        Return Proceed
+    End Function
+
+    Private Function GetPropValue2(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        SSDoc As HCStructuredStorageDoc,
+        PropertySetName As String,
+        PropertyName As String,
+        PropertyNameEnglish As String,
+        AddProp As Boolean,
+        ByRef PropertyValue As String,
+        ErrorLogger As Logger
+        ) As Boolean
+
+        Dim Proceed As Boolean = True
+
+        Dim UC As New UtilsCommon
+        Dim tf As Boolean = True
+        Dim s As String
+
+        'Dim PropertyValue As String = Nothing
+
+        If SEDoc IsNot Nothing Then
+            PropertyValue = CStr(UC.GetPropValue(SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp:=False))
+        Else
+            PropertyValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
+        End If
+
+        If PropertyValue Is Nothing Then
+            If AddProp Then
+                If SEDoc IsNot Nothing Then
+                    Dim tmpProp = UC.GetProp(SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp)
+                    If tmpProp Is Nothing Then Proceed = False
+                Else
+                    Proceed = SSDoc.AddProp(PropertySetName, PropertyNameEnglish, Value:=Nothing)
+                End If
 
                 If Proceed Then
-                    DoReplacement(SSDoc, PropertySetName, PropertyName, PropertyNameEnglish,
-                        FindSearchType, FindString, ReplaceSearchType, ReplaceString)
-
-                    If TaskLogger.HasErrors Then Proceed = False
-
+                    If SEDoc IsNot Nothing Then
+                        PropertyValue = CStr(UC.GetPropValue(SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp:=False))
+                    Else
+                        PropertyValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
+                    End If
+                    If PropertyValue Is Nothing Then
+                        Proceed = False
+                    End If
                 End If
+            Else
+                Proceed = False
+                If PropertyName = PropertyNameEnglish Then
+                    s = $"Property '{PropertyName}' not found or not recognized."
+                Else
+                    s = $"Property '{PropertyName}({PropertyNameEnglish})' not found or not recognized."
+                End If
+                If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+            End If
+
+        End If
+
+        Return Proceed
+    End Function
+
+    Private Function DeleteProp2(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        SSDoc As HCStructuredStorageDoc,
+        PropertySetName As String,
+        PropertyName As String,
+        PropertyNameEnglish As String,
+        ErrorLogger As Logger
+        ) As Boolean
+
+        Dim Proceed As Boolean = True
+
+        Dim UC As New UtilsCommon
+        Dim tf As Boolean = True
+        Dim s As String
+
+        Try
+            If SEDoc IsNot Nothing Then
+                tf = UC.DeleteProp(SEDoc, PropertySetName, PropertyName)
+            Else
+                tf = SSDoc.DeleteProp(PropertySetName, PropertyNameEnglish)
+            End If
+        Catch ex As Exception
+            Proceed = False
+            ErrorLogger.AddMessage($"Unable to delete property.  Exception {ex.Message}")
+            tf = False
+        End Try
+
+        If Proceed And Not tf Then
+            Proceed = False
+            If PropertyName = PropertyNameEnglish Then
+                s = $"Unable to delete property '{PropertyName}'.  This command only works on custom properties."
+            Else
+                s = $"Unable to delete property '{PropertyName}({PropertyNameEnglish})'.  This command only works on custom properties."
+            End If
+            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+        End If
+
+        Return Proceed
+    End Function
+
+    Private Function UpdateMaterial2(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropertySetName As String,
+        PropertyName As String,
+        PropertyNameEnglish As String,
+        ErrorLogger As Logger
+        ) As Boolean
+
+        Dim Proceed As Boolean = True
+
+        Dim UC As New UtilsCommon
+
+        Dim tf As Boolean = True
+        tf = tf And (PropertySetName.ToLower = "system")
+        tf = tf And (PropertyNameEnglish.ToLower = "material")
+        tf = tf And (Me.AutoUpdateMaterial)
+
+        If tf Then
+            Select Case UC.GetDocType(SEDoc)
+                Case "par", "psm"
+                    Dim UM As New UtilsMaterials
+                    UM.UpdateMaterialFromMaterialTable(SEApp, SEDoc, Me.MaterialTable,
+                                                       _RemoveFaceStyleOverrides:=False,
+                                                       _UpdateFaceStyles:=True,
+                                                       _UseFinishFaceStyle:=False,
+                                                       _FinishName:="",
+                                                       _ExcludedFinishesList:=Nothing,
+                                                       _OverrideBodyFaceStyle:=False,
+                                                       _OverrideMaterialFaceStyle:=False,
+                                                       ErrorLogger)
+                    If ErrorLogger.HasErrors Then Proceed = False
+
+                Case Else
+                    ' Not an error
+            End Select
+        End If
+
+
+        Return Proceed
+    End Function
+
+    Private Function SaveProperties2(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ErrorLogger As Logger
+        ) As Boolean
+
+        Dim Proceed As Boolean = True
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets
+
+        Try
+            SEApp.DoIdle()
+            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            For Each Properties As SolidEdgeFramework.Properties In PropertySets
+                Dim ss = Properties.Name
+                Properties.Save()
+                SEApp.DoIdle()
             Next
 
-        End If
+            'If SEDoc.ReadOnly Then
+            '    Dim s As String = "Cannot save document marked 'Read Only'"
+            '    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
 
-        If Not TaskLogger.HasErrors Then
-            If SSDoc IsNot Nothing Then
-                SSDoc.Save()
-                SSDoc.Close()
-            End If
-        Else
-            s = "Errors encountered.  No changes made."
-            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
-        End If
+            'Else
+            '    SEDoc.Save()
+            '    SEApp.DoIdle()
+            'End If
 
-    End Sub
+        Catch ex As Exception
+            Proceed = False
+            Dim s As String = $"Problem accessing or saving Properties.  Exception: {ex.Message}"
+            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+        End Try
+
+        Return Proceed
+    End Function
+
 
 
     Private Sub DoReplacement(
@@ -574,19 +1055,12 @@ Public Class TaskEditProperties
                 If ReplaceSearchType = "EX" Then
                     Dim OriginalReplaceString As String = ReplaceString
 
-
-                    ' ####### 20260831 Dealing with an expression that returns a property conaining trailing vbCrLf characters.
                     ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, True)
-                    'ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger, True).Trim
-
-
 
                     If ReplaceString Is Nothing OrElse ReplaceString.ToLower.Contains("<nothing>") Then
                         Proceed = False
                         s = $"Unable to evaluate expression in Replace text '{OriginalReplaceString}' for property '{PropertyName}'"
                         If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
-                        'Else
-                        '    ReplaceString = ReplaceString.Trim
                     End If
                 Else
                     ReplaceString = UC.SubstitutePropertyFormulas(SEDoc, FullName, ReplaceString, Me.PropertiesData, TaskLogger)
@@ -775,6 +1249,47 @@ Public Class TaskEditProperties
     End Sub
 
 
+    Private Function GetPropertiesToEditDict() As Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim PropertiesToEditDict As Dictionary(Of String, Dictionary(Of String, String)) = Nothing
+        Dim PropertiesToEdit As String = ""
+
+        Dim UC As New UtilsCommon
+
+        PropertiesToEdit = Me.JSONString
+
+        If Not PropertiesToEdit = "" Then
+
+            '{"0":
+            '    {"PropertySet":"Custom",
+            '     "PropertyName":"hmk_Part_Number",
+            '     "FindSearch":"PT",
+            '     "FindString":"a",
+            '     "ReplaceSearch":"PT",
+            '     "ReplaceString":"b"},
+            ' "1":
+            '...
+            '}
+
+            If PropertiesToEdit.StartsWith("SavedSetting") Then
+                Dim UP As New UtilsPreferences
+                Dim EditPropertiesSavedSettingsDict = UP.GetEditPropertiesSavedSettings
+                Dim Key As String = Me.JSONString.Split(":"c)(1)
+                PropertiesToEditDict = EditPropertiesSavedSettingsDict(Key)
+                Dim i = 0
+            Else
+                PropertiesToEditDict = Newtonsoft.Json.JsonConvert.DeserializeObject(
+                    Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+            End If
+
+        Else
+            TaskLogger.AddMessage("No properties provided")
+        End If
+
+        Return PropertiesToEditDict
+    End Function
+
+
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -875,17 +1390,16 @@ Public Class TaskEditProperties
                 If Not FileIO.FileSystem.FileExists(Me.MaterialTable) Then
                     ErrorLogger.AddMessage("Select a valid material table")
                 End If
+            End If
 
+            If Me.PropertiesData.Items.Count = 0 Then
+                ErrorLogger.AddMessage("Template properties not found.  Update them on the Configuration Tab -- Templates Page")
             End If
 
             If Not Me.SolidEdgeRequired Then
-                If Me.PropertiesData.Items.Count = 0 Then
-                    ErrorLogger.AddMessage("Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page")
-                End If
                 If Me.LinkManagementOrder Is Nothing Then
                     ErrorLogger.AddMessage("LinkManagementOrder is null.  Set LinkMgmt.txt on the Configuration Tab -- Top Level Assembly Page")
-                End If
-                If Me.LinkManagementOrder IsNot Nothing AndAlso Me.LinkManagementOrder.Count = 0 Then
+                ElseIf Me.LinkManagementOrder.Count = 0 Then
                     ErrorLogger.AddMessage("LinkMgmt.txt file does not contain any search order information")
                 End If
             End If

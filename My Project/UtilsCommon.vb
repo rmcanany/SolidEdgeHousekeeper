@@ -662,7 +662,8 @@ Public Class UtilsCommon
         PropertyName As String,
         ModelLinkIdx As Integer,
         AddProp As Boolean,
-        PropValue As Object
+        PropValue As Object,
+        ErrorLogger As Logger
         ) As Boolean
 
         Dim Success As Boolean = True
@@ -676,20 +677,122 @@ Public Class UtilsCommon
 
         Prop = GetProp(SEDoc, PropertySetName, PropertyName, ModelLinkIdx, AddProp)
 
-        If Prop IsNot Nothing AndAlso Not Prop.Value.ToString = PropValue.ToString Then
+        Dim SETypeName As String = ""
+
+        Try
+            Dim TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value) ' Integer, String, Double, Date, Boolean
+
+            Select Case TypeName.ToLower
+                Case "string"
+                    SETypeName = "Text"
+                    Dim tmpPropValue As String = CStr(PropValue)
+                    If Not tmpPropValue.Trim = "" Then
+                        Prop.Value = tmpPropValue.Trim
+                    Else
+                        Prop.Value = " "  ' Cannot set Prop.Value = "" with API.  Works in UI.
+                    End If
+
+                Case "integer"
+                    SETypeName = "Number"
+
+                    Success = False
+                    Dim s As String = $"Property '{PropertyName}': Currently unable to process variable type '{SETypeName}'"
+                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+
+                                ' First try int, then double
+                                'Try
+                                '    Dim i As Integer = CInt(PropValue)
+                                '    Prop.Value = i  <- This doesn't work, but doesn't throw an exception
+                                '    If Not CInt(Prop.Value) = i Then  <- This breaks something.  Bombs out later getting SEDoc.Fullname.
+                                '        Dim k = 0
+                                '    End If
+                                '    Dim j = 0
+                                'Catch ex2 As Exception
+                                '    Dim d As Double = CDbl(PropValue)
+                                '    Prop.Value = d
+                                '    Dim j = 0
+                                'End Try
+
+                Case "double"
+                    SETypeName = "Number"
+
+                    Success = False
+                    Dim s As String = $"Property '{PropertyName}': Currently unable to process variable type '{SETypeName}'"
+                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+
+                                'Dim d As Double = CDbl(PropValue)
+                                'Prop.Value = d
+
+                Case "date"
+                    SETypeName = "Date"
+                    Prop.Value = CType(PropValue, DateTime)
+
+                Case "boolean"
+                    SETypeName = "Yes or No"
+                    Prop.Value = CBool(PropValue)
+            End Select
+
+        Catch ex As Exception
+            Success = False
+            Dim s As String = $"Unable to set '{PropertyName}' (variable type '{SETypeName}') to '{PropValue}'.  Exception: {ex.Message}"
+            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+        End Try
+
+
+
+
+
+
+
+
+
+        'If Prop IsNot Nothing AndAlso Not Prop.Value.ToString = PropValue.ToString Then
+        '    Try
+        '        Prop.Value = PropValue
+        '    Catch ex As Exception
+        '        Success = False
+        '    End Try
+        'Else
+        '    Success = False
+        'End If
+
+        If Success Then PropertySets.Save()
+
+        Return Success
+    End Function
+
+    Public Function DeleteProp(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropertySetName As String,
+        PropertyName As String
+        ) As Boolean
+
+        Dim Success As Boolean = True
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets
+        Dim Prop As SolidEdgeFramework.Property
+
+        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+
+        Dim UC As New UtilsCommon
+
+        Prop = GetProp(SEDoc, PropertySetName, PropertyName, 0, AddProp:=False)
+
+        If Prop IsNot Nothing Then
             Try
-                Prop.Value = PropValue
+                Prop.Delete()
             Catch ex As Exception
                 Success = False
             End Try
         Else
-            Success = False
+            ' Not an error to not delete a non-existent property
         End If
 
         If Success Then PropertySets.Save()
 
         Return Success
     End Function
+
 
     Public Function GetProp(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
