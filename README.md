@@ -964,7 +964,7 @@ There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`.
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. 
-- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
+- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.  Note this mode in the `Replace Text` assumes a `capture group` from a `Find Text` `RX` (I don't know what that means, either).
 - `EX` stands for 'Expression'.  It is discussed below. 
 - `X` isn't really a search mode.  It means delete the chosen property. 
 

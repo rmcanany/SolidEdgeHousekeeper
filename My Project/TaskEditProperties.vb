@@ -1580,7 +1580,9 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. "
         HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. "
         HelpString += "Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
-        HelpString += "for more information."
+        HelpString += "for more information.  "
+        HelpString += "Note this mode in the `Replace Text` assumes a `capture group` from a `Find Text` `RX` "
+        HelpString += "(I don't know what that means, either)."
         HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
         HelpString += vbCrLf + "- `X` isn't really a search mode.  It means delete the chosen property. "
 
