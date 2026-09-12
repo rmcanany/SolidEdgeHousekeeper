@@ -182,10 +182,7 @@ Public Class TaskEditProperties
                 If SEDoc.ReadOnly Then
                     TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
                 Else
-                    'SEApp.DisplayAlerts = True
-                    'SEApp.DoIdle()
                     SEDoc.Save()
-                    'SEApp.DisplayAlerts = False
                     SEApp.DoIdle()
                 End If
             Else
@@ -281,18 +278,23 @@ Public Class TaskEditProperties
 
             Try
                 SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=True)
-                SSDoc.ReadProperties(Me.PropertiesData)
-                SSDoc.ReadLinks(Me.LinkManagementOrder)
+                If SSDoc.IsFOA Then
+                    Proceed = False
+                    TaskLogger.AddMessage("FOA processing outside of SE not currently implemented")
+                Else
+                    SSDoc.ReadProperties(Me.PropertiesData)
+                    SSDoc.ReadLinks(Me.LinkManagementOrder)
+                End If
             Catch ex As Exception
                 If SSDoc IsNot Nothing Then SSDoc.Close()
                 Proceed = False
                 TaskLogger.AddMessage(ex.Message)
             End Try
 
-            If Proceed And SSDoc.IsFOA Then
-                Proceed = False
-                TaskLogger.AddMessage("FOA processing outside of SE not currently implemented")
-            End If
+            'If Proceed And SSDoc.IsFOA Then
+            '    Proceed = False
+            '    TaskLogger.AddMessage("FOA processing outside of SE not currently implemented")
+            'End If
 
             If Proceed Then
                 Proceed = InitiateEdit2(Nothing, Nothing, SSDoc)
@@ -441,53 +443,57 @@ Public Class TaskEditProperties
         PropertiesToEditDict = GetPropertiesToEditDict()  ' Function populates TaskLogger if needed
 
         If PropertiesToEditDict Is Nothing Then Proceed = False
-        If Not Proceed Then Return False
 
-        If SEDoc IsNot Nothing Then
-            Dim UC As New UtilsCommon
+        If Proceed Then
+            If SEDoc IsNot Nothing Then
+                Dim UC As New UtilsCommon
 
-            Dim DocType As String = UC.GetDocType(SEDoc)
-            Dim tmpAsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
-            Dim IsFOA As Boolean = False
+                Dim DocType As String = UC.GetDocType(SEDoc)
+                Dim tmpAsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
+                Dim IsFOA As Boolean = False
 
-            If DocType = "asm" Then
-                tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-                IsFOA = tmpAsmDoc.IsFileFamilyByDocument
-            End If
-
-            If (DocType = "asm") And (IsFOA) Then
-                Dim Members As SolidEdgeAssembly.AssemblyFamilyMembers = tmpAsmDoc.AssemblyFamilyMembers
-                If Not Members.GlobalEditMode Then
-                    TaskLogger.AddMessage("Cannot process FOA with 'Apply edits to all members' disabled")
-                Else
-                    For Each Member As SolidEdgeAssembly.AssemblyFamilyMember In Members
-                        Members.ActivateMember(Member.MemberName)
-                        SEApp.DoIdle()
-                        DoFindReplace2(SEApp, SEDoc, Nothing, PropertiesToEditDict)
-                    Next
+                If DocType = "asm" Then
+                    tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                    IsFOA = tmpAsmDoc.IsFileFamilyByDocument
                 End If
+
+                If (DocType = "asm") And (IsFOA) Then
+                    Dim Members As SolidEdgeAssembly.AssemblyFamilyMembers = tmpAsmDoc.AssemblyFamilyMembers
+                    If Not Members.GlobalEditMode Then
+                        Proceed = False
+                        TaskLogger.AddMessage("Cannot process FOA with 'Apply edits to all members' disabled")
+                    Else
+                        For Each Member As SolidEdgeAssembly.AssemblyFamilyMember In Members
+                            Members.ActivateMember(Member.MemberName)
+                            SEApp.DoIdle()
+                            Proceed = DoFindReplace2(SEApp, SEDoc, Nothing, PropertiesToEditDict)
+                            If Not Proceed Then Exit For
+                        Next
+                    End If
+                Else
+                    Proceed = DoFindReplace2(SEApp, SEDoc, Nothing, PropertiesToEditDict)
+                End If
+
+                'If Me.TaskLogger.HasErrors Then Proceed = False
+
             Else
-                DoFindReplace2(SEApp, SEDoc, Nothing, PropertiesToEditDict)
+                Proceed = DoFindReplace2(Nothing, Nothing, SSDoc, PropertiesToEditDict)
+
+                'If Me.TaskLogger.HasErrors Then Proceed = False
+
             End If
-
-            If Me.TaskLogger.HasErrors Then Proceed = False
-
-        Else
-            DoFindReplace2(Nothing, Nothing, SSDoc, PropertiesToEditDict)
-
-            If Me.TaskLogger.HasErrors Then Proceed = False
 
         End If
 
         Return Proceed
     End Function
 
-    Private Sub DoFindReplace2(
+    Private Function DoFindReplace2(
         SEApp As SolidEdgeFramework.Application,
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         SSDoc As HCStructuredStorageDoc,
         PropertiesToEditDict As Dictionary(Of String, Dictionary(Of String, String))
-        )
+        ) As Boolean
 
         'Dim Proceed As Boolean = True
 
@@ -552,7 +558,9 @@ Public Class TaskEditProperties
 
         Next
 
-    End Sub
+        Return Me.TaskLogger.HasErrors
+
+    End Function
 
     Private Function DoFormulaSubstitution2(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -1258,7 +1266,7 @@ Public Class TaskEditProperties
 
         PropertiesToEdit = Me.JSONString
 
-        If Not PropertiesToEdit = "" Then
+        If Not (PropertiesToEdit = "" Or PropertiesToEdit = "{}") Then
 
             '{"0":
             '    {"PropertySet":"Custom",
@@ -1275,7 +1283,11 @@ Public Class TaskEditProperties
                 Dim UP As New UtilsPreferences
                 Dim EditPropertiesSavedSettingsDict = UP.GetEditPropertiesSavedSettings
                 Dim Key As String = Me.JSONString.Split(":"c)(1)
-                PropertiesToEditDict = EditPropertiesSavedSettingsDict(Key)
+                If EditPropertiesSavedSettingsDict.Keys.Contains(Key) Then
+                    PropertiesToEditDict = EditPropertiesSavedSettingsDict(Key)
+                Else
+                    Me.TaskLogger.AddMessage($"Saved setting not found '{Me.JSONString}'")
+                End If
                 Dim i = 0
             Else
                 PropertiesToEditDict = Newtonsoft.Json.JsonConvert.DeserializeObject(

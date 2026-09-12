@@ -397,8 +397,13 @@ Public MustInherit Class Task
                     tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
                 Case "List`1".ToLower
                     Dim Something = PropInfo.GetValue(Me, Nothing)
+                    'If PropInfo.PropertyType.IsGenericType Then
+                    '    Dim underlyingType = PropInfo.PropertyType.GetGenericArguments()
+                    '    'List(Of String): underlyingType.Name = "String"
+                    '    'List(Of List(Of String)): underlyingType.Name = "List`1"
+                    '    Dim i = 0
+                    'End If
                     tmpJSONDict(PropInfoName) = Newtonsoft.Json.JsonConvert.SerializeObject(Something)
-                    Dim i = 0
 
                 Case "Image".ToLower  ' Nothing to do here and below
                 Case "UCTaskControl".ToLower
@@ -462,9 +467,18 @@ Public MustInherit Class Task
                         PropInfo.SetValue(Me, CBool(tmpJSONDict(PropInfoName)))
                     Case "List`1"
                         Dim Something = tmpJSONDict(PropInfoName)
-                        Dim tmpList = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(Something)
-                        PropInfo.SetValue(Me, tmpList)
-                        Dim i = 0
+                        If PropInfo.PropertyType.IsGenericType Then
+                            Dim UnderlyingType = PropInfo.PropertyType.GetGenericArguments()(0).ToString
+                            If UnderlyingType = "System.String" Then
+                                ' List(Of String)
+                                Dim tmpList = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of String))(Something)
+                                PropInfo.SetValue(Me, tmpList)
+                            ElseIf UnderlyingType = "System.Collections.Generic.List`1[System.String]" Then
+                                ' List(Of List(Of String))
+                                Dim tmpList = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of List(Of String)))(Something)
+                                PropInfo.SetValue(Me, tmpList)
+                            End If
+                        End If
                 End Select
 
             End If

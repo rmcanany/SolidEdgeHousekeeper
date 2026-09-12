@@ -17,6 +17,21 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End Set
     End Property
 
+
+    Private _DraftTemplateCriteria As List(Of List(Of String))
+    Public Property DraftTemplateCriteria As List(Of List(Of String))
+        Get
+            Return _DraftTemplateCriteria
+        End Get
+        Set(value As List(Of List(Of String)))
+            _DraftTemplateCriteria = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+
+            End If
+        End Set
+    End Property
+
+
     Private _UseConfigurationPageTemplates As Boolean
     Public Property UseConfigurationPageTemplates As Boolean
         Get
@@ -162,6 +177,10 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Me.AddMissingBorders = False
         Me.UpdateLibraryBlocks = False
         Me.UpdateStyles = False
+
+        Me.DraftTemplateCriteria = New List(Of List(Of String))
+        'Me.DraftTemplateCriteria.Add({"A", "B", "C"}.ToList)
+        'Me.DraftTemplateCriteria.Add({"D", "E", "F"}.ToList)
 
     End Sub
 

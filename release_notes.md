@@ -15,23 +15,52 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.3
 
-### Update Drawings
+### Update Drawing Styles from Template
+
+#### Select Template by Property
+
+Sponsored by **.**  Thank you!
+
+Added the ability to select the template based on a file property's value.  This can be handy if you require different templates based on part type, client, etc.
+
+This can also be accomplished with an `Expression` in single-template mode.  However, if programming is not your thing, this is a simpler method with the same result.
+
+#### Copy/Update Blocks
 
 Contributed by **@JBen79.**  Thank you!
+
+Copies block definitions that are missing from the file and replaces same-name block definitions with those from the template. Existing block occurrences remain in place. 
+
+This is a straight-forward synchronization between the template and the file.  For more fine-grained actions, like renaming and deleting, take a look at the separate `Update Blocks` command.
+
+See the [<ins>**Update Drawing Styles from Template Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/a53bc2e6cc4512976432ee4a1a59b7372bb81270/HelpTopics.md#update-drawing-styles-from-template) for details.
+
+### Update Drawings Views
+
+Contributed by **@JBen79.**  Thank you, yet again!
 
 Added the updating of all tables including holes, bends, user tables and more.  Added the same functionality to `Check Drawings`.
 
-### Update Drawing Styles from Templates
+See the [<ins>**Update Drawings Views Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/a53bc2e6cc4512976432ee4a1a59b7372bb81270/HelpTopics.md#update-drawing-views) for details.
 
-Contributed by **@JBen79.**  Thank you!
+### Edit Properties
 
-Added the updating of blocks.  This is a straight-forward synchronization between the template and the file.  For more fine-grained actions, like renaming and deleting blocks, the `Update Blocks` command can be used.
+Fixed two issues with property handling (Thank you **@robbin70!**)
+
+The first was that the `Find` or `Replace` text could not be blank.
+
+The second was that an `Expression` result contained two trailing carriage returns.  If you used `Expressions` in V2026.2, those extra characters may have been added to some of your files.  
+
+This does not cause any known problem, but to clean it up, you can replace any affected property value with itself, like so:
+
+![](My%20Project/media/release_notes_set_prop_to_itself.png)
+
+See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/a53bc2e6cc4512976432ee4a1a59b7372bb81270/HelpTopics.md#edit-properties) for details.
+
 
 ### Other
 
 - Cleaned up handling of multi-line exception messages.
-- Fixed an issue where Expression results included trailing carriage returns (Thank you **@robbin70!**)
-- Fixed an issue in `Edit Properties` where the `Find` or `Replace` text could not be blank (Thank you again **@robbin70!**)
 
 ## V2026.2
 
