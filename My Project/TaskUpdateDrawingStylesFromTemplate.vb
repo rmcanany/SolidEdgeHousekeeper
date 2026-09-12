@@ -4,6 +4,32 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     Inherits Task
 
+    Private _SelectTemplateByProperty As Boolean
+    Public Property SelectTemplateByProperty As Boolean
+        Get
+            Return _SelectTemplateByProperty
+        End Get
+        Set(value As Boolean)
+            _SelectTemplateByProperty = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SelectTemplateByProperty.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UseConfigurationPageTemplates As Boolean
+    Public Property UseConfigurationPageTemplates As Boolean
+        Get
+            Return _UseConfigurationPageTemplates
+        End Get
+        Set(value As Boolean)
+            _UseConfigurationPageTemplates = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _DraftTemplate As String
     Public Property DraftTemplate As String
         Get
@@ -26,24 +52,11 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Set(value As List(Of List(Of String)))
             _DraftTemplateCriteria = value
             If Me.TaskOptionsTLP IsNot Nothing Then
-
+                UpdateDGV()
             End If
         End Set
     End Property
 
-
-    Private _UseConfigurationPageTemplates As Boolean
-    Public Property UseConfigurationPageTemplates As Boolean
-        Get
-            Return _UseConfigurationPageTemplates
-        End Get
-        Set(value As Boolean)
-            _UseConfigurationPageTemplates = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Checked = value
-            End If
-        End Set
-    End Property
 
     Private _UpdateBorder As Boolean
     Public Property UpdateBorder As Boolean
@@ -136,12 +149,17 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End Set
     End Property
 
+    Private Property ContextMenuStrip1 As ContextMenuStrip
+    Private Property DGVRow As Integer
+
 
 
     Enum ControlNames
+        SelectTemplateByProperty
         UseConfigurationPageTemplates
         Browse
         DraftTemplate
+        DraftTemplateCriteria
         UpdateBorder
         AddMissingBorders
         UpdateLibraryBlocks
@@ -853,12 +871,28 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim CheckBox As CheckBox
         Dim TextBox As TextBox
         Dim Button As Button
+        Dim DataGridView As DataGridView
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
+        Me.ContextMenuStrip1 = New ContextMenuStrip
+        Me.ContextMenuStrip1.Items.Add(New ToolStripMenuItem("Edit row", Nothing, New EventHandler(AddressOf EditRow)))
+        Me.ContextMenuStrip1.Items.Add(New ToolStripMenuItem("Move row up", Nothing, New EventHandler(AddressOf MoveRowUp)))
+        Me.ContextMenuStrip1.Items.Add(New ToolStripMenuItem("Move row down", Nothing, New EventHandler(AddressOf MoveRowDown)))
+        Me.ContextMenuStrip1.Items.Add(New ToolStripMenuItem("Delete row", Nothing, New EventHandler(AddressOf DeleteRow)))
+
         RowIndex = 0
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.SelectTemplateByProperty.ToString, "Select template by file property")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.UseConfigurationPageTemplates.ToString, "Use configuration page templates")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -878,6 +912,22 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
+
+        RowIndex += 1
+
+        Dim ColumnHeaders As List(Of String) = {"Property Formula", "Value", "Template"}.ToList
+        DataGridView = FormatOptionsDataGridView(ControlNames.DraftTemplateCriteria.ToString, ColumnHeaders, "Textbox", Nothing)
+        DataGridView.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
+        AddHandler DataGridView.MouseDown, AddressOf DataGridViewOptions_MouseDown
+        tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(DataGridView, 2)
+        For i = 0 To ColumnHeaders.Count - 1
+            DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+        Next
+        DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
+        ControlsDict(DataGridView.Name) = DataGridView
+        DataGridView.Visible = False
+
 
         RowIndex += 1
 
@@ -967,6 +1017,123 @@ Public Class TaskUpdateDrawingStylesFromTemplate
     End Sub
 
 
+    Private Sub DataGridViewOptions_MouseDown(sender As Object, e As MouseEventArgs)
+
+        Dim DataGridView = CType(sender, DataGridView)
+
+        Me.DGVRow = DataGridView.HitTest(e.X, e.Y).RowIndex
+
+        If e.Button = MouseButtons.Right Then
+            If Me.DGVRow >= 0 Then
+                Me.ContextMenuStrip1.Show(DataGridView, New Point(e.X, e.Y))
+            End If
+        End If
+
+    End Sub
+
+    Private Sub EditRow(sender As Object, e As EventArgs)
+
+        If DGVRow < 0 Then Exit Sub
+
+        Dim FEDTC As New FormEditDraftTemplateCriterion
+
+        If Not Me.DraftTemplateCriteria.Count >= DGVRow + 1 Then  ' Need to add a row to Me.DraftTemplateCriteria
+            Dim tmpDraftTemplateCriteria As List(Of List(Of String)) = Me.DraftTemplateCriteria
+            tmpDraftTemplateCriteria.Add({"", "", ""}.ToList)
+            Me.DraftTemplateCriteria = tmpDraftTemplateCriteria
+        End If
+        FEDTC.DraftTemplateCriterion = Me.DraftTemplateCriteria(Me.DGVRow)
+
+        Dim Result As DialogResult = FEDTC.ShowDialog()
+
+        If Result = DialogResult.OK Then
+            Dim tmpDraftTemplateCriteria As List(Of List(Of String)) = Me.DraftTemplateCriteria
+            tmpDraftTemplateCriteria(Me.DGVRow) = FEDTC.DraftTemplateCriterion
+            Me.DraftTemplateCriteria = tmpDraftTemplateCriteria
+        End If
+
+    End Sub
+
+    Private Sub MoveRowUp(sender As Object, e As EventArgs)
+        MoveRow("Up")
+    End Sub
+
+    Private Sub MoveRowDown(sender As Object, e As EventArgs)
+        MoveRow("Down")
+    End Sub
+
+    Private Sub MoveRow(Direction As String)
+        ' Example
+        ' 0 A
+        ' 1 B
+        ' 2 C <- DGVRow = 2
+        ' 3 D
+        ' 4 (NewRow)
+
+        If DGVRow < 0 Or DGVRow > Me.DraftTemplateCriteria.Count - 1 Then Exit Sub
+
+        Dim tmpDraftTemplateCriteria As New List(Of List(Of String))
+
+        If Direction = "Up" Then
+            If DGVRow = 0 Then Exit Sub
+            For i = 0 To Me.DraftTemplateCriteria.Count - 1
+                If i = DGVRow - 1 Then
+                    tmpDraftTemplateCriteria.Add(Me.DraftTemplateCriteria(i + 1))
+                ElseIf i = DGVRow Then
+                    tmpDraftTemplateCriteria.Add(Me.DraftTemplateCriteria(i - 1))
+                Else
+                    tmpDraftTemplateCriteria.Add(Me.DraftTemplateCriteria(i))
+                End If
+            Next
+        Else
+            If DGVRow >= Me.DraftTemplateCriteria.Count - 1 Then Exit Sub  ' Accounts for NewRow in DataGridView
+            For i = 0 To Me.DraftTemplateCriteria.Count - 1
+                If i = DGVRow Then
+                    tmpDraftTemplateCriteria.Add(Me.DraftTemplateCriteria(i + 1))
+                ElseIf i = DGVRow + 1 Then
+                    tmpDraftTemplateCriteria.Add(Me.DraftTemplateCriteria(i - 1))
+                Else
+                    tmpDraftTemplateCriteria.Add(Me.DraftTemplateCriteria(i))
+                End If
+            Next
+
+        End If
+
+        Me.DraftTemplateCriteria = tmpDraftTemplateCriteria
+
+    End Sub
+
+    Private Sub DeleteRow(sender As Object, e As EventArgs)
+
+        If DGVRow < 0 Or DGVRow > Me.DraftTemplateCriteria.Count - 1 Then Exit Sub
+
+        Dim tmpDraftTemplateCriteria As List(Of List(Of String)) = Me.DraftTemplateCriteria
+        tmpDraftTemplateCriteria.RemoveAt(DGVRow)
+        Me.DraftTemplateCriteria = tmpDraftTemplateCriteria
+
+    End Sub
+
+    Private Sub UpdateDGV()
+
+        Dim DGV As DataGridView = CType(ControlsDict(ControlNames.DraftTemplateCriteria.ToString), DataGridView)
+        DGV.Rows.Clear()
+
+        For Each L As List(Of String) In Me.DraftTemplateCriteria
+            DGV.Rows.Add(L(0), L(1), L(2))
+        Next
+
+        DGV.Height = (DGV.Rows(0).Height + 1) * (DGV.Rows.Count + 2)
+
+        DGV.ClearSelection()
+    End Sub
+
+    'Public Sub UpdateDGVSize(DGV As DataGridView)
+    '    DGV.Height = (DGV.Rows(0).Height + 1) * (DGV.Rows.Count + 2)
+    'End Sub
+
+
+
+
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
@@ -1005,6 +1172,20 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim Name = Checkbox.Name
 
         Select Case Name
+
+            Case ControlNames.SelectTemplateByProperty.ToString
+                Me.SelectTemplateByProperty = Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Visible = Not Me.SelectTemplateByProperty
+
+                Dim tf As Boolean = Not Me.SelectTemplateByProperty
+                tf = tf And Not Me.UseConfigurationPageTemplates
+
+                CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = tf
+                CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox).Visible = tf
+
+                CType(ControlsDict(ControlNames.DraftTemplateCriteria.ToString), DataGridView).Visible = Me.SelectTemplateByProperty
+
 
             Case ControlNames.UseConfigurationPageTemplates.ToString
                 Me.UseConfigurationPageTemplates = Checkbox.Checked

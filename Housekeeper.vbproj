@@ -226,6 +226,12 @@
     <Compile Include="My Project\FormBlockLibraryBlockNames.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormEditDraftTemplateCriterion.Designer.vb">
+      <DependentUpon>FormEditDraftTemplateCriterion.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormEditDraftTemplateCriterion.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormExpressionSelector.Designer.vb">
       <DependentUpon>FormExpressionSelector.vb</DependentUpon>
     </Compile>
@@ -453,6 +459,9 @@
   <ItemGroup>
     <EmbeddedResource Include="My Project\FormBlockLibraryBlockNames.resx">
       <DependentUpon>FormBlockLibraryBlockNames.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormEditDraftTemplateCriterion.resx">
+      <DependentUpon>FormEditDraftTemplateCriterion.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormExpressionSelector.resx">
       <DependentUpon>FormExpressionSelector.vb</DependentUpon>
