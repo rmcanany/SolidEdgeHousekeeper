@@ -229,7 +229,19 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         OleMessageFilter.Register()
 
         'Me.DraftTemplate = MaybeEvaluateExpression(SEDoc, Me.DraftTemplate)
-        Dim tmpDraftTemplate = MaybeEvaluateExpression(SEDoc, Me.DraftTemplate)
+
+        Dim tmpDraftTemplate As String = Nothing
+
+        If Not Me.SelectTemplateByProperty Then
+            tmpDraftTemplate = MaybeEvaluateExpression(SEDoc, Me.DraftTemplate)
+        Else
+            tmpDraftTemplate = DoSelectTemplateByProperty(SEDoc)
+        End If
+
+        If tmpDraftTemplate Is Nothing Then
+            TaskLogger.AddMessage("Template file not found")
+            Exit Sub
+        End If
 
         If SEDoc.FullName = tmpDraftTemplate Then
             TaskLogger.AddMessage("Template file itself ineligible for processing")
@@ -237,8 +249,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End If
 
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument = Nothing
-
-        'Dim UC As New UtilsCommon
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -262,18 +272,20 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End If
 
 
-        ' All style collections.
-        ' DashStyles, DimensionStyles, DrawingViewStyles, FillStyles, HatchPatternStyles, 
-        ' LinearStyles, SmartFrame2dStyles, TableStyles, TextCharStyles, TextStyles
-
-        ' Style collections to receive updates.
-        ' DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles
-
-        ' Styles not updated at this time.
-        ' DashStyles, FillStyles, HatchPatternStyles, SmartFrame2dStyles
-
-
         If Me.UpdateStyles And SETemplateDoc IsNot Nothing Then
+
+            ' All style collections.
+            ' DashStyles, DimensionStyles, DrawingViewStyles, FillStyles, HatchPatternStyles, 
+            ' LinearStyles, SmartFrame2dStyles, TableStyles, TextCharStyles, TextStyles
+
+            ' Style collections to receive updates.
+            ' DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles
+
+            ' Styles not updated at this time.
+            ' DashStyles, FillStyles, HatchPatternStyles, SmartFrame2dStyles
+
+
+            ' Ordered by style dependency
 
             DoLinearStyles(tmpSEDoc, SETemplateDoc)
 
@@ -863,6 +875,45 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Return OutString
     End Function
 
+    Private Function DoSelectTemplateByProperty(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument
+        ) As String
+
+        Dim tmpDraftTemplate As String = Nothing
+
+        If Me.DraftTemplateCriteria Is Nothing Then
+            TaskLogger.AddMessage("Draft template criteria not initialized")
+            Return Nothing
+        End If
+
+        If Me.DraftTemplateCriteria.Count = 0 Then
+            TaskLogger.AddMessage("No draft template criteria to process")
+            Return Nothing
+        End If
+
+        Dim UC As New UtilsCommon
+
+        For Each L As List(Of String) In Me.DraftTemplateCriteria
+            Dim PropertyFormula As String = L(0)
+            Dim Value As String = L(1)
+            Dim DraftTemplate As String = L(2)
+
+            If Value = "*" Then
+                tmpDraftTemplate = DraftTemplate
+                Exit For
+            End If
+
+            Dim tmpValue As String = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, PropertyFormula, Me.PropertiesData, Me.TaskLogger)
+
+            If tmpValue.ToLower = Value.ToLower Then
+                tmpDraftTemplate = DraftTemplate
+                Exit For
+            End If
+        Next
+
+        Return tmpDraftTemplate
+    End Function
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -925,9 +976,10 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             DataGridView.Columns(i).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Next
         DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
+        DataGridView.ReadOnly = True
+        'DataGridView.ClearSelection()
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
-
 
         RowIndex += 1
 
@@ -1001,15 +1053,42 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
-            Dim tf As Boolean = FileIO.FileSystem.FileExists(Me.DraftTemplate)
-            tf = tf Or Me.DraftTemplate.Contains("EXPRESSION_")
-            tf = tf Or Me.DraftTemplate.Contains("SavedSetting:")
-            If Not tf Then
-                ErrorLogger.AddMessage("Select a valid drawing template")
-            End If
-
             If Not (Me.UpdateBorder Or Me.UpdateLibraryBlocks Or Me.UpdateStyles) Then
                 ErrorLogger.AddMessage("Select Update border, Copy/update library blocks, Update styles, or a combination")
+            End If
+
+            If Not Me.SelectTemplateByProperty Then
+                Dim tf As Boolean = FileIO.FileSystem.FileExists(Me.DraftTemplate)
+                tf = tf Or Me.DraftTemplate.Contains("EXPRESSION_")
+                tf = tf Or Me.DraftTemplate.Contains("SavedSetting:")
+                If Not tf Then
+                    ErrorLogger.AddMessage("Select a valid drawing template")
+                End If
+            Else
+                If Me.DraftTemplateCriteria Is Nothing Then
+                    ErrorLogger.AddMessage("Draft template criteria not initialized")
+                Else
+                    If Me.DraftTemplateCriteria.Count = 0 Then
+                        ErrorLogger.AddMessage("No draft template criteria to process")
+                    Else
+                        Dim UC As New UtilsCommon
+                        For Each L As List(Of String) In Me.DraftTemplateCriteria
+                            Dim PropertyFormula As String = L(0)
+                            Dim Value As String = L(1)
+                            Dim DraftTemplate As String = L(2)
+
+                            If Not IO.File.Exists(DraftTemplate) Then
+                                ErrorLogger.AddMessage($"Draft template not found '{DraftTemplate}'")
+                            End If
+
+                            If Not Value = "*" Then
+                                If Not UC.CheckValidPropertyFormulas(PropertyFormula) Then
+                                    ErrorLogger.AddMessage($"Unable to parse property formula '{PropertyFormula}'")
+                                End If
+                            End If
+                        Next
+                    End If
+                End If
             End If
 
         End If
