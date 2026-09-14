@@ -151,7 +151,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     Private Property ContextMenuStrip1 As ContextMenuStrip
     Private Property DGVRow As Integer
-    Private Property NewWay As Boolean = True
+    Private Property NewWay As Boolean = False
 
 
     Enum ControlNames
