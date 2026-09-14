@@ -1123,8 +1123,13 @@ Updates styles, background sheets, and/or library blocks from a template you spe
 ![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template.png)
 
 **Options**
-- **Dft Template:** Drawing that contains the desired styles and background sheets. To use the draft template defined on the **Configuration Tab -- Templates Page**, enable the option `Use configuration page templates.`  
-Another way to specify a draft template is to use an Expression.  Right-click the textbox and choose insert/edit expression.  See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details on using them.  
+- **Select template by file property:** Tells the program to select different templates based on a property in the file.  
+- **Dft Template:** Drawing that contains the desired styles and background sheets. 
+  - To use the draft template defined on the **Configuration Tab -- Templates Page**, enable the option `Use configuration page templates.`  
+  - Another way to specify a draft template is to use an Expression.  Right-click the textbox and choose insert/edit expression.  See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details on using them.  
+  - A third way is to enable the aforementioned `Select template by file property`.  In that case, a table is presented that holds the properties, values to match, and template names.  Right-click a row on the table to open the editor.  
+![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template_property_option.png)
+Choose the `property` with the button provided.  For flexibility, it supports property formulas, for example `%{System.Template} -- %{Custom.Process|R1}`.  The `value` field is plain text.  In the example, it might be `Normal.dft -- DIECAST`.  To specify a `default template`, in the case no match is found, set the last `value` in the table to `*` (asterisk).  Choose the `template` using the button provided.  
 - **Update Drawing Border:** Replace the drawing border in the file with one of the same name in the template. 
   - **If no matching name: Match by sheet size:** If no names match, this option checks for sheet height and width. If a match is found, that border is used as the replacement. 
   - **If matched by sheet size: Rename sheet:** If a size match is found, this option renames the background to match the template. 

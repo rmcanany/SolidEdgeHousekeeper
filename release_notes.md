@@ -15,13 +15,21 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.3
 
+We'll get right to the updates, but first some exciting news  -- we have a repeat **Sponsor** and a new **Contributor!**  **.** sponsored a handy update to the `Update Drawing Styles from Template` command.  **@JBen79** (github) contributed a new feature to that command, and significantly expanded capabilities in `Update Drawing Views`.  Can't wait for you to see their handiwork!
+
+In less exciting news, and the reason this update follows so closely on the heels of the last one, is a bug in `Edit Properties`.  Using `Expressions` in V2026.2 added two trailing carriage returns to property text.  If you are affected, see below for a fix.
+
+Now, on to those updates...
+
 ### Update Drawing Styles from Template
 
 #### Select Template by Property
 
 Sponsored by **.**  Thank you!
 
-Added the ability to select the template based on a file property's value.  This can be handy if you require different templates based on part type, client, etc.
+Added the ability to select the template based on a file property's value.  This can be handy if you require different templates based on model type, client, etc.
+
+![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template_property_option.png)
 
 This can also be accomplished with an `Expression` in single-template mode.  However, if programming is not your thing, this is a simpler method with the same result.
 

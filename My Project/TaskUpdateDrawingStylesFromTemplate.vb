@@ -151,7 +151,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     Private Property ContextMenuStrip1 As ContextMenuStrip
     Private Property DGVRow As Integer
-
+    Private Property NewWay As Boolean = True
 
 
     Enum ControlNames
@@ -940,10 +940,19 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
 
+        If Not NewWay Then
+            CheckBox.Checked = False
+            CheckBox.Visible = False
+        End If
+
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.UseConfigurationPageTemplates.ToString, "Use configuration page templates")
-        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
+
+        If NewWay Then
+            CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
+        End If
+
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1338,13 +1347,33 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         HelpString += vbCrLf + vbCrLf + "**Options**"
 
+        If NewWay Then
+            HelpString += vbCrLf + "- **Select template by file property:** Tells the program to select different templates "
+            HelpString += "based on a property in the file.  "
+        End If
+
         HelpString += vbCrLf + "- **Dft Template:** Drawing that contains the desired styles and background sheets. "
-        HelpString += "To use the draft template defined on the **Configuration Tab -- Templates Page**, "
+
+        HelpString += vbCrLf + "  - To use the draft template defined on the **Configuration Tab -- Templates Page**, "
         HelpString += "enable the option `Use configuration page templates.`  "
 
-        HelpString += vbCrLf + "Another way to specify a draft template is to use an Expression.  "
+        HelpString += vbCrLf + "  - Another way to specify a draft template is to use an Expression.  "
         HelpString += "Right-click the textbox and choose insert/edit expression.  "
         HelpString += "See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details on using them.  "
+
+        If NewWay Then
+            HelpString += vbCrLf + "  - A third way is to enable the aforementioned `Select template by file property`.  "
+            HelpString += "In that case, a table is presented that holds the properties, values to match, and template names.  "
+            HelpString += "Right-click a row on the table to open the editor.  "
+
+            HelpString += vbCrLf + "![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template_property_option.png)"
+
+            HelpString += vbCrLf + "Choose the `property` with the button provided.  For flexibility, it supports property formulas, "
+            HelpString += "for example `%{System.Template} -- %{Custom.Process|R1}`.  "
+            HelpString += "The `value` field is plain text.  In the example, it might be `Normal.dft -- DIECAST`.  "
+            HelpString += "To specify a `default template`, in the case no match is found, set the last `value` in the table to `*` (asterisk).  "
+            HelpString += "Choose the `template` using the button provided.  "
+        End If
 
         HelpString += vbCrLf + "- **Update Drawing Border:** Replace the drawing border in the file with one of the same name in the template. "
         HelpString += vbCrLf + "  - **If no matching name: Match by sheet size:** "
