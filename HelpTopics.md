@@ -551,7 +551,7 @@ To add a task, select one from `AVAILABLE TASKS` and click `Add`.  You can have 
 
 Each task must have a unique name.  Rename one by double-clicking it in the list.  You can rename all of them, for example in your own language, if desired.
 
-The tasks are color-coded.  Change the color by selecting the task, right-clicking, then selecting `Change color`.  I'm not kidding that the task needs to be selected *before* right-clicking.  Otherwise for some reason the task at the top of the list is modified.  Anyway, you can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
+The tasks are color-coded.  Right-click to change color.  You can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
 
 To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any customizations you did, such as duplicated tasks, colors, etc.
 

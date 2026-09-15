@@ -8,6 +8,7 @@ Public Class FormEditTaskList
     Public Property AvailableTasks As List(Of Task)
     Public Property RememberTaskSelections As Boolean
 
+    Private Property DGVRow As Integer
 
     Public Sub New()
 
@@ -285,35 +286,36 @@ Public Class FormEditTaskList
     End Sub
 
     Private Sub CustomizeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomizeToolStripMenuItem.Click
-        Dim ChangeColor As New FormEditTaskListChangeColor
-        Dim s As String = ""
-        Dim i As Integer
 
-        If DataGridViewTarget.SelectedRows.Count = 0 Then
-            s = $"{s}No rows are selected.  Click in the column to the left{vbCrLf}"
-            s = $"{s}of the task description to select a row.{vbCrLf}"
-            MsgBox(s)
-            Exit Sub
-        End If
+        Dim FETLCC As New FormEditTaskListChangeColor
+        'Dim s As String = ""
+        'Dim i As Integer
 
-        i = DataGridViewTarget.SelectedRows(0).Index
-        ChangeColor.ColorHue = Me.TaskList(i).ColorHue
-        ChangeColor.ColorSaturation = Me.TaskList(i).ColorSaturation
-        ChangeColor.ColorBrightness = Me.TaskList(i).ColorBrightness
+        'If DataGridViewTarget.SelectedRows.Count = 0 Then
+        '    s = $"{s}No rows are selected.  Click in the column to the left{vbCrLf}"
+        '    s = $"{s}of the task description to select a row.{vbCrLf}"
+        '    MsgBox(s)
+        '    Exit Sub
+        'End If
 
-        ChangeColor.ShowDialog()
+        'i = DataGridViewTarget.SelectedRows(0).Index
+        FETLCC.ColorHue = Me.TaskList(Me.DGVRow).ColorHue
+        FETLCC.ColorSaturation = Me.TaskList(Me.DGVRow).ColorSaturation
+        FETLCC.ColorBrightness = Me.TaskList(Me.DGVRow).ColorBrightness
 
-        If ChangeColor.DialogResult = DialogResult.OK Then
-            For Each SelectedRow As DataGridViewRow In DataGridViewTarget.SelectedRows
-                i = SelectedRow.Index
-                Me.TaskList(i).ColorHue = ChangeColor.ColorHue
-                Me.TaskList(i).ColorSaturation = ChangeColor.ColorSaturation
-                Me.TaskList(i).ColorBrightness = ChangeColor.ColorBrightness
-                Me.TaskList(i).ColorR = ChangeColor.ColorR
-                Me.TaskList(i).ColorG = ChangeColor.ColorG
-                Me.TaskList(i).ColorB = ChangeColor.ColorB
-                Me.TaskList(i).ResetTaskColor()
-            Next
+        FETLCC.ShowDialog()
+
+        If FETLCC.DialogResult = DialogResult.OK Then
+            Me.TaskList(Me.DGVRow).ColorHue = FETLCC.ColorHue
+            Me.TaskList(Me.DGVRow).ColorSaturation = FETLCC.ColorSaturation
+            Me.TaskList(Me.DGVRow).ColorBrightness = FETLCC.ColorBrightness
+            Me.TaskList(Me.DGVRow).ColorR = FETLCC.ColorR
+            Me.TaskList(Me.DGVRow).ColorG = FETLCC.ColorG
+            Me.TaskList(Me.DGVRow).ColorB = FETLCC.ColorB
+            Me.TaskList(Me.DGVRow).ResetTaskColor()
+            'For Each SelectedRow As DataGridViewRow In DataGridViewTarget.SelectedRows
+            '    i = SelectedRow.Index
+            'Next
             UpdateDataGridView()
         End If
     End Sub
@@ -396,6 +398,18 @@ Public Class FormEditTaskList
         Dim Tag As String = "customizing"
         Dim HelpURL = UD.GenerateVersionURL(Tag)
         Diagnostics.Process.Start(HelpURL)
+
+    End Sub
+
+    Private Sub DataGridViewTarget_MouseDown(sender As Object, e As MouseEventArgs) Handles DataGridViewTarget.MouseDown
+
+        Me.DGVRow = DataGridViewTarget.HitTest(e.X, e.Y).RowIndex
+
+        If e.Button = MouseButtons.Right Then
+            If Me.DGVRow >= 0 Then
+                Me.ContextMenuStrip1.Show(DataGridViewTarget, New Point(e.X, e.Y))
+            End If
+        End If
 
     End Sub
 End Class
