@@ -509,7 +509,7 @@ To save some time, you can process files in the background, without graphics.  T
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">TASK TAB</h2></summary>
+<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">TASK TAB</h2></summary>
 
 The Task Tab is where you choose what operations to perform.
 
@@ -537,7 +537,7 @@ On the far right ![Help](Resources/icons8_help_16.png) brings up general help fo
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block">Customizing</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block">Customizing</h3></summary>
 
 You can customize the list.  To do so, click `Edit Task List` at the bottom of the form.  The following dialog will appear.
 
@@ -545,15 +545,15 @@ You can customize the list.  To do so, click `Edit Task List` at the bottom of t
   <img src="My%20Project/media/edit_task_list.png">
 </p>
 
-The left pane shows all available tasks.  The right pane shows the ones currently in use.  To reposition a task in the list, select it and click `Move up` or `Move down`.  To remove one, select it and click `Remove`.  
+The left pane shows all available tasks.  The right pane shows the ones currently in use.  To reposition one, select it and click `Move up` or `Move down`.  To delete one, select it and click `Remove`.  
 
 To add a task, select one from `AVAILABLE TASKS` and click `Add`.  You can have multiple copies of the same task.  This is handy for many situations.  For example, if you have a printer for small drawings and a plotter for large ones, you can place two `Print` tasks on the list and configure them accordingly.
 
 Each task must have a unique name.  Rename one by double-clicking it in the list.  You can rename all of them, for example in your own language, if desired.
 
-The tasks are color-coded.  Right-click to change color.  You can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
+The tasks are color-coded.  To change the color, select one or more of them, right-click, then select `Change color`.  I'm not kidding that the task(s) must be selected *before* right-clicking.  Otherwise for some reason the one at the top of the list gets modified.  Anyway, you can change hue, saturation and brightness.  A preview of the color is provided on the dialog.
 
-To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any customizations you did, such as duplicated tasks, colors, etc.
+To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any customizations, such as duplicated tasks, colors, etc.
 
 Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
 

@@ -69,6 +69,7 @@ Public Class FormEditTaskList
 
         DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
 
+
     End Sub
 
     Private Sub UpdateDataGridView(SelectedRowIndex As Integer)
@@ -78,6 +79,7 @@ Public Class FormEditTaskList
         DataGridViewTarget.CurrentCell = DataGridViewTarget.Rows(SelectedRowIndex).Cells(0)
         DataGridViewTarget.Rows(SelectedRowIndex).Selected = True
         If (SelectedRowIndex >= 0) And (SelectedRowIndex < DataGridViewTarget.RowCount - 1) Then
+            DataGridViewTarget.CurrentCell = DataGridViewTarget.Rows(SelectedRowIndex).Cells(0)
         End If
 
     End Sub
@@ -243,6 +245,7 @@ Public Class FormEditTaskList
 
     End Sub
 
+
     Private Sub FormEditTaskList_Resize(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
         DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
         DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
@@ -288,35 +291,35 @@ Public Class FormEditTaskList
     Private Sub CustomizeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomizeToolStripMenuItem.Click
 
         Dim FETLCC As New FormEditTaskListChangeColor
-        'Dim s As String = ""
-        'Dim i As Integer
+        Dim s As String = ""
+        Dim i As Integer
 
-        'If DataGridViewTarget.SelectedRows.Count = 0 Then
-        '    s = $"{s}No rows are selected.  Click in the column to the left{vbCrLf}"
-        '    s = $"{s}of the task description to select a row.{vbCrLf}"
-        '    MsgBox(s)
-        '    Exit Sub
-        'End If
+        If DataGridViewTarget.SelectedRows.Count = 0 Then
+            s = $"{s}No rows are selected.  Click in the column to the left{vbCrLf}"
+            s = $"{s}of the task description to select a row.{vbCrLf}"
+            MsgBox(s)
+            Exit Sub
+        End If
 
-        'i = DataGridViewTarget.SelectedRows(0).Index
-        FETLCC.ColorHue = Me.TaskList(Me.DGVRow).ColorHue
-        FETLCC.ColorSaturation = Me.TaskList(Me.DGVRow).ColorSaturation
-        FETLCC.ColorBrightness = Me.TaskList(Me.DGVRow).ColorBrightness
+        i = DataGridViewTarget.SelectedRows(0).Index
+        FETLCC.ColorHue = Me.TaskList(i).ColorHue
+        FETLCC.ColorSaturation = Me.TaskList(i).ColorSaturation
+        FETLCC.ColorBrightness = Me.TaskList(i).ColorBrightness
 
         FETLCC.ShowDialog()
 
         If FETLCC.DialogResult = DialogResult.OK Then
-            Me.TaskList(Me.DGVRow).ColorHue = FETLCC.ColorHue
-            Me.TaskList(Me.DGVRow).ColorSaturation = FETLCC.ColorSaturation
-            Me.TaskList(Me.DGVRow).ColorBrightness = FETLCC.ColorBrightness
-            Me.TaskList(Me.DGVRow).ColorR = FETLCC.ColorR
-            Me.TaskList(Me.DGVRow).ColorG = FETLCC.ColorG
-            Me.TaskList(Me.DGVRow).ColorB = FETLCC.ColorB
-            Me.TaskList(Me.DGVRow).ResetTaskColor()
-            'For Each SelectedRow As DataGridViewRow In DataGridViewTarget.SelectedRows
-            '    i = SelectedRow.Index
-            'Next
-            UpdateDataGridView()
+            For Each SelectedRow As DataGridViewRow In DataGridViewTarget.SelectedRows
+                i = SelectedRow.Index
+                Me.TaskList(i).ColorHue = FETLCC.ColorHue
+                Me.TaskList(i).ColorSaturation = FETLCC.ColorSaturation
+                Me.TaskList(i).ColorBrightness = FETLCC.ColorBrightness
+                Me.TaskList(i).ColorR = FETLCC.ColorR
+                Me.TaskList(i).ColorG = FETLCC.ColorG
+                Me.TaskList(i).ColorB = FETLCC.ColorB
+                Me.TaskList(i).ResetTaskColor()
+            Next
+            UpdateDataGridView(Me.DGVRow)
         End If
     End Sub
 
@@ -347,7 +350,10 @@ Public Class FormEditTaskList
 
         Me.TaskList = tmpTaskList
 
-        UpdateDataGridView()
+        Dim ShowRow As Integer = SelectedRowIndices(0)
+        If ShowRow > Me.TaskList.Count - 1 Then ShowRow = Me.TaskList.Count - 1
+
+        UpdateDataGridView(ShowRow)
 
     End Sub
 
