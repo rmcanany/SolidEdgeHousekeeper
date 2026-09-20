@@ -1371,8 +1371,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             HelpString += vbCrLf + "Choose the `property` with the button provided.  For flexibility, it supports property formulas, "
             HelpString += "for example `%{System.Template} -- %{Custom.Process|R1}`.  "
             HelpString += "The `value` field is plain text.  In the example, it might be `Normal.dft -- DIECAST`.  "
-            HelpString += "To specify a `default template`, in the case no match is found, set the last `value` in the table to `*` (asterisk).  "
             HelpString += "Choose the `template` using the button provided.  "
+
+            HelpString += vbCrLf + "To specify a `default template`, in the case no match is found, set the last `value` in the table to `*` (asterisk).  "
         End If
 
         HelpString += vbCrLf + "- **Update Drawing Border:** Replace the drawing border in the file with one of the same name in the template. "
