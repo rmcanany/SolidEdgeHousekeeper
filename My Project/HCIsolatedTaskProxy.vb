@@ -17,6 +17,35 @@ Public MustInherit Class HCIsolatedTaskProxy
         Return Nothing
     End Function
 
+    ' A genuinely wedged 'edge.exe' (still running, but its message loop has
+    ' stopped responding) never returns a synchronous Solid Edge automation call
+    ' on its own.  Every task's Process() runs its Solid Edge calls on the STA
+    ' thread started below, so a plain, untimed thread.Join() here hangs the
+    ' whole batch forever.  Give it a generous window, and if it's still not
+    ' back, kill 'edge.exe' so the RPC call unblocks (or the thread is simply
+    ' abandoned) and let the caller's existing exception handling recover -
+    ' UtilsExecute already relaunches Solid Edge after a caught exception.
+    '
+    ' User-configurable (Form_Main.TaskTimeoutSeconds / TextBoxTaskTimeoutSeconds)
+    ' since a legitimately long-running task (eg. Check Interference on a large
+    ' assembly) can't be told apart from a genuine hang by wall-clock time alone -
+    ' UtilsExecute.ProcessAll copies the user's setting into every Task before a
+    ' run starts.  180000ms (3 minutes) here is only the fallback default.
+    Public Property STAThreadTimeoutMilliseconds As Integer = 180000
+
+    Private Sub JoinOrRecover(thread As System.Threading.Thread)
+        If thread.Join(STAThreadTimeoutMilliseconds) Then Return
+
+        Try
+            For Each Proc As System.Diagnostics.Process In System.Diagnostics.Process.GetProcessesByName("edge")
+                Proc.Kill()
+            Next
+        Catch
+        End Try
+
+        Throw New System.Exception("Solid Edge stopped responding and was terminated.")
+    End Sub
+
     Protected Sub InvokeSTAThread(ByVal target As Action)
         If target Is Nothing Then Throw New ArgumentNullException("target")
         Dim exception As Exception = Nothing
@@ -30,7 +59,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -50,7 +79,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -70,7 +99,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -90,7 +119,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -110,7 +139,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -131,7 +160,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -154,7 +183,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -177,7 +206,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -200,7 +229,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)
@@ -223,7 +252,7 @@ Public MustInherit Class HCIsolatedTaskProxy
             End Sub)
         thread.SetApartmentState(System.Threading.ApartmentState.STA)
         thread.Start()
-        thread.Join()
+        JoinOrRecover(thread)
 
         If exception IsNot Nothing Then
             Throw New System.Exception("An unhandled exception has occurred. See inner exception for details.", exception)

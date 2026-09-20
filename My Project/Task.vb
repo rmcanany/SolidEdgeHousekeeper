@@ -373,6 +373,7 @@ Public MustInherit Class Task
         'IgnoreProps.AddRange({"LinkManagementOrder", "ImageFileTypeNames", "SelectedSheetsList"})
         IgnoreProps.AddRange({"ImageFileTypeNames", "SelectedSheetsList"})
         IgnoreProps.AddRange({"ErrorLogger", "FileLogger", "TaskLogger"})
+        IgnoreProps.AddRange({"STAThreadTimeoutMilliseconds"})  ' Set fresh by UtilsExecute.ProcessAll() before every run, not a per-task saved option.
 
         Dim s As String = ""
 

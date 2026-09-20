@@ -374,6 +374,7 @@ Public Class TaskCheckLinks
         Me.ContextMenuTest.MenuItems.Add("Add directory", New EventHandler(AddressOf AddDirectory))
         Me.ContextMenuTest.MenuItems.Add("Insert expression", New EventHandler(AddressOf InsertExpression))
         Me.ContextMenuTest.MenuItems.Add("Edit expression", New EventHandler(AddressOf EditExpression))
+        Me.ContextMenuTest.MenuItems.Add("Delete", New EventHandler(AddressOf DeleteRow))
 
 
         RowIndex = 0
@@ -402,7 +403,7 @@ Public Class TaskCheckLinks
         'DataGridView.ContextMenuStrip = Me.TaskControl.ContextMenuStripTaskCheckLinks
         DataGridView.Margin = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler DataGridView.CellClick, AddressOf DataGridViewOptions_CellClick
-        AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
+        'AddHandler DataGridView.Leave, AddressOf DataGridViewOptions_Leave
         AddHandler DataGridView.DataError, AddressOf DataGridViewOptions_DataError
         AddHandler DataGridView.MouseClick, AddressOf DataGridViewOptions_MouseClick
         tmpTLPOptions.Controls.Add(DataGridView, 0, RowIndex)
@@ -464,19 +465,9 @@ Public Class TaskCheckLinks
         Dim DataGridView = CType(sender, DataGridView)
 
         If e.Button = MouseButtons.Right Then
-            ''Dim m As ContextMenu = New ContextMenu()
-            ''Dim m As ContextMenuStrip = Me.TaskControl.ContextMenuStripTaskCheckLinks
-            'Dim m As ContextMenu = Me.ContextMenuTest
-            ''m.MenuItems.Add(New MenuItem("Cut"))
-            ''m.MenuItems.Add(New MenuItem("Copy"))
-            ''m.MenuItems.Add(New MenuItem("Paste"))
-            ''Dim currentMouseOverRow As Integer = DataGridView.HitTest(e.X, e.Y).RowIndex
-
             DGVRow = DataGridView.HitTest(e.X, e.Y).RowIndex
 
             If DGVRow >= 0 Then
-                'm.MenuItems.Add(New MenuItem(String.Format("Do something to row {0}", currentMouseOverRow.ToString())))
-                'm.Show(DataGridView, New Point(e.X, e.Y))
                 Me.ContextMenuTest.Show(DataGridView, New Point(e.X, e.Y))
             End If
 
@@ -501,6 +492,8 @@ Public Class TaskCheckLinks
             TextBox.Text = NewDir
             DataGridView.EndEdit()
 
+            UpdateSearchDirectoriesDGV()
+
             UpdateDGVSize(DataGridView)
 
             Form_Main.WorkingFilesPath = IO.Directory.GetParent(NewDir.TrimEnd(IO.Path.DirectorySeparatorChar)).ToString
@@ -524,6 +517,8 @@ Public Class TaskCheckLinks
             Dim TextBox As TextBox = CType(DataGridView.EditingControl, TextBox)
             TextBox.Text = ExpressionText
             DataGridView.EndEdit()
+
+            UpdateSearchDirectoriesDGV()
 
             UpdateDGVSize(DataGridView)
         End If
@@ -573,6 +568,8 @@ Public Class TaskCheckLinks
                 TextBox.Text = ExpressionText
                 DataGridView.EndEdit()
 
+                UpdateSearchDirectoriesDGV()
+
                 UpdateDGVSize(DataGridView)
             End If
 
@@ -582,10 +579,22 @@ Public Class TaskCheckLinks
 
     End Sub
 
+    Private Sub DeleteRow(ByVal sender As Object, ByVal e As EventArgs)
+        Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
+        DataGridView.CurrentCell = DataGridView.Rows(DGVRow).Cells(0)
+        DataGridView.BeginEdit(True)
+        Dim TextBox As TextBox = CType(DataGridView.EditingControl, TextBox)
+        TextBox.Text = ""
+        DataGridView.EndEdit()
 
-    Public Sub DataGridViewOptions_Leave(sender As System.Object, e As System.EventArgs)
+        UpdateSearchDirectoriesDGV()
 
-        Dim DataGridView = CType(sender, DataGridView)
+        UpdateDGVSize(DataGridView)
+
+    End Sub
+    Public Sub UpdateSearchDirectoriesDGV()
+
+        Dim DataGridView As DataGridView = CType(ControlsDict(ControlNames.SearchDirectoriesDGV.ToString), DataGridView)
 
         DataGridView.CommitEdit(DataGridViewDataErrorContexts.LeaveControl)
         DataGridView.EndEdit()
@@ -628,6 +637,52 @@ Public Class TaskCheckLinks
         End Select
 
     End Sub
+
+    'Public Sub DataGridViewOptions_Leave(sender As System.Object, e As System.EventArgs)
+
+    '    Dim DataGridView = CType(sender, DataGridView)
+
+    '    DataGridView.CommitEdit(DataGridViewDataErrorContexts.LeaveControl)
+    '    DataGridView.EndEdit()
+
+    '    Select Case DataGridView.Name
+
+    '        Case ControlNames.SearchDirectoriesDGV.ToString
+    '            Dim tmpSearchDirectoriesList As New List(Of String)
+
+    '            ' ###### Remove blank rows ######
+
+    '            For RowIdx = DataGridView.Rows.Count - 1 To 0 Step -1
+    '                If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
+    '                Dim SearchDirectory As String = ""
+    '                Try
+    '                    SearchDirectory = CStr(DataGridView.Rows(RowIdx).Cells(0).Value).Trim
+    '                Catch ex As Exception
+    '                    SearchDirectory = ""
+    '                End Try
+
+    '                If SearchDirectory = "" Then
+    '                    DataGridView.Rows.RemoveAt(RowIdx)
+    '                End If
+    '            Next
+
+    '            ' ###### Update Me.SearchDirectoriesList ######
+    '            For RowIdx = 0 To DataGridView.Rows.Count - 1
+    '                If DataGridView.Rows(RowIdx).IsNewRow Then Continue For
+
+    '                tmpSearchDirectoriesList.Add(CStr(DataGridView.Rows(RowIdx).Cells(0).Value).Trim)
+    '            Next
+
+    '            Me.SearchDirectories = tmpSearchDirectoriesList
+
+    '            UpdateDGVSize(DataGridView)
+
+    '        Case Else
+    '            MsgBox($"{Me.Name} Name '{Name}' not recognized")
+    '    End Select
+
+    'End Sub
 
     Private Sub DataGridViewOptions_DataError(sender As Object, e As DataGridViewDataErrorEventArgs)
 
@@ -716,9 +771,10 @@ Public Class TaskCheckLinks
         HelpString += "You can click any other control on the form to clear the selection.  "
         HelpString += "Then go back to the cell and right-click first.  "
 
-        HelpString += vbCrLf + vbCrLf + "Second, to remove a row's contents, "
-        HelpString += "select the `Row Header` (the gray box left of the text) and hit `Delete`. "
-        HelpString += "To clear the entire list, select the top-most `Row Header` and do the same.  "
+        HelpString += vbCrLf + vbCrLf + "Second, to remove a row's contents, use the shortcut's `Delete` command.  "
+        HelpString += "If you instead select the `Row Header` (the gray box left of the text) and hit the `Delete` button, "
+        HelpString += "the table is updated, but not the underlying list.  "
+        HelpString += "There must be a way to fix that, but it is not currently in the program.  "
 
         Return HelpString
     End Function

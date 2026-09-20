@@ -599,6 +599,45 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _SEFastLaunch As Boolean
+    Public Property SEFastLaunch As Boolean
+        Get
+            Return _SEFastLaunch
+        End Get
+        Set(value As Boolean)
+            _SEFastLaunch = value
+            If Me.IsHandleCreated Then
+                CheckBoxSEFastLaunch.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _CheckForNewerVersion As Boolean
+    Public Property CheckForNewerVersion As Boolean
+        Get
+            Return _CheckForNewerVersion
+        End Get
+        Set(value As Boolean)
+            _CheckForNewerVersion = value
+            If Me.IsHandleCreated Then
+                CheckBoxCheckForNewerVersion.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UseLocalPowershell As Boolean
+    Public Property UseLocalPowershell As Boolean
+        Get
+            Return _UseLocalPowershell
+        End Get
+        Set(value As Boolean)
+            _UseLocalPowershell = value
+            If Me.IsHandleCreated Then
+                CheckBoxUseLocalPowershell.Checked = value
+            End If
+        End Set
+    End Property
+
     Private _ForceCloseDesignManager As Boolean
     Public Property ForceCloseDesignManager As Boolean
         Get
@@ -612,18 +651,90 @@ Public Class Form_Main
         End Set
     End Property
 
-    'Private _WarnSave As Boolean
-    'Public Property WarnSave As Boolean
-    '    Get
-    '        Return _WarnSave
-    '    End Get
-    '    Set(value As Boolean)
-    '        _WarnSave = value
-    '        If Me.IsHandleCreated Then
-    '            CheckBoxWarnSave.Checked = value
-    '        End If
-    '    End Set
-    'End Property
+
+    Private _RememberTasks As Boolean
+    Public Property RememberTasks As Boolean
+        Get
+            Return _RememberTasks
+        End Get
+        Set(value As Boolean)
+            _RememberTasks = value
+            If Me.IsHandleCreated Then
+                CheckBoxRememberTasks.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _RunInBackground As Boolean
+    Public Property RunInBackground As Boolean
+        Get
+            Return _RunInBackground
+        End Get
+        Set(value As Boolean)
+            _RunInBackground = value
+            If Me.IsHandleCreated Then
+                CheckBoxRunInBackground.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ProcessDraftsInactive As Boolean
+    Public Property ProcessDraftsInactive As Boolean
+        Get
+            Return _ProcessDraftsInactive
+        End Get
+        Set(value As Boolean)
+            _ProcessDraftsInactive = value
+            If Me.IsHandleCreated Then
+                CheckBoxProcessDraftsInactive.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _TaskTimeoutSeconds As String
+    Public Property TaskTimeoutSeconds As String
+        Get
+            Return _TaskTimeoutSeconds
+        End Get
+        Set(value As String)
+            _TaskTimeoutSeconds = value
+            If Me.IsHandleCreated Then
+                Try
+                    Dim i = CInt(value)
+                    TextBoxTaskTimeoutSeconds.Text = value
+                Catch ex As Exception
+                    TextBoxTaskTimeoutSeconds.Text = "180"
+                End Try
+            End If
+        End Set
+    End Property
+
+
+    Private _RemindFilelistUpdate As Boolean
+    Public Property RemindFilelistUpdate As Boolean
+        Get
+            Return _RemindFilelistUpdate
+        End Get
+        Set(value As Boolean)
+            _RemindFilelistUpdate = value
+            If Me.IsHandleCreated Then
+                CheckBoxRemindFilelistUpdate.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _GroupFiles As Boolean
+    Public Property GroupFiles As Boolean
+        Get
+            Return _GroupFiles
+        End Get
+        Set(value As Boolean)
+            _GroupFiles = value
+            If Me.IsHandleCreated Then
+                CheckBoxGroupFiles.Checked = value
+            End If
+        End Set
+    End Property
 
     Private _NoUpdateMRU As Boolean
     Public Property NoUpdateMRU As Boolean
@@ -656,138 +767,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    'Private _FileListFontSize As String
-    'Public Property FileListFontSize As String
-    '    Get
-    '        Return _FileListFontSize
-    '    End Get
-    '    Set(value As String)
-    '        _FileListFontSize = value
-    '        If Me.IsHandleCreated Then
-    '            TextBoxFileListFontSize.Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    Private _GroupFiles As Boolean
-    Public Property GroupFiles As Boolean
-        Get
-            Return _GroupFiles
-        End Get
-        Set(value As Boolean)
-            _GroupFiles = value
-            If Me.IsHandleCreated Then
-                CheckBoxGroupFiles.Checked = value
-            End If
-        End Set
-    End Property
-
-    Private _RememberTasks As Boolean
-    Public Property RememberTasks As Boolean
-        Get
-            Return _RememberTasks
-        End Get
-        Set(value As Boolean)
-            _RememberTasks = value
-            If Me.IsHandleCreated Then
-                CheckBoxRememberTasks.Checked = value
-            End If
-        End Set
-    End Property
-
-    Private _RunInBackground As Boolean
-    Public Property RunInBackground As Boolean
-        Get
-            Return _RunInBackground
-        End Get
-        Set(value As Boolean)
-            _RunInBackground = value
-            If Me.IsHandleCreated Then
-                CheckBoxRunInBackground.Checked = value
-            End If
-        End Set
-    End Property
-
-    'Private _PropertyFilterIncludeDraftModel As Boolean
-    'Public Property PropertyFilterIncludeDraftModel As Boolean
-    '    Get
-    '        Return _PropertyFilterIncludeDraftModel
-    '    End Get
-    '    Set(value As Boolean)
-    '        _PropertyFilterIncludeDraftModel = value
-    '        If Me.IsHandleCreated Then
-    '            CheckBoxPropertyFilterIncludeDraftModel.Checked = value
-    '        End If
-    '    End Set
-    'End Property
-    Public Property PropertyFilterIncludeDraftModel As Boolean
-
-    'Private _PropertyFilterIncludeDraftItself As Boolean
-    'Public Property PropertyFilterIncludeDraftItself As Boolean
-    '    Get
-    '        Return _PropertyFilterIncludeDraftItself
-    '    End Get
-    '    Set(value As Boolean)
-    '        _PropertyFilterIncludeDraftItself = value
-    '        If Me.IsHandleCreated Then
-    '            CheckBoxPropertyFilterIncludeDraftItself.Checked = value
-    '        End If
-    '    End Set
-    'End Property
-    Public Property PropertyFilterIncludeDraftItself As Boolean
-
-    Private _CheckForNewerVersion As Boolean
-    Public Property CheckForNewerVersion As Boolean
-        Get
-            Return _CheckForNewerVersion
-        End Get
-        Set(value As Boolean)
-            _CheckForNewerVersion = value
-            If Me.IsHandleCreated Then
-                CheckBoxCheckForNewerVersion.Checked = value
-            End If
-        End Set
-    End Property
-
-    Private _RemindFilelistUpdate As Boolean
-    Public Property RemindFilelistUpdate As Boolean
-        Get
-            Return _RemindFilelistUpdate
-        End Get
-        Set(value As Boolean)
-            _RemindFilelistUpdate = value
-            If Me.IsHandleCreated Then
-                CheckBoxRemindFilelistUpdate.Checked = value
-            End If
-        End Set
-    End Property
-
-    Private _ProcessDraftsInactive As Boolean
-    Public Property ProcessDraftsInactive As Boolean
-        Get
-            Return _ProcessDraftsInactive
-        End Get
-        Set(value As Boolean)
-            _ProcessDraftsInactive = value
-            If Me.IsHandleCreated Then
-                CheckBoxProcessDraftsInactive.Checked = value
-            End If
-        End Set
-    End Property
-
-    'Private _ExpressionEditorLanguage As String
-    'Public Property ExpressionEditorLanguage As String
-    '    Get
-    '        Return _ExpressionEditorLanguage
-    '    End Get
-    '    Set(value As String)
-    '        _ExpressionEditorLanguage = value
-    '        If Me.IsHandleCreated Then
-    '            ComboBoxExpressionEditorLanguage.Text = value
-    '        End If
-    '    End Set
-    'End Property
-    Public Property ExpressionEditorLanguage As String
 
     Private _DebugMode As Boolean
     Public Property DebugMode As Boolean
@@ -802,31 +781,11 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _UseLocalPowershell As Boolean
-    Public Property UseLocalPowershell As Boolean
-        Get
-            Return _UseLocalPowershell
-        End Get
-        Set(value As Boolean)
-            _UseLocalPowershell = value
-            If Me.IsHandleCreated Then
-                CheckBoxUseLocalPowershell.Checked = value
-            End If
-        End Set
-    End Property
+    Public Property ExpressionEditorLanguage As String
+    Public Property PropertyFilterIncludeDraftModel As Boolean
+    Public Property PropertyFilterIncludeDraftItself As Boolean
 
-    Private _SEFastLaunch As Boolean
-    Public Property SEFastLaunch As Boolean
-        Get
-            Return _SEFastLaunch
-        End Get
-        Set(value As Boolean)
-            _SEFastLaunch = value
-            If Me.IsHandleCreated Then
-                CheckBoxSEFastLaunch.Checked = value
-            End If
-        End Set
-    End Property
+
 
     Public Property HCDebugLogger As HCErrorLogger
 
@@ -1388,6 +1347,8 @@ Public Class Form_Main
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
         If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
+
+        If Not IsNumeric(Me.TaskTimeoutSeconds) Then Me.TaskTimeoutSeconds = "180"
 
         If Not (Me.ExpressionEditorLanguage = "VB" Or Me.ExpressionEditorLanguage = "NCalc") Then
             Me.ExpressionEditorLanguage = "VB"
@@ -4381,6 +4342,10 @@ Public Class Form_Main
         Dim Tag As String = "filtering"
         Dim HelpURL = UD.GenerateVersionURL(Tag)
         Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub TextBoxTaskTimeoutSeconds_TextChanged(sender As Object, e As EventArgs) Handles TextBoxTaskTimeoutSeconds.TextChanged
+        Me.TaskTimeoutSeconds = TextBoxTaskTimeoutSeconds.Text
     End Sub
 End Class
 

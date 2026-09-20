@@ -34,6 +34,8 @@ Public Class UtilsSEApp
         System.Windows.Forms.Application.DoEvents()
         Dim NoCurrentSessionFound As Boolean = False
 
+        Me.SEApp = Nothing  ' Don't carry a stale reference forward if a step below is skipped.
+
         If SEIsRunning() Then
             Me.EdgeProcess = GetEdgeProcess()
             If Me.EdgeProcess Is Nothing Then
@@ -68,7 +70,15 @@ Public Class UtilsSEApp
             While SEApp Is Nothing
                 If WaitTime >= MaxWaitTime Then Exit While
                 Try
-                    SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+                    Dim tmpSEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+
+                    ' GetObject can return a stale ROT entry for a process that has
+                    ' already died (eg. after a forced Process.Kill following an
+                    ' unresponsive-Solid-Edge timeout) without throwing.  A real call
+                    ' is needed to confirm the object is actually alive.
+                    Dim Probe = tmpSEApp.Version
+
+                    SEApp = tmpSEApp
                 Catch ex As Exception
                     WaitTime += SleepTime
                     Threading.Thread.Sleep(SleepTime)
@@ -79,70 +89,80 @@ Public Class UtilsSEApp
         If Me.SEApp Is Nothing Then
             ErrorLogger.AddMessage("Unable to connect to Solid Edge")
         Else
-            'Me.FMain.TopMost = True
-            Me.FMain.Activate()
-            Windows.Forms.Application.DoEvents()
+            Try
+                'Me.FMain.TopMost = True
+                Me.FMain.Activate()
+                Windows.Forms.Application.DoEvents()
 
-            'Threading.Thread.Sleep(1000)
-            ' Turn off popups.
-            SEApp.DisplayAlerts = False
+                'Threading.Thread.Sleep(1000)
+                ' Turn off popups.
+                SEApp.DisplayAlerts = False
 
-            ' Disable Most Recently Used list updating if option is set.
-            If NoUpdateMRU Then
-                SEApp.SuspendMRU()
-            End If
-
-            ' Set foreground/background processing options
-            If RunInBackground Then
-                SEApp.Visible = False
-                SEApp.DelayCompute = True
-                SEApp.Interactive = False
-                SEApp.ScreenUpdating = False
-
-                'This belongs in UtilsExecute for assembly files, probably not for the InteractiveEdit command
-                'Or in each task that accepts assembly files and might benefit from the setting.
-                'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
-            Else
-                SEApp.Visible = True
-                SEApp.DelayCompute = False
-                SEApp.Interactive = True
-                SEApp.ScreenUpdating = True
-
-                If UseCurrentSession Then
-                    If NoCurrentSessionFound Then
-                        SEApp.WindowState = 2  'Maximizes Solid Edge
-                    Else
-                        ' Should leave it in its existing state
-                    End If
-                Else
-                    SEApp.WindowState = 2
+                ' Disable Most Recently Used list updating if option is set.
+                If NoUpdateMRU Then
+                    SEApp.SuspendMRU()
                 End If
 
-                'This belongs in UtilsExecute for assembly files, probably not for the InteractiveEdit command
-                'Or in each task that accepts assembly files and might benefit from the setting.
-                'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
-            End If
+                ' Set foreground/background processing options
+                If RunInBackground Then
+                    SEApp.Visible = False
+                    SEApp.DelayCompute = True
+                    SEApp.Interactive = False
+                    SEApp.ScreenUpdating = False
 
-            ' For ProcessDraftsInactive, need to remember the previous setting
-            Dim Param = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalSessionDraftOpenInactive
-            SEApp.GetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
-            SEApp.SetGlobalParameter(Param, ProcessDraftsInactive)
+                    'This belongs in UtilsExecute for assembly files, probably not for the InteractiveEdit command
+                    'Or in each task that accepts assembly files and might benefit from the setting.
+                    'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+                Else
+                    SEApp.Visible = True
+                    SEApp.DelayCompute = False
+                    SEApp.Interactive = True
+                    SEApp.ScreenUpdating = True
 
-            ' Save currently open document names, if any.
-            Me.CurrentlyOpenFiles.Clear() '<--- reset between sessions
-            If Not SEApp.Documents.Count = 0 And Not RunInBackground Then
-                Dim Docs As SolidEdgeFramework.Documents = SEApp.Documents
-                Dim ActiveDoc As SolidEdgeFramework.SolidEdgeDocument = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-
-                For Each Doc As SolidEdgeFramework.SolidEdgeDocument In Docs
-                    Me.CurrentlyOpenFiles.Add(Doc.FullName)
-                    ActiveDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-                    If Doc Is ActiveDoc Then
-                        Me.CurrentlyActiveFile = Doc.FullName
+                    If UseCurrentSession Then
+                        If NoCurrentSessionFound Then
+                            SEApp.WindowState = 2  'Maximizes Solid Edge
+                        Else
+                            ' Should leave it in its existing state
+                        End If
+                    Else
+                        SEApp.WindowState = 2
                     End If
-                Next
-            End If
-            'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
+
+                    'This belongs in UtilsExecute for assembly files, probably not for the InteractiveEdit command
+                    'Or in each task that accepts assembly files and might benefit from the setting.
+                    'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+                End If
+
+                ' For ProcessDraftsInactive, need to remember the previous setting
+                Dim Param = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalSessionDraftOpenInactive
+                SEApp.GetGlobalParameter(Param, Me.PreviousProcessDraftsInactive)
+                SEApp.SetGlobalParameter(Param, ProcessDraftsInactive)
+
+                ' Save currently open document names, if any.
+                Me.CurrentlyOpenFiles.Clear() '<--- reset between sessions
+                If Not SEApp.Documents.Count = 0 And Not RunInBackground Then
+                    Dim Docs As SolidEdgeFramework.Documents = SEApp.Documents
+                    Dim ActiveDoc As SolidEdgeFramework.SolidEdgeDocument = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+
+                    For Each Doc As SolidEdgeFramework.SolidEdgeDocument In Docs
+                        Me.CurrentlyOpenFiles.Add(Doc.FullName)
+                        ActiveDoc = CType(SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                        If Doc Is ActiveDoc Then
+                            Me.CurrentlyActiveFile = Doc.FullName
+                        End If
+                    Next
+                End If
+                'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
+
+            Catch ex As Exception
+                ' The liveness probe above isn't a hard guarantee - Solid Edge could
+                ' still die in the narrow window between that check and here.  Treat
+                ' it the same as never having connected, rather than letting the
+                ' exception escape uncaught.
+                ErrorLogger.AddMessage($"Solid Edge became unresponsive while starting.  Exception: {ex.Message}")
+                Me.SEApp = Nothing
+            End Try
         End If
 
     End Sub
@@ -188,6 +208,45 @@ Public Class UtilsSEApp
         End If
 
     End Sub
+
+    ''' <summary>
+    ''' Closes a document, guarding against Solid Edge having crashed or become
+    ''' unresponsive.  When 'edge.exe' has died mid-task, SEDoc.Close() talks to a
+    ''' dead RPC endpoint and blocks forever instead of throwing, so the call is
+    ''' run with a timeout and the process is terminated if it doesn't return.
+    ''' </summary>
+    Public Function CloseDocumentSafely(SEDoc As SolidEdgeFramework.SolidEdgeDocument, TimeoutMilliseconds As Integer) As Boolean
+
+        If Not EdgeProcessIsAlive() Then
+            ErrorLogger.AddMessage("Solid Edge is no longer running.  Skipping document close.")
+            Return False
+        End If
+
+        Dim CloseTask As Threading.Tasks.Task = Threading.Tasks.Task.Run(Sub() SEDoc.Close(False))
+
+        ' Observe any exception on the background thread (eg. if 'edge.exe' is
+        ' killed below while the call is still in flight) so it doesn't surface
+        ' later as an unobserved task exception.
+        CloseTask.ContinueWith(Sub(t)
+                                   Dim swallow = t.Exception
+                               End Sub, Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted)
+
+        If CloseTask.Wait(TimeoutMilliseconds) Then Return True
+
+        ErrorLogger.AddMessage("Solid Edge stopped responding while closing a document.  Terminating 'edge.exe'.")
+        SEKillProcess("edge")
+        SEApp = Nothing
+        Return False
+
+    End Function
+
+    Public Function EdgeProcessIsAlive() As Boolean
+        Try
+            Return Me.EdgeProcess IsNot Nothing AndAlso Not Me.EdgeProcess.HasExited
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
 
     Private Sub RestoreOpenDocuments()
         Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument = Nothing
@@ -290,7 +349,14 @@ Public Class UtilsSEApp
         Dim tmpSEApp As SolidEdgeFramework.Application = Nothing
         Try
             tmpSEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+
+            ' GetObject can return a stale ROT entry for a process that has already
+            ' died (eg. after a forced Process.Kill following an unresponsive-Solid-
+            ' Edge timeout) without throwing.  A real call is needed to confirm the
+            ' object is actually alive.
+            Dim Probe = tmpSEApp.Version
         Catch ex As Exception
+            Return False
         End Try
 
         Return tmpSEApp IsNot Nothing

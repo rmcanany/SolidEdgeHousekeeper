@@ -26,7 +26,7 @@ Partial Class Form_Main
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
@@ -238,6 +238,9 @@ Partial Class Form_Main
         Me.TextBoxListViewUpdateFrequency = New System.Windows.Forms.TextBox()
         Me.LabelListViewUpdateFrequency = New System.Windows.Forms.Label()
         Me.CheckBoxDebugMode = New System.Windows.Forms.CheckBox()
+        Me.ExTableLayoutPanel12 = New Housekeeper.ExTableLayoutPanel()
+        Me.TextBoxTaskTimeoutSeconds = New System.Windows.Forms.TextBox()
+        Me.LabelTaskTimeoutSeconds = New System.Windows.Forms.Label()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -313,6 +316,7 @@ Partial Class Form_Main
         Me.TabPageGeneral.SuspendLayout()
         Me.ExTableLayoutPanel2.SuspendLayout()
         Me.ExTableLayoutPanel11.SuspendLayout()
+        Me.ExTableLayoutPanel12.SuspendLayout()
         Me.ToolStripPresets.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -449,9 +453,9 @@ Partial Class Form_Main
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewSources.FullRowSelect = True
-        ListViewGroup1.Header = "File sources"
-        ListViewGroup1.Name = "Sources"
-        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1})
+        ListViewGroup2.Header = "File sources"
+        ListViewGroup2.Name = "Sources"
+        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup2})
         Me.ListViewSources.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewSources.HideSelection = False
         Me.ListViewSources.Location = New System.Drawing.Point(0, 0)
@@ -983,7 +987,6 @@ Partial Class Form_Main
         Me.TaskHeaderEnableButton.Name = "TaskHeaderEnableButton"
         Me.TaskHeaderEnableButton.Size = New System.Drawing.Size(24, 28)
         Me.TaskHeaderEnableButton.TabIndex = 0
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderEnableButton, "Unselect all")
         Me.TaskHeaderEnableButton.UseVisualStyleBackColor = True
         '
         'TaskHeaderCollapseButton
@@ -994,7 +997,6 @@ Partial Class Form_Main
         Me.TaskHeaderCollapseButton.Name = "TaskHeaderCollapseButton"
         Me.TaskHeaderCollapseButton.Size = New System.Drawing.Size(24, 28)
         Me.TaskHeaderCollapseButton.TabIndex = 1
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderCollapseButton, "Collapse all")
         Me.TaskHeaderCollapseButton.UseVisualStyleBackColor = True
         '
         'TaskHeaderToggleAssemblyButton
@@ -1006,7 +1008,6 @@ Partial Class Form_Main
         Me.TaskHeaderToggleAssemblyButton.Name = "TaskHeaderToggleAssemblyButton"
         Me.TaskHeaderToggleAssemblyButton.Size = New System.Drawing.Size(24, 27)
         Me.TaskHeaderToggleAssemblyButton.TabIndex = 2
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleAssemblyButton, "Toggle assembly selection")
         Me.TaskHeaderToggleAssemblyButton.UseVisualStyleBackColor = True
         '
         'TaskHeaderTogglePartButton
@@ -1018,7 +1019,6 @@ Partial Class Form_Main
         Me.TaskHeaderTogglePartButton.Name = "TaskHeaderTogglePartButton"
         Me.TaskHeaderTogglePartButton.Size = New System.Drawing.Size(24, 27)
         Me.TaskHeaderTogglePartButton.TabIndex = 3
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderTogglePartButton, "Toggle part selection")
         Me.TaskHeaderTogglePartButton.UseVisualStyleBackColor = True
         '
         'TaskHeaderToggleSheetmetalButton
@@ -1031,7 +1031,6 @@ Partial Class Form_Main
         Me.TaskHeaderToggleSheetmetalButton.Name = "TaskHeaderToggleSheetmetalButton"
         Me.TaskHeaderToggleSheetmetalButton.Size = New System.Drawing.Size(24, 28)
         Me.TaskHeaderToggleSheetmetalButton.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleSheetmetalButton, "Toggle sheetmetal selection")
         Me.TaskHeaderToggleSheetmetalButton.UseVisualStyleBackColor = True
         '
         'TaskHeaderToggleDraftButton
@@ -1044,7 +1043,6 @@ Partial Class Form_Main
         Me.TaskHeaderToggleDraftButton.Name = "TaskHeaderToggleDraftButton"
         Me.TaskHeaderToggleDraftButton.Size = New System.Drawing.Size(24, 28)
         Me.TaskHeaderToggleDraftButton.TabIndex = 5
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleDraftButton, "Toggle Draft selection")
         Me.TaskHeaderToggleDraftButton.UseVisualStyleBackColor = True
         '
         'TaskHeaderHelpButton
@@ -1055,7 +1053,6 @@ Partial Class Form_Main
         Me.TaskHeaderHelpButton.Name = "TaskHeaderHelpButton"
         Me.TaskHeaderHelpButton.Size = New System.Drawing.Size(24, 28)
         Me.TaskHeaderHelpButton.TabIndex = 6
-        Me.ToolTip1.SetToolTip(Me.TaskHeaderHelpButton, "Help")
         Me.TaskHeaderHelpButton.UseVisualStyleBackColor = True
         '
         'TaskHeaderNameLabel
@@ -2670,26 +2667,23 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxSEFastLaunch, 0, 2)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 3)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseLocalPowershell, 0, 4)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 6)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 7)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxProcessDraftsInactive, 0, 8)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxForceCloseDesignManager, 0, 9)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 11)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 12)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 13)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 14)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 16)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 7)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 8)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxProcessDraftsInactive, 0, 9)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 12)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 13)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 14)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 15)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 17)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel12, 0, 10)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxForceCloseDesignManager, 0, 5)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 18
+        Me.ExTableLayoutPanel2.RowCount = 19
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2701,7 +2695,11 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(552, 488)
@@ -2772,7 +2770,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxRememberTasks.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxRememberTasks.AutoSize = True
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 170)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 200)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(258, 19)
@@ -2784,7 +2782,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxRunInBackground.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxRunInBackground.AutoSize = True
-        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 200)
+        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 230)
         Me.CheckBoxRunInBackground.Name = "CheckBoxRunInBackground"
         Me.CheckBoxRunInBackground.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRunInBackground.Size = New System.Drawing.Size(253, 19)
@@ -2796,7 +2794,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxProcessDraftsInactive.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxProcessDraftsInactive.AutoSize = True
-        Me.CheckBoxProcessDraftsInactive.Location = New System.Drawing.Point(3, 230)
+        Me.CheckBoxProcessDraftsInactive.Location = New System.Drawing.Point(3, 260)
         Me.CheckBoxProcessDraftsInactive.Name = "CheckBoxProcessDraftsInactive"
         Me.CheckBoxProcessDraftsInactive.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxProcessDraftsInactive.Size = New System.Drawing.Size(181, 19)
@@ -2808,13 +2806,12 @@ Partial Class Form_Main
         '
         Me.CheckBoxForceCloseDesignManager.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxForceCloseDesignManager.AutoSize = True
-        Me.CheckBoxForceCloseDesignManager.Location = New System.Drawing.Point(3, 260)
+        Me.CheckBoxForceCloseDesignManager.Location = New System.Drawing.Point(3, 155)
         Me.CheckBoxForceCloseDesignManager.Name = "CheckBoxForceCloseDesignManager"
         Me.CheckBoxForceCloseDesignManager.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxForceCloseDesignManager.Size = New System.Drawing.Size(321, 19)
         Me.CheckBoxForceCloseDesignManager.TabIndex = 98
         Me.CheckBoxForceCloseDesignManager.Text = "Automatically close Design Manager before processing"
-        Me.ToolTip1.SetToolTip(Me.CheckBoxForceCloseDesignManager, "Unsaved changes in Solid Edge Design Manager may be lost.")
         Me.CheckBoxForceCloseDesignManager.UseVisualStyleBackColor = True
         '
         'CheckBoxRemindFilelistUpdate
@@ -2823,7 +2820,7 @@ Partial Class Form_Main
         Me.CheckBoxRemindFilelistUpdate.AutoSize = True
         Me.CheckBoxRemindFilelistUpdate.Checked = True
         Me.CheckBoxRemindFilelistUpdate.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRemindFilelistUpdate.Location = New System.Drawing.Point(3, 305)
+        Me.CheckBoxRemindFilelistUpdate.Location = New System.Drawing.Point(3, 335)
         Me.CheckBoxRemindFilelistUpdate.Name = "CheckBoxRemindFilelistUpdate"
         Me.CheckBoxRemindFilelistUpdate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRemindFilelistUpdate.Size = New System.Drawing.Size(248, 19)
@@ -2837,7 +2834,7 @@ Partial Class Form_Main
         Me.CheckBoxGroupFiles.AutoSize = True
         Me.CheckBoxGroupFiles.Checked = True
         Me.CheckBoxGroupFiles.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 335)
+        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 365)
         Me.CheckBoxGroupFiles.Name = "CheckBoxGroupFiles"
         Me.CheckBoxGroupFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(130, 19)
@@ -2849,7 +2846,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxNoUpdateMRU.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 365)
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 395)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(316, 19)
@@ -2865,7 +2862,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel11.Controls.Add(Me.TextBoxListViewUpdateFrequency, 0, 0)
         Me.ExTableLayoutPanel11.Controls.Add(Me.LabelListViewUpdateFrequency, 1, 0)
         Me.ExTableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel11.Location = New System.Drawing.Point(3, 393)
+        Me.ExTableLayoutPanel11.Location = New System.Drawing.Point(3, 423)
         Me.ExTableLayoutPanel11.Name = "ExTableLayoutPanel11"
         Me.ExTableLayoutPanel11.RowCount = 1
         Me.ExTableLayoutPanel11.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2878,10 +2875,12 @@ Partial Class Form_Main
         '
         Me.TextBoxListViewUpdateFrequency.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxListViewUpdateFrequency.Location = New System.Drawing.Point(3, 3)
+        Me.TextBoxListViewUpdateFrequency.Margin = New System.Windows.Forms.Padding(3, 3, 5, 3)
         Me.TextBoxListViewUpdateFrequency.Name = "TextBoxListViewUpdateFrequency"
-        Me.TextBoxListViewUpdateFrequency.Size = New System.Drawing.Size(44, 23)
+        Me.TextBoxListViewUpdateFrequency.Size = New System.Drawing.Size(42, 23)
         Me.TextBoxListViewUpdateFrequency.TabIndex = 0
         Me.TextBoxListViewUpdateFrequency.Text = "1"
+        Me.TextBoxListViewUpdateFrequency.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'LabelListViewUpdateFrequency
         '
@@ -2898,13 +2897,50 @@ Partial Class Form_Main
         '
         Me.CheckBoxDebugMode.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxDebugMode.AutoSize = True
-        Me.CheckBoxDebugMode.Location = New System.Drawing.Point(3, 440)
+        Me.CheckBoxDebugMode.Location = New System.Drawing.Point(3, 470)
         Me.CheckBoxDebugMode.Name = "CheckBoxDebugMode"
         Me.CheckBoxDebugMode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxDebugMode.Size = New System.Drawing.Size(100, 19)
         Me.CheckBoxDebugMode.TabIndex = 80
         Me.CheckBoxDebugMode.Text = "Debug mode"
         Me.CheckBoxDebugMode.UseVisualStyleBackColor = True
+        '
+        'ExTableLayoutPanel12
+        '
+        Me.ExTableLayoutPanel12.ColumnCount = 2
+        Me.ExTableLayoutPanel12.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.ExTableLayoutPanel12.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel12.Controls.Add(Me.TextBoxTaskTimeoutSeconds, 0, 0)
+        Me.ExTableLayoutPanel12.Controls.Add(Me.LabelTaskTimeoutSeconds, 1, 0)
+        Me.ExTableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel12.Location = New System.Drawing.Point(3, 288)
+        Me.ExTableLayoutPanel12.Name = "ExTableLayoutPanel12"
+        Me.ExTableLayoutPanel12.RowCount = 1
+        Me.ExTableLayoutPanel12.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel12.Size = New System.Drawing.Size(546, 24)
+        Me.ExTableLayoutPanel12.TabIndex = 99
+        Me.ExTableLayoutPanel12.Task = Nothing
+        '
+        'TextBoxTaskTimeoutSeconds
+        '
+        Me.TextBoxTaskTimeoutSeconds.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxTaskTimeoutSeconds.Location = New System.Drawing.Point(3, 3)
+        Me.TextBoxTaskTimeoutSeconds.Margin = New System.Windows.Forms.Padding(3, 3, 5, 3)
+        Me.TextBoxTaskTimeoutSeconds.Name = "TextBoxTaskTimeoutSeconds"
+        Me.TextBoxTaskTimeoutSeconds.Size = New System.Drawing.Size(42, 23)
+        Me.TextBoxTaskTimeoutSeconds.TabIndex = 0
+        Me.TextBoxTaskTimeoutSeconds.Text = "180"
+        Me.TextBoxTaskTimeoutSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'LabelTaskTimeoutSeconds
+        '
+        Me.LabelTaskTimeoutSeconds.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelTaskTimeoutSeconds.AutoSize = True
+        Me.LabelTaskTimeoutSeconds.Location = New System.Drawing.Point(53, 4)
+        Me.LabelTaskTimeoutSeconds.Name = "LabelTaskTimeoutSeconds"
+        Me.LabelTaskTimeoutSeconds.Size = New System.Drawing.Size(189, 15)
+        Me.LabelTaskTimeoutSeconds.TabIndex = 1
+        Me.LabelTaskTimeoutSeconds.Text = "Task maximum run time (seconds)"
         '
         'ToolStripPresets
         '
@@ -3012,7 +3048,6 @@ Partial Class Form_Main
         Me.TextBoxStatus.TabIndex = 1
         Me.TextBoxStatus.Text = "Select file(s) to process OR Select none to process all (ESC to clear selections)" &
     ""
-        Me.ToolTip1.SetToolTip(Me.TextBoxStatus, "Status")
         '
         'ToolTip1
         '
@@ -3282,6 +3317,8 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.PerformLayout()
         Me.ExTableLayoutPanel11.ResumeLayout(False)
         Me.ExTableLayoutPanel11.PerformLayout()
+        Me.ExTableLayoutPanel12.ResumeLayout(False)
+        Me.ExTableLayoutPanel12.PerformLayout()
         Me.ToolStripPresets.ResumeLayout(False)
         Me.ToolStripPresets.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -3538,4 +3575,7 @@ Partial Class Form_Main
     Friend WithEvents ToolStripSeparator19 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator17 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator18 As ToolStripSeparator
+    Friend WithEvents ExTableLayoutPanel12 As ExTableLayoutPanel
+    Friend WithEvents TextBoxTaskTimeoutSeconds As TextBox
+    Friend WithEvents LabelTaskTimeoutSeconds As Label
 End Class

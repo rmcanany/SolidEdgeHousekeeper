@@ -558,7 +558,7 @@ Public Class TaskEditProperties
 
         Next
 
-        Return Me.TaskLogger.HasErrors
+        Return Not Me.TaskLogger.HasErrors
 
     End Function
 

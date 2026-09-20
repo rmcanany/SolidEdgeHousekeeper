@@ -509,7 +509,7 @@ To save some time, you can process files in the background, without graphics.  T
 
 </details>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">TASK TAB</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">TASK TAB</h2></summary>
 
 The Task Tab is where you choose what operations to perform.
 
@@ -537,7 +537,7 @@ On the far right ![Help](Resources/icons8_help_16.png) brings up general help fo
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block">Customizing</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block">Customizing</h3></summary>
 
 You can customize the list.  To do so, click `Edit Task List` at the bottom of the form.  The following dialog will appear.
 
@@ -687,14 +687,20 @@ If Solid Edge is not running when file processing begins, Housekeeper starts it.
 Uses GitHub's API to get the most recent version and compare it to the running version.  Not everyone wants programs to access outside resources like that.  Feel free to disable it if desired; it won't hurt anything.
 - `Use locally installed PowerShell`  
 `Property filters`, `Expressions` and `Code snippets` all create text files that must be executed in a `VB.Net` interpreter.  Previously Housekeeper used PowerShell for that.  An internal `dotnet` library is now used by default.  This option switches execution back to the previous method.
-<br></br>
+- `Automatically close Design Manager before processing`  
+Housekeeper cannot run with Design Manager open.  Normally you are prompted to close it before processing begins.  This option does it for you.
+<br>
+</br>
 - `Remember selected tasks between sessions`  
 When you close out of Housekeeper, it records the state of all settings, such as template locations, etc.  Normally that's what you want, but not necessarily for task selection.  This lets you decide how to handle that.
 - `Process tasks in background (no graphics)`  
 Launches Solid Edge without displaying its user interface.  It is meant to speed up processing.  Not all commands are compatible.  They trigger an error if this option is enabled.
 - `Process drawing files as inactive`  
 This option is meant to speed up processing of files that are left unchanged by the command.  Only `Save drawing as` and `Print` are compatible; other commands will trigger an error.  The program tries to revert back to the previous setting once processing is complete.  However, in case of a program malfunction, it may not be able to do so.  You can manually reset the option by starting Solid Edge manually, then clicking the `Browse` button.  The checkbox is located toward the bottom of the form.  You have to select a draft file to make the checkbox active.
-<br></br>
+- `Task maximum run time (seconds)`  
+Normally when Solid Edge encounters an error, it `raises an exception`, which Housekeeper detects and reports in the log file.  It's rare, but sometimes it hangs silently instead.  Rather than waiting forever, this option sets a maximum time for the task to finish.  The default is 180 seconds (3 minutes).  That is 3 minutes per task, per file.  Most tasks process a file in seconds, so there's plenty of headroom.  However, for especially long-running ones, you have the ability to increase it.
+<br>
+</br>
 - `Remind me if I need to update the file list`  
 This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
 - `Group files by type`  
@@ -703,7 +709,8 @@ This setting affects the file list.  When enabled (the default) the list groups 
 This keeps from clogging up Solid Edge's file list with those processed in batch mode.
 - `Update list after this many files`  
 This controls the file list update frequency.  Setting it to `1` means update the list after each file is processed.  This is normally what you want.  However, you may want to increase it for Structured Storage mode, where updating the list is sometimes the most time-consuming part.
-<br></br>
+<br>
+</br>
 - `Debug mode`  
 Debug mode is meant to help with troubleshooting user's site-specific issues.  It is currently limited, but may be expanded as needed in the future.
 </details>
@@ -712,13 +719,19 @@ Debug mode is meant to help with troubleshooting user's site-specific issues.  I
 
 <details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">COMMAND LINE</h2></summary>
 
-To launch Housekeeper from the command line, use this (experimental) command.
+To launch Housekeeper from the command line, use this (experimental) command.  
 
-`<Path>\HousekeeperCLI.exe -P <Preset name> -L <File list>`
+`<Path>\HousekeeperCLI.exe -P <Preset name> -L <File list> -AF`
 
 **Arguments**
-- -P: Existing preset in Housekeeper.  If the preset is not found, an error is reported.
-- -L: Text file that contains the file names to process.  Each file name must be on a separate line and include the full path.  For compatibility, the file extension must be `.txt`.
+
+Note arguments are not case-sensitive.
+
+- **-P**: Existing preset in Housekeeper.  If the preset is not found, an error is reported.
+- **-L**: Text file that contains the file names to process.  Each file name must be on a separate line and include the full path.  For compatibility, the file extension must be `.txt`.
+- **-AF**: [Optional] A flag that sets an OS system parameter governing window focus.  Some commands in Solid Edge, like `Save As Flat Dxf`, send feedback to the calling program; it must have focus to receive it.  If not, SE stalls.  Normally you shouldn't use this option.  It can interfere with other work you are doing while the script is running.  If you notice SE stalling/timing out during processing, this is something to try.
+
+Note in Released versions, `HousekeeperCLI.exe` is in the same directory as `Housekeeper.exe`.  In cloned code, once you build the project, it will be under its own `\bin` folder.  It needs to be copied to Housekeeper's main `\bin\[Debug|Release]` directory to function properly.
 
 **Output**
 
@@ -726,7 +739,7 @@ If Housekeeper reports any errors, the program sends the log file name(s) to `st
 
 **Example PowerShell program**
 
-This is a program we use to help automate testing of Tasks.  Its only function is to display log file names.  The logs are manually inspected by the user.
+This is a program we use to help automate testing of Tasks.  Its only function is to display log file names.  The logs are manually inspected by the technician (me).
 
 ```
 $HousekeeperCLIPath = "C:\CAD\SolidEdgeHousekeeper-v2026.2\HousekeeperCLI.exe"
@@ -1199,7 +1212,7 @@ There are a couple of things to know about working with the table.
 
 First, if you click a cell, followed by a right-click, it brings up the wrong shortcut.  The cell has to be unselected to work properly.  You can click any other control on the form to clear the selection.  Then go back to the cell and right-click first.  
 
-Second, to remove a row's contents, select the `Row Header` (the gray box left of the text) and hit `Delete`. To clear the entire list, select the top-most `Row Header` and do the same.  
+Second, to remove a row's contents, use the shortcut's `Delete` command.  If you instead select the `Row Header` (the gray box left of the text) and hit the `Delete` button, the table is updated, but not the underlying list.  There must be a way to fix that, but it is not currently in the program.  
 
 </details>
 

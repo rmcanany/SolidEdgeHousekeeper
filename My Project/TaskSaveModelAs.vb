@@ -1,10 +1,22 @@
 ﻿Option Strict On
 
+'Only used by the commented-out diagnostic block further down.
+'Imports System.Runtime.InteropServices
+
 'Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class TaskSaveModelAs
 
     Inherits Task
+
+    'Only used by the commented-out diagnostic block further down.
+    '<DllImport("user32.dll")>
+    'Private Shared Function GetForegroundWindow() As IntPtr
+    'End Function
+
+    '<DllImport("user32.dll")>
+    'Private Shared Function GetWindowThreadProcessId(hWnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
+    'End Function
 
     Private _NewFileTypeName As String
     Public Property NewFileTypeName As String
@@ -664,6 +676,25 @@ Public Class TaskSaveModelAs
                                 If Models IsNot Nothing AndAlso Models.Count > 0 Then
                                     If Not TaskLogger.HasErrors Then
                                         FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+
+                                        ' 20260918 Diagnostic for the DXF-flat-pattern hang: logged whether
+                                        ' anything actually holds true OS-level foreground/active status
+                                        ' right before the call that hung when Housekeeper was launched via
+                                        ' the CLI wrapper/script but not when launched directly.  Confirmed
+                                        ' the AllowSetForegroundWindow fix in HousekeeperCLI.vb -- foreground
+                                        ' PID matched Housekeeper's own PID on every run, with no hangs.
+                                        ' Left commented out rather than deleted.
+                                        'Try
+                                        '    Dim ForegroundHwnd As IntPtr = GetForegroundWindow()
+                                        '    Dim ForegroundPid As Integer = 0
+                                        '    GetWindowThreadProcessId(ForegroundHwnd, ForegroundPid)
+                                        '    Dim HousekeeperPid As Integer = System.Diagnostics.Process.GetCurrentProcess().Id
+                                        '    Dim EdgePids As String = String.Join(",", System.Diagnostics.Process.GetProcessesByName("edge").Select(Function(p) p.Id))
+                                        '    Me.TaskLogger.AddMessage($"[Diagnostic] Foreground window PID: {ForegroundPid}.  Housekeeper.exe PID: {HousekeeperPid}.  edge.exe PID(s): {EdgePids}.")
+                                        'Catch diagEx As Exception
+                                        '    Me.TaskLogger.AddMessage($"[Diagnostic] Foreground-window check failed: {diagEx.Message}")
+                                        'End Try
+
                                         Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
                                         SEApp.DoIdle()
                                     End If

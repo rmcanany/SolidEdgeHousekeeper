@@ -75,6 +75,15 @@ Public Class UtilsExecute
         Dim AssemblyCount As Integer = 0
         Dim DraftCount As Integer = 0
 
+        ' FMain.TaskTimeoutSeconds is stored as a String (see its property setter
+        ' for why), and isn't guaranteed to hold a valid positive number at this
+        ' point, so fall back to the same 180-second default used elsewhere rather
+        ' than trust it blindly.
+        Dim TaskTimeoutSeconds As Integer
+        If Not Integer.TryParse(FMain.TaskTimeoutSeconds, TaskTimeoutSeconds) OrElse TaskTimeoutSeconds <= 0 Then
+            TaskTimeoutSeconds = 180
+        End If
+
         For Each Task As Task In FMain.TaskList
             If Task.IsSelectedTask And Task.IsSelectedPart Then PartCount += 1
             If Task.IsSelectedTask And Task.IsSelectedSheetmetal Then SheetmetalCount += 1
@@ -82,6 +91,7 @@ Public Class UtilsExecute
             If Task.IsSelectedTask And Task.IsSelectedDraft Then DraftCount += 1
 
             Task.ErrorLogger = Me.ErrorLogger
+            Task.STAThreadTimeoutMilliseconds = TaskTimeoutSeconds * 1000
         Next
 
         ' Process the files
@@ -627,8 +637,23 @@ Public Class UtilsExecute
 
             If FMain.SolidEdgeRequired > 0 Then
                 If Proceed Then
-                    SEDoc.Close(False)
-                    SEApp.DoIdle()
+
+                    ' 20260918 A crashed 'edge.exe' (eg. TestSaveModelAsCLI.ps1's
+                    ' TestSaveModelAs_T02, save as dxf flat) leaves SEDoc pointing at a
+                    ' dead RPC endpoint.  SEDoc.Close() on that reference blocks forever
+                    ' instead of throwing, so it's run with a timeout via
+                    ' CloseDocumentSafely rather than called directly.
+                    If Me.USEA.CloseDocumentSafely(SEDoc, TimeoutMilliseconds:=15000) Then
+                        SEApp.DoIdle()
+                    Else
+                        ' Throw rather than set FMain.StopProcess directly, so this is
+                        ' handled the same way as any other Solid Edge automation
+                        ' failure below: restart Solid Edge and continue with the next
+                        ' file, up to TotalAbortsMaximum, instead of always ending the
+                        ' whole run over what may be a single problem file.
+                        Throw New Exception("Solid Edge stopped responding while closing this file.")
+                    End If
+
                 End If
 
 
@@ -664,8 +689,18 @@ Public Class UtilsExecute
                     'USEA.SEStop(FMain.UseCurrentSession)
                     'SEApp = Nothing
 
-                    Me.USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
-                    Me.SEApp = Me.USEA.SEApp
+                    Try
+                        Me.USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU, FMain.ProcessDraftsInactive)
+                        Me.SEApp = Me.USEA.SEApp
+                    Catch ex2 As Exception
+                        ' Reconnecting to Solid Edge is itself a Solid Edge automation
+                        ' call and can fail the same way the original one did.  Don't
+                        ' let that escape as a second, unhandled exception - abort the
+                        ' run cleanly instead.
+                        AbortList.Add($"Unable to restart Solid Edge.  Exception: {ex2}")
+                        FMain.StopProcess = True
+                        Me.SEApp = Nothing
+                    End Try
                 End If
             End If
 

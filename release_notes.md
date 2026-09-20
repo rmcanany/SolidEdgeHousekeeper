@@ -15,9 +15,9 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.3
 
-We'll get right to the updates, but first some exciting news  -- we have a repeat **Sponsor** and a new **Contributor!**  **.** sponsored a handy update to the `Update Drawing Styles from Template` command.  **@JBen79** (github) contributed a new feature to that command, and significantly expanded capabilities in `Update Drawing Views`.  Can't wait for you to see their handiwork!
+We'll get right to the updates, but first some exciting news  -- we have a repeat **Sponsor** and a new **Contributor!**  **TECHTORY Automation GmbH** sponsored a handy update to the `Update Drawing Styles from Template` command.  **@JBen79** (github) contributed a new feature to that command, and significantly expanded capabilities in `Update Drawing Views`.  Can't wait for you to see their handiwork!
 
-In less exciting news, and the reason this update follows so closely on the heels of the last one, is a bug in `Edit Properties`.  Using `Expressions` in V2026.2 added two trailing carriage returns to property text.  If you are affected, see below for a fix.
+In less exciting news, and the reason this update comes only weeks after the last one, is a bug in `Edit Properties`.  Using `Expressions` in V2026.2 added two trailing carriage returns to property text.  If you are affected, see below for a fix.
 
 Now, on to those updates...
 
@@ -25,13 +25,17 @@ Now, on to those updates...
 
 #### Select Template by Property
 
-Sponsored by **.**  Thank you!
+Sponsored by **TECHTORY Automation GmbH.**  Thank you!
 
-Added the ability to select the template based on a file property's value.  This can be handy if you require different templates based on model type, client, etc.
+Added the ability to select the template based on a file property.  This can be handy if you require different templates based on model type, client, etc.
 
 ![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template_property_option.png)
 
-This can also be accomplished with an `Expression` in single-template mode.  However, if programming is not your thing, this is a simpler method with the same result.
+An editor allows you pick the property and template from a list, rather than entering them manually.  
+
+The property field supports `property formulas`, so you can combine multiple properties and other text to create a more selective match.  
+
+If no match is found, a method is provided to specify a default template.
 
 #### Copy/Update Blocks
 
@@ -47,27 +51,34 @@ See the [<ins>**Update Drawing Styles from Template Help Topic**</ins>](https://
 
 Contributed by **@JBen79.**  Thank you, yet again!
 
-Added the updating of all tables including holes, bends, user tables and more.  Added the same functionality to `Check Drawings`.
+Added the updating of all tables including holes, bends, user tables and more.  Added table inspection to `Check Drawings`.
 
 See the [<ins>**Update Drawings Views Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/a53bc2e6cc4512976432ee4a1a59b7372bb81270/HelpTopics.md#update-drawing-views) for details.
 
 ### Edit Properties
 
-Fixed two issues with property handling (Thank you **@robbin70!**)
+Fixed an issue with property handling (Thank you **@robbin70!**)
 
-The first was that the `Find` or `Replace` text could not be blank.
+Using an `Expression` added two trailing carriage return characters to its output.  If you used `Expressions` in V2026.2, those extra characters may have been added to some of your files.  
 
-The second was that an `Expression` result contained two trailing carriage returns.  If you used `Expressions` in V2026.2, those extra characters may have been added to some of your files.  
-
-This does not cause any known problem, but to clean it up, you can replace any affected property value with itself, like so:
+To clean it up, you can replace any affected property value with itself, like so:
 
 ![](My%20Project/media/release_notes_set_prop_to_itself.png)
+
+To narrow the number of files to process, you could use a property filter (**Home Tab -- Filter Toolbar**).  The following regex search should only display files containing trailing carriage returns in the specified property.
+
+![](My%20Project/media/release_notes_regex_trailing_crlf.png)
+
 
 See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/a53bc2e6cc4512976432ee4a1a59b7372bb81270/HelpTopics.md#edit-properties) for details.
 
 
 ### Other
 
+- Fixed an issue in `Check Links` where search directories were not saved under certain conditions.
+- Fixed an issue in `Edit Variables` where a missing saved settings file caused an exception.  Applied the same fix to `Edit Properties`.
+- Added a new option, `Task maximum run time` that keeps Housekeeper from waiting forever if SE experiences a silent hang.  See the [<ins>**Configuration Tab -- General Page Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/1011df11ddf2b3052d88d241f245fb4ebbb1588f/HelpTopics.md#general-page) for details.
+- Added a new option, `-AL`, to `HousekeeperCLI.exe`.  It fixes a stall condition seen with certain SE commands.  There are tradeoffs to using it; see the [<ins>**Command Line Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#command-line) for details.
 - Cleaned up handling of multi-line exception messages.
 
 ## V2026.2

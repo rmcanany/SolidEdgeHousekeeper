@@ -306,12 +306,12 @@ Public Class TaskUpdateDrawingViews
 
                                         Catch exUpdate As Exception
                                             TaskLogger.AddMessage(
-                                                $"Unable to update drawing view on sheet '{Sheet.Name}': {exUpdate.Message}")
+                                                $"Unable to update drawing view on sheet '{Sheet.Name}'.  Exception: {exUpdate.Message}")
                                         End Try
 
                                     Else
                                         TaskLogger.AddMessage(
-                                            $"Unable to update drawing view on sheet '{Sheet.Name}': {ex.Message}")
+                                            $"Unable to update drawing view on sheet '{Sheet.Name}'.  Exception: {ex.Message}")
                                     End If
                                 End Try
                             End If
@@ -404,12 +404,12 @@ Public Class TaskUpdateDrawingViews
                     HoleTable.Update()
                     PerformedUpdate = True
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to update hole table: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to update hole table.  Exception: {ex.Message}")
                 End Try
             Next
 
         Catch ex As Exception
-            TaskLogger.AddMessage($"Unable to access hole tables: {ex.Message}")
+            TaskLogger.AddMessage($"Unable to access hole tables.  Exception: {ex.Message}")
         End Try
 
         Return PerformedUpdate
@@ -427,12 +427,12 @@ Public Class TaskUpdateDrawingViews
                     BendTable.Update()
                     PerformedUpdate = True
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to update bend table: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to update bend table.  Exception: {ex.Message}")
                 End Try
             Next
 
         Catch ex As Exception
-            TaskLogger.AddMessage($"Unable to access bend tables: {ex.Message}")
+            TaskLogger.AddMessage($"Unable to access bend tables.  Exception: {ex.Message}")
         End Try
 
         Return PerformedUpdate
@@ -450,12 +450,12 @@ Public Class TaskUpdateDrawingViews
                     BlockTable.Update()
                     PerformedUpdate = True
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to update block table: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to update block table.  Exception: {ex.Message}")
                 End Try
             Next
 
         Catch ex As Exception
-            TaskLogger.AddMessage($"Unable to access block tables: {ex.Message}")
+            TaskLogger.AddMessage($"Unable to access block tables.  Exception: {ex.Message}")
         End Try
 
         Return PerformedUpdate
@@ -473,12 +473,12 @@ Public Class TaskUpdateDrawingViews
                     ConnectorTable.Update()
                     PerformedUpdate = True
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to update connector table: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to update connector table.  Exception: {ex.Message}")
                 End Try
             Next
 
         Catch ex As Exception
-            TaskLogger.AddMessage($"Unable to access connector tables: {ex.Message}")
+            TaskLogger.AddMessage($"Unable to access connector tables.  Exception: {ex.Message}")
         End Try
 
         Return PerformedUpdate
@@ -496,12 +496,12 @@ Public Class TaskUpdateDrawingViews
                     UserTable.Update()
                     PerformedUpdate = True
                 Catch ex As Exception
-                    TaskLogger.AddMessage($"Unable to update user table: {ex.Message}")
+                    TaskLogger.AddMessage($"Unable to update user table.  Exception: {ex.Message}")
                 End Try
             Next
 
         Catch ex As Exception
-            TaskLogger.AddMessage($"Unable to access user tables: {ex.Message}")
+            TaskLogger.AddMessage($"Unable to access user tables.  Exception: {ex.Message}")
         End Try
 
         Return PerformedUpdate

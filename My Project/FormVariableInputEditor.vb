@@ -104,11 +104,14 @@ Public Class FormVariableInputEditor
 
         Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
 
-        If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
-            JSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
-        End If
+        Try
+            If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
+                JSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
+            End If
 
-        PopulateUCList(JSONDict)
+            PopulateUCList(JSONDict)
+        Catch ex As Exception
+        End Try
 
         UpdateForm()
 
@@ -263,6 +266,8 @@ Public Class FormVariableInputEditor
             If Me.SavedSettingsDict.Keys.Contains(Key) Then
                 Me.JSONString = Newtonsoft.Json.JsonConvert.SerializeObject(Me.SavedSettingsDict(Key))
                 ComboBoxSavedSettings.Text = Key
+            Else
+                MsgBox($"Saved setting not found: '{Key}'", vbOKOnly)
             End If
         End If
 
