@@ -177,12 +177,12 @@ Public Class FormPropertyInputEditor
         Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
 
         Try
-        Catch ex As Exception
             If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
                 JSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
             End If
 
             PopulateUCList(JSONDict)
+        Catch ex As Exception
         End Try
 
         UpdateForm()

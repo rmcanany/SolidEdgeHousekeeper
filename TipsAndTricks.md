@@ -7,6 +7,8 @@
 
 # Tips and Tricks
 
+This is a compilation of user situations where Housekeeper doesn't seem to be acting right.  The program can be tricky to use in places.  That being said, the majority of reported misbehavior is not a user problem; it is a bug.
+
 <details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">PROGRAM NOT STARTING</h2></summary>
 
 For an overview, see the [<ins>**Installation Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#installation)
@@ -15,13 +17,13 @@ For an overview, see the [<ins>**Installation Help Topic**<ins>](https://github.
 
 This section if for those who obtained Housekeeper in a `*.zip` file from the `Releases` page on GitHub.
 
-#### Verify the Directory Settings
+#### Could not create the Preferences Directory
 
 Downloaded files are frequently blocked or marked read-only.  The program cannot function if so.  Right-click the extracted directory (not the `*.zip` file) and select Properties.  Click the `Unblock` button and clear the `Read-only` checkbox.
 
 #### Cannot Find Housekeeper.exe
 
-GitHub confusingly adds the source code to the release page.  It does not contain the executable.  Verify the downloaded file is called `SolidEdgeHousekeeper-vYYYY.N.zip`.  (Where `YYYY` is the year, `N` is the release number.)
+GitHub confusingly adds the source code to the release page.  The source code does not contain the executable.  Verify the downloaded file is called `SolidEdgeHousekeeper-vYYYY.N.zip` and not `Source code.zip`.
 
 #### Could not start Solid Edge.  Exiting...
 
@@ -33,7 +35,7 @@ That may mean the Solid Edge COM objects have become unregistered.  A quick way 
 
 </details>
 
-<details><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Cloned Code</h3></summary>
+<details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Cloned Code</h3></summary>
 
 #### Cannot See Files in Solution Explorer
 
@@ -51,44 +53,24 @@ error BC30002: Type 'ListViewGroup' is not defined.
 warning BC40056: Namespace or type specified in the Imports 'System.Windows.Forms' ... cannot be found.
 ```
 
-**Cause:** `ListViewExtended.vbproj` (and the main `Housekeeper.vbproj`) reference .NET Framework
-assemblies (`System.Windows.Forms.dll`, `System.dll`) using a hardcoded *relative* path back to:
+**Cause:** 
+
+Possibly the project file, `ListViewExtended.vbproj`, has a reference that is using a hardcoded *relative* path.  The file can be found under Housekeeper's `My Project\ListViewExtended` directory.
+
+**Fix:**
+
+Look for something like this (any number of `..\` are possible):
 
 ```
-C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\
+..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\
 ```
 
-The number of `..\` segments in that path assumes the repo was cloned to a specific folder depth.
-If you clone it somewhere deeper or shallower than that (e.g. into a subfolder of `Downloads`
-instead of directly under a drive root), the relative path no longer resolves to that folder, so
-the reference silently fails to load — which cascades into "type not defined" errors for every
-WinForms type.
+And replace: 
+`..\..\Program Files (x86)\Reference Assemblies` 
 
-**Fix — use an MSBuild reserved property instead of a relative path.**
+with: `$(MSBuildProgramFiles32)`
 
-Replace the hardcoded `..\..\..\` segments with `$(MSBuildProgramFiles32)`, which MSBuild always
-resolves to `Program Files (x86)` regardless of where the repo is cloned:
-
-```xml
-<Reference Include="System.Windows.Forms">
-  <HintPath>$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Windows.Forms.dll</HintPath>
-</Reference>
-```
-
-Apply the same change to the `System` reference's `HintPath` in `Housekeeper.vbproj`. Confirmed
-by rebuilding the whole solution after the change — no other errors.
-
-**Alternative fix (bigger change, not applied here):** `ListViewExtended.vbproj` targets
-`netstandard2.0`, which doesn't include `System.Windows.Forms` at all — that's why it needs an
-explicit `HintPath` in the first place. Since the library is only ever consumed by the WinForms
-exe (`Housekeeper.vbproj`, targeting `net472`), retargeting `ListViewExtended.vbproj` to `net472`
-would let `<Reference Include="System.Windows.Forms" />` resolve automatically with no `HintPath`
-at all — the same way the main project's own `System.Windows.Forms` reference already works.
-Trade-off: it moves the build output from `bin\Debug\netstandard2.0\` to `bin\Debug\net472\`, so
-the consuming project's `HintPath` to `ListViewExtended.dll` would need updating too.
-
-A quicker sanity check for either fix: right-click the reference in Visual Studio's Solution
-Explorer — if it shows a warning icon or `Path not found`, the `HintPath` is broken.
+like so: `$(MSBuildProgramFiles32)\Microsoft\Framework\.NETFramework\v4.7.2\`
 
 </details>
 
@@ -102,19 +84,25 @@ For an overview, see the [<ins>**File Selection Help Topic**<ins>](https://githu
 
 <details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Missing Files</h3></summary>
 
-After selecting file sources then updating the list, files that should be there are not.
+If you selected a source for files, but none are displayed, you might simply need to update the list.  The button is on the selection toolbar at the top of the Home page.
+
+![](My%20Project/media/selection_toolbar.png)
+
+If updating doesn't help, here are a couple of other things to try.
 
 **Check file filters**
 
-The filter controls are located on the bottom toolbar of the Home Page.
+The filters toolbar is located on the bottom of the Home Page.
 
-- Make sure the file type filters are set as needed.  These buttons are on the left side of the filter toolbar.
-- Verify the File Wildcard search, if enabled, is set correctly.
+![](My%20Project/media/filter_toolbar.png)
+
+- Make sure the File Type filters are set as needed.  These buttons are on the left side of the filter toolbar.
 - Check if a Property Filter is active and, if so, configured properly.
+- Verify the File Wildcard search, if enabled, is set correctly.
 
 **Check sort options**
 
-The sorting options are on the **Configuration Tab -- Sorting Page**.  Dependency and Random sort, in particular, can give confusing results if you are unaware they are enabled.
+The sorting options are on the **Configuration Tab -- Sorting Page**.  `Dependency` and `Random` sort, in particular, can give confusing results if you are unaware they are enabled.
 
 </details>
 
@@ -138,25 +126,6 @@ The file names must include the full path.  So `C:\Projects\Project123\Part1.dft
 
 </details>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">SORTING</h2></summary>
-
-For an overview, see the [<ins>**Sorting Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#sorting)
-
-#### Dependency Sort
-
-This is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings.  
-
-Files are processed in strict dependency order.  Processing parts with no dependencies is optional.  If updating part copies only, it would normally be disabled.
-
-#### Unsorted
-
-This is primarily intended for lists prepared in advance in the desired processing order.
-
-An option, `Keep duplicates`, can be useful in some cases.  For example printing job packets for multiple production shops, where certain files need to be provided to each organization.
-
-</details>
-
-
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">FILTERING</h2></summary>
 
 For an overview, see the [<ins>**Filtering Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#filtering)
@@ -169,24 +138,20 @@ You may need to find files that have a given property, even if you don't care wh
 
 A wildcard match for `*` will match every file that contains that property and exclude all others.  If instead you want every file that *does not* contain the property, use `Edit Formula` to set it to `Not A`.
 
-#### Property Filter Formula
+#### Property Filter Not Finding Files
 
-The filter formula is a boolean expression.  They're usually pretty straight-forward, but can get tricky.
+There are plenty of reasons this could happen.  Here's a common one.
 
-Let's say you wanted to find all files with Document Numbers containing `19-37-70` and `19-37-71`.  You might set up the following property filter.
+Let's say you wanted to find all files with Document Numbers containing `Client_A-` and `Client_B-`.  You might set up the following property filter.
 ```
-       A System.Document Number contains 19-37-70 
-       B System.Document Number contains 19-37-71 
+       A System.Document Number contains Client_A-
+       B System.Document Number contains Client_B-
        Filter Formula A AND B
 ```
 
-You would expect it to find `19-37-70-01`, `19-37-70-02B`, `19-37-71-99`, etc.  Instead, no matches would occur.
+It finds nothing.  The filter formula is to blame.  In this situation, rather than `A AND B`, you need `A OR B`.
 
-The reason has to do with the filter formula. When the program checks, `say 19-37-70-01`, it will find `Condition A` to be `TRUE` and `Condition B` to be `FALSE`. It then substitutes those results into the filter formula and evaluates the boolean expression `TRUE AND FALSE` which, if you remember your truth tables, is `FALSE`.
-
-The way to handle it here is to change the filter formula from `A AND B` to `A OR B`. In the example the expression becomes `TRUE OR FALSE`, which evaluates to `TRUE`.
-
-#### Working with Property Filter Options
+#### Draft Files and Property Filter
 
 This is the options page for Property Filters.  The toolbar button with the wrench icon opens it.  It needs some explaining.
 
