@@ -1140,7 +1140,7 @@ Updates styles, background sheets, and/or library blocks from a template you spe
 - **Dft Template:** Drawing that contains the desired styles and background sheets. 
   - To use the draft template defined on the **Configuration Tab -- Templates Page**, enable the option `Use configuration page templates.`  
   - Another way to specify a draft template is to use an Expression.  Right-click the textbox and choose insert/edit expression.  See the [<ins>**Edit Properties Help Topic**</ins>](#edit-properties) for details on using them.  
-  - A third way is to enable the aforementioned `Select template by file property`.  In that case, a table is presented that holds the properties, values to match, and template names.  Right-click a row on the table to open the editor.  
+  - A third way is to enable the aforementioned `Select template by file property`.  In that case, a table is presented that holds the properties, values to match, and template names.  Right-click a row on the table to open the editor.  (Note the other row commands on the shortcut.)  
 ![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template_property_option.png)
 Choose the `property` with the button provided.  For flexibility, it supports property formulas, for example `%{System.Template} -- %{Custom.Process|R1}`.  The `value` field is plain text.  In the example, it might be `Normal.dft -- DIECAST`.  Choose the `template` using the button provided.  
 To specify a `default template`, in the case no match is found, set the last `value` in the table to `*` (asterisk).  

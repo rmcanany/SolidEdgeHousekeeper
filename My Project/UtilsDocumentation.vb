@@ -38,7 +38,6 @@ Public Class UtilsDocumentation
 
         ' ###### GET LATEST COMMIT STRING ######
 
-        Dim WC As New System.Net.WebClient
         Dim NewList As List(Of String)
         Dim s As String
         Dim DoubleQuote As Char = Chr(34)
@@ -48,16 +47,17 @@ Public Class UtilsDocumentation
         Dim HelpfileBaseURLFilename As String
         Dim Outlist As New List(Of String)
 
-        'If Not UP.RunningDevCode Then
-        '    Exit Sub
-        'End If
-
         ' Format example (in testing, this was line 1 from the api results)
         '"{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29"""
 
-        WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
-
-        s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/commits/master")
+        Try
+            Dim WC As New System.Net.WebClient
+            WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
+            s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/commits/master")
+        Catch ex As Exception
+            MsgBox("Unable to update base url", vbOKOnly)
+            Exit Sub
+        End Try
 
         NewList = s.Split(CChar(",")).ToList
 

@@ -986,6 +986,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Next
         DataGridView.Height = (DataGridView.Rows(0).Height + 1) * (DataGridView.Rows.Count + 2)
         DataGridView.ReadOnly = True
+        DataGridView.RowHeadersVisible = False
         'DataGridView.ClearSelection()
         ControlsDict(DataGridView.Name) = DataGridView
         DataGridView.Visible = False
@@ -1365,6 +1366,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             HelpString += vbCrLf + "  - A third way is to enable the aforementioned `Select template by file property`.  "
             HelpString += "In that case, a table is presented that holds the properties, values to match, and template names.  "
             HelpString += "Right-click a row on the table to open the editor.  "
+            HelpString += "(Note the other row commands on the shortcut.)  "
 
             HelpString += vbCrLf + "![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template_property_option.png)"
 

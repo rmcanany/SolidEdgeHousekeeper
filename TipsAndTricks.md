@@ -7,11 +7,14 @@
 
 # Tips and Tricks
 
-This is a compilation of user situations where Housekeeper doesn't seem to be acting right.  The program can be tricky to use in places.  That being said, the majority of reported misbehavior is not a user problem; it is a bug.
+This is a compilation of user situations where Housekeeper doesn't seem to be acting right.  The program can be tricky to use in places.  
 
-<details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">PROGRAM NOT STARTING</h2></summary>
+It can also not act right for real.  In those cases, please raise an issue on [<ins>**GitHub**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
+
+<details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">INSTALLATION AND FIRST TIME USE</h2></summary>
 
 For an overview, see the [<ins>**Installation Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#installation)
+
 
 <details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Released Code</h3></summary>
 
@@ -19,7 +22,7 @@ This section if for those who obtained Housekeeper in a `*.zip` file from the `R
 
 #### Could not create the Preferences Directory
 
-Downloaded files are frequently blocked or marked read-only.  The program cannot function if so.  Right-click the extracted directory (not the `*.zip` file) and select Properties.  Click the `Unblock` button and clear the `Read-only` checkbox.
+Downloaded files are frequently blocked or marked read-only.  The program cannot function if so.  Right-click the extracted directory (not the `*.zip` file) and select Properties.  If applicable, click the `Unblock` button and clear the `Read-only` checkbox.
 
 #### Cannot Find Housekeeper.exe
 
@@ -34,6 +37,17 @@ Check for an error message similar to this:
 That may mean the Solid Edge COM objects have become unregistered.  A quick way to reregister them is to run the latest SE Maintenance Pack.  Worked one time here, anyway.
 
 </details>
+
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Internet Access</h3></summary>
+
+Not everyone wants their programs to access the internet.  There are two places Housekeeper tries.  One is when you click a Help button; the other is when checking for a newer version.
+
+You can disable the version check on the **Configuration Tab -- General Page**.  It is not possible to disable the Help buttons at this time.  However if you don't click one, it will not attempt to open it.
+
+In any case, the program only receives information; it does not send anything.
+
+</details>
+
 
 <details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Cloned Code</h3></summary>
 
@@ -59,7 +73,7 @@ Possibly the project file, `ListViewExtended.vbproj`, has a reference that is us
 
 **Fix:**
 
-Look for something like this (any number of `..\` are possible):
+In the project file, look for something like this (with any number of `..\`):
 
 ```
 ..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\
@@ -84,7 +98,7 @@ For an overview, see the [<ins>**File Selection Help Topic**<ins>](https://githu
 
 <details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Missing Files</h3></summary>
 
-If you selected a source for files, but none are displayed, you might simply need to update the list.  The button is on the selection toolbar at the top of the Home page.
+If you selected a source for files, but no files are displayed, you might simply need to update the list.  The button is on the selection toolbar at the top of the Home page.
 
 ![](My%20Project/media/selection_toolbar.png)
 
@@ -108,17 +122,43 @@ The sorting options are on the **Configuration Tab -- Sorting Page**.  `Dependen
 
 <details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Top Level Assembly</h3></summary>
 
+For an overview, see the [<ins>**Top Level Assembly Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#select-by-top-level-assembly)
+
+#### Top Level Folders
+
+The top-level assembly is the file you want to process.  The top-level folders tell the program where to look for other files.
+
+Say your project has the structure below, and you want to work on Sub_01.asm.  Most of its parts and drawings are in its own directory.  However, it also uses parts from `Hardware` and `Purchased`.
+
+```
+    - Project
+        + Hardware
+        + Purchased
+        - Sub_01
+            Sub_01.asm
+            Part_01-01.par
+            ...
+        + Sub_02
+        ...
+```
+
+You would use the highlighted button to select additional top-level folders:
+
+![](My%20Project/media/tips_tla_folders.png)
+
+You could also simply select the parent directory `Project`, however that would also search `Sub_02`, `Sub_03`..., which you may not want.
+
 #### Removing Unneeded Files
 
-At some point in practically every project, there comes a time to do some cleanup.  The option `Report unrelated files` can help.  It is set, along with the other options, on the **Configuration Tab -- Top Level Assembly Page**.
+Designs evolve, which can lead to abandoned models in your project.  Eventually these need to be cleaned up.  The option `Report unrelated files`, can help.  It is located on the **Configuration Tab -- Top Level Assembly Page**.
 
-If any unrelated files are found, they are presented in a Notepad window.  You can manually remove files that are no longer needed.  For a more automatic method, take a look at [<ins>**File List Shortcut Menu Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#shortcut-menu).
+Once enabled, update the file list to initiate the search.  If any unrelated files are found, they are presented in a Notepad window.  They can be manually removed, or for a more automatic method, take a look at [<ins>**File List Shortcut Menu Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#shortcut-menu).
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">Importing Lists</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Importing Lists</h3></summary>
 
-A list contains the names of files to be processed.  It accepts Excel, `*.txt`, `*.csv`, and `*.tsv` file types.
+A list contains the names of files to be processed.  It accepts `Excel`, `*.txt`, `*.csv`, and `*.tsv` file types.
 
 The file names must include the full path.  So `C:\Projects\Project123\Part1.dft`, not just `Part1.dft` or `Part1`.
 
@@ -189,9 +229,9 @@ Possible answers for each question.
  
  </details>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">TASK-SPECIFIC TIPS</h2></summary>
+<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">TASK-SPECIFIC TIPS</h2></summary>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">Edit Properties</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Edit Properties</h3></summary>
 
 For an overview, see the [<ins>**Edit Properties Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties)
 
@@ -199,15 +239,19 @@ For an overview, see the [<ins>**Edit Properties Help Topic**<ins>](https://gith
 
 There is some setup to make your properties available to the program.  See the [<ins>**Templates Page Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#templates-page) for details.
 
+#### Wildcard Match
+
+Sometimes you want to replace a property value, no matter its current contents.  If it's not working, it may be the setting of the `Find Search Type` (denoted `FS` on the dialog -- see below.)  Make sure it's `WC` and not `PT` or something else.  
+
 #### Change a Custom Property Name
 
-This command is designed to update property values, but can also change the name of the property itself.
-
-![Change Name](My%20Project/media/tips_edit_properties_change_name.png)
+This command is designed to update property values, but you can also change the name of the property itself.
 
 On the Edit Properties option panel (not shown), enable `Add property`.  
 
-In the input editor, assign the value of the old property to the new.  You can then delete the old property as shown on the second row.  (You can delete it in another run of the command if you first want to verify results.)
+In the input editor, assign the value of the old property to the new.  You can then delete the old property as shown on the second row.  (You can delete it in another run of the command if you want to first verify results.)
+
+![Change Name](My%20Project/media/tips_edit_properties_change_name.png)
 
 #### Using a Property Filter
 
@@ -217,17 +261,17 @@ If you are editing a property, there is no reason to process files that do not c
 
 As shown above, the command can delete properties.  That's fine for a couple of them.  
 
-If you have a bunch, there is an external program, [<ins>**AddRemoveCustomProperties**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/AddRemoveCustomProperties#readme), that may help.  It can run stand-alone on a single file, or with the `Run External Program` for a batch of them.  
+If you have a bunch, there is an external program, [<ins>**AddRemoveCustomProperties**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/AddRemoveCustomProperties#readme), that may help.  It can run stand-alone on a single file open in SE, or with the `Run External Program` for a batch of them.  
 
 There are two operating modes -- `Remove` and `RemoveAllExcept`.  They are discussed in the link provided.
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">Update Material from Material Table</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Update Material from Material Table</h3></summary>
 
 For an overview, see the [<ins>**Update Material from Material Table Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-material-from-material-table)
 
-**Change which Material Table Files Use**
+**Change which Material Table Is Used**
 
 In Solid Edge, the Material Library and Material Table are not the same thing.  The Material Library is a directory.  The Material Table(s) are `*.mtl` files in that directory.
 
@@ -235,33 +279,38 @@ SE doesn't care which Material Table contains the file's material, as long as on
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">Save Model/Drawing As</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Save Model/Drawing As</h3></summary>
 
 For an overview, see the [<ins>**Save Drawing As Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#save-drawing-as)
 
 #### Save Multiple File Types
 
-You can configure the Task List with multiple copies of the same command, then configure each as needed.
-
-See the [<ins>**Customizing the Task Tab Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#customizing) for details.
+You can configure the Task List with multiple copies of the same command, then configure each as needed.  See the [<ins>**Customizing the Task Tab Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#customizing) for details.
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">Print</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Print</h3></summary>
 
 For an overview, see the [<ins>**Print Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#print)
 
 #### Send to Printer/Plotter as Needed
 
-You can configure the Task List with multiple copies of the same command, then configure each as needed.  The Print command has the ability to specify sheet sizes accepted by the selected printer.
+As noted above, you can configure the Task List with multiple copies of the same command, then configure each as needed.  The configuration in this case would be to specify the sheet sizes accepted by the selected printer/plotter.
 
 See the [<ins>**Customizing the Task Tab Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#customizing) for details.
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">Task Dummy</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Task Dummy</h3></summary>
 
 </details>
 
 </details>
 
+<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">HOUSEKEEPER EXTERNAL PROGRAMS</h2></summary>
+
+Housekeeper doesn't do *everything*.  That's on purpose.  Some tasks are very narrowly focused, only needed for one-time use, etc.
+
+For those, there is a separate GitHub repo, [<ins>**Housekeeper External Programs**<ins>](https://github.com/rmcanany/HousekeeperExternalPrograms).  It has a bunch of one-off type programs.  You run them with the [<ins>**Run External Program**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) command.
+
+</details>
