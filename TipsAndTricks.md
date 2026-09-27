@@ -69,7 +69,7 @@ warning BC40056: Namespace or type specified in the Imports 'System.Windows.Form
 
 **Cause:** 
 
-Possibly the project file, `ListViewExtended.vbproj`, has a reference that is using a hardcoded *relative* path.  The file can be found under Housekeeper's `My Project\ListViewExtended` directory.
+Possibly the project file, `ListViewExtended.vbproj`.  It might have a reference with a hardcoded *relative* path.  The file can be found under Housekeeper's `My Project\ListViewExtended` directory.
 
 **Fix:**
 
@@ -98,7 +98,7 @@ For an overview, see the [<ins>**File Selection Help Topic**<ins>](https://githu
 
 <details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Missing Files</h3></summary>
 
-If you selected a source for files, but no files are displayed, you might simply need to update the list.  The button is on the selection toolbar at the top of the Home page.
+If you selected a source for files, but no files are displayed, you might simply need to update the list.  The `Update` button is on the selection toolbar at the top of the Home page.
 
 ![](My%20Project/media/selection_toolbar.png)
 
@@ -150,9 +150,9 @@ You could also simply select the parent directory `Project`, however that would 
 
 #### Removing Unneeded Files
 
-Designs evolve, which can lead to abandoned models in your project.  Eventually these need to be cleaned up.  The option `Report unrelated files`, can help.  It is located on the **Configuration Tab -- Top Level Assembly Page**.
+As a design evolves, files that are no longer needed can accumulate in your project.  Eventually they probably need to be removed.  The option `Report unrelated files` can help.  It is located on the **Configuration Tab -- Top Level Assembly Page**.
 
-Once enabled, update the file list to initiate the search.  If any unrelated files are found, they are presented in a Notepad window.  They can be manually removed, or for a more automatic method, take a look at [<ins>**File List Shortcut Menu Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#shortcut-menu).
+Enable the option, then update the file list to initiate the search.  If any such files are found, they are presented in a Notepad window.  They can be manually removed, or for a more automatic method, take a look at [<ins>**File List Shortcut Menu Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#shortcut-menu).
 
 </details>
 
@@ -245,7 +245,7 @@ Sometimes you want to replace a property value, no matter its current contents. 
 
 #### Change a Custom Property Name
 
-This command is designed to update property values, but you can also change the name of the property itself.
+This command is designed to update property values, but there's a trick you can use to change the name of the property itself.
 
 On the Edit Properties option panel (not shown), enable `Add property`.  
 
@@ -301,15 +301,9 @@ See the [<ins>**Customizing the Task Tab Help Topic**<ins>](https://github.com/r
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Task Dummy</h3></summary>
-
-</details>
-
-</details>
-
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">HOUSEKEEPER EXTERNAL PROGRAMS</h2></summary>
 
-Housekeeper doesn't do *everything*.  That's on purpose.  Some tasks are very narrowly focused, only needed for one-time use, etc.
+Housekeeper doesn't do *everything*.  That's on purpose.  Some tasks are very narrowly focused, only needed for one time use, etc.
 
 For those, there is a separate GitHub repo, [<ins>**Housekeeper External Programs**<ins>](https://github.com/rmcanany/HousekeeperExternalPrograms).  It has a bunch of one-off type programs.  You run them with the [<ins>**Run External Program**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) command.
 

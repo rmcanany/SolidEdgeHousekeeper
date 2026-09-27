@@ -573,17 +573,14 @@ Public Class TaskCheckFilename
         Dim UC As New UtilsCommon
 
         Dim FilenameToCheck As String = ""
-
         If SEDoc IsNot Nothing Then
             FilenameToCheck = UC.GetFOAFilename(SEDoc.FullName)
         Else
             FilenameToCheck = SSDoc.FullName
         End If
-
         FilenameToCheck = IO.Path.GetFileNameWithoutExtension(FilenameToCheck)  'c:\project\part.par' -> 'part'
 
         Dim Formula As String = ""
-
         If SEDoc IsNot Nothing Then
             Formula = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData, TaskLogger)
         Else
