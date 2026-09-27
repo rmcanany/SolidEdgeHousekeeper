@@ -888,7 +888,15 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingViews.png"><img src="My%20Project/media/spacer.png">Update drawing views</h3></summary>
 
-Updates draft files.  Presents options to process drawing views, property text, parts lists, hole tables, bend tables, block tables, connector tables, user tables, and sheet scale.  The drawing view sub-option can force an update even when Solid Edge reports the view as current.  If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  
+Updates draft files.  
+
+![EditProperties](My%20Project/media/task_update_drawing_views.png)
+
+Presents options to process drawing views, property text, parts lists, hole tables, bend tables, block tables, connector tables, user tables, and sheet scale.  
+
+The drawing view sub-option can force an update even when Solid Edge reports the view as current.  
+
+If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  
 
 </details>
 

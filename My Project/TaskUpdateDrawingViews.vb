@@ -685,9 +685,17 @@ Public Class TaskUpdateDrawingViews
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Updates draft files.  Presents options to process drawing views, property text, parts lists, hole tables, bend tables, block tables, connector tables, user tables, and sheet scale.  "
-        HelpString += "The drawing view sub-option can force an update even when Solid Edge reports the view as current.  "
-        HelpString += "If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  "
+        HelpString = "Updates draft files.  "
+
+        HelpString += vbCrLf + vbCrLf + "![EditProperties](My%20Project/media/task_update_drawing_views.png)"
+
+        HelpString += vbCrLf + vbCrLf + "Presents options to process drawing views, property text, parts lists, hole tables, "
+        HelpString += "bend tables, block tables, connector tables, user tables, and sheet scale.  "
+
+        HelpString += vbCrLf + vbCrLf + "The drawing view sub-option can force an update even when Solid Edge reports the view as current.  "
+
+        HelpString += vbCrLf + vbCrLf + "If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  "
+
         Return HelpString
     End Function
 
