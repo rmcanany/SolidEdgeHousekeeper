@@ -13,6 +13,13 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
+## V2026.4
+
+
+### Other
+
+- Changed the name of `Update drawing views` to `Update drawings`.  Added an option to select all parts lists and tables.  Disable to select them individually.
+
 ## V2026.3
 
 We'll get right to the updates, but first some exciting news  -- we have a repeat **Sponsor** and a new **Contributor!**  **TECHTORY Automation GmbH** sponsored a handy update to the `Update Drawing Styles from Template` command.  **@JBen79** (github) contributed a new feature to that command, and significantly expanded capabilities in `Update Drawing Views`.  Can't wait for you to see their handiwork!

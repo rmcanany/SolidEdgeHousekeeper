@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Public Class TaskUpdateDrawingViews
+Public Class TaskUpdateDrawings
 
     Inherits Task
 
@@ -42,6 +42,19 @@ Public Class TaskUpdateDrawingViews
             _PropertyText = value
             If Me.TaskOptionsTLP IsNot Nothing Then
                 CType(ControlsDict(ControlNames.PropertyText.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AllTables As Boolean
+    Public Property AllTables As Boolean
+        Get
+            Return _AllTables
+        End Get
+        Set(value As Boolean)
+            _AllTables = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AllTables.ToString), CheckBox).Checked = value
             End If
         End Set
     End Property
@@ -154,6 +167,7 @@ Public Class TaskUpdateDrawingViews
         DrawingView
         ForceDrawingViewUpdate
         PropertyText
+        AllTables
         PartsList
         HoleTable
         BendTable
@@ -188,6 +202,7 @@ Public Class TaskUpdateDrawingViews
         Me.DrawingView = False
         Me.ForceDrawingViewUpdate = False
         Me.PropertyText = False
+        Me.AllTables = False
         Me.PartsList = False
         Me.HoleTable = False
         Me.BendTable = False
@@ -526,7 +541,7 @@ Public Class TaskUpdateDrawingViews
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.ForceDrawingViewUpdate.ToString, "Force update even if current")
+        CheckBox = FormatOptionsCheckBox(ControlNames.ForceDrawingViewUpdate.ToString, "Update even if SE reports up-to-date")
         CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -544,7 +559,16 @@ Public Class TaskUpdateDrawingViews
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.AllTables.ToString, "All parts lists and tables")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.PartsList.ToString, "Part list")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -553,6 +577,7 @@ Public Class TaskUpdateDrawingViews
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.HoleTable.ToString, "Hole table")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -561,6 +586,7 @@ Public Class TaskUpdateDrawingViews
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.BendTable.ToString, "Bend table")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -569,6 +595,7 @@ Public Class TaskUpdateDrawingViews
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.BlockTable.ToString, "Block table")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -577,6 +604,7 @@ Public Class TaskUpdateDrawingViews
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.ConnectorTable.ToString, "Connector table")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -585,6 +613,7 @@ Public Class TaskUpdateDrawingViews
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.UserTable.ToString, "User table")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -650,6 +679,25 @@ Public Class TaskUpdateDrawingViews
             Case ControlNames.PropertyText.ToString
                 Me.PropertyText = Checkbox.Checked
 
+            Case ControlNames.AllTables.ToString
+                Me.AllTables = Checkbox.Checked
+
+                If Me.AllTables Then
+                    Me.PartsList = True
+                    Me.HoleTable = True
+                    Me.BendTable = True
+                    Me.BlockTable = True
+                    Me.ConnectorTable = True
+                    Me.UserTable = True
+                End If
+
+                CType(ControlsDict(ControlNames.PartsList.ToString), CheckBox).Visible = Not Me.AllTables
+                CType(ControlsDict(ControlNames.HoleTable.ToString), CheckBox).Visible = Not Me.AllTables
+                CType(ControlsDict(ControlNames.BendTable.ToString), CheckBox).Visible = Not Me.AllTables
+                CType(ControlsDict(ControlNames.BlockTable.ToString), CheckBox).Visible = Not Me.AllTables
+                CType(ControlsDict(ControlNames.ConnectorTable.ToString), CheckBox).Visible = Not Me.AllTables
+                CType(ControlsDict(ControlNames.UserTable.ToString), CheckBox).Visible = Not Me.AllTables
+
             Case ControlNames.PartsList.ToString
                 Me.PartsList = Checkbox.Checked
 
@@ -687,14 +735,15 @@ Public Class TaskUpdateDrawingViews
         Dim HelpString As String
         HelpString = "Updates draft files.  "
 
-        HelpString += vbCrLf + vbCrLf + "![EditProperties](My%20Project/media/task_update_drawing_views.png)"
+        HelpString += vbCrLf + vbCrLf + "![EditProperties](My%20Project/media/task_update_drawings.png)"
 
-        HelpString += vbCrLf + vbCrLf + "Presents options to process drawing views, property text, parts lists, hole tables, "
-        HelpString += "bend tables, block tables, connector tables, user tables, and sheet scale.  "
+        HelpString += vbCrLf + vbCrLf + "Presents options to update various drawing features.  "
 
-        HelpString += vbCrLf + vbCrLf + "The drawing view sub-option can force an update even when Solid Edge reports the view as current.  "
+        HelpString += vbCrLf + vbCrLf + "The drawing view sub-option forces an update even when Solid Edge reports the view as up-to-date.  "
 
-        HelpString += vbCrLf + vbCrLf + "If a sheet scale is not linked to a drawing view, the latter option links it to the first drawing view added the sheet.  "
+        HelpString += vbCrLf + vbCrLf + "Disable `All parts lists and tables` to select those types individually.  "
+
+        HelpString += vbCrLf + vbCrLf + "If a sheet scale is not linked to a drawing view, the last option links it to the first drawing view added the sheet.  "
 
         Return HelpString
     End Function

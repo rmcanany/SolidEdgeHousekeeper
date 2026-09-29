@@ -434,7 +434,7 @@
     <Compile Include="My Project\TaskSaveModelAs.vb" />
     <Compile Include="My Project\TaskUpdateDesignForCost.vb" />
     <Compile Include="My Project\TaskUpdateDrawingStylesFromTemplate.vb" />
-    <Compile Include="My Project\TaskUpdateDrawingViews.vb" />
+    <Compile Include="My Project\TaskUpdateDrawings.vb" />
     <Compile Include="My Project\TaskUpdateMaterialFromMaterialTable.vb" />
     <Compile Include="My Project\TaskUpdateModelSizeInVariableTable.vb" />
     <Compile Include="My Project\TaskUpdateModelStylesFromTemplate.vb" />

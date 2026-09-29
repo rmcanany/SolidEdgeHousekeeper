@@ -431,7 +431,7 @@ Public MustInherit Class Task
         Return JSONString
     End Function
 
-    Public Sub SetFormState(JSONString As String)
+    Public Sub SetFormState(TaskJSONDict As Dictionary(Of String, String))
 
         ' Dictionary format
         '{
@@ -445,7 +445,7 @@ Public MustInherit Class Task
         '    "IsSelectedDraft":"False"
         '}
 
-        Dim tmpJSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+        'Dim TaskJSONDict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
         Dim TaskType As Type = Me.GetType()
         Dim PropInfos = New List(Of Reflection.PropertyInfo)(TaskType.GetProperties())
@@ -454,20 +454,20 @@ Public MustInherit Class Task
 
             Dim PropInfoName As String = PropInfo.Name
 
-            If tmpJSONDict.Keys.Contains(PropInfoName) Then
+            If TaskJSONDict.Keys.Contains(PropInfoName) Then
                 Dim PropTypestring = PropInfo.PropertyType.Name
 
                 Select Case PropTypestring
                     Case "String"
-                        PropInfo.SetValue(Me, CStr(tmpJSONDict(PropInfoName)))
+                        PropInfo.SetValue(Me, CStr(TaskJSONDict(PropInfoName)))
                     Case "Double"
-                        PropInfo.SetValue(Me, CDbl(tmpJSONDict(PropInfoName)))
+                        PropInfo.SetValue(Me, CDbl(TaskJSONDict(PropInfoName)))
                     Case "Int32"
-                        PropInfo.SetValue(Me, CInt(tmpJSONDict(PropInfoName)))
+                        PropInfo.SetValue(Me, CInt(TaskJSONDict(PropInfoName)))
                     Case "Boolean"
-                        PropInfo.SetValue(Me, CBool(tmpJSONDict(PropInfoName)))
+                        PropInfo.SetValue(Me, CBool(TaskJSONDict(PropInfoName)))
                     Case "List`1"
-                        Dim Something = tmpJSONDict(PropInfoName)
+                        Dim Something = TaskJSONDict(PropInfoName)
                         If PropInfo.PropertyType.IsGenericType Then
                             Dim UnderlyingType = PropInfo.PropertyType.GetGenericArguments()(0).ToString
                             If UnderlyingType = "System.String" Then

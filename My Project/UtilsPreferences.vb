@@ -820,6 +820,7 @@ Public Class UtilsPreferences
 
 
     '###### TASK LIST SETTINGS ######
+
     Public Function GetTaskListFilename(CheckExisting As Boolean) As String
         Dim Filename = "tasklist.json"
         Dim TaskListFilename = $"{GetPreferencesDirectory()}\{Filename}"
@@ -843,6 +844,11 @@ Public Class UtilsPreferences
         Dim Outfile = GetTaskListFilename(CheckExisting:=False)
 
         For Each Task As Task In TaskList
+
+
+            Task.Name = ReconcileChangedTaskName(Task.Name)
+
+
             ' To allow copies of a given Task, the Key Task.Description rather than Task.Name
             tmpJSONDict(Task.Description) = Task.GetFormState()
         Next
@@ -885,7 +891,8 @@ Public Class UtilsPreferences
                 Task = GetNewTaskInstance(AvailableTasks, TaskName, TaskDescription)
 
                 If Task IsNot Nothing Then
-                    Task.SetFormState(JSONString)
+                    TaskJSONDict("TaskName") = Task.Name
+                    Task.SetFormState(TaskJSONDict)
                     TaskList.Add(Task)
                 End If
             Next
@@ -918,11 +925,31 @@ Public Class UtilsPreferences
 
 
     '###### TASK FUNCTIONS ######
+
+    Private Function ReconcileChangedTaskName(TaskName As String) As String
+        ' Deal with renamed tasks
+        ' To rename a task, right click it in Solution Explorer and select Rename.
+        ' Select yes when it asks to update everything else.
+        ' In addition, a new image called <Task.Name>.png in Resources is needed.
+        ' It wouldn't hurt to update the Help documentation, like screenshot names, as needed.
+
+        Dim tmpTaskName As String = TaskName
+
+        Select Case tmpTaskName
+            Case "TaskUpdateDrawingViews"  ' Old name.
+                tmpTaskName = "TaskUpdateDrawings"  ' New name.
+        End Select
+
+        Return tmpTaskName
+    End Function
+
     Public Function GetNewTaskInstance(
         AvailableTasks As List(Of Task),
         TaskName As String,
         TaskDescription As String
         ) As Task
+
+        TaskName = ReconcileChangedTaskName(TaskName)
 
         Dim Task As Task = Nothing
         Dim tmpTask As Task = Nothing
@@ -959,7 +986,7 @@ Public Class UtilsPreferences
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateDesignForCost)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
-        TaskList.Add(New TaskUpdateDrawingViews)
+        TaskList.Add(New TaskUpdateDrawings)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateBlocks)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
