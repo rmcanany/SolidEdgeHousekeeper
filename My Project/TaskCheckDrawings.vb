@@ -312,27 +312,18 @@ Public Class TaskCheckDrawings
 
         Dim UC As New UtilsCommon
 
-        Dim s As String
-        Dim tf As Boolean
+        Dim Sheets As List(Of SolidEdgeDraft.Sheet) = UC.GetSheets(tmpSEDoc, "Working")
 
-        Dim Balloons As SolidEdgeFrameworkSupport.Balloons
-        Dim Balloon As SolidEdgeFrameworkSupport.Balloon
+        ' ###### CALLOUTS ###### (Callouts are 'Balloons' in Solid Edge.)
 
-        Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
-        Dim DimensionName As String
-        Dim Dimension As SolidEdgeFrameworkSupport.Dimension
-
-        Dim ParentSheet As SolidEdgeDraft.Sheet
-
-        ' Check callouts.  Callouts are 'Balloons' in Solid Edge.
-        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
-            Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
-            For Each Balloon In Balloons
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim Balloons As SolidEdgeFrameworkSupport.Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
+            For Each Balloon As SolidEdgeFrameworkSupport.Balloon In Balloons
                 'Doesn't always work
                 Try
                     If Balloon.Leader Then
                         If Not Balloon.IsTerminatorAttachedToEntity Then
-                            s = $"Detached annotation on sheet '{Sheet.Name}'.  Displayed text is '{Balloon.BalloonDisplayedText}'"
+                            Dim s As String = $"Detached annotation on sheet '{Sheet.Name}'.  Displayed text is '{Balloon.BalloonDisplayedText}'"
                             TaskLogger.AddMessage(s)
                         End If
                     End If
@@ -341,29 +332,195 @@ Public Class TaskCheckDrawings
             Next Balloon
         Next Sheet
 
-        ' Check dimensions.
-        DocDimensionDict = UC.GetDocDimensions(CType(tmpSEDoc, SolidEdgeFramework.SolidEdgeDocument))
+        ' ###### DIMENSIONS ######
+
+        Dim DocDimensionDict As Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension) = UC.GetDocDimensions(CType(tmpSEDoc, SolidEdgeFramework.SolidEdgeDocument))
         If DocDimensionDict Is Nothing Then
             TaskLogger.AddMessage("Unable to access dimensions")
 
         Else
-            For Each DimensionName In DocDimensionDict.Keys
-                Dimension = DocDimensionDict(DimensionName)
+            For Each DimensionName As String In DocDimensionDict.Keys
+                Dim Dimension As SolidEdgeFrameworkSupport.Dimension = DocDimensionDict(DimensionName)
 
+                Dim tf As Boolean
                 tf = Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusDetached
                 tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusError
                 tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seOneEndDetached
 
                 If tf Then
-                    ParentSheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
-                    Dim DimValue As Double
-                    Dimension.GetValueEx(DimValue, SolidEdgeFramework.seUnitsTypeConstants.seUnitsType_Document)
-                    s = $"Detached dimension on sheet '{ParentSheet.Name}'.  Displayed value is '{DimValue}'"
-                    TaskLogger.AddMessage(s)
+                    ' Some dimension parents cannot be cast to Sheet
+                    Try
+                        Dim ParentSheet As SolidEdgeDraft.Sheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
+                        Dim DimValue As Double
+                        Dimension.GetValueEx(DimValue, SolidEdgeFramework.seUnitsTypeConstants.seUnitsType_Document)
+                        Dim s As String = $"Detached dimension on sheet '{ParentSheet.Name}'.  Displayed value is '{DimValue}'"
+                        TaskLogger.AddMessage(s)
+                    Catch ex As Exception
+                    End Try
                 End If
 
             Next
         End If
+
+        ' ###### CENTERMARKS ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim Centermarks As SolidEdgeFrameworkSupport.CenterMarks = CType(Sheet.CenterMarks, SolidEdgeFrameworkSupport.CenterMarks)
+            Dim Count As Integer = 0
+            For Each Centermark As SolidEdgeFrameworkSupport.CenterMark In Centermarks
+                Dim ConnectObject As Object = Centermark.ConnectObject
+                If ConnectObject Is Nothing Then
+                    Count += 1
+                End If
+            Next
+            If Count > 0 Then
+                Dim s As String = ""
+                If Count = 1 Then s = "centermark" Else s = "centermarks"
+                TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
+            End If
+        Next
+
+        ' ###### CENTERLINES ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim Centerlines As SolidEdgeFrameworkSupport.CenterLines = CType(Sheet.CenterLines, SolidEdgeFrameworkSupport.CenterLines)
+            Dim Count As Integer = 0
+            For Each Centerline As SolidEdgeFrameworkSupport.CenterLine In Centerlines
+                Dim ConnectObject1 As Object = Nothing
+                Dim ConnectObject2 As Object = Nothing
+                Centerline.ConnectObjects(ConnectObject1, ConnectObject2)
+                If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Then
+                    Count += 1
+                End If
+            Next
+            If Count > 0 Then
+                Dim s As String = ""
+                If Count = 1 Then s = "centerline" Else s = "centerlines"
+                TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
+            End If
+        Next
+
+        '' ###### BOLT HOLE CIRCLES ######
+
+        'For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+        '    Dim BoltHoleCircles As SolidEdgeFrameworkSupport.BoltHoleCircles = CType(Sheet.BoltHoleCircles, SolidEdgeFrameworkSupport.BoltHoleCircles)
+        '    'If BoltHoleCircles.Count > 0 Then TaskLogger.AddMessage($"Bolt hole circle count: {BoltHoleCircles.Count}")
+        '    Dim Count As Integer = 0
+        '    For Each BoltHoleCircle As SolidEdgeFrameworkSupport.BoltHoleCircle In BoltHoleCircles
+        '        Dim ConnectObject1 As Object = Nothing
+        '        Dim KeypointIdx1 As Integer = 0
+        '        Dim ConnectObject2 As Object = Nothing
+        '        Dim KeypointIdx2 As Integer = 0
+        '        Dim ConnectObject3 As Object = Nothing
+        '        Dim KeypointIdx3 As Integer = 0
+        '        Try
+        '            BoltHoleCircle.GetConnectElements3Objects(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2, ConnectObject3, KeypointIdx3)
+        '            If BoltHoleCircle.IsDefinedBy2Points Then
+        '                'BoltHoleCircle.GetConnectElementsCenterRadius(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2)
+        '                If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Then
+        '                    Count += 1
+        '                End If
+        '            ElseIf BoltHoleCircle.IsDefinedBy3Points Then
+        '                'BoltHoleCircle.GetConnectElements3Objects(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2, ConnectObject3, KeypointIdx3)
+        '                If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Or ConnectObject3 Is Nothing Then
+        '                    Count += 1
+        '                End If
+        '            End If
+        '        Catch ex As Exception
+        '            'TaskLogger.AddMessage("Exception")
+        '        End Try
+        '    Next
+        '    If Count > 0 Then
+        '        Dim s As String = ""
+        '        If Count = 1 Then s = "bolt hole circle" Else s = "bolt hole circles"
+        '        TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
+        '    End If
+        'Next
+
+        ' ###### WELD SYMBOLS ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim Count As Integer = 0
+            Dim WeldSymbols As SolidEdgeFrameworkSupport.WeldSymbols = CType(Sheet.WeldSymbols, SolidEdgeFrameworkSupport.WeldSymbols)
+            For Each WeldSymbol As SolidEdgeFrameworkSupport.WeldSymbol In WeldSymbols
+                If WeldSymbol.Leader And Not WeldSymbol.IsTerminatorAttachedToEntity Then
+                    Count += 1
+                End If
+            Next
+            If Count > 0 Then
+                Dim s As String = ""
+                If Count = 1 Then s = "weld symbol" Else s = "weld symbols"
+                TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
+            End If
+        Next
+
+        ' ###### DATUM FRAMES ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim DatumFrames As SolidEdgeFrameworkSupport.DatumFrames = CType(Sheet.DatumFrames, SolidEdgeFrameworkSupport.DatumFrames)
+            For Each DatumFrame As SolidEdgeFrameworkSupport.DatumFrame In DatumFrames
+                If DatumFrame.Leader And Not DatumFrame.IsTerminatorAttachedToEntity Then
+                    TaskLogger.AddMessage($"Detached datum frame on sheet '{Sheet.Name}'.  Displayed text is is '{DatumFrame.Datum}'")
+                End If
+            Next
+        Next
+
+        ' ###### DATUM TARGETS ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim DatumTargets As SolidEdgeFrameworkSupport.DatumTargets = CType(Sheet.DatumTargets, SolidEdgeFrameworkSupport.DatumTargets)
+            For Each DatumTarget As SolidEdgeFrameworkSupport.DatumTarget In DatumTargets
+                If DatumTarget.Leader And Not DatumTarget.IsTerminatorAttachedToEntity Then
+                    TaskLogger.AddMessage($"Detached datum target on sheet '{Sheet.Name}'.  Displayed text is is '{DatumTarget.DatumReference}{DatumTarget.DatumNumber}'")
+                End If
+            Next
+        Next
+
+        ' ###### SURFACE FINISH SYMBOLS ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim Count As Integer = 0
+            Dim SurfaceFinishSymbols As SolidEdgeFrameworkSupport.SurfaceFinishSymbols = CType(Sheet.SurfaceFinishSymbols, SolidEdgeFrameworkSupport.SurfaceFinishSymbols)
+            For Each SurfaceFinishSymbol As SolidEdgeFrameworkSupport.SurfaceFinishSymbol In SurfaceFinishSymbols
+                If Not SurfaceFinishSymbol.IsTerminatorAttachedToEntity Then
+                    Count += 1
+                End If
+            Next
+            If Count > 0 Then
+                Dim s As String = ""
+                If Count = 1 Then s = "surface finish symbol" Else s = "surface finish symbols"
+                TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
+            End If
+        Next
+
+        ' ###### FEATURE CONTROL FRAMES ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim FeatureControlFrames As SolidEdgeFrameworkSupport.FeatureControlFrames = CType(Sheet.FeatureControlFrames, SolidEdgeFrameworkSupport.FeatureControlFrames)
+            For Each FeatureControlFrame As SolidEdgeFrameworkSupport.FeatureControlFrame In FeatureControlFrames
+                If Not FeatureControlFrame.IsTerminatorAttachedToEntity Then
+                    TaskLogger.AddMessage($"Detached feature control frame on sheet '{Sheet.Name}'.  Displayed text is is '{FeatureControlFrame.PrimaryFrame}'")
+                End If
+            Next
+        Next
+
+        ' ###### LEADERS ######
+
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim Count As Integer = 0
+            Dim Leaders As SolidEdgeFrameworkSupport.Leaders = CType(Sheet.Leaders, SolidEdgeFrameworkSupport.Leaders)
+            For Each Leader As SolidEdgeFrameworkSupport.Leader In Leaders
+                If Not Leader.IsTerminatorAttachedToEntity Then
+                    Count += 1
+                End If
+            Next
+            If Count > 0 Then
+                Dim s As String = ""
+                If Count = 1 Then s = "leader" Else s = "leaders"
+                TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
+            End If
+        Next
+
     End Sub
 
     Private Sub CheckDrawingViewOnBackgroundSheet(tmpSEDoc As SolidEdgeDraft.DraftDocument)
@@ -394,27 +551,31 @@ Public Class TaskCheckDrawings
 
             DrawingViews = Sheet.DrawingViews
             For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
-                If DrawingView.Sheet IsNot Nothing Then
-                    Dim Count As Integer = 0
-                    DVSheet = CType(DrawingView.Sheet, SolidEdgeDraft.Sheet)
+                ' Failed on a mysterious empty view placed at the origin.  I vaguely recall a previous bug in SE that did that.
+                Try
+                    If DrawingView.Sheet IsNot Nothing Then
+                        Dim Count As Integer = 0
+                        DVSheet = CType(DrawingView.Sheet, SolidEdgeDraft.Sheet)
 
-                    If DVSheet.Arcs2d IsNot Nothing Then Count += DVSheet.Arcs2d.Count
-                    If DVSheet.BsplineCurves2d IsNot Nothing Then Count += DVSheet.BsplineCurves2d.Count
-                    If DVSheet.Circles2d IsNot Nothing Then Count += DVSheet.Circles2d.Count
-                    If DVSheet.Conics2d IsNot Nothing Then Count += DVSheet.Conics2d.Count
-                    If DVSheet.Curves2d IsNot Nothing Then Count += DVSheet.Curves2d.Count
-                    If DVSheet.Ellipses2d IsNot Nothing Then Count += DVSheet.Ellipses2d.Count
-                    If DVSheet.EllipticalArcs2d IsNot Nothing Then Count += DVSheet.EllipticalArcs2d.Count
-                    If DVSheet.Lines2d IsNot Nothing Then Count += DVSheet.Lines2d.Count
-                    If DVSheet.LineStrings2d IsNot Nothing Then Count += DVSheet.LineStrings2d.Count
-                    If DVSheet.Points2d IsNot Nothing Then Count += DVSheet.Points2d.Count
+                        If DVSheet.Arcs2d IsNot Nothing Then Count += DVSheet.Arcs2d.Count
+                        If DVSheet.BsplineCurves2d IsNot Nothing Then Count += DVSheet.BsplineCurves2d.Count
+                        If DVSheet.Circles2d IsNot Nothing Then Count += DVSheet.Circles2d.Count
+                        If DVSheet.Conics2d IsNot Nothing Then Count += DVSheet.Conics2d.Count
+                        If DVSheet.Curves2d IsNot Nothing Then Count += DVSheet.Curves2d.Count
+                        If DVSheet.Ellipses2d IsNot Nothing Then Count += DVSheet.Ellipses2d.Count
+                        If DVSheet.EllipticalArcs2d IsNot Nothing Then Count += DVSheet.EllipticalArcs2d.Count
+                        If DVSheet.Lines2d IsNot Nothing Then Count += DVSheet.Lines2d.Count
+                        If DVSheet.LineStrings2d IsNot Nothing Then Count += DVSheet.LineStrings2d.Count
+                        If DVSheet.Points2d IsNot Nothing Then Count += DVSheet.Points2d.Count
 
-                    If Count > 0 Then
-                        s = $"Draw-In-View graphics on sheet '{Sheet.Name}'"
-                        If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
-                        Exit For
+                        If Count > 0 Then
+                            s = $"Draw-In-View graphics on sheet '{Sheet.Name}'"
+                            If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
+                            Exit For
+                        End If
                     End If
-                End If
+                Catch ex As Exception
+                End Try
             Next DrawingView
         Next Sheet
 
