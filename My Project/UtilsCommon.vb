@@ -112,7 +112,7 @@ Public Class UtilsCommon
             Dim Model As SolidEdgePart.Model
             Dim Body As SolidEdgeGeometry.Body
 
-            Dim UF As New UtilsFeatures
+            'Dim UF As New UtilsFeatures
             Dim PointsList As New List(Of Double)
             Dim tmpPointsList As New List(Of Double)
             Dim Point As Double
@@ -126,7 +126,7 @@ Public Class UtilsCommon
                     ' Some Models do not have a Body
                     Try
                         Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                        tmpPointsList = UF.GetBodyRange(Body)
+                        tmpPointsList = GetBodyRange(Body)
                         If PointsList.Count = 0 Then
                             For Each Point In tmpPointsList
                                 PointsList.Add(Point)
@@ -165,6 +165,26 @@ Public Class UtilsCommon
 
         Return Range
     End Function
+
+    Public Function GetBodyRange(Body As SolidEdgeGeometry.Body) As List(Of Double)
+        Dim minmax As New List(Of Double)
+        Dim MinRangePoint = Array.CreateInstance(GetType(Double), 3)
+        Dim MaxRangePoint = Array.CreateInstance(GetType(Double), 3)
+        Dim Point As Double
+
+        Body.GetRange(MinRangePoint, MaxRangePoint)
+
+        For Each Point In MinRangePoint
+            minmax.Add(Point)
+        Next
+        For Each Point In MaxRangePoint
+            minmax.Add(Point)
+        Next
+
+        Return minmax
+
+    End Function
+
 
     Public Function GetDocType(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As String
         ' See SolidEdgeFramework.DocumentTypeConstants

@@ -309,7 +309,6 @@
     <Compile Include="My Project\TaskUpdateBlocks.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />
     <Compile Include="My Project\UtilsExecute.vb" />
-    <Compile Include="My Project\UtilsFeatures.vb" />
     <Compile Include="My Project\UtilsFileList.vb" />
     <Compile Include="My Project\UtilsFilenameCharmap.vb" />
     <Compile Include="My Project\Form_Main.Designer.vb">

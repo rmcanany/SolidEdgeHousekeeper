@@ -400,42 +400,66 @@ Public Class TaskCheckDrawings
             End If
         Next
 
-        '' ###### BOLT HOLE CIRCLES ######
+        ' ###### BOLT HOLE CIRCLES ######
 
-        'For Each Sheet As SolidEdgeDraft.Sheet In Sheets
-        '    Dim BoltHoleCircles As SolidEdgeFrameworkSupport.BoltHoleCircles = CType(Sheet.BoltHoleCircles, SolidEdgeFrameworkSupport.BoltHoleCircles)
-        '    'If BoltHoleCircles.Count > 0 Then TaskLogger.AddMessage($"Bolt hole circle count: {BoltHoleCircles.Count}")
-        '    Dim Count As Integer = 0
-        '    For Each BoltHoleCircle As SolidEdgeFrameworkSupport.BoltHoleCircle In BoltHoleCircles
-        '        Dim ConnectObject1 As Object = Nothing
-        '        Dim KeypointIdx1 As Integer = 0
-        '        Dim ConnectObject2 As Object = Nothing
-        '        Dim KeypointIdx2 As Integer = 0
-        '        Dim ConnectObject3 As Object = Nothing
-        '        Dim KeypointIdx3 As Integer = 0
-        '        Try
-        '            BoltHoleCircle.GetConnectElements3Objects(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2, ConnectObject3, KeypointIdx3)
-        '            If BoltHoleCircle.IsDefinedBy2Points Then
-        '                'BoltHoleCircle.GetConnectElementsCenterRadius(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2)
-        '                If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Then
-        '                    Count += 1
-        '                End If
-        '            ElseIf BoltHoleCircle.IsDefinedBy3Points Then
-        '                'BoltHoleCircle.GetConnectElements3Objects(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2, ConnectObject3, KeypointIdx3)
-        '                If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Or ConnectObject3 Is Nothing Then
-        '                    Count += 1
-        '                End If
-        '            End If
-        '        Catch ex As Exception
-        '            'TaskLogger.AddMessage("Exception")
-        '        End Try
-        '    Next
-        '    If Count > 0 Then
-        '        Dim s As String = ""
-        '        If Count = 1 Then s = "bolt hole circle" Else s = "bolt hole circles"
-        '        TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
-        '    End If
-        'Next
+        For Each Sheet As SolidEdgeDraft.Sheet In Sheets
+            Dim BoltHoleCircles As SolidEdgeFrameworkSupport.BoltHoleCircles = CType(Sheet.BoltHoleCircles, SolidEdgeFrameworkSupport.BoltHoleCircles)
+
+            Dim Count As Integer = 0
+
+            'Dim Count As Integer = BoltHoleCircles.Count
+            'If Count > 0 Then
+            '    Dim s As String = ""
+            '    If Count = 1 Then s = "bolt hole circle" Else s = "bolt hole circles"
+            '    TaskLogger.AddMessage($"Found ({Count}) {s} on sheet `{Sheet.Name}`.  No automated way to check is available")
+            'End If
+
+
+            For Each BoltHoleCircle As SolidEdgeFrameworkSupport.BoltHoleCircle In BoltHoleCircles
+                'TaskLogger.AddMessage($"Bolt circle count: {BoltHoleCircle.Count}")
+                If BoltHoleCircle.Count = 0 Then  ' This is the number of holes in the bolt circle.  In testing, detached bolt circles had 0.
+                    Count += 1
+                End If
+
+                'Dim ConnectObject1 As Object = Nothing
+                'Dim KeypointIdx1 As Integer = 0
+                'Dim ConnectObject2 As Object = Nothing
+                'Dim KeypointIdx2 As Integer = 0
+                'Dim ConnectObject3 As Object = Nothing
+                'Dim KeypointIdx3 As Integer = 0
+                'Try
+                '    'BoltHoleCircle.GetConnectElements3Objects(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2, ConnectObject3, KeypointIdx3)
+                '    If BoltHoleCircle.IsDefinedBy2Points Then
+                '        TaskLogger.AddMessage("2 pts")
+                '        BoltHoleCircle.GetConnectElements3Objects(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2, ConnectObject3, KeypointIdx3)
+                '        If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Then
+                '            Count += 1
+                '        End If
+                '    ElseIf BoltHoleCircle.IsDefinedBy3Points Then
+                '        TaskLogger.AddMessage("3 pts")
+                '        BoltHoleCircle.GetConnectElements3Objects(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2, ConnectObject3, KeypointIdx3)
+                '        If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Or ConnectObject3 Is Nothing Then
+                '            Count += 1
+                '        End If
+                '    Else  ' Must be placed by center
+                '        TaskLogger.AddMessage("center")
+                '        BoltHoleCircle.GetConnectElementsCenterRadius(ConnectObject1, KeypointIdx1, ConnectObject2, KeypointIdx2)
+                '        If ConnectObject1 Is Nothing Or ConnectObject2 Is Nothing Then
+                '            Count += 1
+                '        End If
+                '    End If
+                'Catch ex As Exception
+                '    TaskLogger.AddMessage("Exception")
+                'End Try
+            Next
+            If Count > 0 Then
+                Dim s As String = ""
+                If Count = 1 Then s = "bolt hole circle" Else s = "bolt hole circles"
+                TaskLogger.AddMessage($"Found ({Count}) detached {s} on sheet `{Sheet.Name}`")
+            End If
+
+
+        Next
 
         ' ###### WELD SYMBOLS ######
 

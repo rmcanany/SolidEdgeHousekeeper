@@ -562,555 +562,594 @@ Public Class UtilsMaterials
 
     Private Function GetFeatureFaceStyle(Feature As Object) As Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
 
-        Dim FeatureFaces As SolidEdgeGeometry.Faces = Nothing
-        Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
-        Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+        Dim NewWay As Boolean = True
 
-        Dim FeatureType = HCComObject.GetPropertyValue(
+        If NewWay Then
+
+            'Dim FeatureFaces As SolidEdgeGeometry.Faces = Nothing
+            'Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
+            'Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+
+            ''Dim FeatureType = HCComObject.GetPropertyValue(
+            ''Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
+
+            'Dim FeatureType As Type = HCComObject.GetCOMObjectType(Feature)
+
+            'Dim _Feature = CType(Feature, FeatureType)
+
+
+            ' Every feature type that supports a face style override has the same
+            ' GetStyle, Faces and SetStyle members, but on unrelated interop types,
+            ' so they're called by name.  A feature type without them (BlueSurf,
+            ' FaceMove, some CopiedParts...) throws, and is treated as having no
+            ' override.
+            Try
+                Dim FeatureFaceStyle = CType(HCComObject.InvokeMethod(Feature, "GetStyle"), SolidEdgeFramework.FaceStyle)
+                If FeatureFaceStyle Is Nothing Then Return New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+
+                Dim FeatureFaces = CType(HCComObject.InvokeMethod(Feature, "Faces", SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                                         SolidEdgeGeometry.Faces)
+
+                ' DispatchWrapper sends Nothing as a null object.  A plain Nothing
+                ' would arrive as "empty", which Solid Edge may reject.
+                HCComObject.InvokeMethod(Feature, "SetStyle", New System.Runtime.InteropServices.DispatchWrapper(Nothing))
+
+                Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+
+            Catch ex As Exception
+                Return New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+            End Try
+
+        Else
+            Dim FeatureFaces As SolidEdgeGeometry.Faces = Nothing
+            Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
+            Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+
+            Dim FeatureType = HCComObject.GetPropertyValue(
             Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
 
-        Select Case FeatureType
+            Select Case FeatureType
 
-            Case SolidEdgePart.FeatureTypeConstants.igBeadFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Bead)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                Case SolidEdgePart.FeatureTypeConstants.igBeadFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Bead)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igBendFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Bend)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                Case SolidEdgePart.FeatureTypeConstants.igBendFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Bend)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igBlueSurfFeatureObject
+                Case SolidEdgePart.FeatureTypeConstants.igBlueSurfFeatureObject
                         ' BlueSurf objects do not have a FaceStyle override.
 
-            Case SolidEdgePart.FeatureTypeConstants.igBodyFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.BodyFeature)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igBodyFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.BodyFeature)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                                    SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igBooleanFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.BooleanFeature)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
-
-            Case SolidEdgePart.FeatureTypeConstants.igBreakCornerFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.BreakCorner)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
-
-            Case SolidEdgePart.FeatureTypeConstants.igChamferFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Chamfer)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
-
-            Case SolidEdgePart.FeatureTypeConstants.igCloseCornerFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.CloseCorner)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
-
-            Case SolidEdgePart.FeatureTypeConstants.igContourFlangeFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.ContourFlange)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
-
-            Case SolidEdgePart.FeatureTypeConstants.igCopiedPartFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.CopiedPart)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    ' Some CopiedParts do not have Faces
-                    Try
+                Case SolidEdgePart.FeatureTypeConstants.igBooleanFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.BooleanFeature)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
                         FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
                         Feature_.SetStyle(Nothing)
                         Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    Catch ex As Exception
-                    End Try
-                End If
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igCopyConstructionObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.CopyConstruction)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igBreakCornerFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.BreakCorner)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDeleteBlendFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.DeleteBlend)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igChamferFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Chamfer)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDeleteFaceFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.DeleteFace)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igCloseCornerFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.CloseCorner)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDeleteHoleFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.DeleteHole)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igContourFlangeFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.ContourFlange)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDimpleFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Dimple)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igCopiedPartFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.CopiedPart)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        ' Some CopiedParts do not have Faces
+                        Try
+                            FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                            Feature_.SetStyle(Nothing)
+                            Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                        Catch ex As Exception
+                        End Try
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDraftFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Draft)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igCopyConstructionObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.CopyConstruction)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igDrawnCutoutFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.DrawnCutout)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igDeleteBlendFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.DeleteBlend)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igExtrudedCutoutFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedCutout)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igDeleteFaceFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.DeleteFace)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igExtrudedProtrusionFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedProtrusion)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igDeleteHoleFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.DeleteHole)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igExtrudedSurfaceObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedSurface)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igDimpleFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Dimple)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igFaceMoveObject
+                Case SolidEdgePart.FeatureTypeConstants.igDraftFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Draft)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                           SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
+
+                Case SolidEdgePart.FeatureTypeConstants.igDrawnCutoutFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.DrawnCutout)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                           SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
+
+                Case SolidEdgePart.FeatureTypeConstants.igExtrudedCutoutFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedCutout)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                           SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
+
+                Case SolidEdgePart.FeatureTypeConstants.igExtrudedProtrusionFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedProtrusion)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                           SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
+
+                Case SolidEdgePart.FeatureTypeConstants.igExtrudedSurfaceObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedSurface)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                           SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
+
+                Case SolidEdgePart.FeatureTypeConstants.igFaceMoveObject
                         ' Does not have a Faces collection.
 
-            Case SolidEdgePart.FeatureTypeConstants.igFlangeFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Flange)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igFlangeFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Flange)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igHelixCutoutFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.HelixCutout)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igHelixCutoutFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.HelixCutout)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igHelixProtrusionFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.HelixProtrusion)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igHelixProtrusionFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.HelixProtrusion)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igHoleFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Hole)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igHoleFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Hole)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igJogFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Jog)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igJogFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Jog)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igLipFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Lip)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igLipFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Lip)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igLoftedCutoutFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.LoftedCutout)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igLoftedCutoutFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.LoftedCutout)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igLoftedFlangeFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.LoftedFlange)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igLoftedFlangeFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.LoftedFlange)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igLoftedProtrusionFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.LoftedProtrusion)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igLoftedProtrusionFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.LoftedProtrusion)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igLouverFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Louver)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igLouverFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Louver)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igMidSurfaceObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.MidSurface)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igMidSurfaceObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.MidSurface)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igMirrorCopyFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.MirrorCopy)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igMirrorCopyFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.MirrorCopy)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igMirrorPartFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.MirrorPart)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igMirrorPartFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.MirrorPart)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igNormalCutoutFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.NormalCutout)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igNormalCutoutFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.NormalCutout)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igPartingSplitFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.PartingSplit)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igPartingSplitFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.PartingSplit)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igPatternFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Pattern)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igPatternFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Pattern)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igPatternPartFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.PatternPart)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igPatternPartFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.PatternPart)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igRebendFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Rebend)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igRebendFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Rebend)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igReplaceFaceFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.ReplaceFace)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igReplaceFaceFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.ReplaceFace)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igResizeHoleObject
+                Case SolidEdgePart.FeatureTypeConstants.igResizeHoleObject
                         ' Does not have a Faces collection.
 
-            Case SolidEdgePart.FeatureTypeConstants.igRevolvedCutoutFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.RevolvedCutout)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igRevolvedCutoutFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.RevolvedCutout)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igRevolvedProtrusionFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.RevolvedProtrusion)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igRevolvedProtrusionFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.RevolvedProtrusion)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igRibFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Rib)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igRibFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Rib)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igRoundFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Round)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igRoundFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Round)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igSlotFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Slot)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igSlotFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Slot)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igSplitFaceObject
+                Case SolidEdgePart.FeatureTypeConstants.igSplitFaceObject
                         ' Does not have a Faces collection.
 
-            Case SolidEdgePart.FeatureTypeConstants.igSweptCutoutFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.SweptCutout)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igSweptCutoutFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.SweptCutout)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igSweptProtrusionFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.SweptProtrusion)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igSweptProtrusionFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.SweptProtrusion)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igTabFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Tab)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igTabFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Tab)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igThickenFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Thicken)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igThickenFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Thicken)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igThinwallFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Thinwall)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igThinwallFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Thinwall)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igTubeFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.TubeFeature)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igTubeFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.TubeFeature)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igUnbendFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.Unbend)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igUnbendFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.Unbend)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igUserDefinedPatternFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.UserDefinedPattern)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igUserDefinedPatternFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.UserDefinedPattern)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case SolidEdgePart.FeatureTypeConstants.igWebNetworkFeatureObject
-                Dim Feature_ = CType(Feature, SolidEdgePart.WebNetwork)
-                FeatureFaceStyle = Feature_.GetStyle()
-                If FeatureFaceStyle IsNot Nothing Then
-                    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                Case SolidEdgePart.FeatureTypeConstants.igWebNetworkFeatureObject
+                    Dim Feature_ = CType(Feature, SolidEdgePart.WebNetwork)
+                    FeatureFaceStyle = Feature_.GetStyle()
+                    If FeatureFaceStyle IsNot Nothing Then
+                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
-                    Feature_.SetStyle(Nothing)
-                    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                End If
+                        Feature_.SetStyle(Nothing)
+                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                    End If
 
-            Case Else
-                Select Case FeatureType.ToString
-                    Case "0"  ' Box, Cylinder, and some others.  Could be flagging sync parts.
+                Case Else
+                    Select Case FeatureType.ToString
+                        Case "0"  ' Box, Cylinder, and some others.  Could be flagging sync parts.
                                 ' These features do not have a FaceStyle override.
 
-                    Case "1737031522"  'ConvertToSM
+                        Case "1737031522"  'ConvertToSM
                                 ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.ConvToSM)
                                 'FeatureFaceStyle = Feature_.GetStyle()
@@ -1120,7 +1159,7 @@ Public Class UtilsMaterials
                                 '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                                 'End If
 
-                    Case "1245666020"  'FaceSet
+                        Case "1245666020"  'FaceSet
                                 ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.FaceSet)
                                 'FeatureFaceStyle = Feature_.GetStyle()
@@ -1130,7 +1169,7 @@ Public Class UtilsMaterials
                                 '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                                 'End If
 
-                    Case "69347334"  'Hem
+                        Case "69347334"  'Hem
                                 ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.Hem)
                                 'FeatureFaceStyle = Feature_.GetStyle()
@@ -1140,7 +1179,7 @@ Public Class UtilsMaterials
                                 '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                                 'End If
 
-                    Case "1477405962"  'Subtract
+                        Case "1477405962"  'Subtract
                                 ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.Subtract)
                                 'FeatureFaceStyle = Feature_.GetStyle()
@@ -1150,7 +1189,7 @@ Public Class UtilsMaterials
                                 '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                                 'End If
 
-                    Case "-127107951"  'Thread
+                        Case "-127107951"  'Thread
                                 ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.Thread)
                                 'FeatureFaceStyle = Feature_.GetStyle()
@@ -1160,7 +1199,7 @@ Public Class UtilsMaterials
                                 '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                                 'End If
 
-                    Case "451898536"  'Transform.  Guessing it's ConvertPartToSM.
+                        Case "451898536"  'Transform.  Guessing it's ConvertPartToSM.
                                 ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.ConvertPartToSM)
                                 'FeatureFaceStyle = Feature_.GetStyle()
@@ -1170,23 +1209,24 @@ Public Class UtilsMaterials
                                 '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                                 'End If
 
-                    Case "1385450842"  'Union
-                        ' Seems like it should work.  It doesn't.
-                        'Dim Feature_ = CType(Feature, SolidEdgePart.Union)
-                        'FeatureFaceStyle = Feature_.GetStyle()
-                        'If FeatureFaceStyle IsNot Nothing Then
-                        '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                        '   SolidEdgeGeometry.Faces)
-                        '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                        'End If
+                        Case "1385450842"  'Union
+                            ' Seems like it should work.  It doesn't.
+                            'Dim Feature_ = CType(Feature, SolidEdgePart.Union)
+                            'FeatureFaceStyle = Feature_.GetStyle()
+                            'If FeatureFaceStyle IsNot Nothing Then
+                            '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
+                            '   SolidEdgeGeometry.Faces)
+                            '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
+                            'End If
 
-                    Case Else
-                        Dim FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
-                End Select
+                        Case Else
+                            Dim FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
+                    End Select
 
-        End Select
+            End Select
 
-        Return FeatureFaceOverrides
+            Return FeatureFaceOverrides
+        End If
 
 
     End Function

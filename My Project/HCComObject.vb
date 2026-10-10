@@ -19,6 +19,18 @@ Option Strict On
 Public Class HCComObject
     Const LOCALE_SYSTEM_DEFAULT As Integer = 2048
 
+    ' Calls a method or parameterized property by name, without knowing the
+    ' object's type at compile time.  GetProperty is included because some Solid
+    ' Edge members that look like methods, such as Faces(QueryType), are really
+    ' properties with a parameter.
+    Public Shared Function InvokeMethod(ByVal comObject As Object, ByVal name As String, ParamArray args As Object()) As Object
+        If Runtime.InteropServices.Marshal.IsComObject(comObject) = False Then Throw New Runtime.InteropServices.InvalidComObjectException()
+        Dim type = comObject.[GetType]()
+        Return type.InvokeMember(name,
+                                 System.Reflection.BindingFlags.InvokeMethod Or System.Reflection.BindingFlags.GetProperty,
+                                 Nothing, comObject, args)
+    End Function
+
     Public Shared Function GetPropertyValue(Of T)(ByVal comObject As Object, ByVal name As String) As T
         If Runtime.InteropServices.Marshal.IsComObject(comObject) = False Then Throw New Runtime.InteropServices.InvalidComObjectException()
         Dim type = comObject.[GetType]()
