@@ -5,7 +5,7 @@ Public Class UtilsMaterials
     Private Property SEApp As SolidEdgeFramework.Application
     Private Property SEDoc As SolidEdgeFramework.SolidEdgeDocument
     Private Property ActiveMaterialLibrary As String
-    Private Property RemoveFaceStyleOverrides As Boolean
+    Private Property RetainFaceStyleOverrides As Boolean
     Private Property UpdateFaceStyles As Boolean
     Private Property UseFinishFaceStyle As Boolean
     Private Property FinishName As String
@@ -20,65 +20,55 @@ Public Class UtilsMaterials
         ErrorLogger As Logger
         )
 
-        Me.SEApp = _SEApp
-        Me.SEDoc = _SEDoc
-        Me.ActiveMaterialLibrary = _ActiveMaterialLibrary
-
-        Dim MatTable As SolidEdgeFramework.MatTable
-
-        Dim MaterialLibList As Object = Nothing
-        Dim NumMaterialLibraries As Integer
-        Dim MaterialList As Object = Nothing
-        Dim NumMaterials As Integer
-
-        ActiveMaterialLibrary = System.IO.Path.GetFileNameWithoutExtension(ActiveMaterialLibrary)
-        Dim ActiveMaterialLibraryPresent As Boolean = False
-        Dim CurrentMaterialName As String = ""
-        Dim MatTableMaterial As Object
-        Dim CurrentMaterialNameInLibrary As Boolean = False
-        Dim CurrentMaterialMatchesLibMaterial As Boolean = True
-
-        Dim msg As String = ""
-
-        Dim Models As SolidEdgePart.Models = Nothing
-
-        Dim IsWeldment As Boolean = False
+        _ActiveMaterialLibrary = System.IO.Path.GetFileNameWithoutExtension(_ActiveMaterialLibrary)
 
         Dim UC As New UtilsCommon
-        Dim DocType = UC.GetDocType(SEDoc)
+
+        Dim DocType = UC.GetDocType(_SEDoc)
+        Dim Models As SolidEdgePart.Models = Nothing
+        Dim IsWeldment As Boolean = False
 
         Select Case DocType
             Case "par"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                Dim tmpSEDoc = CType(_SEDoc, SolidEdgePart.PartDocument)
                 Models = tmpSEDoc.Models
             Case "psm"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                Dim tmpSEDoc = CType(_SEDoc, SolidEdgePart.SheetMetalDocument)
                 Models = tmpSEDoc.Models
             Case "asm"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                Dim tmpSEDoc = CType(_SEDoc, SolidEdgeAssembly.AssemblyDocument)
                 IsWeldment = tmpSEDoc.WeldmentAssembly
         End Select
 
         If ((DocType = "asm") And (IsWeldment)) Or (Models IsNot Nothing AndAlso Models.Count > 0) Then
 
-            MatTable = SEApp.GetMaterialTable()
-            MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
-            MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
+            Dim MatTable As SolidEdgeFramework.MatTable = _SEApp.GetMaterialTable()
+
+            Dim CurrentMaterialName As String = ""
+            MatTable.GetCurrentMaterialName(_SEDoc, CurrentMaterialName)
+
+            'Dim MaterialLibList As Object = Nothing ' Populated next
+            'Dim NumMaterialLibraries As Integer '     Populated next
+            'MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
 
             'See if the CurrentMaterialName is in the ActiveLibrary
-            MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
-            For Each MatTableMaterial In CType(MaterialList, System.Array)
-                If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
-                    CurrentMaterialNameInLibrary = True
-                    Exit For
-                End If
-            Next
+            Dim NumMaterials As Integer '          Populated next
+            Dim MaterialList As Object = Nothing ' Populated next
+            MatTable.GetMaterialListFromLibrary(_ActiveMaterialLibrary, NumMaterials, MaterialList)
 
-            If Not CurrentMaterialNameInLibrary Then
+            'Dim MaterialInLibrary As Boolean = False
+            'For Each MatTableMaterial As Object In CType(MaterialList, System.Array)
+            '    If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
+            '        MaterialInLibrary = True
+            '        Exit For
+            '    End If
+            'Next
+
+            If Not CurrentMaterialNameInLibrary(CurrentMaterialName, MaterialList) Then
                 If CurrentMaterialName = "" Then
-                    ErrorLogger.AddMessage($"Material 'None' not in {ActiveMaterialLibrary}")
+                    ErrorLogger.AddMessage($"Material 'None' not in {_ActiveMaterialLibrary}")
                 Else
-                    ErrorLogger.AddMessage($"Material '{CurrentMaterialName}' not in {ActiveMaterialLibrary}")
+                    ErrorLogger.AddMessage($"Material '{CurrentMaterialName}' not in {_ActiveMaterialLibrary}")
                 End If
             End If
         End If
@@ -89,7 +79,7 @@ Public Class UtilsMaterials
         ByVal _SEApp As SolidEdgeFramework.Application,
         ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         _ActiveMaterialLibrary As String,
-        _RemoveFaceStyleOverrides As Boolean,
+        _RetainFaceStyleOverrides As Boolean,
         _UpdateFaceStyles As Boolean,
         _UseFinishFaceStyle As Boolean,
         _FinishName As String,
@@ -99,44 +89,29 @@ Public Class UtilsMaterials
         ErrorLogger As Logger
         )
 
-        Me.SEApp = _SEApp
-        Me.SEDoc = _SEDoc
-        Me.ActiveMaterialLibrary = _ActiveMaterialLibrary
-        Me.RemoveFaceStyleOverrides = _RemoveFaceStyleOverrides
-        Me.UpdateFaceStyles = _UpdateFaceStyles
-        Me.UseFinishFaceStyle = _UseFinishFaceStyle
-        Me.FinishName = _FinishName
-        Me.ExcludedFinishesList = _ExcludedFinishesList
-        Me.OverrideBodyFaceStyle = _OverrideBodyFaceStyle
-        Me.OverrideMaterialFaceStyle = _OverrideMaterialFaceStyle
+        ArgsToClassProperties(_SEApp, _SEDoc, _ActiveMaterialLibrary, _RetainFaceStyleOverrides, _UpdateFaceStyles, _UseFinishFaceStyle,
+                              _FinishName, _ExcludedFinishesList, _OverrideBodyFaceStyle, _OverrideMaterialFaceStyle)
 
-        'ActiveMaterialLibrary = System.IO.Path.GetFileNameWithoutExtension(ActiveMaterialLibrary)
-
-        Dim Mismatches As List(Of SolidEdgeFramework.MatTablePropIndex)
-        Dim MatTable As SolidEdgeFramework.MatTable
-        Dim MaterialList As Object = Nothing
-        Dim NumMaterials As Integer
-        Dim CurrentMaterialName As String = ""
-        Dim MatTableMaterial As Object = Nothing
-        Dim tf As Boolean
-        Dim Models As SolidEdgePart.Models = Nothing
-        Dim MaxModelCount As Integer = 10
         Dim UC As New UtilsCommon
 
 
         ' ###### GET THE MATERIAL TABLE AND A LIST OF MATERIALS IT CONTAINS ######
 
-        MatTable = SEApp.GetMaterialTable()
+        Dim MatTable As SolidEdgeFramework.MatTable = Me.SEApp.GetMaterialTable()
 
-        ' Populate 'NumMaterials' and 'MaterialList'
-        MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
+        Dim NumMaterials As Integer '          Populated next
+        Dim MaterialList As Object = Nothing ' Populated next
+        MatTable.GetMaterialListFromLibrary(Me.ActiveMaterialLibrary, NumMaterials, MaterialList)
 
 
-        ' ###### GET THE DOCUMENT MODELS ######
+        ' ###### GET THE DOCUMENT OBJECTS ######
 
-        Select Case UC.GetDocType(SEDoc)
+        Dim Models As SolidEdgePart.Models = Nothing
+        Dim CurrentMaterialName As String = ""
+
+        Select Case UC.GetDocType(Me.SEDoc)
             Case "par"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                Dim tmpSEDoc = CType(Me.SEDoc, SolidEdgePart.PartDocument)
                 Models = tmpSEDoc.Models
                 MatTable.GetCurrentMaterialName(tmpSEDoc, CurrentMaterialName)
                 If Models.Count = 0 Then
@@ -144,7 +119,7 @@ Public Class UtilsMaterials
                     Exit Sub
                 End If
             Case "psm"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                Dim tmpSEDoc = CType(Me.SEDoc, SolidEdgePart.SheetMetalDocument)
                 Models = tmpSEDoc.Models
                 MatTable.GetCurrentMaterialName(tmpSEDoc, CurrentMaterialName)
                 If Models.Count = 0 Then
@@ -156,13 +131,15 @@ Public Class UtilsMaterials
 
         ' ###### CHECK START CONDITIONS ######
 
-        CheckUpdateMaterialStartConditions(SEDoc, Models, MaxModelCount, CurrentMaterialName, MaterialList, ErrorLogger)
-
+        Dim MaxModelCount As Integer = 10
+        CheckUpdateMaterialStartConditions(Me.SEDoc, Models, MaxModelCount, CurrentMaterialName, MaterialList, ErrorLogger)
         If ErrorLogger.HasErrors Then Exit Sub
 
 
         ' ###### GET THE MATERIAL OBJECT FROM THE MATERIAL TABLE ######
+        ' CheckUpdateMaterialStartConditions should catch if the material is not in the library
 
+        Dim MatTableMaterial As Object = Nothing ' Populated next
         For Each tmpMatTableMaterial As Object In CType(MaterialList, System.Array)
             If tmpMatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
                 ' This is the one we want
@@ -172,142 +149,290 @@ Public Class UtilsMaterials
         Next
 
 
-        ' ###### CHECK FOR MISMATCHES BETWEEN THE MATERIAL TABLE AND DOCUMENT ######
+        ' ###### FIX ANY MISMATCHES BETWEEN THE MATERIAL TABLE AND DOCUMENT ######
 
-        Mismatches = GetMaterialPropertyMismatches(MatTable, MatTableMaterial, ActiveMaterialLibrary)
-
-
-        ' ###### FIX ANY MISMATCHES ######
-
+        Dim Mismatches As List(Of SolidEdgeFramework.MatTablePropIndex) = GetMaterialPropertyMismatches(MatTable, MatTableMaterial, Me.ActiveMaterialLibrary)
         If Mismatches.Count > 0 Then
-
-            If Me.UpdateFaceStyles Then
-                ' Face styles are not always updated, especially on imported files.
-                Try
-                    MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                Catch ex As Exception
-                    ErrorLogger.AddMessage($"Some face styles may not have been updated.  Please verify results.  Exception: {ex.Message}")
-                End Try
-            Else
-                For Each MismatchProp As SolidEdgeFramework.MatTablePropIndex In Mismatches
-
-                    tf = MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
-                    tf = tf Or MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFillStyle
-                    If tf Then
-                        Continue For
-                    End If
-
-                    Dim LibPropValue As Object = Nothing
-                    MatTable.GetMaterialPropValueFromLibrary(
-                            MatTableMaterial.ToString, ActiveMaterialLibrary, MismatchProp, LibPropValue)
-                    SEApp.DoIdle()
-
-                    Dim ModelIdx As Integer = 0
-                    Dim AutoAdd As Boolean = False
-
-                    Select Case MismatchProp
-                        Case SolidEdgeFramework.MatTablePropIndex.seDensity
-                            ' Density is a variable, not a property
-
-                            Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
-
-                            Dim UseDisplayName As Boolean = True
-                            DocVariableDict = UC.GetDocVariables(SEDoc, UseDisplayName)
-
-                            If DocVariableDict.Keys.Contains("PhysicalProperties_Density") Then
-                                ' Density from the material table is in kg/m^3
-                                ' Density in the document needs to be in its own units
-
-                                Dim UnitsOfMeasure = SEDoc.UnitsOfMeasure
-                                Dim Factor As Double = 1.0
-                                Dim LibPropDouble As Double = CDbl(LibPropValue)
-                                For Each UnitOfMeasure As SolidEdgeFramework.UnitOfMeasure In UnitsOfMeasure
-                                    If UnitOfMeasure.Type = SolidEdgeConstants.UnitTypeConstants.igUnitDistance Then
-                                        If UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthInch Then
-                                            ' Weight conversion: 0.45359237 kg = 1 lb.  lb/in^3 = kg/m^3 * lb/kg * (m/in)^3
-                                            Factor = (1 / 0.45359237) * ((25.4 / 1000) ^ 3)
-                                            LibPropDouble = Factor * LibPropDouble
-                                            DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
-                                        ElseIf UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter Then
-                                            Factor = 1 / (1000 * 1000 * 1000)
-                                            LibPropDouble = Factor * LibPropDouble
-                                            DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
-                                        Else
-                                            ErrorLogger.AddMessage($"Could not update density with '{UnitOfMeasure.Units}' units")
-                                        End If
-                                    End If
-                                Next
-                            End If
-
-                        Case SolidEdgeFramework.MatTablePropIndex.seCoefOfThermalExpansion
-                            UC.SetPropValue(SEDoc, "System", "Coef. of Thermal Exp", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                        Case SolidEdgeFramework.MatTablePropIndex.seThermalConductivity
-                            UC.SetPropValue(SEDoc, "System", "Thermal Conductivity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                        Case SolidEdgeFramework.MatTablePropIndex.seSpecificHeat
-                            UC.SetPropValue(SEDoc, "System", "Specific Heat", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                        Case SolidEdgeFramework.MatTablePropIndex.seModulusElasticity
-                            UC.SetPropValue(SEDoc, "System", "Modulus of Elasticity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                        Case SolidEdgeFramework.MatTablePropIndex.sePoissonRatio
-                            UC.SetPropValue(SEDoc, "System", "Poisson's Ratio", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                        Case SolidEdgeFramework.MatTablePropIndex.seYieldStress
-                            UC.SetPropValue(SEDoc, "System", "Yield Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                        Case SolidEdgeFramework.MatTablePropIndex.seUltimateStress
-                            UC.SetPropValue(SEDoc, "System", "Ultimate Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                        Case SolidEdgeFramework.MatTablePropIndex.seElongation
-                            UC.SetPropValue(SEDoc, "System", "Elongation", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
-                    End Select
-
-                Next
-
-                'Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
-
-                'Dim OldDocFaceStyleName As Object = Nothing
-                'MatTable.GetMaterialPropValueFromDoc(
-                '                SEDoc, seFaceStyle, OldDocFaceStyleName)
-                'SEApp.DoIdle()
-
-                'Dim OldLibFaceStyleName As Object = Nothing
-                'MatTable.GetMaterialPropValueFromLibrary(
-                '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
-                'SEApp.DoIdle()
-
-                'MatTable.SetMaterialPropValueToLibrary(
-                '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
-                'SEApp.DoIdle()
-
-                'SEDoc.Save()
-                'SEApp.DoIdle()
-
-                'Dim MatOOD As Boolean
-                'Dim GageOOD As Boolean
-                'MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
-
-                'If MatOOD Then
-                '    MatTable.ApplyMaterialToDoc(
-                '                SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                '    SEApp.DoIdle()
-
-                '    SEDoc.Save()
-                '    SEApp.DoIdle()
-                'End If
-
-                'MatTable.SetMaterialPropValueToLibrary(
-                '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
-                'SEApp.DoIdle()
-            End If
+            FixMismatches(Mismatches, MatTable, MatTableMaterial, ErrorLogger)
         End If
 
-        If Me.UpdateFaceStyles Then
+
+        ' ###### UPDATE FACE STYLES IF NEEDED ######
+
+        If Me.UpdateFaceStyles Then ' Allowing this to proceed to catch any downstream errors.
             UpdateFaces(ErrorLogger)
         End If
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        '' The caller should decide whether to save or not
+        'SEDoc.Save()
+        'SEApp.DoIdle()
 
         MatTable = Nothing
         SEApp.DoIdle()
 
     End Sub
+
+    Private Sub ArgsToClassProperties(
+        ByVal _SEApp As SolidEdgeFramework.Application,
+        ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        _ActiveMaterialLibrary As String,
+        _RetainFaceStyleOverrides As Boolean,
+        _UpdateFaceStyles As Boolean,
+        _UseFinishFaceStyle As Boolean,
+        _FinishName As String,
+        _ExcludedFinishesList As List(Of String),
+        _OverrideBodyFaceStyle As Boolean,
+        _OverrideMaterialFaceStyle As Boolean)
+
+        Me.SEApp = _SEApp
+        Me.SEDoc = _SEDoc
+        Me.ActiveMaterialLibrary = _ActiveMaterialLibrary
+        Me.RetainFaceStyleOverrides = _RetainFaceStyleOverrides
+        Me.UpdateFaceStyles = _UpdateFaceStyles
+        Me.UseFinishFaceStyle = _UseFinishFaceStyle
+        Me.FinishName = _FinishName
+        Me.ExcludedFinishesList = _ExcludedFinishesList
+        Me.OverrideBodyFaceStyle = _OverrideBodyFaceStyle
+        Me.OverrideMaterialFaceStyle = _OverrideMaterialFaceStyle
+
+        'Me.ActiveMaterialLibrary = System.IO.Path.GetFileNameWithoutExtension(Me.ActiveMaterialLibrary)
+
+    End Sub
+
+    Private Sub FixMismatches(
+        Mismatches As List(Of SolidEdgeFramework.MatTablePropIndex),
+        MatTable As SolidEdgeFramework.MatTable,
+        MatTableMaterial As Object,
+        ErrorLogger As Logger)
+
+        Dim UC As New UtilsCommon
+
+        ' TODO: Probably need to check if RetainFaceStyleOverrides is enabled.  I think this doesn't do that.
+        If Me.UpdateFaceStyles Then
+            ' Face styles are not always updated, especially on imported files.
+            ' I wonder if ApplyMaterialToDoc is calling Body.ClearOverrides.
+            Try
+                MatTable.ApplyMaterialToDoc(Me.SEDoc, MatTableMaterial.ToString, Me.ActiveMaterialLibrary)
+            Catch ex As Exception
+                ErrorLogger.AddMessage($"Some face styles may not have been updated.  Please verify results.  Exception: {ex.Message}")
+            End Try
+        Else
+            For Each MismatchProp As SolidEdgeFramework.MatTablePropIndex In Mismatches
+                Dim tf As Boolean
+                tf = MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
+                tf = tf Or MismatchProp = SolidEdgeFramework.MatTablePropIndex.seFillStyle
+                If tf Then
+                    Continue For
+                End If
+
+                Dim LibPropValue As Object = Nothing
+                MatTable.GetMaterialPropValueFromLibrary(
+                        MatTableMaterial.ToString, Me.ActiveMaterialLibrary, MismatchProp, LibPropValue)
+                SEApp.DoIdle()
+
+                'Dim ModelIdx As Integer = 0
+                'Dim AutoAdd As Boolean = False
+
+                FixMismatchProp(MismatchProp, LibPropValue, ErrorLogger)
+
+                'Select Case MismatchProp
+                '    Case SolidEdgeFramework.MatTablePropIndex.seDensity
+                '        ' Density is a variable, not a property
+
+                '        Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+
+                '        Dim UseDisplayName As Boolean = True
+                '        DocVariableDict = UC.GetDocVariables(SEDoc, UseDisplayName)
+
+                '        If DocVariableDict.Keys.Contains("PhysicalProperties_Density") Then
+                '            ' Density from the material table is in kg/m^3
+                '            ' Density in the document needs to be in its own units
+
+                '            Dim UnitsOfMeasure = SEDoc.UnitsOfMeasure
+                '            Dim Factor As Double = 1.0
+                '            Dim LibPropDouble As Double = CDbl(LibPropValue)
+                '            For Each UnitOfMeasure As SolidEdgeFramework.UnitOfMeasure In UnitsOfMeasure
+                '                If UnitOfMeasure.Type = SolidEdgeConstants.UnitTypeConstants.igUnitDistance Then
+                '                    If UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthInch Then
+                '                        ' Weight conversion: 0.45359237 kg = 1 lb.  lb/in^3 = kg/m^3 * lb/kg * (m/in)^3
+                '                        Factor = (1 / 0.45359237) * ((25.4 / 1000) ^ 3)
+                '                        LibPropDouble = Factor * LibPropDouble
+                '                        DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                '                    ElseIf UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter Then
+                '                        Factor = 1 / (1000 * 1000 * 1000)
+                '                        LibPropDouble = Factor * LibPropDouble
+                '                        DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                '                    Else
+                '                        ErrorLogger.AddMessage($"Could not update density with '{UnitOfMeasure.Units}' units")
+                '                    End If
+                '                End If
+                '            Next
+                '        End If
+
+                '    Case SolidEdgeFramework.MatTablePropIndex.seCoefOfThermalExpansion
+                '        UC.SetPropValue(SEDoc, "System", "Coef. of Thermal Exp", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                '    Case SolidEdgeFramework.MatTablePropIndex.seThermalConductivity
+                '        UC.SetPropValue(SEDoc, "System", "Thermal Conductivity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                '    Case SolidEdgeFramework.MatTablePropIndex.seSpecificHeat
+                '        UC.SetPropValue(SEDoc, "System", "Specific Heat", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                '    Case SolidEdgeFramework.MatTablePropIndex.seModulusElasticity
+                '        UC.SetPropValue(SEDoc, "System", "Modulus of Elasticity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                '    Case SolidEdgeFramework.MatTablePropIndex.sePoissonRatio
+                '        UC.SetPropValue(SEDoc, "System", "Poisson's Ratio", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                '    Case SolidEdgeFramework.MatTablePropIndex.seYieldStress
+                '        UC.SetPropValue(SEDoc, "System", "Yield Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                '    Case SolidEdgeFramework.MatTablePropIndex.seUltimateStress
+                '        UC.SetPropValue(SEDoc, "System", "Ultimate Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                '    Case SolidEdgeFramework.MatTablePropIndex.seElongation
+                '        UC.SetPropValue(SEDoc, "System", "Elongation", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+                'End Select
+
+            Next
+
+            'Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
+
+            'Dim OldDocFaceStyleName As Object = Nothing
+            'MatTable.GetMaterialPropValueFromDoc(
+            '                SEDoc, seFaceStyle, OldDocFaceStyleName)
+            'SEApp.DoIdle()
+
+            'Dim OldLibFaceStyleName As Object = Nothing
+            'MatTable.GetMaterialPropValueFromLibrary(
+            '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+            'SEApp.DoIdle()
+
+            'MatTable.SetMaterialPropValueToLibrary(
+            '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
+            'SEApp.DoIdle()
+
+            'SEDoc.Save()
+            'SEApp.DoIdle()
+
+            'Dim MatOOD As Boolean
+            'Dim GageOOD As Boolean
+            'MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
+
+            'If MatOOD Then
+            '    MatTable.ApplyMaterialToDoc(
+            '                SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+            '    SEApp.DoIdle()
+
+            '    SEDoc.Save()
+            '    SEApp.DoIdle()
+            'End If
+
+            'MatTable.SetMaterialPropValueToLibrary(
+            '                MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+            'SEApp.DoIdle()
+        End If
+    End Sub
+
+    Private Sub FixMismatchProp(
+        MismatchProp As SolidEdgeFramework.MatTablePropIndex,
+        LibPropValue As Object,
+        ErrorLogger As Logger)
+
+        Dim UC As New UtilsCommon
+
+        Dim ModelIdx As Integer = 0
+        Dim AutoAdd As Boolean = False
+
+        Select Case MismatchProp
+
+            Case SolidEdgeFramework.MatTablePropIndex.seDensity
+                FixDensityProp(LibPropValue, ErrorLogger)
+
+                '' Density is a variable, not a property
+
+                'Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+
+                'Dim UseDisplayName As Boolean = True
+                'DocVariableDict = UC.GetDocVariables(SEDoc, UseDisplayName)
+
+                'If DocVariableDict.Keys.Contains("PhysicalProperties_Density") Then
+                '    ' Density from the material table is in kg/m^3
+                '    ' Density in the document needs to be in its own units
+
+                '    Dim UnitsOfMeasure = SEDoc.UnitsOfMeasure
+                '    Dim Factor As Double = 1.0
+                '    Dim LibPropDouble As Double = CDbl(LibPropValue)
+                '    For Each UnitOfMeasure As SolidEdgeFramework.UnitOfMeasure In UnitsOfMeasure
+                '        If UnitOfMeasure.Type = SolidEdgeConstants.UnitTypeConstants.igUnitDistance Then
+                '            If UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthInch Then
+                '                ' Weight conversion: 0.45359237 kg = 1 lb.  lb/in^3 = kg/m^3 * lb/kg * (m/in)^3
+                '                Factor = (1 / 0.45359237) * ((25.4 / 1000) ^ 3)
+                '                LibPropDouble = Factor * LibPropDouble
+                '                DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                '            ElseIf UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter Then
+                '                Factor = 1 / (1000 * 1000 * 1000)
+                '                LibPropDouble = Factor * LibPropDouble
+                '                DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                '            Else
+                '                ErrorLogger.AddMessage($"Could not update density with '{UnitOfMeasure.Units}' units")
+                '            End If
+                '        End If
+                '    Next
+                'End If
+
+            Case SolidEdgeFramework.MatTablePropIndex.seCoefOfThermalExpansion
+                UC.SetPropValue(SEDoc, "System", "Coef. of Thermal Exp", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+            Case SolidEdgeFramework.MatTablePropIndex.seThermalConductivity
+                UC.SetPropValue(SEDoc, "System", "Thermal Conductivity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+            Case SolidEdgeFramework.MatTablePropIndex.seSpecificHeat
+                UC.SetPropValue(SEDoc, "System", "Specific Heat", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+            Case SolidEdgeFramework.MatTablePropIndex.seModulusElasticity
+                UC.SetPropValue(SEDoc, "System", "Modulus of Elasticity", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+            Case SolidEdgeFramework.MatTablePropIndex.sePoissonRatio
+                UC.SetPropValue(SEDoc, "System", "Poisson's Ratio", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+            Case SolidEdgeFramework.MatTablePropIndex.seYieldStress
+                UC.SetPropValue(SEDoc, "System", "Yield Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+            Case SolidEdgeFramework.MatTablePropIndex.seUltimateStress
+                UC.SetPropValue(SEDoc, "System", "Ultimate Stress", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+            Case SolidEdgeFramework.MatTablePropIndex.seElongation
+                UC.SetPropValue(SEDoc, "System", "Elongation", ModelIdx, AutoAdd, CDbl(LibPropValue), ErrorLogger)
+        End Select
+    End Sub
+
+    Private Sub FixDensityProp(
+        LibPropValue As Object,
+        ErrorLogger As Logger)
+
+        ' Density is a variable, not a property
+
+        Dim UC As New UtilsCommon
+
+        Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+
+        Dim UseDisplayName As Boolean = True
+        DocVariableDict = UC.GetDocVariables(Me.SEDoc, UseDisplayName)
+
+        If DocVariableDict.Keys.Contains("PhysicalProperties_Density") Then
+            ' Density from the material table is in kg/m^3
+            ' Density in the document needs to be in its own units
+
+            Dim UnitsOfMeasure = SEDoc.UnitsOfMeasure
+            Dim Factor As Double = 1.0
+            Dim LibPropDouble As Double = CDbl(LibPropValue)
+            For Each UnitOfMeasure As SolidEdgeFramework.UnitOfMeasure In UnitsOfMeasure
+                If UnitOfMeasure.Type = SolidEdgeConstants.UnitTypeConstants.igUnitDistance Then
+                    If UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthInch Then
+                        ' Weight conversion: 0.45359237 kg = 1 lb.  lb/in^3 = kg/m^3 * lb/kg * (m/in)^3
+                        Factor = (1 / 0.45359237) * ((25.4 / 1000) ^ 3)
+                        LibPropDouble = Factor * LibPropDouble
+                        DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                    ElseIf UnitOfMeasure.Units = SolidEdgeConstants.UnitOfMeasureLengthReadoutConstants.seLengthMillimeter Then
+                        Factor = 1 / (1000 * 1000 * 1000)
+                        LibPropDouble = Factor * LibPropDouble
+                        DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
+                    Else
+                        ErrorLogger.AddMessage($"Could not update density with '{UnitOfMeasure.Units}' units")
+                    End If
+                End If
+            Next
+        End If
+
+    End Sub
+
 
     Private Function CurrentMaterialNameInLibrary(CurrentMaterialName As String, MaterialList As Object) As Boolean
         For Each MatTableMaterial In CType(MaterialList, System.Array)
@@ -372,862 +497,382 @@ Public Class UtilsMaterials
         Return Mismatches
     End Function
 
+
     Private Sub UpdateFaces(ErrorLogger As Logger)
 
-        Dim Models As SolidEdgePart.Models = Nothing
-        Dim Model As SolidEdgePart.Model
-        Dim Body As SolidEdgeGeometry.Body
-        Dim Faces As SolidEdgeGeometry.Faces
-        Dim Face As SolidEdgeGeometry.Face
-
-        Dim Features As SolidEdgePart.Features
-
-        Dim FaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
-        Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
-        Dim BodyStyle As SolidEdgeFramework.FaceStyle = Nothing
-        Dim DocFaceStyles As SolidEdgeFramework.FaceStyles = Nothing
-        Dim FinishFaceStyle As SolidEdgeFramework.FaceStyle = Nothing
-        Dim FeatureNames As New List(Of String)
-        Dim FeatureName As String
-        Dim tf As Boolean
-
         Dim UC As New UtilsCommon
+
+
+        ' ###### GET OBJECTS FROM FILE #######
+
         Dim DocType = UC.GetDocType(SEDoc)
+        Dim Models As SolidEdgePart.Models = Nothing
+        Dim DocFacestyles As SolidEdgeFramework.FaceStyles = Nothing
 
         Select Case DocType
             Case "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
                 Models = tmpSEDoc.Models
-                DocFaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+                DocFacestyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
             Case "psm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                 Models = tmpSEDoc.Models
-                DocFaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+                DocFacestyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
         End Select
 
-        If (Models.Count > 0) And (Models.Count < 300) Then
-            For Each Model In Models
 
-                ' Some Models do not have a Body
+        ' ###### CHECK FILE START CONDITIONS #######
+
+        If Models.Count = 0 Then
+            ' Not an error.
+            Exit Sub
+        End If
+
+        Dim MaxModelsToProcess As Integer = 500
+        If Models.Count > MaxModelsToProcess Then
+            Dim s As String = $"Number of models {Models.Count} exceeds maximum {MaxModelsToProcess}"
+            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+            Exit Sub
+        End If
+
+
+        ' ###### PROCESS #######
+
+        Dim Count As Integer = 0
+        Dim Stage As String = ""
+
+        For Each Model As SolidEdgePart.Model In Models
+
+            Count += 1
+
+            Try
+                Dim Body As SolidEdgeGeometry.Body = Nothing
+                Dim BodyOverride As SolidEdgeFramework.FaceStyle = Nothing
+                Dim Faces As SolidEdgeGeometry.Faces = Nothing
+                Dim FaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+
+
+                ' ###### CHECK MODEL BODY ######
+                Stage = "Checking model body"
+
+                ' Features like Union, ToggleToDesign, ConvertToSM have models with no bodies.
                 Try
-
-                    ' ###### COLLECT STYLE OVERRIDE INFORMATION ######
-
-                    Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                    If Body.Style IsNot Nothing Then
-                        BodyStyle = Body.Style
+                    If Model.Body Is Nothing Then
+                        ' Not an error
+                        Continue For
                     End If
+                Catch ex As Exception
+                    ' Not an error
+                    Continue For
+                End Try
 
-                    'Body.Faces
-                    Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
 
-                    For Each Face In Faces
-                        FaceOverrides(Face.ID) = Face.Style
-                    Next
+                ' ###### COLLECT INCOMING FACE STYLE INFORMATION ######
+                Stage = "Collecting face styles"
 
-                    Features = Model.Features
-                    For Each Feature In Features
-                        FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
-                        If Not FeatureNames.Contains(FeatureName) Then
-                            FeatureNames.Add(FeatureName)
+                Dim Success As Boolean = True
+                GetModelOverrides(Model, ErrorLogger, Success, Body, BodyOverride, Faces, FaceOverrides)
 
-                            FeatureFaceOverrides = GetFeatureFaceStyle(Feature)
+                If Faces IsNot Nothing AndAlso Faces.Count = 0 Then Continue For
+                If Not Success Then Continue For
 
-                            If FeatureFaceOverrides.Count > 0 Then
-                                For Each Key In FeatureFaceOverrides.Keys
-                                    If FaceOverrides(Key) Is Nothing Then
-                                        FaceOverrides(Key) = FeatureFaceOverrides(Key)
-                                    End If
-                                Next
-                            End If
+                If Me.RetainFaceStyleOverrides Then
+                    Dim MaxOverridesToProcess As Integer = 5000
+                    If FaceOverrides.Count > MaxOverridesToProcess Then
+                        ErrorLogger.AddMessage($"Number of overridden faces {FaceOverrides.Count} exceeds maximum {MaxOverridesToProcess}")
+                        Continue For
+                    End If
+                End If
 
-                            FeatureFaceOverrides.Clear()
-                        End If
 
-                    Next
+                ' ###### CLEAR OVERRIDES ######
+                Stage = "Clearing overrides"
 
-                    Dim MaxFacesToProcess As Integer = 500
+                ' Cache incoming face styles
 
-                    If (FaceOverrides.Count > 0) And (FaceOverrides.Count <= MaxFacesToProcess) Then
-                        ' Crashes on some imported files
+                Dim CachedFaceIDs As New List(Of Integer)
+                For Each Face As SolidEdgeGeometry.Face In Faces
+                    CachedFaceIDs.Add(Face.ID)
+                Next
+
+                Dim CachedFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+                For Each FaceID As Integer In FaceOverrides.Keys
+                    CachedFaceOverrides(FaceID) = FaceOverrides(FaceID)
+                Next
+
+                ' Clear overrides
+
+                Dim SubStage As String = "Starting"
+                Try
+                    Dim NewWay As Boolean = True
+                    If Not NewWay Then
+                        Body.ClearOverrides()
+                    Else
+                        Dim FacesList As New List(Of SolidEdgeGeometry.Face)
+                        For Each Face As SolidEdgeGeometry.Face In Faces
+                            FacesList.Add(Face)
+                        Next
                         Try
-                            ' ###### CLEAR OVERRIDES ######
-
-                            ' The method Body.ClearOverrides() apparently makes a new body, rendeering the previous Body invalid.
-                            ' It also, at least in one case, increments the Face.ID for certain Faces.
-                            ' Hopefully it does not change the order of the Faces.
-
-                            Dim FaceStyleList As New List(Of SolidEdgeFramework.FaceStyle)
-                            For Each Key In FaceOverrides.Keys
-                                FaceStyleList.Add(FaceOverrides(Key))
+                            SubStage = "Body"
+                            Body.Style = Nothing
+                            SubStage = "Features"
+                            For Each Feature As Object In Model.Features
+                                Try
+                                    HCComObject.InvokeMethod(Feature, "SetStyle", New System.Runtime.InteropServices.DispatchWrapper(Nothing))
+                                Catch ex As Exception
+                                    ErrorLogger.AddMessage($"Error clearing feature facestyles.  Exception: {ex.Message}")
+                                End Try
                             Next
-                            FaceOverrides.Clear()
-
-                            Body.ClearOverrides()
-                            Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                            Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-
-                            If Not Me.RemoveFaceStyleOverrides Then
-                                ' Since we have a new Body and possibly different FaceIDs
-                                ' Need to transfer old face info to the new items
-                                ' 
-                                Dim i As Integer = 0
-                                For Each Face In Faces
-                                    If FaceStyleList(i) IsNot Nothing Then
-                                        FaceOverrides(Face.ID) = FaceStyleList(i)
-                                    End If
-                                    i += 1
-                                Next
-                            End If
-
-                        Catch ex As Exception
-                            Dim s As String = $"Could not process model faces.  Exception: {ex.Message}"
-                            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
-                            Exit Sub
+                            SubStage = "Faces"
+                            Body.SetFacesStyle(Faces.Count, FacesList.ToArray, Nothing)
+                        Catch ex2 As Exception
+                            ErrorLogger.AddMessage($"{SubStage} {ex2.Message}")
                         End Try
-
-                        SEApp.DoIdle()
-
-                        tf = Me.UseFinishFaceStyle
-                        tf = tf And ExcludedFinishesList IsNot Nothing
-                        tf = tf AndAlso Not Me.ExcludedFinishesList.Contains(Me.FinishName, StringComparer.OrdinalIgnoreCase)
-                        If tf Then
-                            For Each tmpFaceStyle As SolidEdgeFramework.FaceStyle In DocFaceStyles
-                                If tmpFaceStyle.StyleName.ToLower = FinishName.ToLower Then
-                                    FinishFaceStyle = tmpFaceStyle
-                                    Exit For
-                                End If
-                            Next
-
-                            If FinishFaceStyle IsNot Nothing Then
-                                Body.Style = FinishFaceStyle
-                            Else
-                                Dim s As String = $"Finish face style '{FinishName}' not found"
-                                If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
-                            End If
-                        End If
-
-                        If Not RemoveFaceStyleOverrides Then
-                            If BodyStyle IsNot Nothing And Not Me.UseFinishFaceStyle Then
-                                Body.Style = BodyStyle
-                            End If
-
-                            Dim Count As Integer = 0
-
-                            For Each Face In Faces
-                                If FaceOverrides.Keys.Contains(Face.ID) Then
-                                    Face.Style = FaceOverrides(Face.ID)
-                                    Count += 1
-                                    If Count Mod 50 = 0 Then
-                                        SEApp.DoIdle()
-                                    End If
-                                End If
-                            Next
-
-                        End If
-
-                        FaceOverrides.Clear()  ' Get ready for the next Model
-
-                    ElseIf FaceOverrides.Count > MaxFacesToProcess Then
-                        Dim s As String = $"Number of faces '{FaceOverrides.Count}' exceeds maximum '{MaxFacesToProcess}'"
-                        If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                     End If
 
                 Catch ex As Exception
-                    Dim s As String = $"Could not process model.  Exception: {ex.Message}"
+                    Dim s As String = $"Could not reset body face styles.  Exception: {ex.Message}"
                     If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+                    Continue For
                 End Try
+
+                Dim HasOverrides As Boolean = CachedFaceOverrides.Count > 0 OrElse BodyOverride IsNot Nothing
+
+                If Me.UseFinishFaceStyle Or (Me.RetainFaceStyleOverrides And HasOverrides) Then
+
+                    ' Deal with possible new body from clear overrides.  (Legacy issue with older versions.)
+                    '     Collect new face style information
+                    Stage = "Re-reading body"
+
+                    Faces = Nothing
+                    FaceOverrides.Clear()
+
+                    GetModelOverrides(Model, ErrorLogger, Success, Body, BodyOverride, Faces, FaceOverrides)
+
+                    '     Update FaceIDs in FaceOverrides
+
+                    If Success Then
+                        Success = ReconcileFaceIDs(CachedFaceIDs, CachedFaceOverrides, Faces, FaceOverrides, ErrorLogger)
+                    End If
+
+                    If Not Success Then
+                        If Me.UseFinishFaceStyle Then
+                            ErrorLogger.AddMessage("Unable to apply finish face styles")
+                        End If
+                        If Me.RetainFaceStyleOverrides And HasOverrides Then
+                            Dim OverridesCount As Integer = CachedFaceOverrides.Count
+                            If BodyOverride IsNot Nothing Then OverridesCount += 1
+                            ErrorLogger.AddMessage($"Unable to apply style overrides to {OverridesCount} item(s)")
+                        End If
+                        Continue For
+                    End If
+
+
+                    ' ###### APPLY FINISH FACE STYLE IF NEEDED ######
+                    Stage = "Applying finish"
+
+                    If Me.UseFinishFaceStyle Then
+                        ApplyFinishFacestyles(DocFacestyles, Body, ErrorLogger)
+                    End If
+
+
+                    ' ###### APPLY INCOMING FACE STYLE OVERRIDES IF NEEDED ######
+                    Stage = "Re-applying overrides"
+
+                    If Me.RetainFaceStyleOverrides Then
+                        ApplyOverrides(Body, BodyOverride, Faces, FaceOverrides, ErrorLogger)
+                    End If
+
+                End If
+
+            Catch ex As Exception
+                ErrorLogger.AddMessage($"Unable to process model {Count} of {Models.Count}.  Stage: {Stage}.  Exception: {ex.Message}")
+            End Try
+
+        Next
+
+    End Sub
+
+    Private Function ReconcileFaceIDs(
+        CachedFaceIDs As List(Of Integer),
+        CachedFaceOverrides As Dictionary(Of Integer, SolidEdgeFramework.FaceStyle),
+        NewFaces As SolidEdgeGeometry.Faces,
+        ByRef FaceOverrides As Dictionary(Of Integer, SolidEdgeFramework.FaceStyle),
+        ErrorLogger As Logger
+        ) As Boolean
+        Dim Success As Boolean = True
+
+        If Not NewFaces.Count = CachedFaceIDs.Count Then
+            Success = False
+            ErrorLogger.AddMessage("Face count mismatch after clearing overrides")
+        Else
+            FaceOverrides.Clear()
+            For i As Integer = 0 To CachedFaceIDs.Count - 1
+                If CachedFaceOverrides.Keys.Contains(CachedFaceIDs(i)) Then
+                    Dim newFace As SolidEdgeGeometry.Face = CType(NewFaces.Item(i + 1), SolidEdgeGeometry.Face)
+                    FaceOverrides(newFace.ID) = CachedFaceOverrides(CachedFaceIDs(i))
+                End If
+            Next
+        End If
+
+        Return Success
+    End Function
+
+    Private Sub ApplyFinishFacestyles(
+        DocFacestyles As SolidEdgeFramework.FaceStyles,
+        Body As SolidEdgeGeometry.Body,
+        ErrorLogger As Logger)
+
+        Dim tf As Boolean
+        tf = Me.UseFinishFaceStyle
+        tf = tf And ExcludedFinishesList IsNot Nothing
+        tf = tf AndAlso Not Me.ExcludedFinishesList.Contains(Me.FinishName, StringComparer.OrdinalIgnoreCase)
+        If tf Then
+            Dim FinishFaceStyle As SolidEdgeFramework.FaceStyle = Nothing
+            For Each tmpFaceStyle As SolidEdgeFramework.FaceStyle In DocFacestyles
+                If tmpFaceStyle.StyleName.ToLower = FinishName.ToLower Then
+                    FinishFaceStyle = tmpFaceStyle
+                    Exit For
+                End If
             Next
 
-        ElseIf Models.Count >= 300 Then
-            Dim s As String = $"Number of models '{Models.Count}' exceeds maximum '300'"
-            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+            If FinishFaceStyle IsNot Nothing Then
+                Body.Style = FinishFaceStyle
+            Else
+                Dim s As String = $"Finish face style '{FinishName}' not found"
+                If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+            End If
         End If
 
     End Sub
 
-    Private Function PopulateFeatureFaceOverrides(
-        FeatureFaces As SolidEdgeGeometry.Faces,
-        FeatureFaceStyle As SolidEdgeFramework.FaceStyle) As Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+    Private Sub ApplyOverrides(
+        Body As SolidEdgeGeometry.Body,
+        BodyOverride As SolidEdgeFramework.FaceStyle,
+        Faces As SolidEdgeGeometry.Faces,
+        FaceOverrides As Dictionary(Of Integer, SolidEdgeFramework.FaceStyle),
+        ErrorLogger As Logger)
 
-        Dim Face As SolidEdgeGeometry.Face
-        Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+        If BodyOverride IsNot Nothing And Not Me.UseFinishFaceStyle Then Body.Style = BodyOverride
 
-        For Each Face In FeatureFaces
-            FeatureFaceOverrides(Face.ID) = FeatureFaceStyle
+        ' Group overridden faces by style, then apply each group in one call.
+        Dim Groups As New Dictionary(Of String, List(Of Object))
+        Dim StylesByName As New Dictionary(Of String, SolidEdgeFramework.FaceStyle)
+
+        For Each Face As SolidEdgeGeometry.Face In Faces
+            Dim Style As SolidEdgeFramework.FaceStyle = Nothing
+            If FaceOverrides.TryGetValue(Face.ID, Style) AndAlso Style IsNot Nothing Then
+                Dim Name As String = Style.StyleName
+                If Not Groups.ContainsKey(Name) Then
+                    Groups(Name) = New List(Of Object)
+                    StylesByName(Name) = Style
+                End If
+                Groups(Name).Add(Face)
+            End If
         Next
-        Return FeatureFaceOverrides
 
-    End Function
-
-    Private Function GetFeatureFaceStyle(Feature As Object) As Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
-
-        Dim NewWay As Boolean = True
-
-        If NewWay Then
-
-            'Dim FeatureFaces As SolidEdgeGeometry.Faces = Nothing
-            'Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
-            'Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
-
-            ''Dim FeatureType = HCComObject.GetPropertyValue(
-            ''Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
-
-            'Dim FeatureType As Type = HCComObject.GetCOMObjectType(Feature)
-
-            'Dim _Feature = CType(Feature, FeatureType)
-
-
-            ' Every feature type that supports a face style override has the same
-            ' GetStyle, Faces and SetStyle members, but on unrelated interop types,
-            ' so they're called by name.  A feature type without them (BlueSurf,
-            ' FaceMove, some CopiedParts...) throws, and is treated as having no
-            ' override.
+        For Each Name As String In Groups.Keys
+            Dim FaceArray As Array = Groups(Name).ToArray()
             Try
-                Dim FeatureFaceStyle = CType(HCComObject.InvokeMethod(Feature, "GetStyle"), SolidEdgeFramework.FaceStyle)
-                If FeatureFaceStyle Is Nothing Then Return New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
-
-                Dim FeatureFaces = CType(HCComObject.InvokeMethod(Feature, "Faces", SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                         SolidEdgeGeometry.Faces)
-
-                ' DispatchWrapper sends Nothing as a null object.  A plain Nothing
-                ' would arrive as "empty", which Solid Edge may reject.
-                HCComObject.InvokeMethod(Feature, "SetStyle", New System.Runtime.InteropServices.DispatchWrapper(Nothing))
-
-                Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-
+                Body.SetFacesStyle(FaceArray.Length, FaceArray, StylesByName(Name))
             Catch ex As Exception
-                Return New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+                ErrorLogger.AddMessage($"Unable to set face style '{Name}'")
             End Try
-
-        Else
-            Dim FeatureFaces As SolidEdgeGeometry.Faces = Nothing
-            Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
-            Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
-
-            Dim FeatureType = HCComObject.GetPropertyValue(
-            Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
-
-            Select Case FeatureType
-
-                Case SolidEdgePart.FeatureTypeConstants.igBeadFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Bead)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igBendFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Bend)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igBlueSurfFeatureObject
-                        ' BlueSurf objects do not have a FaceStyle override.
-
-                Case SolidEdgePart.FeatureTypeConstants.igBodyFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.BodyFeature)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                   SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igBooleanFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.BooleanFeature)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igBreakCornerFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.BreakCorner)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igChamferFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Chamfer)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igCloseCornerFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.CloseCorner)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igContourFlangeFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.ContourFlange)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igCopiedPartFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.CopiedPart)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        ' Some CopiedParts do not have Faces
-                        Try
-                            FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                            Feature_.SetStyle(Nothing)
-                            Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                        Catch ex As Exception
-                        End Try
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igCopyConstructionObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.CopyConstruction)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igDeleteBlendFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.DeleteBlend)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igDeleteFaceFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.DeleteFace)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igDeleteHoleFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.DeleteHole)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igDimpleFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Dimple)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igDraftFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Draft)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igDrawnCutoutFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.DrawnCutout)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igExtrudedCutoutFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedCutout)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igExtrudedProtrusionFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedProtrusion)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igExtrudedSurfaceObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.ExtrudedSurface)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igFaceMoveObject
-                        ' Does not have a Faces collection.
-
-                Case SolidEdgePart.FeatureTypeConstants.igFlangeFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Flange)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igHelixCutoutFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.HelixCutout)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igHelixProtrusionFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.HelixProtrusion)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igHoleFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Hole)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igJogFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Jog)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igLipFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Lip)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igLoftedCutoutFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.LoftedCutout)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igLoftedFlangeFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.LoftedFlange)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igLoftedProtrusionFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.LoftedProtrusion)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igLouverFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Louver)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igMidSurfaceObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.MidSurface)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igMirrorCopyFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.MirrorCopy)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igMirrorPartFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.MirrorPart)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igNormalCutoutFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.NormalCutout)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igPartingSplitFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.PartingSplit)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igPatternFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Pattern)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igPatternPartFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.PatternPart)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igRebendFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Rebend)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igReplaceFaceFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.ReplaceFace)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igResizeHoleObject
-                        ' Does not have a Faces collection.
-
-                Case SolidEdgePart.FeatureTypeConstants.igRevolvedCutoutFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.RevolvedCutout)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igRevolvedProtrusionFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.RevolvedProtrusion)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igRibFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Rib)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igRoundFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Round)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igSlotFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Slot)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igSplitFaceObject
-                        ' Does not have a Faces collection.
-
-                Case SolidEdgePart.FeatureTypeConstants.igSweptCutoutFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.SweptCutout)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igSweptProtrusionFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.SweptProtrusion)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igTabFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Tab)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igThickenFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Thicken)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igThinwallFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Thinwall)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igTubeFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.TubeFeature)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igUnbendFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.Unbend)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igUserDefinedPatternFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.UserDefinedPattern)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case SolidEdgePart.FeatureTypeConstants.igWebNetworkFeatureObject
-                    Dim Feature_ = CType(Feature, SolidEdgePart.WebNetwork)
-                    FeatureFaceStyle = Feature_.GetStyle()
-                    If FeatureFaceStyle IsNot Nothing Then
-                        FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                           SolidEdgeGeometry.Faces)
-                        Feature_.SetStyle(Nothing)
-                        Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                    End If
-
-                Case Else
-                    Select Case FeatureType.ToString
-                        Case "0"  ' Box, Cylinder, and some others.  Could be flagging sync parts.
-                                ' These features do not have a FaceStyle override.
-
-                        Case "1737031522"  'ConvertToSM
-                                ' Seems like it should work.  It doesn't.
-                                'Dim Feature_ = CType(Feature, SolidEdgePart.ConvToSM)
-                                'FeatureFaceStyle = Feature_.GetStyle()
-                                'If FeatureFaceStyle IsNot Nothing Then
-                                '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                '   SolidEdgeGeometry.Faces)
-                                '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                                'End If
-
-                        Case "1245666020"  'FaceSet
-                                ' Seems like it should work.  It doesn't.
-                                'Dim Feature_ = CType(Feature, SolidEdgePart.FaceSet)
-                                'FeatureFaceStyle = Feature_.GetStyle()
-                                'If FeatureFaceStyle IsNot Nothing Then
-                                '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                '   SolidEdgeGeometry.Faces)
-                                '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                                'End If
-
-                        Case "69347334"  'Hem
-                                ' Seems like it should work.  It doesn't.
-                                'Dim Feature_ = CType(Feature, SolidEdgePart.Hem)
-                                'FeatureFaceStyle = Feature_.GetStyle()
-                                'If FeatureFaceStyle IsNot Nothing Then
-                                '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                '   SolidEdgeGeometry.Faces)
-                                '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                                'End If
-
-                        Case "1477405962"  'Subtract
-                                ' Seems like it should work.  It doesn't.
-                                'Dim Feature_ = CType(Feature, SolidEdgePart.Subtract)
-                                'FeatureFaceStyle = Feature_.GetStyle()
-                                'If FeatureFaceStyle IsNot Nothing Then
-                                '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                '   SolidEdgeGeometry.Faces)
-                                '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                                'End If
-
-                        Case "-127107951"  'Thread
-                                ' Seems like it should work.  It doesn't.
-                                'Dim Feature_ = CType(Feature, SolidEdgePart.Thread)
-                                'FeatureFaceStyle = Feature_.GetStyle()
-                                'If FeatureFaceStyle IsNot Nothing Then
-                                '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                '   SolidEdgeGeometry.Faces)
-                                '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                                'End If
-
-                        Case "451898536"  'Transform.  Guessing it's ConvertPartToSM.
-                                ' Seems like it should work.  It doesn't.
-                                'Dim Feature_ = CType(Feature, SolidEdgePart.ConvertPartToSM)
-                                'FeatureFaceStyle = Feature_.GetStyle()
-                                'If FeatureFaceStyle IsNot Nothing Then
-                                '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                                '   SolidEdgeGeometry.Faces)
-                                '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                                'End If
-
-                        Case "1385450842"  'Union
-                            ' Seems like it should work.  It doesn't.
-                            'Dim Feature_ = CType(Feature, SolidEdgePart.Union)
-                            'FeatureFaceStyle = Feature_.GetStyle()
-                            'If FeatureFaceStyle IsNot Nothing Then
-                            '    FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
-                            '   SolidEdgeGeometry.Faces)
-                            '    Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
-                            'End If
-
-                        Case Else
-                            Dim FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
-                    End Select
-
-            End Select
-
-            Return FeatureFaceOverrides
+        Next
+    End Sub
+
+    Private Sub GetModelOverrides(
+         Model As SolidEdgePart.Model,
+         ErrorLogger As Logger,
+         ByRef Success As Boolean,
+         ByRef Body As SolidEdgeGeometry.Body,
+         ByRef BodyOverride As SolidEdgeFramework.FaceStyle,
+         ByRef Faces As SolidEdgeGeometry.Faces,
+         ByRef FaceOverrides As Dictionary(Of Integer, SolidEdgeFramework.FaceStyle))
+
+        Success = True
+
+        Try
+            Body = CType(Model.Body, SolidEdgeGeometry.Body)
+        Catch ex As Exception
+            Success = False
+            ErrorLogger.AddMessage($"Could not process model body.  Exception: {ex.Message}")
+            Exit Sub
+        End Try
+
+        If Body.Style IsNot Nothing Then
+            BodyOverride = Body.Style
         End If
 
+        'Body.Faces
+        Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+
+        If Faces.Count = 0 Then
+            ' Not an error.
+            'Success = False
+            Exit Sub
+        End If
+
+        Dim MaxFacesToProcess As Integer = 5000
+        If Faces.Count > MaxFacesToProcess And Me.RetainFaceStyleOverrides Then
+            Success = False
+            Dim s As String = $"Number of faces {Faces.Count} exceeds maximum {MaxFacesToProcess}"
+            'If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+            ErrorLogger.AddMessage(s)
+            Exit Sub
+        End If
+
+        For Each Face As SolidEdgeGeometry.Face In Faces
+            ' In rare cases, Face.Style causes an exception
+            Try
+                If Face.Style IsNot Nothing Then
+                    FaceOverrides(Face.ID) = Face.Style
+                End If
+            Catch ex As Exception
+                ' Can't use it.  No need to report.
+            End Try
+        Next
+
+        '  ###### FEATURE FACE STYLES ######
+
+        ' If a face does not have an individually assigned FaceStyle, pick it
+        ' up from the feature FaceStyle if one is assigned at that level.
+
+        Dim Features As SolidEdgePart.Features = Model.Features
+        For Each Feature As Object In Features
+
+            Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle = GetFeatureFaceStyle(Feature)
+
+            If FeatureFaceStyle IsNot Nothing Then
+                Dim igQueryAll = SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll
+                Dim FeatureFaces = CType(HCComObject.InvokeMethod(Feature, "Faces", igQueryAll), SolidEdgeGeometry.Faces)
+
+                For Each FeatureFace As SolidEdgeGeometry.Face In FeatureFaces
+                    If Not FaceOverrides.ContainsKey(FeatureFace.ID) Then
+                        FaceOverrides(FeatureFace.ID) = FeatureFaceStyle
+                    End If
+                Next
+            End If
+        Next
+    End Sub
+
+    Private Function GetFeatureFaceStyle(Feature As Object) As SolidEdgeFramework.FaceStyle
+
+        ' These features do not have a FaceStyle override: Box, Cylinder, and some others.  
+
+        ' These didn't work previously: ConvertToSM, FaceSet, Hem, Subtract, Thread, Transform (ConvertPartToSM?), Union.
+        ' They can legitimately have a model with no body.  That's now checked.
+
+        ' Every feature type that supports a face style override has the same
+        ' GetStyle, Faces and SetStyle members, but on unrelated interop types,
+        ' so they're called by name.  A feature type without them (BlueSurf,
+        ' FaceMove, some CopiedParts...) throws, and is treated as having no
+        ' override.
+        Try
+            Return CType(HCComObject.InvokeMethod(Feature, "GetStyle"), SolidEdgeFramework.FaceStyle)
+        Catch ex As Exception
+            Return Nothing
+        End Try
 
     End Function
 
@@ -1246,7 +891,7 @@ Public Class UtilsMaterials
         End If
 
         If Models.Count > MaxModelCount Then
-            ErrorLogger.AddMessage($"{Models.Count.ToString} models exceeds maximum to process")
+            ErrorLogger.AddMessage($"Number of models {Models.Count} exceeds maximum {MaxModelCount}")
             Exit Sub
         End If
 

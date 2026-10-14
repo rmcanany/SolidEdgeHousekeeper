@@ -374,6 +374,7 @@ Public MustInherit Class Task
         IgnoreProps.AddRange({"ImageFileTypeNames", "SelectedSheetsList"})
         IgnoreProps.AddRange({"ErrorLogger", "FileLogger", "TaskLogger"})
         IgnoreProps.AddRange({"STAThreadTimeoutMilliseconds"})  ' Set fresh by UtilsExecute.ProcessAll() before every run, not a per-task saved option.
+        IgnoreProps.AddRange({"RemoveFaceStyleOverrides"})  ' Legacy property in TaskUpdateMaterialFromMaterialTable
 
         Dim s As String = ""
 

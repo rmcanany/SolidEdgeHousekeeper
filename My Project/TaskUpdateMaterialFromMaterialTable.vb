@@ -44,15 +44,26 @@ Public Class TaskUpdateMaterialFromMaterialTable
     '    End Set
     'End Property
 
-    Private _RemoveFaceStyleOverrides As Boolean
+    ' Legacy option name, kept only so old tasklist/presets files load correctly.
+    ' Not saved: listed in IgnoreProps in Task.GetFormState.
     Public Property RemoveFaceStyleOverrides As Boolean
         Get
-            Return _RemoveFaceStyleOverrides
+            Return Not Me.RetainFaceStyleOverrides
         End Get
         Set(value As Boolean)
-            _RemoveFaceStyleOverrides = value
+            Me.RetainFaceStyleOverrides = Not value
+        End Set
+    End Property
+
+    Private _RetainFaceStyleOverrides As Boolean
+    Public Property RetainFaceStyleOverrides As Boolean
+        Get
+            Return _RetainFaceStyleOverrides
+        End Get
+        Set(value As Boolean)
+            _RetainFaceStyleOverrides = value
             If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
+                CType(ControlsDict(ControlNames.RetainFaceStyleOverrides.ToString), CheckBox).Checked = value
             End If
         End Set
     End Property
@@ -166,7 +177,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Browse
         MaterialTable
         'StructuredStorageEdit
-        RemoveFaceStyleOverrides
+        RetainFaceStyleOverrides
         UpdateFaceStyles
         UseFinishFaceStyle
         FinishPropertyFormulaLabel
@@ -204,7 +215,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         ' Options
         Me.MaterialTable = ""
-        Me.RemoveFaceStyleOverrides = False
+        Me.RetainFaceStyleOverrides = False
         Me.UpdateFaceStyles = False
         Me.UseFinishFaceStyle = False
         Me.FinishPropertyFormula = ""
@@ -264,7 +275,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                     Dim UM As New UtilsMaterials
 
                     UM.UpdateMaterialFromMaterialTable(
-                        SEApp, SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, Me.UpdateFaceStyles,
+                        SEApp, SEDoc, Me.MaterialTable, Me.RetainFaceStyleOverrides, Me.UpdateFaceStyles,
                         Me.UseFinishFaceStyle, FinishName, Me.ExcludedFinishesList,
                         Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle, TaskLogger)
                 End If
@@ -273,12 +284,16 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
         End Select
 
-        If SEDoc.ReadOnly Then
-            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
+        If Not TaskLogger.HasErrors Then
+            If SEDoc.ReadOnly Then
+                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
         Else
-            SEDoc.Save()
-            SEApp.DoIdle()
+            Dim s As String = "Errors encountered.  No changes made."
+            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
         End If
 
     End Sub
@@ -390,15 +405,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        ControlsDict(CheckBox.Name) = CheckBox
-        'CheckBox.Visible = False
-
-        RowIndex += 1
-
         CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -460,6 +466,15 @@ Public Class TaskUpdateMaterialFromMaterialTable
         tmpTLPOptions.SetColumnSpan(TextBox, 2)
         ControlsDict(TextBox.Name) = TextBox
         TextBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.RetainFaceStyleOverrides.ToString, "Retain face style overrides")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        'CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -566,8 +581,8 @@ Public Class TaskUpdateMaterialFromMaterialTable
             '    CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Visible = tf
             '    CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Visible = tf
 
-            Case ControlNames.RemoveFaceStyleOverrides.ToString
-                Me.RemoveFaceStyleOverrides = Checkbox.Checked
+            Case ControlNames.RetainFaceStyleOverrides.ToString
+                Me.RetainFaceStyleOverrides = Checkbox.Checked
 
             Case ControlNames.UpdateFaceStyles.ToString
                 Me.UpdateFaceStyles = Checkbox.Checked
@@ -708,7 +723,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         HelpString += "If no match is found, or no material is assigned, it is reported in the log file."
 
         HelpString += vbCrLf + vbCrLf + "There are several options for this command. "
-        HelpString += vbCrLf + vbCrLf + "- `Remove face style overrides`:  Change all face styles to match that of the material. "
+        HelpString += vbCrLf + vbCrLf + "- `Retain face style overrides`:  Keep any previously manually-applied face styles. "
         HelpString += vbCrLf + "- `Update face styles`:  Disabling this option leaves faces unchanged. "
         HelpString += vbCrLf + "- `Finish property determines face style`:  Uses the finish rather than the material face style. "
         HelpString += "Note a face style with the same name as the finish must be present in the file. "

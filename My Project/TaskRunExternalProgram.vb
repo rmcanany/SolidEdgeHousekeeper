@@ -325,63 +325,28 @@ Public Class TaskRunExternalProgram
         Try
             ' ############## SNIPPET CODE START ##############
 
-            Dim Infile As String = "C:\Data\SEFaceStyles.tsv"
-            Dim InList As List(Of String) = IO.File.ReadAllLines(Infile).ToList
-
-            Dim ColumnList As List(Of String) = InList(0).Split(CChar(vbTab)).ToList
-            InList.RemoveAt(0) ' Remove column headers
-            ColumnList.RemoveAt(0) ' Remove style name
-
-            Dim LUT As New Dictionary(Of String, List(Of String))
-            For Each Line As String In InList
-                Dim LineList As List(Of String) = Line.Split(CChar(vbTab)).ToList
-                Dim StyleName As String = LineList(0)
-                LineList.RemoveAt(0) ' Remove style name
-                LUT(StyleName) = LineList
-            Next
-
-            Dim DocFaceStyles As SolidEdgeFramework.FaceStyles = Nothing
+            Dim Models As SolidEdgePart.Models = Nothing
             Select Case DocType
-                Case ".asm"
-                    Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-                    DocFaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
-                Case ".par", ".psm"
+                Case ".par"
                     Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                    DocFaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+                    Models = tmpSEDoc.Models
+                Case ".psm"
+                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                    Models = tmpSEDoc.Models
             End Select
 
-            If DocFaceStyles Is Nothing Then
-                ErrorMessageList.Add("Could not read face styles")
-            Else
-                For Each FS As SolidEdgeFramework.FaceStyle In DocFaceStyles
-                    If Not LUT.Keys.Contains(FS.StyleName) Then
-                        ErrorMessageList.Add(String.Format("'{0}' not found in LUT", FS.StyleName))
-                    Else
-                        Dim DataList As List(Of String) = LUT(FS.StyleName)
-                        For i = 0 To ColumnList.Count - 1
-                            Select Case ColumnList(i)
-                                Case "DiffuseRed"
-                                    FS.DiffuseRed = CSng(DataList(i))
-                                Case "DiffuseGreen"
-                                    FS.DiffuseGreen = CSng(DataList(i))
-                                Case "DiffuseBlue"
-                                    FS.DiffuseBlue = CSng(DataList(i))
-                                Case "SpecularRed"
-                                    FS.SpecularRed = CSng(DataList(i))
-                                Case "SpecularGreen"
-                                    FS.SpecularGreen = CSng(DataList(i))
-                                Case "SpecularBlue"
-                                    FS.SpecularBlue = CSng(DataList(i))
-                                    ' etc.
-                            End Select
-                        Next
-
+            For Each Model As SolidEdgePart.Model In Models
+                Dim Body As SolidEdgeGeometry.Body = CType(Model.Body, SolidEdgeGeometry.Body)
+                If Body Is Nothing Then
+                    ErrorMessageList.Add("Body is nothing")
+                Else
+                    If Body.Style Is Nothing Then
+                        ErrorMessageList.Add("Body.Style is nothing")
                     End If
-                Next
+                End If
+            Next
 
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
+            If ErrorMessageList.Count > 0 Then ExitStatus = 1
 
             ' ############## SNIPPET CODE END ##############
 

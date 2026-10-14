@@ -826,7 +826,7 @@ Public Class TaskEditProperties
                 Case "par", "psm"
                     Dim UM As New UtilsMaterials
                     UM.UpdateMaterialFromMaterialTable(SEApp, SEDoc, Me.MaterialTable,
-                                                       _RemoveFaceStyleOverrides:=False,
+                                                       _RetainFaceStyleOverrides:=True,
                                                        _UpdateFaceStyles:=True,
                                                        _UseFinishFaceStyle:=False,
                                                        _FinishName:="",
@@ -1243,8 +1243,15 @@ Public Class TaskEditProperties
                     Select Case UC.GetDocType(SEDoc)
                         Case "par", "psm"
                             Dim UM As New UtilsMaterials
-                            UM.UpdateMaterialFromMaterialTable(
-                                SEApp, SEDoc, Me.MaterialTable, False, True, False, "", Nothing, False, False, Me.TaskLogger)
+                            UM.UpdateMaterialFromMaterialTable(SEApp, SEDoc, Me.MaterialTable,
+                                                               _RetainFaceStyleOverrides:=True,
+                                                               _UpdateFaceStyles:=True,
+                                                               _UseFinishFaceStyle:=False,
+                                                               _FinishName:="",
+                                                               _ExcludedFinishesList:=Nothing,
+                                                               _OverrideBodyFaceStyle:=False,
+                                                               _OverrideMaterialFaceStyle:=False,
+                                                               Me.TaskLogger)
 
                         Case Else
                             ' Not an error

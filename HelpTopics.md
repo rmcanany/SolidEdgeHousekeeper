@@ -826,7 +826,7 @@ If the names match, but their properties (e.g., density, face style, etc.) do no
 
 There are several options for this command. 
 
-- `Remove face style overrides`:  Change all face styles to match that of the material. 
+- `Retain face style overrides`:  Keep any previously manually-applied face styles. 
 - `Update face styles`:  Disabling this option leaves faces unchanged. 
 - `Finish property determines face style`:  Uses the finish rather than the material face style. Note a face style with the same name as the finish must be present in the file. 
 - `Finish property`: The property that contains finish information. Note the syntax required in the image above. Right click the text box to select it from a list. 
