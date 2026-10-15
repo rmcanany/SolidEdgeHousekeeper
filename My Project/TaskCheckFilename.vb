@@ -171,360 +171,36 @@ Public Class TaskCheckFilename
 
         OleMessageFilter.Register()
 
-        If NewWay Then
-            Dim Proceed As Boolean = True
+        Dim Proceed As Boolean = True
 
-            Proceed = InitiateCheck2(SEDoc, Nothing)
-        Else
-            Dim Formula As String
-            Dim FormulaFound As Boolean
-            Dim Filename As String
+        Proceed = InitiateCheck2(SEDoc, Nothing)
 
-            Dim UC As New UtilsCommon
-
-            Filename = UC.GetFOAFilename(SEDoc.FullName)
-
-            Filename = System.IO.Path.GetFileNameWithoutExtension(Filename)  'c:\project\part.par' -> 'part'
-
-            Dim DocType As String = UC.GetDocType(SEDoc)
-
-            Select Case DocType
-                Case = "asm", "par", "psm"
-
-                    Formula = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData, TaskLogger)
-
-                    If Formula Is Nothing Then
-                        TaskLogger.AddMessage($"Could not process formula '{Me.PropertyFormula}'")
-
-                    Else
-                        Formula = Formula.Trim
-                    End If
-
-                    If Not TaskLogger.HasErrors Then
-                        If Formula = "" Then
-                            TaskLogger.AddMessage($"Formula '{Me.PropertyFormula}' not assigned")
-                        End If
-                    End If
-
-                    If Not TaskLogger.HasErrors Then
-                        If Me.ComparisonContains Then
-                            If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                                TaskLogger.AddMessage($"File name '{Filename}' does not contain property formula '{Formula}'")
-                            End If
-                        ElseIf Me.ComparisonIsExactly Then
-                            If Not Filename.ToLower = Formula.ToLower Then
-                                TaskLogger.AddMessage($"File name '{Filename}' does not match property formula '{Formula}'")
-                            End If
-                        End If
-                    End If
-
-                Case = "dft"
-
-                    If Me.DraftsCheckDraftItself Then
-                        Formula = UC.SubstitutePropertyFormulas(SEDoc, SEDoc.FullName, Me.PropertyFormula, Me.PropertiesData, TaskLogger)
-
-                        If Formula Is Nothing Then
-                            TaskLogger.AddMessage($"Could not process formula '{Me.PropertyFormula}'")
-
-                        End If
-
-                        If Not TaskLogger.HasErrors Then
-                            If Formula = "" Then
-                                TaskLogger.AddMessage($"Formula '{Me.PropertyFormula}' not assigned")
-                            End If
-                        End If
-
-                        If Not TaskLogger.HasErrors Then
-                            If Me.ComparisonContains Then
-                                If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                                    TaskLogger.AddMessage($"File name '{Filename}' does not contain formula value '{Formula}'")
-                                End If
-                            ElseIf Me.ComparisonIsExactly Then
-                                If Not Filename.ToLower = Formula.ToLower Then
-                                    TaskLogger.AddMessage($"File name '{Filename}' not the same as the formula value '{Formula}'")
-                                End If
-                            End If
-                        End If
-                    End If
-
-                    If Me.DraftsCheckModels Then
-                        Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-
-                        Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
-                        Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
-                        Dim ModelLinkFilenames As New List(Of String)
-                        Dim ModelLinkFilename As String
-                        Dim ModelLinkDoc As SolidEdgeFramework.SolidEdgeDocument
-                        Dim Formulas As New List(Of String)
-
-                        Dim ValidExtensionsList As List(Of String) = ".asm .par .psm".Split(CChar(" ")).ToList
-                        Dim Extension As String
-
-                        ModelLinks = tmpSEDoc.ModelLinks
-
-                        FormulaFound = False
-
-                        For Each ModelLink In ModelLinks
-                            ModelLinkFilename = UC.GetFOAFilename(ModelLink.FileName)
-                            Extension = IO.Path.GetExtension(ModelLinkFilename)
-
-                            If (IO.File.Exists(ModelLinkFilename)) And (ValidExtensionsList.Contains(Extension)) Then
-
-                                ModelLinkFilenames.Add(System.IO.Path.GetFileName(ModelLinkFilename))
-                                ModelLinkDoc = CType(ModelLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument)
-
-                                Formula = UC.SubstitutePropertyFormulas(
-                                    ModelLinkDoc, ModelLinkDoc.FullName, Me.PropertyFormula, Me.PropertiesData, TaskLogger)
-
-                                If Formula IsNot Nothing Then
-                                    Formulas.Add(Formula)
-                                Else
-                                    Formulas.Add("")
-                                End If
-
-                                If Formula IsNot Nothing AndAlso Not Formula = "" Then
-                                    If Me.ComparisonContains Then
-                                        If Filename.ToLower.Contains(Formula.ToLower) Then
-                                            FormulaFound = True
-                                            Exit For
-                                        End If
-                                    ElseIf Me.ComparisonIsExactly Then
-                                        If Filename.ToLower = Formula.ToLower Then
-                                            FormulaFound = True
-                                            Exit For
-                                        End If
-                                    End If
-                                End If
-                            End If
-                        Next
-
-                        If (Not FormulaFound) And (ModelLinkFilenames.Count > 0) Then
-                            If Me.ComparisonContains Then
-                                If ModelLinkFilenames.Count = 1 Then
-                                    TaskLogger.AddMessage($"File name '{Filename}' does not contain property in the following model file")
-                                Else
-                                    TaskLogger.AddMessage($"File name '{Filename}' does not contain property in the following model files")
-                                End If
-                            ElseIf Me.ComparisonIsExactly Then
-                                If ModelLinkFilenames.Count = 1 Then
-                                    TaskLogger.AddMessage($"File name '{Filename}' not the same as the property in the following model file")
-                                Else
-                                    TaskLogger.AddMessage($"File name '{Filename}' not the same as the property in the following model files")
-                                End If
-                            End If
-                            For i As Integer = 0 To ModelLinkFilenames.Count - 1
-                                TaskLogger.AddMessage($"    Model file: '{ModelLinkFilenames(i)}', property value: '{Formulas(i)}'")
-                            Next
-                        End If
-
-                    End If
-
-                Case Else
-                    MsgBox($"{Me.Name} DocType '{DocType}' not recognized")
-            End Select
-        End If
 
     End Sub
 
     Private Overloads Sub ProcessInternal(ByVal FullName As String)
 
-        If NewWay Then
-            Dim Proceed As Boolean = True
+        Dim Proceed As Boolean = True
 
-            Dim SSDoc As HCStructuredStorageDoc = Nothing
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
 
-            Try
-                SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
-                SSDoc.ReadProperties(Me.PropertiesData)
-                SSDoc.ReadLinks(Me.LinkManagementOrder)
+        Try
+            SSDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
+            SSDoc.ReadProperties(Me.PropertiesData)
+            SSDoc.ReadLinks(Me.LinkManagementOrder)
 
-            Catch ex As Exception
-                Proceed = False
-                TaskLogger.AddMessage(ex.Message)
+        Catch ex As Exception
+            Proceed = False
+            TaskLogger.AddMessage(ex.Message)
 
-            End Try
+        End Try
 
-            If Proceed Then
-                Proceed = InitiateCheck2(Nothing, SSDoc)
+        If Proceed Then
+            Proceed = InitiateCheck2(Nothing, SSDoc)
 
-            End If
-
-            If SSDoc IsNot Nothing Then SSDoc.Close()
-
-        Else
-            Dim Proceed As Boolean = True
-            Dim Formula As String = ""
-            Dim FormulaFound As Boolean
-
-            Dim Filename As String = IO.Path.GetFileNameWithoutExtension(FullName)  'c:\project\part.par' -> 'part'
-
-            Dim ValidExtensionsList As List(Of String) = ".asm .par .psm".Split(CChar(" ")).ToList
-            Dim ExtensionParent As String = IO.Path.GetExtension(FullName)
-
-            Dim ChildNames As New List(Of String)
-            Dim ChildName As String = ""
-            Dim Formulas As New List(Of String)
-
-            Dim UC As New UtilsCommon
-
-            Dim SSParentDoc As HCStructuredStorageDoc = Nothing
-
-            Try
-                SSParentDoc = New HCStructuredStorageDoc(FullName, _OpenReadWrite:=False)
-                SSParentDoc.ReadProperties(Me.PropertiesData)
-                SSParentDoc.ReadLinks(Me.LinkManagementOrder)
-
-            Catch ex As Exception
-                Proceed = False
-                TaskLogger.AddMessage(ex.Message)
-
-            End Try
-
-            If Proceed Then
-
-                Select Case ExtensionParent
-                    Case ".asm", ".par", ".psm"
-
-                        Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, TaskLogger)
-
-                        If Formula Is Nothing Then
-                            TaskLogger.AddMessage($"Could not process formula '{Me.PropertyFormula}'")
-                        Else
-                            Formula = Formula.Trim
-                        End If
-
-                        If Not TaskLogger.HasErrors Then
-                            If Formula = "" Then
-                                TaskLogger.AddMessage($"Formula '{Me.PropertyFormula}' not assigned")
-                            End If
-                        End If
-
-                        If Not TaskLogger.HasErrors Then
-                            If Me.ComparisonContains Then
-                                If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                                    TaskLogger.AddMessage($"File name '{Filename}' does not contain formula value '{Formula}'")
-                                End If
-                            ElseIf Me.ComparisonIsExactly Then
-                                If Not Filename.ToLower = Formula.ToLower Then
-                                    TaskLogger.AddMessage($"File name '{Filename}' not the same as formula value '{Formula}'")
-                                End If
-                            End If
-                        End If
-
-
-                    Case ".dft"
-
-                        If Me.DraftsCheckDraftItself Then
-
-                            Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, TaskLogger)
-
-                            If Formula Is Nothing Then
-                                TaskLogger.AddMessage($"Could not process formula '{Me.PropertyFormula}'")
-                            Else
-                                Formula = Formula.Trim
-                            End If
-
-                            If Not TaskLogger.HasErrors Then
-                                If Formula = "" Then
-                                    TaskLogger.AddMessage($"Formula '{Me.PropertyFormula}' not assigned")
-                                End If
-                            End If
-
-                            If Not TaskLogger.HasErrors Then
-                                If Me.ComparisonContains Then
-                                    If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                                        TaskLogger.AddMessage($"File name '{Filename}' does not contain formula value '{Formula}'")
-                                    End If
-                                ElseIf Me.ComparisonIsExactly Then
-                                    If Not Filename.ToLower = Formula.ToLower Then
-                                        TaskLogger.AddMessage($"File name '{Filename}' not the same as formula value '{Formula}'")
-                                    End If
-                                End If
-                            End If
-
-                        End If
-
-                        If Me.DraftsCheckModels Then
-
-                            ChildNames = SSParentDoc.GetLinkNames
-
-                            If (ChildNames IsNot Nothing) AndAlso (ChildNames.Count > 0) Then
-
-                                For Each ChildName In ChildNames
-
-                                    If Not ValidExtensionsList.Contains(IO.Path.GetExtension(ChildName)) Then
-                                        Continue For
-                                    End If
-
-                                    Dim SSChildDoc As HCStructuredStorageDoc = Nothing
-
-                                    Try
-                                        SSChildDoc = New HCStructuredStorageDoc(ChildName, _OpenReadWrite:=False)
-                                        SSChildDoc.ReadProperties(Me.PropertiesData)
-
-                                        Formula = SSChildDoc.SubstitutePropertyFormulas(Me.PropertyFormula, TaskLogger)
-
-                                        If Formula IsNot Nothing Then  ' Nothing is not an error, but no match possible.
-                                            Formula = Formula.Trim
-                                            Formulas.Add(Formula)
-                                            If Me.ComparisonContains Then
-                                                If Filename.ToLower.Contains(Formula.ToLower) Then
-                                                    FormulaFound = True
-                                                    If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
-                                                    Exit For
-                                                End If
-                                            ElseIf Me.ComparisonIsExactly Then
-                                                If Filename.ToLower = Formula.ToLower Then
-                                                    FormulaFound = True
-                                                    If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
-                                                    Exit For
-                                                End If
-                                            End If
-                                        Else
-                                            Formulas.Add("")
-                                        End If
-
-                                    Catch ex As Exception
-                                        Formulas.Add("")
-                                        If ex.Message.Contains("FOA") Then
-                                            TaskLogger.AddMessage($"FOA file '{IO.Path.GetFileName(ChildName)}' not processed")
-                                        End If
-                                    End Try
-
-                                    If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
-
-                                Next
-
-                                If (Not FormulaFound) And (ChildNames.Count > 0) Then
-                                    If Me.ComparisonContains Then
-                                        If ChildNames.Count = 1 Then
-                                            TaskLogger.AddMessage($"File name '{Filename}' does not contain property in the following model file")
-                                        Else
-                                            TaskLogger.AddMessage($"File name '{Filename}' does not contain property in the following model files")
-                                        End If
-                                    ElseIf Me.ComparisonIsExactly Then
-                                        If ChildNames.Count = 1 Then
-                                            TaskLogger.AddMessage($"File name '{Filename}' not the same as the property in the following model file")
-                                        Else
-                                            TaskLogger.AddMessage($"File name '{Filename}' not the same as the property in the following model files")
-                                        End If
-                                    End If
-                                    For i As Integer = 0 To ChildNames.Count - 1
-                                        TaskLogger.AddMessage($"    Model file: '{IO.Path.GetFileName(ChildNames(i))}', property value: '{Formulas(i)}'")
-                                    Next
-                                End If
-                            End If
-                        End If
-
-                    Case Else
-                        MsgBox($"{Me.Name} Extension '{ExtensionParent}' not recognized")
-
-                End Select
-
-            End If
-
-            If SSParentDoc IsNot Nothing Then SSParentDoc.Close()
         End If
+
+        If SSDoc IsNot Nothing Then SSDoc.Close()
 
     End Sub
 
@@ -618,7 +294,7 @@ Public Class TaskCheckFilename
                     Proceed = False
                     If DraftFileFullName Is Nothing Then
                         If Not Formula = "" Then
-                            TaskLogger.AddMessage($"File name '{FilenameToCheck}' does not contain property formula '{Formula}'")
+                            TaskLogger.AddMessage($"File name '{FilenameToCheck}' does not contain property formula.  ('{Me.PropertyFormula}' = '{Formula}')")
                         Else
                             TaskLogger.AddMessage($"Property formula {Me.PropertyFormula} is blank")
                         End If
@@ -629,7 +305,7 @@ Public Class TaskCheckFilename
                     Proceed = False
                     If DraftFileFullName Is Nothing Then
                         If Not Formula = "" Then
-                            TaskLogger.AddMessage($"File name '{FilenameToCheck}' does not match property formula '{Formula}'")
+                            TaskLogger.AddMessage($"File name '{FilenameToCheck}' does not match property formula.  ('{Me.PropertyFormula}' = '{Formula}')")
                         Else
                             TaskLogger.AddMessage($"Property formula {Me.PropertyFormula} is blank")
                         End If
@@ -722,8 +398,6 @@ Public Class TaskCheckFilename
                 ElseIf Me.ComparisonIsExactly Then
                     TaskLogger.AddMessage($"File name '{DraftFilename}' does not match property formula '{Me.PropertyFormula}' from any model")
                 End If
-                'Else
-                '    TaskLogger.AddMessage("No models found")
             End If
         End If
 

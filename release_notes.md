@@ -20,6 +20,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 - Changed the name of `Update drawing views` to `Update drawings`.  Added an option to select all parts lists and tables.  Disable to select them individually.
 - For `Check drawings`, added centerlines, weld symbols and several others to the `Detached dimensions or annotations` check.  (Thank you **@sven-11111!**)
+- Fixed an issue with `Check filenames` where draft model files were checking their own filenames, not the draft file.  (Thank you again **@sven-11111!**)
 
 ## V2026.3
 
