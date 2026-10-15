@@ -75,6 +75,7 @@ Public Class UtilsMaterials
 
     End Sub
 
+
     Public Sub UpdateMaterialFromMaterialTable(
         ByVal _SEApp As SolidEdgeFramework.Application,
         ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -152,7 +153,7 @@ Public Class UtilsMaterials
         ' ###### FIX ANY MISMATCHES BETWEEN THE MATERIAL TABLE AND DOCUMENT ######
 
         Dim Mismatches As List(Of SolidEdgeFramework.MatTablePropIndex) = GetMaterialPropertyMismatches(MatTable, MatTableMaterial, Me.ActiveMaterialLibrary)
-        If Mismatches.Count > 0 Then
+        If Mismatches.Count > 0 Or Me.UpdateFaceStyles Then
             FixMismatches(Mismatches, MatTable, MatTableMaterial, ErrorLogger)
         End If
 

@@ -213,7 +213,7 @@ Public Class TaskCheckFilename
                             End If
                         ElseIf Me.ComparisonIsExactly Then
                             If Not Filename.ToLower = Formula.ToLower Then
-                                TaskLogger.AddMessage($"File name '{Filename}' not the same as property formula '{Formula}'")
+                                TaskLogger.AddMessage($"File name '{Filename}' does not match property formula '{Formula}'")
                             End If
                         End If
                     End If
@@ -566,19 +566,34 @@ Public Class TaskCheckFilename
 
     Private Function ProcessFile2(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        SSDoc As HCStructuredStorageDoc
+        SSDoc As HCStructuredStorageDoc,
+        Optional DraftFileFullName As String = Nothing
         ) As Boolean
 
         Dim Proceed As Boolean = True
         Dim UC As New UtilsCommon
 
+
+        ' ###### GET FILENAME TO CHECK ######
+
         Dim FilenameToCheck As String = ""
         If SEDoc IsNot Nothing Then
-            FilenameToCheck = UC.GetFOAFilename(SEDoc.FullName)
+            If DraftFileFullName Is Nothing Then
+                FilenameToCheck = UC.GetFOAFilename(SEDoc.FullName)
+            Else
+                FilenameToCheck = DraftFileFullName
+            End If
         Else
-            FilenameToCheck = SSDoc.FullName
+            If DraftFileFullName Is Nothing Then
+                FilenameToCheck = SSDoc.FullName
+            Else
+                FilenameToCheck = DraftFileFullName
+            End If
         End If
         FilenameToCheck = IO.Path.GetFileNameWithoutExtension(FilenameToCheck)  'c:\project\part.par' -> 'part'
+
+
+        ' ###### EVALUATE THE FORMULA ######
 
         Dim Formula As String = ""
         If SEDoc IsNot Nothing Then
@@ -594,18 +609,34 @@ Public Class TaskCheckFilename
             'TaskLogger.AddMessage($"Could not process formula '{Me.PropertyFormula}'")
         End If
 
+
+        ' ###### REPORT RESULTS ######
+
         If Proceed Then
             If Me.ComparisonContains Then
-                If Not FilenameToCheck.ToLower.Contains(Formula.ToLower) Then
-                    TaskLogger.AddMessage($"File name '{FilenameToCheck}' does not contain property formula '{Formula}'")
+                If Formula = "" Or Not FilenameToCheck.ToLower.Contains(Formula.ToLower) Then
+                    Proceed = False
+                    If DraftFileFullName Is Nothing Then
+                        If Not Formula = "" Then
+                            TaskLogger.AddMessage($"File name '{FilenameToCheck}' does not contain property formula '{Formula}'")
+                        Else
+                            TaskLogger.AddMessage($"Property formula {Me.PropertyFormula} is blank")
+                        End If
+                    End If
                 End If
             ElseIf Me.ComparisonIsExactly Then
                 If Not FilenameToCheck.ToLower = Formula.ToLower Then
-                    TaskLogger.AddMessage($"File name '{FilenameToCheck}' not the same as property formula '{Formula}'")
+                    Proceed = False
+                    If DraftFileFullName Is Nothing Then
+                        If Not Formula = "" Then
+                            TaskLogger.AddMessage($"File name '{FilenameToCheck}' does not match property formula '{Formula}'")
+                        Else
+                            TaskLogger.AddMessage($"Property formula {Me.PropertyFormula} is blank")
+                        End If
+                    End If
                 End If
             End If
         End If
-
 
         Return Proceed
     End Function
@@ -620,8 +651,15 @@ Public Class TaskCheckFilename
 
         Dim ValidExtensionsList As List(Of String) = ".asm .par .psm".Split(CChar(" ")).ToList
 
+        Dim DraftFileFullName As String = ""
+        Dim Count As Integer = 0
+
+
+        ' ###### PROCESS MODEL FILES ######
+
         If SEDoc IsNot Nothing Then
             Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+            DraftFileFullName = tmpSEDoc.FullName
 
             Dim ChildLinks As SolidEdgeDraft.ModelLinks = tmpSEDoc.ModelLinks
 
@@ -634,11 +672,14 @@ Public Class TaskCheckFilename
 
                 If IO.File.Exists(ChildLinkFilename) Then
                     Dim ChildLinkDoc As SolidEdgeFramework.SolidEdgeDocument = CType(ChildLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument)
-                    Proceed = ProcessFile2(ChildLinkDoc, Nothing)
+                    Count += 1
+                    Proceed = ProcessFile2(ChildLinkDoc, Nothing, DraftFileFullName)
                     If Proceed Then Exit For
                 End If
             Next
         Else
+            DraftFileFullName = SSDoc.FullName
+
             Dim ChildNames As List(Of String) = SSDoc.GetLinkNames
 
             If ChildNames IsNot Nothing AndAlso ChildNames.Count > 0 Then
@@ -653,7 +694,8 @@ Public Class TaskCheckFilename
                         SSChildDoc = New HCStructuredStorageDoc(ChildName, _OpenReadWrite:=False)
                         SSChildDoc.ReadProperties(Me.PropertiesData)
 
-                        Proceed = ProcessFile2(Nothing, SSChildDoc)
+                        Count += 1
+                        Proceed = ProcessFile2(Nothing, SSChildDoc, DraftFileFullName)
                         If Proceed Then
                             If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
                             Exit For
@@ -666,6 +708,22 @@ Public Class TaskCheckFilename
 
                     If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
                 Next
+            End If
+        End If
+
+
+        ' ###### REPORT RESULTS ######
+
+        If Not Proceed Then
+            Dim DraftFilename = IO.Path.GetFileNameWithoutExtension(DraftFileFullName)
+            If Count > 0 Then
+                If Me.ComparisonContains Then
+                    TaskLogger.AddMessage($"File name '{DraftFilename}' does not contain property formula '{Me.PropertyFormula}' from any model")
+                ElseIf Me.ComparisonIsExactly Then
+                    TaskLogger.AddMessage($"File name '{DraftFilename}' does not match property formula '{Me.PropertyFormula}' from any model")
+                End If
+                'Else
+                '    TaskLogger.AddMessage("No models found")
             End If
         End If
 
