@@ -55,6 +55,32 @@ Public Class TaskCheckFilename
         End Set
     End Property
 
+    Private _DraftModelsAny As Boolean
+    Public Property DraftModelsAny As Boolean
+        Get
+            Return _DraftModelsAny
+        End Get
+        Set(value As Boolean)
+            _DraftModelsAny = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DraftModelsAny.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _DraftModelsAll As Boolean
+    Public Property DraftModelsAll As Boolean
+        Get
+            Return _DraftModelsAll
+        End Get
+        Set(value As Boolean)
+            _DraftModelsAll = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DraftModelsAll.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _DraftsCheckDraftItself As Boolean
     Public Property DraftsCheckDraftItself As Boolean
         Get
@@ -105,6 +131,8 @@ Public Class TaskCheckFilename
         ComparisonContains
         ComparisonIsExactly
         DraftsCheckModels
+        DraftModelsAny
+        DraftModelsAll
         DraftsCheckDraftItself
         StructuredStorageEdit
         AutoHideOptions
@@ -138,6 +166,8 @@ Public Class TaskCheckFilename
         Me.ComparisonContains = False
         Me.ComparisonIsExactly = False
         Me.DraftsCheckModels = False
+        Me.DraftModelsAny = False
+        Me.DraftModelsAll = False
         Me.DraftsCheckDraftItself = False
         Me.StructuredStorageEdit = False
 
@@ -328,7 +358,7 @@ Public Class TaskCheckFilename
         Dim ValidExtensionsList As List(Of String) = ".asm .par .psm".Split(CChar(" ")).ToList
 
         Dim DraftFileFullName As String = ""
-        Dim Count As Integer = 0
+        Dim ModelsCount As Integer = 0
 
 
         ' ###### PROCESS MODEL FILES ######
@@ -348,10 +378,17 @@ Public Class TaskCheckFilename
 
                 If IO.File.Exists(ChildLinkFilename) Then
                     Dim ChildLinkDoc As SolidEdgeFramework.SolidEdgeDocument = CType(ChildLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument)
-                    Count += 1
+                    ModelsCount += 1
                     Proceed = ProcessFile2(ChildLinkDoc, Nothing, DraftFileFullName)
-                    If Proceed Then Exit For
+
+                    ' DraftModelsAny stops on the first success.  DraftModelsAll stops on the first failure.
+                    If Me.DraftModelsAny Then
+                        If Proceed Then Exit For
+                    Else
+                        If Not Proceed Then Exit For
+                    End If
                 End If
+
             Next
         Else
             DraftFileFullName = SSDoc.FullName
@@ -370,12 +407,21 @@ Public Class TaskCheckFilename
                         SSChildDoc = New HCStructuredStorageDoc(ChildName, _OpenReadWrite:=False)
                         SSChildDoc.ReadProperties(Me.PropertiesData)
 
-                        Count += 1
+                        ModelsCount += 1
                         Proceed = ProcessFile2(Nothing, SSChildDoc, DraftFileFullName)
-                        If Proceed Then
-                            If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
-                            Exit For
+
+                        If Me.DraftModelsAny Then
+                            If Proceed Then
+                                If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
+                                Exit For
+                            End If
+                        Else
+                            If Not Proceed Then
+                                If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
+                                Exit For
+                            End If
                         End If
+
                     Catch ex As Exception
                         If ex.Message.Contains("FOA") Then
                             TaskLogger.AddMessage($"FOA file not processed '{IO.Path.GetFileName(ChildName)}'")
@@ -392,13 +438,22 @@ Public Class TaskCheckFilename
 
         If Not Proceed Then
             Dim DraftFilename = IO.Path.GetFileNameWithoutExtension(DraftFileFullName)
-            If Count > 0 Then
-                If Me.ComparisonContains Then
-                    TaskLogger.AddMessage($"File name '{DraftFilename}' does not contain property formula '{Me.PropertyFormula}' from any model")
-                ElseIf Me.ComparisonIsExactly Then
-                    TaskLogger.AddMessage($"File name '{DraftFilename}' does not match property formula '{Me.PropertyFormula}' from any model")
+            If ModelsCount > 0 Then
+                If Me.DraftModelsAny Then
+                    If Me.ComparisonContains Then
+                        TaskLogger.AddMessage($"File name '{DraftFilename}' does not contain property formula '{Me.PropertyFormula}' in any model")
+                    ElseIf Me.ComparisonIsExactly Then
+                        TaskLogger.AddMessage($"File name '{DraftFilename}' does not match property formula '{Me.PropertyFormula}' in any model")
+                    End If
+                Else
+                    If Me.ComparisonContains Then
+                        TaskLogger.AddMessage($"File name '{DraftFilename}' does not contain property formula '{Me.PropertyFormula}' in all models")
+                    ElseIf Me.ComparisonIsExactly Then
+                        TaskLogger.AddMessage($"File name '{DraftFilename}' does not match property formula '{Me.PropertyFormula}' in all models")
+                    End If
                 End If
             End If
+
         End If
 
         Return Proceed
@@ -458,6 +513,26 @@ Public Class TaskCheckFilename
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.DraftModelsAny.ToString, "Any model")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.DraftModelsAll.ToString, "All models")
+        CheckBox.Padding = New Padding(Me.ControlIndent, 0, 0, 0)
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.DraftsCheckDraftItself.ToString, "Drafts -- Check draft itself for formula")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -502,7 +577,11 @@ Public Class TaskCheckFilename
                 ErrorLogger.AddMessage("Select at least one Draft process option")
             End If
 
-            'Me.LinkManagementOrder = Form_Main.LinkManagementOrder
+            If Me.DraftsCheckModels And Me.IsSelectedDraft Then
+                If Not (Me.DraftModelsAny Or Me.DraftModelsAll) Then
+                    ErrorLogger.AddMessage("Select a draft model acceptance criterion (Any/All)")
+                End If
+            End If
 
             If (Me.StructuredStorageEdit) And (Me.DraftsCheckModels) And (Me.LinkManagementOrder Is Nothing) Then
                 ErrorLogger.AddMessage("Populate LinkMgmt.txt file name on the Configuration Tab -- Templates page")
@@ -534,6 +613,17 @@ Public Class TaskCheckFilename
 
             Case ControlNames.DraftsCheckModels.ToString
                 Me.DraftsCheckModels = Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.DraftModelsAny.ToString), CheckBox).Visible = Me.DraftsCheckModels
+                CType(ControlsDict(ControlNames.DraftModelsAll.ToString), CheckBox).Visible = Me.DraftsCheckModels
+
+            Case ControlNames.DraftModelsAny.ToString
+                Me.DraftModelsAny = Checkbox.Checked
+                Me.DraftModelsAll = Not Me.DraftModelsAny
+
+            Case ControlNames.DraftModelsAll.ToString
+                Me.DraftModelsAll = Checkbox.Checked
+                Me.DraftModelsAny = Not Me.DraftModelsAll
 
             Case ControlNames.DraftsCheckDraftItself.ToString
                 Me.DraftsCheckDraftItself = Checkbox.Checked
@@ -596,15 +686,17 @@ Public Class TaskCheckFilename
 
         HelpString += vbCrLf + vbCrLf + "For `*.dft` files, there are two ways to search.  You can use either one, or both. "
         HelpString += vbCrLf + "- `Check model files` is the option most users will want.  "
-        HelpString += "It searches any models linked to the file for a property match.  "
+        HelpString += "It searches models linked to the file for a property match.  "
+        HelpString += vbCrLf + "    - `Any model` satisfies the comparison if any model in the draft matches.  "
+        HelpString += vbCrLf + "    - `All models` satisfies the comparison only if all models in the draft match.  "
         HelpString += vbCrLf + "- `Check draft itself` searches properties in the draft file.  "
         HelpString += "Since draft files rarely have properties of their own, this is usually not necessary. "
         HelpString += "Also, because missing properties are reported as an error, "
         HelpString += "it can be distracting/confusing as well. "
-        HelpString += vbCrLf + "- `Check draft itself`  I'm not done with this.  "
+        HelpString += vbCrLf + "- `Check draft itself`  Yes, this is a repeat of the last bullet point; I'm not done with it.  "
         HelpString += "In the example above, the program will check if the model and draft files have the same name.  "
-        HelpString += "With this option enabled, it would check if the draft file has the same name as itself.  "
-        HelpString += "That will always be true, and never be what you want. "
+        HelpString += "With this option enabled, it would check if the *draft file has the same name as itself*.  "
+        HelpString += "That will always be true, and won't tell you anything you don't already know. "
 
         Return HelpString
     End Function

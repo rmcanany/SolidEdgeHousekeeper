@@ -15,12 +15,22 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.4
 
+### Check filename
+
+Added an option to require a match of all draft models.  (Thank you **@sven-11111!**)
+
+![UpdateDrawingStylesFromTemplate](My%20Project/media/task_check_filename.png)
+
+Previously, if any draft models matched, the check passed.  Now you decide how it is handled.
+
+Also, fixed an issue where draft model files were checking their own filenames, not the draft file.  
+
+See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-filename) for details.
 
 ### Other
 
 - Changed the name of `Update drawing views` to `Update drawings`.  Added an option to select all parts lists and tables.  Disable to select them individually.
-- For `Check drawings`, added centerlines, weld symbols and several others to the `Detached dimensions or annotations` check.  (Thank you **@sven-11111!**)
-- Fixed an issue with `Check filenames` where draft model files were checking their own filenames, not the draft file.  (Thank you again **@sven-11111!**)
+- For `Check drawings`, added centerlines, weld symbols and several others to the `Detached dimensions or annotations` check.  (Thank you again **@sven-11111!**)
 
 ## V2026.3
 

@@ -1276,9 +1276,11 @@ There are two comparison methods.
 - `Comparison is exactly` looks for an exact match.  With the previous example, the program would report an error. 
 
 For `*.dft` files, there are two ways to search.  You can use either one, or both. 
-- `Check model files` is the option most users will want.  It searches any models linked to the file for a property match.  
+- `Check model files` is the option most users will want.  It searches models linked to the file for a property match.  
+    - `Any model` satisfies the comparison if any model in the draft matches.  
+    - `All models` satisfies the comparison only if all models in the draft match.  
 - `Check draft itself` searches properties in the draft file.  Since draft files rarely have properties of their own, this is usually not necessary. Also, because missing properties are reported as an error, it can be distracting/confusing as well. 
-- `Check draft itself`  I'm not done with this.  In the example above, the program will check if the model and draft files have the same name.  With this option enabled, it would check if the draft file has the same name as itself.  That will always be true, and never be what you want. 
+- `Check draft itself`  Yes, this is a repeat of the last bullet point; I'm not done with it.  In the example above, the program will check if the model and draft files have the same name.  With this option enabled, it would check if the *draft file has the same name as itself*.  That will always be true, and won't tell you anything you don't already know. 
 
 </details>
 

@@ -11,7 +11,7 @@
 Public Class Form_Main
 
     Public Property Version As String = "2026.4"  ' Two fields, both integers: Year.ReleaseNumber.
-    Public Property PreviewVersion As String = "02" ' ######### Empty string for a release
+    Public Property PreviewVersion As String = "03" ' ######### Empty string for a release
 
     Private lvwColumnSorter As ListViewColumnSorter
 
