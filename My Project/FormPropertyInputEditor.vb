@@ -25,7 +25,7 @@ Public Class FormPropertyInputEditor
         End Set
     End Property
 
-    Dim t As Timer = New Timer()
+    'Dim t As Timer = New Timer()
 
     Public Sub New()
 
@@ -228,74 +228,89 @@ Public Class FormPropertyInputEditor
     End Sub
 
     Private Sub MoveRow(Direction As String)
-        Dim SelectedRow As Integer = GetSelectedRow()
-        Dim tmpUCList As New List(Of UCEditProperties)
-        Dim tf As Boolean
 
-        tf = Direction.ToLower = "up"
-        tf = tf Or Direction.ToLower = "down"
-        If Not tf Then
+        If Not (Direction.ToLower = "up" Or Direction.ToLower = "down") Then
             MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
             Exit Sub
         End If
 
-        'Can't move up from the top
-        tf = (SelectedRow = 0) And (Direction = "up")
+        Dim SelectedRows As List(Of Integer) = GetSelectedRows()
 
-        'Can't move down from the bottom
-        Dim Bottom = UCList.Count - 1
-        tf = tf Or ((SelectedRow >= Bottom) And (Direction = "down"))
-
-        If Not tf Then
-            For i As Integer = 0 To Me.UCList.Count - 1
-
-                Select Case Direction
-
-                    Case "up"
-                        If i = SelectedRow - 1 Then
-                            tmpUCList.Add(Me.UCList(i + 1))
-                        ElseIf i = SelectedRow Then
-                            tmpUCList.Add(Me.UCList(i - 1))
-                        Else
-                            tmpUCList.Add(Me.UCList(i))
-                        End If
-
-                    Case "down"
-                        If i = SelectedRow Then
-                            tmpUCList.Add(Me.UCList(i + 1))
-                        ElseIf i = SelectedRow + 1 Then
-                            tmpUCList.Add(Me.UCList(i - 1))
-                        Else
-                            tmpUCList.Add(Me.UCList(i))
-                        End If
-
-                    Case Else
-                        MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
-                End Select
-
-            Next
-
-            Me.UCList = tmpUCList
-
+        If SelectedRows.Count = 0 Then
+            MsgBox("No row is selected.  Select one by enabling its checkbox.")
+            Exit Sub
         End If
+        If Direction.ToLower = "up" And SelectedRows.Contains(0) Then Exit Sub
+        If Direction.ToLower = "down" Then
+            ' Deal with NewRow
+            Dim tmpUC As UCEditProperties = UCList(UCList.Count - 1)
+            If tmpUC.PropertyName = "" Then
+                If SelectedRows.Contains(UCList.Count - 2) Then Exit Sub
+            Else
+                If SelectedRows.Contains(UCList.Count - 1) Then Exit Sub
+            End If
+        End If
+
+        Dim tmpUCList As New List(Of UCEditProperties)
+        For Each UC As UCEditProperties In UCList
+            tmpUCList.Add(UC)
+        Next
+
+        If Direction.ToLower = "up" Then
+            For i As Integer = 0 To tmpUCList.Count - 2  ' From top to second-from-bottom
+                Dim NextUC As UCEditProperties = tmpUCList(i + 1)
+                If NextUC.Selected Then
+                    Dim tmpUC As UCEditProperties = tmpUCList(i)
+                    tmpUCList(i) = NextUC
+                    tmpUCList(i + 1) = tmpUC
+                End If
+            Next
+        Else
+            For i As Integer = tmpUCList.Count - 1 To 1 Step -1 ' From bottom to second-from-top
+                Dim PreviousUC As UCEditProperties = tmpUCList(i - 1)
+                Dim PProp = PreviousUC.PropertyName
+                If PreviousUC.Selected Then
+                    Dim tmpUC As UCEditProperties = tmpUCList(i)
+                    Dim tmpProp = tmpUC.PropertyName
+                    tmpUCList(i) = PreviousUC
+                    tmpUCList(i - 1) = tmpUC
+                End If
+            Next
+        End If
+
+        Me.UCList = tmpUCList
 
         UpdateForm()
 
     End Sub
 
-    Private Function GetSelectedRow() As Integer
-        Dim SelectedRow As Integer = -1
+    'Private Function GetSelectedRow() As Integer
+    '    Dim SelectedRow As Integer = -1
+
+    '    Dim i = 0
+    '    For Each UC As UCEditProperties In UCList
+    '        If UC.Selected Then
+    '            If UC.Selected Then SelectedRow = i
+    '            Exit For
+    '        End If
+    '        i += 1
+    '    Next
+
+    '    Return SelectedRow
+    'End Function
+
+    Private Function GetSelectedRows() As List(Of Integer)
+        Dim SelectedRows As New List(Of Integer)
 
         Dim i = 0
         For Each UC As UCEditProperties In UCList
             If UC.Selected Then
-                If UC.Selected Then SelectedRow = i
-                Exit For
+                If UC.Selected Then SelectedRows.Add(i)
             End If
             i += 1
         Next
 
-        Return SelectedRow
+        Return SelectedRows
     End Function
 
     Public Sub UCChanged(ChangedUC As UCEditProperties)
@@ -303,11 +318,11 @@ Public Class FormPropertyInputEditor
         Dim NeedANewRow As Boolean = True
 
         For Each UC As UCEditProperties In UCList
-            If ChangedUC.Selected Then
-                If UC IsNot ChangedUC Then
-                    UC.CheckBoxSelected.Checked = False
-                End If
-            End If
+            'If ChangedUC.Selected Then
+            '    If UC IsNot ChangedUC Then
+            '        UC.CheckBoxSelected.Checked = False
+            '    End If
+            'End If
             If UC.PropertyName = "" Then
                 NeedANewRow = False
             End If
@@ -319,49 +334,89 @@ Public Class FormPropertyInputEditor
 
     End Sub
 
-    Private Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
+    Public Sub UCSelectionChanged(ChangedUC As UCEditProperties, ModifierKeys As Windows.Forms.Keys)
+        Select Case ModifierKeys
+            Case Keys.None
+                For Each UC As UCEditProperties In UCList
+                    'If ChangedUC.Selected Then
+                    '    If UC IsNot ChangedUC Then
+                    '        UC.CheckBoxSelected.Checked = False
+                    '    End If
+                    'End If
+                    UC.NotifyPropertyEditor = False
+                    If UC IsNot ChangedUC Then
+                        'UC.CheckBoxSelected.Checked = False
+                        UC.Selected = False
+                    End If
+                    UC.NotifyPropertyEditor = True
+                Next
+            Case Keys.Control
+                ' Nothing to do here
+            Case Keys.Shift
+                Dim SelectedRows As List(Of Integer) = GetSelectedRows()
+                If SelectedRows.Count = 2 Then
+                    Dim tmpUCList As New List(Of UCEditProperties)
+                    For Each UC As UCEditProperties In UCList
+                        tmpUCList.Add(UC)
+                    Next
+                    Dim IdxStart As Integer = SelectedRows(0)
+                    Dim IdxEnd As Integer = SelectedRows(1)
+                    For i As Integer = IdxStart To IdxEnd
+                        tmpUCList(i).NotifyPropertyEditor = False
+                        tmpUCList(i).Selected = True
+                        tmpUCList(i).NotifyPropertyEditor = True
+                    Next
+                    UCList = tmpUCList
+                End If
+        End Select
 
-        Dim tmpForm As New Form
-        Dim tmpSize = New Size(200, 75)
-        tmpForm.Text = String.Empty
-        tmpForm.ControlBox = False
-        tmpForm.BackColor = Color.White
-
-        tmpForm.Size = tmpSize
-        tmpForm.StartPosition = FormStartPosition.Manual
-        tmpForm.Location = New Point(CInt(Me.Left + Me.Width / 2 - tmpForm.Width / 2), CInt(Me.Top + Me.Height / 2 - tmpForm.Height / 2))
-
-        Dim tmpLabel As New Label
-        tmpLabel.Font = New Font(Me.Font.Name, 8, FontStyle.Bold)
-        tmpLabel.Width = 180
-        tmpLabel.Dock = DockStyle.Fill
-        tmpLabel.TextAlign = ContentAlignment.MiddleCenter
-        tmpLabel.Text = "Expression copied to clipboard"
-        tmpForm.Controls.Add(tmpLabel)
-
-        tmpForm.Show(Me)
-
-        t.Start()
+        UCChanged(ChangedUC)
 
     End Sub
 
-    Private Sub HandleTimerTick(sender As Object, e As EventArgs)
+    'Private Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
 
-        For Each item In Me.OwnedForms
-            item.Close()
-        Next
+    '    Dim tmpForm As New Form
+    '    Dim tmpSize = New Size(200, 75)
+    '    tmpForm.Text = String.Empty
+    '    tmpForm.ControlBox = False
+    '    tmpForm.BackColor = Color.White
 
-        t.Stop()
+    '    tmpForm.Size = tmpSize
+    '    tmpForm.StartPosition = FormStartPosition.Manual
+    '    tmpForm.Location = New Point(CInt(Me.Left + Me.Width / 2 - tmpForm.Width / 2), CInt(Me.Top + Me.Height / 2 - tmpForm.Height / 2))
 
-    End Sub
+    '    Dim tmpLabel As New Label
+    '    tmpLabel.Font = New Font(Me.Font.Name, 8, FontStyle.Bold)
+    '    tmpLabel.Width = 180
+    '    tmpLabel.Dock = DockStyle.Fill
+    '    tmpLabel.TextAlign = ContentAlignment.MiddleCenter
+    '    tmpLabel.Text = "Expression copied to clipboard"
+    '    tmpForm.Controls.Add(tmpLabel)
+
+    '    tmpForm.Show(Me)
+
+    '    t.Start()
+
+    'End Sub
+
+    'Private Sub HandleTimerTick(sender As Object, e As EventArgs)
+
+    '    For Each item In Me.OwnedForms
+    '        item.Close()
+    '    Next
+
+    '    t.Stop()
+
+    'End Sub
 
 
     Private Sub FormPropertyInputEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'PopulateForm()
 
-        t.Interval = 1500
-        AddHandler t.Tick, AddressOf HandleTimerTick
+        't.Interval = 1500
+        'AddHandler t.Tick, AddressOf HandleTimerTick
 
         Dim UP As New UtilsPreferences
         Me.SavedSettingsDict = UP.GetEditPropertiesSavedSettings()
@@ -482,14 +537,15 @@ Public Class FormPropertyInputEditor
     'End Sub
 
     Private Sub ToolStripButtonDeleteRow_Click(sender As Object, e As EventArgs) Handles ToolStripButtonDeleteRow.Click
-        Dim SelectedRow = GetSelectedRow()
+        'Dim SelectedRow = GetSelectedRow()
+        Dim SelectedRows = GetSelectedRows()
         Dim tmpUCList As New List(Of UCEditProperties)
 
-        If SelectedRow = -1 Then
+        If SelectedRows.Count = 0 Then
             MsgBox("No row is selected.  Select one by enabling its checkbox.")
         Else
             For i = 0 To UCList.Count - 1
-                If Not i = SelectedRow Then
+                If Not SelectedRows.Contains(i) Then
                     tmpUCList.Add(UCList(i))
                 End If
             Next

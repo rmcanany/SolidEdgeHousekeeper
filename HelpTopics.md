@@ -991,7 +991,7 @@ There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`.
 - `EX` stands for 'Expression'.  It is discussed below. 
 - `X` isn't really a search mode.  It means delete the chosen property. 
 
-The properties are processed in the order in the table. To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected row. 
+The properties are processed in the order in the table. To change the order, select one or more rows and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected rows. The list supports multi-select.  Use `CTRL-click` to select individual rows, `Shift-click` to select a range.
 
 You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting, click the down arrow and select it. To remove a setting, select it and click `Delete`. 
 
@@ -1076,7 +1076,7 @@ If renaming a variable, the new name has the same limitations as above.
 
 If exposing a variable, the Expose name defaults to the variable name. You can optionally change it.  The Expose name does not have restrictions like the variable name. 
 
-The variables are processed in the order in the table. To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected row. 
+The properties are processed in the order in the table. To change the order, select one or more rows and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected rows. The list supports multi-select.  Use `CTRL-click` to select individual rows, `Shift-click` to select a range.
 
 You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting, click the down arrow and select it. To remove a setting, select it and click `Delete`. 
 

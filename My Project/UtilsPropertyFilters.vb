@@ -269,7 +269,9 @@ Public Class UtilsPropertyFilters
 
         For Each Variable In VariableTruthValues.Keys
             var = Variable
+            var = $" {var} "
             val = VariableTruthValues(Variable)
+            val = $" {val} "
             Result = Result.Replace(var, val)
         Next
 
@@ -382,6 +384,9 @@ Public Class UtilsPropertyFilters
 
         For i = 1 To Len(s) - 1
             If s(i - 1) = " " Then
+                ' Checks for a letter after a space character in [A-Z]
+                ' and adds '-'
+                ' Meant to change 'AND' to '-AND', 'OR' '-OR', etc.
                 If (Asc(s(i)) >= 65) And (Asc(s(i)) <= 90) Then
                     s1 = $"{s1}-"
                 End If

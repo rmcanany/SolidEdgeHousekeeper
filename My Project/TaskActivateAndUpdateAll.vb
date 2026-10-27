@@ -73,9 +73,6 @@ Public Class TaskActivateAndUpdateAll
                 SEApp.DoIdle()
         End Select
 
-        If UC.GetDocType(SEDoc) = "asm" Then
-        End If
-
         If SEDoc.ReadOnly Then
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else

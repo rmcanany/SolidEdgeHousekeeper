@@ -1606,8 +1606,9 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + "- `X` isn't really a search mode.  It means delete the chosen property. "
 
         HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
-        HelpString += "To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. "
-        HelpString += "The `Delete` button removes the selected row. "
+        HelpString += "To change the order, select one or more rows and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. "
+        HelpString += "The `Delete` button removes the selected rows. "
+        HelpString += "The list supports multi-select.  Use `CTRL-click` to select individual rows, `Shift-click` to select a range."
 
         HelpString += vbCrLf + vbCrLf + "You can save a setup for future use. "
         HelpString += "In the toolbar `Saved Settings` group, enter the name and click `Save`. "

@@ -2,7 +2,21 @@
 
 Public Class UCEditVariables
     Public Property VariableEditor As FormVariableInputEditor
+    'Public Property Selected As Boolean
+
+    Private _Selected As Boolean
     Public Property Selected As Boolean
+        Get
+            Return _Selected
+        End Get
+        Set(value As Boolean)
+            _Selected = value
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                CheckBoxSelect.Checked = value
+            End If
+        End Set
+    End Property
+
     Public Property VariableName As String
     Public Property Formula As String
     Public Property UnitType As String
@@ -57,6 +71,12 @@ Public Class UCEditVariables
 
 
     Public Sub ReconcileFormWithProps()
+
+        ' 20261026
+        ' TODO: This should not be needed if properties had setters
+        ' that also update the form.  See UCEditProperties for an 
+        ' example.
+
         Me.NotifyVariableEditor = False
 
         CheckBoxSelect.Checked = Me.Selected
@@ -81,7 +101,10 @@ Public Class UCEditVariables
 
     Private Sub CheckBoxSelect_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelect.CheckedChanged
         Me.Selected = CheckBoxSelect.Checked
-        Notify()
+        'Notify()
+        If NotifyVariableEditor Then
+            VariableEditor.UCSelectionChanged(Me, ModifierKeys)
+        End If
     End Sub
 
     Private Sub TextBoxVariableName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxVariableName.TextChanged

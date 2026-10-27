@@ -458,9 +458,10 @@ Public Class TaskEditVariables
         HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name. "
         HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "
 
-        HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table. "
-        HelpString += "To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. "
-        HelpString += "The `Delete` button removes the selected row. "
+        HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
+        HelpString += "To change the order, select one or more rows and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. "
+        HelpString += "The `Delete` button removes the selected rows. "
+        HelpString += "The list supports multi-select.  Use `CTRL-click` to select individual rows, `Shift-click` to select a range."
 
         HelpString += vbCrLf + vbCrLf + "You can save a setup for future use. "
         HelpString += "In the toolbar `Saved Settings` group, enter the name and click `Save`. "
