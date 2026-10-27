@@ -373,6 +373,11 @@ Public Class UtilsPropertyFilters
     End Function
 
     Public Function FormulaToPSSyntax(Formula As String) As String
+
+        ' https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logical_operators?view=powershell-7.6
+        ' PowerShell logical operators
+        ' -and, -or, -xor, -not
+
         Dim s As String = Formula.ToUpper.Trim
         Dim s1 As String = ""
 
