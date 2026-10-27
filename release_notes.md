@@ -31,6 +31,7 @@ See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/S
 
 - Changed the name of `Update drawing views` to `Update drawings`.  Added an option to select all parts lists and tables.  Disable to select them individually.
 - For `Check drawings`, added centerlines, weld symbols and several others to the `Detached dimensions or annotations` check.  (Thank you again **@sven-11111!**)
+- Added multi-select for row operations in the `Property Input Editor`  (Thank you **@TeeVar!**)  Did the same for the `Variable Input Editor`.  
 
 ## V2026.3
 
