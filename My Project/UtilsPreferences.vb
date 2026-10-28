@@ -224,14 +224,20 @@ Public Class UtilsPreferences
 
     '###### SE DEFAULT FOLDERS ######
 
-    Public Sub SetSEDefaultFolders(FMain As Form_Main)
+    Public Sub SetSEDefaultFolders(FMain As Form_Main, Splash As FormSplash)
+
+        Dim ShowSplash As Boolean = Splash IsNot Nothing
 
         ' Working directory
+        If ShowSplash Then Splash.UpdateStatus("Getting working directory")
+
         If Not IO.Directory.Exists(FMain.WorkingFilesPath) Then
             FMain.WorkingFilesPath = GetStartupDirectory()
         End If
 
         ' Install directory
+        If ShowSplash Then Splash.UpdateStatus("Getting install directory")
+
         Dim SEInstallData As New SEInstallDataLib.SEInstallData
         Dim SEInstalledPath As String = SEInstallData.GetInstalledPath ' eg C:\Program Files\Siemens\Solid Edge 2025\Program
         If Not SEInstalledPath.Count <= 8 Then
@@ -243,6 +249,8 @@ Public Class UtilsPreferences
         End If
 
         ' Templates
+        If ShowSplash Then Splash.UpdateStatus("Getting templates")
+
         If IO.File.Exists(FMain.AssemblyTemplate) Then  ' Handles 'Nothing' argument correctly.
             FMain.SETemplatePath = IO.Path.GetDirectoryName(FMain.AssemblyTemplate)
         ElseIf IO.File.Exists(FMain.PartTemplate) Then
@@ -260,6 +268,8 @@ Public Class UtilsPreferences
         End If
 
         ' Preferences
+        If ShowSplash Then Splash.UpdateStatus("Getting preferences")
+
         If Not IO.Directory.Exists(FMain.SEPreferencesPath) Then
             If Not SEInstalledPath = GetStartupDirectory() Then  ' Startup directory also has a Preferences directory.
                 If IO.Directory.Exists($"{SEInstalledPath}\Preferences") Then
@@ -273,6 +283,8 @@ Public Class UtilsPreferences
         End If
 
         ' Materials
+        If ShowSplash Then Splash.UpdateStatus("Getting material table")
+
         If Not IO.Directory.Exists(FMain.SEMaterialsPath) Then
             If IO.Directory.Exists($"{FMain.SEPreferencesPath}\Materials") Then
                 FMain.SEMaterialsPath = $"{FMain.SEPreferencesPath}\Materials"
@@ -282,6 +294,8 @@ Public Class UtilsPreferences
         End If
 
         ' LinkMgmt.txt
+        If ShowSplash Then Splash.UpdateStatus("Getting link management file")
+
         If Not IO.File.Exists(FMain.LinkManagementFilename) Then
             If IO.File.Exists($"{FMain.SEPreferencesPath}\LinkMgmt.txt") Then
                 FMain.LinkManagementFilename = $"{FMain.SEPreferencesPath}\LinkMgmt.txt"
@@ -291,6 +305,8 @@ Public Class UtilsPreferences
         End If
 
         ' FastSearchScope.txt
+        If ShowSplash Then Splash.UpdateStatus("Getting fast search scope file")
+
         If Not IO.File.Exists(FMain.FastSearchScopeFilename) Then
             If IO.File.Exists($"{FMain.SEPreferencesPath}\FastSearchScope.txt") Then
                 FMain.FastSearchScopeFilename = $"{FMain.SEPreferencesPath}\FastSearchScope.txt"
@@ -1180,7 +1196,7 @@ Public Class UtilsPreferences
 
 
     '###### VERSION ######
-    Public Sub CheckForNewerVersion(CurrentVersion As String)
+    Public Async Sub CheckForNewerVersion(CurrentVersion As String)
         ' Version example '2024.2' or '2024.2.1' but the last number is currently ignored for this check
         ' tag_name example '"tag_name":"v2024.1"'
 
@@ -1202,9 +1218,20 @@ Public Class UtilsPreferences
         ' ignore bugfix number
 
         Try
-            Dim WC As New System.Net.WebClient
-            WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
-            s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+            'Dim WC As New System.Net.WebClient
+            'WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
+            's = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+
+            Dim Client As New Net.Http.HttpClient
+            Client.Timeout = TimeSpan.FromSeconds(5)
+            Client.DefaultRequestHeaders.UserAgent.ParseAdd("Other")
+
+            's = Await Client.GetStringAsync("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+
+            Dim t = System.Threading.Tasks.Task.Run(Function() Client.GetStringAsync("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest"))
+            If Await System.Threading.Tasks.Task.WhenAny(t, System.Threading.Tasks.Task.Delay(5000)) IsNot t Then Exit Sub
+            s = Await t
+
         Catch ex As Exception
             Exit Sub
         End Try

@@ -147,6 +147,7 @@ Public Class TaskCheckDrawings
         Me.Image = My.Resources.TaskCheckDrawings
         Me.Category = "Check"
         SetColorFromCategory(Me)
+        Me.RequiresForegroundProcessing = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

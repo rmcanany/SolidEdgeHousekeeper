@@ -375,31 +375,37 @@ Public Class UtilsPropertyFilters
     Public Function FormulaToPSSyntax(Formula As String) As String
 
         ' https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logical_operators?view=powershell-7.6
-        ' PowerShell logical operators
-        ' -and, -or, -xor, -not
+        ' PowerShell logical operators: -and, -or, -xor, -not
+
+        ' https://learn.microsoft.com/en-us/dotnet/visual-basic/programming-guide/language-features/operators-and-expressions/logical-and-bitwise-operators
+        ' VB.Net logical operators: AndAlso, OrElse, And, Or, Xor, Not
 
         Dim s As String = Formula.ToUpper.Trim
-        Dim s1 As String = ""
+        'Dim s1 As String = ""
 
-        s = $" {s}"
+        's = $" {s}"
         s = s.Replace("TRUE", "$TRUE")
         s = s.Replace("FALSE", "$FALSE")
+        s = s.Replace("AND", "-AND")
+        s = s.Replace("OR", "-OR")
+        s = s.Replace("NOT", "-NOT")
+        s = s.Replace("XOR", "-XOR")
 
-        s1 = s(0)
+        's1 = s(0)
 
-        For i = 1 To Len(s) - 1
-            If s(i - 1) = " " Then
-                ' Checks for a letter after a space character in [A-Z]
-                ' and adds '-'
-                ' Meant to change 'AND' to '-AND', 'OR' '-OR', etc.
-                If (Asc(s(i)) >= 65) And (Asc(s(i)) <= 90) Then
-                    s1 = $"{s1}-"
-                End If
-            End If
-            s1 = $"{s1}{s(i)}"
-        Next
+        'For i = 1 To Len(s) - 1
+        '    If s(i - 1) = " " Then
+        '        ' Checks for a letter after a space character in [A-Z]
+        '        ' and adds '-'
+        '        ' Meant to change 'AND' to '-AND', 'OR' '-OR', etc.
+        '        If (Asc(s(i)) >= 65) And (Asc(s(i)) <= 90) Then
+        '            s1 = $"{s1}-"
+        '        End If
+        '    End If
+        '    s1 = $"{s1}{s(i)}"
+        'Next
 
-        Return s1.Trim
+        Return s
     End Function
 
 

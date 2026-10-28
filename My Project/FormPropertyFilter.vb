@@ -193,6 +193,7 @@ Public Class FormPropertyFilter
 
         For Each Condition As PropertyFilterCondition In tmpPropertyFilter.Conditions
             NewUC = New UCPropertyFilter(Me)
+
             NewUC.NotifyPropertyFilter = False
 
             NewUC.Variable = Condition.VariableName
@@ -263,33 +264,88 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub UpdateVariablesAndFormula()
-        Dim tmpFormula As String = ""
-        Dim Ascii = 65  ' "A"
 
-        For Each UC As UCPropertyFilter In UCList
-            UC.Variable = Chr(Ascii)
-            If Not UC.PropertyName = "" Then
-                If tmpFormula = "" Then
-                    tmpFormula = Chr(Ascii)
-                Else
-                    tmpFormula = $"{tmpFormula} AND {Chr(Ascii)}"
+        Dim NewWay As Boolean = True
+
+        If NewWay Then
+            'Dim Alpha As String = NumberToAlpha(1)  ' 'A'
+            'Alpha = NumberToAlpha(26)  ' 'Z'
+            'Alpha = NumberToAlpha(27)  ' 'AA'
+            'Alpha = NumberToAlpha(28)  ' 'AB'
+
+            Dim tmpFormula As String = ""
+            Dim Idx As Integer = 1
+
+            For Each UC As UCPropertyFilter In UCList
+                UC.Variable = NumberToAlpha(Idx)
+                If Not UC.PropertyName = "" Then
+                    If tmpFormula = "" Then
+                        tmpFormula = UC.Variable
+                    Else
+                        tmpFormula = $"{tmpFormula} AND {UC.Variable}"
+                    End If
                 End If
-            End If
-            Ascii += 1
-        Next
+                Idx += 1
+            Next
 
-        tmpFormula = $" {tmpFormula} "
+            tmpFormula = $" {tmpFormula} "
 
-        Me.Formula = tmpFormula
-        TextBoxFormula.Text = Me.Formula
+            Me.Formula = tmpFormula
+            TextBoxFormula.Text = Me.Formula
 
-        For Each UC As UCPropertyFilter In UCList
-            If Not UC.PropertyName = "" Then
-                UC.Formula = Me.Formula
-            End If
-        Next
+            For Each UC As UCPropertyFilter In UCList
+                If Not UC.PropertyName = "" Then
+                    UC.Formula = Me.Formula
+                End If
+            Next
+
+        Else
+            Dim tmpFormula As String = ""
+            Dim Ascii = 65  ' "A"
+
+            For Each UC As UCPropertyFilter In UCList
+                UC.Variable = Chr(Ascii)
+                If Not UC.PropertyName = "" Then
+                    If tmpFormula = "" Then
+                        tmpFormula = Chr(Ascii)
+                    Else
+                        tmpFormula = $"{tmpFormula} AND {Chr(Ascii)}"
+                    End If
+                End If
+                Ascii += 1
+            Next
+
+            tmpFormula = $" {tmpFormula} "
+
+            Me.Formula = tmpFormula
+            TextBoxFormula.Text = Me.Formula
+
+            For Each UC As UCPropertyFilter In UCList
+                If Not UC.PropertyName = "" Then
+                    UC.Formula = Me.Formula
+                End If
+            Next
+        End If
 
     End Sub
+
+    Public Function NumberToAlpha(n As Integer) As String
+
+        ' Converts a number to spreadsheet-style letters
+        '  1 ->  'A'
+        ' 26 ->  'Z'
+        ' 27 -> 'AA'
+        ' 28 -> 'AB'
+
+        Dim result As String = ""
+        While n > 0
+            n -= 1
+            Dim remainder As Integer = n Mod 26
+            result = Chr(Asc("A"c) + remainder) & result
+            n \= 26
+        End While
+        Return result
+    End Function
 
     Private Sub UpdateForm(UpdateFormula As Boolean)
 

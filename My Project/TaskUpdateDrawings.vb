@@ -193,6 +193,7 @@ Public Class TaskUpdateDrawings
         Me.Image = My.Resources.TaskUpdateDrawingViews
         Me.Category = "Update"
         SetColorFromCategory(Me)
+        Me.RequiresForegroundProcessing = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

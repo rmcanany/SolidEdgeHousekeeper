@@ -19,6 +19,7 @@ Public Class TaskCheckDrawingPartsList
         Me.Image = My.Resources.TaskCheckDrawingPartsList
         Me.Category = "Check"
         SetColorFromCategory(Me)
+        Me.RequiresForegroundProcessing = True
 
         GenerateTaskControl()
 
