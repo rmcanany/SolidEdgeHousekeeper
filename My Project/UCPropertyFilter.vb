@@ -212,7 +212,10 @@ Public Class UCPropertyFilter
 
     Private Sub CheckBoxSelect_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelected.CheckedChanged
         Me.Selected = CheckBoxSelected.Checked
-        Notify()
+        'Notify()
+        If NotifyPropertyFilter Then
+            PropertyFilter.UCSelectionChanged(Me, ModifierKeys)
+        End If
     End Sub
 
     Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged

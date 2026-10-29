@@ -402,59 +402,110 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub MoveRow(Direction As String)
-        Dim SelectedRow As Integer = GetSelectedRow()
-        Dim tmpUCList As New List(Of UCPropertyFilter)
-        Dim tf As Boolean
+        'Dim SelectedRow As Integer = GetSelectedRow()
+        'Dim tmpUCList As New List(Of UCPropertyFilter)
+        'Dim tf As Boolean
 
-        tf = Direction.ToLower = "up"
-        tf = tf Or Direction.ToLower = "down"
-        If Not tf Then
+        'tf = Direction.ToLower = "up"
+        'tf = tf Or Direction.ToLower = "down"
+        'If Not tf Then
+        '    MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
+        '    Exit Sub
+        'End If
+
+        ''Can't move up from the top
+        'tf = (SelectedRow = 0) And (Direction = "up")
+
+        ''Can't move down from the bottom
+        'Dim Bottom = UCList.Count - 1
+        'tf = tf Or ((SelectedRow >= Bottom) And (Direction = "down"))
+
+        'If Not tf Then
+        '    For i As Integer = 0 To Me.UCList.Count - 1
+
+        '        Select Case Direction
+
+        '            Case "up"
+        '                If i = SelectedRow - 1 Then
+        '                    tmpUCList.Add(Me.UCList(i + 1))
+        '                ElseIf i = SelectedRow Then
+        '                    tmpUCList.Add(Me.UCList(i - 1))
+        '                Else
+        '                    tmpUCList.Add(Me.UCList(i))
+        '                End If
+
+        '            Case "down"
+        '                If i = SelectedRow Then
+        '                    tmpUCList.Add(Me.UCList(i + 1))
+        '                ElseIf i = SelectedRow + 1 Then
+        '                    tmpUCList.Add(Me.UCList(i - 1))
+        '                Else
+        '                    tmpUCList.Add(Me.UCList(i))
+        '                End If
+
+        '            Case Else
+        '                MsgBox($"Direction '{Direction}' not recognized")
+        '        End Select
+
+        '    Next
+
+        '    Me.UCList = tmpUCList
+
+        '    UpdateForm(UpdateFormula:=True)
+        'End If
+
+        If Not (Direction.ToLower = "up" Or Direction.ToLower = "down") Then
             MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
             Exit Sub
         End If
 
-        'Can't move up from the top
-        tf = (SelectedRow = 0) And (Direction = "up")
+        Dim SelectedRows As List(Of Integer) = GetSelectedRows()
 
-        'Can't move down from the bottom
-        Dim Bottom = UCList.Count - 1
-        tf = tf Or ((SelectedRow >= Bottom) And (Direction = "down"))
-
-        If Not tf Then
-            For i As Integer = 0 To Me.UCList.Count - 1
-
-                Select Case Direction
-
-                    Case "up"
-                        If i = SelectedRow - 1 Then
-                            tmpUCList.Add(Me.UCList(i + 1))
-                        ElseIf i = SelectedRow Then
-                            tmpUCList.Add(Me.UCList(i - 1))
-                        Else
-                            tmpUCList.Add(Me.UCList(i))
-                        End If
-
-                    Case "down"
-                        If i = SelectedRow Then
-                            tmpUCList.Add(Me.UCList(i + 1))
-                        ElseIf i = SelectedRow + 1 Then
-                            tmpUCList.Add(Me.UCList(i - 1))
-                        Else
-                            tmpUCList.Add(Me.UCList(i))
-                        End If
-
-                    Case Else
-                        MsgBox($"Direction '{Direction}' not recognized")
-                End Select
-
-            Next
-
-            Me.UCList = tmpUCList
-
-            UpdateForm(UpdateFormula:=True)
+        If SelectedRows.Count = 0 Then
+            MsgBox("No row is selected.  Select one by enabling its checkbox.")
+            Exit Sub
+        End If
+        If Direction.ToLower = "up" And SelectedRows.Contains(0) Then Exit Sub
+        If Direction.ToLower = "down" Then
+            ' Deal with NewRow
+            Dim tmpUC As UCPropertyFilter = UCList(UCList.Count - 1)
+            If tmpUC.PropertyName = "" Then
+                If SelectedRows.Contains(UCList.Count - 2) Then Exit Sub
+            Else
+                If SelectedRows.Contains(UCList.Count - 1) Then Exit Sub
+            End If
         End If
 
+        Dim tmpUCList As New List(Of UCPropertyFilter)
+        For Each UC As UCPropertyFilter In UCList
+            tmpUCList.Add(UC)
+        Next
 
+        If Direction.ToLower = "up" Then
+            For i As Integer = 0 To tmpUCList.Count - 2  ' From top to second-from-bottom
+                Dim NextUC As UCPropertyFilter = tmpUCList(i + 1)
+                If NextUC.Selected Then
+                    Dim tmpUC As UCPropertyFilter = tmpUCList(i)
+                    tmpUCList(i) = NextUC
+                    tmpUCList(i + 1) = tmpUC
+                End If
+            Next
+        Else
+            For i As Integer = tmpUCList.Count - 1 To 1 Step -1 ' From bottom to second-from-top
+                Dim PreviousUC As UCPropertyFilter = tmpUCList(i - 1)
+                Dim PProp = PreviousUC.PropertyName
+                If PreviousUC.Selected Then
+                    Dim tmpUC As UCPropertyFilter = tmpUCList(i)
+                    Dim tmpProp = tmpUC.PropertyName
+                    tmpUCList(i) = PreviousUC
+                    tmpUCList(i - 1) = tmpUC
+                End If
+            Next
+        End If
+
+        Me.UCList = tmpUCList
+
+        UpdateForm(UpdateFormula:=True)
     End Sub
 
     Private Function GetSelectedRow() As Integer
@@ -472,16 +523,30 @@ Public Class FormPropertyFilter
         Return SelectedRow
     End Function
 
+    Private Function GetSelectedRows() As List(Of Integer)
+        Dim SelectedRows As New List(Of Integer)
+
+        Dim i = 0
+        For Each UC As UCPropertyFilter In UCList
+            If UC.Selected Then
+                If UC.Selected Then SelectedRows.Add(i)
+            End If
+            i += 1
+        Next
+
+        Return SelectedRows
+    End Function
+
     Public Sub UCChanged(ChangedUC As UCPropertyFilter)
 
         Dim NeedANewRow As Boolean = True
 
         For Each UC As UCPropertyFilter In UCList
-            If ChangedUC.Selected Then
-                If UC IsNot ChangedUC Then
-                    UC.CheckBoxSelected.Checked = False
-                End If
-            End If
+            'If ChangedUC.Selected Then
+            '    If UC IsNot ChangedUC Then
+            '        UC.CheckBoxSelected.Checked = False
+            '    End If
+            'End If
             If UC.PropertyName = "" Then
                 NeedANewRow = False
             End If
@@ -492,6 +557,42 @@ Public Class FormPropertyFilter
         End If
 
     End Sub
+
+    Public Sub UCSelectionChanged(ChangedUC As UCPropertyFilter, ModifierKeys As Windows.Forms.Keys)
+        Select Case ModifierKeys
+            Case Keys.None
+                For Each UC As UCPropertyFilter In UCList
+                    UC.NotifyPropertyFilter = False
+                    If UC IsNot ChangedUC Then
+                        'UC.CheckBoxSelected.Checked = False
+                        UC.Selected = False
+                    End If
+                    UC.NotifyPropertyFilter = True
+                Next
+            Case Keys.Control
+                ' Nothing to do here
+            Case Keys.Shift
+                Dim SelectedRows As List(Of Integer) = GetSelectedRows()
+                If SelectedRows.Count = 2 Then
+                    Dim tmpUCList As New List(Of UCPropertyFilter)
+                    For Each UC As UCPropertyFilter In UCList
+                        tmpUCList.Add(UC)
+                    Next
+                    Dim IdxStart As Integer = SelectedRows(0)
+                    Dim IdxEnd As Integer = SelectedRows(1)
+                    For i As Integer = IdxStart To IdxEnd
+                        tmpUCList(i).NotifyPropertyFilter = False
+                        tmpUCList(i).Selected = True
+                        tmpUCList(i).NotifyPropertyFilter = True
+                    Next
+                    UCList = tmpUCList
+                End If
+        End Select
+
+        UCChanged(ChangedUC)
+
+    End Sub
+
 
 
     Private Sub FormPropertyFilter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -559,14 +660,31 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub ButtonRowDelete_Click(sender As Object, e As EventArgs) Handles ButtonRowDelete.Click
-        Dim SelectedRow = GetSelectedRow()
+        'Dim SelectedRow = GetSelectedRow()
+        'Dim tmpUCList As New List(Of UCPropertyFilter)
+
+        'If SelectedRow = -1 Then
+        '    MsgBox("No row is selected.  Select one by enabling its checkbox.")
+        'Else
+        '    For i = 0 To UCList.Count - 1
+        '        If Not i = SelectedRow Then
+        '            tmpUCList.Add(UCList(i))
+        '        End If
+        '    Next
+
+        '    UCList = tmpUCList
+
+        '    UpdateForm(UpdateFormula:=True)
+        'End If
+
+        Dim SelectedRows = GetSelectedRows()
         Dim tmpUCList As New List(Of UCPropertyFilter)
 
-        If SelectedRow = -1 Then
+        If SelectedRows.Count = 0 Then
             MsgBox("No row is selected.  Select one by enabling its checkbox.")
         Else
             For i = 0 To UCList.Count - 1
-                If Not i = SelectedRow Then
+                If Not SelectedRows.Contains(i) Then
                     tmpUCList.Add(UCList(i))
                 End If
             Next
