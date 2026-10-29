@@ -65,7 +65,7 @@ Public Class FormPropertyFilter
 
         If Not tf Then
             tf = Form_Main.PropertiesData.Items.Count = 0
-            tf = tf Or Me.FavoritesList.Count = 0
+            'tf = tf Or Me.FavoritesList.Count = 0
         End If
 
         If tf Then
@@ -508,20 +508,20 @@ Public Class FormPropertyFilter
         UpdateForm(UpdateFormula:=True)
     End Sub
 
-    Private Function GetSelectedRow() As Integer
-        Dim SelectedRow As Integer = -1
+    'Private Function GetSelectedRow() As Integer
+    '    Dim SelectedRow As Integer = -1
 
-        Dim i = 0
-        For Each UC As UCPropertyFilter In UCList
-            If UC.Selected Then
-                If UC.Selected Then SelectedRow = i
-                Exit For
-            End If
-            i += 1
-        Next
+    '    Dim i = 0
+    '    For Each UC As UCPropertyFilter In UCList
+    '        If UC.Selected Then
+    '            If UC.Selected Then SelectedRow = i
+    '            Exit For
+    '        End If
+    '        i += 1
+    '    Next
 
-        Return SelectedRow
-    End Function
+    '    Return SelectedRow
+    'End Function
 
     Private Function GetSelectedRows() As List(Of Integer)
         Dim SelectedRows As New List(Of Integer)

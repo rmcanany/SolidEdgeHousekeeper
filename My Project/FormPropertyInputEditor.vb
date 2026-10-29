@@ -445,7 +445,7 @@ Public Class FormPropertyInputEditor
 
         If Not tf Then
             tf = Form_Main.PropertiesData.Items.Count = 0
-            tf = tf Or Me.TemplatePropertyList.Count = 0
+            'tf = tf Or Me.TemplatePropertyList.Count = 0
         End If
 
         If tf Then

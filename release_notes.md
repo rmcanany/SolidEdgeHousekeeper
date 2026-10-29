@@ -31,9 +31,10 @@ See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/S
 
 - Changed the name of `Update drawing views` to `Update drawings`.  Added an option to select all parts lists and tables.  Disable to select them individually.
 - For `Check drawings`, added centerlines, weld symbols and several others to the `Detached dimensions or annotations` check.  (Thank you again **@sven-11111!**)
-- Added multi-select for row operations in the `Property Input Editor`  (Thank you **@TeeVar!**)  Did the same for the `Variable Input Editor`.  
+- Added multi-select for row operations in the `Property Input Editor`  (Thank you **@TeeVar!**)  Did the same for the `Variable Input Editor` and `Property Filter`.  
 - Fixed a regression with `Property Filter` variable substitution.  (Thank you **@Lui10!**).  Also fixed an issue with row naming for filters with more than 26 conditions.
 - Added the `RequiresForegroundProcessing` flag to `Check Drawing Parts List`, `Check Drawings`, and `Update Drawings`.  (Thank you again **@Lui10!**)
+- Fixed an issue where Property Favorites could not be blank for `Edit Properties` or `Property Filters`.
 
 ## V2026.3
 

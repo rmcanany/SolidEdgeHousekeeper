@@ -433,9 +433,7 @@ i.e., `A AND (B OR C)`.
 
 Prior to Housekeeper V2024.2, the formula, a boolean expression, was parsed and evaluated using the .NET built-in `VBScript` engine.  Oversimplifying a bit, that is no longer supported on 64-bit operating systems.
 
-The program now uses `PowerShell` to do the evaluation.  The communication code is built into .NET, but `PowerShell` itself has to be installed separately.  On recent versions of Windows (maybe back to Win7, not sure) it comes bundled with the OS, so it shouldn't be an issue.
-
-If there is an issue, like `PowerShell` isn't installed, you won't get an error message.  Instead, you'll get no files matching your property search.  If you know that's wrong, please mention it on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).  There may be other more .NET-native ways of evaluating the formula.
+The program now uses `PowerShell` to do the evaluation.  There is an internal dotnet library that exposes `PowerShell` functionality; that is the default.  You can use your own locally-installed version if desired.  Set your choice on the **Configuration Tab -- General Page**.
 
 </details>
 
@@ -477,6 +475,14 @@ As mentioned above, this is a situation where the option `Include Draft file mod
 <details><summary><h4 style="margin:0px; display:inline-block">Saved Settings</h4></summary>
 
 The filters are saved in `property_filter_saved_settings.json` in the `Preferences` directory under the root directory of `Housekeeper.exe`. If desired, you can create a master copy of the file and share it with others. 
+
+</details>
+
+<details><summary><h4 style="margin:0px; display:inline-block">Row Tools</h4></summary>
+
+The filters are processed in the order in the table. To change the order, select one or more rows and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected rows. 
+
+The list supports multi-select.  Use `CTRL-click` to select individual rows, `Shift-click` to select a range.
 
 </details>
 
