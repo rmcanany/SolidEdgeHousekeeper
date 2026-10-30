@@ -41,6 +41,7 @@ Partial Class FormPropertyFilter
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonShowAllProps = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ButtonOptions = New System.Windows.Forms.ToolStripButton()
         Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
         Me.PanelHeader = New System.Windows.Forms.Panel()
         Me.ExTableLayoutPanelHeader = New Housekeeper.ExTableLayoutPanel()
@@ -56,7 +57,6 @@ Partial Class FormPropertyFilter
         Me.TextBoxFormula = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.ButtonHelp2 = New System.Windows.Forms.Button()
-        Me.ButtonOptions = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
@@ -212,6 +212,16 @@ Partial Class FormPropertyFilter
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
         Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
         '
+        'ButtonOptions
+        '
+        Me.ButtonOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonOptions.Image = Global.Housekeeper.My.Resources.Resources.config
+        Me.ButtonOptions.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonOptions.Name = "ButtonOptions"
+        Me.ButtonOptions.Size = New System.Drawing.Size(23, 22)
+        Me.ButtonOptions.Text = "ToolStripButton1"
+        Me.ButtonOptions.ToolTipText = "Options"
+        '
         'ButtonHelp
         '
         Me.ButtonHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
@@ -360,6 +370,7 @@ Partial Class FormPropertyFilter
         '
         Me.TextBoxFormula.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFormula.BackColor = System.Drawing.Color.White
         Me.TextBoxFormula.Enabled = False
         Me.TextBoxFormula.Location = New System.Drawing.Point(293, 12)
         Me.TextBoxFormula.Name = "TextBoxFormula"
@@ -385,16 +396,6 @@ Partial Class FormPropertyFilter
         Me.ButtonHelp2.TabIndex = 28
         Me.ButtonHelp2.Text = "Help"
         Me.ButtonHelp2.UseVisualStyleBackColor = True
-        '
-        'ButtonOptions
-        '
-        Me.ButtonOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonOptions.Image = Global.Housekeeper.My.Resources.Resources.config
-        Me.ButtonOptions.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonOptions.Name = "ButtonOptions"
-        Me.ButtonOptions.Size = New System.Drawing.Size(23, 22)
-        Me.ButtonOptions.Text = "ToolStripButton1"
-        Me.ButtonOptions.ToolTipText = "Options"
         '
         'FormPropertyFilter
         '

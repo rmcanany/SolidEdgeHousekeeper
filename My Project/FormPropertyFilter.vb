@@ -268,10 +268,8 @@ Public Class FormPropertyFilter
         Dim NewWay As Boolean = True
 
         If NewWay Then
-            'Dim Alpha As String = NumberToAlpha(1)  ' 'A'
-            'Alpha = NumberToAlpha(26)  ' 'Z'
-            'Alpha = NumberToAlpha(27)  ' 'AA'
-            'Alpha = NumberToAlpha(28)  ' 'AB'
+
+            Dim PreviousFormula As String = Me.Formula.ToUpper.Trim
 
             Dim tmpFormula As String = ""
             Dim Idx As Integer = 1
@@ -280,9 +278,9 @@ Public Class FormPropertyFilter
                 UC.Variable = NumberToAlpha(Idx)
                 If Not UC.PropertyName = "" Then
                     If tmpFormula = "" Then
-                        tmpFormula = UC.Variable
+                        tmpFormula = UC.Variable  '                         '' -> 'A'
                     Else
-                        tmpFormula = $"{tmpFormula} AND {UC.Variable}"
+                        tmpFormula = $"{tmpFormula} AND {UC.Variable}"  '   'A' -> 'A AND B'
                     End If
                 End If
                 Idx += 1
@@ -298,6 +296,29 @@ Public Class FormPropertyFilter
                     UC.Formula = Me.Formula
                 End If
             Next
+
+
+            '###### Check if a previously customized formula was replaced ######
+
+            If Not Me.Formula.Trim.Count > 1 Then  ' '' or 'A'
+                TextBoxFormula.BackColor = Color.White
+
+            ElseIf PreviousFormula.Count > 1 Then  ' Skips '' or 'A'
+                Dim WasCustomFormula As Boolean = False
+                Dim LogicalOperators As New List(Of String)
+                LogicalOperators.AddRange({"OR", "XOR", "NOT", "(", ")"})
+                For Each LogicalOperator As String In LogicalOperators
+                    If PreviousFormula.Contains(LogicalOperator) Then
+                        WasCustomFormula = True
+                        Exit For
+                    End If
+                Next
+                If WasCustomFormula Then
+                    TextBoxFormula.BackColor = Color.Orange
+                Else
+                    TextBoxFormula.BackColor = Color.White
+                End If
+            End If
 
         Else
             Dim tmpFormula As String = ""
@@ -776,6 +797,8 @@ Public Class FormPropertyFilter
 
     Private Sub ToolStripLabel3_Click(sender As Object, e As EventArgs) Handles ToolStripLabel3.Click
 
+        TextBoxFormula.BackColor = Color.White
+
         Dim FTP As New FormTextPrompt
         FTP.Text = "Edit Formula"
         FTP.TextBoxInput.Text = TextBoxFormula.Text
@@ -789,6 +812,8 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub ButtonEditFormula_Click(sender As Object, e As EventArgs) Handles ButtonEditFormula.Click
+
+        TextBoxFormula.BackColor = Color.White
 
         Dim FTP As New FormTextPrompt
         FTP.Text = "Edit Formula"

@@ -15,7 +15,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.4
 
-### Check filename
+### Check Filename
 
 Added an option to require a match of all draft models.  (Thank you **@sven-11111!**)
 
@@ -32,9 +32,9 @@ See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/S
 - Changed the name of `Update drawing views` to `Update drawings`.  Added an option to select all parts lists and tables.  Disable to select them individually.
 - For `Check drawings`, added centerlines, weld symbols and several others to the `Detached dimensions or annotations` check.  (Thank you again **@sven-11111!**)
 - Added multi-select for row operations in the `Property Input Editor`  (Thank you **@TeeVar!**)  Did the same for the `Variable Input Editor` and `Property Filter`.  
-- Fixed a regression with `Property Filter` variable substitution.  (Thank you **@Lui10!**).  Also fixed an issue with row naming for filters with more than 26 conditions.
+- Fixed a regression with `Property Filter` variable substitution.  (Thank you **@Lui10!**).  Fixed an issue with row naming for filters with more than 26 conditions.  Added a visual indicator when a custom formula is replaced with the default.
 - Added the `RequiresForegroundProcessing` flag to `Check Drawing Parts List`, `Check Drawings`, and `Update Drawings`.  (Thank you again **@Lui10!**)
-- Fixed an issue where Property Favorites could not be blank for `Edit Properties` or `Property Filters`.
+- Fixed an issue where `Property Favorites` could not be blank for `Edit Properties` or `Property Filters`.
 
 ## V2026.3
 

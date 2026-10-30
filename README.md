@@ -426,8 +426,9 @@ In the image above, sticking with the default formula means you would get all pa
 
 **Editing the Formula**
 
-You can optionally change the formula. Click the `Edit Formula` button in the toolbar and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
-i.e., `A AND (B OR C)`.
+You can optionally change the formula. Click the `Edit Formula` button in the toolbar and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, i.e., `A AND (B OR C)`.
+
+Note, if any Conditions are added, removed, or rearranged, the program does not try to fix the customized formula.  It simply replaces it with the default.  If this occurs, the formula textbox is colored orange to let you know.
 
 **One More Thing About the Formula**
 
