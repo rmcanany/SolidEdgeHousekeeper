@@ -51,6 +51,8 @@ In any case, the program only receives information; it does not send anything.
 
 <details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Cloned Code</h3></summary>
 
+This section if for those who obtained Housekeeper by cloning or forking the repo on GitHub.  No executables are included; you generate them by rebuilding the solution.
+
 #### Cannot See Files in Solution Explorer
 
 In Visual Studio, `My Project`, where most of the source code resides, sometimes cannot be expanded.  Enabling the `Show All Files` option should fix it.
@@ -207,26 +209,34 @@ Possible answers for each question.
 - **A** Include Model files: YES, Include Draft file: NO
 - **B** Include Model files: NO, Include Draft file: YES
 - **C** Include Model files: YES, Include Draft file: YES
+- **D** Include Model files: NO, Include Draft file: NO  (This is an error.  Housekeeper will make you fix it.)
 
 **Questions**
 - **1.** You want to find all files with `%{System.Project Name} = 7481`.  That property comes from your models.  It is not populated in drawing files.  
 - **2.** Same as above, but you want all files *EXCEPT* `%{System.Project Name} = 7481`.
-- **3.** You want to find all `Released` files (ie `%{System.Status} = 5`).  A characteristic of your system is that you can have a `Released` model, while its drawing can still be `In Work`.
-- **4.** You want to exclude files that have `SomeText` in the file name.  You set up the filter like so:
+- **3.** Similar to #1, except this time the drafts *do* have properties.  You want to find drafts where their project name does not match the model project name.  (Common with PLM systems.)
+- **4.** You want to find all `Released` files (ie `%{System.Status} = 5`).  A characteristic of your system is that you can have a `Released` model, while its drawing can still be `In Work`.
+- **5.** You want to exclude files that have `SomeText` in the file name.  You set up the filter like so:
 ```
-       A System.File Name contains SomeText
+       A %{System.File Name} contains SomeText
        Filter Formula NOT A
 ```
 
 **Answers**
 - **1.** **A** or **C**.  The Draft files don't have the property, so will never match.  Only the model files matter.
 - **2.** **A**.  With the negation, the Draft files matter.  They will always return `False`.  `NOT False` is `True`, meaning you will always get a match.
-- **3.** **B**.  If you check the drawing's models, and they are `Released`, you will get a match even if the drawing itself is still `In Work`.
-- **4.** Depends.
+- **3.** **B**.  You're only checking draft files.  Yes, you need to access model properties, but only to compare its value with the draft file.  You would set up the filter like so (Note the `|R1` in the value field):
+```
+       A %{System.Project Name} is_exactly %{System.Project Name|R1}
+       Filter Formula NOT A
+```
+- **4.** **B**.  If you check the drawing's models, and they are `Released`, you will get a match even if the drawing itself is still `In Work`.
+- **5.** Depends.
   - **B** or **C** if the draft and model have the same name.
   - **B** if they don't.
 
- 
+ So, yeah, it can get tricky.  Sorry about the quiz, by the way.
+
  </details>
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">TASK-SPECIFIC TIPS</h2></summary>

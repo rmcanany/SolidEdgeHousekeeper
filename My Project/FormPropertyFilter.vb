@@ -244,6 +244,9 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub FormatFormula(tmpFormula As String)
+        ' Formats tmpFormula to be compatible with the boolean parsing function.
+        ' Sets Me.Formula and TextBoxFormula.Text afterwards.
+
         Dim s = tmpFormula.ToUpper
 
         s = s.Replace("(", " ( ")
@@ -286,10 +289,12 @@ Public Class FormPropertyFilter
                 Idx += 1
             Next
 
-            tmpFormula = $" {tmpFormula} "
+            'tmpFormula = $" {tmpFormula} "
 
-            Me.Formula = tmpFormula
-            TextBoxFormula.Text = Me.Formula
+            'Me.Formula = tmpFormula
+            'TextBoxFormula.Text = Me.Formula
+
+            FormatFormula(tmpFormula)  ' Formats for parsing function, updates Me.Formula and TextBoxFormula.Text
 
             For Each UC As UCPropertyFilter In UCList
                 If Not UC.PropertyName = "" Then
@@ -336,10 +341,12 @@ Public Class FormPropertyFilter
                 Ascii += 1
             Next
 
-            tmpFormula = $" {tmpFormula} "
+            'tmpFormula = $" {tmpFormula} "
 
-            Me.Formula = tmpFormula
-            TextBoxFormula.Text = Me.Formula
+            'Me.Formula = tmpFormula
+            'TextBoxFormula.Text = Me.Formula
+
+            FormatFormula(tmpFormula)  ' Formats for parsing, updates Me.Formula and TextBoxFormula.Text
 
             For Each UC As UCPropertyFilter In UCList
                 If Not UC.PropertyName = "" Then
@@ -796,19 +803,7 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub ToolStripLabel3_Click(sender As Object, e As EventArgs) Handles ToolStripLabel3.Click
-
-        TextBoxFormula.BackColor = Color.White
-
-        Dim FTP As New FormTextPrompt
-        FTP.Text = "Edit Formula"
-        FTP.TextBoxInput.Text = TextBoxFormula.Text
-        FTP.LabelPrompt.Text = "Edit formula"
-        Dim Result = FTP.ShowDialog()
-
-        If Result = DialogResult.OK Then
-            FormatFormula(FTP.TextBoxInput.Text)
-        End If
-
+        ButtonEditFormula.PerformClick()
     End Sub
 
     Private Sub ButtonEditFormula_Click(sender As Object, e As EventArgs) Handles ButtonEditFormula.Click
