@@ -7,16 +7,16 @@
 
 # Tips and Tricks
 
-This is a compilation of user situations where Housekeeper doesn't seem to be acting right.  The program can be tricky to use in places.  
+This is a compilation of user-reported situations where Housekeeper doesn't seem to be acting right.  The program can be tricky to use in places.  
 
-It can also not act right for real.  In those cases, please raise an issue on [<ins>**GitHub**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
+Housekeeper can also not act right for real.  In those cases, congratulations you found a bug!  For those, please raise an issue on [<ins>**GitHub**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).  Chances are, if it's not working for you, it's not working for others as well.  Also, doing so will make you *famous*!!  (It'll get your name in the project's [<ins>**Credits Section**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#credits), anyway.  That's a start, right?)
 
 <details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">INSTALLATION AND FIRST TIME USE</h2></summary>
 
 For an overview, see the [<ins>**Installation Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#installation)
 
 
-<details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Released Code</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Released Code</h3></summary>
 
 This section if for those who obtained Housekeeper in a `*.zip` file from the `Releases` page on GitHub.
 
@@ -38,18 +38,7 @@ That may mean the Solid Edge COM objects have become unregistered.  A quick way 
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Internet Access</h3></summary>
-
-Not everyone wants their programs to access the internet.  There are two places Housekeeper tries.  One is when you click a Help button; the other is when checking for a newer version.
-
-You can disable the version check on the **Configuration Tab -- General Page**.  It is not possible to disable the Help buttons at this time.  However if you don't click one, it will not attempt to open it.
-
-In any case, the program only receives information; it does not send anything.
-
-</details>
-
-
-<details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Cloned Code</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Cloned Code</h3></summary>
 
 This section if for those who obtained Housekeeper by cloning or forking the repo on GitHub.  No executables are included; you generate them by rebuilding the solution.
 
@@ -90,17 +79,28 @@ like so: `$(MSBuildProgramFiles32)\Microsoft\Framework\.NETFramework\v4.7.2\`
 
 </details>
 
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Internet Access</h3></summary>
+
+Not everyone wants their programs to access the internet.  There are two places Housekeeper tries.  One is when you click a Help button; the other is when checking for a newer version.
+
+You can disable the version check on the **Configuration Tab -- General Page**.  It is not possible to disable the Help buttons at this time.  However if you don't click one, it will not attempt to open it.
+
+In any case, the program only receives information; it does not send anything.
+
 </details>
 
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">FILE LIST</h2></summary>
+</details>
+
+
+<details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">FILE LIST</h2></summary>
 
 For an overview, see the [<ins>**File Selection Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#file-selection)
 
 
-<details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Missing Files</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Missing Files</h3></summary>
 
-If you selected a source for files, but no files are displayed, you might simply need to update the list.  The `Update` button is on the selection toolbar at the top of the Home page.
+If you selected a source for files, but none are displayed, you might simply need to update the list.  The `Update` button is on the selection toolbar at the top of the Home page.
 
 ![](My%20Project/media/selection_toolbar.png)
 
@@ -122,7 +122,7 @@ The sorting options are on the **Configuration Tab -- Sorting Page**.  `Dependen
 
 </details>
 
-<details open><summary><h3 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Top Level Assembly</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Top Level Assembly</h3></summary>
 
 For an overview, see the [<ins>**Top Level Assembly Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#select-by-top-level-assembly)
 
@@ -144,7 +144,9 @@ Say your project has the structure below, and you want to work on Sub_01.asm.  M
         ...
 ```
 
-You would use the highlighted button to select additional top-level folders:
+To tell the program you want to work on `Sub_01.asm`, click the `Top level assy` button.  It will add the file to the source list along with its parent directory (unless you disabled that option.)  
+
+To get the additional top-level folders, use the button highlighted in the following image:
 
 ![](My%20Project/media/tips_tla_folders.png)
 
@@ -158,7 +160,7 @@ Enable the option, then update the file list to initiate the search.  If any suc
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Importing Lists</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Importing Lists</h3></summary>
 
 A list contains the names of files to be processed.  It accepts `Excel`, `*.txt`, `*.csv`, and `*.tsv` file types.
 
@@ -168,11 +170,11 @@ The file names must include the full path.  So `C:\Projects\Project123\Part1.dft
 
 </details>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">FILTERING</h2></summary>
+<details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">FILTERING</h2></summary>
 
 For an overview, see the [<ins>**Filtering Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#filtering)
 
-#### Detecting if a Property Exists in a File
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Detecting if a Property Exists in a File</h3></summary>
 
 You may need to find files that have a given property, even if you don't care what its value is.
 
@@ -180,7 +182,10 @@ You may need to find files that have a given property, even if you don't care wh
 
 A wildcard match for `*` will match every file that contains that property and exclude all others.  If instead you want every file that *does not* contain the property, use `Edit Formula` to set it to `Not A`.
 
-#### Property Filter Not Finding Files
+</details>
+
+
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Property Filter Not Finding Files</h3></summary>
 
 There are plenty of reasons this could happen.  Here's a common one.
 
@@ -193,9 +198,11 @@ Let's say you wanted to find all files with Document Numbers containing `Client_
 
 It finds nothing.  The filter formula is to blame.  In this situation, rather than `A AND B`, you need `A OR B`.
 
-#### Draft Files and Property Filter
+</details>
 
-This is the options page for Property Filters.  The toolbar button with the wrench icon opens it.  It needs some explaining.
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Draft Files and Property Filter</h3></summary>
+
+This probably causes more confusion than everything else combined.  Here is the options page for Property Filters.  (The toolbar button with the wrench icon opens it.)  It needs some explaining.
 
 ![](My%20Project/media/tips_property_filter_options.png)
 
@@ -209,12 +216,12 @@ Possible answers for each question.
 - **A** Include Model files: YES, Include Draft file: NO
 - **B** Include Model files: NO, Include Draft file: YES
 - **C** Include Model files: YES, Include Draft file: YES
-- **D** Include Model files: NO, Include Draft file: NO  (This is an error.  Housekeeper will make you fix it.)
+- **D** Include Model files: NO, Include Draft file: NO  (*HINT*: This an error.)
 
 **Questions**
 - **1.** You want to find all files with `%{System.Project Name} = 7481`.  That property comes from your models.  It is not populated in drawing files.  
 - **2.** Same as above, but you want all files *EXCEPT* `%{System.Project Name} = 7481`.
-- **3.** Similar to #1, except this time the drafts *do* have properties.  You want to find drafts where their project name does not match the model project name.  (Common with PLM systems.)
+- **3.** Similar to #1, except this time, because your PLM requires it, the drafts *do* have properties.  You want to find drafts where the project name does not match the model project name.
 - **4.** You want to find all `Released` files (ie `%{System.Status} = 5`).  A characteristic of your system is that you can have a `Released` model, while its drawing can still be `In Work`.
 - **5.** You want to exclude files that have `SomeText` in the file name.  You set up the filter like so:
 ```
@@ -237,11 +244,15 @@ Possible answers for each question.
 
  So, yeah, it can get tricky.  Sorry about the quiz, by the way.
 
- </details>
+</details>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">TASK-SPECIFIC TIPS</h2></summary>
+</details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Edit Properties</h3></summary>
+<details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">TASK-SPECIFIC TIPS</h2></summary>
+
+For an overview of any command, click the help button on its options panel.
+
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Edit Properties</h3></summary>
 
 For an overview, see the [<ins>**Edit Properties Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#edit-properties)
 
@@ -277,7 +288,7 @@ There are two operating modes -- `Remove` and `RemoveAllExcept`.  They are discu
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Update Material from Material Table</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Update Material from Material Table</h3></summary>
 
 For an overview, see the [<ins>**Update Material from Material Table Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#update-material-from-material-table)
 
@@ -289,7 +300,7 @@ SE doesn't care which Material Table contains the file's material, as long as on
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Save Model/Drawing As</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Save Model/Drawing As</h3></summary>
 
 For an overview, see the [<ins>**Save Drawing As Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#save-drawing-as)
 
@@ -297,9 +308,43 @@ For an overview, see the [<ins>**Save Drawing As Help Topic**<ins>](https://gith
 
 You can configure the Task List with multiple copies of the same command, then configure each as needed.  See the [<ins>**Customizing the Task Tab Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#customizing) for details.
 
+#### Save to Different Directories Based on File Properties
+
+![SaveModelAs](My%20Project/media/task_save_model_as.png)
+
+You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
+- `Project %{System.Project Name}` 
+- `%{System.Material}\%{System.Sheet Metal Gage}` 
+
+For the former, you will get something like this:
+
+```
+    - CAD
+        + Project 7477
+        + Project 7481
+        ...
+```
+
+And for the latter:
+
+```
+    - CAD
+        - STEEL
+            - 10 GAGE
+                BRACKET UPPER.stp
+                MOTOR MOUNT.stp
+                ...
+            + 16 GAGE
+        - STAINLESS
+            + 10 GAGE
+            + 16 GAGE
+            + 22 GAGE
+        ...
+```
+
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Print</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Print</h3></summary>
 
 For an overview, see the [<ins>**Print Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#print)
 
@@ -311,10 +356,11 @@ See the [<ins>**Customizing the Task Tab Help Topic**<ins>](https://github.com/r
 
 </details>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">HOUSEKEEPER EXTERNAL PROGRAMS</h2></summary>
+<details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">HOUSEKEEPER EXTERNAL PROGRAMS</h2></summary>
 
 Housekeeper doesn't do *everything*.  That's on purpose.  Some tasks are very narrowly focused, only needed for one time use, etc.
 
 For those, there is a separate GitHub repo, [<ins>**Housekeeper External Programs**<ins>](https://github.com/rmcanany/HousekeeperExternalPrograms).  It has a bunch of one-off type programs.  You run them with the [<ins>**Run External Program**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) command.
+
 
 </details>

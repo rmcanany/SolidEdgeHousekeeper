@@ -639,7 +639,6 @@ Public Class TaskUpdateDrawings
         Return tmpTLPOptions
     End Function
 
-
     Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then

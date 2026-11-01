@@ -1310,13 +1310,14 @@ Checks draft files for various problems.
 ![CheckDrawings](My%20Project/media/task_check_drawings.png)
 
 The options are: 
-- `Drawing views out of date`: Checks if any drawing views, and associated models, are not up to date. 
-- `Out of date drawing tables`: Checks Parts Lists, Block Tables, and Connector Tables for an out-of-date status. Hole Tables, Bend Tables, and User Tables can be updated by `Update drawing views`, but the Solid Edge API does not expose an equivalent out-of-date status for those table types. 
-- `Detached dimensions or annotations`: Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing. 
+- `Check all`: Selects all items for processing.  Disable to select them individually.
+- `Out of date drawing views`: Checks if any drawing views, and associated models, are not up to date. 
+- `All detached dimensions and annotations`: Selects all items for processing.  Disable to select them individually. The choices include dimensions, callouts, etc.  Each is checked to see if they are attached to geometry in the drawing. 
+- `All out of date tables`: Selects all items for processing.  Disable to select them individually. The choices include parts lists, hole tables, etc.  The program is currently unable to process bend or user tables. 
 - `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
-- `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. 
-- `Overridden dimensions`: Checks if any dimensions are not to scale, or have the value hidden. 
-- `Sheet scale not linked to a drawing view`: Checks what it says. 
+- `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. This is usually fine, but can sometimes be used to disguise sloppy modeling. It's especially handy if you didn't create the drawing originally. 
+- `Overridden or hidden dimension values`: Checks if any dimensions are not to scale, or have the value hidden. As above, useful as a sloppy modeling detector. 
+- `Sheet scale not linked to a drawing view`: Checks if the scale property of the sheet itself is tied to a drawing view. 
 
 </details>
 
