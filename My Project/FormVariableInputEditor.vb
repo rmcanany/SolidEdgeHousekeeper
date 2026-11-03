@@ -8,6 +8,8 @@ Public Class FormVariableInputEditor
     Public Property HelpURL As String
     Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
 
+    Private Property MultiselectAnchorIdx As Integer
+
 
     Public Sub New()
 
@@ -238,6 +240,9 @@ Public Class FormVariableInputEditor
         Next
 
         If Direction.ToLower = "up" Then
+
+            If Not MultiselectAnchorIdx = -1 Then MultiselectAnchorIdx -= 1
+
             For i As Integer = 0 To tmpUCList.Count - 2  ' From top to second-from-bottom
                 Dim NextUC As UCEditVariables = tmpUCList(i + 1)
                 If NextUC.Selected Then
@@ -247,6 +252,9 @@ Public Class FormVariableInputEditor
                 End If
             Next
         Else
+
+            If Not MultiselectAnchorIdx = -1 Then MultiselectAnchorIdx += 1
+
             For i As Integer = tmpUCList.Count - 1 To 1 Step -1 ' From bottom to second-from-top
                 Dim PreviousUC As UCEditVariables = tmpUCList(i - 1)
                 Dim PProp = PreviousUC.VariableName
@@ -293,16 +301,25 @@ Public Class FormVariableInputEditor
         Return SelectedRows
     End Function
 
+    Private Function GetUCIdx(UC As UCEditVariables) As Integer
+        Dim Idx As Integer
+        For i As Integer = 0 To UCList.Count - 1
+            Dim tmpUC As UCEditVariables = UCList(i)
+            If tmpUC Is UC Then
+                Idx = i
+                Exit For
+            End If
+        Next
+        Return Idx
+    End Function
+
+
+
     Public Sub UCChanged(ChangedUC As UCEditVariables)
 
         Dim NeedANewRow As Boolean = True
 
         For Each UC As UCEditVariables In UCList
-            'If ChangedUC.Selected Then
-            '    If UC IsNot ChangedUC Then
-            '        UC.CheckBoxSelect.Checked = False
-            '    End If
-            'End If
             If UC.VariableName = "" Then
                 NeedANewRow = False
             End If
@@ -317,37 +334,53 @@ Public Class FormVariableInputEditor
     Public Sub UCSelectionChanged(ChangedUC As UCEditVariables, ModifierKeys As Windows.Forms.Keys)
         Select Case ModifierKeys
             Case Keys.None
-                For Each UC As UCEditVariables In UCList
-                    'If ChangedUC.Selected Then
-                    '    If UC IsNot ChangedUC Then
-                    '        UC.CheckBoxSelected.Checked = False
-                    '    End If
-                    'End If
-                    UC.NotifyVariableEditor = False
-                    If UC IsNot ChangedUC Then
-                        'UC.CheckBoxSelected.Checked = False
-                        UC.Selected = False
+                MultiselectAnchorIdx = -1
+                Dim ChangedUCIdx As Integer = GetUCIdx(ChangedUC)
+
+                For i As Integer = 0 To UCList.Count - 1
+                    Dim tmpUC As UCEditVariables = UCList(i)
+                    tmpUC.NotifyVariableEditor = False
+                    If i = ChangedUCIdx Then
+                        If ChangedUC.Selected Then
+                            MultiselectAnchorIdx = ChangedUCIdx
+                        End If
+                    Else
+                        tmpUC.Selected = False
                     End If
-                    UC.NotifyVariableEditor = True
+                    tmpUC.NotifyVariableEditor = True
                 Next
+
             Case Keys.Control
+                MultiselectAnchorIdx = -1
                 ' Nothing to do here
+
             Case Keys.Shift
-                Dim SelectedRows As List(Of Integer) = GetSelectedRows()
-                If SelectedRows.Count = 2 Then
-                    Dim tmpUCList As New List(Of UCEditVariables)
-                    For Each UC As UCEditVariables In UCList
-                        tmpUCList.Add(UC)
-                    Next
-                    Dim IdxStart As Integer = SelectedRows(0)
-                    Dim IdxEnd As Integer = SelectedRows(1)
-                    For i As Integer = IdxStart To IdxEnd
-                        tmpUCList(i).NotifyVariableEditor = False
-                        tmpUCList(i).Selected = True
-                        tmpUCList(i).NotifyVariableEditor = True
-                    Next
-                    UCList = tmpUCList
+                If Not MultiselectAnchorIdx = -1 Then
+                    Dim ChangedUCIDx As Integer = GetUCIdx(ChangedUC)
+                    If Not MultiselectAnchorIdx = ChangedUCIDx Then
+                        Dim IdxStart As Integer
+                        Dim IdxEnd As Integer
+                        If ChangedUCIDx > MultiselectAnchorIdx Then
+                            IdxStart = MultiselectAnchorIdx
+                            IdxEnd = ChangedUCIDx
+                        Else
+                            IdxStart = ChangedUCIDx
+                            IdxEnd = MultiselectAnchorIdx
+                        End If
+
+                        For i As Integer = 0 To UCList.Count - 1
+                            Dim tmpUC As UCEditVariables = UCList(i)
+                            tmpUC.NotifyVariableEditor = False
+                            If i >= IdxStart And i <= IdxEnd Then
+                                tmpUC.Selected = True
+                            Else
+                                tmpUC.Selected = False
+                            End If
+                            tmpUC.NotifyVariableEditor = True
+                        Next
+                    End If
                 End If
+
         End Select
 
         UCChanged(ChangedUC)
@@ -436,29 +469,15 @@ Public Class FormVariableInputEditor
     End Sub
 
     Private Sub ButtonDeleteRow_Click(sender As Object, e As EventArgs) Handles ButtonDeleteRow.Click
-        'Dim SelectedRow = GetSelectedRow()
-        'Dim tmpUCList As New List(Of UCEditVariables)
-
-        'If SelectedRow = -1 Then
-        '    MsgBox("No row is selected.  Select one by enabling its checkbox.")
-        'Else
-        '    For i = 0 To UCList.Count - 1
-        '        If Not i = SelectedRow Then
-        '            tmpUCList.Add(UCList(i))
-        '        End If
-        '    Next
-
-        '    UCList = tmpUCList
-
-        '    UpdateForm()
-        'End If
-
         Dim SelectedRows = GetSelectedRows()
         Dim tmpUCList As New List(Of UCEditVariables)
 
         If SelectedRows.Count = 0 Then
             MsgBox("No row is selected.  Select one by enabling its checkbox.")
         Else
+
+            MultiselectAnchorIdx = -1
+
             For i = 0 To UCList.Count - 1
                 If Not SelectedRows.Contains(i) Then
                     tmpUCList.Add(UCList(i))

@@ -36,6 +36,9 @@ Public Class FormPropertyFilter
     Public Property PropertyFilterIncludeDraftModel As Boolean
     Public Property PropertyFilterIncludeDraftItself As Boolean
 
+    Private Property MultiselectAnchorIdx As Integer
+
+
 
     Public Sub New()
 
@@ -510,6 +513,9 @@ Public Class FormPropertyFilter
         Next
 
         If Direction.ToLower = "up" Then
+
+            If Not MultiselectAnchorIdx = -1 Then MultiselectAnchorIdx -= 1
+
             For i As Integer = 0 To tmpUCList.Count - 2  ' From top to second-from-bottom
                 Dim NextUC As UCPropertyFilter = tmpUCList(i + 1)
                 If NextUC.Selected Then
@@ -519,6 +525,9 @@ Public Class FormPropertyFilter
                 End If
             Next
         Else
+
+            If Not MultiselectAnchorIdx = -1 Then MultiselectAnchorIdx += 1
+
             For i As Integer = tmpUCList.Count - 1 To 1 Step -1 ' From bottom to second-from-top
                 Dim PreviousUC As UCPropertyFilter = tmpUCList(i - 1)
                 Dim PProp = PreviousUC.PropertyName
@@ -565,16 +574,25 @@ Public Class FormPropertyFilter
         Return SelectedRows
     End Function
 
+    Private Function GetUCIdx(UC As UCPropertyFilter) As Integer
+        Dim Idx As Integer
+        For i As Integer = 0 To UCList.Count - 1
+            Dim tmpUC As UCPropertyFilter = UCList(i)
+            If tmpUC Is UC Then
+                Idx = i
+                Exit For
+            End If
+        Next
+        Return Idx
+    End Function
+
+
+
     Public Sub UCChanged(ChangedUC As UCPropertyFilter)
 
         Dim NeedANewRow As Boolean = True
 
         For Each UC As UCPropertyFilter In UCList
-            'If ChangedUC.Selected Then
-            '    If UC IsNot ChangedUC Then
-            '        UC.CheckBoxSelected.Checked = False
-            '    End If
-            'End If
             If UC.PropertyName = "" Then
                 NeedANewRow = False
             End If
@@ -589,32 +607,53 @@ Public Class FormPropertyFilter
     Public Sub UCSelectionChanged(ChangedUC As UCPropertyFilter, ModifierKeys As Windows.Forms.Keys)
         Select Case ModifierKeys
             Case Keys.None
-                For Each UC As UCPropertyFilter In UCList
-                    UC.NotifyPropertyFilter = False
-                    If UC IsNot ChangedUC Then
-                        'UC.CheckBoxSelected.Checked = False
-                        UC.Selected = False
+                MultiselectAnchorIdx = -1
+                Dim ChangedUCIdx As Integer = GetUCIdx(ChangedUC)
+
+                For i As Integer = 0 To UCList.Count - 1
+                    Dim tmpUC As UCPropertyFilter = UCList(i)
+                    tmpUC.NotifyPropertyFilter = False
+                    If i = ChangedUCIdx Then
+                        If ChangedUC.Selected Then
+                            MultiselectAnchorIdx = ChangedUCIdx
+                        End If
+                    Else
+                        tmpUC.Selected = False
                     End If
-                    UC.NotifyPropertyFilter = True
+                    tmpUC.NotifyPropertyFilter = True
                 Next
+
             Case Keys.Control
+                MultiselectAnchorIdx = -1
                 ' Nothing to do here
+
             Case Keys.Shift
-                Dim SelectedRows As List(Of Integer) = GetSelectedRows()
-                If SelectedRows.Count = 2 Then
-                    Dim tmpUCList As New List(Of UCPropertyFilter)
-                    For Each UC As UCPropertyFilter In UCList
-                        tmpUCList.Add(UC)
-                    Next
-                    Dim IdxStart As Integer = SelectedRows(0)
-                    Dim IdxEnd As Integer = SelectedRows(1)
-                    For i As Integer = IdxStart To IdxEnd
-                        tmpUCList(i).NotifyPropertyFilter = False
-                        tmpUCList(i).Selected = True
-                        tmpUCList(i).NotifyPropertyFilter = True
-                    Next
-                    UCList = tmpUCList
+                If Not MultiselectAnchorIdx = -1 Then
+                    Dim ChangedUCIDx As Integer = GetUCIdx(ChangedUC)
+                    If Not MultiselectAnchorIdx = ChangedUCIDx Then
+                        Dim IdxStart As Integer
+                        Dim IdxEnd As Integer
+                        If ChangedUCIDx > MultiselectAnchorIdx Then
+                            IdxStart = MultiselectAnchorIdx
+                            IdxEnd = ChangedUCIDx
+                        Else
+                            IdxStart = ChangedUCIDx
+                            IdxEnd = MultiselectAnchorIdx
+                        End If
+
+                        For i As Integer = 0 To UCList.Count - 1
+                            Dim tmpUC As UCPropertyFilter = UCList(i)
+                            tmpUC.NotifyPropertyFilter = False
+                            If i >= IdxStart And i <= IdxEnd Then
+                                tmpUC.Selected = True
+                            Else
+                                tmpUC.Selected = False
+                            End If
+                            tmpUC.NotifyPropertyFilter = True
+                        Next
+                    End If
                 End If
+
         End Select
 
         UCChanged(ChangedUC)
@@ -688,29 +727,15 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub ButtonRowDelete_Click(sender As Object, e As EventArgs) Handles ButtonRowDelete.Click
-        'Dim SelectedRow = GetSelectedRow()
-        'Dim tmpUCList As New List(Of UCPropertyFilter)
-
-        'If SelectedRow = -1 Then
-        '    MsgBox("No row is selected.  Select one by enabling its checkbox.")
-        'Else
-        '    For i = 0 To UCList.Count - 1
-        '        If Not i = SelectedRow Then
-        '            tmpUCList.Add(UCList(i))
-        '        End If
-        '    Next
-
-        '    UCList = tmpUCList
-
-        '    UpdateForm(UpdateFormula:=True)
-        'End If
-
         Dim SelectedRows = GetSelectedRows()
         Dim tmpUCList As New List(Of UCPropertyFilter)
 
         If SelectedRows.Count = 0 Then
             MsgBox("No row is selected.  Select one by enabling its checkbox.")
         Else
+
+            MultiselectAnchorIdx = -1
+
             For i = 0 To UCList.Count - 1
                 If Not SelectedRows.Contains(i) Then
                     tmpUCList.Add(UCList(i))

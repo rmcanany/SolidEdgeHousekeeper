@@ -89,6 +89,8 @@ Double-click `Housekeeper.exe` to run.  The first time you do, you may get a `Wi
 
 Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
 
+Another thing to try is the [<ins>**Tips and Tricks**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/TipsAndTricks.md) writeup.  It focuses on user-reported situations where Housekeeper doesn't seem to be acting right.
+
 If you need more general information, try the [<ins>**Readme**</ins>](#readme).  GitHub provides a Table of Contents with links to all topics in the file.  Look for this icon ![Table of Contents](Resources/github_toc.png) on the far right of the file's header banner.  It opens an outline view of the document, which can be a great help in finding what you're looking for.
 
 Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).

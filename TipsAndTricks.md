@@ -9,7 +9,7 @@
 
 This is a compilation of user-reported situations where Housekeeper doesn't seem to be acting right.  The program can be tricky to use in places.  
 
-Housekeeper can also not act right for real.  In those cases, congratulations you found a bug!  For those, please raise an issue on [<ins>**GitHub**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).  Chances are, if it's not working for you, it's not working for others as well.  Also, doing so will make you *famous*!!  (It'll get your name in the project's [<ins>**Credits Section**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#credits), anyway.  That's a start, right?)
+Housekeeper can also not act right for real.  In those cases, congratulations you found a bug!  For those, please raise an issue on [<ins>**GitHub**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).  Chances are, if it's not working for you, it's not working for others either.  Also, doing so will make you *famous*!!  (It'll get your name in the project's [<ins>**Credits Section**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#credits), anyway.  That's a start, right?)
 
 <details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">INSTALLATION AND FIRST TIME USE</h2></summary>
 
@@ -130,7 +130,7 @@ For an overview, see the [<ins>**Top Level Assembly Help Topic**<ins>](https://g
 
 The top-level assembly is the file you want to process.  The top-level folders tell the program where to look for other files.
 
-Say your project has the structure below, and you want to work on Sub_01.asm.  Most of its parts and drawings are in its own directory.  However, it also uses parts from `Hardware` and `Purchased`.
+Say your project has the structure below, and you want to work on `Sub_01.asm`.  Most of its parts and drawings are in its own directory.  However, it also uses parts from `Hardware` and `Purchased`.
 
 ```
     - Project
@@ -202,7 +202,7 @@ It finds nothing.  The filter formula is to blame.  In this situation, rather th
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/spacer.png">Draft Files and Property Filter</h3></summary>
 
-This probably causes more confusion than everything else combined.  Here is the options page for Property Filters.  (The toolbar button with the wrench icon opens it.)  It needs some explaining.
+This probably causes more confusion than everything else combined.  Below is the options page for Property Filters.  (The toolbar button with the wrench icon opens it.)  It needs some explaining.
 
 ![](My%20Project/media/tips_property_filter_options.png)
 
@@ -268,15 +268,19 @@ Sometimes you want to replace a property value, no matter its current contents. 
 
 This command is designed to update property values, but there's a trick you can use to change the name of the property itself.
 
-On the Edit Properties option panel (not shown), enable `Add property`.  
+For example, say you have a property named `DisplayedMass` and you want to change it to `Weight`.
 
-In the input editor, assign the value of the old property to the new.  You can then delete the old property as shown on the second row.  (You can delete it in another run of the command if you want to first verify results.)
+First, on the `Edit Properties` option panel (not shown), enable `Add property`.  
+
+Then, in the input editor, assign the value of the old property to the new.  If the property doesn't exist, it will be created.  You can then delete the old property as shown on the second row.  (You can delete it in another run of the command if you want to first verify results.)
 
 ![Change Name](My%20Project/media/tips_edit_properties_change_name.png)
 
 #### Using a Property Filter
 
 If you are editing a property, there is no reason to process files that do not contain it.  See the tip [<ins>**Detecting if a Property Exists in a File**</ins>](#detecting-if-a-property-exists-in-a-file) for a way to speed things up.
+
+In addition, using a filter can avoid nuisance errors.  In the property-renaming example, that would otherwise happen on files where the old property did not exist.
 
 #### Delete Properties
 
@@ -312,7 +316,7 @@ You can configure the Task List with multiple copies of the same command, then c
 
 ![SaveModelAs](My%20Project/media/task_save_model_as.png)
 
-You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
+You can optionally rename the file or create subdirectories using a formula. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
 - `Project %{System.Project Name}` 
 - `%{System.Material}\%{System.Sheet Metal Gage}` 
 
@@ -350,7 +354,7 @@ For an overview, see the [<ins>**Print Help Topic**<ins>](https://github.com/rmc
 
 #### Send to Printer/Plotter as Needed
 
-As noted above, you can configure the Task List with multiple copies of the same command, then configure each as needed.  The configuration in this case would be to specify the sheet sizes accepted by the selected printer/plotter.
+As noted above, you can have multiple copies of the same command.  For this scenario, you would set one task to use the printer and the other to use the plotter.  For each, you would then specify which sheet sizes to accept.
 
 See the [<ins>**Customizing the Task Tab Help Topic**<ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#customizing) for details.
 
