@@ -32,9 +32,9 @@ See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/S
 - Changed the name of `Update Drawing Views` to `Update Drawings`.  Added an option to select all parts lists and tables.  Disable to select them individually.
 - For `Check Drawings`, added centerlines, weld symbols and a dozen other annotation types to the `Detached dimensions or annotations` check.  (Thank you **@sven-11111!**)  Added individual selection for item types to process.  (Thank you **@Lui10!**)
 - Added multi-select for row operations in the `Property Input Editor`  (Thank you **@TeeVar!**)  Did the same for the `Variable Input Editor` and `Property Filter`.  
-- Fixed a regression with `Property Filter` variable substitution (Thank you again **@Lui10!**).  Fixed an issue with row naming for filters with more than 26 conditions.  Added a visual indicator when a custom formula is replaced with the default.
+- Fixed a regression with `Property Filter` variable substitution (Thank you again **@Lui10!**).  Fixed an issue with row naming for filters with more than 26 conditions.  Added a visual indicator when a custom formula is replaced with the default.  Added formula syntax checking.
 - Added the `RequiresForegroundProcessing` flag to `Check Drawing Parts List` (Thank you one more time **@Lui10!**).  Did the same for `Check Drawings` and `Update Drawings`.
-- Fixed an issue where the `Property Favorites` list could not be empty for `Edit Properties` or `Property Filters`.
+- Fixed an issue where an empty `Property Favorites` list was not allowed for `Edit Properties` or `Property Filters`.
 - Updated the [<ins>**Tips and Tricks Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/TipsAndTricks.md) with some new user-reported use cases.
 
 ## V2026.3

@@ -254,7 +254,15 @@ Public Class FormPropertyFilter
 
         s = s.Replace("(", " ( ")
         s = s.Replace(")", " ) ")
-        s = s.Replace("  ", " ")
+
+        Dim PreviousCharCount As Integer = s.Count
+        Dim CharCount As Integer = 0
+        While PreviousCharCount > CharCount
+            PreviousCharCount = s.Count
+            s = s.Replace("  ", " ")
+            CharCount = s.Count
+        End While
+
         s = s.Trim()
         s = $" {s} "
 
@@ -267,95 +275,126 @@ Public Class FormPropertyFilter
             End If
         Next
 
+        CheckFormula(Me.Formula)
+
+    End Sub
+
+    Private Sub CheckFormula(tmpFormula As String)
+
+        ' ###### REMOVE REPEATED SPACE CHARACTERS ######
+
+        Dim PreviousCharCount As Integer = tmpFormula.Count
+        Dim CharCount As Integer = 0
+        While PreviousCharCount > CharCount
+            PreviousCharCount = tmpFormula.Count
+            tmpFormula = tmpFormula.Replace("  ", " ")
+            CharCount = tmpFormula.Count
+        End While
+
+        tmpFormula = tmpFormula.Trim()
+
+        ' ###### MAKE CHECKS ######
+
+        If tmpFormula = "" Then Exit Sub
+
+        Dim tmpList As List(Of String) = tmpFormula.Split(CChar(" ")).ToList
+
+        Dim AllowedStrings As New List(Of String)
+        AllowedStrings.AddRange({"[A-Z]", "AND", "OR", "NOT", "(", ")", "[A-Z][A-Z]", "XOR"})  ' In order of expected probability of occurrence
+        Dim DisallowedStrings As New List(Of String)
+        Dim OpenParenCount As Integer = 0
+        Dim CloseParenCount As Integer = 0
+
+        For Each FormulaItem As String In tmpList
+            Dim Allowed As Boolean = False
+            For Each AllowedString As String In AllowedStrings
+                If FormulaItem Like AllowedString Then
+                    Allowed = True
+                    Exit For
+                End If
+            Next
+            If Not Allowed Then
+                If Not DisallowedStrings.Contains(FormulaItem) Then DisallowedStrings.Add(FormulaItem)
+            End If
+
+            If FormulaItem = "(" Then OpenParenCount += 1
+            If FormulaItem = ")" Then CloseParenCount += 1
+        Next
+
+        ' ###### ANALYZE AND REPORT ######
+
+        Dim ErrorMessage As String = ""
+
+        If Not DisallowedStrings.Count = 0 Then
+            Dim PossiblePlural As String = ""
+            If DisallowedStrings.Count > 1 Then PossiblePlural = "s"
+            ErrorMessage = $"{ErrorMessage}Unrecognized formula item{PossiblePlural}: {String.Join(", ", DisallowedStrings)}{vbCrLf}"
+        End If
+        If Not OpenParenCount = CloseParenCount Then
+            ErrorMessage = $"{ErrorMessage}Mismatched parentheses{vbCrLf}"
+        End If
+
+        If Not ErrorMessage = "" Then
+            ErrorMessage = $"Error in formula{vbCrLf}{ErrorMessage}"
+            MsgBox(ErrorMessage, vbOKOnly)
+        End If
+
     End Sub
 
     Private Sub UpdateVariablesAndFormula()
 
-        Dim NewWay As Boolean = True
-
-        If NewWay Then
-
-            Dim PreviousFormula As String = Me.Formula.ToUpper.Trim
-
-            Dim tmpFormula As String = ""
-            Dim Idx As Integer = 1
-
-            For Each UC As UCPropertyFilter In UCList
-                UC.Variable = NumberToAlpha(Idx)
-                If Not UC.PropertyName = "" Then
-                    If tmpFormula = "" Then
-                        tmpFormula = UC.Variable  '                         '' -> 'A'
-                    Else
-                        tmpFormula = $"{tmpFormula} AND {UC.Variable}"  '   'A' -> 'A AND B'
-                    End If
-                End If
-                Idx += 1
-            Next
-
-            'tmpFormula = $" {tmpFormula} "
-
-            'Me.Formula = tmpFormula
-            'TextBoxFormula.Text = Me.Formula
-
-            FormatFormula(tmpFormula)  ' Formats for parsing function, updates Me.Formula and TextBoxFormula.Text
-
-            For Each UC As UCPropertyFilter In UCList
-                If Not UC.PropertyName = "" Then
-                    UC.Formula = Me.Formula
-                End If
-            Next
+        Dim PreviousFormula As String = Me.Formula.ToUpper.Trim
 
 
-            '###### Check if a previously customized formula was replaced ######
+        ' ###### REPLACE EXISTING VARIABLE NAMES AND RECREATE DEFAULT FORMULA ######
 
-            If Not Me.Formula.Trim.Count > 1 Then  ' '' or 'A'
-                TextBoxFormula.BackColor = Color.White
+        Dim tmpFormula As String = ""
+        Dim Idx As Integer = 1
 
-            ElseIf PreviousFormula.Count > 1 Then  ' Skips '' or 'A'
-                Dim WasCustomFormula As Boolean = False
-                Dim LogicalOperators As New List(Of String)
-                LogicalOperators.AddRange({"OR", "XOR", "NOT", "(", ")"})
-                For Each LogicalOperator As String In LogicalOperators
-                    If PreviousFormula.Contains(LogicalOperator) Then
-                        WasCustomFormula = True
-                        Exit For
-                    End If
-                Next
-                If WasCustomFormula Then
-                    TextBoxFormula.BackColor = Color.Orange
+        For Each UC As UCPropertyFilter In UCList
+            UC.Variable = NumberToAlpha(Idx)
+            If Not UC.PropertyName = "" Then
+                If tmpFormula = "" Then
+                    tmpFormula = UC.Variable  '                         '' -> 'A'
                 Else
-                    TextBoxFormula.BackColor = Color.White
+                    tmpFormula = $"{tmpFormula} AND {UC.Variable}"  '   'A' -> 'A AND B'
                 End If
             End If
+            Idx += 1
+        Next
 
-        Else
-            Dim tmpFormula As String = ""
-            Dim Ascii = 65  ' "A"
+        FormatFormula(tmpFormula)  ' Formats for parsing function, updates Me.Formula and TextBoxFormula.Text
 
-            For Each UC As UCPropertyFilter In UCList
-                UC.Variable = Chr(Ascii)
-                If Not UC.PropertyName = "" Then
-                    If tmpFormula = "" Then
-                        tmpFormula = Chr(Ascii)
-                    Else
-                        tmpFormula = $"{tmpFormula} AND {Chr(Ascii)}"
-                    End If
+
+        ' ###### APPLY THE FORMULA TO ALL INDIVIDUAL FILTER CONDITIONS ######
+
+        For Each UC As UCPropertyFilter In UCList
+            If Not UC.PropertyName = "" Then
+                UC.Formula = Me.Formula
+            End If
+        Next
+
+
+        ' ###### ALERT USER IF A CUSTOMIZED FORMULA WAS REPLACED ######
+
+        If Not Me.Formula.Trim.Count > 1 Then  ' '' or 'A'
+            TextBoxFormula.BackColor = Color.White
+
+        ElseIf PreviousFormula.Count > 1 Then  ' Skips '' or 'A'
+            Dim WasCustomFormula As Boolean = False
+            Dim LogicalOperators As New List(Of String)
+            LogicalOperators.AddRange({"OR", "XOR", "NOT", "(", ")"})
+            For Each LogicalOperator As String In LogicalOperators
+                If PreviousFormula.Contains(LogicalOperator) Then
+                    WasCustomFormula = True
+                    Exit For
                 End If
-                Ascii += 1
             Next
-
-            'tmpFormula = $" {tmpFormula} "
-
-            'Me.Formula = tmpFormula
-            'TextBoxFormula.Text = Me.Formula
-
-            FormatFormula(tmpFormula)  ' Formats for parsing, updates Me.Formula and TextBoxFormula.Text
-
-            For Each UC As UCPropertyFilter In UCList
-                If Not UC.PropertyName = "" Then
-                    UC.Formula = Me.Formula
-                End If
-            Next
+            If WasCustomFormula Then
+                TextBoxFormula.BackColor = Color.Orange
+            Else
+                TextBoxFormula.BackColor = Color.White
+            End If
         End If
 
     End Sub
@@ -433,57 +472,6 @@ Public Class FormPropertyFilter
     End Sub
 
     Private Sub MoveRow(Direction As String)
-        'Dim SelectedRow As Integer = GetSelectedRow()
-        'Dim tmpUCList As New List(Of UCPropertyFilter)
-        'Dim tf As Boolean
-
-        'tf = Direction.ToLower = "up"
-        'tf = tf Or Direction.ToLower = "down"
-        'If Not tf Then
-        '    MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
-        '    Exit Sub
-        'End If
-
-        ''Can't move up from the top
-        'tf = (SelectedRow = 0) And (Direction = "up")
-
-        ''Can't move down from the bottom
-        'Dim Bottom = UCList.Count - 1
-        'tf = tf Or ((SelectedRow >= Bottom) And (Direction = "down"))
-
-        'If Not tf Then
-        '    For i As Integer = 0 To Me.UCList.Count - 1
-
-        '        Select Case Direction
-
-        '            Case "up"
-        '                If i = SelectedRow - 1 Then
-        '                    tmpUCList.Add(Me.UCList(i + 1))
-        '                ElseIf i = SelectedRow Then
-        '                    tmpUCList.Add(Me.UCList(i - 1))
-        '                Else
-        '                    tmpUCList.Add(Me.UCList(i))
-        '                End If
-
-        '            Case "down"
-        '                If i = SelectedRow Then
-        '                    tmpUCList.Add(Me.UCList(i + 1))
-        '                ElseIf i = SelectedRow + 1 Then
-        '                    tmpUCList.Add(Me.UCList(i - 1))
-        '                Else
-        '                    tmpUCList.Add(Me.UCList(i))
-        '                End If
-
-        '            Case Else
-        '                MsgBox($"Direction '{Direction}' not recognized")
-        '        End Select
-
-        '    Next
-
-        '    Me.UCList = tmpUCList
-
-        '    UpdateForm(UpdateFormula:=True)
-        'End If
 
         If Not (Direction.ToLower = "up" Or Direction.ToLower = "down") Then
             MsgBox($"Unrecognized direction '{Direction}'", vbOKOnly)
@@ -496,6 +484,7 @@ Public Class FormPropertyFilter
             MsgBox("No row is selected.  Select one by enabling its checkbox.")
             Exit Sub
         End If
+
         If Direction.ToLower = "up" And SelectedRows.Contains(0) Then Exit Sub
         If Direction.ToLower = "down" Then
             ' Deal with NewRow
