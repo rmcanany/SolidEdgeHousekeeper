@@ -68,9 +68,7 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
 
 <details open><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskSaveAs.png"><img src="My%20Project/media/spacer.png">INSTALLATION</h2></summary>
 
-
 The preferred method is to clone the project and compile it yourself.  The other option is to use the [<ins>**Latest Release**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
-
 
 <p align="center">
   <img src="My%20Project/media/release_page.png">
@@ -91,17 +89,16 @@ Start with the context-sensitive help icon ![Table of Contents](My%20Project/med
 
 Another thing to try is the [<ins>**Tips and Tricks Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/TipsAndTricks.md).  It focuses on user-reported use cases where Housekeeper doesn't seem to be acting right.
 
-If you need more general information, try the [<ins>**Readme**</ins>](#readme).  GitHub provides a Table of Contents with links to all topics in the file.  Look for this icon ![Table of Contents](Resources/github_toc.png) on the far right of the file's header banner.  It opens an outline view of the document, which can be a great help in finding what you're looking for.
+If you need more general information, try the [<ins>**Readme**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md).  GitHub provides a Table of Contents with links to all topics in the file.  Look for this icon ![Table of Contents](Resources/github_toc.png) on the far right of the file's header banner.  It opens an outline view of the document, which can be a great help in finding what you're looking for.
 
-Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
+Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or the [<ins>**GitHub Discussion Page**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/discussions).
 
 ## HELPING OUT
 
-If you want to make Housekeeper better, join us as a beta tester! Beta testing is nothing more than conducting your own workflow on your own files and telling me if you run into problems. It isn't meant to be a lot of work. The big idea is to make the program better for you and me and everyone else!
+User feedback has made Housekeeper the indispensible tool that it is today.  If you are facing a tedious, time-consuming chore, please call it to our attention.  No guarantees, but don't forget we're all Solid Edge users, too -- and we really like not doing things we don't like to do!
 
-To sign up, message me, RobertMcAnany, on the forum. (The `Messages` button is hidden under your profile picture, at the very top right of the page). Unsubscribe the same way. To combat bots and spam, I will probably ignore requests from `User16612341234...`. (Change you nickname in `My Profile`, also under your profile picture). 
+If you know .NET, or want to learn, there are more ways to contribute!  Those  new to GitHub collaboration can head over to [<ins>**ToyProject**</ins>](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.  Otherwise, feel free to fork the repo and start in with those PRs!
 
-If you know .NET, or want to learn, there's more to do!  If you're new to GitHub collaboration, head over to [<ins>**ToyProject**</ins>](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.  Otherwise, feel free to fork the repo and start in with those PRs!
 </details>
 
 <details open>
@@ -345,7 +342,7 @@ You can get around this by checking `Process files as Available regardless of do
 
 After processing, you can choose to change the Status back to the old value, or pick a new one. In the example, I decided to change everything to Available. You can select the new Status by clicking the appropriate button in the table. For instance, if you wanted to convert all Baselined files to Released, you would click the last button on the second row.
 
-If you want simply to change the Status on a batch of files, rather than using this option, run the `Change Document Status` task instead.  That command runs in Microsoft's Structure Storage mode and is 100x to 400x faster than Solid Edge.
+If you want simply to change the Status on a batch of files, rather than using this option, run the `Change Document Status` task instead. 
 
 If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it has to open the file in Structured Storage before and after the run.  That shouldn't hurt anything, but opening and closing files unnecessarily isn't the greatest idea in the world.
 

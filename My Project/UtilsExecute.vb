@@ -39,18 +39,6 @@ Public Class UtilsExecute
             Exit Sub
         End If
 
-        'If FMain.ForceCloseDesignManager Then
-        '    FMain.TextBoxStatus.Text = "Closing Solid Edge Design Manager..."
-        '    System.Windows.Forms.Application.DoEvents()
-
-        '    If Not Me.USEA.DMForceClose() Then
-        '        FMain.TextBoxStatus.Text = "Unable to close Solid Edge Design Manager.  Processing was not started."
-        '        MsgBox(FMain.TextBoxStatus.Text, MsgBoxStyle.Exclamation Or MsgBoxStyle.OkOnly)
-        '        FMain.Cursor = Cursors.Default
-        '        Exit Sub
-        '    End If
-        'End If
-
         Dim UFL As New UtilsFileList(FMain)
 
         FilesToProcessTotal = UFL.GetTotalFilesToProcess()
@@ -759,22 +747,31 @@ Public Class UtilsExecute
 
         Try
             SSDoc = New HCStructuredStorageDoc(Path, _OpenReadWrite:=True)
-            SSDoc.ReadProperties(FMain.PropertiesData)
         Catch ex As Exception
             Proceed = False
+            ErrorMessage = $"Unable to set starting status.  The file may be open in another process{vbCrLf}"
         End Try
+
+        If Proceed Then
+            Try
+                SSDoc.ReadProperties(FMain.PropertiesData)
+            Catch ex As Exception
+                Proceed = False
+                ErrorMessage = $"{ErrorMessage}Unable to access property data{vbCrLf}"
+            End Try
+
+        End If
 
         If Proceed Then
             OldStatus = SSDoc.GetStatus()
 
             If (OldStatus IsNot Nothing) AndAlso (Not OldStatus.ToLower = "Available".ToLower) Then
                 Proceed = SSDoc.SetStatus("Available")
+                If Not Proceed Then ErrorMessage = $"{ErrorMessage}Could not set starting status to 'Available'"
             End If
         End If
 
-        If Not Proceed Then
-            ErrorMessage = "Change status to 'Available' did not succeed"
-        Else
+        If Proceed Then
             If SSDoc IsNot Nothing Then SSDoc.Save()
         End If
 
