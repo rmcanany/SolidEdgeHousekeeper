@@ -525,23 +525,16 @@ Public Class UtilsExecute
 
         '###### EXCEPTION ACCOUNTING ######
 
-        TotalAborts -= 0.1  ' Discounting for infrequent malfunctions on a large number of files.
-        If TotalAborts < 0 Then
-            TotalAborts = 0
-        End If
+        TotalAborts -= 0.1  ' Apply discount for infrequent malfunctions on a large number of files.
+        If TotalAborts < 0 Then TotalAborts = 0
 
 
         ' ###### DOCUMENT STATUS ######
 
-        Dim OldStatus As String = ""
+        Dim OldStatus As String = ""  ' Populated next by SetStartingStatus
 
         If FMain.ProcessAsAvailable And FMain.SolidEdgeRequired > 0 Then
-
-            Dim s As String = SetStartingStatus(OldStatus, Path) 'SetStartingStatus populates OldStatus
-            If Not s = "" Then
-                FileLogger.AddMessage(s)
-            End If
-
+            SetStartingStatus(OldStatus, Path, FileLogger)
         End If
 
 
@@ -648,10 +641,7 @@ Public Class UtilsExecute
                 '###### DOCUMENT STATUS ######
 
                 If FMain.ProcessAsAvailable Then
-                    Dim s As String = SetEndingStatus(OldStatus, Path)
-                    If Not s = "" Then
-                        FileLogger.AddMessage(s)
-                    End If
+                    SetEndingStatus(OldStatus, Path, FileLogger)
                 End If
 
             End If
@@ -736,11 +726,11 @@ Public Class UtilsExecute
         Return IsOK
     End Function
 
-    Private Function SetStartingStatus(
+    Private Sub SetStartingStatus(
         ByRef OldStatus As String,
-        Path As String) As String
+        Path As String,
+        ErrorLogger As Logger)
 
-        Dim ErrorMessage As String = ""
         Dim Proceed As Boolean = True
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
@@ -749,7 +739,7 @@ Public Class UtilsExecute
             SSDoc = New HCStructuredStorageDoc(Path, _OpenReadWrite:=True)
         Catch ex As Exception
             Proceed = False
-            ErrorMessage = $"Unable to set starting status.  The file may be open in another process{vbCrLf}"
+            ErrorLogger.AddMessage("Unable to set starting status.  The file may be open elsewhere")
         End Try
 
         If Proceed Then
@@ -757,17 +747,20 @@ Public Class UtilsExecute
                 SSDoc.ReadProperties(FMain.PropertiesData)
             Catch ex As Exception
                 Proceed = False
-                ErrorMessage = $"{ErrorMessage}Unable to access property data{vbCrLf}"
+                ErrorLogger.AddMessage("Unable to access starting status property data")
             End Try
-
         End If
 
         If Proceed Then
             OldStatus = SSDoc.GetStatus()
 
-            If (OldStatus IsNot Nothing) AndAlso (Not OldStatus.ToLower = "Available".ToLower) Then
-                Proceed = SSDoc.SetStatus("Available")
-                If Not Proceed Then ErrorMessage = $"{ErrorMessage}Could not set starting status to 'Available'"
+            If OldStatus IsNot Nothing Then
+                If Not OldStatus.ToLower = "Available".ToLower Then
+                    Proceed = SSDoc.SetStatus("Available")
+                    If Not Proceed Then ErrorLogger.AddMessage("Could not set starting status to 'Available'")
+                End If
+            Else
+                ErrorLogger.AddMessage("Could not read current status")
             End If
         End If
 
@@ -777,14 +770,13 @@ Public Class UtilsExecute
 
         If SSDoc IsNot Nothing Then SSDoc.Close()
 
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function SetEndingStatus(
+    Private Sub SetEndingStatus(
         OldStatus As String,
-        Path As String) As String
+        Path As String,
+        ErrorLogger As Logger)
 
-        Dim ErrorMessage As String = ""
         Dim Proceed As Boolean = True
 
         Dim NewStatus As String = ""
@@ -793,7 +785,7 @@ Public Class UtilsExecute
 
         If OldStatus Is Nothing OrElse OldStatus = "" Then
             Proceed = False
-            ErrorMessage = $"Unable to reset status.  Previous status unknown"
+            ErrorLogger.AddMessage("Unable to reset status.  Previous status unknown")
         End If
 
         If Proceed Then
@@ -810,7 +802,7 @@ Public Class UtilsExecute
                 If Not OldStatus.ToLower = "Available".ToLower Then
                     Proceed = SSDoc.SetStatus(OldStatus)
                     If Not Proceed Then
-                        ErrorMessage = $"Change status to '{OldStatus}' did not succeed"
+                        ErrorLogger.AddMessage($"Change status to '{OldStatus}' did not succeed")
                     End If
                 End If
 
@@ -819,7 +811,7 @@ Public Class UtilsExecute
                 If Not NewStatus.ToLower = "Available".ToLower Then
                     Proceed = SSDoc.SetStatus(NewStatus)
                     If Not Proceed Then
-                        ErrorMessage = $"Change status to '{NewStatus}' did not succeed"
+                        ErrorLogger.AddMessage($"Change status to '{NewStatus}' did not succeed")
                     End If
                 End If
             End If
@@ -832,9 +824,7 @@ Public Class UtilsExecute
 
         If SSDoc IsNot Nothing Then SSDoc.Close()
 
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
     Private Function GetNewStatus(OldStatus As String) As String
         Dim NewStatus As String = Nothing
