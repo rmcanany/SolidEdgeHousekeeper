@@ -692,6 +692,7 @@ Public Class UtilsFileList
 
     End Function
 
+
     Public Function FileWildcardSearch(
         ByVal FoundFiles As IReadOnlyCollection(Of String),
         ByVal WildcardString As String) As IReadOnlyCollection(Of String)
@@ -1111,31 +1112,6 @@ Public Class UtilsFileList
 
     End Function
 
-    'Public Function GetSourceDirectories() As List(Of String)
-    '    Dim SourceDirectories As New List(Of String)
-    '    Dim TagName As String
-    '    Dim s As String
-
-    '    For Each Item As ListViewItem In ListViewSources.Items
-
-    '        If Item.Group.Name = "Sources" Then
-
-    '            TagName = CType(Item.Tag, String)
-
-    '            If TagName.ToLower.Contains("folder") Then
-    '                s = Item.Name
-    '                If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
-    '            ElseIf TagName.ToLower = "asm" Then
-    '                s = System.IO.Path.GetDirectoryName(Item.Name)
-    '                If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
-    '            End If
-
-    '        End If
-
-    '    Next
-
-    '    Return SourceDirectories
-    'End Function
 
     Public Sub UpdatePropertiesColumns()
 
@@ -1269,16 +1245,14 @@ Public Class UtilsFileList
 
                                 If PropColumn.Visible Then '###### Only a visible column need a value. F.Arfilli
 
+                                    Dim tmpIsReadOnly As Boolean = False
                                     Try
-                                        'Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name, _OpenReadWrite:=False)
-                                        'SSDoc.ReadProperties(FMain.PropertiesData)
-
                                         Dim PropName = UC.PropNameFromFormula(PropColumn.Formula)
                                         If Not IsReadOnly Then
                                             If Not LVItem.Group.Name = ".dft" Then  ' Draft files do not have a PartsLiteData stream
                                                 ' Unable to parse PartsLiteData stream in some files.
                                                 Try
-                                                    IsReadOnly = SSDoc.IsExposedVariable(PropName)
+                                                    tmpIsReadOnly = SSDoc.IsExposedVariable(PropName)
                                                 Catch ex As Exception
                                                 End Try
                                             End If
@@ -1286,16 +1260,7 @@ Public Class UtilsFileList
 
                                         Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
                                         PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, tmpErrorLogger)
-
-                                        'SSDoc.Close()
-
                                     Catch ex As Exception
-                                        'I think this quit working because:
-                                        ' -- The SSDoc New() call no longer throws an exception on read-only files.
-                                        ' -- If PropColumn.Formula is not found in SSDoc, there is no exception.  It returns Nothing.
-                                        'PropValue = ""
-                                        'tmpColor = Color.Gainsboro '<--- Properties not present ######## for some reason this doesn't work anymore
-                                        Dim i = 0
                                     End Try
 
                                     If IsNothing(PropValue) Then
@@ -1303,7 +1268,7 @@ Public Class UtilsFileList
                                         tmpColor = Color.Gainsboro '<---------- Properties not present
                                     End If
 
-                                    If IsReadOnly Then tmpColor = Color.LightGray
+                                    If IsReadOnly Or tmpIsReadOnly Then tmpColor = Color.LightGray
 
                                 End If
 

@@ -1218,18 +1218,14 @@ Public Class UtilsPreferences
         ' ignore bugfix number
 
         Try
-            'Dim WC As New System.Net.WebClient
-            'WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
-            's = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+            Dim TimeoutSeconds As Integer = 15
 
             Dim Client As New Net.Http.HttpClient
-            Client.Timeout = TimeSpan.FromSeconds(5)
+            Client.Timeout = TimeSpan.FromSeconds(TimeoutSeconds)
             Client.DefaultRequestHeaders.UserAgent.ParseAdd("Other")
 
-            's = Await Client.GetStringAsync("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
-
             Dim t = System.Threading.Tasks.Task.Run(Function() Client.GetStringAsync("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest"))
-            If Await System.Threading.Tasks.Task.WhenAny(t, System.Threading.Tasks.Task.Delay(5000)) IsNot t Then Exit Sub
+            If Await System.Threading.Tasks.Task.WhenAny(t, System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(TimeoutSeconds))) IsNot t Then Exit Sub
             s = Await t
 
         Catch ex As Exception
