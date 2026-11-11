@@ -431,13 +431,13 @@ Public Class UtilsFileList
                         FoundFiles = UC.ReadExcel(Source.Name)
                     End If
 
-                Case = "DragDrop"
-                    Dim tmpFoundFiles As New List(Of String)
+                    'Case = "DragDrop"
+                    '    Dim tmpFoundFiles As New List(Of String)
 
-                    For Each tmpItem As ListViewItem In FMain.DragDropCache
-                        tmpFoundFiles.Add(tmpItem.Name)
-                    Next
-                    FoundFiles = tmpFoundFiles
+                    '    For Each tmpItem As ListViewItem In FMain.DragDropCache
+                    '        tmpFoundFiles.Add(tmpItem.Name)
+                    '    Next
+                    '    FoundFiles = tmpFoundFiles
 
                 Case Else
                     FoundFiles = Nothing

@@ -20,8 +20,8 @@ Public Class Form_Main
 
     Public Property StopProcess As Boolean
 
-    Public DragDropCache As New List(Of ListViewItem)
-    Public DragDropCacheExcluded As New List(Of ListViewItem)
+    'Public DragDropCache As New List(Of ListViewItem)
+    'Public DragDropCacheExcluded As New List(Of ListViewItem)
 
 
     Private _ListViewFilesOutOfDate As Boolean
@@ -2099,58 +2099,104 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
+    Private Sub ListViewSources_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewSources.DragEnter, ListViewFiles.DragEnter
 
         e.Effect = DragDropEffects.Copy
 
     End Sub
 
-    Private Sub ListViewFiles_DragDrop(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragDrop
+    Private Sub ListViewSources_DragDrop(sender As Object, e As DragEventArgs) Handles ListViewSources.DragDrop, ListViewFiles.DragDrop
 
-        Dim UC As New UtilsCommon
+        Dim NewWay As Boolean = True
 
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+        If NewWay Then
+            If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+                Dim extFilter As New List(Of String)
+                If Me.FilterAsm Then extFilter.Add(".asm")
+                If Me.FilterPar Then extFilter.Add(".par")
+                If Me.FilterPsm Then extFilter.Add(".psm")
+                If Me.FilterDft Then extFilter.Add(".dft")
 
-            Dim DragDropGroupPresent As Boolean
+                Dim OutFilenames As New List(Of String)
+                Dim InFilenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
 
-            DragDropGroupPresent = False
-            For Each g As ListViewGroup In ListViewSources.Groups
-                If g.Name = "DragDrop" Then
-                    DragDropGroupPresent = True
-                    Exit For
-                End If
-            Next
-
-            If Not DragDropGroupPresent Then
-                Dim tmpItem As New ListViewItem
-                tmpItem.Text = "DragDrop"
-                tmpItem.Group = ListViewSources.Groups.Item("Sources")
-                tmpItem.ImageKey = "ASM_Folder"
-                tmpItem.Tag = "DragDrop"
-                tmpItem.Name = "DragDrop"
-                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
-
-            End If
-
-            ListViewFiles.BeginUpdate()
-
-            Dim extFilter As New List(Of String)
-            If Me.FilterAsm Then extFilter.Add(".asm")
-            If Me.FilterPar Then extFilter.Add(".par")
-            If Me.FilterPsm Then extFilter.Add(".psm")
-            If Me.FilterDft Then extFilter.Add(".dft")
-
-            Dim Filenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
-            For Each FileName As String In Filenames
-
-                If UC.FilenameIsOK(FileName) Then
-
+                For Each FileName As String In InFilenames
                     If Not extFilter.Contains(IO.Path.GetExtension(FileName).ToLower) Then Continue For
 
                     If IO.File.Exists(FileName) Then
+                        OutFilenames.Add(FileName)
+                    End If
+                Next
 
-                        If Not ListViewFiles.Items.ContainsKey(FileName) Then
+                If OutFilenames.Count > 0 Then
+                    Dim FilenamesString As String = String.Join(vbTab, OutFilenames)
 
+                    Dim tmpItem As New ListViewItem
+
+                    tmpItem.Text = "DragDrop"
+                    tmpItem.ImageKey = "ASM_Folder"
+                    tmpItem.Tag = "Files"
+
+                    tmpItem.SubItems.Add(FilenamesString)
+                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                    tmpItem.Name = FilenamesString
+
+                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                        ListViewSources.Items.Add(tmpItem)
+                        ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    End If
+
+                    ListViewFilesOutOfDate = True
+
+                End If
+
+            End If
+        Else
+            Dim UC As New UtilsCommon
+
+            If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+
+                Dim DragDropGroupPresent As Boolean
+
+                DragDropGroupPresent = False
+                For Each g As ListViewGroup In ListViewSources.Groups
+                    If g.Name = "DragDrop" Then
+                        DragDropGroupPresent = True
+                        Exit For
+                    End If
+                Next
+
+                If Not DragDropGroupPresent Then
+                    Dim tmpItem As New ListViewItem
+                    tmpItem.Text = "DragDrop"
+                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                    tmpItem.ImageKey = "ASM_Folder"
+                    tmpItem.Tag = "DragDrop"
+                    tmpItem.Name = "DragDrop"
+                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
+
+                End If
+
+                ListViewFiles.BeginUpdate()
+
+                Dim extFilter As New List(Of String)
+                If Me.FilterAsm Then extFilter.Add(".asm")
+                If Me.FilterPar Then extFilter.Add(".par")
+                If Me.FilterPsm Then extFilter.Add(".psm")
+                If Me.FilterDft Then extFilter.Add(".dft")
+
+                Dim Filenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                For Each FileName As String In Filenames
+
+                    If UC.FilenameIsOK(FileName) Then
+
+                        If Not extFilter.Contains(IO.Path.GetExtension(FileName).ToLower) Then Continue For
+
+                        If IO.File.Exists(FileName) Then
+
+                            'If Not ListViewFiles.Items.ContainsKey(FileName) Then
+
+                            'End If
                             Dim tmpLVItem As New ListViewItem
                             tmpLVItem.Text = IO.Path.GetFileName(FileName)
                             tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FileName))
@@ -2160,30 +2206,30 @@ Public Class Form_Main
                             tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FileName).ToLower)
                             'ListViewFiles.Items.Add(tmpLVItem)
 
-                            Dim ItemPresent As Boolean
+                            'Dim ItemPresent As Boolean
 
-                            ItemPresent = False
-                            For Each CacheItem As ListViewItem In DragDropCache
-                                If tmpLVItem.Name = CacheItem.Name Then
-                                    ItemPresent = True
-                                    Exit For
-                                End If
-                            Next
-                            If Not ItemPresent Then
-                                DragDropCache.Add(tmpLVItem)
-                            End If
+                            'ItemPresent = False
+                            'For Each CacheItem As ListViewItem In DragDropCache
+                            '    If tmpLVItem.Name = CacheItem.Name Then
+                            '        ItemPresent = True
+                            '        Exit For
+                            '    End If
+                            'Next
+                            'If Not ItemPresent Then
+                            '    DragDropCache.Add(tmpLVItem)
+                            'End If
+
 
                         End If
 
                     End If
 
-                End If
+                Next
 
-            Next
+                ListViewFiles.EndUpdate()
 
-            ListViewFiles.EndUpdate()
-
-            ListViewFilesOutOfDate = True
+                ListViewFilesOutOfDate = True
+            End If
 
         End If
 
@@ -2197,8 +2243,8 @@ Public Class Form_Main
         ListViewFiles.Items.Clear()
         ListViewFiles.EndUpdate()
 
-        DragDropCache.Clear()
-        DragDropCacheExcluded.Clear()
+        'DragDropCache.Clear()
+        'DragDropCacheExcluded.Clear()
 
         'ListViewFilesOutOfDate = True
 
@@ -2313,19 +2359,19 @@ Public Class Form_Main
                     ' Move item to "Excluded" group
                     tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
 
-                    If DragDropCache.Contains(tmpItem) Then
-                        DragDropCacheExcluded.Add(tmpItem)
-                        DragDropCache.Remove(tmpItem)
-                    End If
+                    'If DragDropCache.Contains(tmpItem) Then
+                    '    DragDropCacheExcluded.Add(tmpItem)
+                    '    DragDropCache.Remove(tmpItem)
+                    'End If
                 Else
                     ' Move item from "Excluded" group back to the group matching the file's extension
                     tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name).ToLower)
 
-                    If DragDropCacheExcluded.Contains(tmpItem) Then
-                        DragDropCache.Add(tmpItem)
-                        DragDropCacheExcluded.Remove(tmpItem)
+                    'If DragDropCacheExcluded.Contains(tmpItem) Then
+                    '    DragDropCache.Add(tmpItem)
+                    '    DragDropCacheExcluded.Remove(tmpItem)
 
-                    End If
+                    'End If
 
                 End If
 

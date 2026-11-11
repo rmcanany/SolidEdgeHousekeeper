@@ -449,6 +449,7 @@ Partial Class Form_Main
         '
         'ListViewSources
         '
+        Me.ListViewSources.AllowDrop = True
         Me.ListViewSources.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
