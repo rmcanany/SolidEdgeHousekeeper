@@ -8,103 +8,23 @@ Public Class UtilsFileList
     Public Property ListViewSources As ListView
     Public Property FMain As Form_Main
     Public Property ErrorLogger As HCErrorLogger
+    Private Property ListOfColumns As List(Of PropertyColumn)
+
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
         Me.ListViewFiles = Me.FMain.ListViewFiles
         Me.ListViewSources = Me.FMain.ListViewSources
         Me.ErrorLogger = New HCErrorLogger("Housekeeper")
+
+        Me.ListOfColumns = New List(Of PropertyColumn)
+        If FMain.ListOfColumns IsNot Nothing Then
+            For Each tmpPropCol As PropertyColumn In FMain.ListOfColumns
+                Me.ListOfColumns.Add(tmpPropCol.DeepCopy)
+            Next
+        End If
     End Sub
 
-
-    Private Function CheckStartConditions(ByRef BareTopLevelAssembly As Boolean) As Boolean
-        Dim Proceed As Boolean = True
-
-        Dim StartLogger As Logger = ErrorLogger.AddFile("Check Start Conditions")
-
-        Dim GroupTags As New List(Of String)
-        Dim msg As String
-
-        For i = 0 To ListViewSources.Items.Count - 1
-            If ListViewSources.Items(i).Group.Name = "Sources" Then
-                GroupTags.Add(CType(ListViewSources.Items(i).Tag, String))
-            End If
-        Next
-
-        If Not GroupTags.Contains("asm") Then
-            If GroupTags.Contains("ASM_Folder") Then
-                msg = "A top level assembly folder was found with no top level assembly specified.  "
-                msg += "Please add an assembly, or delete the folder(s)."
-                StartLogger.AddMessage(msg)
-            End If
-        End If
-
-        If GroupTags.Contains("asm") Then
-            If (FMain.TLABottomUp) And (Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename)) Then
-                msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
-                StartLogger.AddMessage(msg)
-            End If
-
-            If (FMain.TLATopDown) And (Not FileIO.FileSystem.FileExists(FMain.LinkManagementFilename)) Then
-                msg = "LinkMgmt.txt file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
-                StartLogger.AddMessage(msg)
-            End If
-
-            If Not (GroupTags.Contains("ASM_Folder")) Then
-                If FMain.WarnBareTLA Then
-                    msg = "A top-level assembly with no top-level folder detected.  "
-                    msg += "No 'Where Used' will be performed."
-                    msg += "Disable this check on the Configuration Tab -- Top Level Assembly page"
-                    StartLogger.AddMessage(msg)
-                Else
-                    BareTopLevelAssembly = True
-                End If
-            End If
-
-        End If
-
-        If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
-            Dim USEA = FMain.USEA
-            USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
-
-
-            If Not USEA.SEIsRunning Then
-                StartLogger.AddMessage("SE must be running to obtain active files")
-            Else
-                USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
-
-                Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
-                If SEDocuments.Count > 0 Then
-                    If GroupTags.Contains("ActiveFiles") Then
-                        For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
-                            If Not IO.File.Exists(SEDocument.FullName) Then
-                                StartLogger.AddMessage($"File needs to be saved before continuing: '{SEDocument.FullName}'")
-                            End If
-                        Next
-                    End If
-                    If GroupTags.Contains("ActiveFile") Then
-                        Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
-                        ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-                        FMain.ActiveFile = ActiveDocument.FullName
-                        If Not IO.File.Exists(ActiveDocument.FullName) Then
-                            Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
-                            If Not StartLogger.ContainsMessage(s) Then StartLogger.AddMessage(s)
-                        End If
-                    End If
-                Else
-                    StartLogger.AddMessage("SE cannot process active files with no file open.")
-                End If
-
-            End If
-        End If
-
-        If Me.ErrorLogger.HasErrors Then
-            Me.ErrorLogger.ReportErrors(UseMessageBox:=True)
-            Proceed = False
-        End If
-
-        Return Proceed
-    End Function
 
     Public Sub New_UpdateFileList()
 
@@ -237,11 +157,104 @@ Public Class UtilsFileList
             ElapsedTimeText = $"in {(ElapsedTime / 60).ToString("0.0")} hr."
         End If
 
-        Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
+        'Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
+        Dim filecount As Integer = ListViewFiles.Items.Count
         FMain.TextBoxStatus.Text = $"{filecount} files found in {ElapsedTimeText}"
 
 
     End Sub
+
+    Private Function CheckStartConditions(ByRef BareTopLevelAssembly As Boolean) As Boolean
+        Dim Proceed As Boolean = True
+
+        Dim StartLogger As Logger = ErrorLogger.AddFile("Check Start Conditions")
+
+        Dim GroupTags As New List(Of String)
+        Dim msg As String
+
+        For i = 0 To ListViewSources.Items.Count - 1
+            If ListViewSources.Items(i).Group.Name = "Sources" Then
+                GroupTags.Add(CType(ListViewSources.Items(i).Tag, String))
+            End If
+        Next
+
+        If Not GroupTags.Contains("asm") Then
+            If GroupTags.Contains("ASM_Folder") Then
+                msg = "A top level assembly folder was found with no top level assembly specified.  "
+                msg += "Please add an assembly, or delete the folder(s)."
+                StartLogger.AddMessage(msg)
+            End If
+        End If
+
+        If GroupTags.Contains("asm") Then
+            If (FMain.TLABottomUp) And (Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename)) Then
+                msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
+                StartLogger.AddMessage(msg)
+            End If
+
+            If (FMain.TLATopDown) And (Not FileIO.FileSystem.FileExists(FMain.LinkManagementFilename)) Then
+                msg = "LinkMgmt.txt file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
+                StartLogger.AddMessage(msg)
+            End If
+
+            If Not (GroupTags.Contains("ASM_Folder")) Then
+                If FMain.WarnBareTLA Then
+                    msg = "A top-level assembly with no top-level folder detected.  "
+                    msg += "No 'Where Used' will be performed."
+                    msg += "Disable this check on the Configuration Tab -- Top Level Assembly page"
+                    StartLogger.AddMessage(msg)
+                Else
+                    BareTopLevelAssembly = True
+                End If
+            End If
+
+        End If
+
+        If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
+            Dim USEA = FMain.USEA
+            USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
+
+
+            If Not USEA.SEIsRunning Then
+                StartLogger.AddMessage("SE must be running to obtain active files")
+            Else
+                USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+
+                Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+                If SEDocuments.Count > 0 Then
+                    If GroupTags.Contains("ActiveFiles") Then
+                        For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
+                            If Not IO.File.Exists(SEDocument.FullName) Then
+                                StartLogger.AddMessage($"File needs to be saved before continuing: '{SEDocument.FullName}'")
+                            End If
+                        Next
+                    End If
+                    If GroupTags.Contains("ActiveFile") Then
+                        Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
+                        ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+                        FMain.ActiveFile = ActiveDocument.FullName
+                        If Not IO.File.Exists(ActiveDocument.FullName) Then
+                            Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
+                            If Not StartLogger.ContainsMessage(s) Then StartLogger.AddMessage(s)
+                        End If
+                    End If
+                Else
+                    StartLogger.AddMessage("SE cannot process active files with no file open.")
+                End If
+
+            End If
+        End If
+
+        If Me.ErrorLogger.HasErrors Then
+            Me.ErrorLogger.ReportErrors(UseMessageBox:=True)
+            Proceed = False
+        End If
+
+        Return Proceed
+    End Function
+
+
+    ' ###### FILES AND DIRECTORIES ######
 
     Private Function FindFiles(
         Source As ListViewItem,
@@ -452,7 +465,7 @@ Public Class UtilsFileList
 
     End Function
 
-    Public Sub GetMyDirectories(ByVal Path As String, ByRef DirectoriesList As List(Of String))
+    Private Sub GetMyDirectories(ByVal Path As String, ByRef DirectoriesList As List(Of String))
 
         Try
 
@@ -477,114 +490,82 @@ Public Class UtilsFileList
 
     End Sub
 
-    Public Sub PopulateListView(FoundFiles As IReadOnlyCollection(Of String))
 
-        Dim UC As New UtilsCommon
-        Dim tf As Boolean
-        Dim NumProcessed As Integer = 0
-        Dim PopulatePropertyColumns As Boolean = True
+    Public Function GetFileNames(ByVal FileWildcard As String) As List(Of String)
+        ' Build up list of files to process depending on which option was selected.
+        Dim FoundFilesArray As String() = {}
+        Dim FoundFilesList As New List(Of String)
+        Dim Filename As String
 
-        ' ###### User input for displaying file properties for a large number of files.
+        'Dim FileExtension As String = FileWildcard.Replace("*", "")
+        Dim FileExtension As String = ""
 
-        If (FMain.ListOfColumns.Count > 2) And (FoundFiles.Count > 1000) Then
+        Select Case FileWildcard
+            Case "*.asm", "*.par", "*.psm", "*.dft"
+                FileExtension = FileWildcard.Replace("*", "")
+            Case "*.*"
+                FileExtension = FileWildcard
+        End Select
 
-            Dim HasColumnsToProcess As Boolean = False
-            For Each PropColumn In Me.FMain.ListOfColumns
-                If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
-                    If PropColumn.Visible Then
-                        HasColumnsToProcess = True
-                        Exit For
+        'FMain.TextBoxStatus.Text = "Getting files..."
+
+        If ListViewFiles.SelectedItems.Count > 0 Then
+            For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1
+                Filename = ListViewFiles.SelectedItems.Item(i).Name
+                If System.IO.Path.GetExtension(Filename).ToLower = FileExtension Or FileExtension = "*.*" Then
+                    FoundFilesList.Add(Filename)
+                End If
+            Next
+        Else
+            'Dim ProcessLast As New List(Of String)  ' Trying to process top level assy last
+
+            For i As Integer = 0 To ListViewFiles.Items.Count - 1
+                Filename = ListViewFiles.Items(i).Name
+                If System.IO.Path.GetExtension(Filename).ToLower = FileExtension Or FileExtension = "*.*" Then
+                    If ListViewFiles.Items(i).Group.Name <> "Excluded" Then
+                        'If ListViewFiles.Items(i).Group.Name = "Sources" Then
+                        '    ProcessLast.Add(Filename)
+                        'Else
+                        '    FoundFilesList.Add(Filename)
+                        'End If
+                        FoundFilesList.Add(Filename)
                     End If
                 End If
             Next
 
-            If HasColumnsToProcess Then
-                Dim s As String = $"Getting file properties on {FoundFiles.Count} files can take some time.  "
-                s = $"{s}Do you want to have them displayed anyway?"
-                Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
-                If Result = MsgBoxResult.No Then
-                    PopulatePropertyColumns = False
-                End If
-            End If
+            'For Each Filename In ProcessLast
+            '    FoundFilesList.Add(Filename)
+            'Next
+
         End If
 
-        ListViewFiles.BeginUpdate()
+        Return FoundFilesList
+    End Function
 
-        For Each FoundFile In FoundFiles
+    Public Function GetTotalFilesToProcess() As Integer
+        Dim Count As Integer = 0
 
-            FMain.TextBoxStatus.Text = $"Updating List {System.IO.Path.GetFileName(FoundFile)}"
+        Dim PartCount As Integer = 0
+        Dim SheetmetalCount As Integer = 0
+        Dim AssemblyCount As Integer = 0
+        Dim DraftCount As Integer = 0
 
-            If NumProcessed Mod 100 = 0 Then
-                System.Windows.Forms.Application.DoEvents()
-                If FMain.StopProcess Then
-                    Exit For
-                End If
-
-            End If
-
-
-            tf = True
-            tf = tf And UC.FilenameIsOK(FoundFile)
-            tf = tf And IO.File.Exists(FoundFile)
-
-            If tf Then
-
-                Dim tmpFinfo As IO.FileInfo = My.Computer.FileSystem.GetFileInfo(FoundFile)
-
-                Dim tmpLVItem As New ListViewItem
-
-                tmpLVItem.BackColor = Color.White
-
-                tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
-                tmpLVItem.UseItemStyleForSubItems = False
-                tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
-
-                tmpLVItem.ImageKey = "Unchecked"
-                tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
-                tmpLVItem.Name = FoundFile
-                tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
-
-                tmpLVItem.ToolTipText = tmpLVItem.Name & vbCrLf &
-                    "Size: " & (tmpFinfo.Length / 1024).ToString("0") & " KB" & vbCrLf &
-                    "Date created: " & tmpFinfo.CreationTime.ToShortDateString() & vbCrLf &
-                    "Date modified: " & tmpFinfo.LastWriteTime.ToShortDateString()
-
-                If tmpFinfo.IsReadOnly Then tmpLVItem.BackColor = Color.LightGray : tmpLVItem.SubItems.Item(1).BackColor = Color.LightGray '<----- setting the read-only backcolor
-
-                ListViewFiles.Items.Add(tmpLVItem)
-            Else
-                ' Trying to add a file that does not exist
-                Dim tmpLVItem As New ListViewItem
-
-                tmpLVItem.BackColor = Color.White
-
-                tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
-                tmpLVItem.UseItemStyleForSubItems = False
-                tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
-
-                tmpLVItem.ImageKey = "Error"
-                tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
-                tmpLVItem.Name = FoundFile
-                tmpLVItem.Group = ListViewFiles.Groups.Item("Excluded") 'ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
-
-                tmpLVItem.ToolTipText = "File not found"
-
-                tmpLVItem.ForeColor = Color.Red : tmpLVItem.SubItems.Item(1).ForeColor = Color.Red
-
-                ListViewFiles.Items.Add(tmpLVItem)
-            End If
-
-            NumProcessed += 1
+        For Each Task As Task In FMain.TaskList
+            If Task.IsSelectedPart Then PartCount += 1
+            If Task.IsSelectedSheetmetal Then SheetmetalCount += 1
+            If Task.IsSelectedAssembly Then AssemblyCount += 1
+            If Task.IsSelectedDraft Then DraftCount += 1
         Next
 
-        If PopulatePropertyColumns Then UpdatePropertiesColumns()
+        If PartCount > 0 Then Count += GetFileNames("*.par").Count
+        If SheetmetalCount > 0 Then Count += GetFileNames("*.psm").Count
+        If AssemblyCount > 0 Then Count += GetFileNames("*.asm").Count
+        If DraftCount > 0 Then Count += GetFileNames("*.dft").Count
 
-        ListViewFiles.EndUpdate()
+        Return Count
+    End Function
 
-        FMain.TextBoxStatus.Text = ""
-    End Sub
-
-    Public Function RemoveProblemFiles(
+    Private Function RemoveProblemFiles(
         FoundFiles As IReadOnlyCollection(Of String),
         ActiveFileExtensionsList As List(Of String)
         ) As IReadOnlyCollection(Of String)
@@ -621,7 +602,10 @@ Public Class UtilsFileList
 
     End Function
 
-    Public Function ProcessTLA(
+
+    ' ###### TOP LEVEL ASSEMBLY ######
+
+    Private Function ProcessTLA(
         BareTopLevelAssembly As Boolean,
         Source As ListViewItem,
         ActiveFileExtensionsList As List(Of String)
@@ -693,7 +677,9 @@ Public Class UtilsFileList
     End Function
 
 
-    Public Function FileWildcardSearch(
+    ' ###### SORT AND FILTER ######
+
+    Private Function FileWildcardSearch(
         ByVal FoundFiles As IReadOnlyCollection(Of String),
         ByVal WildcardString As String) As IReadOnlyCollection(Of String)
 
@@ -710,79 +696,6 @@ Public Class UtilsFileList
         Next
 
         Return tmpFoundFiles
-    End Function
-
-    Public Function GetFileNames(ByVal FileWildcard As String) As List(Of String)
-        ' Build up list of files to process depending on which option was selected.
-        Dim FoundFilesArray As String() = {}
-        Dim FoundFilesList As New List(Of String)
-        Dim Filename As String
-
-        'Dim FileExtension As String = FileWildcard.Replace("*", "")
-        Dim FileExtension As String = ""
-
-        Select Case FileWildcard
-            Case "*.asm", "*.par", "*.psm", "*.dft"
-                FileExtension = FileWildcard.Replace("*", "")
-            Case "*.*"
-                FileExtension = FileWildcard
-        End Select
-
-        'FMain.TextBoxStatus.Text = "Getting files..."
-
-        If ListViewFiles.SelectedItems.Count > 0 Then
-            For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1
-                Filename = ListViewFiles.SelectedItems.Item(i).Name
-                If System.IO.Path.GetExtension(Filename) = FileExtension Or FileExtension = "*.*" Then
-                    FoundFilesList.Add(Filename)
-                End If
-            Next
-        Else
-            Dim ProcessLast As New List(Of String)  ' Trying to process top level assy last
-
-            For i As Integer = 0 To ListViewFiles.Items.Count - 1
-                Filename = ListViewFiles.Items(i).Name
-                If System.IO.Path.GetExtension(Filename) = FileExtension Or FileExtension = "*.*" Then
-                    If ListViewFiles.Items(i).Group.Name <> "Excluded" Then
-                        If ListViewFiles.Items(i).Group.Name = "Sources" Then
-                            ProcessLast.Add(Filename)
-                        Else
-                            FoundFilesList.Add(Filename)
-                        End If
-                    End If
-                End If
-            Next
-
-            For Each Filename In ProcessLast
-                FoundFilesList.Add(Filename)
-            Next
-
-        End If
-
-        Return FoundFilesList
-    End Function
-
-    Public Function GetTotalFilesToProcess() As Integer
-        Dim Count As Integer = 0
-
-        Dim PartCount As Integer = 0
-        Dim SheetmetalCount As Integer = 0
-        Dim AssemblyCount As Integer = 0
-        Dim DraftCount As Integer = 0
-
-        For Each Task As Task In FMain.TaskList
-            If Task.IsSelectedPart Then PartCount += 1
-            If Task.IsSelectedSheetmetal Then SheetmetalCount += 1
-            If Task.IsSelectedAssembly Then AssemblyCount += 1
-            If Task.IsSelectedDraft Then DraftCount += 1
-        Next
-
-        If PartCount > 0 Then Count += GetFileNames("*.par").Count
-        If SheetmetalCount > 0 Then Count += GetFileNames("*.psm").Count
-        If AssemblyCount > 0 Then Count += GetFileNames("*.asm").Count
-        If DraftCount > 0 Then Count += GetFileNames("*.dft").Count
-
-        Return Count
     End Function
 
     Private Function GetDependencySortedFiles(
@@ -1113,67 +1026,186 @@ Public Class UtilsFileList
     End Function
 
 
-    Public Sub UpdatePropertiesColumns()
+    ' ###### LISTVIEW ######
+
+    Private Sub PopulateListView(FoundFiles As IReadOnlyCollection(Of String))
 
         Dim UC As New UtilsCommon
+        Dim tf As Boolean
+        Dim NumProcessed As Integer = 0
+        Dim PopulatePropertyColumns As Boolean = True
+
+        ' ###### User input for displaying file properties for a large number of files.
+
+        If (Me.ListOfColumns.Count > 2) And (FoundFiles.Count > 1000) Then
+
+            Dim HasColumnsToProcess As Boolean = False
+            For Each PropColumn In Me.ListOfColumns
+                If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+                    If PropColumn.Visible Then
+                        HasColumnsToProcess = True
+                        Exit For
+                    End If
+                End If
+            Next
+
+            If HasColumnsToProcess Then
+                Dim s As String = $"Getting file properties on {FoundFiles.Count} files can take some time.  "
+                s = $"{s}Do you want to have them displayed anyway?"
+                Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
+                If Result = MsgBoxResult.No Then
+                    PopulatePropertyColumns = False
+                End If
+            End If
+        End If
 
         ListViewFiles.BeginUpdate()
 
-        'Resetting the columns
-        If ListViewFiles.Columns.Count > 2 Then
-            Do Until ListViewFiles.Columns.Count = 2
-                ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-            Loop
-        End If
+        For Each FoundFile In FoundFiles
 
-        Dim NumProcessed As Integer = 0
+            FMain.TextBoxStatus.Text = $"Updating List {System.IO.Path.GetFileName(FoundFile)}"
 
-        For Each tmpLVItem As ListViewItem In ListViewFiles.Items
-
-            If tmpLVItem.Group.Name <> "Excluded" Then  'Ignore excluded files from update
-
-                If tmpLVItem.SubItems.Count > 2 Then
-
-                    Do Until tmpLVItem.SubItems.Count = 2
-
-                        tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
-
-                    Loop
-
+            If NumProcessed Mod 100 = 0 Then
+                System.Windows.Forms.Application.DoEvents()
+                If FMain.StopProcess Then
+                    Exit For
                 End If
-
-                tmpLVItem.UseItemStyleForSubItems = False
-
-                Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
-
-                FMain.TextBoxStatus.Text = $"Getting properties {System.IO.Path.GetFileName(FullName)}"
-                If NumProcessed Mod 100 = 0 Then
-                    System.Windows.Forms.Application.DoEvents()
-                    If FMain.StopProcess Then
-                        Exit For
-                    End If
-
-                End If
-
-                Dim IsReadOnly As Boolean = tmpLVItem.SubItems(0).BackColor = Color.LightGray
-
-                UpdateLVItem(tmpLVItem, IsReadOnly)
 
             End If
 
-            NumProcessed += 1
 
+            tf = True
+            tf = tf And UC.FilenameIsOK(FoundFile)
+            tf = tf And IO.File.Exists(FoundFile)
+
+            If tf Then
+
+                Dim tmpFinfo As IO.FileInfo = My.Computer.FileSystem.GetFileInfo(FoundFile)
+
+                Dim tmpLVItem As New ListViewItem
+
+                tmpLVItem.BackColor = Color.White
+
+                tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
+                tmpLVItem.UseItemStyleForSubItems = False
+                tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+
+                tmpLVItem.ImageKey = "Unchecked"
+                tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
+                tmpLVItem.Name = FoundFile
+                tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+
+                tmpLVItem.ToolTipText = tmpLVItem.Name & vbCrLf &
+                    "Size: " & (tmpFinfo.Length / 1024).ToString("0") & " KB" & vbCrLf &
+                    "Date created: " & tmpFinfo.CreationTime.ToShortDateString() & vbCrLf &
+                    "Date modified: " & tmpFinfo.LastWriteTime.ToShortDateString()
+
+                If tmpFinfo.IsReadOnly Then tmpLVItem.BackColor = Color.LightGray : tmpLVItem.SubItems.Item(1).BackColor = Color.LightGray '<----- setting the read-only backcolor
+
+                ListViewFiles.Items.Add(tmpLVItem)
+            Else
+                ' Trying to add a file that does not exist
+                Dim tmpLVItem As New ListViewItem
+
+                tmpLVItem.BackColor = Color.White
+
+                tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
+                tmpLVItem.UseItemStyleForSubItems = False
+                tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+
+                tmpLVItem.ImageKey = "Error"
+                tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
+                tmpLVItem.Name = FoundFile
+                tmpLVItem.Group = ListViewFiles.Groups.Item("Excluded") 'ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+
+                tmpLVItem.ToolTipText = "File not found"
+
+                tmpLVItem.ForeColor = Color.Red : tmpLVItem.SubItems.Item(1).ForeColor = Color.Red
+
+                ListViewFiles.Items.Add(tmpLVItem)
+            End If
+
+            NumProcessed += 1
         Next
 
-        CreateColumns()
+        If PopulatePropertyColumns Then UpdatePropertiesColumns()
 
         ListViewFiles.EndUpdate()
+
+        FMain.TextBoxStatus.Text = ""
+    End Sub
+
+
+    ' ###### PROPERTY COLUMNS ######
+
+
+    Public Sub UpdatePropertiesColumns()
+
+        Dim NewWay As Boolean = True
+
+        If NewWay Then
+            UpdatePropertiesColumns2()
+        Else
+            Dim UC As New UtilsCommon
+
+            ListViewFiles.BeginUpdate()
+
+            'Resetting the columns
+            If ListViewFiles.Columns.Count > 2 Then
+                Do Until ListViewFiles.Columns.Count = 2
+                    ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+                Loop
+            End If
+
+            Dim NumProcessed As Integer = 0
+
+            For Each tmpLVItem As ListViewItem In ListViewFiles.Items
+
+                If tmpLVItem.Group.Name <> "Excluded" Then  'Ignore excluded files from update
+
+                    If tmpLVItem.SubItems.Count > 2 Then
+
+                        Do Until tmpLVItem.SubItems.Count = 2
+
+                            tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
+
+                        Loop
+
+                    End If
+
+                    tmpLVItem.UseItemStyleForSubItems = False
+
+                    Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
+
+                    FMain.TextBoxStatus.Text = $"Getting properties {System.IO.Path.GetFileName(FullName)}"
+                    If NumProcessed Mod 100 = 0 Then
+                        System.Windows.Forms.Application.DoEvents()
+                        If FMain.StopProcess Then
+                            Exit For
+                        End If
+
+                    End If
+
+                    Dim IsReadOnly As Boolean = tmpLVItem.SubItems(0).BackColor = Color.LightGray
+
+                    UpdateLVItem(tmpLVItem, IsReadOnly)
+
+                End If
+
+                NumProcessed += 1
+
+            Next
+
+            CreateColumns()
+
+            ListViewFiles.EndUpdate()
+        End If
 
     End Sub
 
     Private Sub CreateColumns()
 
-        For Each PropName In FMain.ListOfColumns
+        For Each PropName In Me.ListOfColumns
 
             If PropName.Name <> "Name" And PropName.Name <> "Path" Then
                 ListViewFiles.Columns.Add(PropName.Name, 0)
@@ -1205,10 +1237,11 @@ Public Class UtilsFileList
         'Dim y = LVItem.GetBounds(ItemBoundsPortion.Entire)
         'Dim z = FMain.ListViewFiles.ClientRectangle
 
-        If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
+        'If (LVItem.Group.Name <> "Sources") And (Me.ListOfColumns.Count > 2) Then
+        If (Me.ListOfColumns.Count > 2) Then
 
             Dim HasColumnsToProcess As Boolean = False
-            For Each PropColumn In Me.FMain.ListOfColumns
+            For Each PropColumn In Me.ListOfColumns
                 If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
                     If PropColumn.Visible Then
                         HasColumnsToProcess = True
@@ -1230,14 +1263,14 @@ Public Class UtilsFileList
                 End Try
 
                 If Not Proceed Then
-                    For Each PropColumn In FMain.ListOfColumns
+                    For Each PropColumn In Me.ListOfColumns
                         LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
                     Next
                 Else
 
                     Try
                         'Adding extra properties data if needed
-                        For Each PropColumn In FMain.ListOfColumns
+                        For Each PropColumn In Me.ListOfColumns
                             If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
 
                                 Dim PropValue As String = Nothing
@@ -1281,7 +1314,7 @@ Public Class UtilsFileList
 
                     Catch ex As Exception
 
-                        For Each PropColumn In FMain.ListOfColumns
+                        For Each PropColumn In Me.ListOfColumns
                             LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
                         Next
 
@@ -1300,4 +1333,284 @@ Public Class UtilsFileList
 
     End Sub
 
+
+
+    Public Sub UpdatePropertiesColumns2()
+
+
+        ListViewFiles.BeginUpdate()
+
+        Try
+            'Resetting the columns
+            If ListViewFiles.Columns.Count > 2 Then
+                Do Until ListViewFiles.Columns.Count = 2
+                    ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+                Loop
+            End If
+
+            If Not HasPropertiesToProcess() Then
+                ' ListViewFiles.EndUpdate()  ' Handled in the Finally clause
+                Exit Sub
+            End If
+
+            Dim ListViewFilesLUT As Dictionary(Of String, List(Of Integer)) = BuildListViewFilesLUT()
+
+            Dim Threads As Integer
+            If Environment.ProcessorCount = 1 Or Not CanRunParallel() Then
+                Threads = 1
+            Else
+                Threads = Math.Min(8, Environment.ProcessorCount - 1)
+            End If
+
+            Dim TrySingleThreaded As Boolean = False
+            If TrySingleThreaded Then Threads = 1
+
+            If Threads = 1 Then
+                Dim NumDone As Integer = 0
+                For Each Filename As String In ListViewFilesLUT.Keys
+                    Dim Results As Dictionary(Of String, String)
+                    Results = GetFileProperties(Filename)
+                    UpdateLVItem2(Results, ListViewFilesLUT)
+
+                    NumDone += 1
+                    FMain.TextBoxStatus.Text = $"Getting properties {NumDone} of {ListViewFilesLUT.Count}"
+                    System.Windows.Forms.Application.DoEvents()
+                    If FMain.StopProcess Then
+                        Exit For
+                    End If
+                Next
+            Else
+                ParallelProps(Threads, ListViewFilesLUT)
+            End If
+            'Catch ex As Exception
+        Finally
+            CreateColumns()
+            ListViewFiles.EndUpdate()
+        End Try
+
+
+    End Sub
+
+    Private Sub UpdateLVItem2(Results As Dictionary(Of String, String), ListViewFilesLUT As Dictionary(Of String, List(Of Integer)))
+
+        Dim Filename As String = Results("Filename")
+
+        For Each Idx As Integer In ListViewFilesLUT(Filename)
+            Dim tmpLVItem As ListViewItem = ListViewFiles.Items(Idx)
+
+            If tmpLVItem.SubItems.Count > 2 Then
+                Do Until tmpLVItem.SubItems.Count = 2
+                    tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
+                Loop
+            End If
+
+            tmpLVItem.UseItemStyleForSubItems = False
+
+            If Results.Keys.Count < 2 Then  ' ResultsDict only has one key, "Filename", if Try/Catch on SSDoc fails.
+                For Each PropCol In Me.ListOfColumns
+                    If PropCol.Name = "Name" Or PropCol.Name = "Path" Then Continue For
+
+                    tmpLVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, tmpLVItem.Font)
+                Next
+                Continue For
+            End If
+
+            For Each PropCol In Me.ListOfColumns
+                Dim PropValue As String = Nothing
+                Dim tmpColor As Color = tmpLVItem.BackColor
+
+                If PropCol.Name = "Name" Or PropCol.Name = "Path" Then Continue For
+
+                If PropCol.Visible Then
+
+                    PropValue = Results(PropCol.Name)
+
+                    If PropValue Is Nothing Then
+                        tmpColor = Color.Gainsboro
+                    End If
+
+                    Dim IsReadOnly As Boolean = tmpLVItem.SubItems(0).BackColor = Color.LightGray
+
+                    If IsReadOnly Or CBool(Results($"{PropCol.Name}:IsExposedVariable")) Then
+                        tmpColor = Color.LightGray
+                    End If
+                End If
+
+                tmpLVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, tmpLVItem.Font)
+            Next
+
+
+        Next
+
+    End Sub
+
+
+    Private Function GetFileProperties(Filename As String) As Dictionary(Of String, String)
+
+        Dim ResultsDict As New Dictionary(Of String, String)
+        ResultsDict("Filename") = Filename
+
+        Dim Proceed As Boolean = True
+
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
+        Try
+            SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
+            SSDoc.ReadProperties(FMain.PropertiesData)
+        Catch ex As Exception
+            Proceed = False
+        End Try
+
+        If Not Proceed Then
+            If SSDoc IsNot Nothing Then SSDoc.Close()
+            Return ResultsDict
+        End If
+
+        Dim UC As New UtilsCommon
+
+        For Each PropCol As PropertyColumn In Me.ListOfColumns
+
+            If (PropCol.Name = "Name" Or PropCol.Name = "Path" Or Not PropCol.Visible) Then Continue For
+
+            Dim PropValue As String = Nothing
+            Try
+                Dim tmpErrorLogger As New Logger("tmpLogger", Nothing)
+                PropValue = SSDoc.SubstitutePropertyFormulas(PropCol.Formula, tmpErrorLogger)
+            Catch ex As Exception
+            End Try
+
+            'If PropValue IsNot Nothing Then
+            '    ResultsDict(PropCol.Name) = PropValue
+            'Else
+            '    ResultsDict(PropCol.Name) = "Nothing"
+            'End If
+            ResultsDict(PropCol.Name) = PropValue
+
+            If Not IO.Path.GetExtension(Filename).ToLower = ".dft" Then
+                Try
+                    ResultsDict($"{PropCol.Name}:IsExposedVariable") = CStr(SSDoc.IsExposedVariable(UC.PropNameFromFormula(PropCol.Formula)))
+                Catch ex As Exception
+                    ResultsDict($"{PropCol.Name}:IsExposedVariable") = "False"
+                End Try
+            Else
+                ResultsDict($"{PropCol.Name}:IsExposedVariable") = "False"
+            End If
+
+        Next
+
+        If SSDoc IsNot Nothing Then SSDoc.Close()
+
+        Return ResultsDict
+    End Function
+
+    Private Function BuildListViewFilesLUT() As Dictionary(Of String, List(Of Integer))
+        ' Look up table that ties filenames to a ListViewFiles item index.
+        ' Need a list of indices, rather than a singleton, because unsorted lists
+        ' can contain duplicate filenames.
+
+        Dim ListViewFilesLUT As New Dictionary(Of String, List(Of Integer))
+
+        For i As Integer = 0 To ListViewFiles.Items.Count - 1
+            Dim tmpLVItem As ListViewItem = ListViewFiles.Items(i)
+
+            If tmpLVItem.Group.Name = "Excluded" Then Continue For
+
+            If Not ListViewFilesLUT.Keys.Contains(tmpLVItem.Name) Then
+                ListViewFilesLUT(tmpLVItem.Name) = {i}.ToList
+            Else
+                ListViewFilesLUT(tmpLVItem.Name).Add(i)
+            End If
+        Next
+
+        Return ListViewFilesLUT
+    End Function
+
+    Private Sub ParallelProps(Threads As Integer, ListViewFilesLUT As Dictionary(Of String, List(Of Integer)))
+
+        Using CancellationTokenSource As New System.Threading.CancellationTokenSource
+
+            Dim Options As New System.Threading.Tasks.ParallelOptions
+            Options.MaxDegreeOfParallelism = Threads
+            Options.CancellationToken = CancellationTokenSource.Token
+
+            Dim Finished As New System.Collections.Concurrent.ConcurrentQueue(Of Dictionary(Of String, String))
+
+            Dim Work As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(
+                Sub()
+                    System.Threading.Tasks.Parallel.ForEach(Of String)(
+                            ListViewFilesLUT.Keys,
+                            Options,
+                            Sub(Filename As String)
+                                Finished.Enqueue(GetFileProperties(Filename))
+                            End Sub)
+                End Sub)
+
+            Dim NumDone As Integer = 0
+            Do
+                Dim Results As Dictionary(Of String, String) = Nothing
+                Do While Finished.TryDequeue(Results)
+                    UpdateLVItem2(Results, ListViewFilesLUT)
+                    NumDone += 1
+                Loop
+
+                FMain.TextBoxStatus.Text = $"Getting properties {NumDone} of {ListViewFilesLUT.Count}"
+                System.Windows.Forms.Application.DoEvents()
+                If FMain.StopProcess Then
+                    CancellationTokenSource.Cancel()
+                End If
+
+                If Work.IsCompleted AndAlso Finished.IsEmpty Then Exit Do
+                System.Threading.Thread.Sleep(50)
+            Loop
+
+            Try
+                Work.Wait()
+            Catch ex As System.AggregateException When TypeOf ex.InnerException Is System.OperationCanceledException
+
+            End Try
+
+        End Using
+
+
+    End Sub
+
+    Private Function CanRunParallel() As Boolean
+        Dim Proceed As Boolean = True
+
+        Dim UC As New UtilsCommon
+
+        For Each PropCol As PropertyColumn In Me.ListOfColumns
+
+            If Not PropCol.Visible Then Continue For
+
+            If PropCol.Name <> "Name" And PropCol.Name <> "Path" Then
+                If UC.PropSetFromFormula(PropCol.Formula).ToLower = "server" Then
+                    Proceed = False
+                    Exit For
+                End If
+                If Not UC.ModelIdxFromFormula(PropCol.Formula) = 0 Then
+                    Proceed = False
+                    Exit For
+                End If
+            End If
+
+        Next
+
+        Return Proceed
+    End Function
+
+    Private Function HasPropertiesToProcess() As Boolean
+        Dim Proceed As Boolean = False
+
+        For Each PropCol As PropertyColumn In Me.ListOfColumns
+
+            If Not PropCol.Visible Then Continue For
+
+            If Not PropCol.Name = "Name" And Not PropCol.Name = "Path" Then
+                Proceed = True
+                Exit For
+            End If
+        Next
+
+        Return Proceed
+    End Function
 End Class

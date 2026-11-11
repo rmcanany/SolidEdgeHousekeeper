@@ -197,7 +197,7 @@ Public Class UtilsExecute
                 FMain.TextBoxStatus.Text = $"Checking file integrity: {IO.Path.GetFileName(Filename.Name)}"
                 Application.DoEvents()
 
-                If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
+                If Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
 
                     Filename.ImageKey = "Unchecked"
 
@@ -220,7 +220,7 @@ Public Class UtilsExecute
                 FMain.TextBoxStatus.Text = $"Checking file integrity: {IO.Path.GetFileName(Filename.Name)}"
                 Application.DoEvents()
 
-                If Filename.Group.Name <> "Sources" And Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
+                If Filename.Group.Name <> "Excluded" And Filename.ForeColor <> Color.Red Then
 
                     Filename.ImageKey = "Unchecked"
 

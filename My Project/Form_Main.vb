@@ -1271,10 +1271,12 @@ Public Class Form_Main
         If ListViewFiles.Groups.Count = 0 Then
 
             Dim GroupHeaderNames As New List(Of String)
-            GroupHeaderNames.AddRange({"Files sources", "Excluded files", "Assemblies", "Parts", "Sheetmetals", "Drafts"})
+            'GroupHeaderNames.AddRange({"Files sources", "Excluded files", "Assemblies", "Parts", "Sheetmetals", "Drafts"})
+            GroupHeaderNames.AddRange({"Excluded files", "Assemblies", "Parts", "Sheetmetals", "Drafts"})
 
             Dim GroupNames As New List(Of String)
-            GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
+            'GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
+            GroupNames.AddRange({"Excluded", ".asm", ".par", ".psm", ".dft"})
 
             For i As Integer = 0 To GroupHeaderNames.Count - 1
                 If ShowSplash Then Splash.UpdateStatus($"Initializing {GroupHeaderNames(i)}")
@@ -2283,11 +2285,31 @@ Public Class Form_Main
             For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
 
                 Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
-                If tmpItem.Group.Name = "Sources" Then
-                    tmpItem.Remove()
-                    'ListViewFilesOutOfDate = True
+                'If tmpItem.Group.Name = "Sources" Then
+                '    tmpItem.Remove()
+                '    'ListViewFilesOutOfDate = True
 
-                ElseIf tmpItem.Group.Name <> "Excluded" Then
+                'ElseIf tmpItem.Group.Name <> "Excluded" Then
+                '    ' Move item to "Excluded" group
+                '    tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+
+                '    If DragDropCache.Contains(tmpItem) Then
+                '        DragDropCacheExcluded.Add(tmpItem)
+                '        DragDropCache.Remove(tmpItem)
+                '    End If
+                'Else
+                '    ' Move item from "Excluded" group back to the group matching the file's extension
+                '    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+
+                '    If DragDropCacheExcluded.Contains(tmpItem) Then
+                '        DragDropCache.Add(tmpItem)
+                '        DragDropCacheExcluded.Remove(tmpItem)
+
+                '    End If
+
+                'End If
+
+                If tmpItem.Group.Name <> "Excluded" Then
                     ' Move item to "Excluded" group
                     tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
 
@@ -2297,7 +2319,7 @@ Public Class Form_Main
                     End If
                 Else
                     ' Move item from "Excluded" group back to the group matching the file's extension
-                    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+                    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name).ToLower)
 
                     If DragDropCacheExcluded.Contains(tmpItem) Then
                         DragDropCache.Add(tmpItem)
@@ -2384,7 +2406,7 @@ Public Class Form_Main
             Dim content As String = ""
             For Each tmpItem As ListViewItem In ListViewFiles.Items
 
-                If tmpItem.Group.Name <> "Sources" And tmpItem.Group.Name <> "Excluded" Then
+                If tmpItem.Group.Name <> "Excluded" Then
                     content += tmpItem.Name
 
                     For Each subItem As ListViewItem.ListViewSubItem In tmpItem.SubItems
@@ -2445,12 +2467,17 @@ Public Class Form_Main
         For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
 
             Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
-            If tmpItem.Group.Name = "Sources" Then
-                tmpItem.Remove()
-            ElseIf tmpItem.Group.Name <> "Excluded" Then
+            'If tmpItem.Group.Name = "Sources" Then
+            '    tmpItem.Remove()
+            'ElseIf tmpItem.Group.Name <> "Excluded" Then
+            '    tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+            'Else
+            '    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+            'End If
+            If tmpItem.Group.Name <> "Excluded" Then
                 tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
             Else
-                tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+                tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name).ToLower)
             End If
 
         Next
@@ -4358,6 +4385,15 @@ Public Class PropertyColumn
     Property Formula As String
     Property Width As Integer
 
+    Public Function DeepCopy() As PropertyColumn
+        Dim tmpPropCol As New PropertyColumn With {
+            .Name = Me.Name,
+            .Visible = Me.Visible,
+            .Formula = Me.Formula,
+            .Width = Me.Width
+        }
+        Return tmpPropCol
+    End Function
     Public Function ToJSON() As String
         Dim JSONString As String
         Dim tmpList As New List(Of String)
