@@ -72,10 +72,10 @@ Public Class UtilsFileList
         Next
 
         If Not FMain.SortNone Then
-            tmpFoundFiles = tmpFoundFiles.Distinct.ToList
+            tmpFoundFiles = tmpFoundFiles.Distinct(System.StringComparer.OrdinalIgnoreCase).ToList
         Else
             If Not FMain.KeepUnsortedDuplicates Then
-                tmpFoundFiles = tmpFoundFiles.Distinct.ToList
+                tmpFoundFiles = tmpFoundFiles.Distinct(System.StringComparer.OrdinalIgnoreCase).ToList
             End If
         End If
 
@@ -127,15 +127,6 @@ Public Class UtilsFileList
             End If
         End If
 
-        If Me.ErrorLogger.HasErrors Then
-            ErrorLogger.ReportErrors(UseMessageBox:=False)
-            FMain.StopProcess = False
-            FMain.ButtonCancel.Text = "Cancel"
-
-            FMain.Cursor = Cursors.Default
-            Exit Sub
-        End If
-
         ListViewFiles.BeginUpdate()
 
         ' Populate ListView
@@ -160,6 +151,8 @@ Public Class UtilsFileList
         'Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
         Dim filecount As Integer = ListViewFiles.Items.Count
         FMain.TextBoxStatus.Text = $"{filecount} files found in {ElapsedTimeText}"
+
+        If Me.ErrorLogger.HasErrors Then ErrorLogger.ReportErrors(UseMessageBox:=False)
 
 
     End Sub
@@ -311,9 +304,11 @@ Public Class UtilsFileList
                                      FileIO.SearchOption.SearchTopLevelOnly,
                                      ActiveFileExtensionsList.ToArray)
                         Catch ex As Exception
-                            SubLogger.AddMessage($"Could not process {Source.Name}.  Exception: {ex.Message}")
+                            SubLogger.AddMessage($"Could not process '{Source.Name}'.  Exception: {ex.Message}")
                             FoundFiles = Nothing
                         End Try
+                    Else
+                        SubLogger.AddMessage($"Could not process '{Source.Name}'")
                     End If
 
                 Case = "Folders"
@@ -322,7 +317,7 @@ Public Class UtilsFileList
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
 
-                        Dim tmplist = GetAllDirectories(Source.Name)
+                        Dim tmplist = GetAllDirectories(Source.Name, SubLogger)
                         Dim tmpFolders As String()
                         tmpFolders = tmplist.ToArray
                         Dim tmpFoundFiles As New List(Of String)
@@ -345,6 +340,8 @@ Public Class UtilsFileList
                             SubLogger.AddMessage(s)
                         End If
 
+                    Else
+                        SubLogger.AddMessage($"Could not process '{Source.Name}'")
                     End If
 
                 Case = "ASM_Folder"
@@ -453,20 +450,27 @@ Public Class UtilsFileList
     End Function
 
 
-    Private Function GetAllDirectories(ByVal Path As String) As List(Of String)
+    Private Function GetAllDirectories(
+        ByVal Path As String,
+        SubLogger As Logger
+        ) As List(Of String)
 
         Dim tmpList As New List(Of String)
 
         tmpList.Add(Path)
 
-        GetMyDirectories(Path, tmpList)
+        GetMyDirectories(Path, tmpList, SubLogger)
 
         Return tmpList
 
     End Function
 
-    Private Sub GetMyDirectories(ByVal Path As String, ByRef DirectoriesList As List(Of String))
+    Private Sub GetMyDirectories(
+        ByVal Path As String,
+        ByRef DirectoriesList As List(Of String),
+        SubLogger As Logger)
 
+        'Dim SubDirectory As String = ""
         Try
 
             Dim tmpList As String() = IO.Directory.GetDirectories(Path, "*.*", IO.SearchOption.TopDirectoryOnly)
@@ -474,9 +478,10 @@ Public Class UtilsFileList
             DirectoriesList.AddRange(tmpList)
 
             'Loop  over sub-directories
-            For Each subDirectory As String In IO.Directory.GetDirectories(Path, "*.*", IO.SearchOption.TopDirectoryOnly)
+            'For Each subDirectory As String In IO.Directory.GetDirectories(Path, "*.*", IO.SearchOption.TopDirectoryOnly)
+            For Each SubDirectory As String In tmpList
 
-                Me.GetMyDirectories(subDirectory, DirectoriesList)
+                Me.GetMyDirectories(SubDirectory, DirectoriesList, SubLogger)
 
             Next
 
@@ -484,7 +489,7 @@ Public Class UtilsFileList
             'Access Denied exception
 
         Catch ex1 As Exception
-            'Other exceptions
+            SubLogger.AddMessage($"Could not process '{Path}'")
 
         End Try
 
@@ -585,7 +590,7 @@ Public Class UtilsFileList
                 ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
                 ' Causes a problem comparing extensions
                 Try
-                    tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
+                    tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item.ToLower).Replace(".", "*."))
                 Catch ex As Exception
                     ' MsgBox("Catch")
                 End Try
