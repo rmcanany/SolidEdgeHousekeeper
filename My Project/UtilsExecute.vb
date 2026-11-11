@@ -276,13 +276,13 @@ Public Class UtilsExecute
                         If tmpItem.Tag.ToString = "TeamCenter" Then
                             If TypeOf Task Is TaskCreateDrawingOfFlatPattern Then
                                 Dim T As TaskCreateDrawingOfFlatPattern = CType(Task, TaskCreateDrawingOfFlatPattern)
-                                If Not T.DraftTemplate.Contains(FMain.TCCachePath) Then
+                                If Not T.DraftTemplate.StartsWith(FMain.TCCachePath, System.StringComparison.OrdinalIgnoreCase) Then
                                     StartLogger.AddMessage($"{Task.Description}: Template must be in TeamCenter cache folder")
                                 End If
                                 Exit For
                             ElseIf TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
                                 Dim T As TaskUpdateDrawingStylesFromTemplate = CType(Task, TaskUpdateDrawingStylesFromTemplate)
-                                If Not T.DraftTemplate.Contains(FMain.TCCachePath) Then
+                                If Not T.DraftTemplate.StartsWith(FMain.TCCachePath, System.StringComparison.OrdinalIgnoreCase) Then
                                     StartLogger.AddMessage($"{Task.Description}: Template must be in TeamCenter cache folder")
                                 End If
                                 Exit For
@@ -295,9 +295,10 @@ Public Class UtilsExecute
                     Dim T As TaskUpdateBlocks = CType(Task, TaskUpdateBlocks)
                     For Each tmpItem As ListViewItem In FMain.ListViewSources.Items
                         If tmpItem.Tag.ToString = "TeamCenter" Then
-                            If Not T.BlockLibrary.Contains(FMain.TCCachePath) Then
+                            If Not T.BlockLibrary.StartsWith(FMain.TCCachePath, System.StringComparison.OrdinalIgnoreCase) Then
                                 StartLogger.AddMessage($"{Task.Description}: Block library must be in TeamCenter cache folder")
                             End If
+                            Exit For
                         End If
                     Next
                 End If
