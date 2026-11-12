@@ -351,7 +351,7 @@ Public Class UtilsFileList
                     FMain.TextBoxStatus.Text = $"Processing top level assy '{System.IO.Path.GetFileName(Source.Name)}'"
                     System.Windows.Forms.Application.DoEvents()
 
-                    FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
+                    FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList, SubLogger)
 
                 Case "ActiveFile", "ActiveFiles"
                     Dim USEA = Me.FMain.USEA
@@ -621,12 +621,18 @@ Public Class UtilsFileList
     Private Function ProcessTLA(
         BareTopLevelAssembly As Boolean,
         Source As ListViewItem,
-        ActiveFileExtensionsList As List(Of String)
+        ActiveFileExtensionsList As List(Of String),
+        ErrorLogger As Logger
         ) As IReadOnlyCollection(Of String)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
 
-        If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
+        If Not FileIO.FileSystem.FileExists(Source.Name) Then
+            ErrorLogger.AddMessage($"File not found '{Source.Name}'")
+            Return Nothing
+        End If
+
+        If Not BareTopLevelAssembly Then
             Dim tmpFolders As New List(Of String)
 
             For Each item As ListViewItem In ListViewSources.Items
@@ -638,7 +644,7 @@ Public Class UtilsFileList
             Dim tmpFoundFiles As New List(Of String)
 
             If FMain.TLABottomUp Then
-                Dim UTLA As New UtilsTopLevelAssembly(FMain)
+                Dim UTLA As New UtilsTopLevelAssembly(FMain, ErrorLogger)
 
                 FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
@@ -649,7 +655,7 @@ Public Class UtilsFileList
                                                            FMain.TLAReportUnrelatedFiles))
 
             Else
-                Dim UTLA As New UtilsTopLevelAssembly(FMain)
+                Dim UTLA As New UtilsTopLevelAssembly(FMain, ErrorLogger)
                 tmpFoundFiles.AddRange(UTLA.GetLinksTopDown(tmpFolders,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
@@ -660,9 +666,9 @@ Public Class UtilsFileList
 
             FMain.TextBoxStatus.Text = ""
 
-        ElseIf (BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
+        Else
 
-            Dim UTLA As New UtilsTopLevelAssembly(FMain)
+            Dim UTLA As New UtilsTopLevelAssembly(FMain, ErrorLogger)
 
             FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 

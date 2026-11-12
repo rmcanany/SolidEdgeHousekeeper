@@ -2,9 +2,11 @@
 
 Public Class UtilsTopLevelAssembly
     Public Property FMain As Form_Main
+    Public Property ErrorLogger As Logger
 
-    Public Sub New(_Form_Main As Form_Main)
+    Public Sub New(_Form_Main As Form_Main, _ErrorLogger As Logger)
         Me.FMain = _Form_Main
+        Me.ErrorLogger = _ErrorLogger
     End Sub
 
 
@@ -82,24 +84,42 @@ Public Class UtilsTopLevelAssembly
         AllFilenames.Add(TopLevelAssembly)
 
         For Each TopLevelFolder As String In TopLevelFolders
-
-            Dim tmpAllFilenames = FileIO.FileSystem.GetFiles(
-                                      TopLevelFolder,
-                                      FileIO.SearchOption.SearchAllSubDirectories,
-                                      ActiveFileExtensionsList.ToArray)
-
-            For Each tmpFilename As String In tmpAllFilenames
-
-                FMain.TextBoxStatus.Text = $"Getting files {IO.Path.GetFileName(tmpFilename)}"
-
-                If Not AllFilenames.Contains(tmpFilename, StringComparer.OrdinalIgnoreCase) Then
-                    AllFilenames.Add(tmpFilename)
-                End If
-            Next
+            GetFilesAndRecurseSubs(TopLevelFolder, ActiveFileExtensionsList, AllFilenames)
         Next
 
         Return AllFilenames
     End Function
+
+    Private Sub GetFilesAndRecurseSubs(
+        Path As String,
+        ValidExtensions As List(Of String),
+        ByRef AllFilenames As List(Of String))
+
+        Try
+            '###### COLLECT ELIGIBLE FILES IN THIS DIRECTORY ######
+            Dim tmpFiles = FileIO.FileSystem.GetFiles(Path, FileIO.SearchOption.SearchTopLevelOnly, ValidExtensions.ToArray)
+            For Each tmpFile As String In tmpFiles
+                If Not AllFilenames.Contains(tmpFile, StringComparer.OrdinalIgnoreCase) Then
+                    FMain.TextBoxStatus.Text = $"Getting files {IO.Path.GetFileName(tmpFile)}"
+                    AllFilenames.Add(tmpFile)
+                End If
+            Next
+
+            '###### FOLLOW ANY DIRECTORIES ######
+            Dim tmpPaths = FileIO.FileSystem.GetDirectories(Path, FileIO.SearchOption.SearchTopLevelOnly)
+            For Each tmpPath As String In tmpPaths
+                GetFilesAndRecurseSubs(tmpPath, ValidExtensions, AllFilenames)
+            Next
+
+        Catch ex As UnauthorizedAccessException
+            'Access Denied exception.  Assuming SE also would be denied access.
+
+        Catch ex1 As Exception
+            Me.ErrorLogger.AddMessage($"Could not process '{Path}'")
+
+        End Try
+
+    End Sub
 
     Public Function GetContains(AllFilenames As List(Of String)) As FileLinksContainer
 
@@ -286,7 +306,6 @@ Public Class UtilsTopLevelAssembly
                Foundfiles As List(Of String))
 
         Dim AllFiles As New List(Of String)
-        Dim SomeFiles As IReadOnlyCollection(Of String)
         Dim ActiveFileExtensionsList As New List(Of String)
         Dim UnrelatedFiles As New List(Of String)
 
@@ -302,9 +321,8 @@ Public Class UtilsTopLevelAssembly
         ActiveFileExtensionsList.Add("*.dft")
 
         For Each TopLevelFolder In TopLevelFolders
-            SomeFiles = FileIO.FileSystem.GetFiles(TopLevelFolder,
-                        FileIO.SearchOption.SearchAllSubDirectories,
-                        ActiveFileExtensionsList.ToArray)
+            Dim SomeFiles As New List(Of String)
+            GetFilesAndRecurseSubs(TopLevelFolder, ActiveFileExtensionsList, SomeFiles)
 
             For Each Filename In SomeFiles
                 If Not Foundfiles.Contains(Filename, StringComparer.OrdinalIgnoreCase) Then
