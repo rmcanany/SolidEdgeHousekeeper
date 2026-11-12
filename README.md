@@ -233,7 +233,19 @@ Referring to the toolbar diagram, tool group 5,
 - Click ![Import List](Resources/icons8_Import_16.png) to import a list
 - Click ![Export List](Resources/icons8_Export_16.png) to export one
 
-If you are importing a list from another source, be aware that the file names must contain the full path.  E.g., `D:\Projects\Project123\Partxyz.par`, not just `Partxyz.par`.
+For imported lists, the program assumes one file name per line.  For multi-column formats, such as `.xls` and `.csv`, only the first column is used; the others are ignored.  Also, be aware that the file names must contain the full path.  E.g., `D:\Projects\Project123\Partxyz.par`, not just `Partxyz.par`.
+
+The valid list formats are
+- `.xls`, `.xlsx`, `.xlsm`: Excel files
+- `.txt`: Plain text files
+- `.csv`: Comma-separated-value text files
+- `.tsv`: Tab-separated-value text files
+
+For Excel files, the program uses the first worksheet (the left-most tab) in the file.
+
+You can experience parse errors with the `.csv` format.
+- If there is a comma in the directory or file name.
+- If you save Excel files as `.csv` and file names contain non-English characters (ä, é, ø…).  Get around this with Excel's CSV UTF-8 save option.
 
 </details>
 

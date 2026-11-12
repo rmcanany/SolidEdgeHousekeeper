@@ -510,12 +510,11 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function ReadExcel(FileName As String) As String()
+    Public Function ReadExcel(FileName As String) As List(Of String)
 
-        Dim tmpList As String() = Nothing
-        Dim i As Integer = 0
+        Dim tmpList As New List(Of String)
 
-        Using stream = System.IO.File.Open(FileName, IO.FileMode.Open, IO.FileAccess.Read)
+        Using stream = System.IO.File.Open(FileName, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite)
             ' Auto-detect format, supports:
             '  - Binary Excel files (2.0-2003 format; *.xls)
             '  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
@@ -523,13 +522,16 @@ Public Class UtilsCommon
                 ' Choose one of either 1 or 2:
 
                 ' 1. Use the reader methods
-                Do
-                    While reader.Read()
-                        i += 1
-                        ReDim Preserve tmpList(i)
-                        tmpList(i) = CStr(reader.GetValue(0))
-                    End While
-                Loop While reader.NextResult()
+
+                'Do
+                '    While reader.Read()
+                '        tmpList.Add(CStr(reader.GetValue(0)))
+                '    End While
+                'Loop While reader.NextResult()
+
+                While reader.Read()
+                    tmpList.Add(If(CStr(reader.GetValue(0)), "").Trim) ' Empty cells converted from Nothing to ""
+                End While
 
                 '' 2. Use the AsDataSet extension method
                 'Dim result = reader.AsDataSet()
@@ -541,6 +543,7 @@ Public Class UtilsCommon
         Return tmpList
 
     End Function
+
 
     Public Sub SaveAsPNG(
         View As SolidEdgeFramework.View,

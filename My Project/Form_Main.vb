@@ -1135,6 +1135,9 @@ Public Class Form_Main
                 If Me.CLIFileListName = "" Then s = $"{s}File list not found.{vbCrLf}"
                 MsgBox(s)
                 End
+            ElseIf Not IO.Path.GetExtension(Me.CLIFileListName).ToLower = ".txt" Then
+                MsgBox($"File list not a *.txt file: {IO.Path.GetFileName(Me.CLIFileListName)}")
+                End
             Else
                 Me.CLIActive = True
             End If
@@ -1938,12 +1941,14 @@ Public Class Form_Main
 
         'MsgBox($"{Me.CLIActive} {Me.CLIFileListName}")
         If Me.CLIActive Then
-            tmpFilenameList.Add(Me.CLIFileListName)
+            If IO.Path.GetExtension(Me.CLIFileListName).ToLower = ".txt" Then
+                tmpFilenameList.Add(Me.CLIFileListName)
+            End If
         Else
             Dim tmpFileDialog As New OpenFileDialog
             tmpFileDialog.Title = "Select list of files"
             'tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
-            tmpFileDialog.Filter = "|*.txt;*.tsv;*.csv;*.xls;*.xlsx;*.xlsm"
+            tmpFileDialog.Filter = "File lists|*.txt;*.tsv;*.csv;*.xls;*.xlsx;*.xlsm"
             '"Solid Edge files (*.par;*.psm;*.asm;*.dft)|*.par;*.psm;*.asm;*.dft|" +
             '"Assembly (*.asm)|*.asm|" +
             '"Part (*.par)|*.par|" +
@@ -1982,6 +1987,7 @@ Public Class Form_Main
                         tmpItem.Tag = "excel"
                     Case Else
                         MsgBox($"{Me.ToString}: Extension {IO.Path.GetExtension(tmpFileName).ToLower} not recognized")
+                        Continue For
                 End Select
 
                 tmpItem.SubItems.Add(tmpFileName)

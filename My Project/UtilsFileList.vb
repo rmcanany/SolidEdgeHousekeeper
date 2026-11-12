@@ -394,41 +394,49 @@ Public Class UtilsFileList
 
                     FoundFiles = tmpFoundFiles
 
-                Case = "csv", "txt"
-                    FMain.TextBoxStatus.Text = $"Processing list '{System.IO.Path.GetFileName(Source.Name)}'"
+                Case = "txt", "csv", "tsv"
+                    Dim ListName As String = System.IO.Path.GetFileName(Source.Name)
+                    FMain.TextBoxStatus.Text = $"Processing list '{ListName}'"
 
                     If FileIO.FileSystem.FileExists(Source.Name) Then
 
-                        Dim tmpFoundFiles = IO.File.ReadAllLines(Source.Name)
+                        Try
+                            Dim InFiles As String() = IO.File.ReadAllLines(Source.Name)
+                            Dim OutFiles As New List(Of String)
 
-                        For i = 0 To tmpFoundFiles.Count - 1
-                            tmpFoundFiles(i) = tmpFoundFiles(i).Split(CChar(",")).First
-                        Next
+                            For Each InFile As String In InFiles
+                                Select Case Source.Tag.ToString
+                                    Case "txt"
+                                        InFile = InFile.Trim
+                                    Case "csv"
+                                        InFile = InFile.Split(CChar(",")).First
+                                        InFile = InFile.Replace("""", "").Trim
+                                    Case "tsv"
+                                        InFile = InFile.Split(CChar(vbTab)).First.Trim
+                                End Select
+                                OutFiles.Add(InFile)
+                            Next
 
-                        FoundFiles = tmpFoundFiles
+                            FoundFiles = OutFiles
+                        Catch ex As Exception
+                            SubLogger.AddMessage($"Could not process '{ListName}'")
+                        End Try
 
-                    End If
-
-                Case = "tsv"
-                    FMain.TextBoxStatus.Text = $"Processing list '{System.IO.Path.GetFileName(Source.Name)}'"
-
-                    If FileIO.FileSystem.FileExists(Source.Name) Then
-
-                        Dim tmpFoundFiles = IO.File.ReadAllLines(Source.Name)
-
-                        For i = 0 To tmpFoundFiles.Count - 1
-                            tmpFoundFiles(i) = tmpFoundFiles(i).Split(CChar(vbTab)).First
-                        Next
-
-                        FoundFiles = tmpFoundFiles
-
+                    Else
+                        SubLogger.AddMessage($"File not found '{ListName}'")
                     End If
 
                 Case = "excel"
                     FMain.TextBoxStatus.Text = $"Processing excel '{System.IO.Path.GetFileName(Source.Name)}'"
 
                     If FileIO.FileSystem.FileExists(Source.Name) Then
-                        FoundFiles = UC.ReadExcel(Source.Name)
+                        Try
+                            FoundFiles = UC.ReadExcel(Source.Name)
+                        Catch ex As Exception
+                            SubLogger.AddMessage($"Could not process '{System.IO.Path.GetFileName(Source.Name)}'")
+                        End Try
+                    Else
+                        SubLogger.AddMessage($"File not found '{System.IO.Path.GetFileName(Source.Name)}'")
                     End If
 
                     'Case = "DragDrop"
