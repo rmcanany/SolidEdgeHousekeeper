@@ -40,7 +40,7 @@ Public Class UtilsTopLevelAssembly
 
         '###### Prep the TLA file list ######
         For Each FileLinks As FileLinks In FileLinksContainer.GetItems
-            Dim Extension As String = IO.Path.GetExtension(FileLinks.Name).Replace(".", "*.")
+            Dim Extension As String = IO.Path.GetExtension(FileLinks.Name).ToLower.Replace(".", "*.")
             If ActiveFileExtensionsList.Contains(Extension) Then
                 If FileLinks.Visited Then
                     FoundFiles.Add(FileLinks.Name)
@@ -156,7 +156,7 @@ Public Class UtilsTopLevelAssembly
                                 FileLinks.Contains.Add(LinkName)
 
                             Else
-                                Dim Extension As String = IO.Path.GetExtension(Filename)
+                                Dim Extension As String = IO.Path.GetExtension(Filename).ToLower
                                 If Not ((Extension = ".par") Or (Extension = ".psm")) Then
                                     FileLinks.Contains.Add(LinkName)
                                 End If
@@ -228,7 +228,7 @@ Public Class UtilsTopLevelAssembly
             FileLinks.Visited = True
 
             For Each ContainedByFilename In FileLinks.ContainedBy
-                Extension = IO.Path.GetExtension(ContainedByFilename)
+                Extension = IO.Path.GetExtension(ContainedByFilename).ToLower
                 If Extension = ".dft" Then
                     Dim tmpFileLinks As FileLinks = FileLinksContainer.GetItem(ContainedByFilename)
                     If tmpFileLinks IsNot Nothing Then tmpFileLinks.Visited = True
@@ -242,14 +242,14 @@ Public Class UtilsTopLevelAssembly
                     If Not tmpFileLinks.Visited Then
                         tmpFileLinks.Visited = True
                         For Each ContainedByFilename In tmpFileLinks.ContainedBy
-                            Extension = IO.Path.GetExtension(ContainedByFilename)
+                            Extension = IO.Path.GetExtension(ContainedByFilename).ToLower
                             If Extension = ".dft" Then
                                 Dim tmptmpFileLinks As FileLinks = FileLinksContainer.GetItem(ContainedByFilename)
                                 If tmptmpFileLinks IsNot Nothing Then tmptmpFileLinks.Visited = True
                                 FileLinksContainer = VisitLinks(ContainedByFilename, FileLinksContainer)
                             End If
                         Next
-                        Extension = IO.Path.GetExtension(LinkedFilename)
+                        Extension = IO.Path.GetExtension(LinkedFilename).ToLower
                         If Extension = ".asm" Then
                             FileLinksContainer = VisitLinks(LinkedFilename, FileLinksContainer)
                         ElseIf FMain.TLAIncludePartCopies And (Extension = ".par" Or Extension = ".psm") Then
@@ -463,7 +463,7 @@ Public Class UtilsTopLevelAssembly
         End Try
 
         For Each Filename In AllLinkedFilenames
-            FileExtension = System.IO.Path.GetExtension(Filename).Replace(".", "*.")
+            FileExtension = System.IO.Path.GetExtension(Filename).ToLower.Replace(".", "*.")
             tf = ActiveFileExtensionsList.Contains(FileExtension)
             tf = tf And (Not FoundFiles.Contains(Filename, StringComparer.OrdinalIgnoreCase))
             If tf Then
@@ -532,7 +532,7 @@ Public Class UtilsTopLevelAssembly
                         If Not AllLinkedFilenames.Contains(WhereUsedFile, StringComparer.OrdinalIgnoreCase) Then
                             AllLinkedFilenames.Add(WhereUsedFile)
 
-                            Extension = IO.Path.GetExtension(WhereUsedFile)
+                            Extension = IO.Path.GetExtension(WhereUsedFile).ToLower
                             If Extension = ".dft" And IO.File.Exists(WhereUsedFile) Then
                                 Try
                                     WhereUsedDoc = CType(DMApp.OpenFileInRevisionManager(WhereUsedFile), RevisionManager.Document)
@@ -551,8 +551,8 @@ Public Class UtilsTopLevelAssembly
                     If FMain.TLAIncludePartCopies Then
                         tf = True
                     Else
-                        tf = System.IO.Path.GetExtension(Filename) = ".asm"
-                        tf = tf Or System.IO.Path.GetExtension(Filename) = ".dft"
+                        tf = System.IO.Path.GetExtension(Filename).ToLower = ".asm"
+                        tf = tf Or System.IO.Path.GetExtension(Filename).ToLower = ".dft"
                     End If
 
                     ' Follow links contained by this file, if any.
@@ -572,7 +572,7 @@ Public Class UtilsTopLevelAssembly
 
                                     LinkedDocName = UC.GetFOAFilename(LinkedDocName)
 
-                                    Extension = IO.Path.GetExtension(LinkedDocName)
+                                    Extension = IO.Path.GetExtension(LinkedDocName).ToLower
 
                                     If ValidExtensions.Contains(Extension) Then
                                         AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDoc, AllLinkedFilenames,
@@ -630,7 +630,7 @@ Public Class UtilsTopLevelAssembly
             Return AllWhereUsedFileNames
         End If
 
-        Extension = IO.Path.GetExtension(Filename)
+        Extension = IO.Path.GetExtension(Filename).ToLower
 
         If Not Extension = ".dft" Then  ' Draft files are not "Used" anywhere.
             If Not IsDriveIndexed Then
@@ -645,7 +645,7 @@ Public Class UtilsTopLevelAssembly
                 While Not WhereUsedDocument Is Nothing
                     If Not AllWhereUsedFileNames.Contains(WhereUsedDocument.FullName, StringComparer.OrdinalIgnoreCase) Then
                         ' For bottom_up search, the only applicable where used results are draft files
-                        If IO.Path.GetExtension(WhereUsedDocument.FullName) = ".dft" Then
+                        If IO.Path.GetExtension(WhereUsedDocument.FullName).ToLower = ".dft" Then
                             AllWhereUsedFileNames.Add(WhereUsedDocument.FullName)
                         End If
                     End If
@@ -662,7 +662,7 @@ Public Class UtilsTopLevelAssembly
                     For Each item As String In DirectCast(arrDocUsed, Array)
                         If Not AllWhereUsedFileNames.Contains(item, StringComparer.OrdinalIgnoreCase) Then
                             ' For bottom_up search, the only applicable where used results are draft files
-                            If IO.Path.GetExtension(item) = ".dft" Then
+                            If IO.Path.GetExtension(item).ToLower = ".dft" Then
                                 AllWhereUsedFileNames.Add(item)
                             End If
                         End If
