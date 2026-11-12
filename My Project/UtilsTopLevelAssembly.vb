@@ -390,64 +390,76 @@ Public Class UtilsTopLevelAssembly
         Dim TopLevelFolder As String
         Dim tmpAllLinkedFilename As String
 
-
-        Dim DMApp As New RevisionManager.Application
-        Dim TLADoc As RevisionManager.Document
-
-        DMApp.Visible = 1
-        DMApp.DisplayAlerts = 0
-
-        FMain.Activate()
-
         FMain.TextBoxStatus.Text = $"Opening {System.IO.Path.GetFileName(TopLevelAssembly)}"
 
         TopLevelFolders = RemoveNestedFolders(TopLevelFolders)
 
-        TLADoc = CType(DMApp.OpenFileInRevisionManager(TopLevelAssembly), RevisionManager.Document)
-
-        If TopLevelFolders.Count > 0 Then
-            IndexedDrives = GetIndexedDrives()
-
-            For Each TopLevelFolder In TopLevelFolders
-
-                IsDriveIndexed = False
-                If IndexedDrives.Count > 0 Then
-                    For Each IndexedDrive In IndexedDrives
-                        If TopLevelFolder.ToLower().StartsWith(IndexedDrive.ToLower()) Then
-                            IsDriveIndexed = True
-                            Exit For
-                        End If
-                    Next
-                End If
-
-                tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
-                                                 TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
-
-                For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
-                    If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
-                        AllLinkedFilenames.Add(tmpAllLinkedFilename)
-                    End If
-                Next
-
-            Next
-        Else
-            ' Bare top level assy.  Call FollowLinksBottomUp with TopLevelFolder = ""
-            ' Since there are no folders to process, indexed drives are not relevant.
-
-            tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
-                                                 "", AllFilenames, IsDriveIndexed:=False, DraftAndModelSameName)
-
-            For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
-                If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
-                    AllLinkedFilenames.Add(tmpAllLinkedFilename)
-                End If
-            Next
-
-        End If
+        Dim DMApp As RevisionManager.Application = Nothing
+        Dim Proceed As Boolean = True
 
         Try
-            DMApp.Quit()
+            DMApp = New RevisionManager.Application
+            Dim TLADoc As RevisionManager.Document
+
+            DMApp.Visible = 1
+            DMApp.DisplayAlerts = 0
+            FMain.Activate()
+
+            TLADoc = CType(DMApp.OpenFileInRevisionManager(TopLevelAssembly), RevisionManager.Document)
+
+            If TLADoc Is Nothing OrElse TLADoc.LinkedDocuments Is Nothing Then
+                Proceed = False
+                Me.ErrorLogger.AddMessage($"Revision Manager unable to open '{IO.Path.GetFileName(TopLevelAssembly)}'")
+            Else
+                If TopLevelFolders.Count > 0 Then
+                    IndexedDrives = GetIndexedDrives()
+
+                    For Each TopLevelFolder In TopLevelFolders
+
+                        IsDriveIndexed = False
+                        If IndexedDrives.Count > 0 Then
+                            For Each IndexedDrive In IndexedDrives
+                                If TopLevelFolder.ToLower().StartsWith(IndexedDrive.ToLower()) Then
+                                    IsDriveIndexed = True
+                                    Exit For
+                                End If
+                            Next
+                        End If
+
+                        tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
+                                                 TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
+
+                        For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
+                            If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
+                                AllLinkedFilenames.Add(tmpAllLinkedFilename)
+                            End If
+                        Next
+
+                    Next
+                Else
+                    ' Bare top level assy.  Call FollowLinksBottomUp with TopLevelFolder = ""
+                    ' Since there are no folders to process, indexed drives are not relevant.
+
+                    tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
+                                                 "", AllFilenames, IsDriveIndexed:=False, DraftAndModelSameName)
+
+                    For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
+                        If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
+                            AllLinkedFilenames.Add(tmpAllLinkedFilename)
+                        End If
+                    Next
+
+                End If
+            End If
+
         Catch ex As Exception
+            Proceed = False
+            Me.ErrorLogger.AddMessage($"Unable to read all files linked to '{IO.Path.GetFileName(TopLevelAssembly)}': ({ex.Message})")
+        Finally
+            Try
+                If DMApp IsNot Nothing Then DMApp.Quit()
+            Catch ex As Exception
+            End Try
         End Try
 
         For Each Filename In AllLinkedFilenames
@@ -459,9 +471,8 @@ Public Class UtilsTopLevelAssembly
             End If
         Next
 
-        If Report Then
+        If Proceed And Report Then
             ReportUnrelatedFilesOLD(TopLevelFolders, FoundFiles)
-
         End If
 
         Return FoundFiles
