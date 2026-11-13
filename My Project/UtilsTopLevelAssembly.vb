@@ -686,47 +686,60 @@ Public Class UtilsTopLevelAssembly
 
         ' Sorts the list
         ' [
+        '   c:\
         '   c:\data
         '   c:\data\projects
         '   c:\data\projects\project1
+        '   c:\data\projects\project111
         '   c:\data\standard_parts
         '   d:\other
         '   d:\other\something
         ' ]
         ' Adds the first entry to the output list.
         ' Checks if each subsequent entry contains any entry in the output list.
-        ' eg, "c:\data\projects".Contains("c:\data")
+        ' eg, "c:\data\projects\".StartsWith("c:\data\")
         ' If not, it is added.
 
-        Dim tmpTopLevelFolders As New List(Of String)
-        Dim OutTopLevelFolders As New List(Of String)
+        Dim tmpFolders As New List(Of String)
+        Dim OutFolders As New List(Of String)
 
         If TopLevelFolders.Count < 2 Then
             Return TopLevelFolders
         End If
 
         For Each Dirname In TopLevelFolders
-            tmpTopLevelFolders.Add(Dirname.ToLower)
+            If Dirname.EndsWith("\") Then  ' Deal with pre-existing trailing backslash, eg 'c:\'
+                Dirname = Dirname.Remove(Dirname.Length - 1)
+            End If
+            Dirname = $"{Dirname}\"
+            Dirname = Dirname.ToLower
+            If Not tmpFolders.Contains(Dirname) Then tmpFolders.Add(Dirname)
         Next
 
-        tmpTopLevelFolders.Sort()
+        tmpFolders.Sort()
 
-        OutTopLevelFolders.Add(tmpTopLevelFolders(0))
+        OutFolders.Add(tmpFolders(0))
 
-        For i = 1 To tmpTopLevelFolders.Count - 1
+        For i = 1 To tmpFolders.Count - 1
             Dim IsChildFolder As Boolean = False
-            For Each OutTLF As String In OutTopLevelFolders
-                If tmpTopLevelFolders(i).Contains(OutTLF) Then  ' eg, "c:\data\projects".Contains("c:\data")
+            For Each OutTLF As String In OutFolders
+                If tmpFolders(i).StartsWith(OutTLF, StringComparison.Ordinal) Then  ' eg, "c:\data\projects\".StartsWith("c:\data\")
                     IsChildFolder = True
                     Exit For
                 End If
             Next
             If Not IsChildFolder Then
-                OutTopLevelFolders.Add(tmpTopLevelFolders(i))
+                OutFolders.Add(tmpFolders(i))
             End If
         Next
 
-        Return OutTopLevelFolders
+        For i = 0 To OutFolders.Count - 1
+            If Not OutFolders(i).EndsWith(":\") Then
+                OutFolders(i) = OutFolders(i).Remove(OutFolders(i).Length - 1)
+            End If
+        Next
+
+        Return OutFolders
     End Function
 
 
