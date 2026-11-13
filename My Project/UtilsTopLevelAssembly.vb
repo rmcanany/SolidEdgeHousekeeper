@@ -558,22 +558,14 @@ Public Class UtilsTopLevelAssembly
     End Function
 
     Private Function GetWhereUsedBottomUp(
-                     DMApp As RevisionManager.Application,
-                     TopLevelFolder As String,
-                     Filename As String,
-                     IsDriveIndexed As Boolean,
-                     DraftAndModelSameName As Boolean) As List(Of String)
+        DMApp As RevisionManager.Application,
+        TopLevelFolder As String,
+        Filename As String,
+        IsDriveIndexed As Boolean,
+        DraftAndModelSameName As Boolean
+        ) As List(Of String)
 
         Dim AllWhereUsedFileNames As New List(Of String)
-
-        Dim Extension As String
-
-        Dim WhereUsedDocuments As New List(Of RevisionManager.Document)
-        Dim WhereUsedDocument As RevisionManager.Document
-
-        Dim arrDocUsed As Object = Nothing
-
-        Dim DraftFilename As String
 
         UpdateStatus("Where Used", Filename)
 
@@ -586,24 +578,23 @@ Public Class UtilsTopLevelAssembly
         End If
 
         If DraftAndModelSameName Then
-            DraftFilename = System.IO.Path.ChangeExtension(Filename, ".dft")
+            Dim DraftFilename As String = System.IO.Path.ChangeExtension(Filename, ".dft")
             If IO.File.Exists(DraftFilename) Then
                 AllWhereUsedFileNames.Add(DraftFilename)
             End If
             Return AllWhereUsedFileNames
         End If
 
-        Extension = IO.Path.GetExtension(Filename).ToLower
+        Dim WhereUsedDocuments As New List(Of RevisionManager.Document)
 
-        If Not Extension = ".dft" Then  ' Draft files are not "Used" anywhere.
+        If Not IO.Path.GetExtension(Filename).ToLower = ".dft" Then  ' Draft files are not "Used" anywhere.
             If Not IsDriveIndexed Then
                 'This "resets" DMApp.FindWhereUsed().  Somehow.
                 DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
 
                 'Finds the first WhereUsed Document, if any.
-                WhereUsedDocument = CType(
-                DMApp.FindWhereUsed(FileIO.FileSystem.GetFileInfo(Filename)),
-                RevisionManager.Document)
+                Dim WhereUsedDocument As RevisionManager.Document
+                WhereUsedDocument = CType(DMApp.FindWhereUsed(FileIO.FileSystem.GetFileInfo(Filename)), RevisionManager.Document)
 
                 While Not WhereUsedDocument Is Nothing
                     If Not AllWhereUsedFileNames.Contains(WhereUsedDocument.FullName, StringComparer.OrdinalIgnoreCase) Then
@@ -617,22 +608,26 @@ Public Class UtilsTopLevelAssembly
                 End While
 
             Else  'It is indexed
+                Dim arrDocUsed As Object = Nothing
+
                 Try
                     DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
 
                     DMApp.FindWhereUsedDocuments(FileIO.FileSystem.GetFileInfo(Filename), arrDocUsed)
 
-                    For Each item As String In DirectCast(arrDocUsed, Array)
-                        If Not AllWhereUsedFileNames.Contains(item, StringComparer.OrdinalIgnoreCase) Then
-                            ' For bottom_up search, the only applicable where used results are draft files
-                            If IO.Path.GetExtension(item).ToLower = ".dft" Then
-                                AllWhereUsedFileNames.Add(item)
+                    If arrDocUsed IsNot Nothing Then
+                        For Each item As String In DirectCast(arrDocUsed, Array)
+                            If Not AllWhereUsedFileNames.Contains(item, StringComparer.OrdinalIgnoreCase) Then
+                                ' For bottom_up search, the only applicable where used results are draft files
+                                If IO.Path.GetExtension(item).ToLower = ".dft" Then
+                                    AllWhereUsedFileNames.Add(item)
+                                End If
                             End If
-                        End If
-                    Next
+                        Next
+                    End If
 
                 Catch ex As Exception
-                    MsgBox(ex.ToString)
+                    Me.ErrorLogger.AddMessage($"Unable to process where used for '{IO.Path.GetFileName(Filename)}': {ex.Message}")
                 End Try
 
             End If
