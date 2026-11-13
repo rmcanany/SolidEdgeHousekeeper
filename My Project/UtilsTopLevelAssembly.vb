@@ -729,25 +729,22 @@ Public Class UtilsTopLevelAssembly
 
     Private Function GetIndexedDrives() As List(Of String)
 
-        Dim SearchScopeFilename As String = FMain.TextBoxFastSearchScopeFilename.Text
-
-        Dim SearchScope As String() = Nothing
-        Dim CommentString As String = "\\ "
-        Dim Line As String
         Dim IndexedDrives As New List(Of String)
-        Dim msg As String = ""
+
+        Dim SearchScopeFilename As String = FMain.TextBoxFastSearchScopeFilename.Text
+        Dim SearchScope As String() = Nothing
 
         Try
             SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
         Catch ex As Exception
-            msg = $"Fast search scope file '{SearchScopeFilename}' (on Configuration Tab) not found.{vbCrLf}Exception: {ex.Message}"
-            MsgBox(msg)
+            Me.ErrorLogger.AddMessage($"Fast search scope file '{SearchScopeFilename}' (on Configuration Tab) not found.  Exception: {ex.Message}")
         End Try
 
-        If (SearchScope.Count > 0) And (SearchScope IsNot Nothing) Then
+        If SearchScope IsNot Nothing AndAlso SearchScope.Length > 0 Then
+            Dim CommentString As String = "\\ "
             For Each item As String In SearchScope
-                Line = item.TrimStart()
-                If (Not Line.StartsWith(CommentString)) And (Line.Count > 0) Then
+                Dim Line As String = item.Trim
+                If (Not Line.StartsWith(CommentString)) And (Line.Length > 0) Then
                     IndexedDrives.Add(Line)
                 End If
             Next
