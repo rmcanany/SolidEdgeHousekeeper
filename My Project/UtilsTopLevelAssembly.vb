@@ -124,21 +124,24 @@ Public Class UtilsTopLevelAssembly
     Public Function GetContains(AllFilenames As List(Of String)) As FileLinksContainer
 
         Dim FileLinksContainer As New FileLinksContainer
-        Dim SSDoc As HCStructuredStorageDoc = Nothing
-        Dim SSLinkDoc As HCStructuredStorageDoc = Nothing
-        Dim LinkNames As List(Of String)
 
         For Each Filename As String In AllFilenames
             FMain.TextBoxStatus.Text = $"Getting links {IO.Path.GetFileName(Filename)}"
 
+            Dim SSDoc As HCStructuredStorageDoc = Nothing
+            Dim SSLinkDoc As HCStructuredStorageDoc = Nothing
+
             Try
                 Dim FileLinks As New FileLinks(Filename)
+                Dim LinkNames As List(Of String)
 
                 SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
                 LinkNames = SSDoc.GetLinkNames
 
                 For Each LinkName As String In LinkNames
+
+                    SSLinkDoc = Nothing
 
                     Try
                         Try
@@ -162,8 +165,6 @@ Public Class UtilsTopLevelAssembly
                                 End If
                             End If
 
-                        Else
-                            Dim i = 0
                         End If
 
                         If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
@@ -174,7 +175,6 @@ Public Class UtilsTopLevelAssembly
                             FileLinksContainer.UnprocessedFilenames.Add(LinkName)
                         End If
                     End Try
-
 
                 Next
 
