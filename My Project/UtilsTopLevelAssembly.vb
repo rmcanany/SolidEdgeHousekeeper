@@ -301,24 +301,16 @@ Public Class UtilsTopLevelAssembly
     End Sub
 
 
-    Private Sub ReportUnrelatedFilesOLD(
-               TopLevelFolders As List(Of String),
-               Foundfiles As List(Of String))
+    Private Sub GetUnrelatedFilesBottomUp(
+        TopLevelFolders As List(Of String),
+        Foundfiles As List(Of String),
+        ActiveFileExtensionsList As List(Of String))
 
-        Dim AllFiles As New List(Of String)
-        Dim ActiveFileExtensionsList As New List(Of String)
         Dim UnrelatedFiles As New List(Of String)
-
-        Dim UP As New UtilsPreferences
 
         If TopLevelFolders.Count = 0 Then
             Exit Sub
         End If
-
-        ActiveFileExtensionsList.Add("*.asm")
-        ActiveFileExtensionsList.Add("*.par")
-        ActiveFileExtensionsList.Add("*.psm")
-        ActiveFileExtensionsList.Add("*.dft")
 
         For Each TopLevelFolder In TopLevelFolders
             Dim SomeFiles As New List(Of String)
@@ -334,38 +326,9 @@ Public Class UtilsTopLevelAssembly
 
         Next
 
-        If UnrelatedFiles.Count > 0 Then
-            Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-
-            Dim LogfileName As String
-            LogfileName = $"{UP.GetTempDirectory}\{Timestamp}_Unrelated_Files.log"
-
-            Try
-                Using writer As New IO.StreamWriter(LogfileName, True)
-                    writer.WriteLine("UNRELATED FILES")
-                    writer.WriteLine("")
-                    For Each Filename In UnrelatedFiles
-                        writer.WriteLine(Filename)
-                    Next
-                End Using
-
-                Try
-                    ' Try to use the default application to open the file.
-                    Process.Start(LogfileName)
-                Catch ex As Exception
-                    ' If none, open with notepad.exe
-                    Process.Start("notepad.exe", LogfileName)
-                End Try
-
-
-            Catch ex As Exception
-            End Try
-
-        End If
+        ReportUnrelatedFiles(UnrelatedFiles)
 
     End Sub
-
-
 
     Public Function GetLinksBottomUp(TopLevelFolders As List(Of String),
                              TopLevelAssembly As String,
@@ -472,7 +435,7 @@ Public Class UtilsTopLevelAssembly
         Next
 
         If Proceed And Report Then
-            ReportUnrelatedFilesOLD(TopLevelFolders, FoundFiles)
+            GetUnrelatedFilesBottomUp(TopLevelFolders, FoundFiles, ActiveFileExtensionsList)
         End If
 
         Return FoundFiles
