@@ -576,27 +576,49 @@ Public Class UtilsCommon
     End Sub
 
     Public Function GetFOAFilename(SEDocFullName As String) As String
-        Dim Filename As String
-
-        If SEDocFullName.Contains("!") Then
-            Filename = SEDocFullName.Split("!"c)(0)
-        Else
-            Filename = SEDocFullName
-        End If
-
-        Return Filename
+        Return GetFOASplit(SEDocFullName).Filename
     End Function
 
     Public Function GetFOAMembername(SEDocFullName As String) As String
-        Dim MemberName As String
+        Return GetFOASplit(SEDocFullName).Membername
+    End Function
 
-        If SEDocFullName.Contains("!") Then
-            MemberName = SEDocFullName.Split("!"c)(1)
-        Else
-            MemberName = ""
+    Private Function GetFOASplit(SEDocFullName As String) As (Filename As String, Membername As String)
+        ' C:\Proj\AA.asm
+        ' C:\Proj\AA.asm!M1
+        ' C:\Proj\!AA.asm
+        ' C:\Proj\!AA.asm!M1
+        ' AA.asm
+        ' AA.asm!M1
+        ' !!AA.asm
+        ' C:\Proj\My.asm!AA.asm
+
+        ' Member names cannot contain "!" or ".", among a few others.
+
+        Dim SlashIdx As Integer = SEDocFullName.LastIndexOf("\"c)   ' -1 if no folder
+        Dim BangIdx As Integer = SEDocFullName.LastIndexOf("!"c)    ' -1 if no "!"
+
+        Dim Filename As String
+        Dim Membername As String
+
+        If BangIdx > SlashIdx Then                                  ' C:\Proj\AA.asm!M1, C:\Proj\!AA.asm, AA.asm!M1, !!AA.asm
+            Dim BeforeText = SEDocFullName.Substring(0, BangIdx)
+            Dim AfterText = SEDocFullName.Substring(BangIdx + 1)
+            Dim IsMember = BeforeText.EndsWith(".asm", StringComparison.OrdinalIgnoreCase) And Not AfterText.Contains(".")
+            If Not IsMember Then
+                Filename = SEDocFullName
+                Membername = ""
+            Else
+                Filename = BeforeText
+                Membername = AfterText
+            End If
+        Else                                                          ' C:\Proj\AA.asm, C:\!Proj\AA.asm, AA.asm
+            Filename = SEDocFullName
+            Membername = ""
         End If
 
-        Return MemberName
+        Return (Filename, Membername)
+
     End Function
 
     Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean

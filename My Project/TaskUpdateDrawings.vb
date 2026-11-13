@@ -266,12 +266,6 @@ Public Class TaskUpdateDrawings
         For Each ModelLink In ModelLinks
             Filename = UC.GetFOAFilename(ModelLink.FileName)
 
-            'If ModelLink.IsAssemblyFamilyMember Then
-            '    Filename = ModelLink.FileName.Split("!"c)(0)
-            'Else
-            '    Filename = ModelLink.FileName
-            'End If
-
             If Not FileIO.FileSystem.FileExists(Filename) Then
                 TaskLogger.AddMessage($"Model file '{Filename}' not found")
 

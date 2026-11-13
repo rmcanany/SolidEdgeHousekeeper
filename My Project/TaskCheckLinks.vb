@@ -272,12 +272,7 @@ Public Class TaskCheckLinks
                 Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
                 For Each ModelLink As SolidEdgeDraft.ModelLink In tmpSEDoc.ModelLinks
-                    Dim tmpFilename As String
-                    If ModelLink.IsAssemblyFamilyMember Then
-                        tmpFilename = ModelLink.FileName.Split("!"c)(0)
-                    Else
-                        tmpFilename = ModelLink.FileName
-                    End If
+                    Dim tmpFilename As String = UC.GetFOAFilename(ModelLink.FileName)
 
                     If Not LinkFilenames.Contains(tmpFilename) Then
                         LinkFilenames.Add(tmpFilename)
