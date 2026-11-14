@@ -51,17 +51,23 @@ Public Class UtilsTopLevelAssembly
         Next
 
         '###### Check for unprocessed files ######
-        If FileLinksContainer.UnprocessedFilenames.Count > 0 Then
-            Dim Title As String = $"The following files, and any links they contain, could not be processed.  This can happen if{vbCrLf}"
-            Title = $"{Title}-- The file name (including path) has > 260 characters.{vbCrLf}"
-            Title = $"{Title}-- The file is already open in another process.{vbCrLf}"
-            Title = $"{Title}-- The file is not a Solid Edge file, or is somehow corrupt.{vbCrLf}"
-            Title = $"{Title}-- An unknown error occurred.{vbCrLf}{vbCrLf}"
-            Title = $"{Title}Processing will continue.  Please verify results."
-
-            Dim UC As New UtilsCommon
-            Dim s As String = UC.FormatMsgBoxText(FileLinksContainer.UnprocessedFilenames, Title)
-            If Not s = "" Then MsgBox(s, vbOKOnly)
+        Dim Total As Integer = FileLinksContainer.UnprocessedFilenames.Count
+        If Total > 0 Then
+            Dim UnprocessedFileLogger = Me.ErrorLogger.AddLogger("Unable to process these files (or their links)")
+            UnprocessedFileLogger.AddMessage("(See 'Select by Top Level Assembly' > 'Some Common Issues' in the Help)")
+            Dim MaxToReport As Integer = 10
+            Dim Count As Integer = 0
+            For Each FilePath As String In FileLinksContainer.UnprocessedFilenames
+                If Count = MaxToReport Then
+                    UnprocessedFileLogger.AddMessage($"(and {Total - Count} more)")
+                    Exit For
+                End If
+                Dim SlashIdx As Integer = FilePath.LastIndexOf("\"c)
+                Dim Dir As String = FilePath.Substring(0, SlashIdx + 1)
+                Dim Filename As String = FilePath.Substring(SlashIdx + 1)
+                UnprocessedFileLogger.AddMessage($"{Filename} in {Dir}")
+                Count += 1
+            Next
         End If
 
         '###### Report unrelated files if required ######
