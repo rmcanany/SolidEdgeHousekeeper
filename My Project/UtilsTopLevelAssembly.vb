@@ -4,9 +4,15 @@ Public Class UtilsTopLevelAssembly
     Public Property FMain As Form_Main
     Public Property ErrorLogger As Logger
 
+    Private Property RootReachables As Dictionary(Of String, Boolean)
+    Private Property TopLevelFolders As List(Of String)
+
+
     Public Sub New(_Form_Main As Form_Main, _ErrorLogger As Logger)
         Me.FMain = _Form_Main
         Me.ErrorLogger = _ErrorLogger
+
+        Me.RootReachables = New Dictionary(Of String, Boolean)(StringComparer.OrdinalIgnoreCase)
     End Sub
 
 
@@ -19,11 +25,11 @@ Public Class UtilsTopLevelAssembly
 
         Dim FoundFiles As New List(Of String)
 
-
         TopLevelFolders = RemoveNestedFolders(TopLevelFolders)
+        Me.TopLevelFolders = TopLevelFolders
 
-        Dim AllFilenames As New List(Of String)
-        Dim FileLinksContainer As New FileLinksContainer
+        Dim AllFilenames As List(Of String)
+        Dim FileLinksContainer As FileLinksContainer
         Dim UnrelatedFiles As New List(Of String)
 
         '###### Get filenames in top level folders ######
@@ -31,6 +37,11 @@ Public Class UtilsTopLevelAssembly
 
         '###### Get links contained in each file ######
         FileLinksContainer = GetContains(AllFilenames)
+
+        If CheckInterruptRequest() Then
+            ' Needs some study
+            Return New List(Of String)
+        End If
 
         '###### Populate ContainedBy information ######
         FileLinksContainer = GetContainedBy(FileLinksContainer)
@@ -53,14 +64,18 @@ Public Class UtilsTopLevelAssembly
         '###### Check for unprocessed files ######
         Dim Total As Integer = FileLinksContainer.UnprocessedFilenames.Count
         If Total > 0 Then
-            Dim UnprocessedFileLogger = Me.ErrorLogger.AddLogger("Unable to process these files (or their links)")
+            Dim UnprocessedFileLogger = Me.ErrorLogger.AddLogger("Unable to process these files (or any of their links)")
             UnprocessedFileLogger.AddMessage("(See 'Select by Top Level Assembly' > 'Some Common Issues' in the Help)")
             Dim MaxToReport As Integer = 10
+            Dim MaxStragglersToAllow As Integer = 5
             Dim Count As Integer = 0
-            For Each FilePath As String In FileLinksContainer.UnprocessedFilenames
-                If Count = MaxToReport Then
-                    UnprocessedFileLogger.AddMessage($"(and {Total - Count} more)")
-                    Exit For
+
+            For Each FilePath As String In FileLinksContainer.UnprocessedFilenames.OrderBy(Function(f) f)
+                If Total > MaxToReport + MaxStragglersToAllow Then
+                    If Count = MaxToReport Then
+                        UnprocessedFileLogger.AddMessage($"(and {Total - Count} more)")
+                        Exit For
+                    End If
                 End If
                 Dim SlashIdx As Integer = FilePath.LastIndexOf("\"c)
                 Dim Dir As String = FilePath.Substring(0, SlashIdx + 1)
@@ -131,72 +146,119 @@ Public Class UtilsTopLevelAssembly
 
         Dim FileLinksContainer As New FileLinksContainer
 
-        For Each Filename As String In AllFilenames
-            FMain.TextBoxStatus.Text = $"Getting links {IO.Path.GetFileName(Filename)}"
+        Dim ParentExtensions As List(Of String) = {".par", ".psm", ".asm", ".dft"}.ToList
 
-            Dim SSDoc As HCStructuredStorageDoc = Nothing
-            Dim SSLinkDoc As HCStructuredStorageDoc = Nothing
+        For Each ParentExtension As String In ParentExtensions
+            For Each Filename As String In AllFilenames
 
-            Try
-                Dim FileLinks As New FileLinks(Filename)
-                Dim LinkNames As List(Of String)
+                If Not IO.Path.GetExtension(Filename).ToLower = ParentExtension Then
+                    Continue For
+                End If
 
-                SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
-                SSDoc.ReadLinks(FMain.LinkManagementOrder)
-                LinkNames = SSDoc.GetLinkNames
+                FMain.TextBoxStatus.Text = $"Getting links {IO.Path.GetFileName(Filename)}"
+                Windows.Forms.Application.DoEvents()
 
-                For Each LinkName As String In LinkNames
+                Dim SSDoc As HCStructuredStorageDoc = Nothing
+                Dim SSLinkDoc As HCStructuredStorageDoc = Nothing
 
-                    SSLinkDoc = Nothing
+                Try
+                    Dim FileLinks As New FileLinks(Filename)
+                    Dim LinkNames As List(Of String)
 
-                    Try
+                    SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
+                    SSDoc.ReadLinks(FMain.LinkManagementOrder)
+                    LinkNames = SSDoc.GetLinkNames
+
+                    FileLinks.IsFOPMaster = SSDoc.IsFOPMaster
+
+                    For Each LinkName As String In LinkNames
+
+                        ' ###### CHECK BAILOUT CONDITIONS ######
+
+                        ' Known bad
+                        If FileLinksContainer.UnprocessedFilenames.Contains(LinkName) Then
+                            Continue For
+                        End If
+
+                        ' Already processed
+                        Dim LinkFileLinks As FileLinks = FileLinksContainer.GetItem(LinkName)
+
+                        If LinkFileLinks IsNot Nothing Then
+                            If Not LinkFileLinks.IsFOPMaster Then
+
+                                If FMain.TLAIncludePartCopies Then
+                                    FileLinks.Contains.Add(LinkName)
+
+                                Else
+                                    Dim Extension As String = IO.Path.GetExtension(Filename).ToLower
+                                    If Not ((Extension = ".par") Or (Extension = ".psm")) Then
+                                        FileLinks.Contains.Add(LinkName)
+                                    End If
+                                End If
+
+                            End If
+                            Continue For
+                        End If
+
+                        ' Unreachable path
+                        If LinkName.Length > 260 OrElse Not IsRootReachable(LinkName, RootReachables) Then
+                            FileLinksContainer.UnprocessedFilenames.Add(LinkName)
+                            Continue For
+                        End If
+
+                        ' Outside top level folders
+                        If Not FileInTopLevelFolders(LinkName) Then
+                            FileLinksContainer.UnprocessedFilenames.Add(LinkName)
+                            Continue For
+                        End If
+
+                        ' ###### PROCESS LINK FILE ######
+
+                        SSLinkDoc = Nothing
+
                         Try
-                            SSLinkDoc = New HCStructuredStorageDoc(LinkName, _OpenReadWrite:=False)
+                            Try
+                                SSLinkDoc = New HCStructuredStorageDoc(LinkName, _OpenReadWrite:=False)
+                            Catch ex As Exception
+                                If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
+                                FileLinksContainer.UnprocessedFilenames.Add(LinkName)
+                            End Try
+
+                            If (SSLinkDoc IsNot Nothing) AndAlso (Not SSLinkDoc.IsFOPMaster) Then
+
+                                If FMain.TLAIncludePartCopies Then
+                                    FileLinks.Contains.Add(LinkName)
+
+                                Else
+                                    Dim Extension As String = IO.Path.GetExtension(Filename).ToLower
+                                    If Not ((Extension = ".par") Or (Extension = ".psm")) Then
+                                        FileLinks.Contains.Add(LinkName)
+                                    End If
+                                End If
+
+                            End If
+
+                            If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
+
                         Catch ex As Exception
                             If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
-                            If Not FileLinksContainer.UnprocessedFilenames.Contains(LinkName) Then
-                                FileLinksContainer.UnprocessedFilenames.Add(LinkName)
-                            End If
+                            FileLinksContainer.UnprocessedFilenames.Add(LinkName)
                         End Try
 
-                        If (SSLinkDoc IsNot Nothing) AndAlso (Not SSLinkDoc.IsFOPMaster) Then
+                    Next
 
-                            If FMain.TLAIncludePartCopies Then
-                                FileLinks.Contains.Add(LinkName)
+                    SSDoc.Close()
 
-                            Else
-                                Dim Extension As String = IO.Path.GetExtension(Filename).ToLower
-                                If Not ((Extension = ".par") Or (Extension = ".psm")) Then
-                                    FileLinks.Contains.Add(LinkName)
-                                End If
-                            End If
+                    FileLinks.Contains = FileLinks.Contains.Distinct.ToList
 
-                        End If
+                    FileLinksContainer.AddItem(FileLinks)
 
-                        If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
-
-                    Catch ex As Exception
-                        If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
-                        If Not FileLinksContainer.UnprocessedFilenames.Contains(LinkName) Then
-                            FileLinksContainer.UnprocessedFilenames.Add(LinkName)
-                        End If
-                    End Try
-
-                Next
-
-                SSDoc.Close()
-
-                FileLinks.Contains = FileLinks.Contains.Distinct.ToList
-
-                FileLinksContainer.AddItem(FileLinks)
-
-            Catch ex2 As Exception
-                If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
-                If SSDoc IsNot Nothing Then SSDoc.Close()
-                If Not FileLinksContainer.UnprocessedFilenames.Contains(Filename) Then
+                Catch ex2 As Exception
+                    If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
+                    If SSDoc IsNot Nothing Then SSDoc.Close()
                     FileLinksContainer.UnprocessedFilenames.Add(Filename)
-                End If
-            End Try
+                End Try
+            Next
         Next
 
         Return FileLinksContainer
@@ -206,10 +268,15 @@ Public Class UtilsTopLevelAssembly
 
         For Each FileLinks As FileLinks In FileLinksContainer.GetItems
             FMain.TextBoxStatus.Text = $"Contained by {IO.Path.GetFileName(FileLinks.Name)}"
+            Windows.Forms.Application.DoEvents()
 
             For Each ContainsFilename In FileLinks.Contains
                 Dim tmpFileLinks As FileLinks = FileLinksContainer.GetItem(ContainsFilename)
-                If tmpFileLinks IsNot Nothing Then tmpFileLinks.ContainedBy.Add(FileLinks.Name)
+                If tmpFileLinks IsNot Nothing Then
+                    If Not tmpFileLinks.IsFOPMaster Then
+                        tmpFileLinks.ContainedBy.Add(FileLinks.Name)
+                    End If
+                End If
             Next
         Next
 
@@ -228,6 +295,7 @@ Public Class UtilsTopLevelAssembly
         Dim Extension As String
 
         FMain.TextBoxStatus.Text = $"Visit links {IO.Path.GetFileName(Filename)}"
+        Windows.Forms.Application.DoEvents()
 
         FileLinks = FileLinksContainer.GetItem(Filename)
         If FileLinks IsNot Nothing Then
@@ -644,6 +712,8 @@ Public Class UtilsTopLevelAssembly
 
     End Function
 
+
+
     Private Function RemoveNestedFolders(
         TopLevelFolders As List(Of String)
         ) As List(Of String)
@@ -706,7 +776,6 @@ Public Class UtilsTopLevelAssembly
         Return OutFolders
     End Function
 
-
     Private Sub UpdateStatus(Description As String, Filename As String)
         Dim msg As String
 
@@ -754,39 +823,89 @@ Public Class UtilsTopLevelAssembly
         Return IndexedDrives
     End Function
 
+    Private Function IsRootReachable(
+        Path As String,
+        RootReachables As Dictionary(Of String, Boolean)
+        ) As Boolean
 
+        ' \\server\share\a\b\c.par, -> \\server\share
+        ' D:\Projects\a\b.par, -> D:\
+        ' a.par -> ""
 
+        Dim TargetCount As Integer
+        If Path.StartsWith("\\") Then
+            TargetCount = 4
+        Else
+            TargetCount = 1
+        End If
+
+        Dim EndIdx As Integer
+        Dim SlashCount As Integer = 0
+        For EndIdx = 0 To Path.Length - 1
+            If Path(EndIdx) = "\" Then SlashCount += 1
+            If SlashCount = TargetCount Then Exit For
+        Next
+
+        Dim Root As String = Nothing
+
+        If SlashCount = TargetCount Then
+            If TargetCount = 1 Then EndIdx += 1  ' Keep the trailing \ on local drives
+            Root = Path.Substring(0, EndIdx)
+        Else
+            Root = ""
+        End If
+
+        If Not RootReachables.ContainsKey(Root) Then
+            RootReachables(Root) = IO.Directory.Exists(Root)
+        End If
+
+        Return RootReachables(Root)
+
+    End Function
+
+    Private Function FileInTopLevelFolders(Filename As String) As Boolean
+        Dim IsIn As Boolean = False
+        Dim tmpTopLevelFolder As String
+
+        For Each TopLevelFolder As String In Me.TopLevelFolders
+            tmpTopLevelFolder = TopLevelFolder
+            If Not tmpTopLevelFolder.EndsWith("\") Then tmpTopLevelFolder = $"{tmpTopLevelFolder}\"
+            If Filename.StartsWith(tmpTopLevelFolder, StringComparison.OrdinalIgnoreCase) Then
+                IsIn = True
+                Exit For
+            End If
+        Next
+
+        Return IsIn
+    End Function
 End Class
 
 Public Class FileLinksContainer
-    Public Property UnprocessedFilenames As List(Of String)
+    Public Property UnprocessedFilenames As HashSet(Of String)
 
-    Private Property Items As List(Of FileLinks)
-    Private Property ItemNames As List(Of String)
+    Private Property Items As Dictionary(Of String, FileLinks)
 
     Public Sub New()
-        Me.Items = New List(Of FileLinks)
-        Me.ItemNames = New List(Of String)
-        Me.UnprocessedFilenames = New List(Of String)
+        Me.Items = New Dictionary(Of String, FileLinks)(StringComparer.OrdinalIgnoreCase)
+        Me.UnprocessedFilenames = New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
     End Sub
 
     Public Sub AddItem(FileLinks As FileLinks)
-        Me.Items.Add(FileLinks)
-        Me.ItemNames.Add(FileLinks.Name.ToLower)
+        Me.Items(FileLinks.Name) = FileLinks
     End Sub
 
     Public Function GetItem(ItemName As String) As FileLinks
-        Dim idx As Integer = Me.ItemNames.IndexOf(ItemName.ToLower)
-        If Not idx = -1 Then
-            Return Me.Items(idx)
+        If Me.Items.ContainsKey(ItemName) Then
+            Return Me.Items(ItemName)
         Else
             Return Nothing
         End If
     End Function
 
     Public Function GetItems() As List(Of FileLinks)
-        Return Me.Items
+        Return Me.Items.Values.ToList
     End Function
+
 End Class
 
 Public Class FileLinks
@@ -794,12 +913,14 @@ Public Class FileLinks
     Public Property Contains As List(Of String)
     Public Property ContainedBy As List(Of String)
     Public Property Visited As Boolean
+    Public Property IsFOPMaster As Boolean
 
     Public Sub New(FullName As String)
         Me.Name = FullName
         Me.Contains = New List(Of String)
         Me.ContainedBy = New List(Of String)
         Me.Visited = False
+        Me.IsFOPMaster = False
     End Sub
 
 End Class

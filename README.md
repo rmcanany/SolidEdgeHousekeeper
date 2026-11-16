@@ -191,14 +191,17 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 
 <details><summary><h5 style="margin:0px; display:inline-block">Some Common Issues</h5></summary>
 
-To find files related to an assembly, the program follows links in the file, and their links in turn.  Sometimes a file cannot be opened.  The program reports an error if this occurs.  It's not a bad idea to first use the `Check Links` command before trying a top level assembly.
+To find files related to an assembly, the program follows links in the file, and their links in turn.  Sometimes a file cannot be opened.  The program reports an error if this occurs.  It's not a bad idea to run `Check Links` before trying a top-level assembly.
 
 Here are a few reasons the search can run into problems.
 
+- In a top down search, a linked file is outside the top-level directories.
 - A linked file was renamed or deleted.
 - The file is already open in Solid Edge.
 - The file name (including path) has > 260 characters.
-- The file is not a SE file, or is somehow corrupt.
+- The file is not a SE file, a newer version, or otherwise not readable.
+
+As noted, the log file shows any unprocessed files.  The program populates the list with files it *did* find.  That way, you can decide how to proceed.
 
 </details>
 

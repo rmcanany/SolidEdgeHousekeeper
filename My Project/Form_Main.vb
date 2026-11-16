@@ -4656,3 +4656,14 @@ End Class
 ''Dim UserName As String = Security.Principal.WindowsIdentity.GetCurrent().Name
 ' Dim StatusChangeDate = DateTime.Now
 
+
+' ###### STOPWATCH ######
+
+'Dim TimerLogger As Logger = Me.ErrorLogger.AddLogger("Timer")
+'Dim SW As System.Diagnostics.Stopwatch = System.Diagnostics.Stopwatch.StartNew()
+
+''###### Get filenames in top level folders ######
+'AllFilenames = GetAllFilesTopDown(TopLevelFolders, TopLevelAssembly)
+
+'TimerLogger.AddMessage($"GetAllFilesTopDown: {SW.Elapsed.TotalSeconds:F1} s, {AllFilenames.Count} files")
+'SW.Restart()
