@@ -34,20 +34,19 @@ Public Class UtilsTopLevelAssembly
 
         '###### Get filenames in top level folders ######
         AllFilenames = GetAllFilesTopDown(TopLevelFolders, TopLevelAssembly)
+        If CheckInterruptRequest() Then Return New List(Of String)
 
         '###### Get links contained in each file ######
         FileLinksContainer = GetContains(AllFilenames)
-
-        If CheckInterruptRequest() Then
-            ' Needs some study
-            Return New List(Of String)
-        End If
+        If CheckInterruptRequest() Then Return New List(Of String)
 
         '###### Populate ContainedBy information ######
         FileLinksContainer = GetContainedBy(FileLinksContainer)
+        If CheckInterruptRequest() Then Return New List(Of String)
 
         '###### Find files related to the top level assembly ######
         FileLinksContainer = VisitLinks(TopLevelAssembly, FileLinksContainer)
+        If CheckInterruptRequest() Then Return New List(Of String)
 
         '###### Prep the TLA file list ######
         For Each FileLinks As FileLinks In FileLinksContainer.GetItems
@@ -116,6 +115,8 @@ Public Class UtilsTopLevelAssembly
         ValidExtensions As List(Of String),
         ByRef AllFilenames As List(Of String))
 
+        If CheckInterruptRequest() Then Return
+
         Try
             '###### COLLECT ELIGIBLE FILES IN THIS DIRECTORY ######
             Dim tmpFiles = FileIO.FileSystem.GetFiles(Path, FileIO.SearchOption.SearchTopLevelOnly, ValidExtensions.ToArray)
@@ -155,8 +156,9 @@ Public Class UtilsTopLevelAssembly
                     Continue For
                 End If
 
+                If CheckInterruptRequest() Then Return FileLinksContainer
+
                 FMain.TextBoxStatus.Text = $"Getting links {IO.Path.GetFileName(Filename)}"
-                Windows.Forms.Application.DoEvents()
 
                 Dim SSDoc As HCStructuredStorageDoc = Nothing
                 Dim SSLinkDoc As HCStructuredStorageDoc = Nothing
@@ -172,6 +174,7 @@ Public Class UtilsTopLevelAssembly
                     FileLinks.IsFOPMaster = SSDoc.IsFOPMaster
 
                     For Each LinkName As String In LinkNames
+
 
                         ' ###### CHECK BAILOUT CONDITIONS ######
 
@@ -267,8 +270,10 @@ Public Class UtilsTopLevelAssembly
     Private Function GetContainedBy(FileLinksContainer As FileLinksContainer) As FileLinksContainer
 
         For Each FileLinks As FileLinks In FileLinksContainer.GetItems
+
+            If CheckInterruptRequest() Then Return FileLinksContainer
+
             FMain.TextBoxStatus.Text = $"Contained by {IO.Path.GetFileName(FileLinks.Name)}"
-            Windows.Forms.Application.DoEvents()
 
             For Each ContainsFilename In FileLinks.Contains
                 Dim tmpFileLinks As FileLinks = FileLinksContainer.GetItem(ContainsFilename)
@@ -287,6 +292,8 @@ Public Class UtilsTopLevelAssembly
         Filename As String,
         FileLinksContainer As FileLinksContainer
         ) As FileLinksContainer
+
+        If CheckInterruptRequest() Then Return FileLinksContainer
 
         Dim FileLinks As FileLinks
 
@@ -339,76 +346,15 @@ Public Class UtilsTopLevelAssembly
         Return FileLinksContainer
     End Function
 
-    Private Sub ReportUnrelatedFiles(UnrelatedFiles As List(Of String))
-
-        If UnrelatedFiles.Count > 0 Then
-            Dim UP As New UtilsPreferences
-
-            Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-
-            Dim LogfileName As String
-            LogfileName = $"{UP.GetTempDirectory}\{Timestamp}_Unrelated_Files.log"
-
-            Try
-                Using writer As New IO.StreamWriter(LogfileName, True)
-                    writer.WriteLine("UNRELATED FILES")
-                    writer.WriteLine("")
-                    For Each Filename In UnrelatedFiles
-                        writer.WriteLine(Filename)
-                    Next
-                End Using
-
-                Try
-                    ' Try to use the default application to open the file.
-                    Process.Start(LogfileName)
-                Catch ex As Exception
-                    ' If none, open with notepad.exe
-                    Process.Start("notepad.exe", LogfileName)
-                End Try
 
 
-            Catch ex As Exception
-            End Try
-
-        End If
-
-    End Sub
-
-
-    Private Sub GetUnrelatedFilesBottomUp(
+    Public Function GetLinksBottomUp(
         TopLevelFolders As List(Of String),
-        Foundfiles As List(Of String),
-        ActiveFileExtensionsList As List(Of String))
-
-        Dim UnrelatedFiles As New List(Of String)
-
-        If TopLevelFolders.Count = 0 Then
-            Exit Sub
-        End If
-
-        For Each TopLevelFolder In TopLevelFolders
-            Dim SomeFiles As New List(Of String)
-            GetFilesAndRecurseSubs(TopLevelFolder, ActiveFileExtensionsList, SomeFiles)
-
-            For Each Filename In SomeFiles
-                If Not Foundfiles.Contains(Filename, StringComparer.OrdinalIgnoreCase) Then
-                    If Not UnrelatedFiles.Contains(Filename, StringComparer.OrdinalIgnoreCase) Then
-                        UnrelatedFiles.Add(Filename)
-                    End If
-                End If
-            Next
-
-        Next
-
-        ReportUnrelatedFiles(UnrelatedFiles)
-
-    End Sub
-
-    Public Function GetLinksBottomUp(TopLevelFolders As List(Of String),
-                             TopLevelAssembly As String,
-                             ActiveFileExtensionsList As List(Of String),
-                             DraftAndModelSameName As Boolean,
-                             Report As Boolean) As List(Of String)
+        TopLevelAssembly As String,
+        ActiveFileExtensionsList As List(Of String),
+        DraftAndModelSameName As Boolean,
+        Report As Boolean
+        ) As List(Of String)
 
         ' ###### Changed all references from DesignManager to RevisionManager RM 20250115 ######
         ' Code with DesignManager references is commented out above.
@@ -466,6 +412,8 @@ Public Class UtilsTopLevelAssembly
                         tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
                                                  TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
 
+                        If CheckInterruptRequest() Then Return New List(Of String)
+
                         For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
                             If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
                                 AllLinkedFilenames.Add(tmpAllLinkedFilename)
@@ -479,6 +427,8 @@ Public Class UtilsTopLevelAssembly
 
                     tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
                                                  "", AllFilenames, IsDriveIndexed:=False, DraftAndModelSameName)
+
+                    If CheckInterruptRequest() Then Return New List(Of String)
 
                     For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
                         If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
@@ -510,20 +460,23 @@ Public Class UtilsTopLevelAssembly
 
         If Proceed And Report Then
             GetUnrelatedFilesBottomUp(TopLevelFolders, FoundFiles, ActiveFileExtensionsList)
+
+            If CheckInterruptRequest() Then Return New List(Of String)
         End If
 
         Return FoundFiles
 
     End Function
 
-    Private Function FollowLinksBottomUp(DMApp As RevisionManager.Application,
-                                         DMDoc As RevisionManager.Document,
-                                         AllLinkedFilenames As List(Of String),
-                                         TopLevelFolder As String,
-                                         AllFilenames As Dictionary(Of String, String),
-                                         IsDriveIndexed As Boolean,
-                                         DraftAndModelSameName As Boolean
-                                         ) As List(Of String)
+    Private Function FollowLinksBottomUp(
+        DMApp As RevisionManager.Application,
+        DMDoc As RevisionManager.Document,
+        AllLinkedFilenames As List(Of String),
+        TopLevelFolder As String,
+        AllFilenames As Dictionary(Of String, String),
+        IsDriveIndexed As Boolean,
+        DraftAndModelSameName As Boolean
+        ) As List(Of String)
 
         Dim LinkedDocs As RevisionManager.LinkedDocuments
         Dim LinkedDoc As RevisionManager.Document
@@ -540,9 +493,7 @@ Public Class UtilsTopLevelAssembly
         Dim WhereUsedLinkedDocs As RevisionManager.LinkedDocuments
         Dim WhereUsedLinkedDoc As RevisionManager.Document
 
-        If CheckInterruptRequest() Then
-            Return AllLinkedFilenames
-        End If
+        If CheckInterruptRequest() Then Return AllLinkedFilenames
 
         ValidExtensions.AddRange({".asm", ".par", ".psm", ".dft"})
 
@@ -566,6 +517,9 @@ Public Class UtilsTopLevelAssembly
                     WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, Filename, IsDriveIndexed, DraftAndModelSameName)
 
                     For Each WhereUsedFile In WhereUsedFiles
+
+                        If CheckInterruptRequest() Then Return AllLinkedFilenames
+
                         If Not AllLinkedFilenames.Contains(WhereUsedFile, StringComparer.OrdinalIgnoreCase) Then
                             AllLinkedFilenames.Add(WhereUsedFile)
 
@@ -597,6 +551,8 @@ Public Class UtilsTopLevelAssembly
                         LinkedDocs = CType(DMDoc.LinkedDocuments, RevisionManager.LinkedDocuments)
                         If LinkedDocs.Count > 0 Then
                             For Each LinkedDoc In LinkedDocs
+
+                                If CheckInterruptRequest() Then Return AllLinkedFilenames
 
                                 ' Get FOP status
                                 Dim FOPStatus As Integer
@@ -647,9 +603,7 @@ Public Class UtilsTopLevelAssembly
             Return AllWhereUsedFileNames
         End If
 
-        If CheckInterruptRequest() Then
-            Return AllWhereUsedFileNames
-        End If
+        If CheckInterruptRequest() Then Return AllWhereUsedFileNames
 
         If DraftAndModelSameName Then
             Dim DraftFilename As String = System.IO.Path.ChangeExtension(Filename, ".dft")
@@ -712,7 +666,72 @@ Public Class UtilsTopLevelAssembly
 
     End Function
 
+    Private Sub GetUnrelatedFilesBottomUp(
+        TopLevelFolders As List(Of String),
+        Foundfiles As List(Of String),
+        ActiveFileExtensionsList As List(Of String))
 
+        Dim UnrelatedFiles As New List(Of String)
+
+        If TopLevelFolders.Count = 0 Then
+            Exit Sub
+        End If
+
+        For Each TopLevelFolder In TopLevelFolders
+            Dim SomeFiles As New List(Of String)
+            GetFilesAndRecurseSubs(TopLevelFolder, ActiveFileExtensionsList, SomeFiles)
+
+            For Each Filename In SomeFiles
+                If Not Foundfiles.Contains(Filename, StringComparer.OrdinalIgnoreCase) Then
+                    If Not UnrelatedFiles.Contains(Filename, StringComparer.OrdinalIgnoreCase) Then
+                        UnrelatedFiles.Add(Filename)
+                    End If
+                End If
+            Next
+
+        Next
+
+        If CheckInterruptRequest() Then Exit Sub
+
+        ReportUnrelatedFiles(UnrelatedFiles)
+
+    End Sub
+
+
+    Private Sub ReportUnrelatedFiles(UnrelatedFiles As List(Of String))
+
+        If UnrelatedFiles.Count > 0 Then
+            Dim UP As New UtilsPreferences
+
+            Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+
+            Dim LogfileName As String
+            LogfileName = $"{UP.GetTempDirectory}\{Timestamp}_Unrelated_Files.log"
+
+            Try
+                Using writer As New IO.StreamWriter(LogfileName, True)
+                    writer.WriteLine("UNRELATED FILES")
+                    writer.WriteLine("")
+                    For Each Filename In UnrelatedFiles
+                        writer.WriteLine(Filename)
+                    Next
+                End Using
+
+                Try
+                    ' Try to use the default application to open the file.
+                    Process.Start(LogfileName)
+                Catch ex As Exception
+                    ' If none, open with notepad.exe
+                    Process.Start("notepad.exe", LogfileName)
+                End Try
+
+
+            Catch ex As Exception
+            End Try
+
+        End If
+
+    End Sub
 
     Private Function RemoveNestedFolders(
         TopLevelFolders As List(Of String)
@@ -789,8 +808,9 @@ Public Class UtilsTopLevelAssembly
         Dim tf As Boolean = False
 
         System.Windows.Forms.Application.DoEvents()
-        If Form_Main.StopProcess Then
-            FMain.TextBoxStatus.Text = "Processing aborted"
+        If FMain.StopProcess Then
+            Dim s As String = "Processing stopped by user"
+            If Not Me.ErrorLogger.ContainsMessage(s) Then Me.ErrorLogger.AddMessage(s)
             tf = True
         End If
 
