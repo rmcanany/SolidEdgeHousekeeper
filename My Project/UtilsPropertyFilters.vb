@@ -34,7 +34,7 @@ Public Class UtilsPropertyFilters
 
         'ReportMissingFiles()
 
-        FMain.TextBoxStatus.Text = ""
+        'FMain.TextBoxStatus.Text = ""
 
         Return FilteredFiles
     End Function
@@ -86,8 +86,9 @@ Public Class UtilsPropertyFilters
         Dim Tot As Integer = FoundFiles.Count
 
         For Each FoundFile In FoundFiles
-            If Form_Main.StopProcess Then
-                Exit For
+
+            If FMain.StopProcess Then
+                Return New List(Of String)
             End If
 
             N += 1
@@ -117,7 +118,7 @@ Public Class UtilsPropertyFilters
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         System.Windows.Forms.Application.DoEvents()
-        If Form_Main.StopProcess Then
+        If FMain.StopProcess Then
             Return False
         End If
 

@@ -28,8 +28,6 @@ Public Class UtilsFileList
 
     Public Sub New_UpdateFileList()
 
-        FMain.Cursor = Cursors.WaitCursor
-
         Dim GroupTags As New List(Of String)
         Dim BareTopLevelAssembly As Boolean = False
 
@@ -69,6 +67,9 @@ Public Class UtilsFileList
             If tmptmpFoundFiles IsNot Nothing Then
                 tmpFoundFiles.AddRange(tmptmpFoundFiles)
             End If
+            If CheckInterruptRequest() Then
+                Exit Sub
+            End If
         Next
 
         If Not FMain.SortNone Then
@@ -85,6 +86,9 @@ Public Class UtilsFileList
         ' Remove problem files
         If Not FoundFiles Is Nothing Then
             FoundFiles = RemoveProblemFiles(FoundFiles, ActiveFileExtensionsList)
+            If CheckInterruptRequest() Then
+                Exit Sub
+            End If
         End If
 
 
@@ -92,6 +96,9 @@ Public Class UtilsFileList
         If Not FoundFiles Is Nothing Then
             If FMain.SortDependency Then
                 FoundFiles = GetDependencySortedFiles(FoundFiles, FindFilesLogger)
+            End If
+            If CheckInterruptRequest() Then
+                Exit Sub
             End If
         End If
 
@@ -109,6 +116,10 @@ Public Class UtilsFileList
                 System.Threading.Thread.Sleep(100)
                 Dim UPF As New UtilsPropertyFilters(Me.FMain, FindFilesLogger)
                 FoundFiles = UPF.FilterProperties(FoundFiles)
+                If CheckInterruptRequest() Then
+                    Exit Sub
+                End If
+
             End If
 
             If FMain.SortAlphabetical Then
@@ -132,12 +143,14 @@ Public Class UtilsFileList
         ' Populate ListView
         If Not FoundFiles Is Nothing Then
             PopulateListView(FoundFiles)
+            If CheckInterruptRequest() Then
+                ListViewFiles.Items.Clear()
+                ListViewFiles.EndUpdate()
+                Exit Sub
+            End If
         End If
 
         ListViewFiles.EndUpdate()
-
-        FMain.StopProcess = False
-        FMain.ButtonCancel.Text = "Cancel"
 
         FMain.Cursor = Cursors.Default
 
@@ -150,9 +163,14 @@ Public Class UtilsFileList
 
         'Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
         Dim filecount As Integer = ListViewFiles.Items.Count
-        FMain.TextBoxStatus.Text = $"{filecount} files found in {ElapsedTimeText}"
+
+        If Not FMain.StopProcess Then FMain.TextBoxStatus.Text = $"{filecount} files found in {ElapsedTimeText}"
 
         If Me.ErrorLogger.HasErrors Then ErrorLogger.ReportErrors(UseMessageBox:=False)
+
+        ' This should happen in the caller
+        'FMain.StopProcess = False
+        'FMain.ButtonCancel.Text = "Cancel"
 
 
     End Sub
@@ -270,9 +288,6 @@ Public Class UtilsFileList
         Dim UC As New UtilsCommon
 
         FMain.ListViewFilesOutOfDate = False
-
-        FMain.StopProcess = False
-        FMain.ButtonCancel.Text = "Stop"
 
         If FMain.FilterAsm Then ActiveFileExtensionsList.Add("*.asm")
         If FMain.FilterPar Then ActiveFileExtensionsList.Add("*.par")
@@ -687,7 +702,7 @@ Public Class UtilsFileList
 
             FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
-            FMain.TextBoxStatus.Text = ""
+            'FMain.TextBoxStatus.Text = ""
 
         End If
 
@@ -738,6 +753,10 @@ Public Class UtilsFileList
 
         For Each Filename In Foundfiles
 
+            If CheckInterruptRequest() Then
+                Return CType(New List(Of String), IReadOnlyCollection(Of String))
+            End If
+
             N += 1
 
             FMain.TextBoxStatus.Text = $"{N}/{Tot} Dependency Sort {IO.Path.GetFileName(Filename)}"
@@ -773,6 +792,10 @@ Public Class UtilsFileList
         If Proceed Then
             OutList = SortByDependency(DependencyDict)
 
+            If CheckInterruptRequest() Then
+                Return New List(Of String)
+            End If
+
         End If
 
         Return OutList
@@ -784,6 +807,10 @@ Public Class UtilsFileList
         LinkDict As Dictionary(Of String, List(Of String)),
         MissingFilesList As List(Of String)
         ) As Dictionary(Of String, List(Of String))
+
+        If CheckInterruptRequest() Then
+            Return New Dictionary(Of String, List(Of String))
+        End If
 
         Dim SSDocName As String
         Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
@@ -869,6 +896,11 @@ Public Class UtilsFileList
         Next
 
         While OldCount > Count
+
+            If CheckInterruptRequest() Then
+                Return New List(Of String)
+            End If
+
             For Each Filename In LinkDict.Keys
                 FMain.TextBoxStatus.Text = IO.Path.GetFileName(Filename)
                 If LinkDict(Filename).Count = 0 Then
@@ -943,6 +975,11 @@ Public Class UtilsFileList
             Count = 0
             OldCount = 100
             While OldCount > Count
+
+                If CheckInterruptRequest() Then
+                    Return New List(Of String)
+                End If
+
                 OldCount = Outlist.Count
                 For Each Filename In OriginalLinkDict.Keys
                     If IO.Path.GetExtension(Filename) = ".asm" Then
@@ -961,6 +998,11 @@ Public Class UtilsFileList
             End While
 
             For Each Filename In OriginalLinkDict.Keys
+
+                If CheckInterruptRequest() Then
+                    Return New List(Of String)
+                End If
+
                 If IO.Path.GetExtension(Filename) = ".dft" Then
                     NoRemainingLinks = True
                     For Each LinkFilename As String In OriginalLinkDict(Filename)
@@ -1086,8 +1128,10 @@ Public Class UtilsFileList
 
             If NumProcessed Mod 100 = 0 Then
                 System.Windows.Forms.Application.DoEvents()
-                If FMain.StopProcess Then
-                    Exit For
+                If CheckInterruptRequest() Then
+                    ListViewFiles.Items.Clear()
+                    ListViewFiles.EndUpdate()
+                    Exit Sub
                 End If
 
             End If
@@ -1199,7 +1243,8 @@ Public Class UtilsFileList
                     FMain.TextBoxStatus.Text = $"Getting properties {System.IO.Path.GetFileName(FullName)}"
                     If NumProcessed Mod 100 = 0 Then
                         System.Windows.Forms.Application.DoEvents()
-                        If FMain.StopProcess Then
+                        If CheckInterruptRequest() Then
+                            'ListViewFiles.EndUpdate()
                             Exit For
                         End If
 
@@ -1394,7 +1439,8 @@ Public Class UtilsFileList
                     NumDone += 1
                     FMain.TextBoxStatus.Text = $"Getting properties {NumDone} of {ListViewFilesLUT.Count}"
                     System.Windows.Forms.Application.DoEvents()
-                    If FMain.StopProcess Then
+                    If CheckInterruptRequest() Then
+                        'ListViewFiles.EndUpdate()
                         Exit For
                     End If
                 Next
@@ -1573,7 +1619,7 @@ Public Class UtilsFileList
 
                 FMain.TextBoxStatus.Text = $"Getting properties {NumDone} of {ListViewFilesLUT.Count}"
                 System.Windows.Forms.Application.DoEvents()
-                If FMain.StopProcess Then
+                If CheckInterruptRequest() Then
                     CancellationTokenSource.Cancel()
                 End If
 
@@ -1632,4 +1678,19 @@ Public Class UtilsFileList
 
         Return Proceed
     End Function
+
+
+    Private Function CheckInterruptRequest() As Boolean
+        Dim tf As Boolean = False
+
+        System.Windows.Forms.Application.DoEvents()
+        If FMain.StopProcess Then
+            FMain.TextBoxStatus.Text = "Processing stopped by user"
+            tf = True
+        End If
+
+        Return tf
+    End Function
+
+
 End Class

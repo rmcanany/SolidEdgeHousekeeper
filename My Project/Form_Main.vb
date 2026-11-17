@@ -2262,6 +2262,8 @@ Public Class Form_Main
 
         If Me.ButtonCancel.Text = "Stop" Then Exit Sub
 
+        BT_Update.Owner.Capture = False
+
         Dim UFL As New UtilsFileList(Me)
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
@@ -2290,17 +2292,23 @@ Public Class Form_Main
             End If
         End If
 
-        Me.ButtonCancel.Text = "Cancel"
-        Me.Cursor = Cursors.Default
-
         ElapsedTime = Now.Subtract(StartTime).TotalMinutes
         If ElapsedTime < 60 Then
             ElapsedTimeText = $"{ElapsedTime:0.0} min."
         Else
             ElapsedTimeText = $"{(ElapsedTime / 60):0.0} hr."
         End If
-        'Me.TextBoxStatus.Text = $"Updated properties in {ListViewFiles.Items.Count} files in {ElapsedTimeText}"
-        Me.TextBoxStatus.Text = $"Found {ListViewFiles.Items.Count} files in {ElapsedTimeText}"
+
+        If Not Me.StopProcess Then
+            Me.TextBoxStatus.Text = $"Found {ListViewFiles.Items.Count} files in {ElapsedTimeText}"
+        Else
+            Me.TextBoxStatus.Text = $"Processing stopped by user"
+            Me.ListViewFilesOutOfDate = True
+        End If
+
+        Me.StopProcess = False
+        Me.ButtonCancel.Text = "Cancel"
+        Me.Cursor = Cursors.Default
 
     End Sub
 

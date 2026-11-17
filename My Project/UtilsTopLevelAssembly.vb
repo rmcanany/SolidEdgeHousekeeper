@@ -810,7 +810,8 @@ Public Class UtilsTopLevelAssembly
         System.Windows.Forms.Application.DoEvents()
         If FMain.StopProcess Then
             Dim s As String = "Processing stopped by user"
-            If Not Me.ErrorLogger.ContainsMessage(s) Then Me.ErrorLogger.AddMessage(s)
+            'If Not Me.ErrorLogger.ContainsMessage(s) Then Me.ErrorLogger.AddMessage(s)
+            FMain.TextBoxStatus.Text = s
             tf = True
         End If
 
