@@ -1094,6 +1094,8 @@ Public Class Form_Main
 
         ' Add any initialization after the InitializeComponent() call.
 
+        ' ###### HANDLE COMMAND LINE CALLS ######
+
         'https://stackoverflow.com/questions/1179532/how-do-i-pass-command-line-arguments-to-a-winforms-application
         'string[] args = Environment.GetCommandLineArgs();
         Dim Args As List(Of String) = Environment.GetCommandLineArgs.ToList

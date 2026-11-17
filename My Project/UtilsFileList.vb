@@ -208,6 +208,10 @@ Public Class UtilsFileList
                 StartLogger.AddMessage(msg)
             End If
 
+            If GroupTags.Where(Function(t) t = "asm").Count() > 1 Then
+                StartLogger.AddMessage("Only one top-level assembly is allowed. Please delete the extras to proceed.")
+            End If
+
             If Not (GroupTags.Contains("ASM_Folder")) Then
                 If FMain.WarnBareTLA Then
                     msg = "A top-level assembly with no top-level folder detected.  "

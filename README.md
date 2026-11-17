@@ -151,7 +151,7 @@ Choose this option to select files linked to an assembly. Referring to the toolb
 - click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly
 - click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files
 
-You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders.  As with the previous commands, `multi-select` is enabled for folders. Note the program always includes subfolders for *where used* files.
+You can only specify one top-level assembly.  However, you can have any number of folders.  As with the previous commands, `multi-select` is enabled for folders. Note the program always includes subfolders for *where used* files.
 
 There are a lot of options with this selection type.  They are covered here.  Shown below is the top-level assembly configuration page.
 
@@ -171,13 +171,17 @@ Bottom up is meant for general purpose (hopefully indexed) directories (e.g., `\
 
 A bottom up search requires a valid Fast Search Scope filename, (e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), which tells the program if the specified folder is on an indexed drive. 
 
+Note that bottom-up searches can pull in files from outside any top-level directories you specify, standard parts on a server, for example. Those then get processed with everything else. If that's not what you want, top-down may be a better choice.  If that's not practical, you can always exclude unwanted files from the list before clicking Process.
+
 </details>
 
 <details><summary><h5 style="margin:0px; display:inline-block">Top Down</h5></summary>
 
 Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`), where most of the files in the folder(s) are related to the assembly. The program opens every file within and below the top-level assembly folder(s). As it does, it creates a graph of the links. The graph is subsequently traversed to find related files. I don't know how it works; my son did that part. 
 
-A bottom up search requires a valid LinkMgmt filename, (e.g., `C:\Program Files\...\Preferences\LinkMgmt.txt`), which tells the program the order in which to resolve links. 
+A top down search requires a valid LinkMgmt filename, (e.g., `C:\Program Files\...\Preferences\LinkMgmt.txt`), which tells the program the order in which to resolve links. 
+
+Unlike bottom up, top down does not include linked files outside the top-level folders. They are listed in the log instead.
 
 </details>
 
