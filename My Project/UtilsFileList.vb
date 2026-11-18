@@ -752,19 +752,16 @@ Public Class UtilsFileList
 
         Dim SubLogger As Logger = FindFilesLogger.AddLogger("Dependency Sort")
 
-        Dim OutList As New List(Of String)
-        Dim MissingFilesList As New List(Of String)
-        Dim DependencyDict As New Dictionary(Of String, List(Of String))
-        Dim Filename As String
+        Dim MissingFilesList As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+        Dim DependencyDict As New Dictionary(Of String, List(Of String))(StringComparer.OrdinalIgnoreCase)
         Dim Proceed As Boolean = True
 
-        Dim SSDoc As HCStructuredStorageDoc = Nothing
-        Dim UP As New UtilsPreferences
+        'Dim UP As New UtilsPreferences
 
         Dim N As Integer = 0
         Dim Tot As Integer = Foundfiles.Count
 
-        For Each Filename In Foundfiles
+        For Each Filename As String In Foundfiles
 
             If CheckInterruptRequest() Then
                 Return CType(New List(Of String), IReadOnlyCollection(Of String))
@@ -772,9 +769,14 @@ Public Class UtilsFileList
 
             N += 1
 
+            If DependencyDict.ContainsKey(Filename) Then
+                Continue For
+            End If
+
             FMain.TextBoxStatus.Text = $"{N}/{Tot} Dependency Sort {IO.Path.GetFileName(Filename)}"
             System.Windows.Forms.Application.DoEvents()
 
+            Dim SSDoc As HCStructuredStorageDoc = Nothing
             Try
                 SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
@@ -786,21 +788,15 @@ Public Class UtilsFileList
                 Continue For
             End Try
 
-            Dim tmpDependencyDict As New Dictionary(Of String, List(Of String))
+            Dim NewWay As Boolean = True
 
-            tmpDependencyDict = GetLinks(SSDoc, tmpDependencyDict, MissingFilesList)
+            DependencyDict = GetLinks(SSDoc, DependencyDict, MissingFilesList)
 
             If SSDoc IsNot Nothing Then SSDoc.Close()
 
-            For Each s As String In tmpDependencyDict.Keys
-                FMain.TextBoxStatus.Text = s
-                If Not DependencyDict.Keys.Contains(s) Then
-                    DependencyDict.Add(s, tmpDependencyDict(s))
-
-                End If
-            Next
-
         Next
+
+        Dim OutList As New List(Of String)
 
         If Proceed Then
             OutList = SortByDependency(DependencyDict)
@@ -817,8 +813,8 @@ Public Class UtilsFileList
 
     Private Function GetLinks(
         SSDoc As HCStructuredStorageDoc,
-        LinkDict As Dictionary(Of String, List(Of String)),
-        MissingFilesList As List(Of String)
+        DependencyDict As Dictionary(Of String, List(Of String)),
+        MissingFilesList As HashSet(Of String)
         ) As Dictionary(Of String, List(Of String))
 
         If CheckInterruptRequest() Then
@@ -829,41 +825,42 @@ Public Class UtilsFileList
         Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
 
         Dim SSLinkNames As List(Of String)
-        Dim SSLinkName As String
         Dim SSLinkDoc As HCStructuredStorageDoc = Nothing
 
         Dim UC As New UtilsCommon
 
         SSDocName = SSDoc.FullName
 
-        If Not LinkDict.Keys.Contains(SSDocName) Then
+        If Not DependencyDict.ContainsKey(SSDocName) Then
 
-            LinkDict.Add(SSDocName, New List(Of String))
+            DependencyDict.Add(SSDocName, New List(Of String))
 
             If Not SSDoc.IsFOPMaster Then
                 SSLinkNames = SSDoc.GetLinkNames
                 If SSLinkNames.Count > 0 Then
-                    For Each SSLinkName In SSLinkNames
+                    For Each SSLinkName As String In SSLinkNames
 
-                        If ValidExtensions.Contains(IO.Path.GetExtension(SSLinkName)) Then
-                            If IO.File.Exists(SSLinkName) Then
-                                Try
-                                    SSLinkDoc = New HCStructuredStorageDoc(SSLinkName, _OpenReadWrite:=False)
-                                    SSLinkDoc.ReadLinks(FMain.LinkManagementOrder)
-                                    LinkDict(SSDocName).Add(SSLinkName)
-                                    LinkDict = GetLinks(SSLinkDoc, LinkDict, MissingFilesList)
-                                    SSLinkDoc.Close()
-                                Catch ex As Exception
-                                    If Not MissingFilesList.Contains($"{SSLinkName}: {ex.Message}") Then
-                                        MissingFilesList.Add($"{SSLinkName}: {ex.Message}")
-                                    End If
-                                    If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
-                                End Try
-                            Else
-                                If Not MissingFilesList.Contains(SSLinkName) Then
+                        If ValidExtensions.Contains(IO.Path.GetExtension(SSLinkName).ToLower) Then
+
+                            If DependencyDict.ContainsKey(SSLinkName) Then
+                                If Not DependencyDict(SSDocName).Contains(SSLinkName) Then DependencyDict(SSDocName).Add(SSLinkName)
+                            ElseIf Not MissingFilesList.Contains(SSLinkName) Then
+                                If IO.File.Exists(SSLinkName) Then
+                                    Try
+                                        SSLinkDoc = New HCStructuredStorageDoc(SSLinkName, _OpenReadWrite:=False)
+                                        SSLinkDoc.ReadLinks(FMain.LinkManagementOrder)
+                                        If Not DependencyDict(SSDocName).Contains(SSLinkName) Then DependencyDict(SSDocName).Add(SSLinkName)
+                                        DependencyDict = GetLinks(SSLinkDoc, DependencyDict, MissingFilesList)
+                                        SSLinkDoc.Close()
+                                    Catch ex As Exception
+                                        MissingFilesList.Add(SSLinkName)
+                                        If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
+                                    End Try
+                                Else
                                     MissingFilesList.Add(SSLinkName)
                                 End If
                             End If
+
                         End If
                     Next
                 End If
@@ -871,7 +868,7 @@ Public Class UtilsFileList
             End If
         End If
 
-        Return LinkDict
+        Return DependencyDict
     End Function
 
     Private Function SortByDependency(
