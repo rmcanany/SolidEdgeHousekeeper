@@ -226,38 +226,57 @@ Public Class UtilsFileList
         End If
 
         If GroupTags.Contains("ActiveFile") Or GroupTags.Contains("ActiveFiles") Then
-            Dim USEA = FMain.USEA
-            USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
 
+            If GroupTags.Where(Function(t) t = "ActiveFile").Count > 1 Then
+                StartLogger.AddMessage("Only one Active File entry is allowed. Please delete the extras to proceed.")
+            End If
+
+            If GroupTags.Where(Function(t) t = "ActiveFiles").Count > 1 Then
+                StartLogger.AddMessage("Only one Active Files entry is allowed. Please delete the extras to proceed.")
+            End If
+
+            If GroupTags.Contains("ActiveFile") And GroupTags.Contains("ActiveFiles") Then
+                StartLogger.AddMessage("Cannot process an Active File AND Active Files.  Please delete one or the other.")
+            End If
+
+            Dim USEA As New UtilsSEApp(FMain)
 
             If Not USEA.SEIsRunning Then
                 StartLogger.AddMessage("SE must be running to obtain active files")
             Else
-                USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=True, ProcessDraftsInactive:=False)
+                Dim Result = USEA.GetActiveFiles
 
-                Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
-                If SEDocuments.Count > 0 Then
-                    If GroupTags.Contains("ActiveFiles") Then
-                        For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
-                            If Not IO.File.Exists(SEDocument.FullName) Then
-                                StartLogger.AddMessage($"File needs to be saved before continuing: '{SEDocument.FullName}'")
-                            End If
-                        Next
-                    End If
+                If Not Result.Success Then
+                    StartLogger.AddMessage("Unable to connect to Solid Edge")
+                Else
+
                     If GroupTags.Contains("ActiveFile") Then
-                        Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
-                        ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-                        FMain.ActiveFile = ActiveDocument.FullName
-                        If Not IO.File.Exists(ActiveDocument.FullName) Then
-                            Dim s As String = $"File needs to be saved before continuing: '{ActiveDocument.FullName}'"
-                            If Not StartLogger.ContainsMessage(s) Then StartLogger.AddMessage(s)
+                        Dim ActiveFile = Result.ActiveFile
+                        If ActiveFile = "" Then
+                            StartLogger.AddMessage("No file open in SE")
+                        ElseIf Not IO.File.Exists(ActiveFile) Then
+                            StartLogger.AddMessage($"File must be saved before continuing: '{IO.Path.GetFileName(ActiveFile)}'")
                         End If
                     End If
-                Else
-                    StartLogger.AddMessage("SE cannot process active files with no file open.")
+
+                    If GroupTags.Contains("ActiveFiles") Then
+                        Dim ActiveFiles As List(Of String) = Result.ActiveFiles
+                        If ActiveFiles.Count = 0 Then
+                            StartLogger.AddMessage("No files open in SE")
+                        Else
+                            For Each ActiveFile As String In ActiveFiles
+                                If Not IO.File.Exists(ActiveFile) Then
+                                    StartLogger.AddMessage($"File must be saved before continuing: '{IO.Path.GetFileName(ActiveFile)}'")
+                                End If
+                            Next
+                        End If
+                    End If
+
                 End If
 
             End If
+
+
         End If
 
         If Me.ErrorLogger.HasErrors Then
@@ -372,34 +391,24 @@ Public Class UtilsFileList
 
                     FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList, SubLogger)
 
-                Case "ActiveFile", "ActiveFiles"
-                    Dim USEA = Me.FMain.USEA
-                    USEA.ErrorLogger = New Logger("UtilsSEApp", Nothing)
+                Case "ActiveFile"
+
+                    Dim USEA As New UtilsSEApp(FMain)
 
                     If USEA.SEIsRunning Then
+                        Dim Result = USEA.GetActiveFiles
+                        Dim ActiveFile = Result.ActiveFile
+                        FoundFiles = New List(Of String) From {ActiveFile}
+                    End If
 
-                        USEA.SEStart(RunInBackground:=False, UseCurrentSession:=True, NoUpdateMRU:=False, ProcessDraftsInactive:=False)
-                        Dim SEDocuments As SolidEdgeFramework.Documents = USEA.SEApp.Documents
+                Case "ActiveFiles"
 
-                        FMain.ActiveFiles = New List(Of String)
-                        FMain.ActiveFile = ""
-                        If SEDocuments.Count > 0 Then
-                            Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
-                            ActiveDocument = CType(USEA.SEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
-                            FMain.ActiveFile = ActiveDocument.FullName
-                            For Each SEDocument As SolidEdgeFramework.SolidEdgeDocument In SEDocuments
-                                If Source.Tag.ToString = "ActiveFiles" Then
-                                    FMain.ActiveFiles.Add(SEDocument.FullName)
-                                End If
-                            Next
+                    Dim USEA As New UtilsSEApp(FMain)
 
-                            If Source.Tag.ToString = "ActiveFiles" Then
-                                FoundFiles = FMain.ActiveFiles
-                            Else
-                                FoundFiles = New List(Of String) From {FMain.ActiveFile}
-                            End If
-
-                        End If
+                    If USEA.SEIsRunning Then
+                        Dim Result = USEA.GetActiveFiles
+                        Dim ActiveFiles = Result.ActiveFiles
+                        FoundFiles = ActiveFiles
                     End If
 
                 Case = "TeamCenter"

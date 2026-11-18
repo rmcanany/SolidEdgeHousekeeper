@@ -18,7 +18,7 @@ Public Class UtilsExecute
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
         Me.ErrorLogger = New HCErrorLogger("Housekeeper")
-        Me.USEA = Me.FMain.USEA
+        Me.USEA = New UtilsSEApp(Me.FMain)
         USEA.ErrorLogger = Me.ErrorLogger.AddFile("UtilsSEApp")
     End Sub
 

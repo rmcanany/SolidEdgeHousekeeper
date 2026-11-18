@@ -223,7 +223,9 @@ Choose this option to select files from that are currently open in Solid Edge. R
 
 When updating the list, Solid Edge must be running with at least one file open.  If a new file has never been saved, the program will report an error.
 
-When processing, the option `Use current SE session (if any)` does not have to be enabled.  If it is, when processing is complete, display of the previously open file(s) is restored.
+Only one Active File or Active Files entry is permitted.  If you change which file is active in SE, or open or close any files, the list must be updated to reflect the change.
+
+When processing, the option `Use current SE session (if any)` does not have to be enabled. If it is, when processing is complete, display of the previously open file(s) is restored.
 
 </details>
 

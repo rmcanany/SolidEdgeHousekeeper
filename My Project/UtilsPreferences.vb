@@ -46,7 +46,7 @@ Public Class UtilsPreferences
         SkipProps.AddRange({"listviewfilesoutofdate"})
         SkipProps.AddRange({"propertiesdata", "listofcolumns", "presets", "propertyfilters"})
         SkipProps.AddRange({"cliactive", "clipresetname", "clifilelistname"})
-        SkipProps.AddRange({"hcdebuglogger", "savedexpressions", "usea"})
+        SkipProps.AddRange({"hcdebuglogger", "savedexpressions"})
 
         If SavingPresets Then
             SkipProps.AddRange({"setemplatepath", "sepreferencespath", "sematerialspath", "workingfilespath"})

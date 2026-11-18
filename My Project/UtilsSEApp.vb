@@ -363,6 +363,41 @@ Public Class UtilsSEApp
 
     End Function
 
+    Public Function GetActiveFiles() As (ActiveFile As String, ActiveFiles As List(Of String), Success As Boolean)
+        Dim ActiveFile As String = ""
+        Dim ActiveFiles As New List(Of String)
+        Dim Success As Boolean = True
+
+        Dim tmpSEApp As SolidEdgeFramework.Application = Nothing
+        Try
+            tmpSEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+
+            If tmpSEApp IsNot Nothing Then
+                Dim SEDocs As SolidEdgeFramework.Documents = tmpSEApp.Documents
+
+                If SEDocs.Count > 0 Then
+                    Dim ActiveDocument As SolidEdgeFramework.SolidEdgeDocument
+                    ActiveDocument = CType(tmpSEApp.ActiveDocument, SolidEdgeFramework.SolidEdgeDocument)
+
+                    ActiveFile = ActiveDocument.FullName
+
+                    For Each SEDoc As SolidEdgeFramework.SolidEdgeDocument In SEDocs
+                        ActiveFiles.Add(SEDoc.FullName)
+                    Next
+                End If
+            End If
+        Catch ex As Exception
+            ActiveFile = ""
+            ActiveFiles = New List(Of String)
+            Success = False
+        End Try
+
+        tmpSEApp = Nothing
+
+        Return (ActiveFile, ActiveFiles, Success)
+
+    End Function
+
     Public Function DMIsRunning() As Boolean
         Dim DMApp As RevisionManager.Application = Nothing
         Dim IsRunning As Boolean = False

@@ -1023,10 +1023,6 @@ Public Class Form_Main
     Public Property WorkingFilesPath As String
     Public Property SavedExpressions As HCSavedExpressions
 
-    Public Property ActiveFile As String
-    Public Property ActiveFiles As List(Of String)
-    Public Property USEA As UtilsSEApp
-
     Private _ShowPreview As Boolean
     Public Property ShowPreview As Boolean
         Get
@@ -1384,9 +1380,6 @@ Public Class Form_Main
             Splash.Dispose()
         End If
         Me.Cursor = Cursors.Default
-
-        Me.USEA = New UtilsSEApp(Me)
-        Me.USEA.ErrorLogger = New Logger("Dummy", Nothing)
 
         If Me.CLIActive And Not SavingPresets Then
 
