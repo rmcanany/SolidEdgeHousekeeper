@@ -354,13 +354,27 @@ You can sort the file list in a variety of ways.
 
 ![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
-The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set the sort mode on the **Configuration Tab -- Sorting Page** as shown above.
+The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set the sort mode on the **Configuration Tab -- Sorting Page** as shown above.  `Alphabetical` is hopefully self-explanatory.  The others are described next.
 
-The `Unsorted` option is primarily intended to preserve the order of imported lists.  In some cases, for example printing job packets for distrubution, you may want to keep duplicate entries in the list.  Enable the option `Keep duplicates` to do so.
+**Unsorted**
 
-The `Dependency` option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings.  
+The `Unsorted` option is primarily intended to preserve the order of imported lists.  In some cases, for example printing job packets for distribution, you may want to keep duplicate entries in the list.  Enable the option `Keep duplicates` to do so.
 
-Note `Dependency` sort changes the file processing order.  Normally the order is by file type beginning with `*.par` then `*.psm`, `*.asm` and finally `*.dft`.  With this option, files are processed in strict dependency order.  This sorting option is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running `Update part copy` twice in a row.
+**Dependency**
+
+This option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings.  
+
+To determine dependency order, the program needs to read and follow file links.  This can add new files to the incoming list.  The search also ignores any `file type` filters you may have enabled.  This is necessary for subsequent updates to work correctly.  
+
+Some files may not be found on disk, or may not be readable by the program.  Those are reported in the log file.  Note, the most common reason a file cannot be read is because it is already open in Solid Edge.
+
+Even if some files could not be examined, the known-good files are still added to the list.  Although you can run updates on those, ideally any problems should be fixed before proceeding.
+
+This sorting option is not foolproof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running `Update part copy` twice in a row.
+
+Note `Dependency` sort changes the file processing order.  Normally it is by file type beginning with `*.par` then `*.psm`, `*.asm` and finally `*.dft`.  With this option, files are processed in strict dependency order.  That order is not apparent when files are grouped by type.  To see the true order, disable the `Group files by type` option on the **Configuration Tab -- General Page.**
+
+**Random sample**
 
 The `Random sample` option randomly selects and shuffles a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`. This option is primarily intended for software testing, but can be used for any purpose.
 

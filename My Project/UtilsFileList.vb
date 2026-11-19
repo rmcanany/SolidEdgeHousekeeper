@@ -300,8 +300,6 @@ Public Class UtilsFileList
 
         Dim SubLogger As Logger = FindFilesLogger.AddLogger(Source.Name)
 
-        Dim NewWay As Boolean = True
-
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim ActiveFileExtensionsList As New List(Of String)
 
@@ -324,11 +322,7 @@ Public Class UtilsFileList
                 Case = "Files"
                     Dim tmpFoundFiles As New List(Of String)
 
-                    If NewWay Then
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
-                    Else
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
-                    End If
+                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
 
                     FoundFiles = tmpFoundFiles
 
@@ -414,11 +408,7 @@ Public Class UtilsFileList
                 Case = "TeamCenter"
                     Dim tmpFoundFiles As New List(Of String)
 
-                    If NewWay Then
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
-                    Else
-                        tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
-                    End If
+                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
 
                     FoundFiles = tmpFoundFiles
 
@@ -684,6 +674,7 @@ Public Class UtilsFileList
 
             Else
                 Dim UTLA As New UtilsTopLevelAssembly(FMain, ErrorLogger)
+
                 tmpFoundFiles.AddRange(UTLA.GetLinksTopDown(tmpFolders,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
@@ -752,11 +743,10 @@ Public Class UtilsFileList
 
         Dim SubLogger As Logger = FindFilesLogger.AddLogger("Dependency Sort")
 
-        Dim MissingFilesList As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
         Dim DependencyDict As New Dictionary(Of String, List(Of String))(StringComparer.OrdinalIgnoreCase)
-        Dim Proceed As Boolean = True
-
-        'Dim UP As New UtilsPreferences
+        Dim MissingFiles As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+        Dim UnreadableFiles As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+        Dim FilesWithBadLinks As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
 
         Dim N As Integer = 0
         Dim Tot As Integer = Foundfiles.Count
@@ -773,6 +763,10 @@ Public Class UtilsFileList
                 Continue For
             End If
 
+            If Not IO.File.Exists(Filename) Then
+                MissingFiles.Add(Filename)
+                Continue For
+            End If
             FMain.TextBoxStatus.Text = $"{N}/{Tot} Dependency Sort {IO.Path.GetFileName(Filename)}"
             System.Windows.Forms.Application.DoEvents()
 
@@ -781,30 +775,48 @@ Public Class UtilsFileList
                 SSDoc = New HCStructuredStorageDoc(Filename, _OpenReadWrite:=False)
                 SSDoc.ReadLinks(FMain.LinkManagementOrder)
             Catch ex As Exception
-                'SubLogger.AddMessage($"{Filename}: {ex.Message}")
-                SubLogger.AddMessage($"{ex.Message}")
                 If SSDoc IsNot Nothing Then SSDoc.Close()
-                Proceed = False
+                UnreadableFiles.Add(Filename)
                 Continue For
             End Try
 
-            Dim NewWay As Boolean = True
-
-            DependencyDict = GetLinks(SSDoc, DependencyDict, MissingFilesList)
+            DependencyDict = GetLinks(SSDoc, DependencyDict, MissingFiles, UnreadableFiles, FilesWithBadLinks)
 
             If SSDoc IsNot Nothing Then SSDoc.Close()
 
         Next
 
-        Dim OutList As New List(Of String)
+        Dim OutList As List(Of String) = SortByDependency(DependencyDict)
 
-        If Proceed Then
-            OutList = SortByDependency(DependencyDict)
+        If CheckInterruptRequest() Then
+            Return New List(Of String)
+        End If
 
-            If CheckInterruptRequest() Then
-                Return New List(Of String)
-            End If
+        If FilesWithBadLinks.Count > 0 Then
+            Dim FilesWithBadLinksLogger As Logger = SubLogger.AddLogger("File(s) with links that could not be found or opened")
+            For Each FilesWithBadLink As String In FilesWithBadLinks
+                Dim Filename As String = IO.Path.GetFileName(FilesWithBadLink)
+                Dim Dir As String = IO.Path.GetDirectoryName(FilesWithBadLink)
+                FilesWithBadLinksLogger.AddMessage($"{Filename} in {Dir}")
+            Next
+        End If
 
+        If MissingFiles.Count > 0 Then
+            Dim MissingFilesLogger As Logger = SubLogger.AddLogger("File(s) that could not be found")
+            For Each MissingFile As String In MissingFiles
+                Dim Filename As String = IO.Path.GetFileName(MissingFile)
+                Dim Dir As String = IO.Path.GetDirectoryName(MissingFile)
+                MissingFilesLogger.AddMessage($"{Filename} in {Dir}")
+            Next
+        End If
+
+        If UnreadableFiles.Count > 0 Then
+            Dim UnreadableFilesLogger As Logger = SubLogger.AddLogger("File(s) that could not be opened")
+            For Each UnreadableFile As String In UnreadableFiles
+                Dim Filename As String = IO.Path.GetFileName(UnreadableFile)
+                Dim Dir As String = IO.Path.GetDirectoryName(UnreadableFile)
+                UnreadableFilesLogger.AddMessage($"{Filename} in {Dir}")
+            Next
         End If
 
         Return OutList
@@ -814,7 +826,9 @@ Public Class UtilsFileList
     Private Function GetLinks(
         SSDoc As HCStructuredStorageDoc,
         DependencyDict As Dictionary(Of String, List(Of String)),
-        MissingFilesList As HashSet(Of String)
+        MissingFiles As HashSet(Of String),
+        UnreadableFiles As HashSet(Of String),
+        FilesWithBadLinks As HashSet(Of String)
         ) As Dictionary(Of String, List(Of String))
 
         If CheckInterruptRequest() Then
@@ -844,21 +858,25 @@ Public Class UtilsFileList
 
                             If DependencyDict.ContainsKey(SSLinkName) Then
                                 If Not DependencyDict(SSDocName).Contains(SSLinkName) Then DependencyDict(SSDocName).Add(SSLinkName)
-                            ElseIf Not MissingFilesList.Contains(SSLinkName) Then
+                            ElseIf Not (MissingFiles.Contains(SSLinkName) OrElse UnreadableFiles.Contains(SSLinkName)) Then
                                 If IO.File.Exists(SSLinkName) Then
                                     Try
                                         SSLinkDoc = New HCStructuredStorageDoc(SSLinkName, _OpenReadWrite:=False)
                                         SSLinkDoc.ReadLinks(FMain.LinkManagementOrder)
                                         If Not DependencyDict(SSDocName).Contains(SSLinkName) Then DependencyDict(SSDocName).Add(SSLinkName)
-                                        DependencyDict = GetLinks(SSLinkDoc, DependencyDict, MissingFilesList)
+                                        DependencyDict = GetLinks(SSLinkDoc, DependencyDict, MissingFiles, UnreadableFiles, FilesWithBadLinks)
                                         SSLinkDoc.Close()
                                     Catch ex As Exception
-                                        MissingFilesList.Add(SSLinkName)
+                                        UnreadableFiles.Add(SSLinkName)
+                                        FilesWithBadLinks.Add(SSDocName)
                                         If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
                                     End Try
                                 Else
-                                    MissingFilesList.Add(SSLinkName)
+                                    MissingFiles.Add(SSLinkName)
+                                    FilesWithBadLinks.Add(SSDocName)
                                 End If
+                            Else
+                                FilesWithBadLinks.Add(SSDocName)
                             End If
 
                         End If
@@ -875,8 +893,9 @@ Public Class UtilsFileList
         OriginalLinkDict As Dictionary(Of String, List(Of String))
         ) As List(Of String)
 
-        Dim LinkDict As New Dictionary(Of String, List(Of String))
+        Dim LinkDict As New Dictionary(Of String, List(Of String))(StringComparer.OrdinalIgnoreCase)
         Dim Outlist As New List(Of String)
+        Dim OutHashset As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
         Dim HasUnmetDependencies As Boolean
         Dim NoRemainingLinks As Boolean
         Dim NoDependencies As New List(Of String)
@@ -894,13 +913,14 @@ Public Class UtilsFileList
         For Each Filename In LinkDict.Keys
             If LinkDict(Filename).Count = 0 Then
                 Outlist.Add(Filename)
+                OutHashset.Add(Filename)
                 NoDependencies.Add(Filename)
             End If
         Next
 
         ' Remove files with no dependencies from the copied dictionary
         For Each Filename In Outlist
-            If LinkDict.Keys.Contains(Filename) Then
+            If LinkDict.ContainsKey(Filename) Then
                 LinkDict.Remove(Filename)
             End If
         Next
@@ -915,16 +935,18 @@ Public Class UtilsFileList
                 FMain.TextBoxStatus.Text = IO.Path.GetFileName(Filename)
                 If LinkDict(Filename).Count = 0 Then
                     Outlist.Add(Filename)
+                    OutHashset.Add(Filename)
                     Continue For
                 Else
                     HasUnmetDependencies = False
                     For Each LinkFilename As String In LinkDict(Filename)
-                        If Not Outlist.Contains(LinkFilename) Then
+                        If Not OutHashset.Contains(LinkFilename) Then
                             HasUnmetDependencies = True
                         End If
                     Next
                     If Not HasUnmetDependencies Then
                         Outlist.Add(Filename)
+                        OutHashset.Add(Filename)
                     End If
                 End If
             Next
@@ -932,7 +954,7 @@ Public Class UtilsFileList
             OldCount = LinkDict.Count
 
             For Each Filename In Outlist
-                If LinkDict.Keys.Contains(Filename) Then
+                If LinkDict.ContainsKey(Filename) Then
                     LinkDict.Remove(Filename)
                 End If
             Next
@@ -951,7 +973,7 @@ Public Class UtilsFileList
                 ' See what type of files remain
                 For Each Filename In LinkDict.Keys
                     RemainingFileList.Add(Filename)
-                    Extension = IO.Path.GetExtension(Filename)
+                    Extension = IO.Path.GetExtension(Filename).ToLower
                     If Not ExtensionList.Contains(Extension) Then
                         ExtensionList.Add(Extension)
                     End If
@@ -961,8 +983,9 @@ Public Class UtilsFileList
                 For Each ValidExtension In ValidExtensions
                     If ExtensionList.Contains(ValidExtension) Then
                         For Each Filename In RemainingFileList
-                            If IO.Path.GetExtension(Filename) = ValidExtension Then
+                            If IO.Path.GetExtension(Filename).ToLower = ValidExtension Then
                                 Outlist.Add(Filename)
+                                OutHashset.Add(Filename)
                                 LinkDict.Remove(Filename)
                             End If
                         Next
@@ -977,8 +1000,9 @@ Public Class UtilsFileList
 
         If Not FMain.SortIncludeNoDependencies Then
             For Each Filename In NoDependencies
-                If Outlist.Contains(Filename) Then
+                If OutHashset.Contains(Filename) Then
                     Outlist.Remove(Filename)
+                    OutHashset.Remove(Filename)
                 End If
             Next
 
@@ -992,15 +1016,16 @@ Public Class UtilsFileList
 
                 OldCount = Outlist.Count
                 For Each Filename In OriginalLinkDict.Keys
-                    If IO.Path.GetExtension(Filename) = ".asm" Then
+                    If IO.Path.GetExtension(Filename).ToLower = ".asm" Then
                         NoRemainingLinks = True
                         For Each LinkFilename As String In OriginalLinkDict(Filename)
-                            If Outlist.Contains(LinkFilename) Then
+                            If OutHashset.Contains(LinkFilename) Then
                                 NoRemainingLinks = False
                             End If
                         Next
                         If NoRemainingLinks Then
                             Outlist.Remove(Filename)
+                            OutHashset.Remove(Filename)
                         End If
                     End If
                 Next
@@ -1013,15 +1038,16 @@ Public Class UtilsFileList
                     Return New List(Of String)
                 End If
 
-                If IO.Path.GetExtension(Filename) = ".dft" Then
+                If IO.Path.GetExtension(Filename).ToLower = ".dft" Then
                     NoRemainingLinks = True
                     For Each LinkFilename As String In OriginalLinkDict(Filename)
-                        If Outlist.Contains(LinkFilename) Then
+                        If OutHashset.Contains(LinkFilename) Then
                             NoRemainingLinks = False
                         End If
                     Next
                     If NoRemainingLinks Then
                         Outlist.Remove(Filename)
+                        OutHashset.Remove(Filename)
                     End If
                 End If
             Next
@@ -1031,6 +1057,7 @@ Public Class UtilsFileList
         If Count > 0 Then
             For Each Filename In LinkDict.Keys
                 Outlist.Add(Filename)
+                OutHashset.Add(Filename)
             Next
         End If
 
@@ -1213,68 +1240,7 @@ Public Class UtilsFileList
 
 
     Public Sub UpdatePropertiesColumns()
-
-        Dim NewWay As Boolean = True
-
-        If NewWay Then
-            UpdatePropertiesColumns2()
-        Else
-            Dim UC As New UtilsCommon
-
-            ListViewFiles.BeginUpdate()
-
-            'Resetting the columns
-            If ListViewFiles.Columns.Count > 2 Then
-                Do Until ListViewFiles.Columns.Count = 2
-                    ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-                Loop
-            End If
-
-            Dim NumProcessed As Integer = 0
-
-            For Each tmpLVItem As ListViewItem In ListViewFiles.Items
-
-                If tmpLVItem.Group.Name <> "Excluded" Then  'Ignore excluded files from update
-
-                    If tmpLVItem.SubItems.Count > 2 Then
-
-                        Do Until tmpLVItem.SubItems.Count = 2
-
-                            tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
-
-                        Loop
-
-                    End If
-
-                    tmpLVItem.UseItemStyleForSubItems = False
-
-                    Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
-
-                    FMain.TextBoxStatus.Text = $"Getting properties {System.IO.Path.GetFileName(FullName)}"
-                    If NumProcessed Mod 100 = 0 Then
-                        System.Windows.Forms.Application.DoEvents()
-                        If CheckInterruptRequest() Then
-                            'ListViewFiles.EndUpdate()
-                            Exit For
-                        End If
-
-                    End If
-
-                    Dim IsReadOnly As Boolean = tmpLVItem.SubItems(0).BackColor = Color.LightGray
-
-                    UpdateLVItem(tmpLVItem, IsReadOnly)
-
-                End If
-
-                NumProcessed += 1
-
-            Next
-
-            CreateColumns()
-
-            ListViewFiles.EndUpdate()
-        End If
-
+        UpdatePropertiesColumns2()
     End Sub
 
     Private Sub CreateColumns()
