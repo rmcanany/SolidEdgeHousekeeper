@@ -123,19 +123,13 @@ Public Class UtilsFileList
             End If
         End If
 
-        ListViewFiles.BeginUpdate()
-
         ' Populate ListView
         If Not FoundFiles Is Nothing Then
             PopulateListView(FoundFiles)
             If CheckInterruptRequest() Then
-                ListViewFiles.Items.Clear()
-                ListViewFiles.EndUpdate()
                 Exit Sub
             End If
         End If
-
-        ListViewFiles.EndUpdate()
 
         FMain.Cursor = Cursors.Default
 
@@ -1244,7 +1238,6 @@ Public Class UtilsFileList
     Private Sub PopulateListView(FoundFiles As IReadOnlyCollection(Of String))
 
         Dim UC As New UtilsCommon
-        Dim tf As Boolean
         Dim NumProcessed As Integer = 0
         Dim PopulatePropertyColumns As Boolean = True
 
@@ -1263,10 +1256,14 @@ Public Class UtilsFileList
             Next
 
             If HasColumnsToProcess Then
-                Dim s As String = $"Getting file properties on {FoundFiles.Count} files can take some time.  "
-                s = $"{s}Do you want to have them displayed anyway?"
-                Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
-                If Result = MsgBoxResult.No Then
+                If Not FMain.CLIActive Then
+                    Dim s As String = $"Getting file properties on {FoundFiles.Count} files can take some time.  "
+                    s = $"{s}Do you want to have them displayed anyway?"
+                    Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
+                    If Result = MsgBoxResult.No Then
+                        PopulatePropertyColumns = False
+                    End If
+                Else
                     PopulatePropertyColumns = False
                 End If
             End If
@@ -1276,26 +1273,23 @@ Public Class UtilsFileList
 
         For Each FoundFile In FoundFiles
 
-            FMain.TextBoxStatus.Text = $"Updating List {System.IO.Path.GetFileName(FoundFile)}"
-
             If NumProcessed Mod 100 = 0 Then
+                FMain.TextBoxStatus.Text = $"Updating List {System.IO.Path.GetFileName(FoundFile)}"
                 System.Windows.Forms.Application.DoEvents()
                 If CheckInterruptRequest() Then
                     ListViewFiles.Items.Clear()
                     ListViewFiles.EndUpdate()
                     Exit Sub
                 End If
-
             End If
 
+            Dim tmpFinfo As IO.FileInfo = Nothing
+            Try
+                tmpFinfo = New IO.FileInfo(FoundFile)
+            Catch ex As Exception
+            End Try
 
-            tf = True
-            tf = tf And UC.FilenameIsOK(FoundFile)
-            tf = tf And IO.File.Exists(FoundFile)
-
-            If tf Then
-
-                Dim tmpFinfo As IO.FileInfo = My.Computer.FileSystem.GetFileInfo(FoundFile)
+            If tmpFinfo IsNot Nothing AndAlso tmpFinfo.Exists Then
 
                 Dim tmpLVItem As New ListViewItem
 
@@ -1318,6 +1312,7 @@ Public Class UtilsFileList
                 If tmpFinfo.IsReadOnly Then tmpLVItem.BackColor = Color.LightGray : tmpLVItem.SubItems.Item(1).BackColor = Color.LightGray '<----- setting the read-only backcolor
 
                 ListViewFiles.Items.Add(tmpLVItem)
+
             Else
                 ' Trying to add a file that does not exist
                 Dim tmpLVItem As New ListViewItem

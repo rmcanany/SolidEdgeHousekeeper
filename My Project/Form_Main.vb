@@ -2348,57 +2348,7 @@ Public Class Form_Main
         If e.KeyCode = Keys.Escape Then ListViewFiles.SelectedItems.Clear()
 
         If e.KeyCode = Keys.Back Or e.KeyCode = Keys.Delete Then
-
-            For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
-
-                Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
-                'If tmpItem.Group.Name = "Sources" Then
-                '    tmpItem.Remove()
-                '    'ListViewFilesOutOfDate = True
-
-                'ElseIf tmpItem.Group.Name <> "Excluded" Then
-                '    ' Move item to "Excluded" group
-                '    tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
-
-                '    If DragDropCache.Contains(tmpItem) Then
-                '        DragDropCacheExcluded.Add(tmpItem)
-                '        DragDropCache.Remove(tmpItem)
-                '    End If
-                'Else
-                '    ' Move item from "Excluded" group back to the group matching the file's extension
-                '    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
-
-                '    If DragDropCacheExcluded.Contains(tmpItem) Then
-                '        DragDropCache.Add(tmpItem)
-                '        DragDropCacheExcluded.Remove(tmpItem)
-
-                '    End If
-
-                'End If
-
-                If tmpItem.Group.Name <> "Excluded" Then
-                    ' Move item to "Excluded" group
-                    tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
-
-                    'If DragDropCache.Contains(tmpItem) Then
-                    '    DragDropCacheExcluded.Add(tmpItem)
-                    '    DragDropCache.Remove(tmpItem)
-                    'End If
-                Else
-                    ' Move item from "Excluded" group back to the group matching the file's extension
-                    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name).ToLower)
-
-                    'If DragDropCacheExcluded.Contains(tmpItem) Then
-                    '    DragDropCache.Add(tmpItem)
-                    '    DragDropCacheExcluded.Remove(tmpItem)
-
-                    'End If
-
-                End If
-
-            Next
-
-            ListViewFiles.SelectedItems.Clear()
+            ToggleExcluded()
 
         End If
 
@@ -2531,25 +2481,7 @@ Public Class Form_Main
 
     Private Sub BT_ExcludeFromProcessing_Click(sender As Object, e As EventArgs) Handles BT_ExcludeFromProcessing.Click
 
-        For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
-
-            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
-            'If tmpItem.Group.Name = "Sources" Then
-            '    tmpItem.Remove()
-            'ElseIf tmpItem.Group.Name <> "Excluded" Then
-            '    tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
-            'Else
-            '    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
-            'End If
-            If tmpItem.Group.Name <> "Excluded" Then
-                tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
-            Else
-                tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name).ToLower)
-            End If
-
-        Next
-
-        ListViewFiles.SelectedItems.Clear()
+        ToggleExcluded()
 
         If Not ListViewSources.SelectedItems.Count = 0 Then
             For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
@@ -2559,6 +2491,69 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
         End If
+
+    End Sub
+
+    Private Sub ToggleExcluded()
+        Dim NotRemovedFromExcluded As New List(Of String)
+
+        For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
+
+            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+
+            If tmpItem.Group.Name <> "Excluded" Then
+                tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+
+            Else
+                If IO.File.Exists(tmpItem.Name) Then
+                    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name).ToLower)
+
+                    If tmpItem.ForeColor = Color.Red Then
+                        tmpItem.ImageKey = "Unchecked"
+                        tmpItem.ForeColor = Color.Black
+                        tmpItem.SubItems.Item(1).ForeColor = Color.Black
+
+                        Dim tmpFinfo As IO.FileInfo = New IO.FileInfo(tmpItem.Name)
+
+                        tmpItem.ToolTipText = tmpItem.Name & vbCrLf &
+                            "Size: " & (tmpFinfo.Length / 1024).ToString("0") & " KB" & vbCrLf &
+                            "Date created: " & tmpFinfo.CreationTime.ToShortDateString() & vbCrLf &
+                            "Date modified: " & tmpFinfo.LastWriteTime.ToShortDateString()
+
+                        If tmpFinfo.IsReadOnly Then
+                            tmpItem.BackColor = Color.LightGray
+                            tmpItem.SubItems.Item(1).BackColor = Color.LightGray '<----- setting the read-only backcolor
+                        End If
+                    End If
+                Else
+                    NotRemovedFromExcluded.Add(IO.Path.GetFileName(tmpItem.Name))
+                End If
+            End If
+
+        Next
+
+        If NotRemovedFromExcluded.Count > 0 Then
+            Dim Total As Integer = NotRemovedFromExcluded.Count
+            Dim MaxToReport As Integer = 5
+            Dim MaxStragglersToAllow As Integer = 5
+            Dim Count As Integer = 0
+
+            Dim s As String = "Missing files must remain in the Excluded files section"
+            For Each Name As String In NotRemovedFromExcluded
+                If Total > MaxToReport + MaxStragglersToAllow Then
+                    If Count = MaxToReport Then
+                        s = $"{s}{vbCrLf}    (and {Total - Count} more)"
+                        Exit For
+                    End If
+                End If
+                s = $"{s}{vbCrLf}    {Name}"
+                Count += 1
+            Next
+
+            MsgBox(s)
+        End If
+
+        ListViewFiles.SelectedItems.Clear()
 
     End Sub
 
