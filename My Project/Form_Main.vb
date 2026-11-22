@@ -13,6 +13,8 @@ Public Class Form_Main
     Public Property Version As String = "2026.4"  ' Two fields, both integers: Year.ReleaseNumber.
     Public Property PreviewVersion As String = "08" ' ######### Empty string for a release
 
+    Private ReadOnly ValidListExtensions As New List(Of String) From {".txt", ".tsv", ".csv", ".xls", ".xlsx", ".xlsm"}
+
     Private lvwColumnSorter As ListViewColumnSorter
 
     Private editbox As New TextBox()
@@ -1139,14 +1141,17 @@ Public Class Form_Main
                 MsgBox($"Invalid number incoming arguments:{vbCrLf}{s}")
                 End
             End If
+
             If Me.CLIPresetName = "" Or Me.CLIFileListName = "" Then
                 s = ""
                 If Me.CLIPresetName = "" Then s = $"{s}Preset not found.{vbCrLf}"
                 If Me.CLIFileListName = "" Then s = $"{s}File list not found.{vbCrLf}"
                 MsgBox(s)
                 End
-            ElseIf Not IO.Path.GetExtension(Me.CLIFileListName).ToLower = ".txt" Then
-                MsgBox($"File list not a *.txt file: {IO.Path.GetFileName(Me.CLIFileListName)}")
+            ElseIf Not ValidListExtensions.Contains(IO.Path.GetExtension(Me.CLIFileListName).ToLower) Then
+                s = $"File list not an allowed file type: {IO.Path.GetFileName(Me.CLIFileListName)}"
+                s = $"{s}{vbCrLf}Valid file types: {String.Join(", ", ValidListExtensions)}"
+                MsgBox(s)
                 End
             Else
                 Me.CLIActive = True
@@ -1946,21 +1951,14 @@ Public Class Form_Main
 
         Dim tmpFilenameList As New List(Of String)
 
-        'MsgBox($"{Me.CLIActive} {Me.CLIFileListName}")
         If Me.CLIActive Then
-            If IO.Path.GetExtension(Me.CLIFileListName).ToLower = ".txt" Then
+            If ValidListExtensions.Contains(IO.Path.GetExtension(Me.CLIFileListName).ToLower) Then
                 tmpFilenameList.Add(Me.CLIFileListName)
             End If
         Else
             Dim tmpFileDialog As New OpenFileDialog
             tmpFileDialog.Title = "Select list of files"
-            'tmpFileDialog.Filter = "TSV files|*.tsv|Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
-            tmpFileDialog.Filter = "File lists|*.txt;*.tsv;*.csv;*.xls;*.xlsx;*.xlsm"
-            '"Solid Edge files (*.par;*.psm;*.asm;*.dft)|*.par;*.psm;*.asm;*.dft|" +
-            '"Assembly (*.asm)|*.asm|" +
-            '"Part (*.par)|*.par|" +
-            '"Sheet Metal (*.psm)|*.psm|" +
-            '"Draft (*.dft)|*.dft"
+            tmpFileDialog.Filter = $"File lists|{String.Join(";", ValidListExtensions.Select(Function(x) $"*{x}"))}"
             tmpFileDialog.Multiselect = True
             tmpFileDialog.InitialDirectory = Me.WorkingFilesPath
 

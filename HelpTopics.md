@@ -786,7 +786,7 @@ To launch Housekeeper from the command line, use this (experimental) command.
 Note arguments are not case-sensitive.
 
 - **-P**: Existing preset in Housekeeper.  If the preset is not found, an error is reported.
-- **-L**: Text file that contains the file names to process.  Each file name must be on a separate line and include the full path.  For compatibility, the file extension must be `.txt`.
+- **-L**: A file list in any format Housekeeper can import (.txt, .tsv, .csv, .xls, .xlsx, .xlsm). See the import list section for how each format is read.
 - **-AF**: [Optional] A flag that sets an OS system parameter governing window focus.  Some commands in Solid Edge, like `Save As Flat Dxf`, send feedback to the calling program; it must have focus to receive it.  If not, SE stalls.  Normally you shouldn't use this option.  It can interfere with other work you are doing while the script is running.  If you notice SE stalling/timing out during processing, this is something to try.
 
 Note in Released versions, `HousekeeperCLI.exe` is in the same directory as `Housekeeper.exe`.  In cloned code, once you build the project, it will be under its own `\bin` folder.  It needs to be copied to Housekeeper's main `\bin\[Debug|Release]` directory to function properly.
