@@ -26,7 +26,7 @@ Partial Class Form_Main
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
-        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
@@ -230,9 +230,6 @@ Partial Class Form_Main
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxRunInBackground = New System.Windows.Forms.CheckBox()
         Me.CheckBoxProcessDraftsInactive = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxForceCloseDesignManager = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxRemindFilelistUpdate = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxGroupFiles = New System.Windows.Forms.CheckBox()
         Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
         Me.ExTableLayoutPanel11 = New Housekeeper.ExTableLayoutPanel()
         Me.TextBoxListViewUpdateFrequency = New System.Windows.Forms.TextBox()
@@ -241,6 +238,10 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel12 = New Housekeeper.ExTableLayoutPanel()
         Me.TextBoxTaskTimeoutSeconds = New System.Windows.Forms.TextBox()
         Me.LabelTaskTimeoutSeconds = New System.Windows.Forms.Label()
+        Me.CheckBoxForceCloseDesignManager = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxMoveMissingToExcluded = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxRemindFilelistUpdate = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxGroupFiles = New System.Windows.Forms.CheckBox()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -454,9 +455,9 @@ Partial Class Form_Main
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewSources.FullRowSelect = True
-        ListViewGroup2.Header = "File sources"
-        ListViewGroup2.Name = "Sources"
-        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup2})
+        ListViewGroup1.Header = "File sources"
+        ListViewGroup1.Name = "Sources"
+        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1})
         Me.ListViewSources.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewSources.HideSelection = False
         Me.ListViewSources.Location = New System.Drawing.Point(0, 0)
@@ -2671,18 +2672,19 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 7)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 8)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxProcessDraftsInactive, 0, 9)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 12)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 13)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 14)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 15)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 17)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 15)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 16)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxDebugMode, 0, 18)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel12, 0, 10)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxForceCloseDesignManager, 0, 5)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxMoveMissingToExcluded, 0, 14)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRemindFilelistUpdate, 0, 13)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 12)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 19
+        Me.ExTableLayoutPanel2.RowCount = 20
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2699,9 +2701,9 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(552, 488)
         Me.ExTableLayoutPanel2.TabIndex = 74
@@ -2803,51 +2805,11 @@ Partial Class Form_Main
         Me.CheckBoxProcessDraftsInactive.Text = "Process draft files as inactive"
         Me.CheckBoxProcessDraftsInactive.UseVisualStyleBackColor = True
         '
-        'CheckBoxForceCloseDesignManager
-        '
-        Me.CheckBoxForceCloseDesignManager.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxForceCloseDesignManager.AutoSize = True
-        Me.CheckBoxForceCloseDesignManager.Location = New System.Drawing.Point(3, 155)
-        Me.CheckBoxForceCloseDesignManager.Name = "CheckBoxForceCloseDesignManager"
-        Me.CheckBoxForceCloseDesignManager.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxForceCloseDesignManager.Size = New System.Drawing.Size(321, 19)
-        Me.CheckBoxForceCloseDesignManager.TabIndex = 98
-        Me.CheckBoxForceCloseDesignManager.Text = "Automatically close Design Manager before processing"
-        Me.CheckBoxForceCloseDesignManager.UseVisualStyleBackColor = True
-        '
-        'CheckBoxRemindFilelistUpdate
-        '
-        Me.CheckBoxRemindFilelistUpdate.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxRemindFilelistUpdate.AutoSize = True
-        Me.CheckBoxRemindFilelistUpdate.Checked = True
-        Me.CheckBoxRemindFilelistUpdate.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRemindFilelistUpdate.Location = New System.Drawing.Point(3, 335)
-        Me.CheckBoxRemindFilelistUpdate.Name = "CheckBoxRemindFilelistUpdate"
-        Me.CheckBoxRemindFilelistUpdate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxRemindFilelistUpdate.Size = New System.Drawing.Size(248, 19)
-        Me.CheckBoxRemindFilelistUpdate.TabIndex = 77
-        Me.CheckBoxRemindFilelistUpdate.Text = "Remind me if I need to update the file list"
-        Me.CheckBoxRemindFilelistUpdate.UseVisualStyleBackColor = True
-        '
-        'CheckBoxGroupFiles
-        '
-        Me.CheckBoxGroupFiles.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxGroupFiles.AutoSize = True
-        Me.CheckBoxGroupFiles.Checked = True
-        Me.CheckBoxGroupFiles.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 365)
-        Me.CheckBoxGroupFiles.Name = "CheckBoxGroupFiles"
-        Me.CheckBoxGroupFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(130, 19)
-        Me.CheckBoxGroupFiles.TabIndex = 75
-        Me.CheckBoxGroupFiles.Text = "Group files by type"
-        Me.CheckBoxGroupFiles.UseVisualStyleBackColor = True
-        '
         'CheckBoxNoUpdateMRU
         '
         Me.CheckBoxNoUpdateMRU.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 395)
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 425)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(316, 19)
@@ -2863,7 +2825,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel11.Controls.Add(Me.TextBoxListViewUpdateFrequency, 0, 0)
         Me.ExTableLayoutPanel11.Controls.Add(Me.LabelListViewUpdateFrequency, 1, 0)
         Me.ExTableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel11.Location = New System.Drawing.Point(3, 423)
+        Me.ExTableLayoutPanel11.Location = New System.Drawing.Point(3, 453)
         Me.ExTableLayoutPanel11.Name = "ExTableLayoutPanel11"
         Me.ExTableLayoutPanel11.RowCount = 1
         Me.ExTableLayoutPanel11.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2898,7 +2860,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxDebugMode.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxDebugMode.AutoSize = True
-        Me.CheckBoxDebugMode.Location = New System.Drawing.Point(3, 470)
+        Me.CheckBoxDebugMode.Location = New System.Drawing.Point(3, 500)
         Me.CheckBoxDebugMode.Name = "CheckBoxDebugMode"
         Me.CheckBoxDebugMode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxDebugMode.Size = New System.Drawing.Size(100, 19)
@@ -2942,6 +2904,58 @@ Partial Class Form_Main
         Me.LabelTaskTimeoutSeconds.Size = New System.Drawing.Size(189, 15)
         Me.LabelTaskTimeoutSeconds.TabIndex = 1
         Me.LabelTaskTimeoutSeconds.Text = "Task maximum run time (seconds)"
+        '
+        'CheckBoxForceCloseDesignManager
+        '
+        Me.CheckBoxForceCloseDesignManager.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxForceCloseDesignManager.AutoSize = True
+        Me.CheckBoxForceCloseDesignManager.Location = New System.Drawing.Point(3, 155)
+        Me.CheckBoxForceCloseDesignManager.Name = "CheckBoxForceCloseDesignManager"
+        Me.CheckBoxForceCloseDesignManager.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxForceCloseDesignManager.Size = New System.Drawing.Size(321, 19)
+        Me.CheckBoxForceCloseDesignManager.TabIndex = 98
+        Me.CheckBoxForceCloseDesignManager.Text = "Automatically close Design Manager before processing"
+        Me.CheckBoxForceCloseDesignManager.UseVisualStyleBackColor = True
+        '
+        'CheckBoxMoveMissingToExcluded
+        '
+        Me.CheckBoxMoveMissingToExcluded.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxMoveMissingToExcluded.AutoSize = True
+        Me.CheckBoxMoveMissingToExcluded.Location = New System.Drawing.Point(3, 395)
+        Me.CheckBoxMoveMissingToExcluded.Name = "CheckBoxMoveMissingToExcluded"
+        Me.CheckBoxMoveMissingToExcluded.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxMoveMissingToExcluded.Size = New System.Drawing.Size(278, 19)
+        Me.CheckBoxMoveMissingToExcluded.TabIndex = 100
+        Me.CheckBoxMoveMissingToExcluded.Text = "Move missing files to the Excluded files section"
+        Me.CheckBoxMoveMissingToExcluded.UseVisualStyleBackColor = True
+        '
+        'CheckBoxRemindFilelistUpdate
+        '
+        Me.CheckBoxRemindFilelistUpdate.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxRemindFilelistUpdate.AutoSize = True
+        Me.CheckBoxRemindFilelistUpdate.Checked = True
+        Me.CheckBoxRemindFilelistUpdate.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxRemindFilelistUpdate.Location = New System.Drawing.Point(3, 365)
+        Me.CheckBoxRemindFilelistUpdate.Name = "CheckBoxRemindFilelistUpdate"
+        Me.CheckBoxRemindFilelistUpdate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxRemindFilelistUpdate.Size = New System.Drawing.Size(248, 19)
+        Me.CheckBoxRemindFilelistUpdate.TabIndex = 77
+        Me.CheckBoxRemindFilelistUpdate.Text = "Remind me if I need to update the file list"
+        Me.CheckBoxRemindFilelistUpdate.UseVisualStyleBackColor = True
+        '
+        'CheckBoxGroupFiles
+        '
+        Me.CheckBoxGroupFiles.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxGroupFiles.AutoSize = True
+        Me.CheckBoxGroupFiles.Checked = True
+        Me.CheckBoxGroupFiles.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 335)
+        Me.CheckBoxGroupFiles.Name = "CheckBoxGroupFiles"
+        Me.CheckBoxGroupFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(130, 19)
+        Me.CheckBoxGroupFiles.TabIndex = 75
+        Me.CheckBoxGroupFiles.Text = "Group files by type"
+        Me.CheckBoxGroupFiles.UseVisualStyleBackColor = True
         '
         'ToolStripPresets
         '
@@ -3579,4 +3593,5 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel12 As ExTableLayoutPanel
     Friend WithEvents TextBoxTaskTimeoutSeconds As TextBox
     Friend WithEvents LabelTaskTimeoutSeconds As Label
+    Friend WithEvents CheckBoxMoveMissingToExcluded As CheckBox
 End Class

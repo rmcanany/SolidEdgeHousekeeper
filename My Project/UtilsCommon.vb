@@ -11,14 +11,71 @@ Public Class UtilsCommon
     Public tmpList As Collection
 
     Public Function FilenameIsOK(ByVal fileName As String) As Boolean
+        ' Checks the filename itself, not the file.
+        ' Looks for null, illegal characters (*|>...), and a few other things.
+        ' Claims to check for too-long paths.  "Too long" means > 32,768, not the NTFS 260.
+        ' Does not check if the file exists.
 
         Try
             Dim fi As New IO.FileInfo(fileName)
         Catch ex As Exception
+            Dim T = ex.GetType.Name
             Return False
         End Try
         Return True
 
+    End Function
+
+    Public Function GetDirectoryName(FilePath As String) As String
+        Return GetDirectoryFilenameExtension(FilePath).Directory
+    End Function
+
+    Public Function GetFileName(FilePath As String) As String
+        Return GetDirectoryFilenameExtension(FilePath).Filename
+    End Function
+
+    Public Function GetExtension(FilePath As String) As String
+        Return GetDirectoryFilenameExtension(FilePath).Extension
+    End Function
+
+    Private Function GetDirectoryFilenameExtension(FilePath As String) As (Directory As String, Filename As String, Extension As String)
+        ' Gets a file path's directory, filename and extension using string methods.  
+        ' Unlike the IO library, this does not throw exceptions on
+        ' missing or illegally-named files.
+
+        Dim Directory As String
+        Dim Filename As String
+        Dim Extension As String
+
+        If FilePath Is Nothing Then
+            Return (Nothing, Nothing, Nothing)
+        End If
+
+        Dim SlashIdx As Integer = FilePath.LastIndexOfAny({"\"c, "/"c})
+
+        If SlashIdx = -1 Then
+            Directory = ""
+            Filename = FilePath
+        ElseIf SlashIdx = 0 Then ' '\x.par'
+            Directory = ""
+            Filename = FilePath.Substring(1)
+        ElseIf SlashIdx = 2 AndAlso FilePath.Substring(1, 1) = ":" Then ' 'C:\x.par'
+            Directory = FilePath.Substring(0, SlashIdx + 1) ' Include trailing '\'
+            Filename = FilePath.Substring(SlashIdx + 1)
+        Else
+            Directory = FilePath.Substring(0, SlashIdx) ' Do not include trailing '\'
+            Filename = FilePath.Substring(SlashIdx + 1)
+        End If
+
+        Dim DotIdx As Integer = Filename.LastIndexOf("."c)
+        If DotIdx = -1 Then
+            Extension = ""
+        Else
+            Extension = Filename.Substring(DotIdx)
+            If Extension = "." Then Extension = ""
+        End If
+
+        Return (Directory, Filename, Extension)
     End Function
 
     Public Sub GetOccurrenceDocs(

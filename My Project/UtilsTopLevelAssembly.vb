@@ -568,8 +568,16 @@ Public Class UtilsTopLevelAssembly
                                     Extension = IO.Path.GetExtension(LinkedDocName).ToLower
 
                                     If ValidExtensions.Contains(Extension) Then
-                                        AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDoc, AllLinkedFilenames,
-                                                                             TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
+                                        If IO.File.Exists(LinkedDocName) Then
+                                            AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDoc, AllLinkedFilenames, TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
+                                        Else
+                                            Dim s As String = $"File has missing links '{Filename}'"
+                                            If Not Me.ErrorLogger.ContainsMessage(s) Then Me.ErrorLogger.AddMessage(s)
+                                            If FMain.MoveMissingToExcluded Then
+                                                s = $"File not found '{LinkedDocName}'"
+                                                If Not Me.ErrorLogger.ContainsMessage(s) Then Me.ErrorLogger.AddMessage(s)
+                                            End If
+                                        End If
                                     End If
 
                                 End If
@@ -580,6 +588,10 @@ Public Class UtilsTopLevelAssembly
                     End If
                 Catch ex As Exception
                 End Try
+            End If
+        Else
+            If FMain.MoveMissingToExcluded Then
+                Me.ErrorLogger.AddMessage($"File not found '{Filename}'")
             End If
         End If
 

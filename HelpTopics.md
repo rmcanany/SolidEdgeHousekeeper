@@ -364,7 +364,7 @@ The `Unsorted` option is primarily intended to preserve the order of imported li
 
 This option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings.  
 
-To determine dependency order, the program needs to read and follow file links.  This can add new files to the incoming list.  The search also ignores any `file type` filters you may have enabled.  This is necessary for subsequent updates to work correctly.  
+To determine dependency order, the program needs to read and follow file links. This can add new files to the incoming list.  The search follows links of every file type, regardless of any filters you have set. Filters (by file type, name, and properties) are applied after sorting, so they can remove files a part copy update depends on. If your goal is something else, like exporting a list of results, that's not a concern.
 
 Some files may not be found on disk, or may not be readable by the program.  Those are reported in the log file.  Note, the most common reason a file cannot be read is because it is already open in Solid Edge.
 
@@ -541,6 +541,8 @@ The list supports multi-select.  Use `CTRL-click` to select individual rows, `Sh
 The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png).
  
 As suggested above, see [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) for details and examples.
+
+The filename and wildcard text are both converted to lower case before comparing.  The `Like Operator` has special characters: `*`, `?`,`#`,`[`, and `]`.  If you need to match any of those in your filenames, check the above link for details. 
 
 </details>
 
@@ -755,10 +757,12 @@ This option is meant to speed up processing of files that are left unchanged by 
 Normally when Solid Edge encounters an error, it `raises an exception`, which Housekeeper detects and reports in the log file.  It's rare, but sometimes it hangs silently instead.  Rather than waiting forever, this option sets a maximum time for the task to finish.  The default is 180 seconds (3 minutes).  That is 3 minutes per task, per file.  Most tasks process a file in seconds, so there's plenty of headroom.  However, for especially long-running ones, you have the ability to increase it.
 <br>
 </br>
-- `Remind me if I need to update the file list`  
-This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
 - `Group files by type`  
 This setting affects the file list.  When enabled (the default) the list groups assemblies, parts, etc. into their own collapsible sections.  Note, this does not affect processing order, which is currently fixed.  The program usually first processes Part files, then Sheetmetal, Assembly, and finally Draft.  The one exception is when using `Dependency Sort`.  In that case, the files are processed in strict dependency order.  There are other  options for sorting the list.  See the Sorting section above for details.
+- `Remind me if I need to update the file list`  
+This is to tell the user that the file list is not automatically populated when folders (and other inputs) are selected.  There are reasons to do it that way, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
+- `Move missing files to the Excluded files section`  
+The default when you update the file list is to report missing files in the log file and not add them to the list.  This option moves those to the `Excluded files` section instead.  Missing files do not occur with folder searches, but can with imported lists, `Dependency Sort`, and otherwise.  Excluded files are ignored when processing tasks.  Other problems, such as invalid file names or files containing unresolved links, are still reported.
 - `Do not show processed files in Most Recently Used List`  
 This keeps from clogging up Solid Edge's file list with those processed in batch mode.
 - `Update list after this many files`  

@@ -709,6 +709,18 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _GroupFiles As Boolean
+    Public Property GroupFiles As Boolean
+        Get
+            Return _GroupFiles
+        End Get
+        Set(value As Boolean)
+            _GroupFiles = value
+            If Me.IsHandleCreated Then
+                CheckBoxGroupFiles.Checked = value
+            End If
+        End Set
+    End Property
 
     Private _RemindFilelistUpdate As Boolean
     Public Property RemindFilelistUpdate As Boolean
@@ -723,15 +735,15 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _GroupFiles As Boolean
-    Public Property GroupFiles As Boolean
+    Private _MoveMissingToExcluded As Boolean
+    Public Property MoveMissingToExcluded As Boolean
         Get
-            Return _GroupFiles
+            Return _MoveMissingToExcluded
         End Get
         Set(value As Boolean)
-            _GroupFiles = value
+            _MoveMissingToExcluded = value
             If Me.IsHandleCreated Then
-                CheckBoxGroupFiles.Checked = value
+                CheckBoxMoveMissingToExcluded.Checked = value
             End If
         End Set
     End Property
@@ -4430,6 +4442,10 @@ Public Class Form_Main
 
     Private Sub TextBoxTaskTimeoutSeconds_TextChanged(sender As Object, e As EventArgs) Handles TextBoxTaskTimeoutSeconds.TextChanged
         Me.TaskTimeoutSeconds = TextBoxTaskTimeoutSeconds.Text
+    End Sub
+
+    Private Sub CheckBoxMoveMissingToExcluded_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxMoveMissingToExcluded.CheckedChanged
+        Me.MoveMissingToExcluded = CheckBoxMoveMissingToExcluded.Checked
     End Sub
 End Class
 

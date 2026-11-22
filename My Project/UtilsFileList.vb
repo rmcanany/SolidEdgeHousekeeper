@@ -36,22 +36,15 @@ Public Class UtilsFileList
 
         Dim StartTime As DateTime = Now
 
-        Dim ActiveFileExtensionsList As New List(Of String)
+        Dim ActiveExtensions As List(Of String) = GetActiveExtensions()
 
         FMain.TextBoxStatus.Text = "Updating list..."
         FMain.LabelTimeRemaining.Text = ""
         System.Windows.Forms.Application.DoEvents()
 
-        If FMain.FilterAsm Then ActiveFileExtensionsList.Add("*.asm")
-        If FMain.FilterPar Then ActiveFileExtensionsList.Add("*.par")
-        If FMain.FilterPsm Then ActiveFileExtensionsList.Add("*.psm")
-        If FMain.FilterDft Then ActiveFileExtensionsList.Add("*.dft")
-
         ListViewFiles.Items.Clear()
 
-
         If Not CheckStartConditions(BareTopLevelAssembly) Then
-            ListViewFiles.EndUpdate()
             FMain.Cursor = Cursors.Default
             FMain.TextBoxStatus.Text = ""
 
@@ -83,17 +76,8 @@ Public Class UtilsFileList
         Dim FoundFiles As IReadOnlyCollection(Of String)
         FoundFiles = tmpFoundFiles
 
-        ' Remove problem files
-        If Not FoundFiles Is Nothing Then
-            FoundFiles = RemoveProblemFiles(FoundFiles, ActiveFileExtensionsList)
-            If CheckInterruptRequest() Then
-                Exit Sub
-            End If
-        End If
-
-
         ' Dependency sort
-        If Not FoundFiles Is Nothing Then
+        If FoundFiles IsNot Nothing Then
             If FMain.SortDependency Then
                 FoundFiles = GetDependencySortedFiles(FoundFiles, FindFilesLogger)
             End If
@@ -102,18 +86,26 @@ Public Class UtilsFileList
             End If
         End If
 
-
         ' Run filters
-        If Not FoundFiles Is Nothing Then
+        If FoundFiles IsNot Nothing Then
+
+            ' Filter by file type
+            FoundFiles = FilterByFiletype(FoundFiles, ActiveExtensions)
+            If CheckInterruptRequest() Then
+                Exit Sub
+            End If
+
 
             ' Filter by file wildcard search
             If FMain.EnableFileWildcard Then
                 FoundFiles = FileWildcardSearch(FoundFiles, FMain.FileWildcard)
+                If CheckInterruptRequest() Then
+                    Exit Sub
+                End If
             End If
 
             ' Filter by properties
             If FMain.EnablePropertyFilter Then
-                System.Threading.Thread.Sleep(100)
                 Dim UPF As New UtilsPropertyFilters(Me.FMain, FindFilesLogger)
                 FoundFiles = UPF.FilterProperties(FoundFiles)
                 If CheckInterruptRequest() Then
@@ -127,14 +119,7 @@ Public Class UtilsFileList
             End If
 
             If FMain.SortRandomSample Then
-                Dim Fraction As Double = 0.1
-                Try
-                    Fraction = CDbl(FMain.SortRandomSampleFraction)
-                Catch ex As Exception
-                    Fraction = 0.1
-                    FMain.SortRandomSampleFraction = CStr(Fraction)
-                End Try
-                FoundFiles = SortRandomSample(FoundFiles, Fraction)
+                FoundFiles = SortRandomSample(FoundFiles, FMain.SortRandomSampleFraction, FindFilesLogger)
             End If
         End If
 
@@ -161,7 +146,6 @@ Public Class UtilsFileList
             ElapsedTimeText = $"in {(ElapsedTime / 60).ToString("0.0")} hr."
         End If
 
-        'Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
         Dim filecount As Integer = ListViewFiles.Items.Count
 
         If Not FMain.StopProcess Then FMain.TextBoxStatus.Text = $"{filecount} files found in {ElapsedTimeText}"
@@ -301,180 +285,255 @@ Public Class UtilsFileList
         Dim SubLogger As Logger = FindFilesLogger.AddLogger(Source.Name)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
-        Dim ActiveFileExtensionsList As New List(Of String)
-
-        Dim UP As New UtilsPreferences
-        Dim StartupPath As String = UP.GetStartupDirectory()
-
-        Dim UC As New UtilsCommon
 
         FMain.ListViewFilesOutOfDate = False
 
-        If FMain.FilterAsm Then ActiveFileExtensionsList.Add("*.asm")
-        If FMain.FilterPar Then ActiveFileExtensionsList.Add("*.par")
-        If FMain.FilterPsm Then ActiveFileExtensionsList.Add("*.psm")
-        If FMain.FilterDft Then ActiveFileExtensionsList.Add("*.dft")
+        Dim ActiveExtensions As List(Of String) = GetActiveExtensions()
 
-        If ActiveFileExtensionsList.Count > 0 Then
+        If ActiveExtensions.Count = 0 Then
+            Return FoundFiles
+        End If
 
-            Select Case Source.Tag.ToString
+        Select Case Source.Tag.ToString
 
-                Case = "Files"
-                    Dim tmpFoundFiles As New List(Of String)
-
-                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
-
-                    FoundFiles = tmpFoundFiles
-
-                Case = "Folder"
-                    FMain.TextBoxStatus.Text = $"Processing folder '{System.IO.Path.GetFileName(Source.Name)}'"
-                    System.Windows.Forms.Application.DoEvents()
-
-                    If FileIO.FileSystem.DirectoryExists(Source.Name) Then
-                        Try
-                            FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
-                                     FileIO.SearchOption.SearchTopLevelOnly,
-                                     ActiveFileExtensionsList.ToArray)
-                        Catch ex As Exception
-                            SubLogger.AddMessage($"Could not process '{Source.Name}'.  Exception: {ex.Message}")
-                            FoundFiles = Nothing
-                        End Try
-                    Else
-                        SubLogger.AddMessage($"Could not process '{Source.Name}'")
-                    End If
-
-                Case = "Folders"
-                    FMain.TextBoxStatus.Text = $"Processing folders '{System.IO.Path.GetFileName(Source.Name)}'"
-                    System.Windows.Forms.Application.DoEvents()
-
-                    If FileIO.FileSystem.DirectoryExists(Source.Name) Then
-
-                        Dim tmplist = GetAllDirectories(Source.Name, SubLogger)
-                        Dim tmpFolders As String()
-                        tmpFolders = tmplist.ToArray
-                        Dim tmpFoundFiles As New List(Of String)
-                        Dim s As String = ""
-
-                        For Each tmpFolder In tmpFolders
-                            Try
-                                tmpFoundFiles.AddRange(FileIO.FileSystem.GetFiles(tmpFolder,
-                                FileIO.SearchOption.SearchTopLevelOnly,
-                                ActiveFileExtensionsList.ToArray))
-                            Catch ex As Exception
-                                s = $"{s}{tmpFolder}{vbCrLf}"
-                            End Try
-                        Next
-
-                        FoundFiles = tmpFoundFiles
-
-                        If Not s = "" Then
-                            s = $"Could not process the following folder(s) in {Source.Name}{vbCrLf}{s}"
-                            SubLogger.AddMessage(s)
-                        End If
-
-                    Else
-                        SubLogger.AddMessage($"Could not process '{Source.Name}'")
-                    End If
-
-                Case = "ASM_Folder"
+            Case = "Files"
+                FoundFiles = DoTabDelimitedString(Source, SubLogger)
+            Case = "Folder"
+                FoundFiles = DoFolder(Source, ActiveExtensions, SubLogger)
+            Case = "Folders"
+                FoundFiles = DoFolders(Source, ActiveExtensions, SubLogger)
+            Case = "ASM_Folder"
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'
+            Case = "asm"
+                FoundFiles = DoTLA(BareTopLevelAssembly, Source, ActiveExtensions, SubLogger)
+            Case "ActiveFile"
+                FoundFiles = DoActiveFile(Source, SubLogger)
+            Case "ActiveFiles"
+                FoundFiles = DoActiveFiles(Source, SubLogger)
+            Case = "TeamCenter"
+                FoundFiles = DoTabDelimitedString(Source, SubLogger)
+            Case = "txt", "csv", "tsv"
+                FoundFiles = DoTextList(Source, SubLogger)
+            Case = "excel"
+                FoundFiles = DoExcelList(Source, SubLogger)
 
-                Case = "asm"
-                    FMain.TextBoxStatus.Text = $"Processing top level assy '{System.IO.Path.GetFileName(Source.Name)}'"
-                    System.Windows.Forms.Application.DoEvents()
+                'Case = "DragDrop"
+                ' Now handled as a 'Files' source
 
-                    FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList, SubLogger)
+            Case Else
+                FoundFiles = Nothing
+                FMain.TextBoxStatus.Text = "No files found"
+        End Select
 
-                Case "ActiveFile"
-
-                    Dim USEA As New UtilsSEApp(FMain)
-
-                    If USEA.SEIsRunning Then
-                        Dim Result = USEA.GetActiveFiles
-                        Dim ActiveFile = Result.ActiveFile
-                        FoundFiles = New List(Of String) From {ActiveFile}
-                    End If
-
-                Case "ActiveFiles"
-
-                    Dim USEA As New UtilsSEApp(FMain)
-
-                    If USEA.SEIsRunning Then
-                        Dim Result = USEA.GetActiveFiles
-                        Dim ActiveFiles = Result.ActiveFiles
-                        FoundFiles = ActiveFiles
-                    End If
-
-                Case = "TeamCenter"
-                    Dim tmpFoundFiles As New List(Of String)
-
-                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
-
-                    FoundFiles = tmpFoundFiles
-
-                Case = "txt", "csv", "tsv"
-                    Dim ListName As String = System.IO.Path.GetFileName(Source.Name)
-                    FMain.TextBoxStatus.Text = $"Processing list '{ListName}'"
-
-                    If FileIO.FileSystem.FileExists(Source.Name) Then
-
-                        Try
-                            Dim InFiles As String() = IO.File.ReadAllLines(Source.Name)
-                            Dim OutFiles As New List(Of String)
-
-                            For Each InFile As String In InFiles
-                                Select Case Source.Tag.ToString
-                                    Case "txt"
-                                        InFile = InFile.Trim
-                                    Case "csv"
-                                        InFile = InFile.Split(CChar(",")).First
-                                        InFile = InFile.Replace("""", "").Trim
-                                    Case "tsv"
-                                        InFile = InFile.Split(CChar(vbTab)).First.Trim
-                                End Select
-                                OutFiles.Add(InFile)
-                            Next
-
-                            FoundFiles = OutFiles
-                        Catch ex As Exception
-                            SubLogger.AddMessage($"Could not process '{ListName}'")
-                        End Try
-
-                    Else
-                        SubLogger.AddMessage($"File not found '{ListName}'")
-                    End If
-
-                Case = "excel"
-                    FMain.TextBoxStatus.Text = $"Processing excel '{System.IO.Path.GetFileName(Source.Name)}'"
-
-                    If FileIO.FileSystem.FileExists(Source.Name) Then
-                        Try
-                            FoundFiles = UC.ReadExcel(Source.Name)
-                        Catch ex As Exception
-                            SubLogger.AddMessage($"Could not process '{System.IO.Path.GetFileName(Source.Name)}'")
-                        End Try
-                    Else
-                        SubLogger.AddMessage($"File not found '{System.IO.Path.GetFileName(Source.Name)}'")
-                    End If
-
-                    'Case = "DragDrop"
-                    '    Dim tmpFoundFiles As New List(Of String)
-
-                    '    For Each tmpItem As ListViewItem In FMain.DragDropCache
-                    '        tmpFoundFiles.Add(tmpItem.Name)
-                    '    Next
-                    '    FoundFiles = tmpFoundFiles
-
-                Case Else
+        ' Remove problem files
+        If FoundFiles IsNot Nothing Then
+            If Not (Source.Tag.ToString = "Folder" OrElse Source.Tag.ToString = "Folders") Then
+                Dim ProblemFilesLogger As Logger = SubLogger.AddLogger("Unable to process all files")
+                FoundFiles = RemoveProblemFiles(FoundFiles, ProblemFilesLogger)
+                If CheckInterruptRequest() Then
                     FoundFiles = Nothing
-                    FMain.TextBoxStatus.Text = "No files found"
-            End Select
-
+                End If
+            End If
         End If
 
         Return FoundFiles
     End Function
 
+
+    Private Function GetActiveExtensions() As List(Of String)
+        Dim ActiveExtensions As New List(Of String)
+
+        If FMain.FilterAsm Then ActiveExtensions.Add("*.asm")
+        If FMain.FilterPar Then ActiveExtensions.Add("*.par")
+        If FMain.FilterPsm Then ActiveExtensions.Add("*.psm")
+        If FMain.FilterDft Then ActiveExtensions.Add("*.dft")
+
+        Return ActiveExtensions
+    End Function
+
+    Private Function DoTabDelimitedString(
+        Source As ListViewItem,
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim tmpFoundFiles As New List(Of String)
+        tmpFoundFiles.AddRange(Source.Name.Split(CChar(vbTab)))
+        Return tmpFoundFiles
+    End Function
+
+    Private Function DoFolder(
+        Source As ListViewItem,
+        ActiveExtensions As List(Of String),
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim tmpFoundFiles As IReadOnlyCollection(Of String) = Nothing
+
+        FMain.TextBoxStatus.Text = $"Processing folder '{System.IO.Path.GetFileName(Source.Name)}'"
+        System.Windows.Forms.Application.DoEvents()
+
+        If FileIO.FileSystem.DirectoryExists(Source.Name) Then
+            Try
+                tmpFoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
+                                     FileIO.SearchOption.SearchTopLevelOnly,
+                                     ActiveExtensions.ToArray)
+            Catch ex As Exception
+                SubLogger.AddMessage($"Could not process '{Source.Name}'.  Exception: {ex.Message}")
+                tmpFoundFiles = Nothing
+            End Try
+        Else
+            SubLogger.AddMessage($"Could not process '{Source.Name}'")
+        End If
+
+
+        Return tmpFoundFiles
+    End Function
+
+    Private Function DoFolders(
+        Source As ListViewItem,
+        ActiveExtensions As List(Of String),
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim myFoundFiles As New List(Of String)
+
+        FMain.TextBoxStatus.Text = $"Processing folders '{System.IO.Path.GetFileName(Source.Name)}'"
+        System.Windows.Forms.Application.DoEvents()
+
+        If FileIO.FileSystem.DirectoryExists(Source.Name) Then
+
+            Dim tmplist = GetAllDirectories(Source.Name, SubLogger)
+            Dim tmpFolders As String()
+            tmpFolders = tmplist.ToArray
+            Dim tmpFoundFiles As New List(Of String)
+            Dim s As String = ""
+
+            For Each tmpFolder In tmpFolders
+                Try
+                    tmpFoundFiles.AddRange(FileIO.FileSystem.GetFiles(tmpFolder,
+                                FileIO.SearchOption.SearchTopLevelOnly,
+                                ActiveExtensions.ToArray))
+                Catch ex As Exception
+                    s = $"{s}{tmpFolder}{vbCrLf}"
+                End Try
+            Next
+
+            myFoundFiles = tmpFoundFiles
+
+            If Not s = "" Then
+                s = $"Could not process the following folder(s) in {Source.Name}{vbCrLf}{s}"
+                SubLogger.AddMessage(s)
+            End If
+
+        Else
+            SubLogger.AddMessage($"Could not process '{Source.Name}'")
+        End If
+
+        Return myFoundFiles
+    End Function
+
+    Private Function DoActiveFile(
+        Source As ListViewItem,
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim tmpFoundFiles As New List(Of String)
+
+        Dim USEA As New UtilsSEApp(FMain)
+
+        If USEA.SEIsRunning Then
+            Dim Result = USEA.GetActiveFiles
+            Dim ActiveFile = Result.ActiveFile
+            tmpFoundFiles.Add(ActiveFile)
+        End If
+
+        Return tmpFoundFiles
+    End Function
+
+    Private Function DoActiveFiles(
+        Source As ListViewItem,
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim tmpFoundFiles As New List(Of String)
+
+        Dim USEA As New UtilsSEApp(FMain)
+
+        If USEA.SEIsRunning Then
+            Dim Result = USEA.GetActiveFiles
+            Dim ActiveFiles = Result.ActiveFiles
+            tmpFoundFiles = ActiveFiles
+        End If
+
+        Return tmpFoundFiles
+    End Function
+
+    Private Function DoTextList(
+        Source As ListViewItem,
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim tmpFoundFiles As New List(Of String)
+
+        Dim ListName As String = System.IO.Path.GetFileName(Source.Name)
+        FMain.TextBoxStatus.Text = $"Processing list '{ListName}'"
+        System.Windows.Forms.Application.DoEvents()
+
+        If FileIO.FileSystem.FileExists(Source.Name) Then
+
+            Try
+                Dim InFiles As String() = IO.File.ReadAllLines(Source.Name)
+                Dim OutFiles As New List(Of String)
+
+                For Each InFile As String In InFiles
+                    Select Case Source.Tag.ToString
+                        Case "txt"
+                            InFile = InFile.Trim
+                        Case "csv"
+                            InFile = InFile.Split(CChar(",")).First
+                            InFile = InFile.Replace("""", "").Trim
+                        Case "tsv"
+                            InFile = InFile.Split(CChar(vbTab)).First.Trim
+                    End Select
+                    OutFiles.Add(InFile)
+                Next
+
+                tmpFoundFiles = OutFiles
+            Catch ex As Exception
+                SubLogger.AddMessage($"Could not process '{ListName}'")
+            End Try
+
+        Else
+            SubLogger.AddMessage($"File not found '{ListName}'")
+        End If
+
+        Return tmpFoundFiles
+    End Function
+
+    Private Function DoExcelList(
+        Source As ListViewItem,
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
+        Dim tmpFoundFiles As New List(Of String)
+
+        FMain.TextBoxStatus.Text = $"Processing excel '{System.IO.Path.GetFileName(Source.Name)}'"
+        System.Windows.Forms.Application.DoEvents()
+
+        If FileIO.FileSystem.FileExists(Source.Name) Then
+            Dim UC As New UtilsCommon
+
+            Try
+                tmpFoundFiles = UC.ReadExcel(Source.Name)
+            Catch ex As Exception
+                SubLogger.AddMessage($"Could not process '{System.IO.Path.GetFileName(Source.Name)}'")
+            End Try
+        Else
+            SubLogger.AddMessage($"File not found '{System.IO.Path.GetFileName(Source.Name)}'")
+        End If
+
+        Return tmpFoundFiles
+    End Function
 
     Private Function GetAllDirectories(
         ByVal Path As String,
@@ -598,55 +657,95 @@ Public Class UtilsFileList
 
     Private Function RemoveProblemFiles(
         FoundFiles As IReadOnlyCollection(Of String),
-        ActiveFileExtensionsList As List(Of String)
-        ) As IReadOnlyCollection(Of String)
-
-        Dim UC As New UtilsCommon
-        Dim tf As Boolean
+        SubLogger As Logger
+        ) As List(Of String)
 
         Dim tmpFoundFiles As New List(Of String)
-        For Each item In FoundFiles
 
-            If item IsNot Nothing Then 'better handling of first item being Nothing; this will not cause the excepetion; it's always better to handle known issues
+        Dim UC As New UtilsCommon
 
-                tf = UC.FilenameIsOK(item)             ' Testing file not found
-                tf = tf And IO.File.Exists(item)       ' Testing file not found
-                tf = True   '<-------- SHOW THE FILE NOT FOUND
+        Dim BadFilenames As New List(Of String)
+        Dim MissingFiles As New List(Of String)
 
-                ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
-                ' Causes a problem comparing extensions
-                Try
-                    tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item.ToLower).Replace(".", "*."))
-                Catch ex As Exception
-                    ' MsgBox("Catch")
-                End Try
-
-                If tf Then
-                    tmpFoundFiles.Add(item)
+        For Each Filename In FoundFiles
+            If Filename IsNot Nothing Then
+                If Not Filename.Trim = "" Then
+                    If UC.FilenameIsOK(Filename) Then
+                        If Not FMain.MoveMissingToExcluded Then
+                            If IO.File.Exists(Filename) Then
+                                tmpFoundFiles.Add(Filename)
+                            Else
+                                MissingFiles.Add(Filename)
+                            End If
+                        Else
+                            tmpFoundFiles.Add(Filename)
+                        End If
+                    Else
+                        BadFilenames.Add(Filename)
+                    End If
                 End If
             End If
-
         Next
-        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
-        Return FoundFiles
+        If BadFilenames.Count > 0 Then
+            Dim BadLogger As Logger = SubLogger.AddLogger("Invalid file names")
+            For Each BadFilename As String In BadFilenames
+                BadLogger.AddMessage(BadFilename)
+            Next
+        End If
+
+        If MissingFiles.Count > 0 AndAlso Not FMain.MoveMissingToExcluded Then
+            Dim MissingLogger As Logger = SubLogger.AddLogger("Files not found")
+            For Each MissingFile As String In MissingFiles
+                MissingLogger.AddMessage(MissingFile)
+            Next
+        End If
+
+        Return tmpFoundFiles
 
     End Function
 
+    Private Function FilterByFiletype(
+        FoundFiles As IReadOnlyCollection(Of String),
+        ActiveFileExtensionsList As List(Of String)
+        ) As IReadOnlyCollection(Of String)
+
+        Dim tmpFoundFiles As New List(Of String)
+
+        Dim UC As New UtilsCommon
+
+        For Each Filename In FoundFiles
+            If Filename IsNot Nothing Then
+                Dim Extension As String = UC.GetExtension(Filename)
+
+                ' ActiveFileExtensionsList has '*.par' format.  That is required for folder searches.
+                ' GetExtension does not add the asterisk.
+                Extension = Extension.Replace(".", "*.")
+
+                If ActiveFileExtensionsList.Contains(Extension.ToLower) Then tmpFoundFiles.Add(Filename)
+            End If
+        Next
+
+        Return tmpFoundFiles
+
+    End Function
 
     ' ###### TOP LEVEL ASSEMBLY ######
 
-    Private Function ProcessTLA(
+    Private Function DoTLA(
         BareTopLevelAssembly As Boolean,
         Source As ListViewItem,
         ActiveFileExtensionsList As List(Of String),
-        ErrorLogger As Logger
+        SubLogger As Logger
         ) As IReadOnlyCollection(Of String)
+
+        FMain.TextBoxStatus.Text = $"Processing top level assembly '{System.IO.Path.GetFileName(Source.Name)}'"
+        System.Windows.Forms.Application.DoEvents()
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
 
         If Not FileIO.FileSystem.FileExists(Source.Name) Then
-            ErrorLogger.AddMessage($"File not found '{Source.Name}'")
+            SubLogger.AddMessage($"File not found '{Source.Name}'")
             Return Nothing
         End If
 
@@ -662,7 +761,7 @@ Public Class UtilsFileList
             Dim tmpFoundFiles As New List(Of String)
 
             If FMain.TLABottomUp Then
-                Dim UTLA As New UtilsTopLevelAssembly(FMain, ErrorLogger)
+                Dim UTLA As New UtilsTopLevelAssembly(FMain, SubLogger)
 
                 FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
@@ -673,7 +772,7 @@ Public Class UtilsFileList
                                                            FMain.TLAReportUnrelatedFiles))
 
             Else
-                Dim UTLA As New UtilsTopLevelAssembly(FMain, ErrorLogger)
+                Dim UTLA As New UtilsTopLevelAssembly(FMain, SubLogger)
 
                 tmpFoundFiles.AddRange(UTLA.GetLinksTopDown(tmpFolders,
                                                        Source.SubItems.Item(1).Text,
@@ -687,7 +786,7 @@ Public Class UtilsFileList
 
         Else
 
-            Dim UTLA As New UtilsTopLevelAssembly(FMain, ErrorLogger)
+            Dim UTLA As New UtilsTopLevelAssembly(FMain, SubLogger)
 
             FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
@@ -725,12 +824,19 @@ Public Class UtilsFileList
         Dim FilePath As String
         Dim Filename As String
 
+        Dim Count As Integer = 0
         For Each FilePath In FoundFiles
             Filename = System.IO.Path.GetFileName(FilePath)
-            FMain.TextBoxStatus.Text = $"Wildcard Search {Filename}"
-            If Filename Like WildcardString Then
+
+            If Count Mod 100 = 0 Then
+                FMain.TextBoxStatus.Text = $"Wildcard Search {Filename}"
+                System.Windows.Forms.Application.DoEvents()
+            End If
+
+            If Filename.ToLower Like WildcardString.ToLower Then
                 tmpFoundFiles.Add(FilePath)
             End If
+            Count += 1
         Next
 
         Return tmpFoundFiles
@@ -804,9 +910,13 @@ Public Class UtilsFileList
         If MissingFiles.Count > 0 Then
             Dim MissingFilesLogger As Logger = SubLogger.AddLogger("File(s) that could not be found")
             For Each MissingFile As String In MissingFiles
-                Dim Filename As String = IO.Path.GetFileName(MissingFile)
-                Dim Dir As String = IO.Path.GetDirectoryName(MissingFile)
-                MissingFilesLogger.AddMessage($"{Filename} in {Dir}")
+                If Not FMain.MoveMissingToExcluded Then
+                    Dim Filename As String = IO.Path.GetFileName(MissingFile)
+                    Dim Dir As String = IO.Path.GetDirectoryName(MissingFile)
+                    MissingFilesLogger.AddMessage($"{Filename} in {Dir}")
+                Else
+                    OutList.Add(MissingFile)
+                End If
             Next
         End If
 
@@ -1065,36 +1175,58 @@ Public Class UtilsFileList
 
     End Function
 
-    Private Function SortRandomSample(FoundFiles As IReadOnlyCollection(Of String), Fraction As Double) As IReadOnlyCollection(Of String)
+    Private Function SortRandomSample(
+        FoundFiles As IReadOnlyCollection(Of String),
+        FractionString As String,
+        SubLogger As Logger
+        ) As IReadOnlyCollection(Of String)
+
         ' https://stackoverflow.com/questions/29358857/shuffling-an-array-of-strings-in-vb-net
 
         Dim ShuffleList As New List(Of String)
         Dim OutList As New List(Of String)
-        Dim Foundfile As String
-        Dim temp As String
-        Dim rnd As New Random()
-        Dim j As Int32
-        Dim NumberToReturn As Integer
 
-        For Each Foundfile In FoundFiles
-            ShuffleList.Add(Foundfile)
-        Next
+        ShuffleList.AddRange(FoundFiles)
+
+        Dim Fraction As Double = 0.1
+
+        If Not Double.TryParse(FractionString,
+            System.Globalization.NumberStyles.Float,
+            System.Globalization.CultureInfo.InvariantCulture,
+            Fraction) Then
+
+            Fraction = 0.1
+            FMain.SortRandomSampleFraction = Fraction.ToString(System.Globalization.CultureInfo.InvariantCulture)
+            SubLogger.AddMessage($"Could not parse random sample sort fraction '{FractionString}'.  It was reset to 0.1.")
+        Else
+            If Not (Fraction > 0 And Fraction <= 1) Then
+                Fraction = 0.1
+                FMain.SortRandomSampleFraction = Fraction.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                SubLogger.AddMessage($"Random sample sort fraction out of range '{FractionString}'.  It was reset to 0.1.")
+            End If
+
+        End If
 
         ' Shuffle all
+        Dim rnd As New Random()
         For n As Int32 = ShuffleList.Count - 1 To 0 Step -1
-            j = rnd.Next(0, n + 1)
+            Dim j = rnd.Next(0, n + 1)
             ' Swap them.
-            temp = ShuffleList(n)
+            Dim tmp = ShuffleList(n)
             ShuffleList(n) = ShuffleList(j)
-            ShuffleList(j) = temp
+            ShuffleList(j) = tmp
         Next n
 
         ' Extract fraction
-        NumberToReturn = CInt(Fraction * ShuffleList.Count)
+        Dim NumberToReturn = CInt(Fraction * ShuffleList.Count)
 
-        For i As Integer = 0 To NumberToReturn - 1
-            OutList.Add(ShuffleList(i))
-        Next
+        If Not ShuffleList.Count = 0 AndAlso NumberToReturn = 0 Then
+            SubLogger.AddMessage($"No files found.  {Fraction} of {ShuffleList.Count} = 0")
+        Else
+            For i As Integer = 0 To NumberToReturn - 1
+                OutList.Add(ShuffleList(i))
+            Next
+        End If
 
         Return OutList
     End Function
@@ -1209,12 +1341,12 @@ Public Class UtilsFileList
 
                 tmpLVItem.BackColor = Color.White
 
-                tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
+                tmpLVItem.Text = UC.GetFileName(FoundFile)
                 tmpLVItem.UseItemStyleForSubItems = False
-                tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+                tmpLVItem.SubItems.Add(UC.GetDirectoryName(FoundFile))
 
                 tmpLVItem.ImageKey = "Error"
-                tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
+                tmpLVItem.Tag = UC.GetExtension(FoundFile).ToLower 'Backup gruppo
                 tmpLVItem.Name = FoundFile
                 tmpLVItem.Group = ListViewFiles.Groups.Item("Excluded") 'ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
 
