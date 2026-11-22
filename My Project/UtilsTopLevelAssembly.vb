@@ -573,7 +573,7 @@ Public Class UtilsTopLevelAssembly
                                         Else
                                             Dim s As String = $"File has missing links '{Filename}'"
                                             If Not Me.ErrorLogger.ContainsMessage(s) Then Me.ErrorLogger.AddMessage(s)
-                                            If FMain.MoveMissingToExcluded Then
+                                            If Not FMain.MoveMissingToExcluded Then
                                                 s = $"File not found '{LinkedDocName}'"
                                                 If Not Me.ErrorLogger.ContainsMessage(s) Then Me.ErrorLogger.AddMessage(s)
                                             End If
@@ -590,7 +590,7 @@ Public Class UtilsTopLevelAssembly
                 End Try
             End If
         Else
-            If FMain.MoveMissingToExcluded Then
+            If Not FMain.MoveMissingToExcluded Then
                 Me.ErrorLogger.AddMessage($"File not found '{Filename}'")
             End If
         End If
