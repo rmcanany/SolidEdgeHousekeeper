@@ -1232,26 +1232,9 @@ Public Class UtilsFileList
     End Function
 
     Private Function SortAlphabetical(FoundFiles As IReadOnlyCollection(Of String)) As IReadOnlyCollection(Of String)
-        Dim Outlist As New List(Of String)
-        Dim SortedOutlist As New List(Of String)
-        Dim FoundFile As String
-        Dim Filename As String
-        Dim s As String
 
-        For Each FoundFile In FoundFiles
-            Filename = IO.Path.GetFileName(FoundFile)
-            s = $"{Filename}*{FoundFile}"
-            Outlist.Add(s)
-        Next
-
-        Outlist.Sort()
-
-        For Each s In Outlist
-            Filename = s.Split(CType("*", Char()))(1)
-            SortedOutlist.Add(Filename)
-        Next
-
-        Return SortedOutlist
+        Dim UC As New UtilsCommon
+        Return FoundFiles.OrderBy(Function(f) UC.GetFileName(f), StringComparer.OrdinalIgnoreCase).ToList
 
     End Function
 
