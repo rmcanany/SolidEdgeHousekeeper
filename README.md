@@ -201,11 +201,12 @@ Here are a few reasons the search can run into problems.
 
 - In a top down search, a linked file is outside the top-level directories.
 - A linked file was renamed or deleted.
-- The file is already open in Solid Edge.
-- The file name (including path) has > 260 characters.
+- The file name (including path) has more than 260 characters, and long paths aren't enabled in Windows.
 - The file is not a SE file, a newer version, or otherwise not readable.
 
 As noted, the log file shows any unprocessed files.  The program populates the list with files it *did* find.  That way, you can decide how to proceed.
+
+One final thing to know.  The search reads the last-saved version of any file.  If a file is open with unsaved changes, the results may not be accurate.
 
 </details>
 
@@ -366,7 +367,9 @@ This option is useful in conjunction with the `Update part copy` command.  It is
 
 To determine dependency order, the program needs to read and follow file links. This can add new files to the incoming list.  The search follows links of every file type, regardless of any filters you have set. Filters (by file type, name, and properties) are applied after sorting, so they can remove files a part copy update depends on. If your goal is something else, like exporting a list of results, that's not a concern.
 
-Some files may not be found on disk, or may not be readable by the program.  Those are reported in the log file.  Note, the most common reason a file cannot be read is because it is already open in Solid Edge.
+Some files may not be found on disk, or may not be readable by the program.  Those are reported in the log file.  
+
+Files open in Solid Edge are read from their last-saved version; unsaved changes aren't seen.
 
 Even if some files could not be examined, the known-good files are still added to the list.  Although you can run updates on those, ideally any problems should be fixed before proceeding.
 

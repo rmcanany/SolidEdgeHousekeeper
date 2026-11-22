@@ -45,25 +45,12 @@ Public Class HCStructuredStorageDoc
         Me.FullName = _FullName
         Me.OpenReadWrite = _OpenReadWrite
 
-        'Try
-        '    If _OpenReadWrite Then
-        '        Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite)
-        '    Else
-        '        Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.Read)
-        '    End If
-        'Catch ex As Exception
-        '    Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
-        'End Try
-
         Try
             If _OpenReadWrite Then
-                'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.Transacted)
-                'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.LeaveOpen)
                 Me.cf = OpenMcdf.RootStorage.Open(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite, OpenMcdf.StorageModeFlags.None)
-                'Me.cf = OpenMcdf.RootStorage.Open(Me.FullName, IO.FileMode.Open, IO.FileAccess.ReadWrite, OpenMcdf.StorageModeFlags.Transacted)
             Else
-                'Me.cf = OpenMcdf.RootStorage.Open(fs, OpenMcdf.StorageModeFlags.None)
-                Me.cf = OpenMcdf.RootStorage.OpenRead(Me.FullName)
+                Me.fs = New IO.FileStream(Me.FullName, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite)
+                Me.cf = OpenMcdf.RootStorage.Open(Me.fs, OpenMcdf.StorageModeFlags.None)
             End If
         Catch ex As Exception
             If Me.fs IsNot Nothing Then Me.fs.Close()
