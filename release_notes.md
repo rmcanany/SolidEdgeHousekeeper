@@ -15,6 +15,18 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2026.4
 
+### File List
+
+#### Reorder Property Columns
+
+Contributed by **@[Francesco Arfilli]**, suggested by **@TeeVar.**  Thank you!
+
+Added the ability to reorder property columns in the file list.  You can do it in the column editor as shown, or on the list itself.  Simply click the property name and drag it to the new position.
+
+![Reorder property columns](My%20Project/media/file_list_properties_reorder_columns.png)
+
+The default columns, `Name` and `Path`, cannot be repositioned.  They can be hidden if desired.  To hide a column, disable the checkbox next to its name.
+
 ### Check Filename
 
 Added an option to require a match of all draft models.  (Thank you **@sven-11111!**)
@@ -36,6 +48,7 @@ See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/S
 - Added the `RequiresForegroundProcessing` flag to `Check Drawing Parts List` (Thank you one more time **@Lui10!**).  Did the same for `Check Drawings` and `Update Drawings`.
 - Fixed an issue where an empty `Property Favorites` list was not allowed for `Edit Properties` or `Property Filters`.
 - Updated the [<ins>**Tips and Tricks Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/TipsAndTricks.md) with some new user-reported use cases.
+- Made several performance and reliability improvements to the file list update code (Thank you **@Claude!**)
 
 ## V2026.3
 

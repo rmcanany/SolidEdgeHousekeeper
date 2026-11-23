@@ -300,25 +300,32 @@ You can get a lot of information on the file by using Solid Edge Explorer.  Hold
 
 ![Solid Edge Explorer](My%20Project/media/solid_edge_explorer.png)
 
-
-
 **Customize the List**
 
-Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the left below
+Click ![Columns](Resources/icons8_table_properties_16.png) to open the column editor.  Once properties have been added (see next), you can reorder them as shown below.  You can do it in the column editor, or on the list itself.  Simply click the property name and drag it to the new position.  
+
+The default columns, `Name` and `Path`, cannot be repositioned.  They can be hidden if desired.  To hide a column, disable the checkbox next to its name.
+
+![Reorder property columns](My%20Project/media/file_list_properties_reorder_columns.png)
+
+To show your own properties on the list, click `Add`.  The following dialog appears.
 
 ![Customize file list columns](My%20Project/media/file_list_columns_customize.png)
 
-Click the Add button to bring up the Property Selector dialog.  By default, it shows properties you added to your Favorites.  To show all properties, click the Show All Props button.  Note, before you can use properties, they must first be read from your templates.  See the [<ins>**Templates Page**</ins>](#templates-page) for details.
+By default, it only shows properties you added to your Favorites.  Click `Show All Props` to see the rest.  Note, before you can use properties, they must first be read from your templates.  See the [<ins>**Templates Page**</ins>](#templates-page) for details.
 
-As noted above, you can update the files' property display without updating the file list.  Hold the Shift key and click the Update button to do so.
+You can sort the list by column.  Click the column header to sort.  Click it again to reverse the order.  The column header indicates the sort state.
 
-Getting properties for a large number of files can take some time.  If that's the case, when you click Update, the program asks whether or not to display them.
+As noted above, you can update the files' property display without updating the file list.  Use `Shift-Update` to do so.
+
+When updating the list, getting properties can take some time for a large number of files.  In that case the program asks whether or not to display them.
+
+You can edit properties directly on the list.  Double-click the cell and enter the new value as shown below.  
 
 ![File list edit and sort](My%20Project/media/file_list_edit_and_sort.png)
 
-You can edit properties directly on the list.  Double-click the property and enter the new value as shown above.  Note some properties are, in reality, exposed variables.  These can be changed on the list, but will revert back to their original values when the file is opened.
+Note some properties are, in reality, exposed variables.  Those are shown with a gray background to let you know.  You can change them, but they will revert to their original values the next time the file is opened.
 
-You can also sort the list by column.  Click the column header to sort.  Click it again to reverse the order.  The column header indicates the sort state.
 
 </details>
 

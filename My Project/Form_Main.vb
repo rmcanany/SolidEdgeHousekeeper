@@ -3688,6 +3688,8 @@ Public Class Form_Main
 
     Private Sub ListViewFiles_ColumnWidthChanged(sender As Object, e As ColumnWidthChangedEventArgs) Handles ListViewFiles.ColumnWidthChanged
 
+        If isMoving Then Return
+
         If Not IsNothing(ListOfColumns) Then
 
             If ListOfColumns.Count > e.ColumnIndex Then
@@ -4560,14 +4562,23 @@ Public Class Form_Main
             CLB_Properties.SelectedIndex = target
 
             ' --- ListOfColumns ---
+            Dim colInfo As PropertyColumn = Nothing
             If src < Me.ListOfColumns.Count Then
-                Dim colInfo = Me.ListOfColumns(src)
+                colInfo = Me.ListOfColumns(src)
                 Me.ListOfColumns.RemoveAt(src)
                 Me.ListOfColumns.Insert(Math.Min(target, Me.ListOfColumns.Count), colInfo)
             End If
 
             ' --- ListView ---
             MoveListViewColumn(src, target)
+
+            If colInfo IsNot Nothing AndAlso target < ListViewFiles.Columns.Count Then
+                If stato = CheckState.Checked Then
+                    ListViewFiles.Columns(target).Width = colInfo.Width
+                Else
+                    ListViewFiles.Columns(target).Width = 0
+                End If
+            End If
         Finally
             isMoving = False
         End Try
