@@ -404,6 +404,7 @@ Partial Class Form_Main
         '
         'CLB_Properties
         '
+        Me.CLB_Properties.AllowDrop = True
         Me.CLB_Properties.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.CLB_Properties.CheckOnClick = True
         Me.CLB_Properties.Dock = System.Windows.Forms.DockStyle.Top
@@ -521,6 +522,7 @@ Partial Class Form_Main
         '
         'ListViewFiles
         '
+        Me.ListViewFiles.AllowColumnReorder = True
         Me.ListViewFiles.AllowDrop = True
         Me.ListViewFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.ListViewFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.FileName, Me.FilePath})
@@ -2610,7 +2612,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
