@@ -4470,35 +4470,35 @@ Public Class Form_Main
         End If
     End Sub
 
-    Private Sub CLB_Properties_DragDrop(sender As Object, e As DragEventArgs) Handles CLB_Properties.DragDrop
-        Dim src As Integer = CInt(e.Data.GetData(GetType(Integer)))
-        Dim target As Integer = GetDropIndex(e)
+    'Private Sub CLB_Properties_DragDrop(sender As Object, e As DragEventArgs) Handles CLB_Properties.DragDrop
+    '    Dim src As Integer = CInt(e.Data.GetData(GetType(Integer)))
+    '    Dim target As Integer = GetDropIndex(e)
 
-        If src < FIXED_ITEMS OrElse target < FIXED_ITEMS OrElse target = src Then Return
+    '    If src < FIXED_ITEMS OrElse target < FIXED_ITEMS OrElse target = src Then Return
 
-        isMoving = True
-        Try
-            ' --- CheckedListBox ---
-            Dim item As Object = CLB_Properties.Items(src)
-            Dim stato As CheckState = CLB_Properties.GetItemCheckState(src)
-            CLB_Properties.Items.RemoveAt(src)
-            CLB_Properties.Items.Insert(target, item)
-            CLB_Properties.SetItemCheckState(target, stato)
-            CLB_Properties.SelectedIndex = target
+    '    isMoving = True
+    '    Try
+    '        ' --- CheckedListBox ---
+    '        Dim item As Object = CLB_Properties.Items(src)
+    '        Dim stato As CheckState = CLB_Properties.GetItemCheckState(src)
+    '        CLB_Properties.Items.RemoveAt(src)
+    '        CLB_Properties.Items.Insert(target, item)
+    '        CLB_Properties.SetItemCheckState(target, stato)
+    '        CLB_Properties.SelectedIndex = target
 
-            ' --- ListOfColumns ---
-            If src < Me.ListOfColumns.Count Then
-                Dim colInfo = Me.ListOfColumns(src)
-                Me.ListOfColumns.RemoveAt(src)
-                Me.ListOfColumns.Insert(Math.Min(target, Me.ListOfColumns.Count), colInfo)
-            End If
+    '        ' --- ListOfColumns ---
+    '        If src < Me.ListOfColumns.Count Then
+    '            Dim colInfo = Me.ListOfColumns(src)
+    '            Me.ListOfColumns.RemoveAt(src)
+    '            Me.ListOfColumns.Insert(Math.Min(target, Me.ListOfColumns.Count), colInfo)
+    '        End If
 
-            ' --- ListView: intestazione + SubItems di ogni riga ---
-            MoveListViewColumn(src, target)
-        Finally
-            isMoving = False
-        End Try
-    End Sub
+    '        ' --- ListView: intestazione + SubItems di ogni riga ---
+    '        MoveListViewColumn(src, target)
+    '    Finally
+    '        isMoving = False
+    '    End Try
+    'End Sub
 
     Private Sub MoveListViewColumn(src As Integer, target As Integer)
         ' Se la colonna non esiste ancora (proprietà appena aggiunta) non c'è nulla da spostare
@@ -4541,6 +4541,65 @@ Public Class Form_Main
                 Exit For
             End If
         Next
+    End Sub
+
+    ' ===== Logica comune: sposta una proprietà in CLB, ListOfColumns e ListView =====
+    Private Sub MoveProperty(src As Integer, target As Integer)
+        If src < FIXED_ITEMS OrElse target < FIXED_ITEMS OrElse src = target Then Return
+        If src >= CLB_Properties.Items.Count OrElse target >= CLB_Properties.Items.Count Then Return
+
+        BT_DeleteCLBItem.Visible = False
+        isMoving = True
+        Try
+            ' --- CheckedListBox ---
+            Dim item As Object = CLB_Properties.Items(src)
+            Dim stato As CheckState = CLB_Properties.GetItemCheckState(src)
+            CLB_Properties.Items.RemoveAt(src)
+            CLB_Properties.Items.Insert(target, item)
+            CLB_Properties.SetItemCheckState(target, stato)
+            CLB_Properties.SelectedIndex = target
+
+            ' --- ListOfColumns ---
+            If src < Me.ListOfColumns.Count Then
+                Dim colInfo = Me.ListOfColumns(src)
+                Me.ListOfColumns.RemoveAt(src)
+                Me.ListOfColumns.Insert(Math.Min(target, Me.ListOfColumns.Count), colInfo)
+            End If
+
+            ' --- ListView ---
+            MoveListViewColumn(src, target)
+        Finally
+            isMoving = False
+        End Try
+    End Sub
+
+    ' ===== Drop nel CLB =====
+    Private Sub CLB_Properties_DragDrop(sender As Object, e As DragEventArgs) Handles CLB_Properties.DragDrop
+        Dim src As Integer = CInt(e.Data.GetData(GetType(Integer)))
+        MoveProperty(src, GetDropIndex(e))
+    End Sub
+
+    ' ===== Riordino trascinando le intestazioni della ListView =====
+    Private Sub ListViewFiles_ColumnReordered(sender As Object, e As ColumnReorderedEventArgs) Handles ListViewFiles.ColumnReordered
+        ' Il riordino "visuale" non viene mai applicato: lo trasformiamo in uno spostamento fisico
+        e.Cancel = True
+
+        Dim src As Integer = e.Header.Index       ' coincide con OldDisplayIndex
+        Dim target As Integer = e.NewDisplayIndex
+
+        If src < FIXED_ITEMS OrElse target < FIXED_ITEMS Then Return   ' prime 2 colonne bloccate
+
+        ' Rimandato a dopo l'evento: modificare Columns dentro ColumnReordered non è sicuro
+        Me.BeginInvoke(Sub() MoveProperty(src, target))
+    End Sub
+
+    ' ===== Le colonne nascoste (non spuntate) non devono poter essere allargate a mano =====
+    Private Sub ListViewFiles_ColumnWidthChanging(sender As Object, e As ColumnWidthChangingEventArgs) Handles ListViewFiles.ColumnWidthChanging
+        If e.ColumnIndex < CLB_Properties.Items.Count AndAlso
+           Not CLB_Properties.GetItemChecked(e.ColumnIndex) Then
+            e.Cancel = True
+            e.NewWidth = 0
+        End If
     End Sub
 
 End Class
