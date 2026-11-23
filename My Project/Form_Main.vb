@@ -3617,23 +3617,6 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub CLB_Properties_MouseMove(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseMove
-
-        Dim itemIndex As Integer = CLB_Properties.IndexFromPoint(e.Location)
-        If itemIndex > 1 Then
-
-            Dim tmpPoint As Point = CLB_Properties.GetItemRectangle(itemIndex).Location
-            tmpPoint.X += CLB_Properties.GetItemRectangle(itemIndex).Width - BT_DeleteCLBItem.Width
-
-            BT_DeleteCLBItem.Location = tmpPoint
-            BT_DeleteCLBItem.Tag = itemIndex
-            BT_DeleteCLBItem.Visible = True
-        Else
-            BT_DeleteCLBItem.Visible = False
-        End If
-
-    End Sub
-
     Private Sub BT_DeleteCLBItem_Click(sender As Object, e As EventArgs) Handles BT_DeleteCLBItem.Click
 
         ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
@@ -3701,27 +3684,7 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
 
-        For Each item In Me.ListOfColumns
-
-            If item.Name = CLB_Properties.Items(e.Index).ToString Then
-                item.Visible = CType(e.NewValue, Boolean)
-
-                If ListViewFiles.Columns.Count > e.Index Then 'Insert this check in case of adding a new property the column doesn't exists yet
-                    If Not item.Visible Then
-                        ListViewFiles.Columns.Item(e.Index).Width = 0
-                    Else
-                        ListViewFiles.Columns.Item(e.Index).Width = item.Width
-                    End If
-                End If
-
-                Exit For
-            End If
-
-        Next
-
-    End Sub
 
     Private Sub ListViewFiles_ColumnWidthChanged(sender As Object, e As ColumnWidthChangedEventArgs) Handles ListViewFiles.ColumnWidthChanged
 
@@ -4440,6 +4403,146 @@ Public Class Form_Main
     Private Sub CheckBoxMoveMissingToExcluded_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxMoveMissingToExcluded.CheckedChanged
         Me.MoveMissingToExcluded = CheckBoxMoveMissingToExcluded.Checked
     End Sub
+
+
+
+
+    Private dragBox As Rectangle = Rectangle.Empty
+    Private dragIndex As Integer = -1
+    Private isMoving As Boolean = False
+    Private Const FIXED_ITEMS As Integer = 2   ' primi 2 elementi: non eliminabili né riordinabili
+
+    Private Sub CLB_Properties_MouseDown(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseDown
+        dragIndex = CLB_Properties.IndexFromPoint(e.Location)
+
+        If e.Button = MouseButtons.Left AndAlso dragIndex >= FIXED_ITEMS Then
+            Dim sz As Size = SystemInformation.DragSize
+            dragBox = New Rectangle(e.X - sz.Width \ 2, e.Y - sz.Height \ 2, sz.Width, sz.Height)
+        Else
+            dragBox = Rectangle.Empty
+        End If
+    End Sub
+
+    Private Sub CLB_Properties_MouseUp(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseUp
+        dragBox = Rectangle.Empty
+    End Sub
+
+    Private Sub CLB_Properties_MouseMove(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseMove
+
+        ' 1) Avvio del drag solo se il mouse si è mosso oltre la soglia
+        If e.Button = MouseButtons.Left AndAlso
+       dragBox <> Rectangle.Empty AndAlso
+       Not dragBox.Contains(e.Location) Then
+
+            dragBox = Rectangle.Empty
+            BT_DeleteCLBItem.Visible = False
+            CLB_Properties.DoDragDrop(dragIndex, DragDropEffects.Move)
+            Return
+        End If
+
+        ' 2) Bottone di eliminazione: solo con il mouse senza tasti premuti
+        If e.Button = MouseButtons.None Then
+            Dim itemIndex As Integer = CLB_Properties.IndexFromPoint(e.Location)
+            If itemIndex >= FIXED_ITEMS Then
+                Dim rect As Rectangle = CLB_Properties.GetItemRectangle(itemIndex)
+                BT_DeleteCLBItem.Location = New Point(rect.Right - BT_DeleteCLBItem.Width, rect.Top)
+                BT_DeleteCLBItem.Tag = itemIndex
+                BT_DeleteCLBItem.Visible = True
+            Else
+                BT_DeleteCLBItem.Visible = False
+            End If
+        End If
+
+    End Sub
+
+    Private Function GetDropIndex(e As DragEventArgs) As Integer
+        Dim target As Integer = CLB_Properties.IndexFromPoint(CLB_Properties.PointToClient(New Point(e.X, e.Y)))
+        If target = ListBox.NoMatches Then target = CLB_Properties.Items.Count - 1
+        Return target
+    End Function
+
+    Private Sub CLB_Properties_DragOver(sender As Object, e As DragEventArgs) Handles CLB_Properties.DragOver
+        ' Niente drop sopra i primi 2 elementi
+        If e.Data.GetDataPresent(GetType(Integer)) AndAlso GetDropIndex(e) >= FIXED_ITEMS Then
+            e.Effect = DragDropEffects.Move
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub CLB_Properties_DragDrop(sender As Object, e As DragEventArgs) Handles CLB_Properties.DragDrop
+        Dim src As Integer = CInt(e.Data.GetData(GetType(Integer)))
+        Dim target As Integer = GetDropIndex(e)
+
+        If src < FIXED_ITEMS OrElse target < FIXED_ITEMS OrElse target = src Then Return
+
+        isMoving = True
+        Try
+            ' --- CheckedListBox ---
+            Dim item As Object = CLB_Properties.Items(src)
+            Dim stato As CheckState = CLB_Properties.GetItemCheckState(src)
+            CLB_Properties.Items.RemoveAt(src)
+            CLB_Properties.Items.Insert(target, item)
+            CLB_Properties.SetItemCheckState(target, stato)
+            CLB_Properties.SelectedIndex = target
+
+            ' --- ListOfColumns ---
+            If src < Me.ListOfColumns.Count Then
+                Dim colInfo = Me.ListOfColumns(src)
+                Me.ListOfColumns.RemoveAt(src)
+                Me.ListOfColumns.Insert(Math.Min(target, Me.ListOfColumns.Count), colInfo)
+            End If
+
+            ' --- ListView: intestazione + SubItems di ogni riga ---
+            MoveListViewColumn(src, target)
+        Finally
+            isMoving = False
+        End Try
+    End Sub
+
+    Private Sub MoveListViewColumn(src As Integer, target As Integer)
+        ' Se la colonna non esiste ancora (proprietà appena aggiunta) non c'è nulla da spostare
+        If src >= ListViewFiles.Columns.Count Then Return
+
+        ListViewFiles.BeginUpdate()
+        Try
+            Dim header As ColumnHeader = ListViewFiles.Columns(src)
+            ListViewFiles.Columns.RemoveAt(src)
+            ListViewFiles.Columns.Insert(Math.Min(target, ListViewFiles.Columns.Count), header)
+
+            ' src e target sono sempre >= 2, quindi SubItems(0) (il testo dell'item) non viene mai toccato
+            For Each lvi As ListViewItem In ListViewFiles.Items
+                If src < lvi.SubItems.Count Then
+                    Dim si As ListViewItem.ListViewSubItem = lvi.SubItems(src)
+                    lvi.SubItems.RemoveAt(src)
+                    lvi.SubItems.Insert(Math.Min(target, lvi.SubItems.Count), si)
+                End If
+            Next
+        Finally
+            ListViewFiles.EndUpdate()
+        End Try
+    End Sub
+
+    Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
+        If isMoving Then Return   ' spostamento, non un vero cambio di spunta
+
+        For Each item In Me.ListOfColumns
+            If item.Name = CLB_Properties.Items(e.Index).ToString Then
+                item.Visible = CType(e.NewValue, Boolean)
+
+                If ListViewFiles.Columns.Count > e.Index Then
+                    If Not item.Visible Then
+                        ListViewFiles.Columns.Item(e.Index).Width = 0
+                    Else
+                        ListViewFiles.Columns.Item(e.Index).Width = item.Width
+                    End If
+                End If
+
+                Exit For
+            End If
+        Next
+    End Sub
+
 End Class
 
 

@@ -404,6 +404,7 @@ Partial Class Form_Main
         '
         'CLB_Properties
         '
+        Me.CLB_Properties.AllowDrop = True
         Me.CLB_Properties.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.CLB_Properties.CheckOnClick = True
         Me.CLB_Properties.Dock = System.Windows.Forms.DockStyle.Top
