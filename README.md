@@ -326,6 +326,16 @@ You can edit properties directly on the list.  Double-click the cell and enter t
 
 Note some properties are, in reality, exposed variables.  Those are shown with a gray background to let you know.  You can change them, but they will revert to their original values the next time the file is opened.
 
+One more thing about editing properties.  `Status` is displayed as an icon.  You can change it with a double-click like the others, but you have to use the internally-assigned number to do so.  Here are the numbers.
+
+- `0 Available`
+- `1 InWork`
+- `2 InReview`
+- `3 Released`
+- `4 Baselined`
+- `5 Obsolete`
+
+There is no error checking on edits.  If you enter a number that isn't on the list, it will still accept it and update the file.  (It won't accept text because `Status` is a number field.)  The next time it is opened, SE won't recognize the number.  It doesn't try to guess; it leaves `Status` blank.  That's probably not what you want.  
 
 </details>
 

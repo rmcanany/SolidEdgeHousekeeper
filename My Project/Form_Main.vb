@@ -1,8 +1,6 @@
 ﻿Option Strict On
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
-
-
+'Imports System.Windows.Forms.VisualStyles.VisualStyleElement ' hijacks System.Windows.Forms.Textbox and .Button
 'Imports System.Data.SqlClient ' hijacks Windows.Forms.SortOrder in ListViewColumnSorter
 'Imports System.Data.OleDb
 'Imports System.Runtime.InteropServices
@@ -20,7 +18,7 @@ Public Class Form_Main
 
     Private lvwColumnSorter As ListViewColumnSorter
 
-    Private editbox As New System.Windows.Forms.TextBox()
+    Private editbox As New TextBox
     Private hitinfo As ListViewHitTestInfo
 
     Public Property StopProcess As Boolean
@@ -3631,7 +3629,7 @@ Public Class Form_Main
 
     Private Sub ButtonCloseListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonCloseListOfColumns.Click
 
-        Dim tmpButton As System.Windows.Forms.Button = DirectCast(sender, System.Windows.Forms.Button)
+        Dim tmpButton As Button = DirectCast(sender, Button)
 
         If CStr(tmpButton.Tag) = "Dirty" Then
 
@@ -4222,6 +4220,16 @@ Public Class Form_Main
             Return
         End If
 
+        If e.Item.Selected Then
+            If ListViewFiles.Focused Then
+                e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds)
+            Else
+                e.Graphics.FillRectangle(SystemBrushes.Control, e.Bounds)
+            End If
+        Else
+            e.DrawBackground()
+        End If
+
         Dim x As Integer = e.Bounds.Left + (e.Bounds.Width - 16) \ 2
         Dim y As Integer = e.Bounds.Top + (e.Bounds.Height - 16) \ 2
 
@@ -4230,7 +4238,7 @@ Public Class Form_Main
             Case "0"
                 e.Graphics.DrawImage(My.Resources.status_available, x, y, 16, 16)
 
-            Case = "4"
+            Case "4"
                 e.Graphics.DrawImage(My.Resources.status_baselined, x, y, 16, 16)
 
             Case "2"
@@ -4239,11 +4247,14 @@ Public Class Form_Main
             Case "1"
                 e.Graphics.DrawImage(My.Resources.status_in_work, x, y, 16, 16)
 
-            Case "5".ToLower
+            Case "5"
                 e.Graphics.DrawImage(My.Resources.status_obsolete, x, y, 16, 16)
 
-            Case "3".ToLower
+            Case "3"
                 e.Graphics.DrawImage(My.Resources.status_released, x, y, 16, 16)
+
+            Case Else
+                e.DrawDefault = True
 
         End Select
 

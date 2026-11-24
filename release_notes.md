@@ -17,15 +17,21 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ### File List
 
-#### Reorder Property Columns
-
 Contributed by **@[Francesco Arfilli]**, suggested by **@TeeVar.**  Thank you!
+
+#### Reorder Property Columns
 
 Added the ability to reorder property columns in the file list.  You can do it in the column editor as shown, or on the list itself.  Simply click the property name and drag it to the new position.
 
 ![Reorder property columns](My%20Project/media/file_list_properties_reorder_columns.png)
 
 The default columns, `Name` and `Path`, cannot be repositioned.  They can be hidden if desired.  To hide a column, disable the checkbox next to its name.
+
+#### Status Icons
+
+Changed the display of document status to its icon.  Previously, the internally-assigned number was shown.
+
+![Status icons](My%20Project/media/file_list_status_icon.png)
 
 ### Check Filename
 
