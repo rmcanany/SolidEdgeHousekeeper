@@ -1,4 +1,7 @@
 ﻿Option Strict On
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+
+
 
 'Imports System.Data.SqlClient ' hijacks Windows.Forms.SortOrder in ListViewColumnSorter
 'Imports System.Data.OleDb
@@ -17,7 +20,7 @@ Public Class Form_Main
 
     Private lvwColumnSorter As ListViewColumnSorter
 
-    Private editbox As New TextBox()
+    Private editbox As New System.Windows.Forms.TextBox()
     Private hitinfo As ListViewHitTestInfo
 
     Public Property StopProcess As Boolean
@@ -3628,7 +3631,7 @@ Public Class Form_Main
 
     Private Sub ButtonCloseListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonCloseListOfColumns.Click
 
-        Dim tmpButton As Button = DirectCast(sender, Button)
+        Dim tmpButton As System.Windows.Forms.Button = DirectCast(sender, System.Windows.Forms.Button)
 
         If CStr(tmpButton.Tag) = "Dirty" Then
 
@@ -4213,7 +4216,37 @@ Public Class Form_Main
     End Sub
 
     Private Sub ListViewFiles_DrawSubItem(sender As Object, e As DrawListViewSubItemEventArgs) Handles ListViewFiles.DrawSubItem
-        e.DrawDefault = True
+
+        If e.Header.Text <> "Status" Then
+            e.DrawDefault = True
+            Return
+        End If
+
+        Dim x As Integer = e.Bounds.Left + (e.Bounds.Width - 16) \ 2
+        Dim y As Integer = e.Bounds.Top + (e.Bounds.Height - 16) \ 2
+
+        Select Case e.SubItem.Text
+
+            Case "0"
+                e.Graphics.DrawImage(My.Resources.status_available, x, y, 16, 16)
+
+            Case = "4"
+                e.Graphics.DrawImage(My.Resources.status_baselined, x, y, 16, 16)
+
+            Case "2"
+                e.Graphics.DrawImage(My.Resources.status_in_review, x, y, 16, 16)
+
+            Case "1"
+                e.Graphics.DrawImage(My.Resources.status_in_work, x, y, 16, 16)
+
+            Case "5".ToLower
+                e.Graphics.DrawImage(My.Resources.status_obsolete, x, y, 16, 16)
+
+            Case "3".ToLower
+                e.Graphics.DrawImage(My.Resources.status_released, x, y, 16, 16)
+
+        End Select
+
     End Sub
 
     Private Sub CheckBoxKeepUnsortedDuplicates_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxKeepUnsortedDuplicates.CheckedChanged

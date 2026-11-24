@@ -388,4 +388,40 @@
   <data name="TaskUpdateDrawings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TaskUpdateDrawings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="status_available" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_available.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_available_SE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_available_SE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_baselined" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_baselined.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_baselined_SE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_baselined_SE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_in_review" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_in-review.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_in_review_SE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_in-review_SE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_in_work" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_in-work.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_in_work_SE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_in-work_SE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_obsolete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_obsolete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_obsolete_SE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_obsolete_SE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_released" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_released.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="status_released_SE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\status_released_SE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
