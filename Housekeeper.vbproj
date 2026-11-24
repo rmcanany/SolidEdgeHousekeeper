@@ -711,6 +711,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <None Include="Resources\status_released_SE.png" />
+    <None Include="Resources\status_obsolete_SE.png" />
+    <None Include="Resources\status_in-work_SE.png" />
+    <None Include="Resources\status_in-review_SE.png" />
+    <None Include="Resources\status_baselined_SE.png" />
+    <None Include="Resources\status_available_SE.png" />
+    <None Include="Resources\status_released.png" />
+    <None Include="Resources\status_obsolete.png" />
+    <None Include="Resources\status_in-work.png" />
+    <None Include="Resources\status_in-review.png" />
+    <None Include="Resources\status_baselined.png" />
+    <None Include="Resources\status_available.png" />
     <None Include="Resources\active_file.png" />
     <None Include="Resources\icons8_select_all_16.png" />
     <None Include="Resources\icons8_copy_16.png" />
